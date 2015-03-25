@@ -42,6 +42,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return 'showContent';
 	}
 
+//	public function __construct()
+//	{
+//		parent::__construct();
+//		
+//		$this->objComment = new ilObjComment();
+//		$this->objComment->setRefId($this->ref_id);
+//	}
+//	
+	
 	/**
 	 * @param string $cmd
 	 */
@@ -130,7 +139,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$ilTabs->activateTab('content');
 		$tpl->getStandardTemplate();
+		$tpl->addJavaScript($this->plugin->getDirectory().'/js/jquery.scrollbox.js');
 		$tpl->addCss($this->plugin->getDirectory().'/templates/default/xvid.css');
+		
 		$video_tpl =  new ilTemplate("tpl.video_tpl.html", true, true, $this->plugin->getDirectory());
 		require_once("./Services/MediaObjects/classes/class.ilObjMediaObject.php");
 		require_once("./Services/MediaObjects/classes/class.ilObjMediaObjectGUI.php");
@@ -144,11 +155,63 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		
 		$video_tpl->setVariable('VIDEO_SRC', $mob_dir.'/'.$media_item['location']);
 		$video_tpl->setVariable('VIDEO_TYPE', $media_item['format']);
-
+		
+		$this->objComment = new ilObjComment();
+		$this->objComment->setRefId($this->ref_id);
+		
+		$comments = $this->objComment->getStopPoints();
+		$video_tpl->setVariable('STOP_POINTS', json_encode(array_keys($comments)));
+		
+		$i = 1;
+		foreach(array_values($comments) as $comment_text)
+		{
+			$video_tpl->setCurrentBlock('comments_list');
+			$video_tpl->setVariable('C_INDEX', $i);
+			$video_tpl->setVariable('COMMENT_TEXT', $comment_text);
+			$video_tpl->parseCurrentBlock();
+			$i++;
+			
+		}	
+		
+		$video_tpl->setVariable('COMMENT_FORM', $this->showCommentForm());
+		
+		
 		$tpl->setContent($video_tpl->get());
 		return;
 		
 	}
+	
+	public function showCommentForm()
+	{
+		$form = new ilPropertyFormGUI();
+		$form->setFormAction($this->ctrl->getFormAction($this, 'postComment'));
+		$input = new ilTextAreaInputGUI($this->lng->txt('comment'), 'comment_text');
+		$form->addItem($input);
+		$form->addCommandButton('postComment', $this->lng->txt('post'));
+		$form->addCommandButton('showContent', $this->lng->txt('cancel'));
+		
+		return $form->getHTML();
+		
+	}	
+	
+	public function postComment()
+	{
+		global $ilUser, $lng;
+		$p = $_POST;
+		
+		$comment_text = $_POST['comment_text'];
+		$user_id = $ilUser->getId();
+		
+		$objComment = new ilObjComment();
+		$objComment->setMobId($this->object->getMobId());
+		$objComment->setRefId($this->ref_id);
+		$objComment->setUserId($user_id);
+		$objComment->setCommentText($comment_text);
+		
+		$this->showContent();
+	}
+	
+		
 
 	public function confirmDeleteComment()
 	{

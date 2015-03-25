@@ -23,6 +23,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	public function __construct()
 	{
 		parent::__construct();
+		
+		$this->getMobIdByRefId($this->ref_id);
 	}
 
 	/**

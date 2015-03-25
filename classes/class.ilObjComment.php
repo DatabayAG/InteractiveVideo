@@ -157,7 +157,25 @@ class ilObjComment
 		return $row;
 
 	}
-
+	
+	public function getStopPoints()
+	{
+		global $ilDB;
+		
+		$res = $ilDB->queryF('SELECT comment_time, comment_text FROM rep_robj_xvid_comments WHERE ref_id = %s
+			ORDER BY comment_time ASC', array('integer'), array($this->getRefId()));
+		
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$stop_points[$row['comment_time']] = $row['comment_text'];
+		}
+		
+		
+		return $stop_points;
+	}
+	
+	
+	################## SETTER & GETTER ##################
 	/**
 	 * @return int
 	 */
@@ -174,12 +192,6 @@ class ilObjComment
 		$this->ref_id = $ref_id;
 	}
 
-	
-
-	################## SETTER & GETTER ##################
-	
-	
-	
 	/**
 	 * @return int
 	 */

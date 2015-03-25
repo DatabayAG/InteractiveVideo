@@ -1,28 +1,76 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 		<div id="ilInteractiveVideoPlayerContainer">
-			<video controls="controls">
-				<source type="{VIDEO_TYPE}" src="{VIDEO_SRC}" />
+			<video controls="controls" id="ilInteractiveVideo">
+				<source type="{VIDEO_TYPE}" src="{VIDEO_SRC}"/>
 			</video>
-			<script>
-				(function($) {
-					il.Util.addOnLoad(function() {
-						var player = new MediaElement($("video")[0], {
-							success: function(media) {
-								
-//								media.play();
-								media.addEventListener('pause', function(e) {
-									console.log(media.currentTime);
-								}, false);
-							}
-						});
-					});
-				})(jQuery);
-			</script>
 		</div>
-		<div id="ilInteractiveVideoCommentsForm">Zeige initCommentForm</div>
+		<div id="ilInteractiveVideoCommentsForm">{COMMENT_FORM}</div>
 	</div>
+
+
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-		<div id="ilInteractiveVideoComments">Todo Zeige Kommentare</div>
+		<div id="ilInteractiveVideoComments" class="scroll-text">
+			<ul>
+				<li></li>
+				<!-- BEGIN comments_list -->
+				<li id="{C_INDEX}">{COMMENT_TEXT}</li>
+				<!-- END comments_list -->
+			</ul>
+		</div>
 	</div>
+
+	<script>
+		(function ($) {
+			il.Util.addOnLoad(function () {
+				var _lastTime = 0;
+				var stopPoints = {STOP_POINTS};
+
+				var interval;
+
+				var player = new MediaElement("ilInteractiveVideo", {
+					timerRate: 10,
+					enablePluginDebug: true,
+					success:   function (media) {
+						media.addEventListener('pause', function (e) {
+							clearInterval(interval);
+						}, false);
+
+						media.addEventListener('playing', function (e) {
+							interval = setInterval(function () {
+								if (media.currentTime >= media.duration) {
+									clearInterval(interval);
+									return;
+								}
+								
+								if (!isNaN(media.currentTime) && media.currentTime > 0) {
+									for (var j = stopPoints.length - 1; j >= 0; j--) {
+										var cueTime = stopPoints[j];
+
+										if (cueTime >= _lastTime && cueTime <= media.currentTime) {
+//											
+// if interactive trigger enabled pause ... 
+// player.pause();
+											console.log(cueTime);
+											
+											
+											
+											$('#ilInteractiveVideoComments').scrollbox({
+												afterForward: function(data) {
+													$(this).trigger('xvid_stop');
+												}
+											});
+										}
+									}
+									_lastTime = media.currentTime;
+								}
+							}, 100);
+
+						}, false);
+					}
+				});
+			});			
+		})(jQuery);
+	</script>
+
 </div>

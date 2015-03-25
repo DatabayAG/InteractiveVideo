@@ -2,3 +2,24 @@
 	width: 100%!important;
 	height: auto !important;
 }
+
+.scroll-text {
+	border: 1px solid gray;
+	width: 100%!important;
+	/*width: 400px;*/
+	height: 6em;
+	overflow: hidden;
+}
+.scroll-text ul {
+	/*width: 800px;*/
+	width: 100%!important;
+	height: 100px;
+	overflow: hidden;
+	margin: 0;
+}
+.scroll-text ul li {
+	height: 1.5em;
+	list-style: none;
+	
+	
+}
