@@ -154,13 +154,25 @@ class ilObjComment
 
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getStopPoints()
 	{
+		/**
+		 * @vas $ilDB ilDB
+		 */
 		global $ilDB;
 
-		$res = $ilDB->queryF('SELECT comment_time, comment_text FROM rep_robj_xvid_comments WHERE obj_id = %s
-			ORDER BY comment_time ASC', array('integer'), array($this->getObjId()));
+		$res = $ilDB->queryF(
+			'SELECT comment_time, comment_text
+			FROM rep_robj_xvid_comments WHERE obj_id = %s
+			ORDER BY comment_time ASC',
+			array('integer'),
+			array($this->getObjId())
+		);
 
+		$stop_points = array();
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$stop_points[$row['comment_time']] = $row['comment_text'];

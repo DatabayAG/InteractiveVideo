@@ -124,14 +124,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		/**
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
-		 * @var $lng    ilLanguage
-		 * @var $ilUser ilObjUser
-		 * @var $ilLog  ilLog
 		 */
-		global $tpl, $ilTabs, $lng, $ilUser, $ilLog;
+		global $tpl, $ilTabs;
 
 		$ilTabs->activateTab('content');
-		$tpl->getStandardTemplate();
+
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.scrollbox.js');
 		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
 
@@ -163,14 +160,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$video_tpl->setVariable('COMMENT_TEXT', $comment_text);
 			$video_tpl->parseCurrentBlock();
 			$i++;
-
 		}
 
 		$video_tpl->setVariable('COMMENT_FORM', $this->showCommentForm());
 
 		$tpl->setContent($video_tpl->get());
-		return;
-
 	}
 
 	public function showCommentForm()
@@ -183,7 +177,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addCommandButton('showContent', $this->lng->txt('cancel'));
 
 		return $form->getHTML();
-
 	}
 
 	public function postComment()
@@ -195,7 +188,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$user_id      = $ilUser->getId();
 
 		$objComment = new ilObjComment();
-		$objComment->setMobId($this->object->getMobId());
 		$objComment->setObjId($this->object->getId());
 		$objComment->setUserId($user_id);
 		$objComment->setCommentText($comment_text);
