@@ -76,8 +76,8 @@ class ilObjComment
 				'comment_id'     => array('integer', $next_id),
 				'obj_id'         => array('integer', $this->getObjId()),
 				'user_id'        => array('integer', $ilUser->getId()),
-				'is_tutor'       => array('integer', $this->isTutor()),
-				'is_interactive' => array('integer', $this->isInteractive()),
+				'is_tutor'       => array('integer', (int)$this->isTutor()),
+				'is_interactive' => array('integer', (int)$this->isInteractive()),
 				'comment_time'   => array('integer', $this->getCommentTime()),
 				'comment_text'   => array('text', $this->getCommentText())
 			));
@@ -165,7 +165,7 @@ class ilObjComment
 		global $ilDB;
 
 		$res = $ilDB->queryF(
-			'SELECT comment_time, comment_text
+			'SELECT comment_time
 			FROM rep_robj_xvid_comments WHERE obj_id = %s
 			ORDER BY comment_time ASC',
 			array('integer'),
@@ -175,10 +175,23 @@ class ilObjComment
 		$stop_points = array();
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$stop_points[$row['comment_time']] = $row['comment_text'];
+			$stop_points[] = $row['comment_time'];
 		}
 
 		return $stop_points;
+	}
+	public function getCommentTexts()
+	{
+		global $ilDB;
+
+		$res = $ilDB->queryF('SELECT comment_id, comment_text FROM rep_robj_xvid_comments WHERE obj_id = %s
+			ORDER BY comment_time, comment_id ASC', array('integer'), array($this->getObjId()));
+
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$comment_text[] = $row['comment_text'];
+		}
+		return $comment_text;
 	}
 
 
