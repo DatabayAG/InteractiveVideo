@@ -178,7 +178,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function postComment()
 	{
 		global $ilUser, $lng;
-
+		$comment_text = array();
 		$comment_text = (string)$_POST['comment_text'];
 
 		if(isset($comment_text) && strlen($comment_text) > 0)

@@ -40,15 +40,17 @@
 	</div>
 
 	<script>
-		function getCurrentTime(){
-			document.getElementById("comment_time").value = document.getElementById("ilInteractiveVideo").currentTime
-		};
-
-		function deleteCommentText(){
-			document.getElementById("comment_text").value = "";
-		};
-		
+	
 		(function ($) {
+
+			 getCurrentTime = function(){
+				$('#comment_time').val("#ilInteractiveVideo")[0].currentTime;
+			}
+
+			deleteCommentText = function(){
+				$('#comment_text').val("");
+			}
+
 			il.Util.addOnLoad(function () {
 				var _lastTime = 0;
 				var stopPoints = {STOP_POINTS};
