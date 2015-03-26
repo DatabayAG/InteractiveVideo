@@ -500,7 +500,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function validateCustom(ilPropertyFormGUI $a_form)
 	{
-		// Validate custom values on update and return false if the property form is invalid
+		// @todo: Validate custom values (e.g. a new video file) on update and return false if the property form is invalid
 		return parent::validateCustom($a_form);
 	}
 
@@ -607,9 +607,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		catch(Exception $e)
 		{
-			if($this->plugin->txt($e->getMessage()) != '-' . $e->getMessage() . '-')
+			if(
+				$this->plugin->txt($e->getMessage()) != '-' . $e->getMessage() . '-' &&
+				$this->plugin->txt($e->getMessage()) != '-rep_robj_xvid_' . $e->getMessage() . '-'
+			)
 			{
 				ilUtil::sendFailure($this->plugin->txt($e->getMessage()), true);
+			}
+			else
+			{
+				ilUtil::sendFailure($e->getMessage(), true);
 			}
 
 			$this->ctrl->setParameterByClass('ilrepositorygui', 'ref_id', (int)$_GET['ref_id']);
