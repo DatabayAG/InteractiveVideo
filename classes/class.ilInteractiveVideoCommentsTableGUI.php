@@ -32,7 +32,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$this->setDefaultOrderDirection('ASC');
 		$this->setDefaultOrderField('comment_time');
 
-		$this->setTitle($this->lng->txt('comments'));
+		$this->setTitle($a_parent_obj->plugin->txt('comments'));
 		$this->setRowTemplate('tpl.row_comments.html', './Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo');
 		
 		$this->addColumn('', 'comment_id',  '1px', true);
@@ -40,8 +40,8 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$this->addColumn($this->lng->txt('time'), 'comment_time');
 		$this->addColumn($this->lng->txt('user'), 'user_id');
 		$this->addColumn($this->lng->txt('comment'), 'comment_text');
-		$this->addColumn($this->lng->txt('interactive'), 'is_interactive');
-		$this->addColumn($this->lng->txt('tutor'), 'is_tutor');
+		$this->addColumn($a_parent_obj->plugin->txt('interactive'), 'is_interactive');
+		$this->addColumn($a_parent_obj->plugin->txt('tutor'), 'is_tutor');
 		$this->addColumn($this->lng->txt('actions'), 'actions', '10%');
 		
 		$this->setSelectAllCheckbox('comment_id');	

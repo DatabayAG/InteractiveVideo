@@ -5,22 +5,20 @@ require_once 'Services/PersonalDesktop/interfaces/interface.ilDesktopItemHandlin
 require_once 'Services/Form/classes/class.ilPropertyFormGUI.php';
 include_once("./Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.xvidUtils.php");
 include_once("./Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilObjComment.php");
+
 /**
  * Class ilObjInteractiveVideoGUI
- * @author Nadia Ahmad <nahmad@databay.de>
-          
- * @ilCtrl_isCalledBy 	ilObjInteractiveVideoGUI: ilRepositoryGUI, ilAdministrationGUI, ilObjPluginDispatchGUI
- * @ilCtrl_Calls 		ilObjInteractiveVideoGUI: ilPermissionGUI, ilInfoScreenGUI, ilObjectCopyGUI, ilRepositorySearchGUI, ilPublicUserProfileGUI, ilCommonActionDispatcherGUI, ilMDEditorGUI
-*/
-
+ * @author               Nadia Ahmad <nahmad@databay.de>
+ * @ilCtrl_isCalledBy    ilObjInteractiveVideoGUI: ilRepositoryGUI, ilAdministrationGUI, ilObjPluginDispatchGUI
+ * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilPermissionGUI, ilInfoScreenGUI, ilObjectCopyGUI, ilRepositorySearchGUI, ilPublicUserProfileGUI, ilCommonActionDispatcherGUI, ilMDEditorGUI
+ */
 class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopItemHandling
 {
-
 	/**
 	 * @object $objComment ilObjComment
 	 */
 	public $objComment = 0;
-	
+
 	/**
 	 * Functions that must be overwritten
 	 */
@@ -42,15 +40,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return 'showContent';
 	}
 
-//	public function __construct()
-//	{
-//		parent::__construct();
-//		
-//		$this->objComment = new ilObjComment();
-//		$this->objComment->setRefId($this->ref_id);
-//	}
-//	
-	
 	/**
 	 * @param string $cmd
 	 */
@@ -62,8 +51,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $ilTabs, $tpl;
 		$tpl->setDescription($this->object->getDescription());
+
 		$next_class = $this->ctrl->getNextClass($this);
-		
 		switch($next_class)
 		{
 			case 'ilmdeditorgui':
@@ -75,31 +64,32 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$this->ctrl->forwardCommand($md_gui);
 				return;
 				break;
+
 			case 'ilpublicuserprofilegui':
-				$ilTabs->activateTab('members');
-				$this->setSubTabs('members');
 				require_once 'Services/User/classes/class.ilPublicUserProfileGUI.php';
-				$profile_gui = new ilPublicUserProfileGUI($_GET["user"]);
-				$profile_gui->setBackUrl($this->ctrl->getLinkTarget($this, 'showParticipantsGallery'));
+				$profile_gui = new ilPublicUserProfileGUI($_GET['user']);
+				$profile_gui->setBackUrl($this->ctrl->getLinkTarget($this, 'showContent'));
 				$this->tpl->setContent($this->ctrl->forwardCommand($profile_gui));
 				break;
+
 			case 'ilcommonactiondispatchergui':
 				require_once 'Services/Object/classes/class.ilCommonActionDispatcherGUI.php';
 				$gui = ilCommonActionDispatcherGUI::getInstanceFromAjaxCall();
 				$this->ctrl->forwardCommand($gui);
 				break;
+
 			default:
 				switch($cmd)
 				{
 					case 'updateProperties':
-					case 'editProperties': 
-					case 'confirmDeleteComment': 
-					case 'deleteComment': 
-					 
+					case 'editProperties':
+					case 'confirmDeleteComment':
+					case 'deleteComment':
 						$this->checkPermission('write');
 						$this->$cmd();
 						break;
-					
+
+					case 'redrawHeaderAction':
 					case 'addToDesk':
 					case 'removeFromDesk':
 					case 'showContent':
@@ -110,20 +100,23 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 						$this->checkPermission('read');
 						$this->$cmd();
 						break;
+
 					default:
 						if(method_exists($this, $cmd))
 						{
 							$this->checkPermission('read');
 							$this->$cmd();
 						}
-						else 
+						else
 						{
-							
-						}	
+							throw new ilException(sprintf("Unsupported command %s", $cmd));
+						}
 						break;
 				}
 				break;
 		}
+
+		$this->addHeaderAction();
 	}
 
 	public function showContent()
@@ -139,29 +132,29 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$ilTabs->activateTab('content');
 		$tpl->getStandardTemplate();
-		$tpl->addJavaScript($this->plugin->getDirectory().'/js/jquery.scrollbox.js');
-		$tpl->addCss($this->plugin->getDirectory().'/templates/default/xvid.css');
-		
-		$video_tpl =  new ilTemplate("tpl.video_tpl.html", true, true, $this->plugin->getDirectory());
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.scrollbox.js');
+		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
+
+		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $this->plugin->getDirectory());
 		require_once("./Services/MediaObjects/classes/class.ilObjMediaObject.php");
 		require_once("./Services/MediaObjects/classes/class.ilObjMediaObjectGUI.php");
 
-		$mob_id = $this->object->getMobIdByRefId($this->ref_id);
-		
+		$mob_id = $this->object->getMobId();
+
 		ilObjMediaObjectGUI::includePresentationJS($tpl);
 
-		$mob_dir = ilObjMediaObject::_getDirectory($mob_id);
+		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
-		
-		$video_tpl->setVariable('VIDEO_SRC', $mob_dir.'/'.$media_item['location']);
+
+		$video_tpl->setVariable('VIDEO_SRC', $mob_dir . '/' . $media_item['location']);
 		$video_tpl->setVariable('VIDEO_TYPE', $media_item['format']);
-		
+
 		$this->objComment = new ilObjComment();
-		$this->objComment->setRefId($this->ref_id);
-		
+		$this->objComment->setObjId($this->object->getId());
+
 		$comments = $this->objComment->getStopPoints();
 		$video_tpl->setVariable('STOP_POINTS', json_encode(array_keys($comments)));
-		
+
 		$i = 1;
 		foreach(array_values($comments) as $comment_text)
 		{
@@ -170,17 +163,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$video_tpl->setVariable('COMMENT_TEXT', $comment_text);
 			$video_tpl->parseCurrentBlock();
 			$i++;
-			
-		}	
-		
+
+		}
+
 		$video_tpl->setVariable('COMMENT_FORM', $this->showCommentForm());
-		
-		
+
 		$tpl->setContent($video_tpl->get());
 		return;
-		
+
 	}
-	
+
 	public function showCommentForm()
 	{
 		$form = new ilPropertyFormGUI();
@@ -189,29 +181,27 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($input);
 		$form->addCommandButton('postComment', $this->lng->txt('post'));
 		$form->addCommandButton('showContent', $this->lng->txt('cancel'));
-		
+
 		return $form->getHTML();
-		
-	}	
-	
+
+	}
+
 	public function postComment()
 	{
 		global $ilUser, $lng;
 		$p = $_POST;
-		
+
 		$comment_text = $_POST['comment_text'];
-		$user_id = $ilUser->getId();
-		
+		$user_id      = $ilUser->getId();
+
 		$objComment = new ilObjComment();
 		$objComment->setMobId($this->object->getMobId());
-		$objComment->setRefId($this->ref_id);
+		$objComment->setObjId($this->object->getId());
 		$objComment->setUserId($user_id);
 		$objComment->setCommentText($comment_text);
-		
+
 		$this->showContent();
 	}
-	
-		
 
 	public function confirmDeleteComment()
 	{
@@ -228,7 +218,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			ilUtil::sendFailure($lng->txt('select_one'));
 			$this->editProperties();
-		}	
+		}
 		include_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
 		$confirm = new ilConfirmationGUI();
 		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteComment'));
@@ -245,7 +235,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($confirm->getHTML());
 	}
 
-
 	public function deleteComment()
 	{
 		/**
@@ -256,15 +245,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			ilUtil::sendFailure($lng->txt('error_sry_error'));
 		}
-		
+
 		if(is_array($_POST['comment_id']))
 		{
 			$this->object->deleteComments($_POST['comment_id']);
 		}
-		
+
 		$this->editProperties();
 	}
-	
+
 	private function initCommentForm()
 	{
 		/**
@@ -275,7 +264,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
 		$form->setTitle($this->lng->txt('insert_comment'));
 
-		include_once $this->plugin->getDirectory().'/classes/class.ilTimeInputGUI.php';
+		include_once $this->plugin->getDirectory() . '/classes/class.ilTimeInputGUI.php';
 		$time = new ilTimeInputGUI($lng->txt('time'), 'comment_time');
 		$time->setShowTime(true);
 		$time->setShowSeconds(true);
@@ -288,7 +277,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($interactive);
 		return $form;
 	}
-	
+
 	public function showTutorInsertCommentForm()
 	{
 		/**
@@ -302,15 +291,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$ilTabs->activateTab('editProperties');
 		$tpl->getStandardTemplate();
-		
+
 		$form = $this->initCommentForm();
 
 		$form->addCommandButton('insertTutorComment', $lng->txt('insert'));
-		$form->addCommandButton('editProperties',$lng->txt('cancel'));
+		$form->addCommandButton('editProperties', $lng->txt('cancel'));
 
 		$tpl->setContent($form->getHTML());
 	}
-	
+
 	public function showLearnerCommentForm()
 	{
 		/**
@@ -324,54 +313,50 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$ilTabs->activateTab('showContent');
 		$tpl->getStandardTemplate();
-		
+
 		$form = $this->initCommentForm();
 		$form->addCommandButton('insertLearnerComment', $lng->txt('insert'));
-		$form->addCommandButton('showContent',$lng->txt('cancel'));
+		$form->addCommandButton('showContent', $lng->txt('cancel'));
 
 		$tpl->setContent($form->getHTML());
 	}
-	
+
 	public function insertTutorComment()
 	{
 		$this->insertComment(1);
-	}	
+	}
+
 	public function insertLearnerComment()
 	{
 		$this->insertComment(0);
 	}
-	
+
 	private function insertComment($is_tutor = 0)
 	{
 		$form = $this->initCommentForm();
-		
+
 		if($form->checkInput())
 		{
 			$this->objComment = new ilObjComment();
-			
-			$this->objComment->setRefId($this->ref_id);
+
+			$this->objComment->setObjId($this->object->getId());
 			$this->objComment->setCommentText($form->getInput('comment_text'));
 			$this->objComment->setInteractive((int)$form->getInput('is_interactive'));
-			
+
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
-			$seconds = $comment_time['time']['h'] * 3600
-			 			+ $comment_time['time']['m'] * 60
-						+ $comment_time['time']['s'];
+			$seconds      = $comment_time['time']['h'] * 3600
+				+ $comment_time['time']['m'] * 60
+				+ $comment_time['time']['s'];
 			$this->objComment->setCommentTime($seconds);
-			
-			$mob_id = $this->object->getMobIdByRefId($this->ref_id);
-			$this->objComment->setMobId($mob_id);
 			$this->objComment->setIsTutor($is_tutor);
-
 			$this->objComment->insertComment();
 		}
-		
-		$is_tutor ? $cmd = 'editProperties': $cmd = 'showContent';
+
+		$is_tutor ? $cmd = 'editProperties' : $cmd = 'showContent';
 		return $this->$cmd();
 	}
-	
-	
+
 	public function editComment()
 	{
 		/**
@@ -389,27 +374,27 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$frm_id = new ilHiddenInputGUI('comment_id');
 		$form->addItem($frm_id);
-		
+
 		$form->setFormAction($this->ctrl->getFormAction($this, 'updateComment'));
 		$form->setTitle($this->lng->txt('edit_comment'));
-		
+
 		$form->addCommandButton('updateComment', $lng->txt('save'));
 		$form->addCommandButton('editProperties', $lng->txt('cancel'));
-		
+
 		if(isset($_GET['comment_id']))
 		{
-			$comment_data = $this->object->getCommentDataById((int)$_GET['comment_id']);
-			$values['comment_id']	= $comment_data['comment_id'];
-			$values['comment_time'] = $comment_data['comment_time'];
-			$values['comment_text'] = $comment_data['comment_text'];
+			$comment_data             = $this->object->getCommentDataById((int)$_GET['comment_id']);
+			$values['comment_id']     = $comment_data['comment_id'];
+			$values['comment_time']   = $comment_data['comment_time'];
+			$values['comment_text']   = $comment_data['comment_text'];
 			$values['is_interactive'] = $comment_data['is_interactive'];
-		
+
 			$form->setValuesByArray($values, true);
 		}
 		$tpl->setContent($form->getHTML());
 		return;
 	}
-	
+
 	public function updateComment()
 	{
 		$form = $this->initCommentForm();
@@ -420,18 +405,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			{
 				$this->objComment = new ilObjComment($comment_id);
 
-			}			
+			}
 			$this->objComment->setCommentText($form->getInput('comment_text'));
 			$this->objComment->setInteractive((int)$form->getInput('is_interactive'));
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
-			$seconds = $comment_time['time']['h'] * 3600
+			$seconds      = $comment_time['time']['h'] * 3600
 				+ $comment_time['time']['m'] * 60
 				+ $comment_time['time']['s'];
 			$this->objComment->setCommentTime($seconds);
-			
-			
+
 			$this->objComment->updateComment();
 			return $this->editProperties();
 		}
@@ -441,25 +425,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			return $this->editComment();
 		}
 	}
-	
-	
+
 	public function editProperties()
 	{
 		/**
-	 * @var $tpl    ilTemplate
-	 * @var $ilTabs ilTabsGUI
-	 * @var $lng    ilLanguage
-	 * @var $ilUser ilObjUser
-	 * @var $ilLog  ilLog
-	 */
-		global $tpl, $ilTabs, $lng, $ilUser, $ilLog;
+		 * @var $tpl    ilTemplate
+		 * @var $ilTabs ilTabsGUI
+		 */
+		global $tpl, $ilTabs;
 
 		$ilTabs->activateTab('editProperties');
-		$this->object->setIsTutor(1);
-		
-		$tpl->getStandardTemplate();
+
 		$tbl_data = $this->object->getCommentsTableData();
-		include_once $this->plugin->getDirectory().'/classes/class.ilInteractiveVideoCommentsTableGUI.php';
+		include_once $this->plugin->getDirectory() . '/classes/class.ilInteractiveVideoCommentsTableGUI.php';
 		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editProperties');
 
 		$tbl->setData($tbl_data);
@@ -467,7 +445,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($tbl->getHTML());
 		return;
 	}
-	
+
 	/**
 	 * @param string $type
 	 * @return array
@@ -495,68 +473,40 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return $form;
 	}
 
-	public function afterSave(ilObjInteractiveVideo $newObj)
+	/**
+	 * Overwriting this method is necessary to handle creation problems with the api
+	 */
+	public function save()
 	{
-		include_once("./Services/MediaObjects/classes/class.ilObjMediaObject.php");
-		$new_file = $_FILES['video_file'];
+		$this->saveObject();
+	}
 
-		if(isset($new_file) && is_array($new_file))
+	/**
+	 * Overwriting this method is necessary to handle creation problems with the api
+	 */
+	public function saveObject()
+	{
+		/**
+		 * @var $ilCtrl ilCtrl
+		 */
+		global $ilCtrl;
+
+		try
 		{
-			$mob = new ilObjMediaObject();
-
-			$mob->setTitle($new_file['name']);
-			$mob->setDescription("");
-			$mob->create();
-			
-			$mob_dir = ilObjMediaObject::_getDirectory($mob->getId());
-			if(!is_dir($mob_dir))
+			parent::saveObject();
+		}
+		catch(Exception $e)
+		{
+			if($this->plugin->txt($e->getMessage()) != '-' . $e->getMessage() . '-')
 			{
-				$mob->createDirectory();
+				ilUtil::sendFailure($this->plugin->txt($e->getMessage()), true);
 			}
 
-			$media_item = new ilMediaItem();
-			$mob->addMediaItem($media_item);
-			$media_item->setPurpose("Standard");
-
-			$file = $mob_dir . "/" . $new_file['name'];
-			ilUtil::moveUploadedFile($new_file['tmp_name'],	$new_file['name'], $file, false, $_POST["action"]);
-
-			// get mime type
-			$format   = ilObjMediaObject::getMimeType($file);
-			$location = $new_file['name'];
-
-			// set real meta and object data
-			$media_item->setFormat($format);
-			$media_item->setLocation($location);
-			$media_item->setLocationType("LocalFile");
-
-			$mob->setDescription($format);
-
-			// determine width and height of known image types
-			$wh = ilObjMediaObject::_determineWidthHeight(500, 400, $format,
-				"File", $mob_dir . "/" . $location, $media_item->getLocation(),
-				true, true, "", "");
-			$media_item->setWidth($wh["width"]);
-			$media_item->setHeight($wh["height"]);
-
-			$media_item->setHAlign("Left");
-			ilUtil::renameExecutables($mob_dir);
-			$mob->update();
-			
-			$newObj->saveMobIdForRefId($mob->getId(), $newObj->getRefId());
+			$ilCtrl->setParameterByClass('ilrepositorygui', 'ref_id', (int)$_GET['ref_id']);
+			$ilCtrl->redirectByClass('ilrepositorygui');
 		}
-		parent::afterSave($newObj);
 	}
-	
-	
-	public function beforeDelete()
-	{
-		include_once("./Services/MediaObjects/classes/class.ilObjMediaObject.php");
-		
-		$mob = new ilObjMediaObject($this->obj_id);
-		$mob->delete();
-	}
-	
+
 	/**
 	 * @see ilDesktopItemHandling::addToDesk()
 	 */
@@ -564,36 +514,69 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		/**
 		 * @var $ilSetting ilSetting
-		 * @var $lng ilLanguage
+		 * @var $lng       ilLanguage
 		 */
 		global $ilSetting, $lng;
+
 		if((int)$ilSetting->get('disable_my_offers'))
 		{
-			$this->showContent();
+			$this->ctrl->redirect($this);
 			return;
 		}
+
 		include_once './Services/PersonalDesktop/classes/class.ilDesktopItemGUI.php';
 		ilDesktopItemGUI::addToDesktop();
-		ilUtil::sendSuccess($lng->txt('added_to_desktop'));
-		$this->showContent();
+		ilUtil::sendSuccess($lng->txt('added_to_desktop'), true);
+		$this->ctrl->redirect($this);
 	}
+
 	/**
 	 * @see ilDesktopItemHandling::removeFromDesk()
 	 */
 	public function removeFromDeskObject()
 	{
 		global $ilSetting, $lng;
+
 		if((int)$ilSetting->get('disable_my_offers'))
 		{
-			$this->showContent();
+			$this->ctrl->redirect($this);
 			return;
 		}
+
 		include_once './Services/PersonalDesktop/classes/class.ilDesktopItemGUI.php';
 		ilDesktopItemGUI::removeFromDesktop();
-		ilUtil::sendSuccess($lng->txt('removed_from_desktop'));
-		$this->showContent();
+		ilUtil::sendSuccess($lng->txt('removed_from_desktop'), true);
+		$this->ctrl->redirect($this);
 	}
-	
+
+	/**
+	 * @param string $a_sub_type
+	 * @param int    $a_sub_id
+	 * @return ilObjectListGUI|ilObjInteractiveVideoListGUI
+	 */
+	protected function initHeaderAction($a_sub_type = null, $a_sub_id = null)
+	{
+		/**
+		 * @var $ilUser ilObjUser
+		 */
+		global $ilUser;
+
+		$lg = parent::initHeaderAction();
+
+		if($lg instanceof ilObjInteractiveVideoListGUI)
+		{
+			if($ilUser->getId() != ANONYMOUS_USER_ID)
+			{
+				// Maybe handle notifications in future ...
+			}
+		}
+
+		return $lg;
+	}
+
+	/**
+	 *
+	 */
 	protected function setTabs()
 	{
 		/**
@@ -607,17 +590,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$ilTabs->addTab('content', $this->lng->txt('content'), $ilCtrl->getLinkTarget($this, 'showContent'));
 		}
+
 		$this->addInfoTab();
-		
+
 		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
 		{
 			$ilTabs->addTab('editProperties', $this->lng->txt('edit'), $ilCtrl->getLinkTarget($this, 'editProperties'));
 		}
 
-		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
-		{
-			$this->addPermissionTab();
-		}
-		return;
+		$this->addPermissionTab();
 	}
 }
