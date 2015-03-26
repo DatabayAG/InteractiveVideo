@@ -187,6 +187,7 @@ class ilObjComment
 		$res = $ilDB->queryF('SELECT comment_id, comment_text FROM rep_robj_xvid_comments WHERE obj_id = %s
 			ORDER BY comment_time, comment_id ASC', array('integer'), array($this->getObjId()));
 
+		$comment_text = array();
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$comment_text[] = $row['comment_text'];
