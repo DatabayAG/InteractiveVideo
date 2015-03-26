@@ -471,34 +471,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	/**
-	 * 
-	 */
-	public function editProperties()
-	{
-		/**
-		 * @var $tpl    ilTemplate
-		 * @var $ilTabs ilTabsGUI
-		 */
-		global $tpl, $ilTabs;
-
-		$this->setSubTabs('editProperties');
-
-		$ilTabs->activateTab('editProperties');
-		$ilTabs->activateSubTab('editProperties');
-
-		$form = $this->initEditForm();
-
-		$values['title']      = $this->object->getTitle();
-		$values['desc']       = $this->object->getDescription();
-		$values['video_file'] = ilObject::_lookupTitle($this->object->getMobId()); 
-
-		$form->setValuesByArray($values);
-
-		$tpl->setContent($form->getHTML());
-	}
-
-	/**
-	 * 
+	 *
 	 */
 	public function editComments()
 	{
@@ -519,6 +492,26 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$tbl->setData($tbl_data);
 		$tpl->setContent($tbl->getHTML());
+	}
+
+	/**
+	 * @param ilPropertyFormGUI $a_form
+	 * @return bool
+	 */
+	protected function validateCustom(ilPropertyFormGUI $a_form)
+	{
+		// Validate custom values on update and return false if the property form is invalid
+		return parent::validateCustom($a_form);
+	}
+
+	/**
+	 * @param ilPropertyFormGUI $a_form
+	 */
+	protected function updateCustom(ilPropertyFormGUI $a_form)
+	{
+		// @todo: Store the new file (delegate to application class)
+
+		parent::updateCustom($a_form);
 	}
 
 	/**
@@ -549,18 +542,51 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	/**
-	 * @return ilPropertyFormGUI
+	 * @param ilPropertyFormGUI $a_form
+	 */
+	protected function initEditCustomForm(ilPropertyFormGUI $a_form)
+	{
+		/**
+		 * @var $ilTabs ilTabsGUI
+		 */
+		global $ilTabs;
+
+		$this->setSubTabs('editProperties');
+
+		$ilTabs->activateTab('editProperties');
+		$ilTabs->activateSubTab('editProperties');
+
+		$upload_field = new ilFileInputGUI($this->plugin->txt('video_file'), 'video_file');
+		$upload_field->setSuffixes(array('mp4', 'mov'));
+		$a_form->addItem($upload_field);
+	}
+
+	/**
+	 * @param array $a_values
+	 */
+	protected function getEditFormCustomValues(array &$a_values)
+	{
+		$a_values['video_file'] = ilObject::_lookupTitle($this->object->getMobId());
+	}
+
+	/**
+	 *
+	 */
+	public function editProperties()
+	{
+		$this->edit();
+	}
+
+	/**
+	 *
 	 */
 	public function initEditForm()
 	{
 		$form = parent::initEditForm();
-
-		$upload_field = new ilFileInputGUI($this->plugin->txt('video_file'), 'video_file');
-		$upload_field->setSuffixes(array('mp4', 'mov'));
-		$form->addItem($upload_field);
-
+		$this->initEditCustomForm($form);
 		return $form;
 	}
+
 
 	/**
 	 * Overwriting this method is necessary to handle creation problems with the api
