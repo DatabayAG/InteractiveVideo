@@ -56,8 +56,8 @@
 					timerRate: 50,
 					enablePluginDebug: false,
 					success:           function(media) {
-					if (_lastTime == media.currentTime) {
-							} else 	media.addEventListener('seeked', function(e) {
+
+						media.addEventListener('seeked', function(e) {
 							console.log("seeked");
 							clearInterval(interval);
 							if (_lastTime > media.currentTime) {
