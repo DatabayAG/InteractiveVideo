@@ -6,22 +6,19 @@
 			</video>
 		</div>
 		<div id="ilInteractiveVideoCommentsForm">
-			<form id="form_" class="form-horizontal preventDoubleSubmission" method="post"
-				  action="{FORM_ACTION}" role="form">
+			<form class="form-horizontal preventDoubleSubmission" method="post" action="{FORM_ACTION}" role="form">
 				<div id="il_prop_cont_comment_text" class="form-group">
 					<label class="col-sm-3 control-label" for="comment_text">{TXT_COMMENT}</label>
-
 					<div class="col-sm-9">
 						<textarea id="comment_text" class="form-control noRTEditor" rows="" wrap="virtual" name="comment_text"></textarea>
 						<input type="hidden" name="comment_time" id="comment_time" value="">
-
 					</div>
 				</div>
 				<div class="ilFormFooter clearfix">
 					<div class="col-sm-6 ilFormRequired"></div>
 					<div class="col-sm-6 ilFormCmds">
-						<input class="btn btn-default btn-sm" type="submit" value="{TXT_POST}" onclick="getCurrentTime()">
-						<input class="btn btn-default btn-sm" type="button" value="{TXT_CANCEL}" onclick="deleteCommentText()">
+						<input id="ilInteractiveVideoCommentSubmit" class="btn btn-default btn-sm" type="submit" value="{TXT_POST}">
+						<button id="ilInteractiveVideoCommentCancel" class="btn btn-default btn-sm" type="button" value="">{TXT_CANCEL}</button>
 					</div>
 				</div>
 			</form>
@@ -42,13 +39,13 @@
 
 	<script type="text/javascript">
 		(function ($) {
-			function getCurrentTime() {
-				$('#comment_time').val($("video#ilInteractiveVideo").prop("currentTime"));
-			}
+			$("#ilInteractiveVideoCommentSubmit").on("click", function(e) {
+				$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
+			});
 
-			function deleteCommentText() {
+			$("#ilInteractiveVideoCommentCancel").on("click", function(e) {
 				$('#comment_text').val("");
-			}
+			});
 
 			il.Util.addOnLoad(function () {
 				var _lastTime = 0,
@@ -57,31 +54,27 @@
 
 				var player = new MediaElementPlayer("#ilInteractiveVideo", {
 					timerRate: 100,
-					enablePluginDebug: true,
+					enablePluginDebug: false,
 					success:           function(media) {
-						media.addEventListener('seeked', function (e) {
-							console.log('seeked');
-							console.log(_lastTime);
-							console.log(media.currentTime);
-							if (_lastTime == media.currentTime) {
-								console.log('do nothing');
-							}
+					if (_lastTime == media.currentTime) {
+							} else 	media.addEventListener('seeked', function(e) {
+							console.log("seeked");
+							clearInterval(interval);
 							if (_lastTime > media.currentTime) {
-								console.log('scrollbox: scroll backward');
 								_lastTime = media.currentTime;
-							}
-							if (_lastTime < media.currentTime) {
-								console.log('scrollbox: scroll forward');
+							} else if (_lastTime < media.currentTime) {
 								_lastTime = media.currentTime;
 							}
 						}, false);
 
 						media.addEventListener('pause', function(e) {
+							console.log("paused");
 							clearInterval(interval);
 							_lastTime = media.currentTime;
 						}, false);
 
 						media.addEventListener('playing', function(e) {
+							console.log("playing");
 							interval = setInterval(function () {
 								if (media.currentTime >= media.duration) {
 									clearInterval(interval);
@@ -93,7 +86,6 @@
 										var cueTime = stopPoints[j];
 
 										if (cueTime >= _lastTime && cueTime <= media.currentTime) {
-//											
 // if interactive trigger enabled pause ... 
 // player.pause();
 											$('#ilInteractiveVideoComments').scrollbox({
@@ -113,5 +105,4 @@
 			});
 		})(jQuery);
 	</script>
-
 </div>
