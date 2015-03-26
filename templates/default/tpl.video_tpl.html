@@ -51,14 +51,9 @@
 			}
 
 			il.Util.addOnLoad(function () {
-				var _lastTime = 0, stopPoints = [];
-				try {
-					stopPoints = {STOP_POINTS};
-				} catch (e) {
-					stopPoints = [];
-				}
-
-				var interval;
+				var _lastTime = 0,
+					stopPoints = {STOP_POINTS},
+					interval = null;
 
 				var player = new MediaElementPlayer("#ilInteractiveVideo", {
 					timerRate: 100,
