@@ -24,3 +24,5 @@ comment#:#Kommentar
 post#:#Posten
 cancel#:#Abbrechen
 sure_delete_comment#:#Sind Sie sicher, dass die die gewählten Kommentare löschen möchten?
+missing_comment_text#:#Bitte geben Sie einen Kommentar ein.
+missing_stopping_point#:#Der Haltepunkt wurde nicht zum Server übertragen. Bitte versuchen Sie es erneut.

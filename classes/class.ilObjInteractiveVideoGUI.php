@@ -3,8 +3,11 @@
 require_once 'Services/Repository/classes/class.ilObjectPluginGUI.php';
 require_once 'Services/PersonalDesktop/interfaces/interface.ilDesktopItemHandling.php';
 require_once 'Services/Form/classes/class.ilPropertyFormGUI.php';
-include_once("./Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.xvidUtils.php");
-include_once("./Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilObjComment.php");
+require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
+require_once 'Services/MediaObjects/classes/class.ilObjMediaObjectGUI.php';
+require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php'; 
+ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
 
 /**
  * Class ilObjInteractiveVideoGUI
@@ -17,7 +20,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 * @object $objComment ilObjComment
 	 */
-	public $objComment = 0;
+	public $objComment;
 
 	/**
 	 * Functions that must be overwritten
@@ -42,6 +45,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	/**
 	 * @param string $cmd
+	 * @throws ilException
 	 */
 	public function performCommand($cmd)
 	{
@@ -62,12 +66,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$md_gui->addObserver($this->object, 'MDUpdateListener', 'General');
 				$ilTabs->setTabActive('meta_data');
 				$this->ctrl->forwardCommand($md_gui);
-				return;
 				break;
 
 			case 'ilpublicuserprofilegui':
 				require_once 'Services/User/classes/class.ilPublicUserProfileGUI.php';
-				$profile_gui = new ilPublicUserProfileGUI($_GET['user']);
+				$profile_gui = new ilPublicUserProfileGUI((int)$_GET['user']);
 				$profile_gui->setBackUrl($this->ctrl->getLinkTarget($this, 'showContent'));
 				$this->tpl->setContent($this->ctrl->forwardCommand($profile_gui));
 				break;
@@ -109,7 +112,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 						}
 						else
 						{
-							throw new ilException(sprintf("Unsupported command %s", $cmd));
+							throw new ilException(sprintf("Unsupported plugin command %s ind %s", $cmd, __METHOD__));
 						}
 						break;
 				}
@@ -119,6 +122,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->addHeaderAction();
 	}
 
+	/**
+	 * 
+	 */
 	public function showContent()
 	{
 		/**
@@ -131,15 +137,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.scrollbox.js');
 		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
-
-		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $this->plugin->getDirectory());
-		require_once("./Services/MediaObjects/classes/class.ilObjMediaObject.php");
-		require_once("./Services/MediaObjects/classes/class.ilObjMediaObjectGUI.php");
-
-		$mob_id = $this->object->getMobId();
-
 		ilObjMediaObjectGUI::includePresentationJS($tpl);
 
+		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $this->plugin->getDirectory());
+
+		$mob_id = $this->object->getMobId();
 		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
 
@@ -153,112 +155,135 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('comment'));
 		$video_tpl->setVariable('TXT_POST', $this->plugin->txt('post'));
 		$video_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
-		
+
 		$video_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
 
 		$comments = $this->objComment->getCommentTexts();
-		
-		$i = 1;
+		$i        = 1;
 		foreach($comments as $comment_text)
 		{
 			$video_tpl->setCurrentBlock('comments_list');
-			$video_tpl->setVariable('C_INDEX', $i);
+			$video_tpl->setVariable('COMMENT_INDEX', $i);
 			$video_tpl->setVariable('COMMENT_TEXT', $comment_text);
 			$video_tpl->parseCurrentBlock();
 			$i++;
 		}
 
-		$target = $this->ctrl->getLinkTarget($this, 'postComment', '', true, false);
-		$video_tpl->setVariable('FORM_ACTION', $target);
-		$tpl->setContent($video_tpl->get());
-		return;
+		$video_tpl->setVariable('FORM_ACTION', $this->ctrl->getFormAction($this, 'postComment'));
 
+		$tpl->setContent($video_tpl->get());
 	}
 
+	/**
+	 * 
+	 */
 	public function postComment()
 	{
-		global $ilUser, $lng;
-		$comment_text = array();
-		$comment_text = (string)$_POST['comment_text'];
+		/**
+		 * @var $ilUser ilObjUser
+		 */
+		global $ilUser;
 
-		if(isset($comment_text) && strlen($comment_text) > 0)
+		if(
+			!isset($_POST['comment_text']) ||
+			!is_string($_POST['comment_text']) ||
+			!strlen(trim(ilUtil::stripSlashes($_POST['comment_text'])))
+		)
 		{
-			$user_id = $ilUser->getId();
-
-			$objComment = new ilObjComment();
-			$objComment->setObjId($this->obj_id);
-			$objComment->setUserId($user_id);
-			$objComment->setCommentText($comment_text);
-			$objComment->setCommentTime((int)$_POST['comment_time']);
-
-			$objComment->insertComment();
+			ilUtil::sendFailure($this->plugin->txt('missing_comment_text'));
+			$this->showContent();
+			return;
 		}
-		return $this->showContent();
+
+		if(!isset($_POST['comment_time']) || !strlen(trim(ilUtil::stripSlashes($_POST['comment_time']))))
+		{
+			ilUtil::sendFailure($this->plugin->txt('missing_stopping_point'));
+			$this->showContent();
+			return;
+		}
+
+		$comment = new ilObjComment();
+		$comment->setObjId($this->object->getId());
+		$comment->setUserId($ilUser->getId());
+		$comment->setCommentText(trim(ilUtil::stripSlashes($_POST['comment_text'])));
+		$comment->setCommentTime((float)$_POST['comment_time']);
+		$comment->create();
+
+		ilUtil::sendSuccess($this->lng->txt('saved_successfully'));
+		$this->showContent();
 	}
 
+	/**
+	 * 
+	 */
 	public function confirmDeleteComment()
 	{
 		/**
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
-		 * @var $lng    ilLanguage
 		 */
-		global $tpl, $ilTabs, $lng;
+		global $tpl, $ilTabs;
 
 		$ilTabs->activateTab('editProperties');
-		$tpl->getStandardTemplate();
-		if(!isset($_POST['comment_id']))
+
+		if(!isset($_POST['comment_id']) || !is_array($_POST['comment_id']) || !count($_POST['comment_id']))
 		{
-			ilUtil::sendFailure($lng->txt('select_one'));
-			$this->editProperties();
+			ilUtil::sendFailure($this->lng->txt('select_one'));
+			$this->editComments();
+			return;
 		}
-		include_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
+
+		require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
 		$confirm = new ilConfirmationGUI();
 		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteComment'));
 		$confirm->setHeaderText($this->plugin->txt('sure_delete_comment'));
-		$confirm->setConfirm($lng->txt('confirm'), 'deleteComment');
-		$confirm->setCancel($lng->txt('cancel'), 'editComments');
-		if(is_array($_POST['comment_id']))
+		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteComment');
+		$confirm->setCancel($this->lng->txt('cancel'), 'editComments');
+
+		// @todo: Check (in a separate loop) if all the comment ids belong to the current object context, otherwise show a failure message
+
+		foreach($_POST['comment_id'] as $comment_id)
 		{
-			foreach((array)$_POST['comment_id'] as $comment_id)
-			{
-				$confirm->addItem('comment_id[]', $comment_id, $this->object->getCommentTextById($comment_id));
-			}
+			$confirm->addItem('comment_id[]', $comment_id, $this->object->getCommentTextById($comment_id));
 		}
+	
 		$tpl->setContent($confirm->getHTML());
 	}
 
+	/**
+	 * 
+	 */
 	public function deleteComment()
 	{
-		/**
-		 * @var $lng    ilLanguage
-		 */
-		global $lng;
-		if(!isset($_POST['comment_id']))
+		if(!isset($_POST['comment_id']) || !is_array($_POST['comment_id']) || !count($_POST['comment_id']))
 		{
-			ilUtil::sendFailure($lng->txt('error_sry_error'));
+			ilUtil::sendFailure($this->lng->txt('select_one'));
+			$this->editComments();
+			return;
 		}
 
-		if(is_array($_POST['comment_id']))
-		{
-			$this->object->deleteComments($_POST['comment_id']);
-		}
+		// @todo: Check (in a separate loop) if the comment ids belong to the current object context, otherwise show a failure message
+		$this->object->deleteComments($_POST['comment_id']);
 
+		// @todo: Print a success message (and directly add the language variable)
+		ilUtil::sendSuccess($this->lng->txt(''));
 		$this->editComments();
 	}
 
+	/**
+	 * @return ilPropertyFormGUI
+	 */
 	private function initCommentForm()
 	{
-		/**
-		 * @var $lng    ilLanguage
-		 */
-		global $lng;
+		// @todo: Why don't you add a "required" attribute to any of these fields?
+
 		$form = new ilPropertyFormGUI();
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
-		$form->setTitle($this->lng->txt('insert_comment'));
+		// @todo: Untranslated language variable
+		$form->setTitle($this->plugin->txt('insert_comment'));
 
-		include_once $this->plugin->getDirectory() . '/classes/class.ilTimeInputGUI.php';
-		$time = new ilTimeInputGUI($lng->txt('time'), 'comment_time');
+		$this->plugin->includeClass('class.ilTimeInputGUI.php');
+		$time = new ilTimeInputGUI($this->lng->txt('time'), 'comment_time');
 		$time->setShowTime(true);
 		$time->setShowSeconds(true);
 		$form->addItem($time);
@@ -266,64 +291,74 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment = new ilTextAreaInputGUI($this->lng->txt('comment'), 'comment_text');
 		$form->addItem($comment);
 
-		$interactive = new ilCheckboxInputGUI($this->lng->txt('interactive'), 'is_interactive');
+		$interactive = new ilCheckboxInputGUI($this->plugin->txt('interactive'), 'is_interactive');
 		$form->addItem($interactive);
 		return $form;
 	}
 
+	/**
+	 * 
+	 */
 	public function showTutorInsertCommentForm()
 	{
 		/**
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
-		 * @var $lng    ilLanguage
-		 * @var $ilUser ilObjUser
-		 * @var $ilLog  ilLog
 		 */
-		global $tpl, $ilTabs, $lng, $ilUser, $ilLog;
+		global $tpl, $ilTabs;
+
+		$this->setSubTabs('editProperties');
 
 		$ilTabs->activateTab('editProperties');
-		$tpl->getStandardTemplate();
+		$ilTabs->activateSubTab('editComments');
 
 		$form = $this->initCommentForm();
 
-		$form->addCommandButton('insertTutorComment', $lng->txt('insert'));
-		$form->addCommandButton('editComments', $lng->txt('cancel'));
+		$form->addCommandButton('insertTutorComment', $this->lng->txt('insert'));
+		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
 
 		$tpl->setContent($form->getHTML());
 	}
 
+	/**
+	 * 
+	 */
 	public function showLearnerCommentForm()
 	{
 		/**
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
-		 * @var $lng    ilLanguage
-		 * @var $ilUser ilObjUser
-		 * @var $ilLog  ilLog
 		 */
-		global $tpl, $ilTabs, $lng, $ilUser, $ilLog;
+		global $tpl, $ilTabs;
 
 		$ilTabs->activateTab('showContent');
-		$tpl->getStandardTemplate();
 
 		$form = $this->initCommentForm();
-		$form->addCommandButton('insertLearnerComment', $lng->txt('insert'));
-		$form->addCommandButton('showContent', $lng->txt('cancel'));
+		$form->addCommandButton('insertLearnerComment', $this->lng->txt('insert'));
+		$form->addCommandButton('showContent', $this->lng->txt('cancel'));
 
 		$tpl->setContent($form->getHTML());
 	}
 
+	/**
+	 * 
+	 */
 	public function insertTutorComment()
 	{
 		$this->insertComment(1);
 	}
 
+	/**
+	 * 
+	 */
 	public function insertLearnerComment()
 	{
 		$this->insertComment(0);
 	}
 
+	/**
+	 * @param int $is_tutor
+	 */
 	private function insertComment($is_tutor = 0)
 	{
 		$form = $this->initCommentForm();
@@ -343,23 +378,37 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				+ $comment_time['time']['s'];
 			$this->objComment->setCommentTime($seconds);
 			$this->objComment->setIsTutor($is_tutor);
-			$this->objComment->insertComment();
+			$this->objComment->create();
+
+			ilUtil::sendSuccess($this->lng->txt('saved_successfully'));
+		}
+		else
+		{
+			// @todo: You left the happy path... Please handle errors, populate the form fields with the correct values and display the form again.
+			// @todo: And please pay attention on the correct context (content for public comments, settings for tutor comments)
 		}
 
-		$is_tutor ? $cmd = 'editComments' : $cmd = 'showContent';
-		return $this->$cmd();
+		// @todo: I don't understand the difference between "postComment" and "insertLearnerComment"
+		if($is_tutor)
+		{
+			$this->editComments();
+		}
+		else
+		{
+			$this->showContent();
+		}
 	}
 
+	/**
+	 * 
+	 */
 	public function editComment()
 	{
 		/**
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
-		 * @var $lng    ilLanguage
-		 * @var $ilUser ilObjUser
-		 * @var $ilLog  ilLog
 		 */
-		global $tpl, $ilTabs, $lng, $ilUser, $ilLog;
+		global $tpl, $ilTabs;
 
 		$ilTabs->activateTab('editProperties');
 		$form = $this->initCommentForm();
@@ -368,10 +417,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($frm_id);
 
 		$form->setFormAction($this->ctrl->getFormAction($this, 'updateComment'));
-		$form->setTitle($this->lng->txt('edit_comment'));
+		// @todo: Untranslated language variable
+		$form->setTitle($this->plugin->txt('edit_comment'));
 
-		$form->addCommandButton('updateComment', $lng->txt('save'));
-		$form->addCommandButton('editProperties', $lng->txt('cancel'));
+		$form->addCommandButton('updateComment', $this->lng->txt('save'));
+		$form->addCommandButton('editProperties', $this->lng->txt('cancel'));
 
 		if(isset($_GET['comment_id']))
 		{
@@ -383,10 +433,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			$form->setValuesByArray($values, true);
 		}
+
 		$tpl->setContent($form->getHTML());
-		return;
 	}
 
+	/**
+	 * 
+	 */
 	public function updateComment()
 	{
 		$form = $this->initCommentForm();
@@ -407,17 +460,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				+ $comment_time['time']['m'] * 60
 				+ $comment_time['time']['s'];
 			$this->objComment->setCommentTime($seconds);
-
-			$this->objComment->updateComment();
-			return $this->editComments();
+			$this->objComment->update();
+			$this->editComments();
 		}
 		else
 		{
 			$form->setValuesByPost();
-			return $this->editComment();
+			$this->editComment();
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public function editProperties()
 	{
 		/**
@@ -426,23 +481,25 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $ilTabs;
 
-		$ilTabs->activateTab('editProperties');
 		$this->setSubTabs('editProperties');
+
+		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('editProperties');
 
-		$tpl->getStandardTemplate();
-		
 		$form = $this->initEditForm();
-		$values['title'] = $this->object->getTitle();
-		$values['desc'] = $this->object->getDescription();
-		$values['video_file']= ilObject::_lookupTitle($this->object->getMobId()); 
-		
+
+		$values['title']      = $this->object->getTitle();
+		$values['desc']       = $this->object->getDescription();
+		$values['video_file'] = ilObject::_lookupTitle($this->object->getMobId()); 
+
 		$form->setValuesByArray($values);
-		
+
 		$tpl->setContent($form->getHTML());
-		return;
 	}
 
+	/**
+	 * 
+	 */
 	public function editComments()
 	{
 		/**
@@ -451,35 +508,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $ilTabs;
 
-		$ilTabs->activateTab('editProperties');
 		$this->setSubTabs('editProperties');
+
+		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('editComments');
 
-		$tpl->getStandardTemplate();
 		$tbl_data = $this->object->getCommentsTableData();
-		include_once $this->plugin->getDirectory() . '/classes/class.ilInteractiveVideoCommentsTableGUI.php';
+		$this->plugin->includeClass('class.ilInteractiveVideoCommentsTableGUI.php');
 		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editComments');
 
 		$tbl->setData($tbl_data);
-
 		$tpl->setContent($tbl->getHTML());
-		return;
 	}
 
-	
-	public function setSubTabs($a_tab)
-	{
-		global $ilTabs, $lng;
-
-		switch ($a_tab)
-		{
-			case 'editProperties':
-				$ilTabs->addSubTab("editProperties",$lng->txt("settings"),$this->ctrl->getLinkTarget($this,'editProperties'));
-
-				$ilTabs->addSubTab("editComments",$this->plugin->txt("comments"),$this->ctrl->getLinkTarget($this,'editComments'));
-		}
-	}
-	
 	/**
 	 * @param string $type
 	 * @return array
@@ -506,13 +547,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		return $form;
 	}
+
+	/**
+	 * @return ilPropertyFormGUI
+	 */
 	public function initEditForm()
 	{
 		$form = parent::initEditForm();
 
 		$upload_field = new ilFileInputGUI($this->plugin->txt('video_file'), 'video_file');
 		$upload_field->setSuffixes(array('mp4', 'mov'));
-		$upload_field->setRequired(true);
 		$form->addItem($upload_field);
 
 		return $form;
@@ -531,11 +575,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	public function saveObject()
 	{
-		/**
-		 * @var $ilCtrl ilCtrl
-		 */
-		global $ilCtrl;
-
 		try
 		{
 			parent::saveObject();
@@ -547,8 +586,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				ilUtil::sendFailure($this->plugin->txt($e->getMessage()), true);
 			}
 
-			$ilCtrl->setParameterByClass('ilrepositorygui', 'ref_id', (int)$_GET['ref_id']);
-			$ilCtrl->redirectByClass('ilrepositorygui');
+			$this->ctrl->setParameterByClass('ilrepositorygui', 'ref_id', (int)$_GET['ref_id']);
+			$this->ctrl->redirectByClass('ilrepositorygui');
 		}
 	}
 
@@ -559,9 +598,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		/**
 		 * @var $ilSetting ilSetting
-		 * @var $lng       ilLanguage
 		 */
-		global $ilSetting, $lng;
+		global $ilSetting;
 
 		if((int)$ilSetting->get('disable_my_offers'))
 		{
@@ -571,7 +609,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		include_once './Services/PersonalDesktop/classes/class.ilDesktopItemGUI.php';
 		ilDesktopItemGUI::addToDesktop();
-		ilUtil::sendSuccess($lng->txt('added_to_desktop'), true);
+		ilUtil::sendSuccess($this->lng->txt('added_to_desktop'), true);
 		$this->ctrl->redirect($this);
 	}
 
@@ -580,7 +618,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	public function removeFromDeskObject()
 	{
-		global $ilSetting, $lng;
+		global $ilSetting;
 
 		if((int)$ilSetting->get('disable_my_offers'))
 		{
@@ -590,7 +628,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		include_once './Services/PersonalDesktop/classes/class.ilDesktopItemGUI.php';
 		ilDesktopItemGUI::removeFromDesktop();
-		ilUtil::sendSuccess($lng->txt('removed_from_desktop'), true);
+		ilUtil::sendSuccess($this->lng->txt('removed_from_desktop'), true);
 		$this->ctrl->redirect($this);
 	}
 
@@ -626,23 +664,41 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		/**
 		 * @var $ilTabs   ilTabsGUI
-		 * @var $ilCtrl   ilCtrl
 		 * @var $ilAccess ilAccessHandler
 		 */
-		global $ilTabs, $ilCtrl, $ilAccess;
+		global $ilTabs, $ilAccess;
 
 		if($ilAccess->checkAccess('read', '', $this->object->getRefId()))
 		{
-			$ilTabs->addTab('content', $this->lng->txt('content'), $ilCtrl->getLinkTarget($this, 'showContent'));
+			$ilTabs->addTab('content', $this->lng->txt('content'), $this->ctrl->getLinkTarget($this, 'showContent'));
 		}
 
 		$this->addInfoTab();
 
 		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
 		{
-			$ilTabs->addTab('editProperties', $this->lng->txt('edit'), $ilCtrl->getLinkTarget($this, 'editProperties'));
+			$ilTabs->addTab('editProperties', $this->lng->txt('edit'), $this->ctrl->getLinkTarget($this, 'editProperties'));
 		}
 
 		$this->addPermissionTab();
+	}
+
+	/**
+	 * @param string $a_tab
+	 */
+	public function setSubTabs($a_tab)
+	{
+		/**
+		 * @var $ilTabs   ilTabsGUI
+		 */
+		global $ilTabs;
+
+		switch($a_tab)
+		{
+			case 'editProperties':
+				$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'),$this->ctrl->getLinkTarget($this,'editProperties'));
+				$ilTabs->addSubTab('editComments', $this->plugin->txt('comments'),$this->ctrl->getLinkTarget($this,'editComments'));
+				break;
+		}
 	}
 }

@@ -25,10 +25,10 @@ class ilObjComment
 	/**
 	 * @var bool
 	 */
-	protected $is_tutor = 0;
+	protected $is_tutor = false;
 
 	/**
-	 * @var integer $comment_time in seconds
+	 * @var float $comment_time in seconds
 	 */
 	protected $comment_time = 0;
 
@@ -40,7 +40,7 @@ class ilObjComment
 	/**
 	 * @var bool
 	 */
-	protected $is_interactive = 0;
+	protected $is_interactive = false;
 
 	/**
 	 * @var array
@@ -48,29 +48,47 @@ class ilObjComment
 	protected $comments = array();
 
 	/**
-	 *
+	 * @param int $comment_id
 	 */
 	public function __construct($comment_id = 0)
 	{
-		if(isset($comment_id))
+		if($comment_id > 0)
 		{
-			$data = $this->getCommentDataById($comment_id);
 			$this->setCommentId($comment_id);
-			$this->setCommentText($data['comment_text']);
-			$this->setCommentTime($data['comment_time']);
-			$this->setInteractive($data['is_interactive']);
-			$this->setIsTutor($data['is_tutor']);
-			$this->setUserId($data['user_id']);
+			$this->read();
 		}
 	}
 
-	// insert
-	public function insertComment()
+	public function read()
 	{
+		/**
+		 * @var $ilDB ilDB
+		 */
+		global $ilDB;
+
+		$res = $ilDB->queryF(
+			'SELECT * FROM rep_robj_xvid_comments WHERE comment_id = %s',
+			array('integer'),
+			array($this->getCommentId())
+		);
+		$row = $ilDB->fetchAssoc($res);
+
+		$this->setCommentText($row['comment_text']);
+		$this->setCommentTime($row['comment_time']);
+		$this->setInteractive((bool)$row['is_interactive']);
+		$this->setIsTutor((bool)$row['is_tutor']);
+		$this->setUserId($row['user_id']);
+	}
+
+	public function create()
+	{
+		/**
+		 * @var $ilDB   ilDB
+		 * @var $ilUser ilObjUser
+		 */
 		global $ilDB, $ilUser;
 
 		$next_id = $ilDB->nextId('rep_robj_xvid_comments');
-
 		$ilDB->insert('rep_robj_xvid_comments',
 			array(
 				'comment_id'     => array('integer', $next_id),
@@ -78,20 +96,24 @@ class ilObjComment
 				'user_id'        => array('integer', $ilUser->getId()),
 				'is_tutor'       => array('integer', (int)$this->isTutor()),
 				'is_interactive' => array('integer', (int)$this->isInteractive()),
-				'comment_time'   => array('integer', $this->getCommentTime()),
+				// @todo: Change rounding and database type in case we should store milli seconds
+				'comment_time'   => array('integer', round($this->getCommentTime(), 0)),
 				'comment_text'   => array('text', $this->getCommentText())
 			));
 	}
 
-	// update
-	public function updateComment()
+	public function update()
 	{
+		/**
+		 * @var $ilDB ilDB
+		 */
 		global $ilDB;
 
 		$ilDB->update('rep_robj_xvid_comments',
 			array(
-				'is_interactive' => array('integer', $this->isInteractive()),
-				'comment_time'   => array('integer', $this->getCommentTime()),
+				'is_interactive' => array('integer', (int)$this->isInteractive()),
+				// @todo: Change rounding and database type in case we should store milli seconds
+				'comment_time'   => array('integer', round($this->getCommentTime(), 2)),
 				'comment_text'   => array('text', $this->getCommentText())
 			),
 			array(
@@ -142,18 +164,6 @@ class ilObjComment
 
 	}
 
-	public function getCommentDataById($comment_id)
-	{
-		global $ilDB;
-
-		$res = $ilDB->queryF('SELECT * FROM rep_robj_xvid_comments WHERE comment_id = %s',
-			array('integer'), array($comment_id));
-
-		$row = $ilDB->fetchAssoc($res);
-		return $row;
-
-	}
-
 	/**
 	 * @return array
 	 */
@@ -166,7 +176,8 @@ class ilObjComment
 
 		$res = $ilDB->queryF(
 			'SELECT comment_time
-			FROM rep_robj_xvid_comments WHERE obj_id = %s
+			FROM rep_robj_xvid_comments
+			WHERE obj_id = %s
 			ORDER BY comment_time ASC',
 			array('integer'),
 			array($this->getObjId())
@@ -180,18 +191,30 @@ class ilObjComment
 
 		return $stop_points;
 	}
+
 	public function getCommentTexts()
 	{
+		/**
+		 * @var $ilDB ilDB
+		 */
 		global $ilDB;
 
-		$res = $ilDB->queryF('SELECT comment_id, comment_text FROM rep_robj_xvid_comments WHERE obj_id = %s
-			ORDER BY comment_time, comment_id ASC', array('integer'), array($this->getObjId()));
+		$res = $ilDB->queryF(
+			'SELECT comment_id, comment_text
+			FROM rep_robj_xvid_comments
+			WHERE obj_id = %s
+			ORDER BY comment_time, comment_id ASC',
+			array('integer'),
+			array($this->getObjId())
+		);
 
 		$comment_text = array();
+
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$comment_text[] = $row['comment_text'];
 		}
+
 		return $comment_text;
 	}
 
@@ -262,7 +285,7 @@ class ilObjComment
 	}
 
 	/**
-	 * @return int
+	 * @return float
 	 */
 	public function getCommentTime()
 	{
@@ -270,7 +293,7 @@ class ilObjComment
 	}
 
 	/**
-	 * @param int $comment_time
+	 * @param float $comment_time
 	 */
 	public function setCommentTime($comment_time)
 	{

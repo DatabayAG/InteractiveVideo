@@ -6,46 +6,47 @@
 if(!$ilDB->tableExists('rep_robj_xvid_comments'))
 {
 	$fields = array(
-		'comment_id' => array(
-			'type' => 'integer',
-			'length' => '4',
+		'comment_id'     => array(
+			'type'    => 'integer',
+			'length'  => '4',
 			'notnull' => true
 		),
-		'obj_id' => array(
-			'type' => 'integer',
-			'length' => '4',
+		'obj_id'         => array(
+			'type'    => 'integer',
+			'length'  => '4',
 			'notnull' => true
 		),
-		'user_id' => array(
-			'type' => 'integer',
-			'length' => '4',
+		'user_id'        => array(
+			'type'    => 'integer',
+			'length'  => '4',
 			'notnull' => true
 		),
-		'is_tutor' => array(
-			'type' => 'integer',
-			'length' => '1',
+		'is_tutor'       => array(
+			'type'    => 'integer',
+			'length'  => '1',
 			'notnull' => true,
 			'default' => 0
 		),
 		'is_interactive' => array(
-			'type' => 'integer',
-			'length' => '1',
+			'type'    => 'integer',
+			'length'  => '1',
 			'notnull' => true,
 			'default' => 0
 		),
-		'comment_time' => array(
-			'type' => 'integer',
-			'length' => '4',
+		'comment_time'   => array(
+			'type'    => 'integer',
+			'length'  => '4',
 			'notnull' => true,
 			'default' => 0
 		),
-		'comment_text' => array(
-			'type' => 'text',
-			'length' => '4000',
-			'notnull' => true
+		'comment_text'   => array(
+			'type'    => 'text',
+			'length'  => '4000',
+			'notnull' => false,
+			'default' => null
 		)
 	);
-	
+
 	$ilDB->createTable('rep_robj_xvid_comments', $fields);
 	$ilDB->addPrimaryKey('rep_robj_xvid_comments', array('comment_id'));
 	$ilDB->createSequence('rep_robj_xvid_comments');
@@ -120,3 +121,11 @@ if($ilDB->tableColumnExists('rep_robj_xvid_comments', 'mob_id'))
 {
 	$ilDB->dropTableColumn('rep_robj_xvid_comments', 'mob_id');
 }
+?>
+<#6>
+<?php
+if($ilDB->tableColumnExists('rep_robj_xvid_comments', 'obj_id'))
+{
+	$ilDB->addIndex('rep_robj_xvid_comments', array('obj_id'), 'i1');
+}
+?>
