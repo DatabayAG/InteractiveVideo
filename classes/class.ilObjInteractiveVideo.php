@@ -113,7 +113,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 			$ilDB->insert(
 				'rep_robj_xvid_objects',
 				array(
-					'ref_id' => array('integer', $this->getId()),
+					'obj_id' => array('integer', $this->getId()),
 					'mob_id' => array('integer', $this->getMobId())
 				)
 			);
