@@ -71,17 +71,14 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 			$mob->setDescription('');
 			$mob->create();
 
+			$mob->createDirectory();
 			$mob_dir = ilObjMediaObject::_getDirectory($mob->getId());
-			if(!is_dir($mob_dir))
-			{
-				$mob->createDirectory();
-			}
 
 			$media_item = new ilMediaItem();
 			$mob->addMediaItem($media_item);
 			$media_item->setPurpose('Standard');
 
-			$file_name = ilObjMediaObject::fixFilename($_FILES['video_file']['name']);
+			$file_name = ilObjMediaObject::fixFilename($new_file['name']);
 			$file      = $mob_dir . '/' . $file_name;
 			ilUtil::moveUploadedFile($new_file['tmp_name'], $file_name, $file);
 
@@ -95,18 +92,23 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 			$media_item->setLocationType('LocalFile');
 
 			$mob->setDescription($format);
-
-			// determine width and height of known image types
-			$wh = ilObjMediaObject::_determineWidthHeight(500, 400, $format,
-				"File", $mob_dir . "/" . $location, $media_item->getLocation(),
-				true, true, "", "");
-			$media_item->setWidth($wh["width"]);
-			$media_item->setHeight($wh["height"]);
-
 			$media_item->setHAlign("Left");
+
 			ilUtil::renameExecutables($mob_dir);
 			$mob->update();
+
 			$this->setMobId($mob->getId());
+
+			if(!$mob->getMediaItem('Standard'))
+			{
+				throw new ilException(sprintf("%s: No standard media item given", __METHOD__));
+			}
+
+			$format = $mob->getMediaItem('Standard')->getFormat();
+			if(strpos($format, 'video') === false)
+			{
+				throw new ilException(sprintf("%s: No video file given", __METHOD__));
+			}
 
 			$ilDB->insert(
 				'rep_robj_xvid_objects',
@@ -151,9 +153,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	 */
 	public function beforeDelete()
 	{
-		include_once("./Services/MediaObjects/classes/class.ilObjMediaObject.php");
-
-		$mob = new ilObjMediaObject($this->getId());
+		$mob = new ilObjMediaObject($this->getMobId());
 		$mob->delete();
 	}
 
@@ -171,7 +171,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$ilDB->manipulate('DELETE FROM rep_robj_xvid_comments WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
 
 		parent::doDelete();
-		
+
 		$this->deleteMetaData();
 	}
 
