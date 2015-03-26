@@ -1,7 +1,22 @@
 <!-- language file start -->
 obj_xvid#:#Interaktives Video
 objs_xvid#:#Interaktive Videos
+obj_xvid_duplicate#:#Kopieren
+objs_xvid_duplicate#:#Interaktives Videos kopieren
+xvid_add#:#Neues Interaktives Video anlegen
+xvid_new#:#Neues Interaktives Video anlegen
+xvid_read#:#Interaktives Video lesen
+xvid_write#:#Interaktives Video bearbeiten
+xvid_delete#:#Interaktives Video löschen
+xvid_edit_permission#:#Rechteeinstellungen ändern
+xvid_visible#:#Interaktives Video ist sichtbar
+crs_create_xvid#:#Neues Interaktives Video anlegen
+grp_create_xvid#:#Neues Interaktives Video anlegen
+fold_create_xvid#:#Neues Interaktives Video anlegen
+root_create_xvid#:#Neues Interaktives Video anlegen
+cat_create_xvid#:#Neues Interaktives Video anlegen
 interactive#:#Interaktive
 tutor#:#Tutor
 comments#:#Kommentare
 sure_delete_comments#:#Sind Sie sicher, dass die selektierten Commentare gelöscht werden sollen?
+video_file#:#Video

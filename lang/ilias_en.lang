@@ -1,7 +1,22 @@
 <!-- language file start -->
 obj_xvid#:#Interactive Video
 objs_xvid#:#Interactive Videos
+obj_xvid_duplicate#:#Copy
+objs_xvid_duplicate#:#Copy Interactive Videos
+xvid_add#:#Add Interactive Video
+xvid_new#:#Add new Interactive Video
+xvid_read#:#User can read Interactive Video
+xvid_write#:#User can edit Interactive Video
+xvid_delete#:#User can move or delete Interactive Video
+xvid_edit_permission#:#User can change permission settings
+xvid_visible#:#Interactive Video is visible
+crs_create_xvid#:#Create Interactive Video
+grp_create_xvid#:#Create Interactive Video
+fold_create_xvid#:#Create Interactive Video
+root_create_xvid#:#Create Interactive Video
+cat_create_xvid#:#Create Interactive Video
 interactive#:#Interactive
 tutor#:#Tutor
 comments#:#Comments
 sure_delete_comments#:#Are you sure you want to delete the selected comments?
+video_file#:#Video
