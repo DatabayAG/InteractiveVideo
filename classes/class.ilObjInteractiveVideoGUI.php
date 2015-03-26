@@ -215,9 +215,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		include_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
 		$confirm = new ilConfirmationGUI();
 		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteComment'));
-		$confirm->setHeaderText($lng->txt('sure_delete'));
+		$confirm->setHeaderText($this->plugin->txt('sure_delete_comment'));
 		$confirm->setConfirm($lng->txt('confirm'), 'deleteComment');
-		$confirm->setCancel($lng->txt('cancel'), 'editProperties');
+		$confirm->setCancel($lng->txt('cancel'), 'editComments');
 		if(is_array($_POST['comment_id']))
 		{
 			foreach((array)$_POST['comment_id'] as $comment_id)
@@ -244,7 +244,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->object->deleteComments($_POST['comment_id']);
 		}
 
-		$this->editProperties();
+		$this->editComments();
 	}
 
 	private function initCommentForm()
@@ -288,7 +288,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form = $this->initCommentForm();
 
 		$form->addCommandButton('insertTutorComment', $lng->txt('insert'));
-		$form->addCommandButton('editProperties', $lng->txt('cancel'));
+		$form->addCommandButton('editComments', $lng->txt('cancel'));
 
 		$tpl->setContent($form->getHTML());
 	}
@@ -346,7 +346,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->insertComment();
 		}
 
-		$is_tutor ? $cmd = 'editProperties' : $cmd = 'showContent';
+		$is_tutor ? $cmd = 'editComments' : $cmd = 'showContent';
 		return $this->$cmd();
 	}
 
@@ -409,7 +409,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTime($seconds);
 
 			$this->objComment->updateComment();
-			return $this->editProperties();
+			return $this->editComments();
 		}
 		else
 		{
@@ -453,7 +453,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->getStandardTemplate();
 		$tbl_data = $this->object->getCommentsTableData();
 		include_once $this->plugin->getDirectory() . '/classes/class.ilInteractiveVideoCommentsTableGUI.php';
-		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editProperties');
+		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editComments');
 
 		$tbl->setData($tbl_data);
 
