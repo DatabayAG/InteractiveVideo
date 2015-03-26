@@ -433,6 +433,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->getStandardTemplate();
 		
 		$form = $this->initEditForm();
+		$values['title'] = $this->object->getTitle();
+		$values['desc'] = $this->object->getDescription();
+		$values['video_file']= ilObject::_lookupTitle($this->object->getMobId()); 
+		
+		$form->setValuesByArray($values);
 		
 		$tpl->setContent($form->getHTML());
 		return;
@@ -469,9 +474,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		switch ($a_tab)
 		{
 			case 'editProperties':
-				$ilTabs->addSubTab("editProperties",$lng->txt("editProperties"),$this->ctrl->getLinkTarget($this,'editProperties'));
+				$ilTabs->addSubTab("editProperties",$lng->txt("settings"),$this->ctrl->getLinkTarget($this,'editProperties'));
 
-				$ilTabs->addSubTab("editComments",$lng->txt("editComments"),$this->ctrl->getLinkTarget($this,'editComments'));
+				$ilTabs->addSubTab("editComments",$this->plugin->txt("comments"),$this->ctrl->getLinkTarget($this,'editComments'));
 		}
 	}
 	
@@ -508,7 +513,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$upload_field = new ilFileInputGUI($this->plugin->txt('video_file'), 'video_file');
 		$upload_field->setSuffixes(array('mp4', 'mov'));
 		$upload_field->setRequired(true);
-		$upload_field->setInfo('... info filename');
 		$form->addItem($upload_field);
 
 		return $form;
