@@ -9,12 +9,18 @@ require_once 'Services/Repository/classes/class.ilObjectPluginListGUI.php';
  */
 class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 {
-	function getGuiClass()
+	/**
+	 * @return string
+	 */
+	public function getGuiClass()
 	{
 		return 'ilObjInteractiveVideoGUI';
 	}
 
-	function initCommands()
+	/**
+	 * @return array
+	 */
+	public function initCommands()
 	{
 		$this->copy_enabled = false;
 
@@ -39,9 +45,11 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 		);
 	}
 
-	function initType()
+	/**
+	 * 
+	 */
+	public function initType()
 	{
 		$this->setType('xvid');
 	}
-
 }

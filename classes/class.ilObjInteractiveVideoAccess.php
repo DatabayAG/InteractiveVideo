@@ -30,23 +30,6 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess
 			$a_user_id = $ilUser->getId();
 		}
 
-		switch($a_permission)
-		{	case 'read':
-			case 'visible':
-				return true;
-				break;
-				
-			case 'write': 
-			case 'delete':
-			case 'edit_permission':
-		
-				if(!$ilAccess->checkAccessOfUser($a_user_id, 'write', '', $a_ref_id))
-				{
-					return false;
-				}
-				return true;
-			break;
-		}
-		return false;
+		return true;
 	}
 }
