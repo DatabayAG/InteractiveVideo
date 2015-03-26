@@ -362,7 +362,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $ilTabs, $lng, $ilUser, $ilLog;
 
 		$ilTabs->activateTab('editProperties');
-		$this->object->setIsTutor(1);
 		$form = $this->initCommentForm();
 
 		$frm_id = new ilHiddenInputGUI('comment_id');
@@ -450,7 +449,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editProperties');
 		$this->setSubTabs('editProperties');
 		$ilTabs->activateSubTab('editComments');
-		$this->object->setIsTutor(1);
 
 		$tpl->getStandardTemplate();
 		$tbl_data = $this->object->getCommentsTableData();
