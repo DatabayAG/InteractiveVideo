@@ -90,7 +90,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			if($key == 'comment_time')
 			{
 				$time = xvidUtils::timespanArray($value);
-				$value = $time['h'].':'.$time['i'].':'.$time['s'];
+				$value = $time['h'].':'.$time['m'].':'.$time['s'];
 			}
 
 			$this->tpl->setVariable('VAL_'.strtoupper($key), $value);
