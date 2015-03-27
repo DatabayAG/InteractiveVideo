@@ -1,0 +1,35 @@
+<div id="addQuestion">
+		<div class="simple_question_editor">
+			<select name="question_type">
+				<option value="single">{SINGLE_CHOICE}</option>
+				<option value="multiple">{MULTIPLE_CHOICE}</option>
+			</select>
+			<table class="answerwizard">
+				<thead>
+				<tr class="form-group">
+					<th>{ANSWER_TEXT}</th>
+					<th>{CORRECT_SOLUTION}</th>
+					<th></th>
+				</tr>
+				</thead>
+				<tbody id="table_body_question_editor">
+				
+				</tbody>
+			</table>
+		</div>
+</div>
+		
+<table>
+	<tr class="form-group" id="inner_question_editor_prototype">
+		<td>
+			<input type="text" size="25" class="text_field" maxlength="200"  value="">
+		</td>
+		<td style="text-align: center;">
+			<input type="checkbox" style="margin:0px;" class="correct_solution" size="5"  value="0">
+		</td>
+		<td style="vertical-align: top;">
+			<button class="clone_fields_add btn btn-link"><span class="sr-only"></span><span class="glyphicon glyphicon-plus"></span></button>
+			<button class="clone_fields_remove btn btn-link"><span class="sr-only"></span><span class="glyphicon glyphicon-minus"></span></button>
+		</td>
+	</tr>
+</table>

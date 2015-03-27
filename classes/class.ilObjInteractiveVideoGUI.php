@@ -168,9 +168,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$video_tpl->parseCurrentBlock();
 			$i++;
 		}
-
 		$video_tpl->setVariable('FORM_ACTION', $this->ctrl->getFormAction($this, 'postComment'));
-
+		
 		$tpl->setContent($video_tpl->get());
 	}
 
@@ -306,7 +305,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment = new ilTextAreaInputGUI($this->lng->txt('comment'), 'comment_text');
 		$comment->setRequired(true);
 		$form->addItem($comment);
-
 		$interactive = new ilCheckboxInputGUI($this->plugin->txt('interactive'), 'is_interactive');
 		$form->addItem($interactive);
 		return $form;
@@ -424,8 +422,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			$form->setValuesByArray($values, true);
 		}
-
-		$tpl->setContent($form->getHTML());
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuesitonCreator.js');
+		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
+		$question = new ilTemplate("tpl.simple_questions.html", true, true, $this->plugin->getDirectory());
+		$question->setVariable('SINGLE_CHOICE', 'single_choice');
+		$question->setVariable('MULTIPLE_CHOICE', 'multiple_choice');
+		$question->setVariable('ANSWER_TEXT', 'answer_text');
+		$question->setVariable('CORRECT_SOLUTION', 'correct_solution');
+		$tpl->setContent($form->getHTML() . $question->get());
 	}
 
 	/**
@@ -444,7 +448,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 			$this->objComment->setCommentText($form->getInput('comment_text'));
 			$this->objComment->setInteractive((int)$form->getInput('is_interactive'));
-
+			if((int)$form->getInput('is_interactive') === 1)
+			{
+				//Todo save question to db
+				$a=0;
+			}
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
 			$seconds      = $comment_time['time']['h'] * 3600

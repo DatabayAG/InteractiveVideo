@@ -19,7 +19,11 @@
 }
 .scroll-text ul li {
 	height: 1.5em;
-	list-style: none;
-	
-	
+	list-style: none;	
+}
+.simple_question_editor{
+    margin: 1em;
+}
+#inner_question_editor_prototype{
+    display:none;
 }
