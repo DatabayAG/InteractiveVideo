@@ -57,66 +57,13 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	protected function doCreate()
 	{
 		/**
-		 * @var $ilDB  ilDB
 		 * @var $ilLog ilLog
 		 */
-		global $ilDB, $ilLog;
+		global $ilLog;
 		
 		try
 		{
-			$new_file = $_FILES['video_file'];
-
-			$mob = new ilObjMediaObject();
-			$mob->setTitle($new_file['name']);
-			$mob->setDescription('');
-			$mob->create();
-
-			$mob->createDirectory();
-			$mob_dir = ilObjMediaObject::_getDirectory($mob->getId());
-
-			$media_item = new ilMediaItem();
-			$mob->addMediaItem($media_item);
-			$media_item->setPurpose('Standard');
-
-			$file_name = ilObjMediaObject::fixFilename($new_file['name']);
-			$file      = $mob_dir . '/' . $file_name;
-			ilUtil::moveUploadedFile($new_file['tmp_name'], $file_name, $file);
-
-			// get mime type
-			$format   = ilObjMediaObject::getMimeType($file);
-			$location = $file_name;
-
-			// set real meta and object data
-			$media_item->setFormat($format);
-			$media_item->setLocation($location);
-			$media_item->setLocationType('LocalFile');
-
-			$mob->setDescription($format);
-			$media_item->setHAlign("Left");
-
-			ilUtil::renameExecutables($mob_dir);
-			$mob->update();
-
-			$this->setMobId($mob->getId());
-
-			if(!$mob->getMediaItem('Standard'))
-			{
-				throw new ilException(sprintf("%s: No standard media item given", __METHOD__));
-			}
-
-			$format = $mob->getMediaItem('Standard')->getFormat();
-			if(strpos($format, 'video') === false)
-			{
-				throw new ilException(sprintf("%s: No video file given", __METHOD__));
-			}
-
-			$ilDB->insert(
-				'rep_robj_xvid_objects',
-				array(
-					'obj_id' => array('integer', $this->getId()),
-					'mob_id' => array('integer', $this->getMobId())
-				)
-			);
+			$this->uploadVideoFile();
 
 			parent::doCreate();
 
@@ -283,6 +230,86 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		return $comment_ids;
 	}
 
+	/**
+	 * @throws ilException
+	 */
+	public function uploadVideoFile()
+	{
+		global $ilDB;
+
+		$new_file = $_FILES['video_file'];
+
+		$mob = new ilObjMediaObject();
+		$mob->setTitle($new_file['name']);
+		$mob->setDescription('');
+		$mob->create();
+
+		$mob->createDirectory();
+		$mob_dir = ilObjMediaObject::_getDirectory($mob->getId());
+
+		$media_item = new ilMediaItem();
+		$mob->addMediaItem($media_item);
+		$media_item->setPurpose('Standard');
+
+		$file_name = ilObjMediaObject::fixFilename($new_file['name']);
+		$file      = $mob_dir . '/' . $file_name;
+		ilUtil::moveUploadedFile($new_file['tmp_name'], $file_name, $file);
+
+		// get mime type
+		$format   = ilObjMediaObject::getMimeType($file);
+		$location = $file_name;
+
+		// set real meta and object data
+		$media_item->setFormat($format);
+		$media_item->setLocation($location);
+		$media_item->setLocationType('LocalFile');
+
+		$mob->setDescription($format);
+		$media_item->setHAlign("Left");
+
+		ilUtil::renameExecutables($mob_dir);
+		$mob->update();
+
+		$this->setMobId($mob->getId());
+
+		if(!$mob->getMediaItem('Standard'))
+		{
+			throw new ilException(sprintf("%s: No standard media item given", __METHOD__));
+		}
+
+		$format = $mob->getMediaItem('Standard')->getFormat();
+		if(strpos($format, 'video') === false)
+		{
+			throw new ilException(sprintf("%s: No video file given", __METHOD__));
+		}
+
+		//delete old mob-data 
+		$res = $ilDB->queryF('SELECT mob_id FROM rep_robj_xvid_objects WHERE obj_id = %s',
+			array('integer'), array($this->getId()));
+		$old_mob_ids = array();
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$old_mob_ids[] = $row['mob_id'];
+		}
+			
+		foreach($old_mob_ids as $mob_id)
+		{
+			$old_mob = new ilObjMediaObject($mob_id);
+			$old_mob->delete();
+		}	
+			
+		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_objects WHERE obj_id = %s',
+			array('integer'), array($this->getId()));
+		
+		$ilDB->insert(
+			'rep_robj_xvid_objects',
+			array(
+				'obj_id' => array('integer', $this->getId()),
+				'mob_id' => array('integer', $this->getMobId())
+			)
+		);
+	}
+	
 	################## SETTER & GETTER ##################
 
 	/**

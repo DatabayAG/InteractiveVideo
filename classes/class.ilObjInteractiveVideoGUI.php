@@ -373,9 +373,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		else
 		{
-			// @todo: You left the happy path... Please handle errors, populate the form fields with the correct values and display the form again.
-			// @todo: And please pay attention on the correct context (content for public comments, settings for tutor comments)
-			
 			$form->setValuesByPost();
 			ilUtil::sendFailure($this->lng->txt('err_check_input'));
 			return $this->showTutorInsertCommentForm();
@@ -501,6 +498,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	protected function updateCustom(ilPropertyFormGUI $a_form)
 	{
 		// @todo: Store the new file (delegate to application class)
+		if($a_form->getInput('video_file'))
+		{
+			$this->object->uploadVideoFile();
+		}
 
 		parent::updateCustom($a_form);
 	}
