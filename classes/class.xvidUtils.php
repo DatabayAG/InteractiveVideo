@@ -10,27 +10,34 @@
 class xvidUtils 
 {
 
-
-	public static function timespanArray( $seconds ){
-
-
-		$td['s'] = $seconds % 60;
-
-		$td['i'] = (($seconds - $td['sec']) / 60) % 60;
-
-		$td['h'] = (((($seconds - $td['sec']) /60)-
-					$td['min']) / 60) % 24;
-
-//		$td['day'] = floor( ((((($seconds - $td['sec']) /60)-
-//					$td['min']) / 60) / 24) );
-
-		foreach($td as $key => $value)
+	/**
+	 * @param $seconds
+	 * @return mixed
+	 */
+	public static function timespanArray( $seconds )
+	{
+		if(!is_array($seconds))
 		{
-			$time[$key] = sprintf("%02d", $value);
+			$td['s'] = $seconds % 60;
+
+			$td['m'] = (($seconds - $td['sec']) / 60) % 60;
+
+			$td['h'] = (((($seconds - $td['sec']) / 60) -
+						$td['min']) / 60) % 24;
+
+			foreach($td as $key => $value)
+			{
+				$time[$key] = sprintf("%02d", $value);
+			}
+			return $time;
 		}
-
-		return $time;
+		else
+		{
+			foreach($seconds['time'] as $key => $value)
+			{
+				$time[$key] = sprintf("%02d", $value);
+			}
+			return $time;
+		}
 	}
-
-
 }

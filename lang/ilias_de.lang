@@ -26,3 +26,7 @@ cancel#:#Abbrechen
 sure_delete_comment#:#Sind Sie sicher, dass die die gewählten Kommentare löschen möchten?
 missing_comment_text#:#Bitte geben Sie einen Kommentar ein.
 missing_stopping_point#:#Der Haltepunkt wurde nicht zum Server übertragen. Bitte versuchen Sie es erneut.
+invalid_comment_ids#:#Einige Kommentare konnten nicht gefunden werden. 
+comments_successfully_deleted#:#Die gewählten Kommentare wurden erfolgreich gelöscht.
+insert_comment#:#Neuen Kommentar einfügen
+edit_comment#:#Kommentar bearbeiten

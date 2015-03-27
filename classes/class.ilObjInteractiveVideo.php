@@ -264,6 +264,25 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		return (string)$row['comment_text'];
 	}
 
+	/**
+	 * @param $obj_id
+	 * @return array
+	 */
+	public function getCommentIdsByObjId($obj_id)
+	{
+		global $ilDB;
+		
+		$comment_ids = array();
+		$res = $ilDB->queryF('SELECT comment_id FROM rep_robj_xvid_comments WHERE obj_id = %s',
+			array('integer'), array($obj_id));
+		
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$comment_ids[] = $row['comment_id'];
+		}
+		return $comment_ids;
+	}
+
 	################## SETTER & GETTER ##################
 
 	/**

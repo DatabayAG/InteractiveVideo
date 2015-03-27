@@ -26,3 +26,7 @@ cancel#:#Cancel
 sure_delete_comment#:#Are you sure, you want to delete the selected comments?
 missing_comment_text#:#Please enter a comment.
 missing_stopping_point#:#The stopping point was not trasnferred to the server. Please try again.
+invalid_comment_ids#:#Some comments could not be found.
+comments_successfully_deleted#:#The selected comments were deleted successfully.
+insert_comment#:#Insert new comment
+edit_comment#:#Edit comment

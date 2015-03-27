@@ -103,7 +103,8 @@ class ilTimeInputGUI extends ilDateTimeInputGUI
 		{
 			$time_array = xvidUtils::timespanArray($a_values[$this->getPostVar()]);
 
-			$this->setDate(new ilDateTime(date('Y-m-d', time()) . ' ' . $time_array['h'] . ':' . $time_array['i'] . ':' . $time_array['s'],
+			$tmp_date = date('Y-m-d', time()) . ' ' . $time_array['h'] . ':' . $time_array['m'] . ':' . $time_array['s'];
+			$this->setDate(new ilDateTime($tmp_date,
 				IL_CAL_DATETIME, 0));
 		}
 
@@ -117,7 +118,7 @@ class ilTimeInputGUI extends ilDateTimeInputGUI
 			$item->setValueByArray($a_values);
 		}
 	}
-
+	
 	/**
 	 * Check input, strip slashes etc. set alert, if input is not ok.
 	 * @return   boolean     Input ok, true/false
@@ -201,7 +202,17 @@ class ilTimeInputGUI extends ilDateTimeInputGUI
 			}
 			else
 			{
-				$timestamp = mktime(0, 0, 0, 1, 1, 2015);
+				$h = 0;
+				$m = 0;
+				$s = 0;
+				if(isset($_POST[$this->getPostVar()]))
+				{
+					$h = $_POST[$this->getPostVar()]['time']['h'];
+					$m = $_POST[$this->getPostVar()]['time']['m'];
+					$s = $_POST[$this->getPostVar()]['time']['s'];
+				}	
+				
+				$timestamp = mktime($h, $m, $s, 1, 1, 2015);
 				$this->setDate(new ilDateTime($timestamp, IL_CAL_UNIX));
 				$date_info = $this->getDate()->get(IL_CAL_FKT_GETDATE, '', 0);
 			}

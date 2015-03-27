@@ -240,14 +240,24 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteComment');
 		$confirm->setCancel($this->lng->txt('cancel'), 'editComments');
 
-		// @todo: Check (in a separate loop) if all the comment ids belong to the current object context, otherwise show a failure message
+		$post_ids = $_POST['comment_id'];
+		
+		$comment_ids = $this->object->getCommentIdsByObjId($this->obj_id);
+		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
 
-		foreach($_POST['comment_id'] as $comment_id)
+		if(count($wrong_comment_ids) == 0)
 		{
-			$confirm->addItem('comment_id[]', $comment_id, $this->object->getCommentTextById($comment_id));
+			foreach($post_ids as $comment_id)
+			{
+				$confirm->addItem('comment_id[]', $comment_id, $this->object->getCommentTextById($comment_id));
+			}
+
+			$tpl->setContent($confirm->getHTML());
 		}
-	
-		$tpl->setContent($confirm->getHTML());
+		else
+		{
+			ilUtil::sendFailure($this->plugin->txt('invalid_comment_ids'));
+		}
 	}
 
 	/**
@@ -262,11 +272,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			return;
 		}
 
-		// @todo: Check (in a separate loop) if the comment ids belong to the current object context, otherwise show a failure message
-		$this->object->deleteComments($_POST['comment_id']);
+		$post_ids = $_POST['comment_id'];
 
-		// @todo: Print a success message (and directly add the language variable)
-		ilUtil::sendSuccess($this->lng->txt(''));
+		$comment_ids = $this->object->getCommentIdsByObjId($this->obj_id);
+		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
+		if(count($wrong_comment_ids) == 0)
+		{
+			$this->object->deleteComments($_POST['comment_id']);
+			ilUtil::sendSuccess($this->lng->txt('comments_successfully_deleted'));
+		}
+		else
+		{
+			ilUtil::sendFailure('invalid_comment_ids');
+		}
 		$this->editComments();
 	}
 
@@ -275,11 +293,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	private function initCommentForm()
 	{
-		// @todo: Why don't you add a "required" attribute to any of these fields?
-
 		$form = new ilPropertyFormGUI();
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
-		// @todo: Untranslated language variable
 		$form->setTitle($this->plugin->txt('insert_comment'));
 
 		$this->plugin->includeClass('class.ilTimeInputGUI.php');
@@ -289,6 +304,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($time);
 
 		$comment = new ilTextAreaInputGUI($this->lng->txt('comment'), 'comment_text');
+		$comment->setRequired(true);
 		$form->addItem($comment);
 
 		$interactive = new ilCheckboxInputGUI($this->plugin->txt('interactive'), 'is_interactive');
@@ -320,25 +336,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($form->getHTML());
 	}
 
-	/**
-	 * 
-	 */
-	public function showLearnerCommentForm()
-	{
-		/**
-		 * @var $tpl    ilTemplate
-		 * @var $ilTabs ilTabsGUI
-		 */
-		global $tpl, $ilTabs;
-
-		$ilTabs->activateTab('showContent');
-
-		$form = $this->initCommentForm();
-		$form->addCommandButton('insertLearnerComment', $this->lng->txt('insert'));
-		$form->addCommandButton('showContent', $this->lng->txt('cancel'));
-
-		$tpl->setContent($form->getHTML());
-	}
 
 	/**
 	 * 
@@ -346,14 +343,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function insertTutorComment()
 	{
 		$this->insertComment(1);
-	}
-
-	/**
-	 * 
-	 */
-	public function insertLearnerComment()
-	{
-		$this->insertComment(0);
 	}
 
 	/**
@@ -386,9 +375,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			// @todo: You left the happy path... Please handle errors, populate the form fields with the correct values and display the form again.
 			// @todo: And please pay attention on the correct context (content for public comments, settings for tutor comments)
+			
+			$form->setValuesByPost();
+			ilUtil::sendFailure($this->lng->txt('err_check_input'));
+			return $this->showTutorInsertCommentForm();
 		}
 
-		// @todo: I don't understand the difference between "postComment" and "insertLearnerComment"
 		if($is_tutor)
 		{
 			$this->editComments();
@@ -417,7 +409,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($frm_id);
 
 		$form->setFormAction($this->ctrl->getFormAction($this, 'updateComment'));
-		// @todo: Untranslated language variable
 		$form->setTitle($this->plugin->txt('edit_comment'));
 
 		$form->addCommandButton('updateComment', $this->lng->txt('save'));
