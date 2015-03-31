@@ -8,7 +8,7 @@ require_once 'Services/MediaObjects/classes/class.ilObjMediaObjectGUI.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php'; 
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
-
+ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
 /**
  * Class ilObjInteractiveVideoGUI
  * @author               Nadia Ahmad <nahmad@databay.de>
@@ -429,6 +429,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question->setVariable('MULTIPLE_CHOICE', 'multiple_choice');
 		$question->setVariable('ANSWER_TEXT', 'answer_text');
 		$question->setVariable('CORRECT_SOLUTION', 'correct_solution');
+		//Todo: add question id
+		$question->setVariable('QUESTION_ID', 0);
 		$tpl->setContent($form->getHTML() . $question->get());
 	}
 
@@ -448,11 +450,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 			$this->objComment->setCommentText($form->getInput('comment_text'));
 			$this->objComment->setInteractive((int)$form->getInput('is_interactive'));
-			if((int)$form->getInput('is_interactive') === 1)
-			{
-				//Todo save question to db
-				$a=0;
-			}
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
 			$seconds      = $comment_time['time']['h'] * 3600
@@ -461,6 +458,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTime($seconds);
 			$this->objComment->update();
 			$this->editComments();
+			if((int)$form->getInput('is_interactive') === 1)
+			{
+				//Todo save question to db
+				$question_id = $form->getInput('question_id');
+				$question = new SimpleChoiceQuestion($question_id);
+
+			}
 		}
 		else
 		{
