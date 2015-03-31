@@ -1,13 +1,3 @@
-var IVQuestionCreator = {
-	JSON : [
-			{answer :'Answer 1', correct: true},
-			{answer :'Answer 2', correct: false},
-			{answer :'Answer 3', correct: true},
-			{answer :'Answer 4', correct: false}
-		   ],
-	type : 'single_choice'
-};
-
 $.fn.initQuestionEditor = function() {
 	var question_form = $('#addQuestion');
 	$('#is_interactive').parent().parent().append(question_form);	
@@ -46,46 +36,57 @@ $.fn.createQuestionForm = function() {
 				'meta' : l
 			}
 		);
-		if(value.correct === true )
+		if(parseInt(value.correct,10) === 1 )
 		{
 			inner.find('.correct_solution').attr('checked' , 'checked');
 		}
 		inner.find('.clone_fields_add').parent().attr('meta', l);
 	});
+
+	$().appendMultiListener();
 };
 
-$('.text_field').live('blur', function (){
+$.fn.appendSingleListener = function() {
+	$('.question_type').on('change', function (){
+		IVQuestionCreator.type = parseInt($(this).val(),10);
+	});
+};
+$.fn.appendMultiListener = function() {
+	$('.text_field').on('blur', function (){
 		var pos = parseInt($(this).attr('meta'), 10)
 		IVQuestionCreator.JSON[pos].answer = $(this).val();
-});
-$('.correct_solution').live('click', function (){
-	var pos = parseInt($(this).attr('meta'), 10)
-	var bool= false;
-	if($(this).attr('checked'))
-	{
-		bool = true;
-	}
-	IVQuestionCreator.JSON[pos].correct = bool;
-	console.log(pos,$(this).val())
-});
-$('.clone_fields_add').live('click', function ()
-{
-	var insert = new Object({
-		answer  : '',
-		correct: false
 	});
-	IVQuestionCreator.JSON.splice(parseInt($(this).parent().attr('meta'), 10), 0, insert);
-	$().createQuestionForm();
-	return false;
-});
 
-$('.clone_fields_remove').live('click', function ()
-{
-	IVQuestionCreator.JSON.splice(parseInt($(this).parent().attr('meta'), 10), 1);
-	$().createQuestionForm();
-	return false;
-});
+	$('.correct_solution').on('click', function (){
+		var pos = parseInt($(this).attr('meta'), 10)
+		var bool= false;
+		if($(this).attr('checked'))
+		{
+			bool = true;
+		}
+		IVQuestionCreator.JSON[pos].correct = bool;
+	});
+	$('.clone_fields_add').on('click', function ()
+	{
+		var insert = new Object({
+			answer  : '',
+			correct: false
+		});
+		IVQuestionCreator.JSON.splice(parseInt($(this).parent().attr('meta'), 10), 0, insert);
+		$().createQuestionForm();
+		return false;
+	});
+	$('.clone_fields_remove').on('click', function ()
+	{
+		IVQuestionCreator.JSON.splice(parseInt($(this).parent().attr('meta'), 10), 1);
+		$().createQuestionForm();
+		return false;
+	});
+};
 
 $( document ).ready(function() {
 	$().initQuestionEditor();
+	$().appendSingleListener();
+	$('.question_type').val(IVQuestionCreator.type);
 });
+

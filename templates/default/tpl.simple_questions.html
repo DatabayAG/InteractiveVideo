@@ -1,8 +1,17 @@
+<script>
+	var IVQuestionCreator = 
+	{
+		JSON : {JSON},
+		type : {QUESTION_TYPE}
+	}
+</script>
+
 <div id="addQuestion">
 		<div class="simple_question_editor">
-			<select name="question_type">
-				<option value="single">{SINGLE_CHOICE}</option>
-				<option value="multiple">{MULTIPLE_CHOICE}</option>
+			<textarea name="question_text" class="question_text" cols="50" rows="10">{QUESTION_TEXT}</textarea><br/>
+			<select name="question_type" class="question_type">
+				<option value="0">{SINGLE_CHOICE}</option>
+				<option value="1">{MULTIPLE_CHOICE}</option>
 			</select>
 			<table class="answerwizard">
 				<thead>

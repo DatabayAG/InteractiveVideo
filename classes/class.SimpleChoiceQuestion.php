@@ -7,6 +7,8 @@
  */
 
 class SimpleChoiceQuestion {
+	const SINGLE_CHOICE = 0;
+	const MULTIPLE_CHOICE = 0;
 	/**
 	 * @var integer
 	 */
@@ -25,7 +27,7 @@ class SimpleChoiceQuestion {
 	/**
 	 * @var integer
 	 */
-	protected $user_id;
+	protected $type;
 
 	/**
 	 * @param int $comment_id
@@ -45,9 +47,20 @@ class SimpleChoiceQuestion {
 		 * @var $ilDB ilDB
 		 */
 		global $ilDB;
-		$a= 0;
+		$res = $ilDB->queryF(
+					'SELECT * FROM rep_robj_xvid_question as question, rep_robj_xvid_qus_text as answers 
+								WHERE question.question_id = %s AND question.question_id = answers.question_id',
+						array('integer'),
+						array($this->getQuestionId())
+		);
+		$row = $ilDB->fetchAssoc($res);
 
-		
+		/*$this->setCommentText($row['comment_text']);
+		$this->setCommentTime($row['comment_time']);
+		$this->setInteractive((bool)$row['is_interactive']);
+		$this->setIsTutor((bool)$row['is_tutor']);
+		$this->setUserId($row['user_id']);
+		*/
 	}
 
 	public function create()
@@ -56,31 +69,133 @@ class SimpleChoiceQuestion {
 		 * @var $ilDB   ilDB
 		 * @var $ilUser ilObjUser
 		 */
-		global $ilDB, $ilUser;
-
-		
+		global $ilDB;
+		$question_id = $ilDB->nextId('rep_robj_xvid_question');
+		if((int) $_POST['type'] === 0)
+		{
+			$this->setType(self::SINGLE_CHOICE);
+		}
+		else
+		{
+			$this->setType(self::MULTIPLE_CHOICE);
+		}
+		$ilDB->insert('rep_robj_xvid_question',
+			array(
+				'question_id'	 => array('integer', $question_id),
+				'comment_id'     => array('integer', (int) $_POST['comment_id']),
+				'type'         	 => array('integer', (int) $_POST['question_type']),
+				'question_text'  => array('text', ilUtil::stripSlashes($_POST['question_text']))
+			));
+		foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
+		{
+			$answer_id = $ilDB->nextId('rep_robj_xvid_qus_text');
+			if(array_key_exists($key, ilUtil::stripSlashesRecursive($_POST['correct'])))
+			{
+				$correct = 1;
+			}
+			else
+			{
+				$correct = 0;
+			}
+			$ilDB->insert('rep_robj_xvid_qus_text',
+				array(
+					'answer_id'		 => array('integer', $answer_id),
+					'question_id'	 => array('integer', $question_id),
+					'answer'     	 => array('text',  	 $value),
+					'correct'        => array('integer', $correct)
+				));
+		}
 	}
 
-	public function update()
+	public function existQuestionForCommentId($comment_id)
 	{
 		/**
-		 * @var $ilDB ilDB
+		 * @var $ilDB   ilDB
 		 */
-		global $ilDB;
-
 		
+		global $ilDB;
+		$res = $ilDB->queryF('SELECT * FROM rep_robj_xvid_question WHERE comment_id = %s',
+			array('integer'), array($comment_id));
+
+		$row = $ilDB->fetchAssoc($res);
+		
+		$question_id = (int) $row['question_id'];
+		
+		return $question_id;
 	}
 
-	/**
-	 * delete
-	 * @param array $comment_ids
-	 * @return bool
-	 */
+	public function getJsonForQuestionId($qid)
+	{
+		/**
+		 * @var $ilDB   ilDB
+		 */
+
+		global $ilDB;
+		$res = $ilDB->queryF(
+					'SELECT * FROM rep_robj_xvid_question as question, rep_robj_xvid_qus_text as answers 
+								WHERE question.question_id = %s AND question.question_id = answers.question_id',
+						array('integer'),
+						array((int) $qid)
+		);
+
+		$counter = 0;
+		$question_data = array();
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$question_data[$counter]['answer']     = $row['answer'];
+			$question_data[$counter]['answer_id']  = $row['answer_id'];
+			$question_data[$counter]['correct']    = $row['correct'];
+			$counter++;
+		}
+
+		return json_encode($question_data);
+	}
+
+	public function getTypeByQuestionId($qid)
+	{
+		/**
+		 * @var $ilDB   ilDB
+		 */
+
+		global $ilDB;
+		$res = $ilDB->queryF(
+					'SELECT * FROM rep_robj_xvid_question WHERE question_id = %s',
+						array('integer'),
+						array((int) $qid)
+		);
+		$row = $ilDB->fetchAssoc($res);
+		return (int) $row['type'];
+
+	}
+
+	public function getQuestionTextQuestionId($qid)
+	{
+		/**
+		 * @var $ilDB   ilDB
+		 */
+
+		global $ilDB;
+		$res = $ilDB->queryF(
+					'SELECT * FROM rep_robj_xvid_question WHERE question_id = %s',
+						array('integer'),
+						array((int) $qid)
+		);
+		$row = $ilDB->fetchAssoc($res);
+		return $row['question_text'];
+
+	}
+	
 	public function deleteQuestion($qid)
 	{
 		global $ilDB;
 
-		
+		$res = $ilDB->queryF('DELETE FROM rep_robj_xvid_question WHERE question_id = %s',
+			array('integer'), array($qid));
+		$ilDB->fetchAssoc($res);
+		$res = $ilDB->queryF('DELETE FROM rep_robj_xvid_qus_text WHERE question_id = %s',
+			array('integer'), array($qid));
+		$ilDB->fetchAssoc($res);
+
 	}
 
 	/**
@@ -118,17 +233,17 @@ class SimpleChoiceQuestion {
 	/**
 	 * @return int
 	 */
-	public function getUserId()
+	public function getType()
 	{
-		return $this->user_id;
+		return $this->type;
 	}
 
 	/**
 	 * @param int $user_id
 	 */
-	public function setUserId($user_id)
+	public function setType($type)
 	{
-		$this->user_id = $user_id;
+		$this->type = $type;
 	}
 
 	/**

@@ -129,3 +129,66 @@ if($ilDB->tableColumnExists('rep_robj_xvid_comments', 'obj_id'))
 	$ilDB->addIndex('rep_robj_xvid_comments', array('obj_id'), 'i1');
 }
 ?>
+<#7>
+<?php
+if(!$ilDB->tableExists('rep_robj_xvid_qus_text'))
+{
+	$fields = array(
+			'answer_id' => array(
+			'type' => 'integer',
+			'length' => '4',
+			'notnull' => true
+		),
+			'question_id' => array(
+			'type' => 'integer',
+			'length' => '4',
+			'notnull' => true
+		),
+			'answer' => array(
+			'type' => 'text',
+			'length' => '255',
+			'notnull' => true
+		),
+			'correct' => array(
+			'type' => 'integer',
+			'length' => '4',
+			'notnull' => true
+		)
+	);
+	$ilDB->createTable('rep_robj_xvid_qus_text', $fields);
+	$ilDB->addPrimaryKey('rep_robj_xvid_qus_text', array('answer_id'));
+	$ilDB->createSequence('rep_robj_xvid_qus_text');
+}
+?>
+<#8>
+<?php
+if(!$ilDB->tableExists('rep_robj_xvid_question'))
+{
+	$fields = array(
+		'question_id' => array(
+			'type' => 'integer',
+			'length' => '4',
+			'notnull' => true
+		),
+		'comment_id' => array(
+			'type' => 'integer',
+			'length' => '4',
+			'notnull' => true
+		),
+		'question_text' => array(
+			'type'    => 'text',
+			'length'  => '4000',
+			'notnull' => false,
+			'default' => null
+		),
+		'type' => array(
+			'type' => 'integer',
+			'length' => '4',
+			'notnull' => true
+		)
+	);	
+	$ilDB->createTable('rep_robj_xvid_question', $fields);
+	$ilDB->addPrimaryKey('rep_robj_xvid_question', array('question_id'));
+	$ilDB->createSequence('rep_robj_xvid_question');
+}
+?>

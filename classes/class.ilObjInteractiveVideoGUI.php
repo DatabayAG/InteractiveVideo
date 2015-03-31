@@ -422,15 +422,27 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			$form->setValuesByArray($values, true);
 		}
-		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuesitonCreator.js');
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionCreator.js');
 		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
+		$simple_choice = new SimpleChoiceQuestion();
+		$question_id = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
 		$question = new ilTemplate("tpl.simple_questions.html", true, true, $this->plugin->getDirectory());
 		$question->setVariable('SINGLE_CHOICE', 'single_choice');
 		$question->setVariable('MULTIPLE_CHOICE', 'multiple_choice');
 		$question->setVariable('ANSWER_TEXT', 'answer_text');
-		$question->setVariable('CORRECT_SOLUTION', 'correct_solution');
-		//Todo: add question id
-		$question->setVariable('QUESTION_ID', 0);
+		$question->setVariable('CORRECT_SOLUTION', 'correct_solution');	
+		if($question_id > 0)
+		{
+			$question->setVariable('JSON', $simple_choice->getJsonForQuestionId($question_id));
+			$question->setVariable('QUESTION_TYPE', $simple_choice->getTypeByQuestionId($question_id));
+			$question->setVariable('QUESTION_TEXT', $simple_choice->getQuestionTextQuestionId($question_id));
+		}
+		else
+		{
+			$question->setVariable('JSON', json_encode(array('answer')));
+			$question->setVariable('QUESTION_TYPE', 0);
+		}
+		$question->setVariable('QUESTION_ID', $question_id);
 		$tpl->setContent($form->getHTML() . $question->get());
 	}
 
@@ -460,10 +472,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->editComments();
 			if((int)$form->getInput('is_interactive') === 1)
 			{
-				//Todo save question to db
 				$question_id = $form->getInput('question_id');
 				$question = new SimpleChoiceQuestion($question_id);
-
+				$question->deleteQuestion($question_id);
+				$question->create();
 			}
 		}
 		else
