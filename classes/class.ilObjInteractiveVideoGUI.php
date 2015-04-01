@@ -8,7 +8,7 @@ require_once 'Services/MediaObjects/classes/class.ilObjMediaObjectGUI.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php'; 
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
-
+ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
 /**
  * Class ilObjInteractiveVideoGUI
  * @author               Nadia Ahmad <nahmad@databay.de>
@@ -103,7 +103,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 						$this->checkPermission('read');
 						$this->$cmd();
 						break;
-
+					case 'getQuestionPerAjax':
+						$this->checkPermission('read');
+						$this->$cmd();
+						break;
 					default:
 						if(method_exists($this, $cmd))
 						{
@@ -120,6 +123,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 
 		$this->addHeaderAction();
+	}
+
+	public function getQuestionPerAjax()
+	{
+		$tpl_json = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
+		$simple_choice = new SimpleChoiceQuestion();
+		$tpl_json->setVariable('JSON', $simple_choice->getJsonForCommentId((int) $_GET['comment_id']));
+		$tpl_json->show("DEFAULT", false, true );
+		exit();
 	}
 
 	/**
@@ -160,7 +172,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('COMMENTS', json_encode($comments));
 
 		$video_tpl->setVariable('FORM_ACTION', $this->ctrl->getFormAction($this, 'postComment'));
-
+		require_once("./Services/UIComponent/Modal/classes/class.ilModalGUI.php");
+		$modal = ilModalGUI::getInstance();
+		$modal->setId("ilQuestionModal");
+		$modal->setBody('');
+		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
+		$video_tpl->setVariable('QUESTION_URL', $this->ctrl->getLinkTarget($this, 'getQuestionPerAjax', '', true, false));
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
 		$tpl->setContent($video_tpl->get());
 	}
 
@@ -411,8 +429,29 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			$form->setValuesByArray($values, true);
 		}
-
-		$tpl->setContent($form->getHTML());
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionCreator.js');
+		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
+		$simple_choice = new SimpleChoiceQuestion();
+		$question_id = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
+		$question = new ilTemplate("tpl.simple_questions.html", true, true, $this->plugin->getDirectory());
+		$question->setVariable('SINGLE_CHOICE', 'single_choice');
+		$question->setVariable('MULTIPLE_CHOICE', 'multiple_choice');
+		$question->setVariable('ANSWER_TEXT', 'answer_text');
+		$question->setVariable('CORRECT_SOLUTION', 'correct_solution');	
+		if($question_id > 0)
+		{
+			$question->setVariable('JSON', $simple_choice->getJsonForQuestionId($question_id));
+			$question->setVariable('QUESTION_TYPE', $simple_choice->getTypeByQuestionId($question_id));
+			$question->setVariable('QUESTION_TEXT', $simple_choice->getQuestionTextQuestionId($question_id));
+		}
+		else
+		{
+			$question->setVariable('JSON', json_encode(array()));
+			$question->setVariable('QUESTION_TYPE', 0);
+			$question->setVariable('QUESTION_TEXT', '');
+		}
+		$question->setVariable('QUESTION_ID', $question_id);
+		$tpl->setContent($form->getHTML() . $question->get());
 	}
 
 	/**
@@ -440,6 +479,32 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTime($seconds);
 			$this->objComment->update();
 			$this->editComments();
+			if((int)$form->getInput('is_interactive') === 1)
+			{
+				$question_id = $form->getInput('question_id');
+				$question = new SimpleChoiceQuestion();
+				if($question->checkInput())
+				{
+					$question->deleteQuestion($question_id);
+					$question->create();
+				}
+				else
+				{
+					#$form->setValuesByPost();
+					#ilUtil::sendFailure($this->lng->txt('err_check_input'));
+					#return $this->editComment();
+				}
+
+			}
+			else
+			{
+				$question = new SimpleChoiceQuestion();
+				$question_id = $question->existQuestionForCommentId($comment_id);
+				if($question_id > 0)
+				{
+					$question->deleteQuestion($question_id);
+				}
+			}
 		}
 		else
 		{

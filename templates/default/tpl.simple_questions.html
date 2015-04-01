@@ -1,0 +1,45 @@
+<script>
+	var IVQuestionCreator = 
+	{
+		JSON : {JSON},
+		type : {QUESTION_TYPE}
+	}
+</script>
+
+<div id="addQuestion">
+		<div class="simple_question_editor">
+			<textarea name="question_text" class="question_text" cols="50" rows="10">{QUESTION_TEXT}</textarea><br/>
+			<select name="question_type" class="question_type">
+				<option value="0">{SINGLE_CHOICE}</option>
+				<option value="1">{MULTIPLE_CHOICE}</option>
+			</select>
+			<table class="answerwizard">
+				<thead>
+				<tr class="form-group">
+					<th>{ANSWER_TEXT}</th>
+					<th>{CORRECT_SOLUTION}</th>
+					<th></th>
+				</tr>
+				</thead>
+				<tbody id="table_body_question_editor">
+				
+				</tbody>
+			</table>
+			<input type="hidden" name="question_id" value="{QUESTION_ID}"/>
+		</div>
+</div>
+		
+<table>
+	<tr class="form-group" id="inner_question_editor_prototype">
+		<td>
+			<input type="text" size="25" class="text_field" maxlength="200"  value="">
+		</td>
+		<td style="text-align: center;">
+			<input type="checkbox" style="margin:0px;" class="correct_solution" size="5"  value="0">
+		</td>
+		<td style="vertical-align: top;">
+			<button class="clone_fields_add btn btn-link"><span class="sr-only"></span><span class="glyphicon glyphicon-plus"></span></button>
+			<button class="clone_fields_remove btn btn-link"><span class="sr-only"></span><span class="glyphicon glyphicon-minus"></span></button>
+		</td>
+	</tr>
+</table>

@@ -30,3 +30,8 @@ invalid_comment_ids#:#Some comments could not be found.
 comments_successfully_deleted#:#The selected comments were deleted successfully.
 insert_comment#:#Insert new comment
 edit_comment#:#Edit comment
+correct_solution#:#Correct
+answertext#:#Answer
+add_question#:#Add Question
+single_choice#:#Single Choice
+multiple_choice#:#Multiple Choice

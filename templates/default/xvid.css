@@ -8,22 +8,27 @@
 	width: 100%!important;
 	/*width: 400px;*/
 	height: 15em;
-	overflow: scroll;
+    overflow-y: auto;
 }
 .scroll-text ul {
 	/*width: 800px;*/
 	width: 100%!important;
 	height: 100px;
-	/*overflow: hidden;*/
+	overflow: hidden;
 	margin: 0;
 }
 .scroll-text ul li {
 	height: 1.5em;
-	list-style: none;
-	
-	
+	list-style: none;	
 }
 
 #time{
 	color: blue;
+}
+
+.simple_question_editor{
+    margin: 1em;
+}
+#inner_question_editor_prototype{
+    display:none;
 }
