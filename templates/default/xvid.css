@@ -7,14 +7,14 @@
 	border: 1px solid gray;
 	width: 100%!important;
 	/*width: 400px;*/
-	height: 6em;
-	overflow: hidden;
+	height: 15em;
+	overflow: scroll;
 }
 .scroll-text ul {
 	/*width: 800px;*/
 	width: 100%!important;
 	height: 100px;
-	overflow: hidden;
+	/*overflow: hidden;*/
 	margin: 0;
 }
 .scroll-text ul li {
@@ -22,4 +22,8 @@
 	list-style: none;
 	
 	
+}
+
+#time{
+	color: blue;
 }

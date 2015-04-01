@@ -135,7 +135,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$ilTabs->activateTab('content');
 
-		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.scrollbox.js');
 		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
 		ilObjMediaObjectGUI::includePresentationJS($tpl);
 
@@ -152,22 +151,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->objComment->setObjId($this->object->getId());
 
 		$stop_points = $this->objComment->getStopPoints();
+		$comments = $this->objComment->getComments();
 		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('comment'));
 		$video_tpl->setVariable('TXT_POST', $this->plugin->txt('post'));
 		$video_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
 
 		$video_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
-
-		$comments = $this->objComment->getCommentTexts();
-		$i        = 1;
-		foreach($comments as $comment_text)
-		{
-			$video_tpl->setCurrentBlock('comments_list');
-			$video_tpl->setVariable('COMMENT_INDEX', $i);
-			$video_tpl->setVariable('COMMENT_TEXT', $comment_text);
-			$video_tpl->parseCurrentBlock();
-			$i++;
-		}
+		$video_tpl->setVariable('COMMENTS', json_encode($comments));
 
 		$video_tpl->setVariable('FORM_ACTION', $this->ctrl->getFormAction($this, 'postComment'));
 

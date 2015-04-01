@@ -192,7 +192,7 @@ class ilObjComment
 		return $stop_points;
 	}
 
-	public function getCommentTexts()
+	public function getComments()
 	{
 		/**
 		 * @var $ilDB ilDB
@@ -200,7 +200,7 @@ class ilObjComment
 		global $ilDB;
 
 		$res = $ilDB->queryF(
-			'SELECT comment_id, comment_text
+			'SELECT comment_id, comment_text, comment_time, is_interactive
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s
 			ORDER BY comment_time, comment_id ASC',
@@ -208,14 +208,14 @@ class ilObjComment
 			array($this->getObjId())
 		);
 
-		$comment_text = array();
+		$comments = array();
 
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$comment_text[] = $row['comment_text'];
+			$comments[] = $row;
 		}
 
-		return $comment_text;
+		return $comments;
 	}
 
 

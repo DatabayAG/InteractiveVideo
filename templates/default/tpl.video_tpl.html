@@ -28,17 +28,17 @@
 
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 		<div id="ilInteractiveVideoComments" class="scroll-text">
-			<ul>
-				<li></li>
-				<!-- BEGIN comments_list -->
-				<li id="{COMMENT_INDEX}">{COMMENT_TEXT}</li>
-				<!-- END comments_list -->
+			<ul id="ul_scroll">
 			</ul>
 		</div>
 	</div>
-
 	<script type="text/javascript">
 		(function ($) {
+			$.fn.scrollToBottom = function (that)
+			{
+				that.animate({ scrollTop: that.prop('scrollHeight') }, 200);
+			};
+			
 			$("#ilInteractiveVideoCommentSubmit").on("click", function(e) {
 				$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
 			});
@@ -49,6 +49,7 @@
 
 			il.Util.addOnLoad(function () {
 				var _lastTime = 0,
+					comments = {COMMENTS},
 					stopPoints = {STOP_POINTS},
 					interval = null;
 
@@ -80,25 +81,36 @@
 									clearInterval(interval);
 									return;
 								}
-
+								
 								if (!isNaN(media.currentTime) && media.currentTime > 0) {
 									// @todo: Evtl. use a better way to detect the relevant stopping point
+									last_stopPoint = 0;
+									
 									for (var j = stopPoints.length - 1; j >= 0; j--) {
 										var cueTime = stopPoints[j];
-
+										
 										if (cueTime >= _lastTime && cueTime <= media.currentTime) {
-// if interactive trigger enabled pause ... 
-// player.pause();
-											$('#ilInteractiveVideoComments').scrollbox({
-												afterForward: function(data) {
-													$(this).trigger('xvid_stop');
+											stop_video = 0;
+											if (last_stopPoint < cueTime) {
+												for (var i = 0; i < Object.keys(comments).length; i++) {
+													if (comments[i].comment_time == cueTime) {
+														$("#ul_scroll").append('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode(media.currentTime) +' </time> ' + comments[i].comment_text + '</li>');
+														jQuery().scrollToBottom($("#ilInteractiveVideoComments"));
+													}
+													if (comments[i].interactive == 1) {
+														stop_video = 1;
+													}
 												}
-											});
-										}
+												if (stop_video == 1) {
+													player.pause();
+												}
+											}
+											last_stopPoint = cueTime;
+										} 
 									}
 									_lastTime = media.currentTime;
 								}
-							}, 50);
+							}, 500);
 
 						}, false);
 					}
