@@ -192,3 +192,27 @@ if(!$ilDB->tableExists('rep_robj_xvid_question'))
 	$ilDB->createSequence('rep_robj_xvid_question');
 }
 ?>
+<#9>
+<?php
+if(!$ilDB->tableExists('rep_robj_xvid_answers'))
+{
+	$fields = array(
+		'question_id' => array(
+			'type' => 'integer',
+			'length' => '4',
+			'notnull' => true
+		),
+		'answer_id' => array(
+			'type' => 'integer',
+			'length' => '4',
+			'notnull' => true
+		),
+		'user_id' => array(
+			'type' => 'integer',
+			'length' => '4',
+			'notnull' => true
+		)
+	);
+	$ilDB->createTable('rep_robj_xvid_answers', $fields);
+}
+?>

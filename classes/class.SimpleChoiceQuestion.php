@@ -254,20 +254,43 @@ class SimpleChoiceQuestion {
 	
 	public function saveAnswer($qid, $answers)
 	{
-		global $ilUser;
+		global $ilDB, $ilUser;
 		
 		$usr_id	= $ilUser->getId();
 		$type 	= $this->getTypeByQuestionId($qid);
 		
+		$this->removeAnswer($qid);
 		
 		if($type === self::SINGLE_CHOICE)
 		{
-
+			$ilDB->insert('rep_robj_xvid_answers',
+				array(
+					'question_id'	 => array('integer', $qid),
+					'user_id'     	 => array('integer', $usr_id),
+					'answer_id'      => array('integer', (int) $answers[0])
+				));
 		}
-		else if ($type === self::MULTIPLE_CHOICE)
+		else
 		{
-			
+			foreach($answers as $key => $value)
+			{
+				$ilDB->insert('rep_robj_xvid_answers',
+					array(
+						'question_id'	 => array('integer', $qid),
+						'user_id'     	 => array('integer', $usr_id),
+						'answer_id'      => array('integer', (int) $value)
+					));
+			}
 		}
+	}
+
+	public function removeAnswer($qid)
+	{
+		global $ilDB, $ilUser;
+		$usr_id	= $ilUser->getId();
+		$res = $ilDB->queryF('DELETE FROM rep_robj_xvid_answers WHERE question_id = %s AND user_id = %s',
+			array('integer', 'integer'), array($qid, $usr_id));
+		$ilDB->fetchAssoc($res);
 	}
 	
 	public function deleteQuestion($qid)
@@ -278,6 +301,9 @@ class SimpleChoiceQuestion {
 			array('integer'), array($qid));
 		$ilDB->fetchAssoc($res);
 		$res = $ilDB->queryF('DELETE FROM rep_robj_xvid_qus_text WHERE question_id = %s',
+			array('integer'), array($qid));
+		$ilDB->fetchAssoc($res);
+		$res = $ilDB->queryF('DELETE FROM rep_robj_xvid_answers WHERE question_id = %s',
 			array('integer'), array($qid));
 		$ilDB->fetchAssoc($res);
 
