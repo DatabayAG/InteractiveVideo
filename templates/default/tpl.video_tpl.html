@@ -92,21 +92,20 @@
 										var cueTime = stopPoints[j];
 										
 										if (cueTime >= _lastTime && cueTime <= media.currentTime) {
-											stop_video = 0;
+											var stop_video = 0;
 											if (last_stopPoint < cueTime) {
 												for (var i = 0; i < Object.keys(comments).length; i++) {
 													if (comments[i].comment_time == cueTime) {
 														$("#ul_scroll").append('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode(media.currentTime) +' </time> ' + comments[i].comment_text + '</li>');
 														jQuery().scrollToBottom($("#ilInteractiveVideoComments"));
-													}
-													if (comments[i].is_interactive == 1) {
+														if (comments[i].is_interactive == 1) {
 //														console.log('stop true');
-														stop_video = 1;
+															stop_video = 1;
+															$().getQuestionPerAjax(comments[i].comment_id);
+														}
 													}
 												}
 												if (stop_video == 1) {
-													
-													//@todo fix this
 													player.pause();
 													stop_video = 0;
 												}
