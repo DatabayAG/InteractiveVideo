@@ -3,12 +3,13 @@ $( document ).ready(function() {
 	
 });
 
-$.fn.getQuestionPerAjax = function(comment_id) {
+$.fn.getQuestionPerAjax = function(comment_id, player) {
 	$.when(
 		$.ajax({url: question_get_url + '&comment_id=' + comment_id,
 				type: 'GET', dataType: 'json'})
 		).then(function (array) {
 			IVQV = array;
+			IVQV.player = player;
 			$().buildQuestionForm();
 			$('#ilQuestionModal').modal('show');
 		});
@@ -57,9 +58,8 @@ $.fn.appendButtonListener = function() {
 			url      : question_post_url,
 			data     : $(this).serialize(),
 			success  : function(data) {
-				console.log(data)
 				$('#ilQuestionModal').modal('hide');
-				//$(".printArea").empty().append(data).css('visibility','visible');
+				//IVQV.player.play();
 			}
 		});
 	});
