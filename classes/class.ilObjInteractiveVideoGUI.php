@@ -546,6 +546,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($tbl->getHTML());
 	}
 
+	public function showResults()
+	{
+
+	}
+
 	/**
 	 * @param ilPropertyFormGUI $a_form
 	 * @return bool
@@ -787,6 +792,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			case 'editProperties':
 				$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'),$this->ctrl->getLinkTarget($this,'editProperties'));
 				$ilTabs->addSubTab('editComments', $this->plugin->txt('comments'),$this->ctrl->getLinkTarget($this,'editComments'));
+				$ilTabs->addSubTab('showResults', $this->plugin->txt('results'),$this->ctrl->getLinkTarget($this,'showResults'));
 				break;
 		}
 	}

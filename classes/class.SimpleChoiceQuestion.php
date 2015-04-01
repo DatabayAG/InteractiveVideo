@@ -235,6 +235,53 @@ class SimpleChoiceQuestion {
 
 	}
 
+	public function getPointsForUsers($oid)
+	{
+		/**
+		 * @var $ilDB   ilDB
+		 */
+
+		global $ilDB;
+		$res = $ilDB->queryF(
+					'SELECT * FROM rep_robj_xvid_comments as comments, rep_robj_xvid_question as questions, 
+					 rep_robj_xvid_qus_text as answers  WHERE comments.comment_id = questions.comment_id 
+					 AND questions.question_id = answers.question_id AND  is_interactive = 1 AND correct = 1 AND obj_id = %s',
+						array('integer'),
+						array((int) $oid)
+		);	
+		$questions = array();
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$questions[$row['question_id']][$row['answer_id']] = $row['answer_id'];
+		}
+
+		$res = $ilDB->queryF(
+					'SELECT * FROM rep_robj_xvid_comments as comments, rep_robj_xvid_question as questions, 
+					 rep_robj_xvid_answers as answers  WHERE comments.comment_id = questions.comment_id 
+					 AND questions.question_id = answers.question_id AND obj_id = %s',
+						array('integer'),
+						array((int) $oid)
+		);
+		$answers = array();
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$answers[$row['user_id']][$row['question_id']][$row['answer_id']] = $row['answer_id'];
+		}
+		$results = array();
+		foreach( $answers as $key => $value)
+		{
+			$results[$key] = 0;
+			foreach( $value as $question_id => $answer_id)
+			{
+				if($questions[$question_id] == $answer_id)
+				{
+					$results[$key] ++;
+				}
+			}
+		}
+		return $results;
+	}
+	
 	public function getQuestionTextQuestionId($qid)
 	{
 		/**
