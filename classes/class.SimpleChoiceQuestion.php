@@ -30,7 +30,7 @@ class SimpleChoiceQuestion {
 	protected $type;
 
 	/**
-	 * @param int $comment_id
+	 * @param int $question_id
 	 */
 	public function __construct($question_id = 0)
 	{
@@ -55,12 +55,6 @@ class SimpleChoiceQuestion {
 		);
 		$row = $ilDB->fetchAssoc($res);
 
-		/*$this->setCommentText($row['comment_text']);
-		$this->setCommentTime($row['comment_time']);
-		$this->setInteractive((bool)$row['is_interactive']);
-		$this->setIsTutor((bool)$row['is_tutor']);
-		$this->setUserId($row['user_id']);
-		*/
 	}
 
 	public function create()
@@ -177,22 +171,25 @@ class SimpleChoiceQuestion {
 		);
 
 		$counter = 0;
-		$question_data = array();
-		$question_text = '';
-		$question_type = 0;
+		$question_data 	= array();
+		$question_text 	= '';
+		$question_type 	= 0;
+		$question_id	= 0;
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$question_data[$counter]['answer']     = $row['answer'];
-			$question_data[$counter]['answer_id']  = $row['answer_id'];
-			$question_data[$counter]['correct']    = $row['correct'];
-			$question_text						   = $row['question_text'];;
-			$question_type						   = $row['type'];
+			$question_data[$counter]['answer']     	= $row['answer'];
+			$question_data[$counter]['answer_id']  	= $row['answer_id'];
+			$question_data[$counter]['correct']    	= $row['correct'];
+			$question_text						   	= $row['question_text'];
+			$question_type						   	= $row['type'];
+			$question_id							= $row['question_id'];
 			$counter++;
 		}
 		$build_json = array();
 		$build_json['answers'] 		= $question_data;
 		$build_json['question_text']= $question_text;
 		$build_json['type']			= $question_type;
+		$build_json['question_id']	= $question_id;
 		return json_encode($build_json);
 	}
 
