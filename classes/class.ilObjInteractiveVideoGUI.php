@@ -104,6 +104,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 						$this->$cmd();
 						break;
 					case 'getQuestionPerAjax':
+					case 'postAnswerPerAjax':
 						$this->checkPermission('read');
 						$this->$cmd();
 						break;
@@ -131,6 +132,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$simple_choice = new SimpleChoiceQuestion();
 		$tpl_json->setVariable('JSON', $simple_choice->getJsonForCommentId((int) $_GET['comment_id']));
 		$tpl_json->show("DEFAULT", false, true );
+		exit();
+	}
+
+	public function postAnswerPerAjax()
+	{
+		$simple_choice = new SimpleChoiceQuestion();
+		$simple_choice->saveAnswer((int) $_POST['qid'], ilUtil::stripSlashesRecursive($_POST['answer']));
 		exit();
 	}
 
@@ -177,7 +185,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$modal->setId("ilQuestionModal");
 		$modal->setBody('');
 		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
-		$video_tpl->setVariable('QUESTION_URL', $this->ctrl->getLinkTarget($this, 'getQuestionPerAjax', '', true, false));
+		$video_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTarget($this, 'getQuestionPerAjax', '', true, false));
+		$video_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTarget($this, 'postAnswerPerAjax', '', true, false));
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
 		$tpl->setContent($video_tpl->get());
 	}

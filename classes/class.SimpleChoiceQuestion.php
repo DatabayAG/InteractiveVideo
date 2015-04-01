@@ -252,6 +252,24 @@ class SimpleChoiceQuestion {
 
 	}
 	
+	public function saveAnswer($qid, $answers)
+	{
+		global $ilUser;
+		
+		$usr_id	= $ilUser->getId();
+		$type 	= $this->getTypeByQuestionId($qid);
+		
+		
+		if($type === self::SINGLE_CHOICE)
+		{
+
+		}
+		else if ($type === self::MULTIPLE_CHOICE)
+		{
+			
+		}
+	}
+	
 	public function deleteQuestion($qid)
 	{
 		global $ilDB;
