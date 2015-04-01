@@ -51,7 +51,8 @@
 				var _lastTime = 0,
 					comments = {COMMENTS},
 					stopPoints = {STOP_POINTS},
-					interval = null;
+					interval = null,
+						last_stopPoint = 0;
 
 				var player = new MediaElementPlayer("#ilInteractiveVideo", {
 					timerRate: 50,
@@ -84,8 +85,7 @@
 								
 								if (!isNaN(media.currentTime) && media.currentTime > 0) {
 									// @todo: Evtl. use a better way to detect the relevant stopping point
-									last_stopPoint = 0;
-									
+								
 									for (var j = stopPoints.length - 1; j >= 0; j--) {
 										var cueTime = stopPoints[j];
 										
@@ -97,12 +97,16 @@
 														$("#ul_scroll").append('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode(media.currentTime) +' </time> ' + comments[i].comment_text + '</li>');
 														jQuery().scrollToBottom($("#ilInteractiveVideoComments"));
 													}
-													if (comments[i].interactive == 1) {
+													if (comments[i].is_interactive == 1) {
+//														console.log('stop true');
 														stop_video = 1;
 													}
 												}
 												if (stop_video == 1) {
+													
+													//@todo fix this
 													player.pause();
+													stop_video = 0;
 												}
 											}
 											last_stopPoint = cueTime;
