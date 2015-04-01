@@ -8,7 +8,7 @@
 
 class SimpleChoiceQuestion {
 	const SINGLE_CHOICE = 0;
-	const MULTIPLE_CHOICE = 0;
+	const MULTIPLE_CHOICE = 1;
 	/**
 	 * @var integer
 	 */
@@ -107,6 +107,45 @@ class SimpleChoiceQuestion {
 		}
 	}
 
+	public function checkInput()
+	{
+		$status = true;
+		$correct = 0;
+
+		if((int) $_POST['type'] === 0)
+		{
+			$this->setType(self::SINGLE_CHOICE);
+		}
+		else
+		{
+			$this->setType(self::MULTIPLE_CHOICE);
+		}
+		
+		$question_text = ilUtil::stripSlashes($_POST['question_text']);
+		
+		if($question_text === '')
+		{
+			$status =  false;
+		}
+		foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
+		{
+			if(array_key_exists($key, ilUtil::stripSlashesRecursive($_POST['correct'])))
+			{
+				$correct += 1;
+			}
+			if($value === '')
+			{
+				$status = false;
+			}
+		}	
+		if($correct === 0)
+		{
+			$status = false;
+		}
+		
+		return $status;
+	}
+	
 	public function existQuestionForCommentId($comment_id)
 	{
 		/**
@@ -124,12 +163,44 @@ class SimpleChoiceQuestion {
 		return $question_id;
 	}
 
+	public function getJsonForCommentId($cid)
+	{
+		/**
+		 * @var $ilDB   ilDB
+		 */
+		global $ilDB;
+		$res = $ilDB->queryF(
+					'SELECT * FROM rep_robj_xvid_question as question, rep_robj_xvid_qus_text as answers 
+								WHERE question.comment_id = %s AND question.question_id = answers.question_id',
+						array('integer'),
+						array((int) $cid)
+		);
+
+		$counter = 0;
+		$question_data = array();
+		$question_text = '';
+		$question_type = 0;
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$question_data[$counter]['answer']     = $row['answer'];
+			$question_data[$counter]['answer_id']  = $row['answer_id'];
+			$question_data[$counter]['correct']    = $row['correct'];
+			$question_text						   = $row['question_text'];;
+			$question_type						   = $row['type'];
+			$counter++;
+		}
+		$build_json = array();
+		$build_json['answers'] 		= $question_data;
+		$build_json['question_text']= $question_text;
+		$build_json['type']			= $question_type;
+		return json_encode($build_json);
+	}
+
 	public function getJsonForQuestionId($qid)
 	{
 		/**
 		 * @var $ilDB   ilDB
 		 */
-
 		global $ilDB;
 		$res = $ilDB->queryF(
 					'SELECT * FROM rep_robj_xvid_question as question, rep_robj_xvid_qus_text as answers 
@@ -147,7 +218,6 @@ class SimpleChoiceQuestion {
 			$question_data[$counter]['correct']    = $row['correct'];
 			$counter++;
 		}
-
 		return json_encode($question_data);
 	}
 
@@ -239,7 +309,7 @@ class SimpleChoiceQuestion {
 	}
 
 	/**
-	 * @param int $user_id
+	 * @param int $type
 	 */
 	public function setType($type)
 	{

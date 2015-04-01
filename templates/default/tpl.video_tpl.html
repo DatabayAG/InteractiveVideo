@@ -37,6 +37,7 @@
 	</div>
 	
 	<script type="text/javascript">
+		var question_url = "{QUESTION_URL}";
 		(function ($) {
 			$("#ilInteractiveVideoCommentSubmit").on("click", function(e) {
 				$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
@@ -45,7 +46,6 @@
 			$("#ilInteractiveVideoCommentCancel").on("click", function(e) {
 				$('#comment_text').val("");
 			});
-
 			il.Util.addOnLoad(function () {
 				var _lastTime = 0,
 					stopPoints = {STOP_POINTS},
@@ -106,3 +106,5 @@
 		})(jQuery);
 	</script>
 </div>
+{MODAL_OVERLAY}
+<div class="question_viewer_dummy prototype"></div>
