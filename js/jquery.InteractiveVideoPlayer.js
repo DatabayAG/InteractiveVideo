@@ -51,6 +51,9 @@ $.fn.scrollToBottom = function (that)
 					_lastTime = media.currentTime;
 				}, false);
 
+				media.addEventListener('ended', function(e) {
+					$().debugPrinter('Player', 'video finished');
+				}, false);
 				media.addEventListener('playing', function(e) {
 					$().debugPrinter('Player', 'playing');
 					interval = setInterval(function () {
