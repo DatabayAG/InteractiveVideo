@@ -105,8 +105,11 @@ $.fn.appendMultiListener = function() {
 	});
 	$('.clone_fields_remove').on('click', function ()
 	{
-		IVQuestionCreator.JSON.splice(parseInt($(this).parent().attr('meta'), 10), 1);
-		$().createQuestionForm();
+		if(IVQuestionCreator.JSON.length > 1)
+		{
+			IVQuestionCreator.JSON.splice(parseInt($(this).parent().attr('meta'), 10), 1);
+			$().createQuestionForm();
+		}
 		return false;
 	});
 };
