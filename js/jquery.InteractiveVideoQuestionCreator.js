@@ -1,13 +1,11 @@
 $( document ).ready(function() {
 
 	if($('#is_interactive').attr('checked') == 'checked'){
-		$().initQuestionEditor();
 		$('#addQuestion').show();
 	}
 	else{
 		$('#addQuestion').hide();
 	}
-	
 	$().initQuestionEditor();
 	$().appendSingleListener();
 	$('.question_type').val(IVQuestionCreator.type);
