@@ -573,8 +573,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('showQuestionsResults');
-		
-		
+
+		$simple = new SimpleChoiceQuestion();
+		$tbl_data = $simple->getQuestionsOverview($this->obj_id);
+		$this->plugin->includeClass('class.SimpleChoiceQuestionsOverviewTableGUI.php');
+		$tbl = new SimpleChoiceQuestionsOverviewTableGUI($this, 'showResults');
+
+		$tbl->setData($tbl_data);
+		$tpl->setContent($tbl->getHTML());
 		
 	}
 	
@@ -820,7 +826,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'),$this->ctrl->getLinkTarget($this,'editProperties'));
 				$ilTabs->addSubTab('editComments', $this->plugin->txt('comments'),$this->ctrl->getLinkTarget($this,'editComments'));
 				$ilTabs->addSubTab('showResults', $this->plugin->txt('user_results'),$this->ctrl->getLinkTarget($this,'showResults'));
-				//$ilTabs->addSubTab('showQuestionsResults', $this->plugin->txt('question_results'),$this->ctrl->getLinkTarget($this,'showQuestionsResults'));
+				$ilTabs->addSubTab('showQuestionsResults', $this->plugin->txt('question_results'),$this->ctrl->getLinkTarget($this,'showQuestionsResults'));
 				break;
 		}
 	}

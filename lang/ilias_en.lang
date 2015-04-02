@@ -43,3 +43,6 @@ multiple_choice#:#Multiple Choice
 answer_text#:#Answer
 percentage#:#Overall Percentage
 answered#:#Questions answered
+question_results#:#Question Results
+user_answered#:#User Answered
+user_correct#:#User Answered Correct

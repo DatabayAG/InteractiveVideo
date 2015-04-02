@@ -256,6 +256,59 @@ class SimpleChoiceQuestion {
 		$row = $ilDB->fetchAssoc($res);
 		return (int) $row['count'];
 	}
+
+	public function getQuestionsOverview($oid)
+	{
+		global $ilDB;
+		$res = $ilDB->queryF(
+								'SELECT questions.question_id, score.user_id, score.points, comments.comment_id, comments.comment_text
+								FROM rep_robj_xvid_comments AS comments, rep_robj_xvid_question AS questions
+								LEFT JOIN rep_robj_xvid_score AS score ON questions.question_id = score.question_id
+								WHERE comments.comment_id = questions.comment_id
+								AND is_interactive =1
+								AND obj_id = %s',
+						array('integer'),
+						array((int) $oid)
+		);
+		$questions = array();
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			if( $row['points'] == null )
+			{
+				$questions[$row['question_id']]['answered'] = 0;
+				$questions[$row['question_id']]['correct']  = 0;
+			}
+			else
+			{
+				$questions[$row['question_id']]['answered']++;
+				$questions[$row['question_id']]['correct'] += $row['points'];
+			}
+			$questions[$row['question_id']]['comment_id'] = $row['comment_id'];
+			$questions[$row['question_id']]['comment_text'] = $row['comment_text'];
+
+		}
+		$results = array();
+		$counter = 0;
+		foreach( $questions as $key => $value )
+		{
+			$results[$counter]['question_id'] 	= $key;
+			$results[$counter]['comment_id'] 	= $value['comment_id'];
+			$results[$counter]['comment_text'] 			= $value['comment_text'];
+			$results[$counter]['answered'] 		= $value['answered'];
+			$results[$counter]['correct'] 		= $value['correct'];
+			if($value['answered'] > 0)
+			{
+				$results[$counter]['percentage'] = round(($value['correct']/ $value['answered']) * 100, 2);
+			}
+			else
+			{
+				$results[$counter]['percentage'] = 0;
+			}
+			$counter++;
+		}
+		return $results;
+
+	}
 	
 	public function getPointsForUsers($oid)
 	{
