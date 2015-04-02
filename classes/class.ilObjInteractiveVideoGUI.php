@@ -577,7 +577,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$simple = new SimpleChoiceQuestion();
 		$tbl_data = $simple->getQuestionsOverview($this->obj_id);
 		$this->plugin->includeClass('class.SimpleChoiceQuestionsOverviewTableGUI.php');
-		$tbl = new SimpleChoiceQuestionsOverviewTableGUI($this, 'showResults');
+		$tbl = new SimpleChoiceQuestionsOverviewTableGUI($this, 'showQuestionsResults');
 
 		$tbl->setData($tbl_data);
 		$tpl->setContent($tbl->getHTML());

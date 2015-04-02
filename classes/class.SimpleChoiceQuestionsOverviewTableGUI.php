@@ -25,7 +25,7 @@ class SimpleChoiceQuestionsOverviewTableGUI extends ilTable2GUI
 
 		$this->ctrl = $ilCtrl;
 
-		$this->setId('xvid_answers_' . $a_parent_obj->object->getId());
+		$this->setId('xvid_questions_' . $a_parent_obj->object->getId());
 		parent::__construct($a_parent_obj, $a_parent_cmd);
 
 		$this->setFormAction($this->ctrl->getFormAction($a_parent_obj, $a_parent_cmd));
