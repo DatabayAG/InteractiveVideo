@@ -5,11 +5,6 @@ require_once 'Services/Table/classes/class.ilTable2GUI.php';
 require_once 'Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvancedSelectionListGUI.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
 
-/**
- * Class ilInteractiveVideoCommentsTableGUI
- * @author Nadia Ahmad <nahmad@databay.de>
- * @version $Id$
- */
 class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 {
 	/**

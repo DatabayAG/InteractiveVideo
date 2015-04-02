@@ -30,11 +30,19 @@ invalid_comment_ids#:#Einige Kommentare konnten nicht gefunden werden.
 comments_successfully_deleted#:#Die gewählten Kommentare wurden erfolgreich gelöscht.
 insert_comment#:#Neuen Kommentar einfügen
 edit_comment#:#Kommentar bearbeiten
-single_choice#:#Single Choice
-multiple_choice#:#Multiple Choice
-answer_text#:#Antwort
-correct_solution#:#Richtig
-results#:#Ergebnisse
 user#:#Benutzer
 correct#:#Richtig
+correct_solution#:#Richtige Lösung
+add_question#:#Frage hinzufügen
+single_choice#:#Single Choice
+multiple_choice#:#Multiple Choice
+correct#:#Richtige beantwortete Fragen
 questions#:#Fragen
+results#:#Ergebnisse
+user_results#:#Benutzerergebnisse
+answer_text#:#Antwort
+percentage#:#Prozent
+answered#:#Fragen beantwortet
+question_results#:#Fragenergebnisse
+user_answered#:#Beantwortet von Nutzern
+user_correct#:#Richtig beantwortet von Nutzern

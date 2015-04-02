@@ -5,12 +5,7 @@ require_once 'Services/Table/classes/class.ilTable2GUI.php';
 require_once 'Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvancedSelectionListGUI.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
 
-/**
- * Class ilInteractiveVideoCommentsTableGUI
- * @author Nadia Ahmad <nahmad@databay.de>
- * @version $Id$
- */
-class SimpleChoiceQuestionsTableGUI extends ilTable2GUI
+class SimpleChoiceQuestionsOverviewTableGUI extends ilTable2GUI
 {
 	/**
 	 * @var ilCtrl
@@ -35,17 +30,31 @@ class SimpleChoiceQuestionsTableGUI extends ilTable2GUI
 
 		$this->setFormAction($this->ctrl->getFormAction($a_parent_obj, $a_parent_cmd));
 		$this->setDefaultOrderDirection('ASC');
-		$this->setDefaultOrderField('name');
+		$this->setDefaultOrderField('cid');
 
-		$this->setTitle($a_parent_obj->plugin->txt('user_results'));
-		$this->setRowTemplate('tpl.row_answers.html', $a_parent_obj->plugin->getDirectory());
+		$this->setTitle($a_parent_obj->plugin->txt('question_results'));
+		$this->setRowTemplate('tpl.row_questions.html', $a_parent_obj->plugin->getDirectory());
 
-		$this->addColumn($this->lng->txt('name'), 'name');
-		$this->addColumn($a_parent_obj->plugin->txt('answered'), 'answered');
-		$this->addColumn($a_parent_obj->plugin->txt('correct'), 'correct');
+		$this->addColumn($this->lng->txt('comment'), 'comment');
+		$this->addColumn($a_parent_obj->plugin->txt('user_answered'), 'user_answered');
+		$this->addColumn($a_parent_obj->plugin->txt('user_correct'), 'user_correct');
 		$this->addColumn($a_parent_obj->plugin->txt('percentage'), 'percentage');
 
 		$this->setShowRowsSelector(false);
+	}
+
+	/**
+	 * @param string $column
+	 * @return bool
+	 */
+	public function numericOrdering($column)
+	{
+		if('question_id' == $column)
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -57,9 +66,9 @@ class SimpleChoiceQuestionsTableGUI extends ilTable2GUI
 		$current_selection_list = new ilAdvancedSelectionListGUI();
 		$current_selection_list->setListTitle($this->lng->txt('actions'));
 		$current_selection_list->setId('act_' . $row['user_id']);
-		$this->tpl->setVariable('USER_NAME', $row['name']);
+		$this->tpl->setVariable('COMMENT_TEXT', $row['comment_text']);
 		$this->tpl->setVariable('USER_ANSWERED', $row['answered']);
-		$this->tpl->setVariable('USER_SCORE', $row['correct']);
+		$this->tpl->setVariable('USER_ANSWERED_CORRECT', $row['correct']);
 		$this->tpl->setVariable('PERCENTAGE', $row['percentage']);
 		$this->ctrl->setParameter($this->parent_obj, 'user_id', $row['user_id']);
 	}

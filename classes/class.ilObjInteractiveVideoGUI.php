@@ -441,10 +441,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$simple_choice = new SimpleChoiceQuestion();
 		$question_id = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
 		$question = new ilTemplate("tpl.simple_questions.html", true, true, $this->plugin->getDirectory());
-		$question->setVariable('SINGLE_CHOICE', $this->plugin->txt('single_choice'));
-		$question->setVariable('MULTIPLE_CHOICE', $this->plugin->txt('multiple_choice'));
-		$question->setVariable('ANSWER_TEXT', $this->plugin->txt('answer_text'));
-		$question->setVariable('CORRECT_SOLUTION', $this->plugin->txt('correct_solution'));	
+		$question->setVariable('SINGLE_CHOICE', 	$this->plugin->txt('single_choice'));
+		$question->setVariable('MULTIPLE_CHOICE', 	$this->plugin->txt('multiple_choice'));
+		$question->setVariable('ANSWER_TEXT',		$this->plugin->txt('answer_text'));
+		$question->setVariable('CORRECT_SOLUTION', 	$this->plugin->txt('correct_solution'));	
 		if($question_id > 0)
 		{
 			$question->setVariable('JSON', $simple_choice->getJsonForQuestionId($question_id));
@@ -564,6 +564,25 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	}
 
+	public function showQuestionsResults()
+	{
+		global $tpl, $ilTabs;
+
+		$this->setSubTabs('editProperties');
+
+		$ilTabs->activateTab('editProperties');
+		$ilTabs->activateSubTab('showQuestionsResults');
+
+		$simple = new SimpleChoiceQuestion();
+		$tbl_data = $simple->getQuestionsOverview($this->obj_id);
+		$this->plugin->includeClass('class.SimpleChoiceQuestionsOverviewTableGUI.php');
+		$tbl = new SimpleChoiceQuestionsOverviewTableGUI($this, 'showResults');
+
+		$tbl->setData($tbl_data);
+		$tpl->setContent($tbl->getHTML());
+		
+	}
+	
 	/**
 	 * @param ilPropertyFormGUI $a_form
 	 * @return bool
@@ -805,7 +824,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			case 'editProperties':
 				$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'),$this->ctrl->getLinkTarget($this,'editProperties'));
 				$ilTabs->addSubTab('editComments', $this->plugin->txt('comments'),$this->ctrl->getLinkTarget($this,'editComments'));
-				$ilTabs->addSubTab('showResults', $this->plugin->txt('results'),$this->ctrl->getLinkTarget($this,'showResults'));
+				$ilTabs->addSubTab('showResults', $this->plugin->txt('user_results'),$this->ctrl->getLinkTarget($this,'showResults'));
+				$ilTabs->addSubTab('showQuestionsResults', $this->plugin->txt('question_results'),$this->ctrl->getLinkTarget($this,'showQuestionsResults'));
 				break;
 		}
 	}
