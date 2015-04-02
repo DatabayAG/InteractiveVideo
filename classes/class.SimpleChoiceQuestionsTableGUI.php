@@ -37,7 +37,7 @@ class SimpleChoiceQuestionsTableGUI extends ilTable2GUI
 		$this->setDefaultOrderDirection('ASC');
 		$this->setDefaultOrderField('cid');
 
-		$this->setTitle($a_parent_obj->plugin->txt('results'));
+		$this->setTitle($a_parent_obj->plugin->txt('user_results'));
 		$this->setRowTemplate('tpl.row_answers.html', $a_parent_obj->plugin->getDirectory());
 
 		$this->addColumn($this->lng->txt('name'), 'name');

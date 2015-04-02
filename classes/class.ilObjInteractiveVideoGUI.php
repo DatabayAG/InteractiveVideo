@@ -565,6 +565,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	}
 
+	public function showQuestionsResults()
+	{
+		global $tpl, $ilTabs;
+
+		$this->setSubTabs('editProperties');
+
+		$ilTabs->activateTab('editProperties');
+		$ilTabs->activateSubTab('showQuestionsResults');
+		
+		
+		
+	}
+	
 	/**
 	 * @param ilPropertyFormGUI $a_form
 	 * @return bool
@@ -806,7 +819,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			case 'editProperties':
 				$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'),$this->ctrl->getLinkTarget($this,'editProperties'));
 				$ilTabs->addSubTab('editComments', $this->plugin->txt('comments'),$this->ctrl->getLinkTarget($this,'editComments'));
-				$ilTabs->addSubTab('showResults', $this->plugin->txt('results'),$this->ctrl->getLinkTarget($this,'showResults'));
+				$ilTabs->addSubTab('showResults', $this->plugin->txt('user_results'),$this->ctrl->getLinkTarget($this,'showResults'));
+				//$ilTabs->addSubTab('showQuestionsResults', $this->plugin->txt('question_results'),$this->ctrl->getLinkTarget($this,'showQuestionsResults'));
 				break;
 		}
 	}
