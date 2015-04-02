@@ -2,7 +2,6 @@ $( document ).ready(function() {
 
 	if($('#is_interactive').attr('checked') == 'checked'){
 		$().initQuestionEditor();
-		$().createQuestionForm();
 		$('#addQuestion').show();
 	}
 	else{
