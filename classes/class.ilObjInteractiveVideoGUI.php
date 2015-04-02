@@ -443,10 +443,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$simple_choice = new SimpleChoiceQuestion();
 		$question_id = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
 		$question = new ilTemplate("tpl.simple_questions.html", true, true, $this->plugin->getDirectory());
-		$question->setVariable('SINGLE_CHOICE', 'single_choice');
-		$question->setVariable('MULTIPLE_CHOICE', 'multiple_choice');
-		$question->setVariable('ANSWER_TEXT', 'answer_text');
-		$question->setVariable('CORRECT_SOLUTION', 'correct_solution');	
+		$question->setVariable('SINGLE_CHOICE', 	$this->plugin->txt('single_choice'));
+		$question->setVariable('MULTIPLE_CHOICE', 	$this->plugin->txt('multiple_choice'));
+		$question->setVariable('ANSWER_TEXT',		$this->plugin->txt('answer_text'));
+		$question->setVariable('CORRECT_SOLUTION', 	$this->plugin->txt('correct_solution'));	
 		if($question_id > 0)
 		{
 			$question->setVariable('JSON', $simple_choice->getJsonForQuestionId($question_id));
