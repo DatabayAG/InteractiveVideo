@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: gvollbach
- * Date: 27.03.15
- * Time: 11:47
- */
 
 class SimpleChoiceQuestion {
 	const SINGLE_CHOICE = 0;
@@ -260,7 +254,7 @@ class SimpleChoiceQuestion {
 		$res = $ilDB->queryF(
 					'SELECT score.user_id, sum(points) as points  FROM rep_robj_xvid_comments as comments, rep_robj_xvid_question as questions, 
 					 rep_robj_xvid_score as score  WHERE comments.comment_id = questions.comment_id 
-					 AND questions.question_id = score.question_id AND obj_id =  %s',
+					 AND questions.question_id = score.question_id AND obj_id =  %s GROUP BY user_id ',
 						array('integer'),
 						array((int) $oid)
 		);
@@ -326,7 +320,7 @@ class SimpleChoiceQuestion {
 		$type 	= $this->getTypeByQuestionId($qid);
 		
 		$this->removeAnswer($qid);
-		$correct_answers = $this->getCorrectAnswersForQuestion($qid);
+		$correct_answers = $this->getCorrectAnswersCountForQuestion($qid);
 		$points = 0;
 		
 		if($type === self::SINGLE_CHOICE)
