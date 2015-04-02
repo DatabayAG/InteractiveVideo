@@ -51,7 +51,7 @@ $.fn.addButtons = function() {
 $.fn.appendButtonListener = function() {
 	$('#question_form').on('submit',function(e){
 		e.preventDefault();
-		console.log($(this).serialize())
+		$().debugPrinter('IVQV Ajax', $(this).serialize());
 		$.ajax({
 			type     : "POST",
 			cache    : false,
