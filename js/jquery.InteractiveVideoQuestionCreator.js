@@ -86,10 +86,10 @@ $.fn.appendMultiListener = function() {
 
 	$('.correct_solution').on('click', function (){
 		var pos = parseInt($(this).attr('meta'), 10)
-		var bool= false;
+		var bool= 0;
 		if($(this).attr('checked'))
 		{
-			bool = true;
+			bool = 1;
 		}
 		IVQuestionCreator.JSON[pos].correct = bool;
 	});
@@ -97,7 +97,7 @@ $.fn.appendMultiListener = function() {
 	{
 		var insert = new Object({
 			answer  : '',
-			correct: false
+			correct: 0
 		});
 		IVQuestionCreator.JSON.splice(parseInt($(this).parent().attr('meta'), 10), 0, insert);
 		$().createQuestionForm();
