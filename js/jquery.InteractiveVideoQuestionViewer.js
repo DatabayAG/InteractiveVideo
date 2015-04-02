@@ -1,7 +1,4 @@
 var IVQV = {};
-$( document ).ready(function() {
-	
-});
 
 $.fn.getQuestionPerAjax = function(comment_id, player) {
 	$.when(
