@@ -487,7 +487,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				+ $comment_time['time']['s'];
 			$this->objComment->setCommentTime($seconds);
 			$this->objComment->update();
-			$this->editComments();
+
 			if((int)$form->getInput('is_interactive') === 1)
 			{
 				$question_id = $form->getInput('question_id');
@@ -514,6 +514,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					$question->deleteQuestion($question_id);
 				}
 			}
+			$this->editComments();
 		}
 		else
 		{

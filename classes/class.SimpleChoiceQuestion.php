@@ -123,7 +123,7 @@ class SimpleChoiceQuestion {
 		}
 		foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
 		{
-			if(array_key_exists($key, ilUtil::stripSlashesRecursive($_POST['correct'])))
+			if(is_array($_POST['correct']) && array_key_exists($key, ilUtil::stripSlashesRecursive($_POST['correct'])))
 			{
 				$correct += 1;
 			}
