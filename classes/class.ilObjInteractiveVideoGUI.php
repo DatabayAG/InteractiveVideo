@@ -548,6 +548,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	public function showResults()
 	{
+		global $tpl, $ilTabs;
+		
+		$this->setSubTabs('editProperties');
+
+		$ilTabs->activateTab('editProperties');
+		$ilTabs->activateSubTab('showResults');
+
+		$simple = new SimpleChoiceQuestion();
+		$tbl_data = $simple->getPointsForUsers($this->obj_id);
+		$this->plugin->includeClass('class.SimpleChoiceQuestionsTableGUI.php');
+		$tbl = new SimpleChoiceQuestionsTableGUI($this, 'showResults');
+
+		$tbl->setData($tbl_data);
+		$tpl->setContent($tbl->getHTML());
 
 	}
 
