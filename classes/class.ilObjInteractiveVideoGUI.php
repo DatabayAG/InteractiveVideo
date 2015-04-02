@@ -179,7 +179,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
 		$video_tpl->setVariable('COMMENTS', json_encode($comments));
 
-		$video_tpl->setVariable('FORM_ACTION', $this->ctrl->getFormAction($this, 'postComment'));
 		require_once("./Services/UIComponent/Modal/classes/class.ilModalGUI.php");
 		$modal = ilModalGUI::getInstance();
 		$modal->setId("ilQuestionModal");
@@ -187,6 +186,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
 		$video_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTarget($this, 'getQuestionPerAjax', '', true, false));
 		$video_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTarget($this, 'postAnswerPerAjax', '', true, false));
+		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postComment', '', true, false));
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
 		$tpl->setContent($video_tpl->get());
 	}
@@ -218,16 +218,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->showContent();
 			return;
 		}
-
+		
 		$comment = new ilObjComment();
 		$comment->setObjId($this->object->getId());
 		$comment->setUserId($ilUser->getId());
 		$comment->setCommentText(trim(ilUtil::stripSlashes($_POST['comment_text'])));
 		$comment->setCommentTime((float)$_POST['comment_time']);
 		$comment->create();
-
-		ilUtil::sendSuccess($this->lng->txt('saved_successfully'));
-		$this->showContent();
+		exit();
 	}
 
 	/**
@@ -443,10 +441,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$simple_choice = new SimpleChoiceQuestion();
 		$question_id = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
 		$question = new ilTemplate("tpl.simple_questions.html", true, true, $this->plugin->getDirectory());
-		$question->setVariable('SINGLE_CHOICE', 'single_choice');
-		$question->setVariable('MULTIPLE_CHOICE', 'multiple_choice');
-		$question->setVariable('ANSWER_TEXT', 'answer_text');
-		$question->setVariable('CORRECT_SOLUTION', 'correct_solution');	
+		$question->setVariable('SINGLE_CHOICE', $this->plugin->txt('single_choice'));
+		$question->setVariable('MULTIPLE_CHOICE', $this->plugin->txt('multiple_choice'));
+		$question->setVariable('ANSWER_TEXT', $this->plugin->txt('answer_text'));
+		$question->setVariable('CORRECT_SOLUTION', $this->plugin->txt('correct_solution'));	
 		if($question_id > 0)
 		{
 			$question->setVariable('JSON', $simple_choice->getJsonForQuestionId($question_id));
@@ -786,7 +784,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
 		{
-			$ilTabs->addTab('editProperties', $this->lng->txt('edit'), $this->ctrl->getLinkTarget($this, 'editProperties'));
+			$ilTabs->addTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
 		}
 
 		$this->addPermissionTab();

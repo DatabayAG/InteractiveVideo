@@ -6,23 +6,20 @@
 			</video>
 		</div>
 		<div id="ilInteractiveVideoCommentsForm">
-			<form class="form-horizontal preventDoubleSubmission" method="post" action="{FORM_ACTION}" role="form">
-				<div id="il_prop_cont_comment_text" class="form-group">
-					<label class="col-sm-3 control-label" for="comment_text">{TXT_COMMENT}</label>
-					<div class="col-sm-9">
-						<textarea id="comment_text" class="form-control noRTEditor" rows="" wrap="virtual" name="comment_text"></textarea>
-						<input type="hidden" name="comment_time" id="comment_time" value="">
-					</div>
+			<div id="il_prop_cont_comment_text" class="form-group">
+				<label class="col-sm-3 control-label" for="comment_text">{TXT_COMMENT}</label>
+				<div class="col-sm-9">
+					<textarea id="comment_text" class="form-control noRTEditor" rows="" wrap="virtual" name="comment_text"></textarea>
+					<input type="hidden" name="comment_time" id="comment_time" value="">
 				</div>
-				<div class="ilFormFooter clearfix">
-					<div class="col-sm-6 ilFormRequired"></div>
-					<div class="col-sm-6 ilFormCmds">
-						<input id="ilInteractiveVideoCommentSubmit" class="btn btn-default btn-sm" type="submit" value="{TXT_POST}">
-						<button id="ilInteractiveVideoCommentCancel" class="btn btn-default btn-sm" type="button" value="">{TXT_CANCEL}</button>
-					</div>
+			</div>
+			<div class="ilFormFooter clearfix">
+				<div class="col-sm-6 ilFormRequired"></div>
+				<div class="col-sm-6 ilFormCmds">
+					<input id="ilInteractiveVideoCommentSubmit" class="btn btn-default btn-sm" type="submit" value="{TXT_POST}">
+					<button id="ilInteractiveVideoCommentCancel" class="btn btn-default btn-sm" type="button" value="">{TXT_CANCEL}</button>
 				</div>
-			</form>
-
+			</div>
 		</div>
 	</div>
 
@@ -36,6 +33,7 @@
 	<script type="text/javascript">
 		var question_get_url 	= "{QUESTION_GET_URL}";
 		var question_post_url 	= "{QUESTION_POST_URL}";
+		var post_comment_url 	= "{POST_COMMENT_URL}";
 		(function ($) {
 			$.fn.scrollToBottom = function (that)
 			{
@@ -43,7 +41,16 @@
 			};
 			
 			$("#ilInteractiveVideoCommentSubmit").on("click", function(e) {
-				$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
+				$.ajax({
+					type     : "POST",
+					dataType : "JSON",
+					url      : post_comment_url,
+					data     : {"comment_time":$("video#ilInteractiveVideo")[0].currentTime, "comment_text": $('#comment_text').val()},
+					success  : function(data) {
+						console.log("ok");
+						$('#comment_text').val("");
+					}
+				});
 			});
 
 			$("#ilInteractiveVideoCommentCancel").on("click", function(e) {

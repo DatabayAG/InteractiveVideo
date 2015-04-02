@@ -41,8 +41,8 @@ class SimpleChoiceQuestionsTableGUI extends ilTable2GUI
 		$this->setRowTemplate('tpl.row_answers.html', $a_parent_obj->plugin->getDirectory());
 
 		$this->addColumn($this->lng->txt('name'), 'name');
-		$this->addColumn($this->lng->txt('correct'), 'correct');
-		$this->addColumn($this->lng->txt('questions'), 'questions');
+		$this->addColumn($a_parent_obj->plugin->txt('correct'), 'correct');
+		$this->addColumn($a_parent_obj->plugin->txt('questions'), 'questions');
 
 		$this->setShowRowsSelector(false);
 	}
