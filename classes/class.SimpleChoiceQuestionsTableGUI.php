@@ -41,8 +41,9 @@ class SimpleChoiceQuestionsTableGUI extends ilTable2GUI
 		$this->setRowTemplate('tpl.row_answers.html', $a_parent_obj->plugin->getDirectory());
 
 		$this->addColumn($this->lng->txt('name'), 'name');
+		$this->addColumn($a_parent_obj->plugin->txt('answered'), 'answered');
 		$this->addColumn($a_parent_obj->plugin->txt('correct'), 'correct');
-		$this->addColumn($a_parent_obj->plugin->txt('questions'), 'questions');
+		$this->addColumn($a_parent_obj->plugin->txt('percentage'), 'percentage');
 
 		$this->setShowRowsSelector(false);
 	}
@@ -71,8 +72,9 @@ class SimpleChoiceQuestionsTableGUI extends ilTable2GUI
 		$current_selection_list->setListTitle($this->lng->txt('actions'));
 		$current_selection_list->setId('act_' . $row['user_id']);
 		$this->tpl->setVariable('USER_NAME', $row['name']);
+		$this->tpl->setVariable('USER_ANSWERED', $row['answered']);
 		$this->tpl->setVariable('USER_SCORE', $row['correct']);
-		$this->tpl->setVariable('MAX', $row['questions']);
+		$this->tpl->setVariable('PERCENTAGE', $row['percentage']);
 		$this->ctrl->setParameter($this->parent_obj, 'user_id', $row['user_id']);
 	}
 }

@@ -241,6 +241,21 @@ class SimpleChoiceQuestion {
 		$row = $ilDB->fetchAssoc($res);
 		return (int) $row['count'];
 	}
+
+	public function getAnsweredQuestionsFromUser($oid, $uid)
+	{
+		global $ilDB;
+		$res = $ilDB->queryF(
+					'SELECT count(score.question_id) as count FROM rep_robj_xvid_comments as comments, 
+							rep_robj_xvid_question as questions, rep_robj_xvid_score as score
+					 WHERE comments.comment_id = questions.comment_id AND questions.question_id = score.question_id 
+					 		AND is_interactive = 1 AND obj_id = %s AND score.user_id = %s',
+						array('integer', 'integer'),
+						array((int) $oid, $uid)
+		);
+		$row = $ilDB->fetchAssoc($res);
+		return (int) $row['count'];
+	}
 	
 	public function getPointsForUsers($oid)
 	{
@@ -264,8 +279,9 @@ class SimpleChoiceQuestion {
 		{
 			$results[$counter]['name']		= $ilUser->_lookupFullname($row['user_id']);
 			$results[$counter]['user_id'] 	= $row['user_id'];
+			$results[$counter]['answered']	= $this->getAnsweredQuestionsFromUser($oid, $row['user_id']);
 			$results[$counter]['correct'] 	= $row['points'];
-			$results[$counter]['questions'] = $questions_for_object;
+			$results[$counter]['percentage']= round(($row['points']/$questions_for_object) * 100, 2);
 			$counter ++ ;
 		}
 		
