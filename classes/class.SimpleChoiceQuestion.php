@@ -235,51 +235,70 @@ class SimpleChoiceQuestion {
 
 	}
 
+	public function getQuestionCountForObject($oid)
+	{
+		global $ilDB;
+		$res = $ilDB->queryF(
+					'SELECT count(question_id) as count FROM rep_robj_xvid_comments as comments, rep_robj_xvid_question as questions
+					 WHERE comments.comment_id = questions.comment_id AND  is_interactive = 1 AND obj_id = %s',
+						array('integer'),
+						array((int) $oid)
+		);
+		$row = $ilDB->fetchAssoc($res);
+		return (int) $row['count'];
+	}
+	
 	public function getPointsForUsers($oid)
 	{
 		/**
 		 * @var $ilDB   ilDB
 		 */
 
-		global $ilDB;
+		global $ilDB, $ilUser;
+		$questions_for_object = $this->getQuestionCountForObject($oid);
+		
 		$res = $ilDB->queryF(
-					'SELECT * FROM rep_robj_xvid_comments as comments, rep_robj_xvid_question as questions, 
-					 rep_robj_xvid_qus_text as answers  WHERE comments.comment_id = questions.comment_id 
-					 AND questions.question_id = answers.question_id AND  is_interactive = 1 AND correct = 1 AND obj_id = %s',
-						array('integer'),
-						array((int) $oid)
-		);	
-		$questions = array();
-		while($row = $ilDB->fetchAssoc($res))
-		{
-			$questions[$row['question_id']][$row['answer_id']] = $row['answer_id'];
-		}
-
-		$res = $ilDB->queryF(
-					'SELECT * FROM rep_robj_xvid_comments as comments, rep_robj_xvid_question as questions, 
-					 rep_robj_xvid_answers as answers  WHERE comments.comment_id = questions.comment_id 
-					 AND questions.question_id = answers.question_id AND obj_id = %s',
+					'SELECT score.user_id, sum(points) as points  FROM rep_robj_xvid_comments as comments, rep_robj_xvid_question as questions, 
+					 rep_robj_xvid_score as score  WHERE comments.comment_id = questions.comment_id 
+					 AND questions.question_id = score.question_id AND obj_id =  %s',
 						array('integer'),
 						array((int) $oid)
 		);
-		$answers = array();
+		$results = array();
+		$counter = 0;
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$answers[$row['user_id']][$row['question_id']][$row['answer_id']] = $row['answer_id'];
+			$results[$counter]['name']		= $ilUser->_lookupFullname($row['user_id']);
+			$results[$counter]['user_id'] 	= $row['user_id'];
+			$results[$counter]['correct'] 	= $row['points'];
+			$results[$counter]['questions'] = $questions_for_object;
+			$counter ++ ;
 		}
-		$results = array();
-		foreach( $answers as $key => $value)
-		{
-			$results[$key] = 0;
-			foreach( $value as $question_id => $answer_id)
-			{
-				if($questions[$question_id] == $answer_id)
-				{
-					$results[$key] ++;
-				}
-			}
-		}
+		
 		return $results;
+	}
+	
+	public function getCorrectAnswersCountForQuestion($qid)
+	{
+		/**
+		 * @var $ilDB   ilDB
+		 */
+
+		global $ilDB;
+		
+		$res = $ilDB->queryF(
+					'SELECT * FROM rep_robj_xvid_comments as comments, rep_robj_xvid_question as questions, 
+					 rep_robj_xvid_qus_text as answers  WHERE comments.comment_id = questions.comment_id 
+					 AND questions.question_id = answers.question_id AND  is_interactive = 1 AND correct = 1 AND questions.question_id = %s',
+						array('integer'),
+						array((int) $qid)
+		);
+		$question = array();
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$question[] = $row['answer_id'];
+		}
+		return $question;
 	}
 	
 	public function getQuestionTextQuestionId($qid)
@@ -307,18 +326,31 @@ class SimpleChoiceQuestion {
 		$type 	= $this->getTypeByQuestionId($qid);
 		
 		$this->removeAnswer($qid);
+		$correct_answers = $this->getCorrectAnswersForQuestion($qid);
+		$points = 0;
 		
 		if($type === self::SINGLE_CHOICE)
 		{
+			if(in_array($answers[0], $correct_answers))
+			{
+				$points = 1;
+			}
 			$ilDB->insert('rep_robj_xvid_answers',
 				array(
 					'question_id'	 => array('integer', $qid),
 					'user_id'     	 => array('integer', $usr_id),
 					'answer_id'      => array('integer', (int) $answers[0])
 				));
+			$ilDB->insert('rep_robj_xvid_score',
+			array(
+				'question_id'	 => array('integer', $qid),
+				'user_id'     	 => array('integer', $usr_id),
+				'points'      	 => array('integer', $points)
+			));
 		}
 		else
 		{
+			$points = 1;
 			foreach($answers as $key => $value)
 			{
 				$ilDB->insert('rep_robj_xvid_answers',
@@ -327,7 +359,18 @@ class SimpleChoiceQuestion {
 						'user_id'     	 => array('integer', $usr_id),
 						'answer_id'      => array('integer', (int) $value)
 					));
+				if( sizeof($answers) !== sizeof($correct_answers) || !in_array($value, $correct_answers))
+				{
+					$points = 0;
+				}
+			
 			}
+			$ilDB->insert('rep_robj_xvid_score',
+				array(
+					'question_id'	 => array('integer', $qid),
+					'user_id'     	 => array('integer', $usr_id),
+					'points'      	 => array('integer', $points)
+				));
 		}
 	}
 
@@ -336,6 +379,16 @@ class SimpleChoiceQuestion {
 		global $ilDB, $ilUser;
 		$usr_id	= $ilUser->getId();
 		$res = $ilDB->queryF('DELETE FROM rep_robj_xvid_answers WHERE question_id = %s AND user_id = %s',
+			array('integer', 'integer'), array($qid, $usr_id));
+		$ilDB->fetchAssoc($res);
+		$this->removeScore($qid);
+	}
+
+	public function removeScore($qid)
+	{
+		global $ilDB, $ilUser;
+		$usr_id	= $ilUser->getId();
+		$res = $ilDB->queryF('DELETE FROM rep_robj_xvid_score WHERE question_id = %s AND user_id = %s',
 			array('integer', 'integer'), array($qid, $usr_id));
 		$ilDB->fetchAssoc($res);
 	}
@@ -353,7 +406,9 @@ class SimpleChoiceQuestion {
 		$res = $ilDB->queryF('DELETE FROM rep_robj_xvid_answers WHERE question_id = %s',
 			array('integer'), array($qid));
 		$ilDB->fetchAssoc($res);
-
+		$res = $ilDB->queryF('DELETE FROM rep_robj_xvid_score WHERE question_id = %s',
+			array('integer'), array($qid));
+		$ilDB->fetchAssoc($res);
 	}
 
 	/**

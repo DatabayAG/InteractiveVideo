@@ -216,3 +216,27 @@ if(!$ilDB->tableExists('rep_robj_xvid_answers'))
 	$ilDB->createTable('rep_robj_xvid_answers', $fields);
 }
 ?>
+<#10>
+<?php
+if(!$ilDB->tableExists('rep_robj_xvid_score'))
+{
+	$fields = array(
+		'question_id' => array(
+			'type' => 'integer',
+			'length' => '4',
+			'notnull' => true
+		),
+		'user_id' => array(
+			'type' => 'integer',
+			'length' => '4',
+			'notnull' => true
+		),
+			'points' => array(
+			'type' => 'integer',
+			'length' => '4',
+			'notnull' => true
+		)
+	);
+	$ilDB->createTable('rep_robj_xvid_score', $fields);
+}
+?>

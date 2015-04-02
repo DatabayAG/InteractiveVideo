@@ -10,7 +10,7 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
  * @author Nadia Ahmad <nahmad@databay.de>
  * @version $Id$
  */
-class SimpleChoiceQuestionGUI extends ilTable2GUI
+class SimpleChoiceQuestionsTableGUI extends ilTable2GUI
 {
 	/**
 	 * @var ilCtrl
@@ -40,11 +40,10 @@ class SimpleChoiceQuestionGUI extends ilTable2GUI
 		$this->setTitle($a_parent_obj->plugin->txt('user'));
 		$this->setRowTemplate('tpl.row_answers.html', $a_parent_obj->plugin->getDirectory());
 
-		$this->addColumn('', 'user_id',  '1px', true);
-		$this->addColumn($this->lng->txt('username'), 'username');
-		$this->addColumn($this->lng->txt('points'), 'points');
+		$this->addColumn($this->lng->txt('name'), 'name');
+		$this->addColumn($this->lng->txt('correct'), 'correct');
+		$this->addColumn($this->lng->txt('questions'), 'questions');
 
-		$this->setSelectAllCheckbox('user_id');
 		$this->setShowRowsSelector(false);
 	}
 
@@ -70,10 +69,10 @@ class SimpleChoiceQuestionGUI extends ilTable2GUI
 
 		$current_selection_list = new ilAdvancedSelectionListGUI();
 		$current_selection_list->setListTitle($this->lng->txt('actions'));
-		$current_selection_list->setId('act_' . $row['comment_id']);
-
-		$this->ctrl->setParameter($this->parent_obj, 'comment_id', $row['comment_id']);
-		$current_selection_list->addItem($this->lng->txt('edit'), '', $this->ctrl->getLinkTarget($this->parent_obj, 'editComment'));
-		$this->tpl->setVariable('VAL_ACTIONS', $current_selection_list->getHTML());
+		$current_selection_list->setId('act_' . $row['user_id']);
+		$this->tpl->setVariable('USER_NAME', $row['name']);
+		$this->tpl->setVariable('USER_SCORE', $row['correct']);
+		$this->tpl->setVariable('MAX', $row['questions']);
+		$this->ctrl->setParameter($this->parent_obj, 'user_id', $row['user_id']);
 	}
 }
