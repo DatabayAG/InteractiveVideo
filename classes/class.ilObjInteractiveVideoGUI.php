@@ -349,7 +349,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addCommandButton('insertTutorComment', $this->lng->txt('insert'));
 		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
 
-		$tpl->setContent($form->getHTML());
+		$question_form = $this->getInteractiveForm();
+		$tpl->setContent($form->getHTML() . $question_form);
 	}
 
 
@@ -437,6 +438,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			$form->setValuesByArray($values, true);
 		}
+		$question_form = $this->getInteractiveForm();
+		$tpl->setContent($form->getHTML() . $question_form);
+	}
+
+	
+	public function  getInteractiveForm()
+	{
+		global $tpl;
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionCreator.js');
 		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
 		$simple_choice = new SimpleChoiceQuestion();
@@ -445,7 +454,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question->setVariable('SINGLE_CHOICE', 	$this->plugin->txt('single_choice'));
 		$question->setVariable('MULTIPLE_CHOICE', 	$this->plugin->txt('multiple_choice'));
 		$question->setVariable('ANSWER_TEXT',		$this->plugin->txt('answer_text'));
-		$question->setVariable('CORRECT_SOLUTION', 	$this->plugin->txt('correct_solution'));	
+		$question->setVariable('CORRECT_SOLUTION', 	$this->plugin->txt('correct_solution'));
 		if($question_id > 0)
 		{
 			$question->setVariable('JSON', $simple_choice->getJsonForQuestionId($question_id));
@@ -459,9 +468,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$question->setVariable('QUESTION_TEXT', '');
 		}
 		$question->setVariable('QUESTION_ID', $question_id);
-		$tpl->setContent($form->getHTML() . $question->get());
+		return $question->get();
 	}
-
 	/**
 	 * 
 	 */
