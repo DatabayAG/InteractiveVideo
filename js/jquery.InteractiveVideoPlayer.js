@@ -1,5 +1,18 @@
 $( document ).ready(function() {
 	$("#ilInteractiveVideoCommentSubmit").on("click", function(e) {
+		tmp_obj = 
+			{
+				'comment_id': '0',
+				'comment_time': $("video#ilInteractiveVideo")[0].currentTime,
+				'comment_text': $('#comment_text').val(),
+				'is_interactive': '0'
+			};
+		comments[Object.keys(comments).length]= tmp_obj;
+		stopPoints[stopPoints.length]= Math.floor($("video#ilInteractiveVideo")[0].currentTime);
+		
+		$("#ul_scroll").append('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode($("video#ilInteractiveVideo")[0].currentTime) +' </time> ' + comments[laenge].comment_text + '</li>');
+		$().scrollToBottom($("#ilInteractiveVideoComments"));
+
 		$.ajax({
 			type     : "POST",
 			dataType : "JSON",
@@ -14,6 +27,10 @@ $( document ).ready(function() {
 
 	$("#ilInteractiveVideoCommentCancel").on("click", function(e) {
 		$('#comment_text').val("");
+	});
+
+	$("#ilInteractiveVideoTutorCommentSubmit").on("click", function(e) {
+		$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
 	});
 });
 
@@ -34,6 +51,14 @@ $.fn.scrollToBottom = function (that)
 			timerRate: 50,
 			enablePluginDebug: false,
 			success:           function(media) {
+
+				media.addEventListener('loadedmetadata', function (e) {
+					console.log('loadedmetadata');
+					if (seekTime > 0) {
+						media.currentTime = seekTime;
+						seekTime = 0;
+					}
+				}, false);
 
 				media.addEventListener('seeked', function(e) {
 					$().debugPrinter('Player', 'seeked');

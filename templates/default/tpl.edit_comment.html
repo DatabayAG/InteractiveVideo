@@ -6,6 +6,7 @@
 			</video>
 		</div>
 		<div id="ilInteractiveVideoCommentsForm">
+			<form id="f_cmt" method="post" action="{FORM_ACTION}"> 
 			<div id="il_prop_cont_comment_text" class="form-group">
 				<label class="col-sm-3 control-label" for="comment_text">{TXT_COMMENT}</label>
 				<div class="col-sm-9">
@@ -16,28 +17,31 @@
 			<div class="ilFormFooter clearfix">
 				<div class="col-sm-6 ilFormRequired"></div>
 				<div class="col-sm-6 ilFormCmds">
-					<input id="ilInteractiveVideoCommentSubmit" class="btn btn-default btn-sm" type="submit" value="{TXT_POST}">
+					<input id="ilInteractiveVideoTutorCommentSubmit" class="btn btn-default btn-sm" type="submit" value="{TXT_POST}">
 					<button id="ilInteractiveVideoCommentCancel" class="btn btn-default btn-sm" type="button" value="">{TXT_CANCEL}</button>
 				</div>
 			</div>
+			</form>
 		</div>
 	</div>
 
-	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-		<div id="ilInteractiveVideoComments" class="scroll-text">
-			<ul id="ul_scroll">
-			</ul>
-		</div>
-	</div>
-	
+	<!--<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">-->
+		<!--<div id="ilInteractiveVideoComments" class="scroll-text">-->
+			<!--<ul id="ul_scroll">-->
+			<!--</ul>-->
+		<!--</div>-->
+	<!--</div>-->
+
 	<script type="text/javascript">
-		var question_get_url 	= "{QUESTION_GET_URL}";
-		var question_post_url 	= "{QUESTION_POST_URL}";
+
+//		var question_get_url 	= "{QUESTION_GET_URL}";
+//		var question_post_url 	= "{QUESTION_POST_URL}";
 		var post_comment_url 	= "{POST_COMMENT_URL}";
 		var comments 			= {COMMENTS};
 		var stopPoints 			= {STOP_POINTS};
-		var seekTime			= 0;
-		var iv_debug			= true;
+		var seekTime			= {CURRENT_TIME};
+
+		var iv_debug			= false;
 		$.fn.debugPrinter = function (message, element)
 		{
 			if( iv_debug )
@@ -46,10 +50,12 @@
 				console.log(element);
 			}
 		};
-//		$().debugPrinter('Comments', comments);
-//		$().debugPrinter('stopPoints', stopPoints);
-		
+		$().debugPrinter('Comments', comments);
+		$().debugPrinter('stopPoints', stopPoints);
+		$().debugPrinter('stopPoints', stopPoints);
+
 	</script>
 </div>
 </div>
 {MODAL_OVERLAY}
+{TABLE}

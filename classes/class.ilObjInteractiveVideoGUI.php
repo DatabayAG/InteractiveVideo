@@ -533,7 +533,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 *
 	 */
-	public function editComments()
+	public function editComments($current_time = 0)
 	{
 		/**
 		 * @var $tpl    ilTemplate
@@ -546,12 +546,92 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('editComments');
 
+		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
+		ilObjMediaObjectGUI::includePresentationJS($tpl);
+
+		$video_tpl = new ilTemplate("tpl.edit_comment.html", true, true, $this->plugin->getDirectory());
+
+		$mob_id = $this->object->getMobId();
+		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
+		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
+		
+		$video_tpl->setVariable('FORM_ACTION', $this->ctrl->getFormAction($this,'postTutorComment'));
+		$video_tpl->setVariable('VIDEO_SRC', $mob_dir . '/' . $media_item['location']);
+		$video_tpl->setVariable('VIDEO_TYPE', $media_item['format']);
+
+		$this->objComment = new ilObjComment();
+		$this->objComment->setObjId($this->object->getId());
+
+		$stop_points = $this->objComment->getStopPoints();
+		$comments = $this->objComment->getComments();
+		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('comment'));
+		$video_tpl->setVariable('TXT_POST', $this->plugin->txt('post'));
+		$video_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
+
+		$video_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
+		$video_tpl->setVariable('COMMENTS', json_encode($comments));
+		$video_tpl->setVAriable('CURRENT_TIME', json_encode($current_time));
+
+		require_once("./Services/UIComponent/Modal/classes/class.ilModalGUI.php");
+		$modal = ilModalGUI::getInstance();
+		$modal->setId("ilQuestionModal");
+		$modal->setBody('');
+//		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
+//		$video_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTarget($this, 'getQuestionPerAjax', '', true, false));
+//		$video_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTarget($this, 'postAnswerPerAjax', '', true, false));
+		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postTutorComment', '', false, false));
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoPlayer.js');
+		
 		$tbl_data = $this->object->getCommentsTableData();
 		$this->plugin->includeClass('class.ilInteractiveVideoCommentsTableGUI.php');
 		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editComments');
 
 		$tbl->setData($tbl_data);
-		$tpl->setContent($tbl->getHTML());
+
+		$video_tpl->setVariable('TABLE', $tbl->getHTML());
+		
+		$tpl->setContent($video_tpl->get());
+	}
+
+	/**
+	 *
+	 */
+	public function postTutorComment()
+	{
+		/**
+		 * @var $ilUser ilObjUser
+		 */
+		global $ilUser;
+
+		if(
+			!isset($_POST['comment_text']) ||
+			!is_string($_POST['comment_text']) ||
+			!strlen(trim(ilUtil::stripSlashes($_POST['comment_text'])))
+		)
+		{
+			ilUtil::sendFailure($this->plugin->txt('missing_comment_text'));
+			$this->editComments();
+			return;
+		}
+
+		if(!isset($_POST['comment_time']) || !strlen(trim(ilUtil::stripSlashes($_POST['comment_time']))))
+		{
+			ilUtil::sendFailure($this->plugin->txt('missing_stopping_point'));
+			$this->editComments();
+			return;
+		}
+
+		$comment = new ilObjComment();
+		$comment->setObjId($this->object->getId());
+		$comment->setUserId($ilUser->getId());
+		$comment->setCommentText(trim(ilUtil::stripSlashes($_POST['comment_text'])));
+		$comment->setCommentTime((float)$_POST['comment_time']);
+		$comment->setIsTutor(true);
+		$comment->create();
+		
+		$current_time = $comment->getCommentTime();
+		$this->editComments($current_time);
 	}
 
 	public function showResults()
