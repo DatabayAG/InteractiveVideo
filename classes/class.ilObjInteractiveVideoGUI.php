@@ -688,7 +688,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	protected function updateCustom(ilPropertyFormGUI $a_form)
 	{
 		// @todo: Store the new file (delegate to application class)
-		if($a_form->getInput('video_file'))
+		$file = $a_form->getInput('video_file');
+		if($file['error'] == 0 )
 		{
 			$this->object->uploadVideoFile();
 		}
