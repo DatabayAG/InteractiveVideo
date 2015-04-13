@@ -17,7 +17,7 @@ root_create_xvid#:#Create Interactive Video
 cat_create_xvid#:#Create Interactive Video
 interactive#:#Interactive
 tutor#:#Tutor
-comments#:#Comments
+comments#:#Questions and Comments
 sure_delete_comments#:#Are you sure you want to delete the selected comments?
 video_file#:#Video
 comment#:#Comment
@@ -28,7 +28,7 @@ missing_comment_text#:#Please enter a comment.
 missing_stopping_point#:#The stopping point was not trasnferred to the server. Please try again.
 invalid_comment_ids#:#Some comments could not be found.
 comments_successfully_deleted#:#The selected comments were deleted successfully.
-insert_comment#:#Insert new comment
+insert_comment#:#Insert new question / new comment
 edit_comment#:#Edit comment
 correct_solution#:#Correct
 add_question#:#Add Question
@@ -49,3 +49,5 @@ answered#:#Questions answered
 question_results#:#Question Results
 user_answered#:#User Answered
 user_correct#:#User Answered Correct
+insert_question#:#Insert question
+insert_comment#:#Insert Comment

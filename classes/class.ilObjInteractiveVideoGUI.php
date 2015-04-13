@@ -172,8 +172,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$stop_points = $this->objComment->getStopPoints();
 		$comments = $this->objComment->getComments();
-		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('comment'));
-		$video_tpl->setVariable('TXT_POST', $this->plugin->txt('post'));
+		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
+		$video_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
 		$video_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
 
 		$video_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
@@ -323,7 +323,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment->setRequired(true);
 		$form->addItem($comment);
 
-		$interactive = new ilCheckboxInputGUI($this->plugin->txt('interactive'), 'is_interactive');
+		$interactive = new ilCheckboxInputGUI($this->plugin->txt('insert_question'), 'is_interactive');
 		$form->addItem($interactive);
 		return $form;
 	}
@@ -564,8 +564,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$stop_points = $this->objComment->getStopPoints();
 		$comments = $this->objComment->getComments();
-		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('comment'));
-		$video_tpl->setVariable('TXT_POST', $this->plugin->txt('post'));
+		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
+		$video_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
 		$video_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
 
 		$video_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
