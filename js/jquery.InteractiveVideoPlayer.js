@@ -53,7 +53,7 @@ $.fn.scrollToBottom = function (that)
 			success:           function(media) {
 
 				media.addEventListener('loadedmetadata', function (e) {
-					console.log('loadedmetadata');
+					$().debugPrinter('Player', 'loadedmetadata');
 					if (seekTime > 0) {
 						media.currentTime = seekTime;
 						seekTime = 0;

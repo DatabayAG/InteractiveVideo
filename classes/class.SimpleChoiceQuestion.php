@@ -310,14 +310,15 @@ class SimpleChoiceQuestion {
 
 	}
 	
-	public function getFeedbackForQuestion($qid)
+	
+	public function getScoreForQuestion($qid)
 	{
 		/**
 		 * @var $ilDB   ilDB
 		 */
 
 		global $ilDB, $ilUser;
-		
+
 		$usr_id	= $ilUser->getId();
 		$res = $ilDB->queryF(
 					'SELECT points  FROM rep_robj_xvid_score as score  WHERE 
@@ -326,12 +327,18 @@ class SimpleChoiceQuestion {
 						array((int) $usr_id, (int) $qid)
 		);
 		$score = $ilDB->fetchAssoc($res);
-		
+		return (int) $score['points'];
+	}
+	
+	public function getFeedbackForQuestion($qid)
+	{
+	
+		$score = $this->getScoreForQuestion($qid);	
 		//Todo add feedback to database and replace placeholder
 		$feedback = '';
 		if($feedback !== '')
 		{
-			if((int) $score['points'] === 0)
+			if($score === 0)
 			{
 				return 'Long Feedback Placeholder WRONG!';
 			}
@@ -342,13 +349,13 @@ class SimpleChoiceQuestion {
 		}
 		else
 		{
-			if((int) $score['points'] === 0)
+			if($score === 0)
 			{
-				return 'placeholder correct';
+				return 'placeholder wrong';
 			}
 			else
 			{
-				return 'placeholder wrong';
+				return 'placeholder correct';
 			}
 		}
 	}
