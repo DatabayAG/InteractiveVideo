@@ -310,6 +310,33 @@ class SimpleChoiceQuestion {
 
 	}
 	
+	public function getFeedbackForQuestion($qid)
+	{
+		/**
+		 * @var $ilDB   ilDB
+		 */
+
+		global $ilDB, $ilUser;
+		
+		$usr_id	= $ilUser->getId();
+		$res = $ilDB->queryF(
+					'SELECT points  FROM rep_robj_xvid_score as score  WHERE 
+					 user_id = %s AND question_id = %s',
+						array('integer', 'integer'),
+						array((int) $usr_id, (int) $qid)
+		);
+		$score = $ilDB->fetchAssoc($res);
+		
+		if($score['points'] == 0)
+		{
+			return 'wrong';
+		}
+		else
+		{
+			return 'correct';
+		}
+	}
+	
 	public function getPointsForUsers($oid)
 	{
 		/**

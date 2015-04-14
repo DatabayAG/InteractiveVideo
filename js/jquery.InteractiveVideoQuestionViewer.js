@@ -49,6 +49,11 @@ $.fn.addButtons = function() {
 	$().appendButtonListener();
 };
 
+$.fn.showFeedback = function(feedback) {
+	$('.modal_feedback').remove();
+	$('#question_form').append('<p class="modal_feedback">' + feedback + '</p>');
+};
+
 $.fn.appendButtonListener = function() {
 	$('#question_form').on('submit',function(e){
 		e.preventDefault();
@@ -59,7 +64,8 @@ $.fn.appendButtonListener = function() {
 			url      : question_post_url,
 			data     : $(this).serialize(),
 			success  : function(data) {
-				$('#ilQuestionModal').modal('hide');
+				//$('#ilQuestionModal').modal('hide');
+				 $().showFeedback(data);
 				//IVQV.player.play();
 			}
 		});
