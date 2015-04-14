@@ -139,13 +139,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$simple_choice = new SimpleChoiceQuestion();
 		$simple_choice->saveAnswer((int) $_POST['qid'], ilUtil::stripSlashesRecursive($_POST['answer']));
-		$feedback = $simple_choice->getFeedbackForQuestion($_POST['qid']);
-		$tpl_json = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
-		$tpl_json->setVariable('JSON', 'Feedback ' . $feedback);
-		$tpl_json->show("DEFAULT", false, true );
+		$this->showFeedbackPerAjax();
 		exit();
 	}
 
+	public function showFeedbackPerAjax()
+	{
+		$simple_choice = new SimpleChoiceQuestion();
+		$feedback = $simple_choice->getFeedbackForQuestion($_POST['qid']);
+		$tpl_json = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
+		$tpl_json->setVariable('JSON', 'Feedback ' . $feedback);
+		return $tpl_json->show("DEFAULT", false, true );
+	}
+	
 	/**
 	 * 
 	 */

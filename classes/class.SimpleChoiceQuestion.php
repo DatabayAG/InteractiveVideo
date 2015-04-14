@@ -327,13 +327,29 @@ class SimpleChoiceQuestion {
 		);
 		$score = $ilDB->fetchAssoc($res);
 		
-		if($score['points'] == 0)
+		//Todo add feedback to database and replace placeholder
+		$feedback = '';
+		if($feedback !== '')
 		{
-			return 'wrong';
+			if((int) $score['points'] === 0)
+			{
+				return 'Long Feedback Placeholder WRONG!';
+			}
+			else
+			{
+				return 'Long Feedback Placeholder CORRECT!';
+			}
 		}
 		else
 		{
-			return 'correct';
+			if((int) $score['points'] === 0)
+			{
+				return 'placeholder correct';
+			}
+			else
+			{
+				return 'placeholder wrong';
+			}
 		}
 	}
 	
