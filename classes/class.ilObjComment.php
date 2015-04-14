@@ -100,6 +100,16 @@ class ilObjComment
 				'comment_time'   => array('integer', round($this->getCommentTime(), 0)),
 				'comment_text'   => array('text', $this->getCommentText())
 			));
+		if((int) $this->isInteractive())
+		{
+			$question = new SimpleChoiceQuestion();
+			if($question->checkInput())
+			{
+				$question->deleteQuestion($next_id);
+				$_POST['comment_id'] = $next_id;
+				$question->create();
+			}
+		}
 	}
 
 	public function update()
