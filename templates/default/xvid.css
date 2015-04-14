@@ -45,3 +45,15 @@
 	right: 0;
 	text-align: left;
 }
+
+.modal_feedback{
+    margin: 10px 0px 10px 0px;
+    padding: 5px;
+}
+.modal_feedback .wrong{
+    background-color: #FFE7E7;
+}
+
+.modal_feedback .correct{
+    background-color: #E7FFE7;
+}

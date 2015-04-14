@@ -332,30 +332,29 @@ class SimpleChoiceQuestion {
 	
 	public function getFeedbackForQuestion($qid)
 	{
-	
 		$score = $this->getScoreForQuestion($qid);	
 		//Todo add feedback to database and replace placeholder
-		$feedback = '';
-		if($feedback !== '')
+		$feedback['correct'] = '';
+		if($feedback['correct'] !== '')
 		{
 			if($score === 0)
 			{
-				return 'Long Feedback Placeholder WRONG!';
+				return '<div class="wrong">Long Feedback Placeholder WRONG!</div>';//$feedback['one_wrong'];
 			}
 			else
 			{
-				return 'Long Feedback Placeholder CORRECT!';
+				return '<div class="correct">Long Feedback Placeholder CORRECT!</div>';//$feedback['correct'];
 			}
 		}
 		else
 		{
 			if($score === 0)
 			{
-				return 'placeholder wrong';
+				return '<div class="wrong">placeholder wrong<div>';
 			}
 			else
 			{
-				return 'placeholder correct';
+				return '<div class="correct">placeholder correct<div>';
 			}
 		}
 	}

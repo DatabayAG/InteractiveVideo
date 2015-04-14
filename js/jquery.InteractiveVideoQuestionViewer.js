@@ -28,6 +28,7 @@ $.fn.buildQuestionForm = function() {
 	{
 		$().addAnswerPossibilities('checkbox');
 	}
+	$().addFeedbackDiv();
 	$().addButtons();
 };
 
@@ -44,14 +45,19 @@ $.fn.addAnswerPossibilities = function(input_type) {
 	$('.modal-body').append(html);
 };
 
+$.fn.addFeedbackDiv = function() {
+	$('#question_form').append('<div class="modal_feedback"></div>');
+};
+
 $.fn.addButtons = function() {
 	$('#question_form').append('<input id="sendForm" class="btn btn-default btn-sm" type="submit" value="Save">');
 	$().appendButtonListener();
 };
 
 $.fn.showFeedback = function(feedback) {
-	$('.modal_feedback').remove();
-	$('#question_form').append('<p class="modal_feedback">' + feedback + '</p>');
+	var modal = $('.modal_feedback');
+	modal.html('');
+	modal.html(feedback);
 };
 
 $.fn.appendButtonListener = function() {
