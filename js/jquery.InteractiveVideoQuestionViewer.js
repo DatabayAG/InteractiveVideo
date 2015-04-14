@@ -8,6 +8,10 @@ $.fn.getQuestionPerAjax = function(comment_id, player) {
 			IVQV = array;
 			IVQV.player = player;
 			$().buildQuestionForm();
+			if(IVQV.player.isFullScreen === true)
+			{
+				IVQV.player.exitFullScreen();
+			}
 			$('#ilQuestionModal').modal('show');
 		});
 };
