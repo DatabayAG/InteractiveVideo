@@ -72,7 +72,9 @@ class SimpleChoiceQuestion {
 				'question_id'	 => array('integer', $question_id),
 				'comment_id'     => array('integer', (int) $_POST['comment_id']),
 				'type'         	 => array('integer', (int) $_POST['question_type']),
-				'question_text'  => array('text', ilUtil::stripSlashes($_POST['question_text']))
+				'question_text'  => array('text', ilUtil::stripSlashes($_POST['question_text'])),
+				'feedback_correct' => array('text', ilUtil::stripSlashes($_POST['feedback_correct'])),
+				'feedback_one_wrong' => array('text', ilUtil::stripSlashes($_POST['feedback_wrong']))
 			));
 		foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
 		{
@@ -333,28 +335,27 @@ class SimpleChoiceQuestion {
 	public function getFeedbackForQuestion($qid)
 	{
 		$score = $this->getScoreForQuestion($qid);	
-		//Todo add feedback to database and replace placeholder
-		$feedback['correct'] = '';
-		if($feedback['correct'] !== '')
+		$feedback = $this->getFeedbackByQuestionId($qid);
+		if(is_array($feedback) && $feedback['correct'] !== null )
 		{
 			if($score === 0)
 			{
-				return '<div class="wrong">Long Feedback Placeholder WRONG!</div>';//$feedback['one_wrong'];
+				return '<div class="wrong">'.$feedback['wrong'].'</div>';//$feedback['one_wrong'];
 			}
 			else
 			{
-				return '<div class="correct">Long Feedback Placeholder CORRECT!</div>';//$feedback['correct'];
+				return '<div class="correct">'.$feedback['correct'].'</div>';//$feedback['correct'];
 			}
 		}
 		else
 		{
 			if($score === 0)
 			{
-				return '<div class="wrong">placeholder wrong<div>';
+				return '<div class="wrong"><div>';
 			}
 			else
 			{
-				return '<div class="correct">placeholder correct<div>';
+				return '<div class="correct"><div>';
 			}
 		}
 	}
@@ -427,6 +428,23 @@ class SimpleChoiceQuestion {
 		);
 		$row = $ilDB->fetchAssoc($res);
 		return $row['question_text'];
+
+	}
+
+	public function getFeedbackByQuestionId($qid)
+	{
+		/**
+		 * @var $ilDB   ilDB
+		 */
+
+		global $ilDB;
+		$res = $ilDB->queryF(
+					'SELECT * FROM rep_robj_xvid_question WHERE question_id = %s',
+						array('integer'),
+						array((int) $qid)
+		);
+		$row = $ilDB->fetchAssoc($res);
+		return array('correct' => $row['feedback_correct'] , 'wrong' => $row['feedback_one_wrong']);
 
 	}
 	

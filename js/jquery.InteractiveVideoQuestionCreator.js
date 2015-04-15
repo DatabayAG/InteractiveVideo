@@ -13,7 +13,7 @@ $( document ).ready(function() {
 
 $.fn.initQuestionEditor = function() {
 	var question_form = $('#addQuestion');
-	$('#is_interactive').parent().parent().append(question_form);	
+	$('#is_interactive').parent().parent().parent().parent().append(question_form);	
 	$().addClickListenerForCheckbox();
 	$().createQuestionForm();
 };

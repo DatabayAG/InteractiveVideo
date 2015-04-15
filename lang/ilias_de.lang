@@ -53,3 +53,7 @@ my_comments#:#Meine Kommentare
 general#:#Allgemein
 repeat_question#:#Frage wiederholen
 tags#:#Tags
+question_text#:#Fragentext
+question_type#:#Fragentyp
+feedback_correct#:#Feedback Richtige Antwort
+feedback_one_wrong#:#Feedback bei mindestens einer falschen Antwort

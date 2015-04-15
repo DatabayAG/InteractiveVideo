@@ -57,3 +57,20 @@
 .modal_feedback .correct{
     background-color: #E7FFE7;
 }
+.modal_feedback .correct:before {
+    color: #008000;
+    font-size: 30px;
+    font-family: "Glyphicons Halflings";
+    content: "\e013";
+    padding-right: 20px;
+    opacity: 0.4;
+}
+
+.modal_feedback .wrong:before {
+    color: #880000;
+    font-size: 30px;
+    font-family: "Glyphicons Halflings";
+    content: "\e014";
+    padding-right: 20px;
+    opacity: 0.4;
+}

@@ -56,3 +56,7 @@ my_comments#:#My Comments
 general#:#General
 repeat_question#:#Repeat Question
 tags#:#Tags
+question_text#:#Question Text
+question_type#:#Question Type
+feedback_correct#:#Feedback Correct Answer
+feedback_one_wrong#:#Feedback at least one wrong

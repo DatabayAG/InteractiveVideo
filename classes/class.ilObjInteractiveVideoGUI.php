@@ -533,11 +533,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question->setVariable('MULTIPLE_CHOICE', 	$this->plugin->txt('multiple_choice'));
 		$question->setVariable('ANSWER_TEXT',		$this->plugin->txt('answer_text'));
 		$question->setVariable('CORRECT_SOLUTION', 	$this->plugin->txt('correct_solution'));
+		$question->setVariable('QUESTIONTEXT', 		$this->plugin->txt('question_text'));
+		$question->setVariable('QUESTION_TYPE_TEXT',$this->plugin->txt('question_type'));
+		$question->setVariable('FEEDBACK_CORRECT_LABEL', 	$this->plugin->txt('feedback_correct'));
+		$question->setVariable('FEDDBACK_ONE_WRONG_LABEL', 	$this->plugin->txt('feedback_one_wrong'));
+		$feedback =  $simple_choice->getFeedbackByQuestionId($question_id);
 		if($question_id > 0)
 		{
 			$question->setVariable('JSON', $simple_choice->getJsonForQuestionId($question_id));
 			$question->setVariable('QUESTION_TYPE', $simple_choice->getTypeByQuestionId($question_id));
 			$question->setVariable('QUESTION_TEXT', $simple_choice->getQuestionTextQuestionId($question_id));
+			$question->setVariable('FEEDBACK_CORRECT',$feedback['correct']);
+			$question->setVariable('FEEDBACK_WRONG', $feedback['wrong']);
 		}
 		else
 		{
