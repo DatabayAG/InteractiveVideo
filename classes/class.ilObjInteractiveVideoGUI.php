@@ -87,7 +87,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					case 'updateProperties':
 					case 'editProperties':
 					case 'confirmDeleteComment':
-					case 'deleteComment':
+					case 'deleteComment': 
+					case 'editComments':  	
 						$this->checkPermission('write');
 						$this->$cmd();
 						break;
@@ -250,7 +251,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $ilTabs;
 
-		$ilTabs->activateTab('editProperties');
+		$ilTabs->activateTab('editComments');
 
 		if(!isset($_POST['comment_id']) || !is_array($_POST['comment_id']) || !count($_POST['comment_id']))
 		{
@@ -268,7 +269,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$post_ids = $_POST['comment_id'];
 		
-		$comment_ids = $this->object->getCommentIdsByObjId($this->obj_id);
+		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
 		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
 
 		if(count($wrong_comment_ids) == 0)
@@ -300,7 +301,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$post_ids = $_POST['comment_id'];
 
-		$comment_ids = $this->object->getCommentIdsByObjId($this->obj_id);
+		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
 		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
 		if(count($wrong_comment_ids) == 0)
 		{
@@ -323,18 +324,33 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
 		$form->setTitle($this->plugin->txt('insert_comment'));
 
+		$section_header = new ilFormSectionHeaderGUI();
+		$section_header->setTitle($this->plugin->txt('general'));
+		$form->addItem($section_header);
+
+		$title = new ilTextInputGUI($this->lng->txt('title'), 'comment_title');
+		$form->addItem($title);
+		
 		$this->plugin->includeClass('class.ilTimeInputGUI.php');
 		$time = new ilTimeInputGUI($this->lng->txt('time'), 'comment_time');
 		$time->setShowTime(true);
 		$time->setShowSeconds(true);
 		$form->addItem($time);
 
+		$repeat_question = new ilCheckboxInputGUI($this->plugin->txt('repeat_question'), 'repeat_question');
+		$form->addItem($repeat_question);
+
+		$section_header = new ilFormSectionHeaderGUI();
+		$section_header->setTitle($this->plugin->txt('comments'));
+		$form->addItem($section_header);
+		
 		$comment = new ilTextAreaInputGUI($this->lng->txt('comment'), 'comment_text');
 		$comment->setRequired(true);
 		$form->addItem($comment);
 
-		$interactive = new ilCheckboxInputGUI($this->plugin->txt('insert_question'), 'is_interactive');
-		$form->addItem($interactive);
+		$tags = new ilTextAreaInputGUI($this->plugin->txt('tags'), 'comment_tags');
+		$form->addItem($tags);
+		
 		return $form;
 	}
 
@@ -349,13 +365,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $ilTabs;
 
-		$this->setSubTabs('editProperties');
+		$this->setSubTabs('editComments');
 
-		$ilTabs->activateTab('editProperties');
+		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('editComments');
 
 		$form = $this->initCommentForm();
+		$section_header = new ilFormSectionHeaderGUI();
+		$section_header->setTitle($this->plugin->txt('questions'));
+		$form->addItem($section_header);
 
+
+		$interactive = new ilCheckboxInputGUI($this->plugin->txt('insert_question'), 'is_interactive');
+		$form->addItem($interactive);
+		
 		$form->addCommandButton('insertTutorComment', $this->lng->txt('insert'));
 		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
 
@@ -386,6 +409,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setObjId($this->object->getId());
 			$this->objComment->setCommentText($form->getInput('comment_text'));
 			$this->objComment->setInteractive((int)$form->getInput('is_interactive'));
+			
+			$this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
+			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
+			$this->objComment->setRepeatQuestion((int)$form->getInput('repeat_question'));
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
@@ -414,6 +441,38 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->showContent();
 		}
 	}
+	public function editMyComment()
+	{
+		/**
+		 * @var $tpl    ilTemplate
+		 * @var $ilTabs ilTabsGUI
+		 */
+		global $tpl, $ilTabs;
+
+		$ilTabs->activateTab('editComments');
+		$form = $this->initCommentForm();
+
+		$frm_id = new ilHiddenInputGUI('comment_id');
+		$form->addItem($frm_id);
+
+		$form->setFormAction($this->ctrl->getFormAction($this, 'updateMyComment'));
+		$form->setTitle($this->plugin->txt('edit_comment'));
+
+		$form->addCommandButton('updateMyComment', $this->lng->txt('save'));
+		$form->addCommandButton('editMyComments', $this->lng->txt('cancel'));
+
+		if(isset($_GET['comment_id']))
+		{
+			$comment_data             = $this->object->getCommentDataById((int)$_GET['comment_id']);
+			$values['comment_id']     = $comment_data['comment_id'];
+			$values['comment_time']   = $comment_data['comment_time'];
+			$values['comment_text']   = $comment_data['comment_text'];
+			$values['is_interactive'] = $comment_data['is_interactive'];
+
+			$form->setValuesByArray($values, true);
+		}
+		$tpl->setContent($form->getHTML());
+	}
 
 	/**
 	 * 
@@ -426,9 +485,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $ilTabs;
 
-		$ilTabs->activateTab('editProperties');
+		$ilTabs->activateTab('editComments');
 		$form = $this->initCommentForm();
 
+		$section_header = new ilFormSectionHeaderGUI();
+		$section_header->setTitle($this->plugin->txt('questions'));
+		$form->addItem($section_header);
+
+		$interactive = new ilCheckboxInputGUI($this->plugin->txt('insert_question'), 'is_interactive');
+		$form->addItem($interactive);
 		$frm_id = new ilHiddenInputGUI('comment_id');
 		$form->addItem($frm_id);
 
@@ -436,7 +501,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->setTitle($this->plugin->txt('edit_comment'));
 
 		$form->addCommandButton('updateComment', $this->lng->txt('save'));
-		$form->addCommandButton('editProperties', $this->lng->txt('cancel'));
+		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
 
 		if(isset($_GET['comment_id']))
 		{
@@ -445,6 +510,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$values['comment_time']   = $comment_data['comment_time'];
 			$values['comment_text']   = $comment_data['comment_text'];
 			$values['is_interactive'] = $comment_data['is_interactive'];
+			$values['comment_title']  = $comment_data['comment_title'];
+			$values['comment_tags']   = $comment_data['comment_tags'];
+			$values['repeat_question']   = $comment_data['repeat_question'];
 
 			$form->setValuesByArray($values, true);
 		}
@@ -496,6 +564,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 			$this->objComment->setCommentText($form->getInput('comment_text'));
 			$this->objComment->setInteractive((int)$form->getInput('is_interactive'));
+			$this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
+			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
+			$this->objComment->setRepeatQuestion((int)$form->getInput('repeat_question'));
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
@@ -551,9 +622,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $ilTabs;
 
-		$this->setSubTabs('editProperties');
+		$this->setSubTabs('editComments');
 
-		$ilTabs->activateTab('editProperties');
+		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('editComments');
 
 		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
@@ -607,6 +678,146 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 *
 	 */
+	public function editMyComments()
+	{
+		/**
+		 * @var $tpl    ilTemplate
+		 * @var $ilTabs ilTabsGUI
+		 */
+		global $tpl, $ilTabs;
+
+		$this->setSubTabs('editComments');
+
+		$ilTabs->activateTab('editComments');
+		$ilTabs->activateSubTab('editMyComments');
+
+		$tbl_data = $this->object->getCommentsTableDataByUserId();
+		$this->plugin->includeClass('class.ilInteractiveVideoCommentsTableGUI.php');
+		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editMyComments');
+
+		$tbl->setData($tbl_data);
+		$tpl->setContent($tbl->getHTML());
+	}
+	/**
+	 *
+	 */
+	public function updateMyComment()
+	{
+		$form = $this->initCommentForm();
+		if($form->checkInput())
+		{
+			$comment_id = $form->getInput('comment_id');
+			if($comment_id > 0)
+			{
+				$this->objComment = new ilObjComment($comment_id);
+
+			}
+			$this->objComment->setCommentText($form->getInput('comment_text'));
+			$this->objComment->setInteractive(0);
+
+			// calculate seconds
+			$comment_time = $form->getInput('comment_time');
+			$seconds      = $comment_time['time']['h'] * 3600
+				+ $comment_time['time']['m'] * 60
+				+ $comment_time['time']['s'];
+			$this->objComment->setCommentTime($seconds);
+			$this->objComment->update();
+
+			$this->editComments();
+		}
+		else
+		{
+			$form->setValuesByPost();
+			$this->editMyComment();
+		}
+	}
+
+	/**
+	 *
+	 */
+	public function confirmDeleteMyComment()
+	{
+		/**
+		 * @var $tpl    ilTemplate
+		 * @var $ilTabs ilTabsGUI
+		 */
+		global $tpl, $ilTabs;
+
+		$ilTabs->activateTab('editComments');
+
+		if(!isset($_POST['comment_id']) || !is_array($_POST['comment_id']) || !count($_POST['comment_id']))
+		{
+			ilUtil::sendFailure($this->lng->txt('select_one'));
+			$this->editComments();
+			return;
+		}
+
+		require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
+		$confirm = new ilConfirmationGUI();
+		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteComment'));
+		$confirm->setHeaderText($this->plugin->txt('sure_delete_comment'));
+		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteComment');
+		$confirm->setCancel($this->lng->txt('cancel'), 'editComments');
+
+		$post_ids = $_POST['comment_id'];
+
+		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
+		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
+
+		if(count($wrong_comment_ids) == 0)
+		{
+			foreach($post_ids as $comment_id)
+			{
+				$confirm->addItem('comment_id[]', $comment_id, $this->object->getCommentTextById($comment_id));
+			}
+
+			$tpl->setContent($confirm->getHTML());
+		}
+		else
+		{
+			ilUtil::sendFailure($this->plugin->txt('invalid_comment_ids'));
+		}
+	}
+
+	/**
+	 *
+	 */
+	public function deleteMyComment()
+	{
+		if(!isset($_POST['comment_id']) || !is_array($_POST['comment_id']) || !count($_POST['comment_id']))
+		{
+			ilUtil::sendFailure($this->lng->txt('select_one'));
+			$this->editMyComments();
+			return;
+		}
+
+		$post_ids = $_POST['comment_id'];
+		$comments = $this->object->getCommentIdsByObjId($this->obj_id);
+		$comment_ids = array_keys($comments);
+		$user_ids = array_unique($comments);
+		
+		if(count($user_ids)> 1)
+		{
+			ilUtil::sendFailure('invalid_comment_ids');
+			$this->editMyComments();
+		}
+			
+		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
+		if(count($wrong_comment_ids) == 0)
+		{
+			$this->object->deleteComments($_POST['comment_id']);
+			ilUtil::sendSuccess($this->lng->txt('comments_successfully_deleted'));
+		}
+		else
+		{
+			ilUtil::sendFailure('invalid_comment_ids');
+		}
+		$this->editMyComments();
+	}
+	
+	/**
+	 *
+	 */
 	public function postTutorComment()
 	{
 		/**
@@ -648,9 +859,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		global $tpl, $ilTabs;
 		
-		$this->setSubTabs('editProperties');
+		$this->setSubTabs('editComments');
 
-		$ilTabs->activateTab('editProperties');
+		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('showResults');
 
 		$simple = new SimpleChoiceQuestion();
@@ -667,9 +878,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		global $tpl, $ilTabs;
 
-		$this->setSubTabs('editProperties');
+		$this->setSubTabs('editComments');
 
-		$ilTabs->activateTab('editProperties');
+		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('showQuestionsResults');
 
 		$simple = new SimpleChoiceQuestion();
@@ -744,8 +955,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $ilTabs;
 
-		$this->setSubTabs('editProperties');
-
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('editProperties');
 
@@ -779,7 +988,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->initEditCustomForm($form);
 		return $form;
 	}
-
 
 	/**
 	 * Overwriting this method is necessary to handle creation problems with the api
@@ -905,6 +1113,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$ilTabs->addTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
 		}
+		
+		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
+		{
+			$ilTabs->addTab('editComments', $this->plugin->txt('questions_comments'), $this->ctrl->getLinkTarget($this, 'editComments'));
+		}
+		else if($ilAccess->checkAccess('read', '', $this->object->getRefId()))
+		{
+			$ilTabs->addTab('editComments', $this->plugin->txt('questions_comments'), $this->ctrl->getLinkTarget($this, 'editMyComments'));
+		}	
 
 		$this->addPermissionTab();
 	}
@@ -917,15 +1134,21 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		/**
 		 * @var $ilTabs   ilTabsGUI
 		 */
-		global $ilTabs;
+		global $ilTabs, $ilAccess;
 
 		switch($a_tab)
 		{
-			case 'editProperties':
-				$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'),$this->ctrl->getLinkTarget($this,'editProperties'));
-				$ilTabs->addSubTab('editComments', $this->plugin->txt('comments'),$this->ctrl->getLinkTarget($this,'editComments'));
-				$ilTabs->addSubTab('showResults', $this->plugin->txt('user_results'),$this->ctrl->getLinkTarget($this,'showResults'));
-				$ilTabs->addSubTab('showQuestionsResults', $this->plugin->txt('question_results'),$this->ctrl->getLinkTarget($this,'showQuestionsResults'));
+			case 'editComments':
+				if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
+				{
+					$ilTabs->addSubTab('editComments', $this->plugin->txt('questions_comments'),$this->ctrl->getLinkTarget($this,'editComments'));
+				}
+				$ilTabs->addSubTab('editMyComments', $this->plugin->txt('my_comments'),$this->ctrl->getLinkTarget($this,'editMyComments'));
+				if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
+				{
+					$ilTabs->addSubTab('showResults', $this->plugin->txt('user_results'), $this->ctrl->getLinkTarget($this, 'showResults'));
+					$ilTabs->addSubTab('showQuestionsResults', $this->plugin->txt('question_results'), $this->ctrl->getLinkTarget($this, 'showQuestionsResults'));
+				}
 				break;
 		}
 	}

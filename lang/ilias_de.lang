@@ -17,10 +17,11 @@ root_create_xvid#:#Neues Interaktives Video anlegen
 cat_create_xvid#:#Neues Interaktives Video anlegen
 interactive#:#Interaktive
 tutor#:#Tutor
-comments#:#Fragen und Kommentare
+questions_comments#:#Fragen und Kommentare
 sure_delete_comments#:#Sind Sie sicher, dass die selektierten Commentare gelöscht werden sollen?
 video_file#:#Video
 comment#:#Kommentar
+comments#:#Kommentare
 post#:#Posten
 cancel#:#Abbrechen
 sure_delete_comment#:#Sind Sie sicher, dass die die gewählten Kommentare löschen möchten?
@@ -48,3 +49,7 @@ user_answered#:#Beantwortet von Nutzern
 user_correct#:#Richtig beantwortet von Nutzern
 insert_question#:#Frage hinzufügen
 insert_comment#:#Kommentar hinzufügen
+my_comments#:#Meine Kommentare
+general#:#Allgemein
+repeat_question#:#Frage wiederholen
+tags#:#Tags

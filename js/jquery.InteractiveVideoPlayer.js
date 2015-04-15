@@ -10,7 +10,7 @@ $( document ).ready(function() {
 		comments[Object.keys(comments).length]= tmp_obj;
 		stopPoints[stopPoints.length]= Math.floor($("video#ilInteractiveVideo")[0].currentTime);
 		
-		$("#ul_scroll").append('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode($("video#ilInteractiveVideo")[0].currentTime) +' </time> ' + comments[laenge].comment_text + '</li>');
+		$("#ul_scroll").append('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode($("video#ilInteractiveVideo")[0].currentTime) +' </time> ' + $('#comment_text').val() + '</li>');
 		$().scrollToBottom($("#ilInteractiveVideoComments"));
 
 		$.ajax({

@@ -240,3 +240,43 @@ if(!$ilDB->tableExists('rep_robj_xvid_score'))
 	$ilDB->createTable('rep_robj_xvid_score', $fields);
 }
 ?>
+<#11>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_comments'))
+{
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_comments', 'comment_title'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_comments', 'comment_title',
+			array(
+				'type'    => 'text',
+				'length'  => '100',
+				'notnull' => false,
+				'default' => null
+			));
+	}
+
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_comments', 'repeat_question'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_comments', 'repeat_question',
+			array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => true,
+				'default' => 0
+			)
+		);
+	}
+
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_comments', 'comment_tags'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_comments', 'comment_tags',
+			array(
+				'type'    => 'text',
+				'length'  => '4000',
+				'notnull' => false,
+				'default' => null
+			)
+		);
+	}
+}
+?>

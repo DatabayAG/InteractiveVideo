@@ -43,6 +43,21 @@ class ilObjComment
 	protected $is_interactive = false;
 
 	/**
+	 * @var string
+	 */
+	protected $comment_title = '';
+
+	/**
+	 * @var int
+	 */
+	protected $repeat_question = 0;
+
+	/**
+	 * @var string
+	 */
+	protected $comment_tags = '';
+
+	/**
 	 * @var array
 	 */
 	protected $comments = array();
@@ -78,6 +93,9 @@ class ilObjComment
 		$this->setInteractive((bool)$row['is_interactive']);
 		$this->setIsTutor((bool)$row['is_tutor']);
 		$this->setUserId($row['user_id']);
+		$this->setCommentTitle($row['comment_title']);
+		$this->setRepeatQuestion($row['repeat_question']);
+		$this->setCommentTags($row['comment_tags']);
 	}
 
 	public function create()
@@ -98,7 +116,10 @@ class ilObjComment
 				'is_interactive' => array('integer', (int)$this->isInteractive()),
 				// @todo: Change rounding and database type in case we should store milli seconds
 				'comment_time'   => array('integer', round($this->getCommentTime(), 0)),
-				'comment_text'   => array('text', $this->getCommentText())
+				'comment_text'   => array('text', $this->getCommentText()),
+				'comment_title'	=> array('text', $this->getCommentTitle()),
+				'repeat_question' => array('integer', $this->getRepeatQuestion()),
+				'comment_tags'	=> array('text', $this->getCommentTags())
 			));
 		if((int) $this->isInteractive())
 		{
@@ -124,7 +145,10 @@ class ilObjComment
 				'is_interactive' => array('integer', (int)$this->isInteractive()),
 				// @todo: Change rounding and database type in case we should store milli seconds
 				'comment_time'   => array('integer', round($this->getCommentTime(), 2)),
-				'comment_text'   => array('text', $this->getCommentText())
+				'comment_text'   => array('text', $this->getCommentText()),
+				'comment_title'	=> array('text', $this->getCommentTitle()),
+				'repeat_question' => array('integer', $this->getRepeatQuestion()),
+				'comment_tags'	=> array('text', $this->getCommentTags())
 			),
 			array(
 				'comment_id' => array('integer', $this->getCommentId())
@@ -340,5 +364,53 @@ class ilObjComment
 	public function setUserId($user_id)
 	{
 		$this->user_id = $user_id;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCommentTags()
+	{
+		return $this->comment_tags;
+	}
+
+	/**
+	 * @param string $comment_tags
+	 */
+	public function setCommentTags($comment_tags)
+	{
+		$this->comment_tags = $comment_tags;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getRepeatQuestion()
+	{
+		return $this->repeat_question;
+	}
+
+	/**
+	 * @param int $repeat_question
+	 */
+	public function setRepeatQuestion($repeat_question)
+	{
+		$this->repeat_question = $repeat_question;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCommentTitle()
+	{
+		return $this->comment_title;
+	}
+
+	/**
+	 * @param string $comment_title
+	 */
+	public function setCommentTitle($comment_title)
+	{
+		$this->comment_title = $comment_title;
 	}
 }
