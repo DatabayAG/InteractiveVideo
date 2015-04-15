@@ -10,8 +10,8 @@ $( document ).ready(function() {
 		comments[Object.keys(comments).length]= tmp_obj;
 		stopPoints[stopPoints.length]= Math.floor($("video#ilInteractiveVideo")[0].currentTime);
 		
-		$("#ul_scroll").append('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode($("video#ilInteractiveVideo")[0].currentTime) +' </time> ' + $('#comment_text').val() + '</li>');
-		$().scrollToBottom($("#ilInteractiveVideoComments"));
+		$("#ul_scroll").prepend('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode($("video#ilInteractiveVideo")[0].currentTime) +' </time> ' + $('#comment_text').val() + '</li>');
+		//$().scrollToBottom($("#ilInteractiveVideoComments"));
 
 		$.ajax({
 			type     : "POST",
@@ -101,8 +101,8 @@ $.fn.scrollToBottom = function (that)
 										{
 											if (comments[i].comment_time == cueTime) 
 											{
-												$("#ul_scroll").append('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode(media.currentTime) +' </time> ' + comments[i].comment_text + '</li>');
-												$().scrollToBottom($("#ilInteractiveVideoComments"));
+												$("#ul_scroll").prepend('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode(media.currentTime) +' </time> ' + comments[i].comment_text + '</li>');
+												//$().scrollToBottom($("#ilInteractiveVideoComments"));
 												if (comments[i].is_interactive == 1) 
 												{
 													stop_video = 1;
