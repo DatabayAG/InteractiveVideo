@@ -184,6 +184,33 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 
 	}
 
+	public function getCommentsTableDataByUserId()
+	{
+		global $ilDB, $ilUser;
+
+		$res = $ilDB->queryF('
+			SELECT * FROM rep_robj_xvid_comments 
+			WHERE obj_id = %s
+			AND user_id = %s
+			ORDER BY comment_time ASC',
+			array('integer', 'integer'), array($this->getId(), $ilUser->getId()));
+
+		$counter    = 0;
+		$table_data = array();
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$table_data[$counter]['comment_id']     = $row['comment_id'];
+			$table_data[$counter]['comment_time']   = $row['comment_time'];
+			$table_data[$counter]['user_id']        = $row['user_id'];
+			$table_data[$counter]['comment_text']   = $row['comment_text'];
+//			$table_data[$counter]['is_tutor']       = $row['is_tutor'];
+//			$table_data[$counter]['is_interactive'] = $row['is_interactive'];
+			$counter++;
+		}
+
+		return $table_data;
+	}
+
 	public function getCommentDataById($comment_id)
 	{
 		global $ilDB;
@@ -220,12 +247,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		global $ilDB;
 		
 		$comment_ids = array();
-		$res = $ilDB->queryF('SELECT comment_id FROM rep_robj_xvid_comments WHERE obj_id = %s',
+		$res = $ilDB->queryF('SELECT comment_id, user_id FROM rep_robj_xvid_comments WHERE obj_id = %s',
 			array('integer'), array($obj_id));
 		
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$comment_ids[] = $row['comment_id'];
+			$comment_ids[$row['comment_id']] = $row['user_id'];
 		}
 		return $comment_ids;
 	}

@@ -21,8 +21,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		/**
 		 * @var $ilCtrl ilCtrl
 		 */
-		global $ilCtrl;
-
+		global $ilCtrl, $ilAccess;
 		$this->ctrl = $ilCtrl;
 
 		$this->setId('xvid_comments_' . $a_parent_obj->object->getId());
@@ -32,7 +31,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$this->setDefaultOrderDirection('ASC');
 		$this->setDefaultOrderField('comment_time');
 
-		$this->setTitle($a_parent_obj->plugin->txt('comments'));
+		$this->setTitle($a_parent_obj->plugin->txt('questions_comments'));
 		$this->setRowTemplate('tpl.row_comments.html', $a_parent_obj->plugin->getDirectory());
 
 		$this->addColumn('', 'comment_id',  '1px', true);
@@ -40,13 +39,17 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$this->addColumn($this->lng->txt('time'), 'comment_time');
 		$this->addColumn($this->lng->txt('user'), 'user_id');
 		$this->addColumn($this->lng->txt('comment'), 'comment_text');
-		$this->addColumn($a_parent_obj->plugin->txt('interactive'), 'is_interactive');
-		$this->addColumn($a_parent_obj->plugin->txt('tutor'), 'is_tutor');
+		if($ilAccess->checkAccess('write', '', $a_parent_obj->object->getRefId()) && $a_parent_cmd == 'editComments')
+		{
+			$this->addColumn($a_parent_obj->plugin->txt('interactive'), 'is_interactive');
+			$this->addColumn($a_parent_obj->plugin->txt('tutor'), 'is_tutor');
+			
+			$this->addCommandButton('showTutorInsertCommentForm', $this->lng->txt('insert'));
+		}
 		$this->addColumn($this->lng->txt('actions'), 'actions', '10%');
 
 		$this->setSelectAllCheckbox('comment_id');
 		$this->addMultiCommand('confirmDeleteComment', $this->lng->txt('delete'));
-		$this->addCommandButton('showTutorInsertCommentForm', $this->lng->txt('insert'));
 		$this->setShowRowsSelector(true);
 	}
 
@@ -96,7 +99,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$current_selection_list->setId('act_' . $row['comment_id']);
 
 		$this->ctrl->setParameter($this->parent_obj, 'comment_id', $row['comment_id']);
-		$current_selection_list->addItem($this->lng->txt('edit'), '', $this->ctrl->getLinkTarget($this->parent_obj, 'editComment'));
+		$current_selection_list->addItem($this->lng->txt('edit'), '', $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editComment' : 'editMyComment'));
 		$this->tpl->setVariable('VAL_ACTIONS', $current_selection_list->getHTML());
 	}
 }
