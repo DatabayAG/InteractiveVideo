@@ -39,11 +39,15 @@ class SimpleChoiceQuestionsTableGUI extends ilTable2GUI
 
 		$this->setTitle($a_parent_obj->plugin->txt('user_results'));
 		$this->setRowTemplate('tpl.row_answers.html', $a_parent_obj->plugin->getDirectory());
+		$this->addColumn('', 'user_id',  '1px', true);
 
 		$this->addColumn($this->lng->txt('name'), 'name');
 		$this->addColumn($a_parent_obj->plugin->txt('answered'), 'answered');
 		$this->addColumn($a_parent_obj->plugin->txt('correct'), 'correct');
 		$this->addColumn($a_parent_obj->plugin->txt('percentage'), 'percentage');
+		
+		$this->setSelectAllCheckbox('user_id');
+		$this->addMultiCommand('confirmDeleteUserResults', $this->lng->txt('delete'));
 
 		$this->setShowRowsSelector(false);
 	}
@@ -57,6 +61,8 @@ class SimpleChoiceQuestionsTableGUI extends ilTable2GUI
 		$current_selection_list = new ilAdvancedSelectionListGUI();
 		$current_selection_list->setListTitle($this->lng->txt('actions'));
 		$current_selection_list->setId('act_' . $row['user_id']);
+
+		$this->tpl->setVariable('USER_ID', ilUtil::formCheckbox(0, 'user_id[]', $row['user_id']));
 		$this->tpl->setVariable('USER_NAME', $row['name']);
 		$this->tpl->setVariable('USER_ANSWERED', $row['answered']);
 		$this->tpl->setVariable('USER_SCORE', $row['correct']);

@@ -256,6 +256,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $ilTabs;
 
 		$ilTabs->activateTab('editComments');
+		$this->setSubTabs('editComments');
+		$ilTabs->activateSubTab('editComments');
 
 		if(!isset($_POST['comment_id']) || !is_array($_POST['comment_id']) || !count($_POST['comment_id']))
 		{
@@ -310,11 +312,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if(count($wrong_comment_ids) == 0)
 		{
 			$this->object->deleteComments($_POST['comment_id']);
-			ilUtil::sendSuccess($this->lng->txt('comments_successfully_deleted'));
+			ilUtil::sendSuccess($this->plugin->txt('comments_successfully_deleted'));
 		}
 		else
 		{
-			ilUtil::sendFailure('invalid_comment_ids');
+			ilUtil::sendFailure($this->plugin->txt('invalid_comment_ids'));
 		}
 		$this->editComments();
 	}
@@ -349,7 +351,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($section_header);
 		
 		$comment = new ilTextAreaInputGUI($this->lng->txt('comment'), 'comment_text');
-		$comment->setRequired(true);
 		$form->addItem($comment);
 
 		$tags = new ilTextAreaInputGUI($this->plugin->txt('tags'), 'comment_tags');
@@ -454,6 +455,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $ilTabs;
 
 		$ilTabs->activateTab('editComments');
+		$this->setSubTabs('editComments');
+		$ilTabs->activateSubTab('editMyComments');
+		
 		$form = $this->initCommentForm();
 
 		$frm_id = new ilHiddenInputGUI('comment_id');
@@ -755,6 +759,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $ilTabs;
 
 		$ilTabs->activateTab('editComments');
+		$this->setSubTabs('editComments');
+		$ilTabs->activateSubTab('editMyComments');
 
 		if(!isset($_POST['comment_id']) || !is_array($_POST['comment_id']) || !count($_POST['comment_id']))
 		{
@@ -765,10 +771,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
 		$confirm = new ilConfirmationGUI();
-		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteComment'));
+		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteMyComment'));
 		$confirm->setHeaderText($this->plugin->txt('sure_delete_comment'));
-		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteComment');
-		$confirm->setCancel($this->lng->txt('cancel'), 'editComments');
+		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteMyComment');
+		$confirm->setCancel($this->lng->txt('cancel'), 'editMyComments');
 
 		$post_ids = $_POST['comment_id'];
 
@@ -809,7 +815,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		
 		if(count($user_ids)> 1)
 		{
-			ilUtil::sendFailure('invalid_comment_ids');
+			ilUtil::sendFailure($this->plugin->txt('invalid_comment_ids'));
 			$this->editMyComments();
 		}
 			
@@ -817,11 +823,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if(count($wrong_comment_ids) == 0)
 		{
 			$this->object->deleteComments($_POST['comment_id']);
-			ilUtil::sendSuccess($this->lng->txt('comments_successfully_deleted'));
+			ilUtil::sendSuccess($this->plugin->txt('comments_successfully_deleted'));
 		}
 		else
 		{
-			ilUtil::sendFailure('invalid_comment_ids');
+			ilUtil::sendFailure($this->plugin->txt('invalid_comment_ids'));
 		}
 		$this->editMyComments();
 	}
@@ -882,11 +888,77 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$tbl->setData($tbl_data);
 		$tpl->setContent($tbl->getHTML());
+	}
+	
+	public function confirmDeleteUserResults()
+	{
+		/**
+		 * @var $tpl    ilTemplate
+		 * @var $ilTabs ilTabsGUI
+		 */
+		global $tpl, $ilTabs;
 
+		$this->setSubTabs('editComments');
+
+		$ilTabs->activateTab('editComments');
+		$ilTabs->activateSubTab('showResults');
+
+		if(!isset($_POST['user_id']) || !is_array($_POST['user_id']) || !count($_POST['user_id']))
+		{
+			ilUtil::sendFailure($this->lng->txt('select_one'));
+			$this->showResults();
+			return;
+		}
+
+		require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
+		$confirm = new ilConfirmationGUI();
+		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteUserResults'));
+		$confirm->setHeaderText($this->plugin->txt('sure_delete_results'));
+		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteUserResults');
+		$confirm->setCancel($this->lng->txt('cancel'), 'showResults');
+
+		$user_ids = $_POST['user_id'];
+
+		foreach($user_ids as $user_id)
+		{
+			$login = ilObjUser::_lookupName($user_id);
+			
+			$confirm->addItem('user_id[]', $user_id, $login['firstname'].' '.$login['lastname']);
+		}
+
+		$tpl->setContent($confirm->getHTML());
+	}
+	
+	public function deleteUserResults()
+	{
+		if(!isset($_POST['user_id']) || !is_array($_POST['user_id']) || !count($_POST['user_id']))
+		{
+			ilUtil::sendFailure($this->lng->txt('select_one'));
+			$this->showResults();
+			return;
+		}
+
+		$user_ids = $_POST['user_id'];
+
+		if(count($user_ids) > 0)
+		{
+			$simple = new SimpleChoiceQuestion();
+			$simple->deleteUserResults($user_ids, $this->obj_id);
+			ilUtil::sendSuccess($this->plugin->txt('results_successfully_deleted'));
+		}
+		else
+		{
+			ilUtil::sendFailure($this->plugin->txt('invalid_user_ids'));
+		}
+		$this->showResults();
 	}
 
 	public function showQuestionsResults()
 	{
+		/**
+		 * @var $tpl    ilTemplate
+		 * @var $ilTabs ilTabsGUI
+		 */
 		global $tpl, $ilTabs;
 
 		$this->setSubTabs('editComments');
@@ -901,9 +973,70 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$tbl->setData($tbl_data);
 		$tpl->setContent($tbl->getHTML());
-		
 	}
 	
+	public function confirmDeleteQuestionsResults()
+	{
+		/**
+		* @var $tpl    ilTemplate
+		* @var $ilTabs ilTabsGUI
+		*/
+		global $tpl, $ilTabs;
+
+		$this->setSubTabs('editComments');
+
+		$ilTabs->activateTab('editComments');
+		$ilTabs->activateSubTab('showQuestionsResults');
+
+
+		if(!isset($_POST['question_id']) || !is_array($_POST['question_id']) || !count($_POST['question_id']))
+		{
+			ilUtil::sendFailure($this->lng->txt('select_one'));
+			$this->showQuestionsResults();
+			return;
+		}
+
+		require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
+		$confirm = new ilConfirmationGUI();
+		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteQuestionsResults'));
+		$confirm->setHeaderText($this->plugin->txt('sure_delete_results'));
+		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteQuestionsResults');
+		$confirm->setCancel($this->lng->txt('cancel'), 'showQuestionsResults');
+
+		$question_ids = $_POST['question_id'];
+
+		foreach($question_ids as $question_id)
+		{
+			$confirm->addItem('question_id[]', $question_id, $question_id);
+		}
+
+		$tpl->setContent($confirm->getHTML());
+	}
+
+	public function deleteQuestionsResults()
+	{
+		if(!isset($_POST['question_id']) || !is_array($_POST['question_id']) || !count($_POST['question_id']))
+		{
+			ilUtil::sendFailure($this->lng->txt('select_one'));
+			$this->showQuestionsResults();
+			return;
+		}
+
+		$question_ids = $_POST['question_id'];
+
+		if(count($question_ids) > 0)
+		{
+			$simple = new SimpleChoiceQuestion();
+			$simple->deleteQuestionsResults($question_ids);
+			ilUtil::sendSuccess($this->plugin->txt('results_successfully_deleted'));
+		}
+		else
+		{
+			ilUtil::sendFailure($this->plugin->txt('invalid_question_ids'));
+		}
+		$this->showQuestionsResults();
+	}
+
 	/**
 	 * @param ilPropertyFormGUI $a_form
 	 * @return bool

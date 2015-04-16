@@ -60,3 +60,10 @@ question_text#:#Question Text
 question_type#:#Question Type
 feedback_correct#:#Feedback Correct Answer
 feedback_one_wrong#:#Feedback at least one wrong
+results_successfully_deleted#:#The selected results are deleted successfully
+sure_delete_results#:#Are you sure, you want to delete the selected results?
+comments_successfully_deleted#:#The selected comments are deleted successfully
+invalid_question_ids#:#Invalid Question-Ids
+invalid_user_ids#:#Invalid User-Ids
+invalid_comment_ids#:#Invalid Comment-Ids
+comment_title#:#Comment-Title

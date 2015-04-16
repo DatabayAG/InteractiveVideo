@@ -57,3 +57,10 @@ question_text#:#Fragentext
 question_type#:#Fragentyp
 feedback_correct#:#Feedback Richtige Antwort
 feedback_one_wrong#:#Feedback bei mindestens einer falschen Antwort
+results_successfully_deleted#:#Die gewählten Ergebnisse wurden erfolgreich gelöscht
+sure_delete_results#:#Sind Sie sicher, dass Sie die gewählten Ergebnisse löschen möchten?
+comments_successfully_deleted#:#Die gewählten Kommentare wurden erfolgreich gelöscht
+invalid_question_ids#:#Ungültige Fragen-Ids
+invalid_user_ids#:#Ungültige User-Ids
+invalid_comment_ids#:#Ungültige Kommentar-Ids
+comment_title#:#Kommentar-Titel

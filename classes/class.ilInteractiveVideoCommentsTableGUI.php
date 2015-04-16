@@ -49,7 +49,16 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$this->addColumn($this->lng->txt('actions'), 'actions', '10%');
 
 		$this->setSelectAllCheckbox('comment_id');
-		$this->addMultiCommand('confirmDeleteComment', $this->lng->txt('delete'));
+		
+		if($a_parent_cmd == 'editComments')
+		{
+			$this->addMultiCommand('confirmDeleteComment', $this->lng->txt('delete'));
+		}
+		else if($a_parent_cmd == 'editMyComments')
+		{
+			$this->addMultiCommand('confirmDeleteMyComment', $this->lng->txt('delete'));
+		}
+		
 		$this->setShowRowsSelector(true);
 	}
 

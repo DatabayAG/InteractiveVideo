@@ -135,7 +135,11 @@ class SimpleChoiceQuestion {
 		
 		return $status;
 	}
-	
+
+	/**
+	 * @param $comment_id
+	 * @return int
+	 */
 	public function existQuestionForCommentId($comment_id)
 	{
 		/**
@@ -153,6 +157,10 @@ class SimpleChoiceQuestion {
 		return $question_id;
 	}
 
+	/**
+	 * @param int $cid comment_id
+	 * @return string
+	 */
 	public function getJsonForCommentId($cid)
 	{
 		/**
@@ -160,7 +168,7 @@ class SimpleChoiceQuestion {
 		 */
 		global $ilDB;
 		$res = $ilDB->queryF(
-					'SELECT * FROM rep_robj_xvid_question as question, rep_robj_xvid_qus_text as answers 
+					'SELECT * FROM rep_robj_xvid_question question, rep_robj_xvid_qus_text answers 
 								WHERE question.comment_id = %s AND question.question_id = answers.question_id',
 						array('integer'),
 						array((int) $cid)
@@ -189,6 +197,10 @@ class SimpleChoiceQuestion {
 		return json_encode($build_json);
 	}
 
+	/**
+	 * @param $qid
+	 * @return string
+	 */
 	public function getJsonForQuestionId($qid)
 	{
 		/**
@@ -196,7 +208,7 @@ class SimpleChoiceQuestion {
 		 */
 		global $ilDB;
 		$res = $ilDB->queryF(
-					'SELECT * FROM rep_robj_xvid_question as question, rep_robj_xvid_qus_text as answers 
+					'SELECT * FROM rep_robj_xvid_question question, rep_robj_xvid_qus_text answers 
 								WHERE question.question_id = %s AND question.question_id = answers.question_id',
 						array('integer'),
 						array((int) $qid)
@@ -214,6 +226,10 @@ class SimpleChoiceQuestion {
 		return json_encode($question_data);
 	}
 
+	/**
+	 * @param $qid
+	 * @return int
+	 */
 	public function getTypeByQuestionId($qid)
 	{
 		/**
@@ -231,11 +247,15 @@ class SimpleChoiceQuestion {
 
 	}
 
+	/**
+	 * @param $oid object_id
+	 * @return int
+	 */
 	public function getQuestionCountForObject($oid)
 	{
 		global $ilDB;
 		$res = $ilDB->queryF(
-					'SELECT count(question_id) as count FROM rep_robj_xvid_comments as comments, rep_robj_xvid_question as questions
+					'SELECT count(question_id) count FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
 					 WHERE comments.comment_id = questions.comment_id AND  is_interactive = 1 AND obj_id = %s',
 						array('integer'),
 						array((int) $oid)
@@ -248,8 +268,8 @@ class SimpleChoiceQuestion {
 	{
 		global $ilDB;
 		$res = $ilDB->queryF(
-					'SELECT count(score.question_id) as count FROM rep_robj_xvid_comments as comments, 
-							rep_robj_xvid_question as questions, rep_robj_xvid_score as score
+					'SELECT count(score.question_id)  count FROM rep_robj_xvid_comments  comments, 
+							rep_robj_xvid_question questions, rep_robj_xvid_score  score
 					 WHERE comments.comment_id = questions.comment_id AND questions.question_id = score.question_id 
 					 		AND is_interactive = 1 AND obj_id = %s AND score.user_id = %s',
 						array('integer', 'integer'),
@@ -259,18 +279,22 @@ class SimpleChoiceQuestion {
 		return (int) $row['count'];
 	}
 
+	/**
+	 * @param int $oid object_id
+	 * @return array
+	 */
 	public function getQuestionsOverview($oid)
 	{
 		global $ilDB;
 		$res = $ilDB->queryF(
-								'SELECT questions.question_id, score.user_id, score.points, comments.comment_id, comments.comment_text
-								FROM rep_robj_xvid_comments AS comments, rep_robj_xvid_question AS questions
-								LEFT JOIN rep_robj_xvid_score AS score ON questions.question_id = score.question_id
-								WHERE comments.comment_id = questions.comment_id
-								AND is_interactive =1
-								AND obj_id = %s',
-						array('integer'),
-						array((int) $oid)
+			'SELECT questions.question_id, score.user_id, score.points, comments.comment_id, comments.comment_title
+			FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
+			LEFT JOIN rep_robj_xvid_score score ON questions.question_id = score.question_id
+			WHERE comments.comment_id = questions.comment_id
+			AND is_interactive =1
+			AND obj_id = %s',
+			array('integer'),
+			array((int) $oid)
 		);
 		$questions = array();
 		while($row = $ilDB->fetchAssoc($res))
@@ -286,7 +310,7 @@ class SimpleChoiceQuestion {
 				$questions[$row['question_id']]['correct'] += $row['points'];
 			}
 			$questions[$row['question_id']]['comment_id'] = $row['comment_id'];
-			$questions[$row['question_id']]['comment_text'] = $row['comment_text'];
+			$questions[$row['question_id']]['comment_title'] = $row['comment_title'];
 
 		}
 		$results = array();
@@ -295,7 +319,7 @@ class SimpleChoiceQuestion {
 		{
 			$results[$counter]['question_id'] 	= $key;
 			$results[$counter]['comment_id'] 	= $value['comment_id'];
-			$results[$counter]['comment_text'] 			= $value['comment_text'];
+			$results[$counter]['comment_title'] = $value['comment_title'];
 			$results[$counter]['answered'] 		= $value['answered'];
 			$results[$counter]['correct'] 		= $value['correct'];
 			if($value['answered'] > 0)
@@ -311,8 +335,11 @@ class SimpleChoiceQuestion {
 		return $results;
 
 	}
-	
-	
+
+	/**
+	 * @param int $qid question_id
+	 * @return int
+	 */
 	public function getScoreForQuestion($qid)
 	{
 		/**
@@ -322,16 +349,20 @@ class SimpleChoiceQuestion {
 		global $ilDB, $ilUser;
 
 		$usr_id	= $ilUser->getId();
-		$res = $ilDB->queryF(
-					'SELECT points  FROM rep_robj_xvid_score as score  WHERE 
-					 user_id = %s AND question_id = %s',
-						array('integer', 'integer'),
-						array((int) $usr_id, (int) $qid)
+		$res = $ilDB->queryF('
+				SELECT points FROM rep_robj_xvid_score score  
+				WHERE user_id = %s AND question_id = %s',
+				array('integer', 'integer'),
+				array((int) $usr_id, (int) $qid)
 		);
 		$score = $ilDB->fetchAssoc($res);
 		return (int) $score['points'];
 	}
-	
+
+	/**
+	 * @param int $qid question_id
+	 * @return string
+	 */
 	public function getFeedbackForQuestion($qid)
 	{
 		$score = $this->getScoreForQuestion($qid);	
@@ -359,7 +390,11 @@ class SimpleChoiceQuestion {
 			}
 		}
 	}
-	
+
+	/**
+	 * @param int $user_id
+	 * @return array
+	 */
 	public function getAllNonRepeatCorrectAnswerQuestion($user_id)
 	{
 		global $ilDB;
@@ -382,7 +417,11 @@ class SimpleChoiceQuestion {
 		}
 		return $results;
 	}
-	
+
+	/**
+	 * @param int $oid object_id 
+	 * @return array
+	 */
 	public function getPointsForUsers($oid)
 	{
 		/**
@@ -391,29 +430,102 @@ class SimpleChoiceQuestion {
 
 		global $ilDB, $ilUser;
 		$questions_for_object = $this->getQuestionCountForObject($oid);
-		
-		$res = $ilDB->queryF(
-					'SELECT score.user_id, sum(points) as points  FROM rep_robj_xvid_comments as comments, rep_robj_xvid_question as questions, 
-					 rep_robj_xvid_score as score  WHERE comments.comment_id = questions.comment_id 
-					 AND questions.question_id = score.question_id AND obj_id =  %s GROUP BY user_id ',
-						array('integer'),
-						array((int) $oid)
+
+		$res     = $ilDB->queryF('
+			SELECT score.user_id, sum(points) points  
+			FROM 	rep_robj_xvid_comments comments, 
+				 	rep_robj_xvid_question questions, 
+				 	rep_robj_xvid_score score  
+			WHERE 	comments.comment_id   = questions.comment_id 
+			AND 	questions.question_id = score.question_id 
+			AND 	obj_id = %s 
+			GROUP BY user_id',
+			array('integer'), array((int)$oid)
 		);
 		$results = array();
 		$counter = 0;
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$results[$counter]['name']		= $ilUser->_lookupFullname($row['user_id']);
-			$results[$counter]['user_id'] 	= $row['user_id'];
-			$results[$counter]['answered']	= $this->getAnsweredQuestionsFromUser($oid, $row['user_id']);
-			$results[$counter]['correct'] 	= $row['points'];
-			$results[$counter]['percentage']= round(($row['points']/$questions_for_object) * 100, 2);
-			$counter ++ ;
+			$results[$counter]['name']       = $ilUser->_lookupFullname($row['user_id']);
+			$results[$counter]['user_id']    = $row['user_id'];
+			$results[$counter]['answered']   = $this->getAnsweredQuestionsFromUser($oid, $row['user_id']);
+			$results[$counter]['correct']    = $row['points'];
+			$results[$counter]['percentage'] = round(($row['points'] / $questions_for_object) * 100, 2);
+			$counter++;
 		}
 		
 		return $results;
 	}
+
+	/**
+	 * @param array $user_ids
+	 * @param int $obj_id
+	 */
+	public function deleteUserResults($user_ids, $obj_id)
+	{
+		global $ilDB;
+		
+		if(!is_array($user_ids))
+			return ;
+		
+		$question_ids = $this->getInteractiveQuestionIdsByObjId($obj_id);
+		
+		$ilDB->manipulate('
+		DELETE FROM rep_robj_xvid_score 
+		WHERE 	'. $ilDB->in('question_id', $question_ids, false, 'integer') .' 
+		AND 	'. $ilDB->in('user_id', $user_ids, false, 'integer'));
+
+		$ilDB->manipulate('
+		DELETE FROM rep_robj_xvid_answers 
+		WHERE 	'. $ilDB->in('question_id', $question_ids, false, 'integer') .' 
+		AND 	'. $ilDB->in('user_id', $user_ids, false, 'integer'));
+	}
 	
+	public function getInteractiveQuestionIdsByObjId($obj_id)
+	{
+		global $ilDB;
+		
+		$res = $ilDB->queryF('
+			SELECT 		question_id 
+			FROM 		rep_robj_xvid_question qst
+			INNER JOIN 	rep_robj_xvid_comments  cmt on qst.comment_id = cmt.comment_id
+			WHERE		obj_id = %s AND is_interactive = %s',
+			array('integer', 'integer'), array($obj_id, 1));
+		
+		$question_ids = array();
+		
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$question_ids[] = $row['question_id'];
+		}
+		
+		return $question_ids;
+	}
+
+	/**
+	 * @param array $question_ids
+	 */
+	public function deleteQuestionsResults($question_ids)
+	{
+		global $ilDB;
+		
+		if(!is_array($question_ids))
+			return;
+
+		$ilDB->manipulate('
+		DELETE FROM rep_robj_xvid_score 
+		WHERE 	'. $ilDB->in('question_id', $question_ids, false, 'integer'));
+
+		$ilDB->manipulate('
+		DELETE FROM rep_robj_xvid_answers 
+		WHERE 	'. $ilDB->in('question_id', $question_ids, false, 'integer'));
+	}
+	
+	
+	/**
+	 * @param int $qid question_id
+	 * @return array
+	 */
 	public function getCorrectAnswersCountForQuestion($qid)
 	{
 		/**
@@ -422,12 +534,17 @@ class SimpleChoiceQuestion {
 
 		global $ilDB;
 		
-		$res = $ilDB->queryF(
-					'SELECT * FROM rep_robj_xvid_comments as comments, rep_robj_xvid_question as questions, 
-					 rep_robj_xvid_qus_text as answers  WHERE comments.comment_id = questions.comment_id 
-					 AND questions.question_id = answers.question_id AND  is_interactive = 1 AND correct = 1 AND questions.question_id = %s',
-						array('integer'),
-						array((int) $qid)
+		$res = $ilDB->queryF('
+			SELECT * 
+			FROM rep_robj_xvid_comments comments,
+				 rep_robj_xvid_question questions, 
+				 rep_robj_xvid_qus_text answers 
+			WHERE comments.comment_id = questions.comment_id 
+			AND questions.question_id = answers.question_id 
+			AND is_interactive = 1 
+			AND correct = 1 
+			AND questions.question_id = %s',
+		array('integer'), array((int) $qid)
 		);
 		$question = array();
 		while($row = $ilDB->fetchAssoc($res))
@@ -436,7 +553,11 @@ class SimpleChoiceQuestion {
 		}
 		return $question;
 	}
-	
+
+	/**
+	 * @param int $qid question_id
+	 * @return mixed
+	 */
 	public function getQuestionTextQuestionId($qid)
 	{
 		/**
@@ -454,6 +575,10 @@ class SimpleChoiceQuestion {
 
 	}
 
+	/**
+	 * @param int $qid question_id
+	 * @return array
+	 */
 	public function getFeedbackByQuestionId($qid)
 	{
 		/**
@@ -470,7 +595,11 @@ class SimpleChoiceQuestion {
 		return array('correct' => $row['feedback_correct'] , 'wrong' => $row['feedback_one_wrong']);
 
 	}
-	
+
+	/**
+	 * @param $int qid question_id
+	 * @param $answers
+	 */
 	public function saveAnswer($qid, $answers)
 	{
 		global $ilDB, $ilUser;
@@ -527,6 +656,9 @@ class SimpleChoiceQuestion {
 		}
 	}
 
+	/**
+	 * @param $qid
+	 */
 	public function removeAnswer($qid)
 	{
 		global $ilDB, $ilUser;
@@ -537,6 +669,9 @@ class SimpleChoiceQuestion {
 		$this->removeScore($qid);
 	}
 
+	/**
+	 * @param $qid
+	 */
 	public function removeScore($qid)
 	{
 		global $ilDB, $ilUser;
@@ -545,7 +680,10 @@ class SimpleChoiceQuestion {
 			array('integer', 'integer'), array($qid, $usr_id));
 		$ilDB->fetchAssoc($res);
 	}
-	
+
+	/**
+	 * @param $qid
+	 */
 	public function deleteQuestion($qid)
 	{
 		global $ilDB;
