@@ -162,7 +162,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
 		 */
-		global $tpl, $ilTabs;
+		global $tpl, $ilTabs, $ilUser;
 
 		$ilTabs->activateTab('content');
 
@@ -190,6 +190,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
 		$video_tpl->setVariable('COMMENTS', json_encode($comments));
 
+		$simple_choice = new SimpleChoiceQuestion();
+		$question_id = $simple_choice->getAllNonRepeatCorrectAnswerQuestion($ilUser->getId());
+		$video_tpl->setVariable('IGNORE_QUESTIONS', json_encode($question_id));
+		
 		require_once("./Services/UIComponent/Modal/classes/class.ilModalGUI.php");
 		$modal = ilModalGUI::getInstance();
 		$modal->setId("ilQuestionModal");

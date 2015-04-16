@@ -103,7 +103,8 @@ $.fn.scrollToBottom = function (that)
 											{
 												$("#ul_scroll").prepend('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode(media.currentTime) +' </time> ' + comments[i].comment_text + '</li>');
 												//$().scrollToBottom($("#ilInteractiveVideoComments"));
-												if (comments[i].is_interactive == 1) 
+												console.log($.inArray(comments[i].comment_id, ignore_questions), comments[i].comment_id , ignore_questions);
+												if (comments[i].is_interactive == 1 && $.inArray(comments[i].comment_id, ignore_questions) == -1) 
 												{
 													stop_video = 1;
 													$().getQuestionPerAjax(comments[i].comment_id, player);

@@ -360,6 +360,29 @@ class SimpleChoiceQuestion {
 		}
 	}
 	
+	public function getAllNonRepeatCorrectAnswerQuestion($user_id)
+	{
+		global $ilDB;
+		$res = $ilDB->queryF(
+					'SELECT comments.comment_id as comment FROM rep_robj_xvid_comments as comments, 
+						rep_robj_xvid_question as questions, rep_robj_xvid_score as score  
+						WHERE comments.comment_id = questions.comment_id AND 
+						questions.question_id = score.question_id 
+						AND comments.repeat_question = 0 
+						AND score.points = 1 
+						AND score.user_id = %s'
+						,
+						array('integer'),
+						array((int) $user_id)
+		);
+		$results = array();
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$results[]	= $row['comment'];
+		}
+		return $results;
+	}
+	
 	public function getPointsForUsers($oid)
 	{
 		/**
