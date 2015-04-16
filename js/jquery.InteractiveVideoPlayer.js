@@ -101,9 +101,11 @@ $.fn.scrollToBottom = function (that)
 										{
 											if (comments[i].comment_time == cueTime) 
 											{
-												$("#ul_scroll").prepend('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode(media.currentTime) +' </time> ' + comments[i].comment_text + '</li>');
+												if(comments[i].comment_text != null)
+												{
+													$("#ul_scroll").prepend('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode(media.currentTime) +' </time> ' + comments[i].comment_text + '</li>');
+												}
 												//$().scrollToBottom($("#ilInteractiveVideoComments"));
-												console.log($.inArray(comments[i].comment_id, ignore_questions), comments[i].comment_id , ignore_questions);
 												if (comments[i].is_interactive == 1 && $.inArray(comments[i].comment_id, ignore_questions) == -1) 
 												{
 													stop_video = 1;
