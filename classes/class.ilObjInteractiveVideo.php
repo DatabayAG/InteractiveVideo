@@ -101,6 +101,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	public function beforeDelete()
 	{
 		$mob = new ilObjMediaObject($this->getMobId());
+		ilObjMediaObject::_removeUsage($this->getMobId(), $this->getType(), $this->getId());
 		$mob->delete();
 	}
 
@@ -298,6 +299,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$mob->update();
 
 		$this->setMobId($mob->getId());
+		ilObjMediaObject::_saveUsage( $mob->getId(), $this->getType(), $this->getId());
 
 		if(!$mob->getMediaItem('Standard'))
 		{
@@ -323,6 +325,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		{
 			$old_mob = new ilObjMediaObject($mob_id);
 			$old_mob->delete();
+			ilObjMediaObject::_removeUsage($mob->getId(), $this->getType(), $this->getId());
 		}	
 			
 		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_objects WHERE obj_id = %s',
