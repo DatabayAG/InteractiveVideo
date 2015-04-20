@@ -193,8 +193,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 			SELECT * FROM rep_robj_xvid_comments 
 			WHERE obj_id = %s
 			AND user_id = %s
+			AND is_interactive = %s
 			ORDER BY comment_time ASC',
-			array('integer', 'integer'), array($this->getId(), $ilUser->getId()));
+			array('integer', 'integer', 'integer'), 
+			array($this->getId(), $ilUser->getId(), 0));
 
 		$counter    = 0;
 		$table_data = array();
