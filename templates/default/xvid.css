@@ -23,7 +23,7 @@
 .scroll-text {
 	width: 100%!important;
 	background-color:white;
-	height: 30em;
+	height: 35em;
     overflow-y: auto;
 }
 .scroll-text ul {
