@@ -7,8 +7,7 @@ $( document ).ready(function() {
 				'comment_text': $('#comment_text').val(),
 				'is_interactive': '0'
 			};
-		comments[Object.keys(comments).length]= tmp_obj;
-		stopPoints[stopPoints.length]= Math.floor($("video#ilInteractiveVideo")[0].currentTime);
+		$().sliceCommentAndStopPointsInCorrectPostion(tmp_obj, $("video#ilInteractiveVideo")[0].currentTime);
 		
 		$("#ul_scroll").prepend('<li> <time class="time">'+ mejs.Utility.secondsToTimeCode($("video#ilInteractiveVideo")[0].currentTime) +' </time> ' + $('#comment_text').val() + '</li>');
 
@@ -32,6 +31,21 @@ $( document ).ready(function() {
 		$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
 	});
 });
+
+$.fn.sliceCommentAndStopPointsInCorrectPostion = function (tmp_obj, time)
+{
+	var pos = 0;
+	for (var i = 0; i < Object.keys(comments).length; i++)
+	{
+		if (comments[i].comment_time <= time)
+		{
+			pos = i;
+		}
+	}
+	comments.splice( pos, 0 , tmp_obj);
+	stopPoints.splice( pos, 0, Math.floor(time));
+};
+
 
 $.fn.replaceCommentsAfterSeeking = function (time)
 {

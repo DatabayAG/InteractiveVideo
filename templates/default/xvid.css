@@ -3,11 +3,27 @@
 	height: auto !important;
 }
 
+.mejs-container {
+    width: 100% !important;
+    height: auto !important;
+    padding-top: 57%;
+    background: none !important;
+}
+.mejs-overlay, .mejs-poster {
+    width: 100% !important;
+    height: 100% !important;
+}
+.mejs-mediaelement video {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
 .scroll-text {
-	border: 1px solid gray;
 	width: 100%!important;
-	/*width: 400px;*/
-	height: 15em;
+	background-color:white;
+	height: 30em;
     overflow-y: auto;
 }
 .scroll-text ul {
