@@ -51,7 +51,8 @@ $.fn.addFeedbackDiv = function() {
 };
 
 $.fn.addButtons = function() {
-	$('#question_form').append('<input id="sendForm" class="btn btn-default btn-sm" type="submit" value="Save">');
+	$('#question_form').append('<input id="sendForm" class="btn btn-default btn-sm" type="submit" value="' + send_text + '">');
+	$('#question_form').append('<input id="close_form" class="btn btn-default btn-sm" type="submit" value="' + close_text + '">');
 	$().appendButtonListener();
 };
 
@@ -76,5 +77,8 @@ $.fn.appendButtonListener = function() {
 				//IVQV.player.play();
 			}
 		});
+	});
+	$('#close_form').on('click',function(e){
+		$('#ilQuestionModal').modal('hide');
 	});
 };

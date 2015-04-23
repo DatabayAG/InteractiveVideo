@@ -202,6 +202,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTarget($this, 'getQuestionPerAjax', '', true, false));
 		$video_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTarget($this, 'postAnswerPerAjax', '', true, false));
 		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postComment', '', true, false));
+		$video_tpl->setVariable('SEND_BUTTON', $this->plugin->txt('send'));
+		$video_tpl->setVariable('CLOSE_BUTTON', $this->plugin->txt('close'));
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoPlayer.js');
 		$tpl->setContent($video_tpl->get());
