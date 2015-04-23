@@ -42,21 +42,22 @@ $.fn.sliceCommentAndStopPointsInCorrectPostion = function (tmp_obj, time)
 			pos = i;
 		}
 	}
-	comments.splice( pos, 0 , tmp_obj);
-	stopPoints.splice( pos, 0, Math.floor(time));
+	comments.splice( pos + 1, 0 , tmp_obj);
+	stopPoints.splice( pos + 1, 0, Math.floor(time));
 };
 
 
 $.fn.replaceCommentsAfterSeeking = function (time)
 {
-	$("#ul_scroll").html('');
+	var html = '';
 	for (var i = 0; i < Object.keys(comments).length; i++)
 	{
 		if (comments[i].comment_time <= time && comments[i].comment_text != null && comments[i].is_interactive == 0)
 		{
-			$("#ul_scroll").prepend('<li> <time class="time">'+ mejs.Utility.secondsToTimeCode(comments[i].comment_time) +' </time> ' + comments[i].comment_text + '</li>');
+			html ='<li> <time class="time">'+ mejs.Utility.secondsToTimeCode(comments[i].comment_time) +' </time> ' + comments[i].comment_text + '</li>' + html;
 		}
 	}
+	$("#ul_scroll").html(html);
 };
 
 (function ($) {
