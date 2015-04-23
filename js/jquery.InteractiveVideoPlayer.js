@@ -10,8 +10,7 @@ $( document ).ready(function() {
 		comments[Object.keys(comments).length]= tmp_obj;
 		stopPoints[stopPoints.length]= Math.floor($("video#ilInteractiveVideo")[0].currentTime);
 		
-		$("#ul_scroll").prepend('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode($("video#ilInteractiveVideo")[0].currentTime) +' </time> ' + $('#comment_text').val() + '</li>');
-		//$().scrollToBottom($("#ilInteractiveVideoComments"));
+		$("#ul_scroll").prepend('<li> <time class="time">'+ mejs.Utility.secondsToTimeCode($("video#ilInteractiveVideo")[0].currentTime) +' </time> ' + $('#comment_text').val() + '</li>');
 
 		$.ajax({
 			type     : "POST",
@@ -34,9 +33,16 @@ $( document ).ready(function() {
 	});
 });
 
-$.fn.scrollToBottom = function (that)
+$.fn.replaceCommentsAfterSeeking = function (time)
 {
-	that.animate({ scrollTop: that.prop('scrollHeight') }, 200);
+	$("#ul_scroll").html('');
+	for (var i = 0; i < Object.keys(comments).length; i++)
+	{
+		if (comments[i].comment_time <= time && comments[i].comment_text != null && comments[i].is_interactive == 0)
+		{
+			$("#ul_scroll").prepend('<li> <time class="time">'+ mejs.Utility.secondsToTimeCode(comments[i].comment_time) +' </time> ' + comments[i].comment_text + '</li>');
+		}
+	}
 };
 
 (function ($) {
@@ -68,6 +74,7 @@ $.fn.scrollToBottom = function (that)
 					} else if (_lastTime < media.currentTime) {
 						_lastTime = media.currentTime;
 					}
+					$().replaceCommentsAfterSeeking(media.currentTime);
 				}, false);
 
 				media.addEventListener('pause', function(e) {
@@ -103,9 +110,8 @@ $.fn.scrollToBottom = function (that)
 											{
 												if(comments[i].comment_text != null)
 												{
-													$("#ul_scroll").prepend('<li> <time id="time">'+ mejs.Utility.secondsToTimeCode(media.currentTime) +' </time> ' + comments[i].comment_text + '</li>');
+													$("#ul_scroll").prepend('<li> <time class="time">'+ mejs.Utility.secondsToTimeCode(media.currentTime) +' </time> ' + comments[i].comment_text + '</li>');
 												}
-												//$().scrollToBottom($("#ilInteractiveVideoComments"));
 												if (comments[i].is_interactive == 1 && $.inArray(comments[i].comment_id, ignore_questions) == -1) 
 												{
 													stop_video = 1;
