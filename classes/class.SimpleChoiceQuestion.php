@@ -190,13 +190,33 @@ class SimpleChoiceQuestion {
 			$counter++;
 		}
 		$build_json = array();
-		$build_json['answers'] 		= $question_data;
-		$build_json['question_text']= $question_text;
-		$build_json['type']			= $question_type;
-		$build_json['question_id']	= $question_id;
+		$build_json['title'] 		  = $question_data;
+		$build_json['answers'] 		  = $question_data;
+		$build_json['question_text']  = $question_text;
+		$build_json['type']			  = $question_type;
+		$build_json['question_id']	  = $question_id;
+		$build_json['question_title'] = $this->getCommentTitleByCommentId($cid);
 		return json_encode($build_json);
 	}
 
+	public function getCommentTitleByCommentId($cid)
+	{
+		/**
+		 * @var $ilDB   ilDB
+		 */
+		global $ilDB;
+		$res = $ilDB->queryF(
+					'SELECT comment_title FROM rep_robj_xvid_comments WHERE comment_id = %s',
+						array('integer'),
+						array((int) $cid)
+		);
+		$title = '';
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$title = $row['comment_title'];
+		}
+		return $title;
+	}
 	/**
 	 * @param $qid
 	 * @return string

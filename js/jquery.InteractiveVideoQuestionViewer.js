@@ -19,6 +19,7 @@ $.fn.getQuestionPerAjax = function(comment_id, player) {
 $.fn.buildQuestionForm = function() {
 	var modal = $('.modal-body');
 	modal.html('');
+	modal.append('<h2>' + IVQV.question_title + '</h2>');
 	modal.append('<p>' + IVQV.question_text + '</p>');
 	if(parseInt(IVQV.type, 10) === 0)
 	{
