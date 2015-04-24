@@ -1,11 +1,12 @@
 $( document ).ready(function() {
 
-	if($('#is_interactive').attr('checked') == 'checked'){
+	//if($('#is_interactive').attr('checked') == 'checked'){
 		$('#addQuestion').show();
-	}
-	else{
-		$('#addQuestion').hide();
-	}
+		$().appendEmptyJSON();
+	//}
+	//else{
+	//	$('#addQuestion').hide();
+	//}
 	$().initQuestionEditor();
 	$().appendSingleListener();
 	$('.question_type').val(IVQuestionCreator.type);
@@ -14,7 +15,7 @@ $( document ).ready(function() {
 $.fn.initQuestionEditor = function() {
 	var question_form = $('#addQuestion');
 	$('#is_interactive').parent().parent().parent().parent().append(question_form);	
-	$().addClickListenerForCheckbox();
+	//$().addClickListenerForCheckbox();
 	$().createQuestionForm();
 };
 

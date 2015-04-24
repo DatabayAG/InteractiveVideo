@@ -8,23 +8,22 @@
 		<div id="ilInteractiveVideoCommentsForm">
 			<form id="f_cmt" method="post" action="{FORM_ACTION}"> 
 			<div id="il_prop_cont_comment_text" class="form-group">
-				<label class="col-sm-9 control-label" for="comment_text">{TXT_COMMENT}</label>
+				
 				<div class="col-sm-9">
-					<textarea id="comment_text" class="form-control noRTEditor" rows="" wrap="virtual" name="comment_text"></textarea>
-					<input type="hidden" name="comment_time" id="comment_time" value="">
+					<input type="hidden" name="comment_time" id="comment_time" value="($('video#ilInteractiveVideo')[0].currentTime">
 				</div>
 			</div>
 			<div class="ilFormFooter clearfix">
 				<div class="col-sm-9 ilFormRequired"></div>
 				<div class="col-sm-9 ilFormCmds">
-					<input id="ilInteractiveVideoTutorCommentSubmit" class="btn btn-default btn-sm" type="submit" value="{TXT_POST}">
-					<button id="ilInteractiveVideoCommentCancel" class="btn btn-default btn-sm" type="button" value="">{TXT_CANCEL}</button>
+					<button id="ilInteractiveVideoTutorCommentSubmit" class="btn btn-default btn-sm" type="submit" name='cmd' value="showTutorInsertCommentForm">{TXT_INS_COMMENT}</button>
+					<button id="ilInteractiveVideoTutorQuestionSubmit" class="btn btn-default btn-sm" type="submit"  name='cmd' value="showTutorInsertQuestionForm">{TXT_INS_QUESTION}</button>
 				</div>
 			</div>
 			</form>
 		</div>
 	</div>
-
+	
 	<!--<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">-->
 		<!--<div id="ilInteractiveVideoComments" class="scroll-text">-->
 			<!--<ul id="ul_scroll">-->
@@ -36,7 +35,7 @@
 
 //		var question_get_url 	= "{QUESTION_GET_URL}";
 //		var question_post_url 	= "{QUESTION_POST_URL}";
-		var post_comment_url 	= "{POST_COMMENT_URL}";
+//		var post_comment_url 	= "{POST_COMMENT_URL}";
 		var comments 			= {COMMENTS};
 		var stopPoints 			= {STOP_POINTS};
 		var seekTime			= {CURRENT_TIME};
@@ -45,4 +44,6 @@
 </div>
 </div>
 {MODAL_OVERLAY}
+
+<div class="col-sm-12">&nbsp;</div>
 {TABLE}

@@ -30,6 +30,9 @@ $( document ).ready(function() {
 	$("#ilInteractiveVideoTutorCommentSubmit").on("click", function(e) {
 		$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
 	});
+	$("#ilInteractiveVideoTutorQuestionSubmit").on("click", function(e) {
+		$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
+	});
 });
 
 $.fn.sliceCommentAndStopPointsInCorrectPostion = function (tmp_obj, time)

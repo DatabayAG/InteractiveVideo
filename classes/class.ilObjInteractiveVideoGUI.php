@@ -84,6 +84,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			default:
 				switch($cmd)
 				{
+					case 'showTutorInsertForm':
+						$this->checkPermission('write');
+						$cmd = $_POST['cmd'];
+						if(method_exists($this, $cmd))
+						{
+							$this->$cmd();
+						}
+						else  $this->editComments();
+						break;
+					
 					case 'updateProperties':
 					case 'editProperties':
 					case 'confirmDeleteComment':
@@ -343,13 +353,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$time = new ilTimeInputGUI($this->lng->txt('time'), 'comment_time');
 		$time->setShowTime(true);
 		$time->setShowSeconds(true);
+		
+		if(isset($_POST['comment_time']))
+		{
+			$seconds = $_POST['comment_time'];
+			$time->setValueByArray(array('comment_time' => (int)$seconds));
+		}
 		$form->addItem($time);
 
-		$repeat_question = new ilCheckboxInputGUI($this->plugin->txt('repeat_question'), 'repeat_question');
-		$form->addItem($repeat_question);
-
 		$section_header = new ilFormSectionHeaderGUI();
-		$section_header->setTitle($this->plugin->txt('comments'));
+		$section_header->setTitle($this->plugin->txt('comment'));
 		$form->addItem($section_header);
 		
 		$comment = new ilTextAreaInputGUI($this->lng->txt('comment'), 'comment_text');
@@ -378,21 +391,73 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateSubTab('editComments');
 
 		$form = $this->initCommentForm();
-		$section_header = new ilFormSectionHeaderGUI();
-		$section_header->setTitle($this->plugin->txt('questions'));
-		$form->addItem($section_header);
-
-
-		$interactive = new ilCheckboxInputGUI($this->plugin->txt('insert_question'), 'is_interactive');
-		$form->addItem($interactive);
 		
 		$form->addCommandButton('insertTutorComment', $this->lng->txt('insert'));
 		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
 
+		$tpl->setContent($form->getHTML());
+	}
+	
+	public function initQuestionForm()
+	{
+		$form = new ilPropertyFormGUI();
+		$form->setFormAction($this->ctrl->getFormAction($this, 'insertQuestion'));
+		$form->setTitle($this->plugin->txt('insert_question'));
+
+		$section_header = new ilFormSectionHeaderGUI();
+		$section_header->setTitle($this->plugin->txt('general'));
+		$form->addItem($section_header);
+
+		$title = new ilTextInputGUI($this->lng->txt('title'), 'comment_title');
+		$form->addItem($title);
+
+		$this->plugin->includeClass('class.ilTimeInputGUI.php');
+		$time = new ilTimeInputGUI($this->lng->txt('time'), 'comment_time');
+		$time->setShowTime(true);
+		$time->setShowSeconds(true);
+
+		if(isset($_POST['comment_time']))
+		{
+			$seconds = $_POST['comment_time'];
+			$time->setValueByArray(array('comment_time' => (int)$seconds));
+		}
+		$form->addItem($time);
+
+		$section_header = new ilFormSectionHeaderGUI();
+		$section_header->setTitle($this->plugin->txt('question'));
+		$form->addItem($section_header);
+		
+		$interactive = new ilCheckboxInputGUI($this->plugin->txt('insert_question'), 'is_interactive');
+		$interactive->setChecked(true);
+		$interactive->setDisabled(true);
+
+		$form->addItem($interactive);
+
+		$repeat_question = new ilCheckboxInputGUI($this->plugin->txt('repeat_question'), 'repeat_question');
+		$form->addItem($repeat_question);
+		$form->addCommandButton('insertTutorComment', $this->lng->txt('insert'));
+		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
+
+		return $form;
+	}
+	
+	public function showTutorInsertQuestionForm()
+	{
+		/**
+		 * @var $tpl    ilTemplate
+		 * @var $ilTabs ilTabsGUI
+		 */
+		global $tpl, $ilTabs;
+
+		$this->setSubTabs('editComments');
+
+		$ilTabs->activateTab('editComments');
+		$ilTabs->activateSubTab('editComments');
+
+		$form = $this->initQuestionForm();
 		$question_form = $this->getInteractiveForm();
 		$tpl->setContent($form->getHTML() . $question_form);
 	}
-
 
 	/**
 	 * 
@@ -653,7 +718,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
 		
-		$video_tpl->setVariable('FORM_ACTION', $this->ctrl->getFormAction($this,'postTutorComment'));
+		$video_tpl->setVariable('FORM_ACTION', $this->ctrl->getFormAction($this,'showTutorInsertForm'));
 		$video_tpl->setVariable('VIDEO_SRC', $mob_dir . '/' . $media_item['location']);
 		$video_tpl->setVariable('VIDEO_TYPE', $media_item['format']);
 
@@ -662,9 +727,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$stop_points = $this->objComment->getStopPoints();
 		$comments = $this->objComment->getComments();
-		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
-		$video_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
-		$video_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
+		$video_tpl->setVariable('TXT_INS_COMMENT', $this->plugin->txt('insert_comment'));
+		$video_tpl->setVariable('TXT_INS_QUESTION', $this->plugin->txt('insert_question'));
 
 		$video_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
 		$video_tpl->setVariable('COMMENTS', json_encode($comments));
