@@ -307,3 +307,28 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 	}
 }
 ?>
+<#13>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_objects'))
+{
+
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'is_anonymized'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_objects', 'is_anonymized',
+			array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => true,
+				'default' => 0));
+	}
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'is_public'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_objects', 'is_public',
+			array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => true,
+				'default' => 0));
+	}
+}
+?>	

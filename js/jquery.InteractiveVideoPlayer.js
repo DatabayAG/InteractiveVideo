@@ -57,7 +57,7 @@ $.fn.replaceCommentsAfterSeeking = function (time)
 	{
 		if (comments[i].comment_time <= time && comments[i].comment_text != null && comments[i].is_interactive == 0)
 		{
-			html ='<li> <time class="time">'+ mejs.Utility.secondsToTimeCode(comments[i].comment_time) +' </time> ' + comments[i].comment_text + '</li>' + html;
+			html ='<li> <time class="time">'+ mejs.Utility.secondsToTimeCode(comments[i].comment_time)+ ' </time> ' + comments[i].user_name + ' '  + comments[i].comment_text + '</li>' + html;
 		}
 	}
 	$("#ul_scroll").html(html);
@@ -128,7 +128,7 @@ $.fn.replaceCommentsAfterSeeking = function (time)
 											{
 												if(comments[i].comment_text != null)
 												{
-													$("#ul_scroll").prepend('<li> <time class="time">'+ mejs.Utility.secondsToTimeCode(media.currentTime) +' </time> ' + comments[i].comment_text + '</li>');
+													$("#ul_scroll").prepend('<li> <time class="time">'+ mejs.Utility.secondsToTimeCode(media.currentTime)+' </time> ' + ' ' + comments[i].user_name + ' '  + comments[i].comment_text + '</li>');
 												}
 												if (comments[i].is_interactive == 1 && $.inArray(comments[i].comment_id, ignore_questions) == -1) 
 												{

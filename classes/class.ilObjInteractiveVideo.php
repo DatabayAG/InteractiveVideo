@@ -16,6 +16,15 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	protected $mob_id = 0;
 
 	/**
+	 * @var int
+	 */
+	protected $is_anonymized = 0;
+	/**
+	 * @var int
+	 */
+	protected $is_public = 0;
+
+	/**
 	 * 
 	 */
 	protected function doRead()
@@ -33,6 +42,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$row = $ilDB->fetchAssoc($res);
 
 		$this->setMobId($row['mob_id']);
+		$this->setIsAnonymized($row['is_anonymized']);
+		$this->setIsPublic($row['is_public']);
 
 		parent::doRead();
 	}
@@ -93,6 +104,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		parent::doUpdate();
 		
 		$this->updateMetaData();
+		
+		$ilDB->update('rep_robj_xvid_objects',
+			array('is_anonymized' => array('integer', $this->isAnonymized()),
+				'is_public' =>array('integer', $this->isPublic())),
+			array('obj_id' => array('integer', $this->getId())));
 	}
 
 	/**
@@ -336,8 +352,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$ilDB->insert(
 			'rep_robj_xvid_objects',
 			array(
-				'obj_id' => array('integer', $this->getId()),
-				'mob_id' => array('integer', $this->getMobId())
+				'obj_id'        => array('integer', $this->getId()),
+				'mob_id'        => array('integer', $this->getMobId()),
+				'is_anonymized' => array('integer', $this->isAnonymized()),
+				'is_public'     => array('integer', $this->isPublic())
 			)
 		);
 	}
@@ -358,5 +376,37 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	public function setMobId($mob_id)
 	{
 		$this->mob_id = $mob_id;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function isAnonymized()
+	{
+		return $this->is_anonymized;
+	}
+
+	/**
+	 * @param int $is_anonymized
+	 */
+	public function setIsAnonymized($is_anonymized)
+	{
+		$this->is_anonymized = $is_anonymized;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function isPublic()
+	{
+		return $this->is_public;
+	}
+
+	/**
+	 * @param int $is_public
+	 */
+	public function setIsPublic($is_public)
+	{
+		$this->is_public = $is_public;
 	}
 }

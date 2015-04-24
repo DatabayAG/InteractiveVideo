@@ -61,7 +61,12 @@ class ilObjComment
 	 * @var array
 	 */
 	protected $comments = array();
+	
+	protected $is_public = 0;
+	protected $is_anonymized = 0;
 
+	protected static $user_name_cache = array();
+	
 	/**
 	 * @param int $comment_id
 	 */
@@ -226,7 +231,58 @@ class ilObjComment
 		return $stop_points;
 	}
 
-	public function getComments()
+	public function getContentComments()
+	{
+		/**
+		 * @var $ilDB ilDB
+		 */
+		global $ilDB;
+
+		$query_types = array('integer');
+		$query_data = array($this->getObjId());
+		
+		$where_condition = '';
+	
+		if(!$this->isPublic())
+		{
+			global $ilUser;
+			$where_condition = ' AND user_id = %s OR is_tutor = %s OR is_interactive = %s ';
+			$query_types = array_merge($query_types, array('integer', 'integer', 'integer'));
+			$query_data = array_merge($query_data, array($ilUser->getId(), 1, 1));
+		}
+		
+		$res = $ilDB->queryF(
+			'SELECT comment_id, user_id, comment_text, comment_time, is_interactive
+			FROM rep_robj_xvid_comments
+			WHERE obj_id = %s'.
+			$where_condition.'
+			ORDER BY comment_time, comment_id ASC',
+			$query_types,
+			$query_data
+		);
+
+		$comments = array();
+		$i = 0;
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$comments[$i]['comment_id'] = $row['comment_id'];
+			$comments[$i]['user_name'] = '';
+			if(!$this->isAnonymized())
+			{
+				$comments[$i]['user_name'] = self::lookupUsername($row['user_id']);
+			}
+			
+			$comments[$i]['comment_text'] = $row['comment_text'];
+			$comments[$i]['comment_time'] = $row['comment_time'];
+			$comments[$i]['is_interactive'] = $row['is_interactive'];
+
+			$i++;
+		}
+
+		return $comments;
+	}
+
+	public function getAllComments()
 	{
 		/**
 		 * @var $ilDB ilDB
@@ -234,7 +290,7 @@ class ilObjComment
 		global $ilDB;
 
 		$res = $ilDB->queryF(
-			'SELECT comment_id, comment_text, comment_time, is_interactive
+			'SELECT comment_id, user_id, comment_text, comment_time, is_interactive
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s
 			ORDER BY comment_time, comment_id ASC',
@@ -243,16 +299,35 @@ class ilObjComment
 		);
 
 		$comments = array();
-
+		$i = 0;
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$comments[] = $row;
+			$comments[$i]['comment_id'] = $row['comment_id'];
+			$comments[$i]['user_name'] = self::lookupUsername($row['user_id']);
+			$comments[$i]['comment_text'] = $row['comment_text'];
+			$comments[$i]['comment_time'] = $row['comment_time'];
+			$comments[$i]['is_interactive'] = $row['is_interactive'];
+			
+			$i++;
 		}
 
 		return $comments;
 	}
 
+	/**
+	 * @param $user_id
+	 * @return mixed
+	 */
+	public static function lookupUsername($user_id)
+	{
+		if(!array_key_exists($user_id, self::$user_name_cache))
+		{
+			self::$user_name_cache[$user_id] = ilObjUser::_lookupLogin($user_id);
+		}
 
+		return self::$user_name_cache[$user_id];
+	}
+	
 	################## SETTER & GETTER ##################
 	/**
 	 * @return int
@@ -412,5 +487,37 @@ class ilObjComment
 	public function setCommentTitle($comment_title)
 	{
 		$this->comment_title = $comment_title;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function isPublic()
+	{
+		return $this->is_public;
+	}
+
+	/**
+	 * @param int $is_public
+	 */
+	public function setIsPublic($is_public)
+	{
+		$this->is_public = $is_public;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function isAnonymized()
+	{
+		return $this->is_anonymized;
+	}
+
+	/**
+	 * @param int $is_anonymized
+	 */
+	public function setIsAnonymized($is_anonymized)
+	{
+		$this->is_anonymized = $is_anonymized;
 	}
 }

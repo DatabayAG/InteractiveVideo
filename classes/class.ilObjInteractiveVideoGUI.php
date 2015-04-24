@@ -148,8 +148,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	public function postAnswerPerAjax()
 	{
+		$answer = is_array($_POST['answer']) ? ilUtil::stripSlashesRecursive($_POST['answer']) : array();
 		$simple_choice = new SimpleChoiceQuestion();
-		$simple_choice->saveAnswer((int) $_POST['qid'], ilUtil::stripSlashesRecursive($_POST['answer']));
+		$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
 		$this->showFeedbackPerAjax();
 		exit();
 	}
@@ -187,12 +188,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$video_tpl->setVariable('VIDEO_SRC', $mob_dir . '/' . $media_item['location']);
 		$video_tpl->setVariable('VIDEO_TYPE', $media_item['format']);
-
+		
 		$this->objComment = new ilObjComment();
 		$this->objComment->setObjId($this->object->getId());
+		$this->objComment->setIsPublic($this->object->isPublic());
+		$this->objComment->setIsAnonymized($this->object->isAnonymized());
 
 		$stop_points = $this->objComment->getStopPoints();
-		$comments = $this->objComment->getComments();
+		$comments = $this->objComment->getContentComments();
 		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
 		$video_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
 		$video_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
@@ -726,7 +729,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->objComment->setObjId($this->object->getId());
 
 		$stop_points = $this->objComment->getStopPoints();
-		$comments = $this->objComment->getComments();
+		$comments = $this->objComment->getAllComments();
 		$video_tpl->setVariable('TXT_INS_COMMENT', $this->plugin->txt('insert_comment'));
 		$video_tpl->setVariable('TXT_INS_QUESTION', $this->plugin->txt('insert_question'));
 
@@ -1118,6 +1121,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function updateCustom(ilPropertyFormGUI $a_form)
 	{
+		$is_anonymized = $a_form->getInput('is_anonymized');
+		$this->object->setIsAnonymized((int)$is_anonymized);
+		
+		$is_public = $a_form->getInput('is_public');
+		$this->object->setIsPublic((int)$is_public);
+
+		$this->object->update();
+		
 		// @todo: Store the new file (delegate to application class)
 		$file = $a_form->getInput('video_file');
 		if($file['error'] == 0 )
@@ -1152,6 +1163,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$upload_field->setRequired(true);
 		$form->addItem($upload_field);
 
+		$anonymized = new ilCheckboxInputGUI($this->plugin->txt('is_anonymized'), 'is_anonymized');
+		$anonymized->setInfo($this->plugin->txt('is_anonymized_info'));
+		$form->addItem($anonymized);
+
+		$is_public = new ilCheckboxInputGUI($this->plugin->txt('is_public'), 'is_public');
+		$is_public->setInfo($this->plugin->txt('is_public_info'));
+		$form->addItem($is_public);
+
 		return $form;
 	}
 
@@ -1171,6 +1190,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$upload_field = new ilFileInputGUI($this->plugin->txt('video_file'), 'video_file');
 		$upload_field->setSuffixes(array('mp4', 'mov'));
 		$a_form->addItem($upload_field);
+
+		$anonymized = new ilCheckboxInputGUI($this->plugin->txt('is_anonymized'), 'is_anonymized');
+		$anonymized->setInfo($this->plugin->txt('is_anonymized_info'));
+		$a_form->addItem($anonymized);
+
+		$is_public = new ilCheckboxInputGUI($this->plugin->txt('is_public'), 'is_public');
+		$is_public->setInfo($this->plugin->txt('is_public_info'));
+		$a_form->addItem($is_public);
+
 	}
 
 	/**
@@ -1179,6 +1207,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	protected function getEditFormCustomValues(array &$a_values)
 	{
 		$a_values['video_file'] = ilObject::_lookupTitle($this->object->getMobId());
+		$a_values['is_anonymized'] = $this->object->isAnonymized();
+		$a_values['is_public']     = $this->object->isPublic();
 	}
 
 	/**

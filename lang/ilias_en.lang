@@ -70,3 +70,7 @@ comment_title#:#Comment-Title
 send#:#Send
 close#:#Close
 question#:#Question
+is_anonymized#:#Anonymize Comments
+is_anonymized_info#:#If enabled all comments are shown without usernames 
+is_public#:#Publish All Comments
+is_public_info#:#If enabled all users are able to read all comments, otherwise they are only able to see their own comments
