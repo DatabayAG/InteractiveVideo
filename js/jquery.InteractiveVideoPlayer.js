@@ -75,9 +75,13 @@ $.fn.buildListElement = function (comment, time, username)
 	{
 		comment.comment_tags = '';
 	}
+	if(username != '')
+	{
+		username = '[' + username + ']';
+	}
 	return '<li>' + 
 				'<time class="time">'+ mejs.Utility.secondsToTimeCode(time)  + '</time> '  + 
-		   		'<span class="comment_username">[' + username                +']</span> '  +
+		   		'<span class="comment_username"> ' + username                + '</span> '  +
 				'<span class="comment_title">' 	   + comment.comment_title   + '</span> '  +
 				'<span class="comment_text">'      + comment.comment_text    + '</span> '  +
 				'<span class="comment_tags">' 	   + comment.comment_tags    		 + '</span> '  +
