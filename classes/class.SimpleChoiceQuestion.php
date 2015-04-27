@@ -190,7 +190,7 @@ class SimpleChoiceQuestion {
 			$counter++;
 		}
 		$build_json = array();
-		$build_json['title'] 		  = $question_data;
+		//$build_json['title'] 		  = $question_data;
 		$build_json['answers'] 		  = $question_data;
 		$build_json['question_text']  = $question_text;
 		$build_json['type']			  = $question_type;
@@ -214,6 +214,10 @@ class SimpleChoiceQuestion {
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$title = $row['comment_title'];
+		}
+		if($title == null)
+		{
+			$title = '';
 		}
 		return $title;
 	}
