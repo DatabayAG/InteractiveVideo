@@ -67,17 +67,18 @@ $.fn.replaceCommentsAfterSeeking = function (time)
 
 $.fn.buildListElement = function (comment, time, username)
 {
+	var comment_tags = '';
 	if(comment.comment_title === null)
 	{
 		comment.comment_title = '';
 	}
 	if(comment.comment_tags === null)
 	{
-		comment.comment_tags = '';
+		comment_tags = '';
 	}
 	else
 	{
-		comment.comment_tags = '<span class="tag">' + comment.comment_tags.split(',').join('</span> <span class="tag">') + '</span>';
+		comment_tags = '<span class="tag">' + comment.comment_tags.split(',').join('</span> <span class="tag">') + '</span>';
 	}
 	if(username != '')
 	{
@@ -88,7 +89,7 @@ $.fn.buildListElement = function (comment, time, username)
 		   		'<span class="comment_username"> ' + username                + '</span> '  +
 				'<span class="comment_title">' 	   + comment.comment_title   + '</span> '  +
 				'<span class="comment_text">'      + comment.comment_text    + '</span> '  +
-				'<br/><div class="comment_tags">' 	   + comment.comment_tags    + '</div> '  +
+				'<br/><div class="comment_tags">' 	   + comment_tags    + '</div> '  +
 		   '</li>';
 };
 	
