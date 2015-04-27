@@ -477,6 +477,81 @@ class SimpleChoiceQuestion {
 		return $results;
 	}
 
+
+
+	/**
+	 * @param int $oid object_id
+	 * @return array
+	 */
+	public function getMyPoints($oid)
+	{
+		/**
+		 * @var $ilDB   ilDB
+		 */
+
+		global $ilDB, $ilUser, $lng;
+
+		$res     = $ilDB->queryF('
+			SELECT * 
+				FROM rep_robj_xvid_score score, rep_robj_xvid_question questions
+				WHERE score.question_id = questions.question_id
+			AND 	score.user_id = %s',
+			array('integer'), array( $ilUser->getId())
+		);
+		$answered = array();
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$answered[$row['question_id']]  = $row['points'];
+		}
+		
+		$res     = $ilDB->queryF('
+			SELECT * FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
+					 WHERE comments.comment_id = questions.comment_id AND  is_interactive = 1 AND obj_id = %s',
+			array('integer'), array( $oid )
+		);
+		$results = array();
+		$counter = 0;
+		$correct = 0;
+		$answered_questions = 0;
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$results[$counter]['question_id'] = $row['question_id'];
+			$results[$counter]['title'] = $row['comment_title'];
+			if($answered[$row['question_id']] !== null)
+			{
+				$results[$counter]['answered'] 	= 1;
+				$answered_questions++;
+				$question_points = self::getScoreForQuestion($row['question_id']);
+				if($question_points > 0)
+				{
+					$results[$counter]['points'] 	=  round(($answered[$row['question_id']] / $question_points) * 100, 2);
+					if($results[$counter]['points'] == 100)
+					{
+						$correct++;
+					}
+				}
+				else
+				{
+					$results[$counter]['points'] = 0;
+				}
+			}
+			else
+			{
+				$results[$counter]['answered'] 	= 0;
+				$results[$counter]['points'] 	= 0;
+			}
+			$counter++;
+		}
+		if($counter > 0)
+		{
+			$results[$counter]['title'] 	 = $lng->txt('summary');
+			$results[$counter]['answered'] 	 = round(($answered_questions / $counter) * 100, 2) . '%';
+			$results[$counter]['points']	 = round(($correct / $counter) * 100, 2);
+		}
+
+		return $results;
+	}
+	
 	/**
 	 * @param array $user_ids
 	 * @param int $obj_id

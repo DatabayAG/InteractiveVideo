@@ -71,3 +71,5 @@ is_anonymized#:#Kommentare anonymisieren
 is_anonymized_info#:#Wenn aktiviert, werden alle Kommentare ohne Benutzernamen angezeigt.
 is_public#:#Alle Kommentare veröffentlichen
 is_public_info#:#Wenn aktiviert, können alle Benutzer alle Kommentare lesen. Im anderen Fall sehen sie nur ihre eigenen Kommentare
+correct_answered#:#Richtig beantwortet
+show_my_results#:#Meine Ergebnisse
