@@ -75,6 +75,10 @@ $.fn.buildListElement = function (comment, time, username)
 	{
 		comment.comment_tags = '';
 	}
+	else
+	{
+		comment.comment_tags = '<span class="tag">' + comment.comment_tags.split(',').join('</span> <span class="tag">') + '</span>';
+	}
 	if(username != '')
 	{
 		username = '[' + username + ']';
@@ -84,7 +88,7 @@ $.fn.buildListElement = function (comment, time, username)
 		   		'<span class="comment_username"> ' + username                + '</span> '  +
 				'<span class="comment_title">' 	   + comment.comment_title   + '</span> '  +
 				'<span class="comment_text">'      + comment.comment_text    + '</span> '  +
-				'<span class="comment_tags">' 	   + comment.comment_tags    		 + '</span> '  +
+				'<br/><div class="comment_tags">' 	   + comment.comment_tags    + '</div> '  +
 		   '</li>';
 };
 	

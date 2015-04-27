@@ -94,6 +94,10 @@
     float: right;
 }
 .comment_tags{
-    color:#00AAAA;
+    padding-left:3em;
 }
-
+.comment_tags .tag{
+    padding-left:5px;
+    padding-right:5px;
+    background-color:#00AAAA;
+}
