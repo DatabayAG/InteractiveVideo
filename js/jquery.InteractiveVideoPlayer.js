@@ -5,12 +5,14 @@ $( document ).ready(function() {
 				'comment_id': '0',
 				'comment_time': $("video#ilInteractiveVideo")[0].currentTime,
 				'comment_text': $('#comment_text').val(),
+				'user_name': username,
 				'is_interactive': '0'
 			};
-		$().sliceCommentAndStopPointsInCorrectPostion(tmp_obj, $("video#ilInteractiveVideo")[0].currentTime);
+		$().sliceCommentAndStopPointsInCorrectPostion(tmp_obj, tmp_obj.comment_time);
 		
-		$("#ul_scroll").prepend('<li> <time class="time">'+ mejs.Utility.secondsToTimeCode($("video#ilInteractiveVideo")[0].currentTime) +' </time> ' + $('#comment_text').val() + '</li>');
 
+		$("#ul_scroll").prepend($().buildListElement(tmp_obj, tmp_obj.comment_time, username));
+		
 		$.ajax({
 			type     : "POST",
 			dataType : "JSON",
@@ -57,17 +59,17 @@ $.fn.replaceCommentsAfterSeeking = function (time)
 	{
 		if (comments[i].comment_time <= time && comments[i].comment_text != null && comments[i].is_interactive == 0)
 		{
-			html = $().buildListElement(comments[i], comments[i].comment_time) + html;
+			html = $().buildListElement(comments[i], comments[i].comment_time, comments[i].user_name) + html;
 		}
 	}
 	$("#ul_scroll").html(html);
 };
 
-$.fn.buildListElement = function (comment, time)
+$.fn.buildListElement = function (comment, time, username)
 {
 	return '<li>' + 
 				'<time class="time">'+ mejs.Utility.secondsToTimeCode(time)+' </time> ' + 
-		   		'<span class="comment_username">' + comment.user_name + '</span> '  +
+		   		'<span class="comment_username">' + username + '</span> '  +
 				'<span class="comment_text">' 	  + comment.comment_text + '</span> '  +
 		   '</li>';
 };
@@ -137,7 +139,7 @@ $.fn.buildListElement = function (comment, time)
 											{
 												if(comments[i].comment_text != null)
 												{
-													$("#ul_scroll").prepend($().buildListElement(comments[i], media.currentTime));
+													$("#ul_scroll").prepend($().buildListElement(comments[i], media.currentTime, username));
 												}
 												if (comments[i].is_interactive == 1 && $.inArray(comments[i].comment_id, ignore_questions) == -1) 
 												{
