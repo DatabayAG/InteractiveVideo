@@ -252,7 +252,7 @@ class ilObjComment
 		}
 		
 		$res = $ilDB->queryF(
-			'SELECT comment_id, user_id, comment_text, comment_time, is_interactive
+			'SELECT comment_id, user_id, comment_text, comment_time, is_interactive, comment_title, comment_tags
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s'.
 			$where_condition.'
@@ -271,9 +271,10 @@ class ilObjComment
 			{
 				$comments[$i]['user_name'] = self::lookupUsername($row['user_id']);
 			}
-			
+			$comments[$i]['comment_title'] = $row['comment_title'];
 			$comments[$i]['comment_text'] = $row['comment_text'];
 			$comments[$i]['comment_time'] = $row['comment_time'];
+			$comments[$i]['comment_tags'] = $row['comment_tags'];
 			$comments[$i]['is_interactive'] = $row['is_interactive'];
 
 			$i++;

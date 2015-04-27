@@ -67,10 +67,20 @@ $.fn.replaceCommentsAfterSeeking = function (time)
 
 $.fn.buildListElement = function (comment, time, username)
 {
+	if(comment.comment_title === null)
+	{
+		comment.comment_title = '';
+	}
+	if(comment.comment_tags === null)
+	{
+		comment.comment_tags = '';
+	}
 	return '<li>' + 
-				'<time class="time">'+ mejs.Utility.secondsToTimeCode(time)+' </time> ' + 
-		   		'<span class="comment_username">' + username + '</span> '  +
-				'<span class="comment_text">' 	  + comment.comment_text + '</span> '  +
+				'<time class="time">'+ mejs.Utility.secondsToTimeCode(time)  + '</time> '  + 
+		   		'<span class="comment_username">[' + username                +']</span> '  +
+				'<span class="comment_title">' 	   + comment.comment_title   + '</span> '  +
+				'<span class="comment_text">'      + comment.comment_text    + '</span> '  +
+				'<span class="comment_tags">' 	   + comment.comment_tags    		 + '</span> '  +
 		   '</li>';
 };
 	
