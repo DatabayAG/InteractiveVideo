@@ -68,11 +68,11 @@ $.fn.replaceCommentsAfterSeeking = function (time)
 $.fn.buildListElement = function (comment, time, username)
 {
 	var comment_tags = '';
-	if(comment.comment_title === null)
+	if(comment.comment_title == null)
 	{
 		comment.comment_title = '';
 	}
-	if(comment.comment_tags === null)
+	if(comment.comment_tags == null)
 	{
 		comment_tags = '';
 	}
