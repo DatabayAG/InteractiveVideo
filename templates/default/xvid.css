@@ -101,3 +101,15 @@
     padding-right:5px;
     background-color:#00AAAA;
 }
+.text_field
+{
+    width: 80%
+}
+.xvid_checkbox{
+    float:right;
+    white-space:nowrap;
+}
+.correct_solution{
+    float:right;
+    white-space:nowrap;
+}

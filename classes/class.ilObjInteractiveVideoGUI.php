@@ -1358,6 +1358,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$is_public = new ilCheckboxInputGUI($this->plugin->txt('is_public'), 'is_public');
 		$is_public->setInfo($this->plugin->txt('is_public_info'));
+		$is_public->setChecked(true);
 		$form->addItem($is_public);
 
 		return $form;

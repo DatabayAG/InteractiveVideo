@@ -6,26 +6,14 @@
 	}
 </script>
 
-<!--<div id="addQuestion" class="">-->
-	<!--<div class="form-group">-->
-		<!--<label for="question_text" class="col-sm-3 control-label">{QUESTIONTEXT}</label>-->
-		<!--<textarea id="question_text" name="question_text" class="question_text col-sm-9" cols="50" rows="10">{QUESTION_TEXT}</textarea>-->
-	<!--</div>-->
-	<!--<div class="form-group">-->
-	<!--<label for="question_type" class="col-sm-3 control-label">{QUESTION_TYPE_TEXT}</label>-->
-	<!--<select id="question_type" name="question_type" class="question_type col-sm-9">-->
-		<!--<option value="0">{SINGLE_CHOICE}</option>-->
-		<!--<option value="1">{MULTIPLE_CHOICE}</option>-->
-	<!--</select>-->
-	<!--</div>-->
 	<div >
 		<label for="answer_table" class="col-sm-12 control-label">{ANSWERS}</label>
-		<table id="answer_table" class="answerwizard  col-sm-4">
+	<table id="answer_table" class="answerwizard  col-sm-12">
 			<thead>
 			<tr class="form-group">
-				<th>{ANSWER_TEXT}</th>
+			<th class="text_field">{ANSWER_TEXT}</th>
 				<th>{CORRECT_SOLUTION}</th>
-				<th></th>
+			<th class="xvid_checkbox"></th>
 			</tr>
 			</thead>
 			<tbody id="table_body_question_editor">
@@ -33,16 +21,6 @@
 			</tbody>
 		</table>
 	</div>
-	<!--<div class="form-group">-->
-		<!--<label for="feedback_correct" class="col-sm-3 control-label">{FEEDBACK_CORRECT_LABEL}</label>-->
-		<!--<textarea id="feedback_correct" name="feedback_correct" class="question_text col-sm-9" cols="50" rows="10">{FEEDBACK_CORRECT}</textarea>-->
-	<!--</div>-->
-	<!--<div class="form-group">-->
-		<!--<label for="feedback_wrong" class="col-sm-3 control-label">{FEDDBACK_ONE_WRONG_LABEL}</label>-->
-		<!--<textarea id="feedback_wrong" name="feedback_wrong" class="question_text col-sm-9" cols="50" rows="10">{FEEDBACK_WRONG}</textarea>-->
-	<!--</div>-->
-	<!--<input type="hidden" name="question_id" value="{QUESTION_ID}"/>-->
-<!--</div>-->
 		
 <table>
 	<tr class="form-group" id="inner_question_editor_prototype">
@@ -52,7 +30,7 @@
 		<td style="text-align: center;">
 			<input type="checkbox" style="margin:0px;" class="correct_solution" size="5"  value="0">
 		</td>
-		<td style="vertical-align: top;">
+		<td  class="xvid_checkbox" style="vertical-align: top;">
 			<button class="clone_fields_add btn btn-link"><span class="sr-only"></span><span class="glyphicon glyphicon-plus"></span></button>
 			<button class="clone_fields_remove btn btn-link"><span class="sr-only"></span><span class="glyphicon glyphicon-minus"></span></button>
 		</td>
