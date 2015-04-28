@@ -37,10 +37,6 @@
 	list-style: none;	
 }
 
-.time{
-	color: blue;
-}
-
 .simple_question_editor{
     margin: 1em;
 }
@@ -112,4 +108,16 @@
 .correct_solution{
     float:right;
     white-space:nowrap;
+}
+.time{
+    color: blue;
+}
+.comment_username{
+    
+}
+.comment_title{
+    
+}
+.comment_text{
+    
 }
