@@ -89,7 +89,7 @@ $.fn.buildListElement = function (comment, time, username)
 		   		'<span class="comment_username"> ' + username                + '</span> '  +
 				'<span class="comment_title">' 	   + comment.comment_title   + '</span> '  +
 				'<span class="comment_text">'      + comment.comment_text    + '</span> '  +
-				'<br/><div class="comment_tags">' 	   + comment_tags    + '</div> '  +
+				'<br/><div class="comment_tags">'  + comment_tags    		 + '</div> '  +
 		   '</li>';
 };
 	
