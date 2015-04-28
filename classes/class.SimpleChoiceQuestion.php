@@ -74,7 +74,7 @@ class SimpleChoiceQuestion {
 				'type'         	 => array('integer', (int) $_POST['question_type']),
 				'question_text'  => array('text', ilUtil::stripSlashes($_POST['question_text'])),
 				'feedback_correct' => array('text', ilUtil::stripSlashes($_POST['feedback_correct'])),
-				'feedback_one_wrong' => array('text', ilUtil::stripSlashes($_POST['feedback_wrong']))
+				'feedback_one_wrong' => array('text', ilUtil::stripSlashes($_POST['feedback_one_wrong']))
 			));
 		foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
 		{
@@ -786,21 +786,43 @@ class SimpleChoiceQuestion {
 	public function deleteQuestion($qid)
 	{
 		global $ilDB;
-
-		$res = $ilDB->queryF('DELETE FROM rep_robj_xvid_question WHERE question_id = %s',
+		
+		//@todo maybe select all question_ids for current comment_id first and perform delete for all found question_ids ... . 
+		
+		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_question WHERE question_id = %s',
 			array('integer'), array($qid));
-		$ilDB->fetchAssoc($res);
-		$res = $ilDB->queryF('DELETE FROM rep_robj_xvid_qus_text WHERE question_id = %s',
+		
+		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_qus_text WHERE question_id = %s',
 			array('integer'), array($qid));
-		$ilDB->fetchAssoc($res);
-		$res = $ilDB->queryF('DELETE FROM rep_robj_xvid_answers WHERE question_id = %s',
+		
+		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_answers WHERE question_id = %s',
 			array('integer'), array($qid));
-		$ilDB->fetchAssoc($res);
-		$res = $ilDB->queryF('DELETE FROM rep_robj_xvid_score WHERE question_id = %s',
+		
+		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_score WHERE question_id = %s',
 			array('integer'), array($qid));
-		$ilDB->fetchAssoc($res);
+		
 	}
+	/**
+	 * @param array $question_ids
+	 */
+	public static function deleteQuestions($question_ids)
+	{
+		if(!is_array($question_ids))
+		{
+			return;
+		}
+		
+		global $ilDB;
 
+		$ilDB->manipulate('DELETE FROM rep_robj_xvid_question WHERE '. $ilDB->in('question_id', $question_ids, false, 'integer'));
+
+		$ilDB->manipulate('DELETE FROM rep_robj_xvid_qus_text WHERE '. $ilDB->in('question_id', $question_ids, false, 'integer'));
+
+		$ilDB->manipulate('DELETE FROM rep_robj_xvid_answers WHERE '. $ilDB->in('question_id', $question_ids, false, 'integer'));
+
+		$ilDB->manipulate('DELETE FROM rep_robj_xvid_score WHERE '. $ilDB->in('question_id', $question_ids, false, 'integer'));
+	}
+	
 	/**
 	 * @return int
 	 */

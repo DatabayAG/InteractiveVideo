@@ -31,7 +31,13 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$this->setDefaultOrderDirection('ASC');
 		$this->setDefaultOrderField('comment_time');
 
-		$this->setTitle($a_parent_obj->plugin->txt('questions_comments'));
+		$title = $a_parent_obj->plugin->txt('questions_comments');
+		if($a_parent_cmd == 'editMyComments')
+		{
+			$title = $a_parent_obj->plugin->txt('my_comments');
+		}
+		
+		$this->setTitle($title);
 		$this->setRowTemplate('tpl.row_comments.html', $a_parent_obj->plugin->getDirectory());
 
 		$this->addColumn('', 'comment_id',  '1px', true);
@@ -44,7 +50,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			$this->addColumn($a_parent_obj->plugin->txt('interactive'), 'is_interactive');
 			$this->addColumn($a_parent_obj->plugin->txt('tutor'), 'is_tutor');
 			
-			$this->addCommandButton('showTutorInsertCommentForm', $this->lng->txt('insert'));
+//			$this->addCommandButton('showTutorInsertCommentForm', $this->lng->txt('insert'));
 		}
 		$this->addColumn($this->lng->txt('actions'), 'actions', '10%');
 
@@ -108,7 +114,17 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$current_selection_list->setId('act_' . $row['comment_id']);
 
 		$this->ctrl->setParameter($this->parent_obj, 'comment_id', $row['comment_id']);
-		$current_selection_list->addItem($this->lng->txt('edit'), '', $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editComment' : 'editMyComment'));
+		
+		if($row['is_interactive'] == 1)
+		{
+			$link_target =  $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editQuestion' : 'editComment');
+		}	
+		else
+		{
+			$link_target =  $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editComment' : 'editMyComment');	
+		}
+		
+		$current_selection_list->addItem($this->lng->txt('edit'), '', $link_target);
 		$this->tpl->setVariable('VAL_ACTIONS', $current_selection_list->getHTML());
 	}
 }

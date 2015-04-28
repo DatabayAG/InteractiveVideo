@@ -3,6 +3,7 @@
 
 require_once 'Services/Repository/classes/class.ilObjectPlugin.php';
 require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
+ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
 
 /**
  * Class ilObjInteractiveVideo
@@ -171,9 +172,34 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		if(!is_array($comment_ids))
 			return false;
 
+		$question_ids = self::getQuestionIdsByCommentIds($comment_ids);
+		SimpleChoiceQuestion::deleteQuestions($question_ids);
+		
 		$ilDB->manipulate('DELETE FROM rep_robj_xvid_comments WHERE ' . $ilDB->in('comment_id', $comment_ids, false, 'integer'));
 	}
 
+
+	/**
+	 * @param $comment_ids
+	 * @return array
+	 */
+	public static function getQuestionIdsByCommentIds($comment_ids)
+	{
+		global $ilDB;
+
+		if(!is_array($comment_ids))
+			return false;
+
+		$question_ids = array();
+
+		$res = $ilDB->query('SELECT question_id FROM rep_robj_xvid_question WHERE ' . $ilDB->in('comment_id', $comment_ids, false, 'integer'));
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$question_ids[] = $row['question_id'];
+		}
+		return $question_ids;
+	}
+	
 	public function getCommentsTableData()
 	{
 		global $ilDB;
@@ -240,6 +266,19 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$row = $ilDB->fetchAssoc($res);
 		return $row;
 
+	}
+	
+	public function getQuestionDataById($comment_id)
+	{
+		global $ilDB;
+		
+		$res = 	$ilDB->queryF('SELECT * FROM rep_robj_xvid_question WHERE comment_id = %s',
+			array('integer'), array($comment_id));
+		
+		$row = $ilDB->fetchAssoc($res);
+		$data['question_data'] = $row;
+
+		return $data;
 	}
 
 	/**
