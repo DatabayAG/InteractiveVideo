@@ -45,7 +45,7 @@ $.fn.createQuestionForm = function() {
 			{
 				'name' : 'correct[' + l + ']',
 				'meta' : l,
-				'class':'checkbox'
+				'class':'checkbox correct_solution'
 			}
 		);
 		if(parseInt(value.correct,10) === 1 )
