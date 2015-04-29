@@ -65,6 +65,27 @@ $.fn.replaceCommentsAfterSeeking = function (time)
 	$("#ul_scroll").html(html);
 };
 
+$.fn.jumpToTimeInVideo = function (time)
+{
+	var video_player = $('#ilInteractiveVideo')["0"];
+	video_player.play();
+	video_player.pause();
+	if(time != null)
+	{
+		video_player.setCurrentTime(time);
+	}
+	$().resumeVideo();
+};
+
+$.fn.resumeVideo = function ()
+{
+	if(InteractiveVideo.auto_resume === true)
+	{
+		$('#ilInteractiveVideo')["0"].play();
+	}
+
+};
+
 $.fn.buildListElement = function (comment, time, username)
 {
 	var comment_tags = '';

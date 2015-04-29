@@ -391,6 +391,7 @@ class SimpleChoiceQuestion {
 	{
 		$score = $this->getScoreForQuestion($qid);	
 		$feedback = $this->getFeedbackByQuestionId($qid);
+		//Todo add timestamp
 		if(is_array($feedback) && $feedback['correct'] !== null )
 		{
 			if($score === 0)

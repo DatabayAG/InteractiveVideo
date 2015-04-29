@@ -51,8 +51,10 @@ $.fn.addFeedbackDiv = function() {
 };
 
 $.fn.addButtons = function() {
-	$('#question_form').append('<input id="sendForm" class="btn btn-default btn-sm" type="submit" value="' + send_text + '">');
-	$('#question_form').append('<input id="close_form" class="btn btn-default btn-sm" type="submit" value="' + close_text + '">');
+	var question_form = $('#question_form');
+	question_form.append('<input id="sendForm" class="btn btn-default btn-sm" type="submit" value="' + send_text + '">');
+	question_form.append('<input id="jumpToTimeInVideo" class="hidden btn btn-default btn-sm" type="submit" value="' + feedback_button_text + '">');
+	question_form.append('<input id="close_form" class="btn btn-default btn-sm" type="submit" value="' + close_text + '">');
 	$().appendButtonListener();
 };
 
@@ -60,6 +62,7 @@ $.fn.showFeedback = function(feedback) {
 	var modal = $('.modal_feedback');
 	modal.html('');
 	modal.html(feedback);
+	
 };
 
 $.fn.appendButtonListener = function() {
@@ -78,7 +81,13 @@ $.fn.appendButtonListener = function() {
 			}
 		});
 	});
+	$('#jumpToTimeInVideo').on('click',function(e){
+		$('#ilQuestionModal').modal('hide');
+		$().jumpToTimeInVideo(120);
+	});
+	
 	$('#close_form').on('click',function(e){
 		$('#ilQuestionModal').modal('hide');
+		$().resumeVideo();
 	});
 };
