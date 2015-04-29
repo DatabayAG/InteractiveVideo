@@ -89,6 +89,9 @@
 #close_form{
     float: right;
 }
+#jumpToTimeInVideo{
+    margin-left:11em;
+}
 .comment_tags{
     padding-left:3em;
 }

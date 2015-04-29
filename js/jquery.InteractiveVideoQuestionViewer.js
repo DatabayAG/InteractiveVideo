@@ -62,7 +62,7 @@ $.fn.showFeedback = function(feedback) {
 	var modal = $('.modal_feedback');
 	modal.html('');
 	modal.html(feedback);
-	
+	$('#jumpToTimeInVideo').removeClass('hidden');
 };
 
 $.fn.appendButtonListener = function() {
