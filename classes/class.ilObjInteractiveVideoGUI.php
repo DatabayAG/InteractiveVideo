@@ -208,7 +208,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$simple_choice = new SimpleChoiceQuestion();
 		$question_id = $simple_choice->getAllNonRepeatCorrectAnswerQuestion($ilUser->getId());
 		$video_tpl->setVariable('IGNORE_QUESTIONS', json_encode($question_id));
-		$video_tpl->setVariable('USERNAME', $ilUser->getPublicName());
+		if($this->object->isAnonymized())
+		{
+			$video_tpl->setVariable('USERNAME', '');
+		}
+		else
+		{
+			$video_tpl->setVariable('USERNAME', $ilUser->getPublicName());
+		}
 		require_once("./Services/UIComponent/Modal/classes/class.ilModalGUI.php");
 		$modal = ilModalGUI::getInstance();
 		$modal->setId("ilQuestionModal");
