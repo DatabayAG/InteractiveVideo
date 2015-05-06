@@ -56,8 +56,8 @@ $.fn.addFeedbackDiv = function() {
 
 $.fn.addButtons = function() {
 	var question_form = $('#question_form');
-	question_form.append('<input id="sendForm" class="btn btn-default btn-sm" type="submit" value="' + send_text + '">');
-	question_form.append('<input id="close_form" class="btn btn-default btn-sm" type="submit" value="' + close_text + '">');
+	question_form.append($().createButtonButtons('sendForm',send_text));
+	question_form.append($().createButtonButtons('close_form',close_text));
 	if( question_tries >= 1 && question_not_answered === false )
 	{
 		$('#sendForm').attr('disabled', 'true');
@@ -71,7 +71,7 @@ $.fn.showFeedback = function(feedback) {
 	modal.html(feedback.html);
 	if( feedback.is_timed == 1 )
 	{
-		modal.append('<div class="align_button"><input id="jumpToTimeInVideo" class="btn btn-default btn-sm" type="submit" value="' + feedback_button_text + '"></div>');
+		modal.append('<div class="align_button">' + $().createButtonButtons('jumpToTimeInVideo',feedback_button_text) + '</div>');
 		$('#jumpToTimeInVideo').on('click',function(e){
 			$('#ilQuestionModal').modal('hide');
 			$().jumpToTimeInVideo(feedback.time);
@@ -102,4 +102,8 @@ $.fn.appendButtonListener = function() {
 		$('#ilQuestionModal').modal('hide');
 		$().resumeVideo();
 	});
+};
+
+$.fn.createButtonButtons = function(id, value) {
+	return '<input id="' + id + '" class="btn btn-default btn-sm" type="submit" value="' + value + '">';
 };
