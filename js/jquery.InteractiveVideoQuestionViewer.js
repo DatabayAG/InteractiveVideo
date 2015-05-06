@@ -1,10 +1,14 @@
 var IVQV = {};
+//Todo remove temp variables
+var question_not_answered = false;
+var question_tries = 1;
 
 $.fn.getQuestionPerAjax = function(comment_id, player) {
 	$.when(
 		$.ajax({url: question_get_url + '&comment_id=' + comment_id,
 				type: 'GET', dataType: 'json'})
 		).then(function (array) {
+			//Todo get answerd state of question also if question can be answered multiple times 
 			IVQV = array;
 			IVQV.player = player;
 			$().buildQuestionForm();
@@ -55,6 +59,10 @@ $.fn.addButtons = function() {
 	question_form.append('<input id="sendForm" class="btn btn-default btn-sm" type="submit" value="' + send_text + '">');
 	question_form.append('<input id="jumpToTimeInVideo" class="hidden btn btn-default btn-sm" type="submit" value="' + feedback_button_text + '">');
 	question_form.append('<input id="close_form" class="btn btn-default btn-sm" type="submit" value="' + close_text + '">');
+	if( question_tries >= 1 && question_not_answered === false )
+	{
+		$('#sendForm').attr('disabled', 'true');
+	}
 	$().appendButtonListener();
 };
 
@@ -68,18 +76,21 @@ $.fn.showFeedback = function(feedback) {
 $.fn.appendButtonListener = function() {
 	$('#question_form').on('submit',function(e){
 		e.preventDefault();
-		$().debugPrinter('IVQV Ajax', $(this).serialize());
-		$.ajax({
-			type     : "POST",
-			cache    : false,
-			url      : question_post_url,
-			data     : $(this).serialize(),
-			success  : function(data) {
-				//$('#ilQuestionModal').modal('hide');
-				 $().showFeedback(data);
-				//IVQV.player.play();
-			}
-		});
+		if( question_tries >= 1 && question_not_answered === true )
+		{
+			$().debugPrinter('IVQV Ajax', $(this).serialize());
+			$.ajax({
+				type     : "POST",
+				cache    : false,
+				url      : question_post_url,
+				data     : $(this).serialize(),
+				success  : function(data) {
+					//$('#ilQuestionModal').modal('hide');
+					$().showFeedback(data);
+					//IVQV.player.play();
+				}
+			});
+		}
 	});
 	$('#jumpToTimeInVideo').on('click',function(e){
 		$('#ilQuestionModal').modal('hide');
