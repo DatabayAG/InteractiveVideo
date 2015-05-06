@@ -331,4 +331,55 @@ if($ilDB->tableExists('rep_robj_xvid_objects'))
 				'default' => 0));
 	}
 }
-?>	
+?>
+<#14>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_question'))
+{
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'limit_attempts'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_question', 'limit_attempts',
+			array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => true,
+				'default' => 0));
+	}
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'is_jump_correct'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_question', 'is_jump_correct',
+			array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => true,
+				'default' => 0));
+	}
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'jump_correct_ts'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_question', 'jump_correct_ts',
+			array(
+				'type'    => 'integer',
+				'length'  => '4',
+				'notnull' => true,
+				'default' => 0));
+	}
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'is_jump_wrong'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_question', 'is_jump_wrong',
+			array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => true,
+				'default' => 0));
+	}
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'jump_wrong_ts'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_question', 'jump_wrong_ts',
+			array(
+				'type'    => 'integer',
+				'length'  => '4',
+				'notnull' => true,
+				'default' => 0));
+	}
+}
+?>

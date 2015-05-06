@@ -73,3 +73,7 @@ is_public#:#Alle Kommentare veröffentlichen
 is_public_info#:#Wenn aktiviert, können alle Benutzer alle Kommentare lesen. Im anderen Fall sehen sie nur ihre eigenen Kommentare
 correct_answered#:#Richtig beantwortet
 show_my_results#:#Meine Ergebnisse
+is_jump_correct#:#"Richtig"-Sprungmarke verwenden
+is_jump_wrong#:#"Falsch"-Sprungmarke verwenden
+limit_attempts#:#Versuche begrenzen
+limit_attempts_info#:#Der Benutzer darf die Frage nur einmal beantworten

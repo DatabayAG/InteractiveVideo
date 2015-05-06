@@ -17,20 +17,55 @@ class SimpleChoiceQuestion {
 	 * @var integer
 	 */
 	protected $question_id;
+
+	/**
+	 * @var string
+	 */
+	protected $question_text;
 	
 	/**
 	 * @var integer
 	 */
 	protected $type;
-
 	/**
-	 * @param int $question_id
+	 * @var string
 	 */
-	public function __construct($question_id = 0)
+	protected $feedback_correct;
+	/**
+	 * @var string
+	 */
+	protected $feedback_one_wrong;
+	
+	/**
+	 * @var int
+	 */
+	protected $limit_attempts = 0;
+	/**
+	 * @var int
+	 */
+	protected $is_jump_correct = 0;
+	/**
+	 * @var int
+	 */
+	protected $jump_correct_ts = 0;
+	/**
+	 * @var int
+	 */
+	protected $is_jump_wrong = 0;
+	/**
+	 * @var int
+	 */
+	protected $jump_wrong_ts = 0;
+
+	
+	/**
+	 * @param int $comment_id
+	 */
+	public function __construct($comment_id = 0)
 	{
-		if($question_id > 0)
+		if($comment_id > 0)
 		{
-			$this->setQuestionId($question_id);
+			$this->setCommentId($comment_id);
 			$this->read();
 		}
 	}
@@ -41,16 +76,47 @@ class SimpleChoiceQuestion {
 		 * @var $ilDB ilDB
 		 */
 		global $ilDB;
-		$res = $ilDB->queryF(
-					'SELECT * FROM rep_robj_xvid_question as question, rep_robj_xvid_qus_text as answers 
-								WHERE question.question_id = %s AND question.question_id = answers.question_id',
-						array('integer'),
-						array($this->getQuestionId())
+		$res = $ilDB->queryF('
+				SELECT * 
+				FROM rep_robj_xvid_question 
+				WHERE comment_id = %s', 
+				array('integer'), array($this->getCommentId())
 		);
-		$row = $ilDB->fetchAssoc($res);
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$this->setQuestionId($row['question_id']);
+			$this->setQuestionText($row['question_text']);
+			$this->setType($row['type']);
+			$this->setFeedbackCorrect($row['feedback_correct']);
+			$this->setFeedbackOneWrong($row['feedback_one_wrong']);
+			$this->setLimitAttempts($row['limit_attempts']);
+			$this->setIsJumpCorrect($row['is_jump_correct']);
+			$this->setJumpCorrectTs($row['jump_correct_ts']);
+			$this->setIsJumpWrong($row['is_jump_wrong']);
+			$this->setJumpWrongTs($row['jump_wrong_ts']);
+		}
 
+//		$this->readAnswerDefinitions();
 	}
 
+	private function readAnswerDefinitions()
+	{
+		global $ilDB;
+		
+		$res = $ilDB->queryF('
+				SELECT * 
+				FROM rep_robj_xvid_qus_text  
+				WHERE question_id = %s',
+			array('integer'), array($this->getQuestionId())
+		);
+		
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$this->answer_defs[] = $row;
+		}
+	}
+	
+	
 	public function create()
 	{
 		/**
@@ -70,12 +136,17 @@ class SimpleChoiceQuestion {
 		$ilDB->insert('rep_robj_xvid_question',
 			array(
 				'question_id'	 => array('integer', $question_id),
-				'comment_id'     => array('integer', (int) $_POST['comment_id']),
-				'type'         	 => array('integer', (int) $_POST['question_type']),
-				'question_text'  => array('text', ilUtil::stripSlashes($_POST['question_text'])),
-				'feedback_correct' => array('text', ilUtil::stripSlashes($_POST['feedback_correct'])),
-				'feedback_one_wrong' => array('text', ilUtil::stripSlashes($_POST['feedback_one_wrong']))
-			));
+				'comment_id'     => array('integer', $this->getCommentId()),
+				'type'         	 => array('integer', $this->getType()),
+				'question_text'  => array('text', $this->getQuestionText()),
+				'feedback_correct' => array('text', $this->getFeedbackCorrect()),
+				'feedback_one_wrong' => array('text', $this->getFeedbackOneWrong()),
+				'limit_attempts'	=> array('integer', $this->getLimitAttempts()),
+				'is_jump_correct'	=> array('integer', $this->getIsJumpCorrect()),
+				'jump_correct_ts'	=> array('integer', $this->getJumpCorrectTs()),
+				'is_jump_wrong'	=> array('integer', $this->getIsJumpWrong()),
+				'jump_wrong_ts'	=> array('integer', $this->getJumpWrongTs())
+				));
 		foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
 		{
 			$answer_id = $ilDB->nextId('rep_robj_xvid_qus_text');
@@ -181,21 +252,32 @@ class SimpleChoiceQuestion {
 		$question_id	= 0;
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$question_data[$counter]['answer']     	= $row['answer'];
-			$question_data[$counter]['answer_id']  	= $row['answer_id'];
-			$question_data[$counter]['correct']    	= $row['correct'];
-			$question_text						   	= $row['question_text'];
-			$question_type						   	= $row['type'];
-			$question_id							= $row['question_id'];
+			$question_data[$counter]['answer']    = $row['answer'];
+			$question_data[$counter]['answer_id'] = $row['answer_id'];
+			$question_data[$counter]['correct']   = $row['correct'];
+			$question_text                        = $row['question_text'];
+			$question_type                        = $row['type'];
+			$question_id                          = $row['question_id'];
+			$limit_attempts                       = $row['limit_attempts'];
+			$is_jump_correct                      = $row['is_jump_correct'];
+			$jump_correct_ts                      = $row['jump_correct_ts'];
+			$is_jump_wrong                        = $row['is_jump_wrong'];
+			$jump_wrong_ts                        = $row['jump_wrong_ts'];
 			$counter++;
 		}
 		$build_json = array();
 		//$build_json['title'] 		  = $question_data;
-		$build_json['answers'] 		  = $question_data;
-		$build_json['question_text']  = $question_text;
-		$build_json['type']			  = $question_type;
-		$build_json['question_id']	  = $question_id;
-		$build_json['question_title'] = $this->getCommentTitleByCommentId($cid);
+		$build_json['answers']         = $question_data;
+		$build_json['question_text']   = $question_text;
+		$build_json['type']            = $question_type;
+		$build_json['question_id']     = $question_id;
+		$build_json['question_title']  = $this->getCommentTitleByCommentId($cid);
+		$build_json['limit_attempts']  = $limit_attempts;
+		$build_json['is_jump_correct'] = $is_jump_correct;
+		$build_json['jump_correct_ts'] = $jump_correct_ts;
+		$build_json['is_jump_wrong']   = $is_jump_wrong;
+		$build_json['jump_wrong_ts']   = $jump_wrong_ts;
+		
 		return json_encode($build_json);
 	}
 
@@ -231,22 +313,15 @@ class SimpleChoiceQuestion {
 		 * @var $ilDB   ilDB
 		 */
 		global $ilDB;
-		$res = $ilDB->queryF(
-					'SELECT * FROM rep_robj_xvid_question question, rep_robj_xvid_qus_text answers 
-								WHERE question.question_id = %s AND question.question_id = answers.question_id',
-						array('integer'),
-						array((int) $qid)
-		);
 
-		$counter = 0;
-		$question_data = array();
+		$res = $ilDB->queryF('SELECT answer_id, answer, correct FROM rep_robj_xvid_qus_text WHERE question_id = %s',
+				array('integer'), array((int) $qid));
+		
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$question_data[$counter]['answer']     = $row['answer'];
-			$question_data[$counter]['answer_id']  = $row['answer_id'];
-			$question_data[$counter]['correct']    = $row['correct'];
-			$counter++;
+			$question_data[] = $row;
 		}
+		
 		return json_encode($question_data);
 	}
 
@@ -424,8 +499,8 @@ class SimpleChoiceQuestion {
 	{
 		global $ilDB;
 		$res = $ilDB->queryF(
-					'SELECT comments.comment_id as comment FROM rep_robj_xvid_comments as comments, 
-						rep_robj_xvid_question as questions, rep_robj_xvid_score as score  
+					'SELECT comments.comment_id  comment FROM rep_robj_xvid_comments  comments, 
+						rep_robj_xvid_question  questions, rep_robj_xvid_score  score  
 						WHERE comments.comment_id = questions.comment_id AND 
 						questions.question_id = score.question_id 
 						AND comments.repeat_question = 0 
@@ -666,7 +741,7 @@ class SimpleChoiceQuestion {
 
 		global $ilDB;
 		$res = $ilDB->queryF(
-					'SELECT * FROM rep_robj_xvid_question WHERE question_id = %s',
+					'SELECT question_text FROM rep_robj_xvid_question WHERE question_id = %s',
 						array('integer'),
 						array((int) $qid)
 		);
@@ -691,8 +766,19 @@ class SimpleChoiceQuestion {
 						array('integer'),
 						array((int) $qid)
 		);
-		$row = $ilDB->fetchAssoc($res);
-		return array('correct' => $row['feedback_correct'] , 'wrong' => $row['feedback_one_wrong']);
+		$data = array();
+		
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$data['limit_attempts']  = $row['limit_attempts'];
+			$data['correct']         = $row['feedback_correct'];
+			$data['is_jump_correct'] = $row['is_jump_correct'];
+			$data['jump_correct_ts'] = $row['jump_correct_ts'];
+			$data['wrong']         = $row['feedback_one_wrong'];
+			$data['is_jump_wrong'] = $row['is_jump_wrong'];
+			$data['jump_wrong_ts'] = $row['jump_wrong_ts'];
+		}
+		return $data;
 
 	}
 
@@ -803,6 +889,27 @@ class SimpleChoiceQuestion {
 			array('integer'), array($qid));
 		
 	}
+
+	/**
+	 * @param $comment_id
+	 */
+	public function deleteQuestionsIdByCommentId($comment_id)
+	{
+		global $ilDB;
+		
+		$res = $ilDB->queryF('SELECT question_id FROM rep_robj_xvid_question WHERE comment_id = %s',
+			array('integer'), array($comment_id));
+
+		$question_ids = array();
+		
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$question_ids[] = $row['question_id'];
+		}	 
+		
+		self::deleteQuestions($question_ids);
+	}
+		
 	/**
 	 * @param array $question_ids
 	 */
@@ -886,6 +993,135 @@ class SimpleChoiceQuestion {
 	public function getQuestionId()
 	{
 		return $this->question_id;
+	}
+
+
+	/**
+	 * @return int
+	 */
+	public function getLimitAttempts()
+	{
+		return $this->limit_attempts;
+	}
+
+	/**
+	 * @param int $limit_attempts
+	 */
+	public function setLimitAttempts($limit_attempts)
+	{
+		$this->limit_attempts = $limit_attempts;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getIsJumpCorrect()
+	{
+		return $this->is_jump_correct;
+	}
+
+	/**
+	 * @param int $is_jump_correct
+	 */
+	public function setIsJumpCorrect($is_jump_correct)
+	{
+		$this->is_jump_correct = $is_jump_correct;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getJumpCorrectTs()
+	{
+		return $this->jump_correct_ts;
+	}
+
+	/**
+	 * @param int $jump_correct_ts
+	 */
+	public function setJumpCorrectTs($jump_correct_ts)
+	{
+		$this->jump_correct_ts = $jump_correct_ts;
+	}
+
+	/**
+	 * @param int $is_jump_wrong
+	 */
+	public function setIsJumpWrong($is_jump_wrong)
+	{
+		$this->is_jump_wrong = $is_jump_wrong;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getIsJumpWrong()
+	{
+		return $this->is_jump_wrong;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getJumpWrongTs()
+	{
+		return $this->jump_wrong_ts;
+	}
+
+	/**
+	 * @param int $jump_wrong_ts
+	 */
+	public function setJumpWrongTs($jump_wrong_ts)
+	{
+		$this->jump_wrong_ts = $jump_wrong_ts;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getQuestionText()
+	{
+		return $this->question_text;
+	}
+
+	/**
+	 * @param string $question_text
+	 */
+	public function setQuestionText($question_text)
+	{
+		$this->question_text = $question_text;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getFeedbackCorrect()
+	{
+		return $this->feedback_correct;
+	}
+
+	/**
+	 * @param string $feedback_correct
+	 */
+	public function setFeedbackCorrect($feedback_correct)
+	{
+		$this->feedback_correct = $feedback_correct;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getFeedbackOneWrong()
+	{
+		return $this->feedback_one_wrong;
+	}
+
+	/**
+	 * @param string $feedback_one_wrong
+	 */
+	public function setFeedbackOneWrong($feedback_one_wrong)
+	{
+		$this->feedback_one_wrong = $feedback_one_wrong;
 	}
 
 } 

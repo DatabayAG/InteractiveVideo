@@ -112,6 +112,7 @@ class ilObjComment
 		global $ilDB, $ilUser;
 
 		$next_id = $ilDB->nextId('rep_robj_xvid_comments');
+		$this->setCommentId($next_id);
 		$ilDB->insert('rep_robj_xvid_comments',
 			array(
 				'comment_id'     => array('integer', $next_id),
@@ -126,16 +127,6 @@ class ilObjComment
 				'repeat_question' => array('integer', $this->getRepeatQuestion()),
 				'comment_tags'	=> array('text', $this->getCommentTags())
 			));
-		if((int) $this->isInteractive())
-		{
-			$question = new SimpleChoiceQuestion();
-			if($question->checkInput())
-			{
-				$question->deleteQuestion($next_id);
-				$_POST['comment_id'] = $next_id;
-				$question->create();
-			}
-		}
 	}
 
 	public function update()
@@ -521,4 +512,5 @@ class ilObjComment
 	{
 		$this->is_anonymized = $is_anonymized;
 	}
+
 }
