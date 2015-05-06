@@ -89,8 +89,9 @@
 #close_form{
     float: right;
 }
-#jumpToTimeInVideo{
-    margin-left:11em;
+.align_button{
+    width: 100%;
+    text-align:center;
 }
 .comment_tags{
     padding-left:3em;

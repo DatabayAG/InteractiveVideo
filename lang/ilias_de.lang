@@ -77,3 +77,4 @@ is_jump_correct#:#"Richtig"-Sprungmarke verwenden
 is_jump_wrong#:#"Falsch"-Sprungmarke verwenden
 limit_attempts#:#Versuche begrenzen
 limit_attempts_info#:#Der Benutzer darf die Frage nur einmal beantworten
+feedback_jump_text#:#Springe zu
