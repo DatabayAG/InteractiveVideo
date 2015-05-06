@@ -456,15 +456,46 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$answer = new ilCustomInputGUI($this->lng->txt('answers'), 'answer_text');
 		$answer->setHtml($this->getInteractiveForm());
 		$form->addItem($answer);
-
+		
+		// Feedback correct
 		$feedback_correct = new ilTextAreaInputGUI($this->plugin->txt('feedback_correct'), 'feedback_correct');
+		$is_jump_correct = new ilCheckboxInputGUI($this->plugin->txt('is_jump_correct'), 'is_jump_correct');
+
+		$jump_correct_ts = new ilTimeInputGUI($this->lng->txt('time'), 'jump_correct_ts');
+		$jump_correct_ts->setShowTime(true);
+		$jump_correct_ts->setShowSeconds(true);
+
+		if(isset($_POST['jump_correct_ts']))
+		{
+			$seconds = $_POST['jump_correct_ts'];
+			$time->setValueByArray(array('jump_correct_ts' => (int)$seconds));
+		}
+		$is_jump_correct->addSubItem($jump_correct_ts);
+		$feedback_correct->addSubItem($is_jump_correct);
 		$form->addItem($feedback_correct);
 
+		// Feedback wrong
 		$feedback_one_wrong = new ilTextAreaInputGUI($this->plugin->txt('feedback_one_wrong'), 'feedback_one_wrong');
-		$form->addItem($feedback_one_wrong);
+		$is_jump_wrong = new ilCheckboxInputGUI($this->plugin->txt('is_jump_wrong'), 'is_jump_wrong');
 
+		$jump_wrong_ts = new ilTimeInputGUI($this->lng->txt('time'), 'jump_wrong_ts');
+		$jump_wrong_ts->setShowTime(true);
+		$jump_wrong_ts->setShowSeconds(true);
+
+		if(isset($_POST['jump_wrong_ts']))
+		{
+			$seconds = $_POST['jump_wrong_ts'];
+			$time->setValueByArray(array('jump_correct_ts' => (int)$seconds));
+		}
+		$is_jump_wrong->addSubItem($jump_wrong_ts);
+		$feedback_one_wrong->addSubItem($is_jump_wrong);
+		$form->addItem($feedback_one_wrong);
+		
 		$repeat_question = new ilCheckboxInputGUI($this->plugin->txt('repeat_question'), 'repeat_question');
 		$form->addItem($repeat_question);
+
+		$limit_attempts = new ilCheckboxInputGUI($this->plugin->txt('limit_attempts'), 'limit_attempts');
+		$form->addItem($limit_attempts);
 		
 		$is_interactive = new ilHiddenInputGUI('is_interactive');
 		$is_interactive->setValue(1);
@@ -523,7 +554,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTime($seconds);
 			$this->objComment->setIsTutor(1);
 			$this->objComment->create();
-
+			
+			$this->performQuestionRefresh($this->objComment->getCommentId(), $form);
+			
 			ilUtil::sendSuccess($this->lng->txt('saved_successfully'));
 			return $this->editComments();
 		}
@@ -549,7 +582,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateSubTab('editComments');
 
 		$form = $this->initQuestionForm();
-
 		
 		if(isset($_GET['comment_id']))
 		{
@@ -563,10 +595,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$values['repeat_question'] = $comment_data['repeat_question'];
 
 			$question_data = $this->object->getQuestionDataById((int)$_GET['comment_id']);
-			
-			$values['question_text'] 	  = $question_data['question_data']['question_text'];
+
+			$values['question_text']      = $question_data['question_data']['question_text'];
 			$values['feedback_correct']   = $question_data['question_data']['feedback_correct'];
+			$values['is_jump_correct']    = $question_data['question_data']['is_jump_correct'];
+			$values['jump_correct_ts']    = $question_data['question_data']['jump_correct_ts'];
 			$values['feedback_one_wrong'] = $question_data['question_data']['feedback_one_wrong'];
+			$values['is_jump_wrong']      = $question_data['question_data']['is_jump_wrong'];
+			$values['jump_wrong_ts']      = $question_data['question_data']['jump_wrong_ts'];
+			$values['limit_attempts']     = $question_data['question_data']['limit_attempts'];
 			
 			$form->setValuesByArray($values);
 		}
@@ -587,7 +624,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			if($comment_id > 0)
 			{
 				$this->objComment = new ilObjComment($comment_id);
-
 			}
 			$this->objComment->setCommentText($form->getInput('question_text'));
 			$this->objComment->setInteractive((int)$form->getInput('is_interactive'));
@@ -603,28 +639,60 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTime($seconds);
 			$this->objComment->update();
 
+			$this->performQuestionRefresh($comment_id, $form);
 
-			$question = new SimpleChoiceQuestion();
-			$question_id = $question->existQuestionForCommentId($comment_id);	
-				
-			if($question->checkInput())
-			{
-				$question->deleteQuestion($question_id);
-				$question->create();
-			}
-			else
-			{
-				#$form->setValuesByPost();
-				#ilUtil::sendFailure($this->lng->txt('err_check_input'));
-				#return $this->editComment();
-			}
-
+			ilUtil::sendSuccess($this->lng->txt('saved_successfully'));
 			$this->editComments();
 		}
 		else
 		{
 			$form->setValuesByPost();
 			$this->editComment();
+		}
+	}
+
+	/**
+	 * @param $comment_id
+	 * @param $form
+	 */
+	private function performQuestionRefresh($comment_id, $form)
+	{
+		$question    = new SimpleChoiceQuestion($comment_id);
+		$question_id = $question->existQuestionForCommentId($comment_id);
+
+		if($question->checkInput())
+		{
+			$question->setCommentId($comment_id);
+			$question->setType((int)$form->getInput('question_type'));
+			$question->setQuestionText(ilUtil::stripSlashes($form->getInput('question_text')));
+			$question->setFeedbackCorrect(ilUtil::stripSlashes($form->getInput('feedback_correct')));
+				$question->setFeedbackOneWrong(ilUtil::stripSlashes($form->getInput('feedback_one_wrong')));
+				
+				$question->setLimitAttempts((int)$form->getInput('limit_attempts'));
+				$question->setIsJumpCorrect((int)$form->getInput('is_jump_correct'));
+
+				$jmp_correct_time = $form->getInput('jump_correct_ts');
+				$correct_seconds  = $jmp_correct_time['time']['h'] * 3600
+					+ $jmp_correct_time['time']['m'] * 60
+					+ $jmp_correct_time['time']['s'];
+				$question->setJumpCorrectTs($correct_seconds);
+
+				$question->setIsJumpWrong((int)$form->getInput('is_jump_wrong'));
+
+				$jmp_wrong_time = $form->getInput('jump_wrong_ts');
+				$wrong_seconds  = $jmp_wrong_time['time']['h'] * 3600
+					+ $jmp_wrong_time['time']['m'] * 60
+					+ $jmp_wrong_time['time']['s'];
+				$question->setJumpWrongTs($wrong_seconds);
+
+				$question->deleteQuestionsIdByCommentId($comment_id);
+				$question->create();
+			}
+		else
+		{
+			#$form->setValuesByPost();
+			#ilUtil::sendFailure($this->lng->txt('err_check_input'));
+			#return $this->editComment();
 		}
 	}
 	
@@ -1590,4 +1658,5 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				break;
 		}
 	}
+
 }
