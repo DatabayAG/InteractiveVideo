@@ -252,21 +252,32 @@ class SimpleChoiceQuestion {
 		$question_id	= 0;
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$question_data[$counter]['answer']     	= $row['answer'];
-			$question_data[$counter]['answer_id']  	= $row['answer_id'];
-			$question_data[$counter]['correct']    	= $row['correct'];
-			$question_text						   	= $row['question_text'];
-			$question_type						   	= $row['type'];
-			$question_id							= $row['question_id'];
+			$question_data[$counter]['answer']    = $row['answer'];
+			$question_data[$counter]['answer_id'] = $row['answer_id'];
+			$question_data[$counter]['correct']   = $row['correct'];
+			$question_text                        = $row['question_text'];
+			$question_type                        = $row['type'];
+			$question_id                          = $row['question_id'];
+			$limit_attempts                       = $row['limit_attempts'];
+			$is_jump_correct                      = $row['is_jump_correct'];
+			$jump_correct_ts                      = $row['jump_correct_ts'];
+			$is_jump_wrong                        = $row['is_jump_wrong'];
+			$jump_wrong_ts                        = $row['jump_wrong_ts'];
 			$counter++;
 		}
 		$build_json = array();
 		//$build_json['title'] 		  = $question_data;
-		$build_json['answers'] 		  = $question_data;
-		$build_json['question_text']  = $question_text;
-		$build_json['type']			  = $question_type;
-		$build_json['question_id']	  = $question_id;
-		$build_json['question_title'] = $this->getCommentTitleByCommentId($cid);
+		$build_json['answers']         = $question_data;
+		$build_json['question_text']   = $question_text;
+		$build_json['type']            = $question_type;
+		$build_json['question_id']     = $question_id;
+		$build_json['question_title']  = $this->getCommentTitleByCommentId($cid);
+		$build_json['limit_attempts']  = $limit_attempts;
+		$build_json['is_jump_correct'] = $is_jump_correct;
+		$build_json['jump_correct_ts'] = $jump_correct_ts;
+		$build_json['is_jump_wrong']   = $is_jump_wrong;
+		$build_json['jump_wrong_ts']   = $jump_wrong_ts;
+		
 		return json_encode($build_json);
 	}
 
@@ -302,22 +313,15 @@ class SimpleChoiceQuestion {
 		 * @var $ilDB   ilDB
 		 */
 		global $ilDB;
-		$res = $ilDB->queryF(
-					'SELECT * FROM rep_robj_xvid_question question, rep_robj_xvid_qus_text answers 
-								WHERE question.question_id = %s AND question.question_id = answers.question_id',
-						array('integer'),
-						array((int) $qid)
-		);
 
-		$counter = 0;
-		$question_data = array();
+		$res = $ilDB->queryF('SELECT answer_id, answer, correct FROM rep_robj_xvid_qus_text WHERE question_id = %s',
+				array('integer'), array((int) $qid));
+		
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$question_data[$counter]['answer']     = $row['answer'];
-			$question_data[$counter]['answer_id']  = $row['answer_id'];
-			$question_data[$counter]['correct']    = $row['correct'];
-			$counter++;
+			$question_data[] = $row;
 		}
+		
 		return json_encode($question_data);
 	}
 
@@ -494,8 +498,8 @@ class SimpleChoiceQuestion {
 	{
 		global $ilDB;
 		$res = $ilDB->queryF(
-					'SELECT comments.comment_id as comment FROM rep_robj_xvid_comments as comments, 
-						rep_robj_xvid_question as questions, rep_robj_xvid_score as score  
+					'SELECT comments.comment_id  comment FROM rep_robj_xvid_comments  comments, 
+						rep_robj_xvid_question  questions, rep_robj_xvid_score  score  
 						WHERE comments.comment_id = questions.comment_id AND 
 						questions.question_id = score.question_id 
 						AND comments.repeat_question = 0 
