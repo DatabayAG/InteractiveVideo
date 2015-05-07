@@ -398,4 +398,42 @@ if($ilDB->tableExists('rep_robj_xvid_comments'))
 	}
 }
 ?>
+<#16>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_question'))
+{
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'repeat_question'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_question', 'repeat_question',
+			array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => true,
+				'default' => 0
+			)
+		);
+	}
+	
+	$res = $ilDB->queryF('SELECT comment_id FROM rep_robj_xvid_comments WHERE repeat_question = %s',
+		array('integer'), array(1));
+	
+	while($row = $ilDB->fetchAssoc($res))
+	{
+		$comment_ids[] = $row['comment_id'];
+	}
+		
+	$ilDB->manipulateF('
+	UPDATE rep_robj_xvid_question 
+	SET rep_robj_xvid_question.repeat_question = %s
+	WHERE '. $ilDB->in('comment_id', $comment_ids, false, 'integer'),
+		array('integer'), array(1)) ;
+}
+?>
+<#17>
+<?php
+	if($ilDB->tableColumnExists('rep_robj_xvid_comments', 'repeat_question'))
+	{
+		$ilDB->dropTableColumn('rep_robj_xvid_comments','repeat_question');
+	}
+?>
 	

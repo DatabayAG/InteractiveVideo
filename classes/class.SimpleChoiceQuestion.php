@@ -57,7 +57,11 @@ class SimpleChoiceQuestion {
 	 */
 	protected $jump_wrong_ts = 0;
 
-	
+	/**
+	 * @var int
+	 */
+	protected $repeat_question = 0;
+
 	/**
 	 * @param int $comment_id
 	 */
@@ -94,6 +98,7 @@ class SimpleChoiceQuestion {
 			$this->setJumpCorrectTs($row['jump_correct_ts']);
 			$this->setIsJumpWrong($row['is_jump_wrong']);
 			$this->setJumpWrongTs($row['jump_wrong_ts']);
+			$this->setRepeatQuestion($row['repeat_question']);
 		}
 
 //		$this->readAnswerDefinitions();
@@ -145,7 +150,8 @@ class SimpleChoiceQuestion {
 				'is_jump_correct'	=> array('integer', $this->getIsJumpCorrect()),
 				'jump_correct_ts'	=> array('integer', $this->getJumpCorrectTs()),
 				'is_jump_wrong'	=> array('integer', $this->getIsJumpWrong()),
-				'jump_wrong_ts'	=> array('integer', $this->getJumpWrongTs())
+				'jump_wrong_ts'	=> array('integer', $this->getJumpWrongTs()),
+				'repeat_question'	=> array('integer', $this->getRepeatQuestion())
 				));
 		foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
 		{
@@ -238,11 +244,13 @@ class SimpleChoiceQuestion {
 		 * @var $ilDB   ilDB
 		 */
 		global $ilDB;
-		$res = $ilDB->queryF(
-					'SELECT * FROM rep_robj_xvid_question question, rep_robj_xvid_qus_text answers 
-								WHERE question.comment_id = %s AND question.question_id = answers.question_id',
-						array('integer'),
-						array((int) $cid)
+		$res = $ilDB->queryF('
+			SELECT * 
+			FROM  rep_robj_xvid_question question, 
+				  rep_robj_xvid_qus_text answers 
+			WHERE question.comment_id = %s 
+			AND   question.question_id = answers.question_id',
+			array('integer'), array((int) $cid)
 		);
 
 		$counter = 0;
@@ -263,6 +271,8 @@ class SimpleChoiceQuestion {
 			$jump_correct_ts                      = $row['jump_correct_ts'];
 			$is_jump_wrong                        = $row['is_jump_wrong'];
 			$jump_wrong_ts                        = $row['jump_wrong_ts'];
+			$repeat_question                      = $row['repeat_question'];
+			
 			$counter++;
 		}
 		$build_json = array();
@@ -277,6 +287,7 @@ class SimpleChoiceQuestion {
 		$build_json['jump_correct_ts'] = $jump_correct_ts;
 		$build_json['is_jump_wrong']   = $is_jump_wrong;
 		$build_json['jump_wrong_ts']   = $jump_wrong_ts;
+		$build_json['repeat_question']   = $repeat_question;
 		
 		return json_encode($build_json);
 	}
@@ -500,17 +511,18 @@ class SimpleChoiceQuestion {
 	public function getAllNonRepeatCorrectAnswerQuestion($user_id)
 	{
 		global $ilDB;
-		$res = $ilDB->queryF(
-					'SELECT comments.comment_id  comment FROM rep_robj_xvid_comments  comments, 
-						rep_robj_xvid_question  questions, rep_robj_xvid_score  score  
-						WHERE comments.comment_id = questions.comment_id AND 
-						questions.question_id = score.question_id 
-						AND comments.repeat_question = 0 
-						AND score.points = 1 
-						AND score.user_id = %s'
-						,
-						array('integer'),
-						array((int) $user_id)
+		$res = $ilDB->queryF('
+			SELECT comments.comment_id  comment 
+			FROM rep_robj_xvid_comments comments, 
+				rep_robj_xvid_question  questions, 
+				rep_robj_xvid_score  score  
+			WHERE comments.comment_id = questions.comment_id 
+			AND questions.question_id = score.question_id 
+			AND questions.repeat_question = %s 
+			AND score.points = %s 
+			AND score.user_id = %s',
+			array('integer', 'integer', 'integer'),
+			array(0, 1, (int)$user_id)
 		);
 		$results = array();
 		while($row = $ilDB->fetchAssoc($res))
@@ -947,6 +959,39 @@ class SimpleChoiceQuestion {
 		
 		
 	}
+
+	/**
+	 * @param $comment_id
+	 */
+	public static function isRepeatQuestionEnabled($comment_id)
+	{
+		global $ilDB;
+		$res = $ilDB->queryF('SELECT repeat_question FROM rep_robj_xvid_question WHERE comment_id = %s',
+			array('integer'), array($comment_id));
+
+		$row = $ilDB->fetchAssoc($res);
+
+		return (bool)$row['repeat_question'];
+	}
+	
+	public static function existUserAnswer($comment_id)
+	{
+		global $ilUser, $ilDB;
+		
+		$res = $ilDB->queryF('
+			SELECT * FROM rep_robj_xvid_answers ans
+			INNER JOIN rep_robj_xvid_question qst on ans.question_id = qst.question_id 
+			WHERE comment_id = %s 
+			AND user_id = %s
+			',
+			array('integer', 'integer'), array($comment_id, $ilUser->getId()));
+		
+		if($ilDB->numRows($res) > 0)
+		{
+			return true;
+		}
+		return false;	
+	}	
 	
 	/**
 	 * @return int
@@ -1139,6 +1184,22 @@ class SimpleChoiceQuestion {
 	public function setFeedbackOneWrong($feedback_one_wrong)
 	{
 		$this->feedback_one_wrong = $feedback_one_wrong;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getRepeatQuestion()
+	{
+		return $this->repeat_question;
+	}
+
+	/**
+	 * @param int $repeat_question
+	 */
+	public function setRepeatQuestion($repeat_question)
+	{
+		$this->repeat_question = $repeat_question;
 	}
 
 } 

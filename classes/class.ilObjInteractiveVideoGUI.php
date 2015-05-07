@@ -141,11 +141,22 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	public function getQuestionPerAjax()
 	{
-		$tpl_json = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
 		$simple_choice = new SimpleChoiceQuestion();
-		$tpl_json->setVariable('JSON', $simple_choice->getJsonForCommentId((int) $_GET['comment_id']));
-		$tpl_json->show("DEFAULT", false, true );
-		exit();
+
+		$existUserAnswer = SimpleChoiceQuestion::existUserAnswer((int)$_GET['comment_id']);
+		
+		$is_repeat_question = SimpleChoiceQuestion::isRepeatQuestionEnabled((int)$_GET['comment_id']);
+		
+		if($is_repeat_question == true 
+		|| ($is_repeat_question == false && $existUserAnswer() == false))
+		{
+			$tpl_json      = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
+			
+			$tpl_json->setVariable('JSON', $simple_choice->getJsonForCommentId((int)$_GET['comment_id']));
+			$tpl_json->show("DEFAULT", false, true);
+			exit();
+		}
+		return;
 	}
 
 	public function postAnswerPerAjax()
@@ -571,7 +582,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setInteractive(1);
 
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
-			$this->objComment->setRepeatQuestion((int)$form->getInput('repeat_question'));
 			$this->objComment->setIsPrivate(0);
 
 			// calculate seconds
@@ -620,7 +630,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$values['is_interactive']  = $comment_data['is_interactive'];
 			$values['comment_title']   = $comment_data['comment_title'];
 			$values['comment_tags']    = $comment_data['comment_tags'];
-			$values['repeat_question'] = $comment_data['repeat_question'];
 
 			$question_data = $this->object->getQuestionDataById((int)$_GET['comment_id']);
 
@@ -632,6 +641,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$values['is_jump_wrong']      = $question_data['question_data']['is_jump_wrong'];
 			$values['jump_wrong_ts']      = $question_data['question_data']['jump_wrong_ts'];
 			$values['limit_attempts']     = $question_data['question_data']['limit_attempts'];
+			$values['repeat_question'] 	  = $question_data['question_data']['repeat_question'];
 			
 			$form->setValuesByArray($values);
 		}
@@ -655,9 +665,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 			$this->objComment->setCommentText($form->getInput('question_text'));
 			$this->objComment->setInteractive((int)$form->getInput('is_interactive'));
-//			$this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
-			$this->objComment->setRepeatQuestion((int)$form->getInput('repeat_question'));
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
@@ -690,29 +698,30 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		if($question->checkInput())
 		{
-			$question->setCommentId($comment_id);
-			$question->setType((int)$form->getInput('question_type'));
-			$question->setQuestionText(ilUtil::stripSlashes($form->getInput('question_text')));
-			$question->setFeedbackCorrect(ilUtil::stripSlashes($form->getInput('feedback_correct')));
+				$question->setCommentId($comment_id);
+				$question->setType((int)$form->getInput('question_type'));
+				$question->setQuestionText(ilUtil::stripSlashes($form->getInput('question_text')));
+				$question->setFeedbackCorrect(ilUtil::stripSlashes($form->getInput('feedback_correct')));
 				$question->setFeedbackOneWrong(ilUtil::stripSlashes($form->getInput('feedback_one_wrong')));
 				
 				$question->setLimitAttempts((int)$form->getInput('limit_attempts'));
 				$question->setIsJumpCorrect((int)$form->getInput('is_jump_correct'));
-
+				
 				$jmp_correct_time = $form->getInput('jump_correct_ts');
 				$correct_seconds  = $jmp_correct_time['time']['h'] * 3600
-					+ $jmp_correct_time['time']['m'] * 60
-					+ $jmp_correct_time['time']['s'];
+				+ $jmp_correct_time['time']['m'] * 60
+				+ $jmp_correct_time['time']['s'];
 				$question->setJumpCorrectTs($correct_seconds);
-
+				
 				$question->setIsJumpWrong((int)$form->getInput('is_jump_wrong'));
-
+				
 				$jmp_wrong_time = $form->getInput('jump_wrong_ts');
 				$wrong_seconds  = $jmp_wrong_time['time']['h'] * 3600
-					+ $jmp_wrong_time['time']['m'] * 60
-					+ $jmp_wrong_time['time']['s'];
+				+ $jmp_wrong_time['time']['m'] * 60
+				+ $jmp_wrong_time['time']['s'];
 				$question->setJumpWrongTs($wrong_seconds);
-
+				
+				$question->setRepeatQuestion((int)$form->getInput('repeat_question'));
 				$question->deleteQuestionsIdByCommentId($comment_id);
 				$question->create();
 			}
@@ -749,7 +758,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			
 			$this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
-			$this->objComment->setRepeatQuestion((int)$form->getInput('repeat_question'));
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
 
 			// calculate seconds
@@ -838,7 +846,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$values['is_interactive']  = $comment_data['is_interactive'];
 			$values['comment_title']   = $comment_data['comment_title'];
 			$values['comment_tags']    = $comment_data['comment_tags'];
-			$values['repeat_question'] = $comment_data['repeat_question'];
 			$values['is_private'] = $comment_data['is_private'];
 			
 	
@@ -930,7 +937,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setInteractive((int)$form->getInput('is_interactive'));
 			$this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
-			$this->objComment->setRepeatQuestion((int)$form->getInput('repeat_question'));
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
 
 			// calculate seconds
