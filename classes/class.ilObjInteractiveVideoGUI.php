@@ -150,11 +150,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	public function postAnswerPerAjax()
 	{
-		
-		
-		$answer = is_array($_POST['answer']) ? ilUtil::stripSlashesRecursive($_POST['answer']) : array();
-		$simple_choice = new SimpleChoiceQuestion();
-		$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
+		if(SimpleChoiceQuestion::isLimitAttemptsEnabled((int)$_POST['qid']) == false)
+		{
+			$answer = is_array($_POST['answer']) ? ilUtil::stripSlashesRecursive($_POST['answer']) : array();
+			$simple_choice = new SimpleChoiceQuestion();
+			$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
+		}
 		$this->showFeedbackPerAjax();
 		exit();
 	}
@@ -162,14 +163,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function showFeedbackPerAjax()
 	{
 		$tpl_json = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
+		$simple_choice = new SimpleChoiceQuestion();
+		$feedback      = $simple_choice->getFeedbackForQuestion($_POST['qid']);
+		//Todo: get time if feddback has one
+		$tpl_json->setVariable('JSON', $feedback);
 		
-		if(SimpleChoiceQuestion::isLimitAttemptsEnabled((int)$_POST['qid']) == false)
-		{
-			$simple_choice = new SimpleChoiceQuestion();
-			$feedback      = $simple_choice->getFeedbackForQuestion($_POST['qid']);
-			//Todo: get time if feddback has one
-			$tpl_json->setVariable('JSON', $feedback);
-		}	
 		return $tpl_json->show("DEFAULT", false, true );
 	}
 	
