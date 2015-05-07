@@ -66,12 +66,12 @@ $.fn.appendSingleListener = function() {
 
 $.fn.appendMultiListener = function() {
 	$('.text_field').on('blur', function (){
-		var pos = parseInt($(this).attr('meta'), 10)
+		var pos = parseInt($(this).attr('meta'), 10);
 		IVQuestionCreator.JSON[pos].answer = $(this).val();
 	});
 
 	$('.correct_solution').on('click', function (){
-		var pos = parseInt($(this).attr('meta'), 10)
+		var pos = parseInt($(this).attr('meta'), 10);
 		var bool= 0;
 		if($(this).attr('checked'))
 		{
