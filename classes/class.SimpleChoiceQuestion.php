@@ -467,32 +467,25 @@ class SimpleChoiceQuestion {
 		$score = $this->getScoreForQuestion($qid);	
 		$feedback = $this->getFeedbackByQuestionId($qid);
 		$json = array();
-		if(is_array($feedback) && $feedback['correct'] !== null )
+		if(is_array($feedback))
 		{
 			if($score === 0)
 			{
-				$json['html'] 	  = '<div class="wrong">'.$feedback['wrong'].'</div>';//$feedback['one_wrong'];
+				if($feedback['wrong'] === null)
+				{
+					$feedback['wrong'] = '';
+				}
+				$json['html'] 	  = '<div class="wrong">'.$feedback['wrong'].'</div>';
 				$json['is_timed'] = $feedback['is_jump_wrong'];
 				$json['time'] 	  = $feedback['jump_wrong_ts'];
 			}
 			else
 			{
-				$json['html'] 	  = '<div class="correct">'.$feedback['correct'].'</div>';//$feedback['correct'];
-				$json['is_timed'] = $feedback['is_jump_correct'];
-				$json['time'] 	  = $feedback['jump_correct_ts'];
-			}
-		}
-		else
-		{
-			if($score === 0)
-			{
-				$json['html'] = '<div class="wrong"><div>';
-				$json['is_timed'] = $feedback['is_jump_wrong'];
-				$json['time'] 	  = $feedback['jump_wrong_ts'];
-			}
-			else
-			{
-				$json['html'] = '<div class="correct"><div>';
+				if($feedback['correct'] === null)
+				{
+					$feedback['correct'] = '';
+				}
+				$json['html'] 	  = '<div class="correct">'.$feedback['correct'].'</div>';
 				$json['is_timed'] = $feedback['is_jump_correct'];
 				$json['time'] 	  = $feedback['jump_correct_ts'];
 			}
