@@ -47,10 +47,6 @@ class ilObjComment
 	 */
 	protected $comment_title = '';
 
-	/**
-	 * @var int
-	 */
-	protected $repeat_question = 0;
 
 	/**
 	 * @var string
@@ -104,7 +100,6 @@ class ilObjComment
 		$this->setIsTutor((bool)$row['is_tutor']);
 		$this->setUserId($row['user_id']);
 		$this->setCommentTitle($row['comment_title']);
-		$this->setRepeatQuestion($row['repeat_question']);
 		$this->setCommentTags($row['comment_tags']);
 		$this->setIsPrivate($row['is_private']);
 	}
@@ -130,7 +125,6 @@ class ilObjComment
 				'comment_time'   => array('integer', round($this->getCommentTime(), 0)),
 				'comment_text'   => array('text', $this->getCommentText()),
 				'comment_title'	=> array('text', $this->getCommentTitle()),
-				'repeat_question' => array('integer', $this->getRepeatQuestion()),
 				'comment_tags'	=> array('text', $this->getCommentTags()),
 				'is_private'	=> array('integer', $this->getIsPrivate())
 			));
@@ -150,7 +144,6 @@ class ilObjComment
 				'comment_time'   => array('integer', round($this->getCommentTime(), 2)),
 				'comment_text'   => array('text', $this->getCommentText()),
 				'comment_title'	=> array('text', $this->getCommentTitle()),
-				'repeat_question' => array('integer', $this->getRepeatQuestion()),
 				'comment_tags'	=> array('text', $this->getCommentTags()),
 				'is_private'	=> array('integer', $this->getIsPrivate())
 			),
@@ -305,6 +298,7 @@ class ilObjComment
 
 		return self::$user_name_cache[$user_id];
 	}
+
 	
 	################## SETTER & GETTER ##################
 	/**
@@ -435,22 +429,7 @@ class ilObjComment
 		$this->comment_tags = $comment_tags;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getRepeatQuestion()
-	{
-		return $this->repeat_question;
-	}
-
-	/**
-	 * @param int $repeat_question
-	 */
-	public function setRepeatQuestion($repeat_question)
-	{
-		$this->repeat_question = $repeat_question;
-	}
-
+	
 	/**
 	 * @return string
 	 */
