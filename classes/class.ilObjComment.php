@@ -61,6 +61,11 @@ class ilObjComment
 	 * @var array
 	 */
 	protected $comments = array();
+
+	/**
+	 * @var int
+	 */
+	protected $is_private = 0;
 	
 	protected $is_public = 0;
 	protected $is_anonymized = 0;
@@ -101,6 +106,7 @@ class ilObjComment
 		$this->setCommentTitle($row['comment_title']);
 		$this->setRepeatQuestion($row['repeat_question']);
 		$this->setCommentTags($row['comment_tags']);
+		$this->setIsPrivate($row['is_private']);
 	}
 
 	public function create()
@@ -125,7 +131,8 @@ class ilObjComment
 				'comment_text'   => array('text', $this->getCommentText()),
 				'comment_title'	=> array('text', $this->getCommentTitle()),
 				'repeat_question' => array('integer', $this->getRepeatQuestion()),
-				'comment_tags'	=> array('text', $this->getCommentTags())
+				'comment_tags'	=> array('text', $this->getCommentTags()),
+				'is_private'	=> array('integer', $this->getIsPrivate())
 			));
 	}
 
@@ -144,7 +151,8 @@ class ilObjComment
 				'comment_text'   => array('text', $this->getCommentText()),
 				'comment_title'	=> array('text', $this->getCommentTitle()),
 				'repeat_question' => array('integer', $this->getRepeatQuestion()),
-				'comment_tags'	=> array('text', $this->getCommentTags())
+				'comment_tags'	=> array('text', $this->getCommentTags()),
+				'is_private'	=> array('integer', $this->getIsPrivate())
 			),
 			array(
 				'comment_id' => array('integer', $this->getCommentId())
@@ -167,32 +175,6 @@ class ilObjComment
 		$ilDB->manipulate('DELETE FROM rep_robj_xvid_comments WHERE ' . $ilDB->in('comment_id', $comment_ids, false, 'integer'));
 	}
 
-	public function getCommentsTableData()
-	{
-		global $ilDB;
-
-		$res = $ilDB->queryF('
-			SELECT * FROM rep_robj_xvid_comments 
-			WHERE obj_id = %s
-			ORDER BY comment_time ASC',
-			array('integer'), array($this->getObjId()));
-
-		$counter    = 0;
-		$table_data = array();
-		while($row = $ilDB->fetchAssoc($res))
-		{
-			$table_data[$counter]['comment_id']     = $row['comment_id'];
-			$table_data[$counter]['comment_time']   = $row['comment_time'];
-			$table_data[$counter]['user_id']        = $row['user_id'];
-			$table_data[$counter]['comment_text']   = $row['comment_text'];
-			$table_data[$counter]['is_tutor']       = $row['is_tutor'];
-			$table_data[$counter]['is_interactive'] = $row['is_interactive'];
-			$counter++;
-		}
-
-		return $table_data;
-
-	}
 
 	/**
 	 * @return array
@@ -229,8 +211,8 @@ class ilObjComment
 		 */
 		global $ilDB;
 
-		$query_types = array('integer');
-		$query_data = array($this->getObjId());
+		$query_types = array('integer','integer');
+		$query_data = array($this->getObjId(), 0);
 		
 		$where_condition = '';
 	
@@ -245,7 +227,8 @@ class ilObjComment
 		$res = $ilDB->queryF(
 			'SELECT comment_id, user_id, comment_text, comment_time, is_interactive, comment_title, comment_tags
 			FROM rep_robj_xvid_comments
-			WHERE obj_id = %s'.
+			WHERE obj_id = %s 
+			AND is_private = %s'.
 			$where_condition.'
 			ORDER BY comment_time, comment_id ASC',
 			$query_types,
@@ -267,6 +250,7 @@ class ilObjComment
 			$comments[$i]['comment_time'] = $row['comment_time'];
 			$comments[$i]['comment_tags'] = $row['comment_tags'];
 			$comments[$i]['is_interactive'] = $row['is_interactive'];
+			$comments[$i]['is_private'] = $row['is_private'];
 
 			$i++;
 		}
@@ -279,15 +263,16 @@ class ilObjComment
 		/**
 		 * @var $ilDB ilDB
 		 */
-		global $ilDB;
+		global $ilDB, $ilUser;
 
 		$res = $ilDB->queryF(
-			'SELECT comment_id, user_id, comment_text, comment_time, is_interactive
+			'SELECT comment_id, user_id, comment_text, comment_time, is_interactive, is_private
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s
+			AND ( is_private = %s OR (is_private = %s AND user_id = %s))
 			ORDER BY comment_time, comment_id ASC',
-			array('integer'),
-			array($this->getObjId())
+			array('integer', 'integer', 'integer', 'integer'),
+			array($this->getObjId(), 0, 1, $ilUser->getId())
 		);
 
 		$comments = array();
@@ -299,6 +284,7 @@ class ilObjComment
 			$comments[$i]['comment_text'] = $row['comment_text'];
 			$comments[$i]['comment_time'] = $row['comment_time'];
 			$comments[$i]['is_interactive'] = $row['is_interactive'];
+			$comments[$i]['is_private'] = $row['is_private'];
 			
 			$i++;
 		}
@@ -481,6 +467,24 @@ class ilObjComment
 		$this->comment_title = $comment_title;
 	}
 
+	/**
+	 * @return int
+	 */
+	public function getIsPrivate()
+	{
+		return $this->is_private;
+	}
+
+	/**
+	 * @param int $is_private
+	 */
+	public function setIsPrivate($is_private)
+	{
+		$this->is_private = $is_private;
+	}
+
+	
+	
 	/**
 	 * @return int
 	 */

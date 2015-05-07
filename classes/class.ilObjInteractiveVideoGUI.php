@@ -150,20 +150,24 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	public function postAnswerPerAjax()
 	{
-		$answer = is_array($_POST['answer']) ? ilUtil::stripSlashesRecursive($_POST['answer']) : array();
-		$simple_choice = new SimpleChoiceQuestion();
-		$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
+		if(SimpleChoiceQuestion::isLimitAttemptsEnabled((int)$_POST['qid']) == false)
+		{
+			$answer = is_array($_POST['answer']) ? ilUtil::stripSlashesRecursive($_POST['answer']) : array();
+			$simple_choice = new SimpleChoiceQuestion();
+			$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
+		}
 		$this->showFeedbackPerAjax();
 		exit();
 	}
 
 	public function showFeedbackPerAjax()
 	{
-		$simple_choice = new SimpleChoiceQuestion();
-		$feedback = $simple_choice->getFeedbackForQuestion($_POST['qid']);
 		$tpl_json = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
+		$simple_choice = new SimpleChoiceQuestion();
+		$feedback      = $simple_choice->getFeedbackForQuestion($_POST['qid']);
 		//Todo: get time if feddback has one
 		$tpl_json->setVariable('JSON', $feedback);
+		
 		return $tpl_json->show("DEFAULT", false, true );
 	}
 	
@@ -200,6 +204,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$stop_points = $this->objComment->getStopPoints();
 		$comments = $this->objComment->getContentComments();
 		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
+		$video_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
+		
 		$video_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
 		$video_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
 
@@ -266,6 +272,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment->setUserId($ilUser->getId());
 		$comment->setCommentText(trim(ilUtil::stripSlashes($_POST['comment_text'])));
 		$comment->setCommentTime((float)$_POST['comment_time']);
+		
+		if($ilUser->getId() == ANONYMOUS_USER_ID)
+		{
+			// NO private-flag for Anonymous!!
+			$comment->setIsPrivate(0);
+		}
+		else
+		{		
+			$comment->setIsPrivate((int)$_POST['is_private']);
+		}
 		$comment->create();
 		exit();
 	}
@@ -352,6 +368,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	private function initCommentForm()
 	{
+		global $ilUser;
+		
 		$form = new ilPropertyFormGUI();
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
 		$form->setTitle($this->plugin->txt('insert_comment'));
@@ -386,6 +404,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tags = new ilTextAreaInputGUI($this->plugin->txt('tags'), 'comment_tags');
 		$form->addItem($tags);
 		
+		if($ilUser->getId() != ANONYMOUS_USER_ID)
+		{
+			$is_private = new ilCheckboxInputGUI($this->plugin->txt('is_private_comment'), 'is_private');
+			$form->addItem($is_private);
+		}
 		return $form;
 	}
 
@@ -494,9 +517,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($feedback_one_wrong);
 		
 		$repeat_question = new ilCheckboxInputGUI($this->plugin->txt('repeat_question'), 'repeat_question');
+		$repeat_question->setInfo($this->plugin->txt('repeat_question_info'));
 		$form->addItem($repeat_question);
 
 		$limit_attempts = new ilCheckboxInputGUI($this->plugin->txt('limit_attempts'), 'limit_attempts');
+		$limit_attempts->setInfo($this->plugin->txt('limit_attempts_info'));
 		$form->addItem($limit_attempts);
 		
 		$is_interactive = new ilHiddenInputGUI('is_interactive');
@@ -547,6 +572,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
 			$this->objComment->setRepeatQuestion((int)$form->getInput('repeat_question'));
+			$this->objComment->setIsPrivate(0);
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
@@ -724,6 +750,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
 			$this->objComment->setRepeatQuestion((int)$form->getInput('repeat_question'));
+			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
@@ -732,6 +759,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				+ $comment_time['time']['s'];
 			$this->objComment->setCommentTime($seconds);
 			$this->objComment->setIsTutor($is_tutor);
+			
 			$this->objComment->create();
 
 			ilUtil::sendSuccess($this->lng->txt('saved_successfully'));
@@ -783,6 +811,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$values['comment_time']   = $comment_data['comment_time'];
 			$values['comment_text']   = $comment_data['comment_text'];
 			$values['is_interactive'] = $comment_data['is_interactive'];
+			$values['is_private']	  = $comment_data['is_private'];	
 
 			$form->setValuesByArray($values, true);
 		}
@@ -810,6 +839,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$values['comment_title']   = $comment_data['comment_title'];
 			$values['comment_tags']    = $comment_data['comment_tags'];
 			$values['repeat_question'] = $comment_data['repeat_question'];
+			$values['is_private'] = $comment_data['is_private'];
+			
 	
 			$ilTabs->activateTab('editComments');
 			$form = $this->initCommentForm();
@@ -900,6 +931,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
 			$this->objComment->setRepeatQuestion((int)$form->getInput('repeat_question'));
+			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
@@ -1046,6 +1078,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 			$this->objComment->setCommentText($form->getInput('comment_text'));
 			$this->objComment->setInteractive(0);
+			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');

@@ -80,4 +80,6 @@ is_jump_correct#:#Use 'Correct'-Jump Label
 is_jump_wrong#:#"Use 'Wrong'-Jump Label
 limit_attempts#:#Limit attempts
 limit_attempts_info#:#If enabled the user only can answer a question once.
+is_private_comment#:#Private Comment
 feedback_jump_text#:#Jump To
+repeat_question_info#:#The question will be displayed again

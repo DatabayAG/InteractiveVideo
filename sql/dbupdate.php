@@ -383,3 +383,19 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 	}
 }
 ?>
+<#15>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_comments'))
+{
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_comments', 'is_private'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_comments', 'is_private',
+			array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => true,
+				'default' => 0));
+	}
+}
+?>
+	

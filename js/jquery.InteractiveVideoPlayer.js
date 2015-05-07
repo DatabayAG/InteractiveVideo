@@ -6,7 +6,8 @@ $( document ).ready(function() {
 				'comment_time': $("video#ilInteractiveVideo")[0].currentTime,
 				'comment_text': $('#comment_text').val(),
 				'user_name': username,
-				'is_interactive': '0'
+				'is_interactive': '0',
+				'is_private': $('#is_private').val()
 			};
 		$().sliceCommentAndStopPointsInCorrectPostion(tmp_obj, tmp_obj.comment_time);
 		
@@ -17,7 +18,7 @@ $( document ).ready(function() {
 			type     : "POST",
 			dataType : "JSON",
 			url      : post_comment_url,
-			data     : {"comment_time":$("video#ilInteractiveVideo")[0].currentTime, "comment_text": $('#comment_text').val()},
+			data     : {"comment_time":$("video#ilInteractiveVideo")[0].currentTime, "comment_text": $('#comment_text').val(), 'is_private': $('#is_private').val()},
 			success  : function(data) {
 				console.log("ok");
 				$('#comment_text').val("");

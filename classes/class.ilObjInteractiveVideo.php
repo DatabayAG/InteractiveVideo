@@ -207,8 +207,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$res = $ilDB->queryF('
 			SELECT * FROM rep_robj_xvid_comments 
 			WHERE obj_id = %s
+			AND is_private = %s
 			ORDER BY comment_time ASC',
-			array('integer'), array($this->getId()));
+			array('integer', 'integer'), array($this->getId(),0));
 
 		$counter    = 0;
 		$table_data = array();
@@ -248,6 +249,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 			$table_data[$counter]['comment_time']   = $row['comment_time'];
 			$table_data[$counter]['user_id']        = $row['user_id'];
 			$table_data[$counter]['comment_text']   = $row['comment_text'];
+			$table_data[$counter]['is_private'] 	= $row['is_private'];
 //			$table_data[$counter]['is_tutor']       = $row['is_tutor'];
 //			$table_data[$counter]['is_interactive'] = $row['is_interactive'];
 			$counter++;

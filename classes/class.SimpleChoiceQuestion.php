@@ -940,6 +940,21 @@ class SimpleChoiceQuestion {
 		$ilDB->manipulate('DELETE FROM rep_robj_xvid_score WHERE '. $ilDB->in('question_id', $question_ids, false, 'integer'));
 	}
 	
+	
+	public static function isLimitAttemptsEnabled($question_id)
+	{
+		global $ilDB;
+		
+		$res = $ilDB->queryF('SELECT limit_attempts FROM rep_robj_xvid_question WHERE question_id = %s',
+			array('integer'), array($question_id));
+		
+		$row = $ilDB->fetchAssoc($res);
+		
+		return (bool)$row['limit_attemps'];
+		
+		
+	}
+	
 	/**
 	 * @return int
 	 */

@@ -52,6 +52,10 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			
 //			$this->addCommandButton('showTutorInsertCommentForm', $this->lng->txt('insert'));
 		}
+		else
+		{
+			$this->addColumn($a_parent_obj->plugin->txt('is_private_comment'), 'is_private');
+		}
 		$this->addColumn($this->lng->txt('actions'), 'actions', '10%');
 
 		$this->setSelectAllCheckbox('comment_id');
