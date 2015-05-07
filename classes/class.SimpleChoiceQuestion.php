@@ -954,8 +954,7 @@ class SimpleChoiceQuestion {
 			array('integer'), array($question_id));
 		
 		$row = $ilDB->fetchAssoc($res);
-		
-		return (bool)$row['limit_attemps'];
+		return (bool)$row['limit_attempts'];
 		
 		
 	}

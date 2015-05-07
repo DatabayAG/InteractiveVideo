@@ -148,7 +148,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_repeat_question = SimpleChoiceQuestion::isRepeatQuestionEnabled((int)$_GET['comment_id']);
 		
 		if($is_repeat_question == true 
-		|| ($is_repeat_question == false && $existUserAnswer() == false))
+		|| ($is_repeat_question == false && $existUserAnswer == false))
 		{
 			$tpl_json      = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
 			

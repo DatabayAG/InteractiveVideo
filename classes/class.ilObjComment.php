@@ -212,13 +212,13 @@ class ilObjComment
 		if(!$this->isPublic())
 		{
 			global $ilUser;
-			$where_condition = ' AND user_id = %s OR is_tutor = %s OR is_interactive = %s ';
+			$where_condition = ' AND (user_id = %s OR is_tutor = %s OR is_interactive = %s )';
 			$query_types = array_merge($query_types, array('integer', 'integer', 'integer'));
 			$query_data = array_merge($query_data, array($ilUser->getId(), 1, 1));
 		}
 		
 		$res = $ilDB->queryF(
-			'SELECT comment_id, user_id, comment_text, comment_time, is_interactive, comment_title, comment_tags
+			'SELECT comment_id, user_id, comment_text, comment_time, is_interactive, comment_title, comment_tags, obj_id
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s 
 			AND is_private = %s'.
