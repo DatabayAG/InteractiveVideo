@@ -1,10 +1,14 @@
 var IVQV = {};
+//Todo remove temp variables
+var question_not_answered = true;
+var question_tries = 1;
 
 $.fn.getQuestionPerAjax = function(comment_id, player) {
 	$.when(
 		$.ajax({url: question_get_url + '&comment_id=' + comment_id,
 				type: 'GET', dataType: 'json'})
 		).then(function (array) {
+			//Todo get answerd state of question also if question can be answered multiple times 
 			IVQV = array;
 			IVQV.player = player;
 			$().buildQuestionForm();
@@ -51,34 +55,55 @@ $.fn.addFeedbackDiv = function() {
 };
 
 $.fn.addButtons = function() {
-	$('#question_form').append('<input id="sendForm" class="btn btn-default btn-sm" type="submit" value="' + send_text + '">');
-	$('#question_form').append('<input id="close_form" class="btn btn-default btn-sm" type="submit" value="' + close_text + '">');
+	var question_form = $('#question_form');
+	question_form.append($().createButtonButtons('sendForm',send_text));
+	question_form.append($().createButtonButtons('close_form',close_text));
+	if( question_tries >= 1 && question_not_answered === false )
+	{
+		$('#sendForm').attr('disabled', 'true');
+	}
 	$().appendButtonListener();
 };
 
 $.fn.showFeedback = function(feedback) {
 	var modal = $('.modal_feedback');
 	modal.html('');
-	modal.html(feedback);
+	modal.html(feedback.html);
+	if( feedback.is_timed == 1 )
+	{
+		modal.append('<div class="align_button">' + $().createButtonButtons('jumpToTimeInVideo',feedback_button_text) + '</div>');
+		$('#jumpToTimeInVideo').on('click',function(e){
+			$('#ilQuestionModal').modal('hide');
+			$().jumpToTimeInVideo(feedback.time);
+		});
+	}
 };
 
 $.fn.appendButtonListener = function() {
 	$('#question_form').on('submit',function(e){
 		e.preventDefault();
-		$().debugPrinter('IVQV Ajax', $(this).serialize());
-		$.ajax({
-			type     : "POST",
-			cache    : false,
-			url      : question_post_url,
-			data     : $(this).serialize(),
-			success  : function(data) {
-				//$('#ilQuestionModal').modal('hide');
-				 $().showFeedback(data);
-				//IVQV.player.play();
-			}
-		});
+		if( question_tries >= 1 && question_not_answered === true )
+		{
+			$().debugPrinter('IVQV Ajax', $(this).serialize());
+			$.ajax({
+				type     : "POST",
+				cache    : false,
+				url      : question_post_url,
+				data     : $(this).serialize(),
+				success  : function(feedback) {
+					var obj = JSON.parse(feedback);
+					$().showFeedback(obj);
+				}
+			});
+		}
 	});
+		
 	$('#close_form').on('click',function(e){
 		$('#ilQuestionModal').modal('hide');
+		$().resumeVideo();
 	});
+};
+
+$.fn.createButtonButtons = function(id, value) {
+	return '<input id="' + id + '" class="btn btn-default btn-sm" type="submit" value="' + value + '">';
 };

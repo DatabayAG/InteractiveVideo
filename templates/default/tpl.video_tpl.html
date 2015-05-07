@@ -39,15 +39,21 @@
 		var post_comment_url 	= "{POST_COMMENT_URL}";
 		var send_text			= "{SEND_BUTTON}";
 		var close_text			= "{CLOSE_BUTTON}";
+		var feedback_button_text= "{FEEDBACK_JUMP_TEXT}";
 		var comments 			= {COMMENTS};
 		var stopPoints 			= {STOP_POINTS};
 		var ignore_questions	= {IGNORE_QUESTIONS};
 		var username			= "{USERNAME}";
 		var seekTime			= 0;
-		var iv_debug			= false;
+		var InteractiveVideo 	= 
+		{
+			auto_resume	: false,
+			iv_debug	: false
+		}
+				
 		$.fn.debugPrinter = function (message, element)
 		{
-			if( iv_debug )
+			if( InteractiveVideo.iv_debug )
 			{
 				console.log(message + ': ');
 				console.log(element);

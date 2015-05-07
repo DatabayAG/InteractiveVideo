@@ -162,6 +162,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$simple_choice = new SimpleChoiceQuestion();
 		$feedback = $simple_choice->getFeedbackForQuestion($_POST['qid']);
 		$tpl_json = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
+		//Todo: get time if feddback has one
 		$tpl_json->setVariable('JSON', $feedback);
 		return $tpl_json->show("DEFAULT", false, true );
 	}
@@ -228,6 +229,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postComment', '', true, false));
 		$video_tpl->setVariable('SEND_BUTTON', $this->plugin->txt('send'));
 		$video_tpl->setVariable('CLOSE_BUTTON', $this->plugin->txt('close'));
+		$video_tpl->setVariable('FEEDBACK_JUMP_TEXT', $this->plugin->txt('feedback_jump_text'));
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoPlayer.js');
 		$tpl->setContent($video_tpl->get());

@@ -89,6 +89,10 @@
 #close_form{
     float: right;
 }
+.align_button{
+    width: 100%;
+    text-align:center;
+}
 .comment_tags{
     padding-left:3em;
 }

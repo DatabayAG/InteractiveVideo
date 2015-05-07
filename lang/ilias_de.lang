@@ -78,3 +78,4 @@ is_jump_wrong#:#"Falsch"-Sprungmarke verwenden
 limit_attempts#:#Versuche begrenzen
 limit_attempts_info#:#Der Benutzer darf die Frage nur einmal beantworten
 is_private_comment#:#Privater Kommentar
+feedback_jump_text#:#Springe zu
