@@ -146,12 +146,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$existUserAnswer = SimpleChoiceQuestion::existUserAnswer((int)$_GET['comment_id']);
 		
 		$is_repeat_question = SimpleChoiceQuestion::isRepeatQuestionEnabled((int)$_GET['comment_id']);
-		
+		$tpl_json      = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
 		if($is_repeat_question == true 
 		|| ($is_repeat_question == false && $existUserAnswer == false))
 		{
-			$tpl_json      = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
-			
 			$tpl_json->setVariable('JSON', $simple_choice->getJsonForCommentId((int)$_GET['comment_id']));
 			$tpl_json->show("DEFAULT", false, true);
 			exit();
@@ -176,9 +174,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl_json = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
 		$simple_choice = new SimpleChoiceQuestion();
 		$feedback      = $simple_choice->getFeedbackForQuestion($_POST['qid']);
-		//Todo: get time if feddback has one
-		$tpl_json->setVariable('JSON', $feedback);
-		
+		$tpl_json->setVariable('JSON', $feedback);	
 		return $tpl_json->show("DEFAULT", false, true );
 	}
 	

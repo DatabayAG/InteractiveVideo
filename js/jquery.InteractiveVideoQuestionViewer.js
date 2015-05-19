@@ -1,7 +1,4 @@
 var IVQV = {};
-//Todo remove temp variables
-var question_not_answered = true;
-var question_tries = 1;
 
 $.fn.getQuestionPerAjax = function(comment_id, player) {
 	$.when(
@@ -58,10 +55,6 @@ $.fn.addButtons = function() {
 	var question_form = $('#question_form');
 	question_form.append($().createButtonButtons('sendForm',send_text));
 	question_form.append($().createButtonButtons('close_form',close_text));
-	if( question_tries >= 1 && question_not_answered === false )
-	{
-		$('#sendForm').attr('disabled', 'true');
-	}
 	$().appendButtonListener();
 };
 
@@ -82,8 +75,6 @@ $.fn.showFeedback = function(feedback) {
 $.fn.appendButtonListener = function() {
 	$('#question_form').on('submit',function(e){
 		e.preventDefault();
-		if( question_tries >= 1 && question_not_answered === true )
-		{
 			$().debugPrinter('IVQV Ajax', $(this).serialize());
 			$.ajax({
 				type     : "POST",
@@ -95,7 +86,6 @@ $.fn.appendButtonListener = function() {
 					$().showFeedback(obj);
 				}
 			});
-		}
 	});
 		
 	$('#close_form').on('click',function(e){
