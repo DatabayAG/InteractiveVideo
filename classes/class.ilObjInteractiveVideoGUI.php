@@ -1255,9 +1255,23 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tbl_data = $simple->getMyPoints($this->obj_id);
 		$this->plugin->includeClass('class.SimpleChoiceQuestionsUserTableGUI.php');
 		$tbl = new SimpleChoiceQuestionsUserTableGUI($this, 'showMyResults');
-
 		$tbl->setData($tbl_data);
 		$tpl->setContent($tbl->getHTML());
+	}
+
+	public function showCompleteOverviewOverAllResults()
+	{
+		global $tpl, $ilTabs;
+
+		$this->setSubTabs('editComments');
+
+		$ilTabs->activateTab('editComments');
+		$ilTabs->activateSubTab('showCompleteOverviewOverAllResults');
+		$this->plugin->includeClass('class.SimpleChoiceQuestionsCompleteUserTableGUI.php');
+		$tbl = new SimpleChoiceQuestionsCompleteUserTableGUI($this, 'showCompleteResults');
+		$tbl->setData($tbl_data);
+		$tpl->setContent($tbl->getHTML());
+
 	}
 	
 	public function confirmDeleteUserResults()
@@ -1687,10 +1701,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				}
 				$ilTabs->addSubTab('editMyComments', $this->plugin->txt('my_comments'),$this->ctrl->getLinkTarget($this,'editMyComments'));
 				$ilTabs->addSubTab('showMyResults', $this->plugin->txt('show_my_results'), $this->ctrl->getLinkTarget($this, 'showMyResults'));
+				
 				if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
 				{
 					$ilTabs->addSubTab('showResults', $this->plugin->txt('user_results'), $this->ctrl->getLinkTarget($this, 'showResults'));
 					$ilTabs->addSubTab('showQuestionsResults', $this->plugin->txt('question_results'), $this->ctrl->getLinkTarget($this, 'showQuestionsResults'));
+					$ilTabs->addSubTab('showCompleteOverviewOverAllResults', $this->plugin->txt('dummy_complete_results'), $this->ctrl->getLinkTarget($this, 'showCompleteOverviewOverAllResults'));
 				}
 				break;
 		}
