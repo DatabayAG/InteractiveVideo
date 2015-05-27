@@ -9,6 +9,7 @@ require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionAjaxHandler.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionScoring.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionStatistics.php');
 /**
@@ -144,7 +145,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	public function getQuestionPerAjax()
 	{
-		$simple_choice = new SimpleChoiceQuestion();
+		$ajax_object = new SimpleChoiceQuestionAjaxHandler();
 
 		$existUserAnswer = SimpleChoiceQuestion::existUserAnswer((int)$_GET['comment_id']);
 		
@@ -153,7 +154,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($is_repeat_question == true 
 		|| ($is_repeat_question == false && $existUserAnswer == false))
 		{
-			$tpl_json->setVariable('JSON', $simple_choice->getJsonForCommentId((int)$_GET['comment_id']));
+			$tpl_json->setVariable('JSON', $ajax_object->getJsonForCommentId((int)$_GET['comment_id']));
 			$tpl_json->show("DEFAULT", false, true);
 			exit();
 		}
@@ -175,8 +176,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function showFeedbackPerAjax()
 	{
 		$tpl_json = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
-		$simple_choice = new SimpleChoiceQuestionScoring();
-		$feedback      = $simple_choice->getFeedbackForQuestion($_POST['qid']);
+		$ajax_object   = new SimpleChoiceQuestionAjaxHandler();
+		$feedback      = $ajax_object->getFeedbackForQuestion($_POST['qid']);
 		$tpl_json->setVariable('JSON', $feedback);	
 		return $tpl_json->show("DEFAULT", false, true );
 	}
@@ -877,11 +878,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function getAnswerDefinitionsJSON()
 	{
 		$simple_choice = new SimpleChoiceQuestion();
+        $ajax_object   = new SimpleChoiceQuestionAjaxHandler();
 		$question_id = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
 		$question = new ilTemplate("tpl.simple_questions.html", true, true, $this->plugin->getDirectory());
 		if($question_id > 0)
 		{
-			$question->setVariable('JSON', $simple_choice->getJsonForQuestionId($question_id));
+			$question->setVariable('JSON', $ajax_object->getJsonForQuestionId($question_id));
 			$question->setVariable('QUESTION_TYPE', $simple_choice->getTypeByQuestionId($question_id));
 		}
 		else
@@ -898,6 +900,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionCreator.js');
 		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
 		$simple_choice = new SimpleChoiceQuestion();
+        $ajax_object   = new SimpleChoiceQuestionAjaxHandler();
 		$question_id = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
 		$question = new ilTemplate("tpl.simple_questions.html", true, true, $this->plugin->getDirectory());
 		
@@ -905,7 +908,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question->setVariable('CORRECT_SOLUTION', 	$this->plugin->txt('correct_solution'));
 		if($question_id > 0)
 		{
-			$question->setVariable('JSON', $simple_choice->getJsonForQuestionId($question_id));
+			$question->setVariable('JSON', $ajax_object->getJsonForQuestionId($question_id));
 			$question->setVariable('QUESTION_TYPE', $simple_choice->getTypeByQuestionId($question_id));
 			$question->setVariable('QUESTION_TEXT', $simple_choice->getQuestionTextQuestionId($question_id));
 		}

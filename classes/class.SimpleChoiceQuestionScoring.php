@@ -34,41 +34,6 @@ class SimpleChoiceQuestionScoring {
 
     /**
      * @param int $qid question_id
-     * @return string
-     */
-    public function getFeedbackForQuestion($qid)
-    {
-        $score    = $this->getScoreForQuestionOnUserId($qid);
-        $feedback = $this->getFeedbackByQuestionId($qid);
-        $json     = array();
-        if(is_array($feedback))
-        {
-            if($score === 0)
-            {
-                if($feedback['wrong'] === null)
-                {
-                    $feedback['wrong'] = '';
-                }
-                $json['html']     = '<div class="wrong">' . $feedback['wrong'] . '</div>';
-                $json['is_timed'] = $feedback['is_jump_wrong'];
-                $json['time']     = $feedback['jump_wrong_ts'];
-            }
-            else
-            {
-                if($feedback['correct'] === null)
-                {
-                    $feedback['correct'] = '';
-                }
-                $json['html']     = '<div class="correct">' . $feedback['correct'] . '</div>';
-                $json['is_timed'] = $feedback['is_jump_correct'];
-                $json['time']     = $feedback['jump_correct_ts'];
-            }
-        }
-        return json_encode($json);
-    }
-
-    /**
-     * @param int $qid question_id
      * @return array
      */
     public function getFeedbackByQuestionId($qid)
