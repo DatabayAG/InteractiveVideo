@@ -9,6 +9,8 @@ require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionScoring.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionStatistics.php');
 /**
  * Class ilObjInteractiveVideoGUI
  * @author               Nadia Ahmad <nahmad@databay.de>
@@ -173,7 +175,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function showFeedbackPerAjax()
 	{
 		$tpl_json = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
-		$simple_choice = new SimpleChoiceQuestion();
+		$simple_choice = new SimpleChoiceQuestionScoring();
 		$feedback      = $simple_choice->getFeedbackForQuestion($_POST['qid']);
 		$tpl_json->setVariable('JSON', $feedback);	
 		return $tpl_json->show("DEFAULT", false, true );
@@ -1235,7 +1237,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('showResults');
 
-		$simple = new SimpleChoiceQuestion();
+		$simple = new SimpleChoiceQuestionStatistics();
 		$tbl_data = $simple->getPointsForUsers($this->obj_id);
 		$this->plugin->includeClass('class.SimpleChoiceQuestionsTableGUI.php');
 		$tbl = new SimpleChoiceQuestionsTableGUI($this, 'showResults');
@@ -1253,7 +1255,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('showMyResults');
 
-		$simple = new SimpleChoiceQuestion();
+		$simple = new SimpleChoiceQuestionScoring();
 		$tbl_data = $simple->getMyPoints($this->obj_id);
 		$this->plugin->includeClass('class.SimpleChoiceQuestionsUserTableGUI.php');
 		$tbl = new SimpleChoiceQuestionsUserTableGUI($this, 'showMyResults');
@@ -1270,7 +1272,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('showCompleteOverviewOverAllResults');
 		$this->plugin->includeClass('class.SimpleChoiceQuestionsCompleteUserTableGUI.php');
-        $simple = new SimpleChoiceQuestion();
+        $simple = new SimpleChoiceQuestionStatistics();
         $data = $simple->getScoreForAllQuestionsAndAllUser($this->obj_id);
 		$tbl = new SimpleChoiceQuestionsCompleteUserTableGUI($this, 'showCompleteResults', $data['question']);
 		$tbl_data = $data['users'];
@@ -1355,7 +1357,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('showQuestionsResults');
 
-		$simple = new SimpleChoiceQuestion();
+		$simple = new SimpleChoiceQuestionStatistics();
 		$tbl_data = $simple->getQuestionsOverview($this->obj_id);
 		$this->plugin->includeClass('class.SimpleChoiceQuestionsOverviewTableGUI.php');
 		$tbl = new SimpleChoiceQuestionsOverviewTableGUI($this, 'showQuestionsResults');
@@ -1721,7 +1723,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     {
         
         global $lng;
-        $simple = new SimpleChoiceQuestion();
+        $simple = new SimpleChoiceQuestionStatistics();
         $data = $simple->getScoreForAllQuestionsAndAllUser($this->obj_id);
        
         $csv = array();
