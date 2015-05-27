@@ -59,7 +59,7 @@ $.fn.createQuestionForm = function() {
 };
 
 $.fn.appendSingleListener = function() {
-	$('.question_type').on('change', function (){
+	$('#question_type').on('change', function (){
 		IVQuestionCreator.type = parseInt($(this).val(),10);
 	});
 };

@@ -83,3 +83,7 @@ limit_attempts_info#:#If enabled the user only can answer a question once.
 is_private_comment#:#Private Comment
 feedback_jump_text#:#Jump To
 repeat_question_info#:#The question will be displayed again
+sum#:#Sum
+answered#:#Answered
+csv_export#:#CSV Export
+complete_question_results#:#Complete Question Results Overview

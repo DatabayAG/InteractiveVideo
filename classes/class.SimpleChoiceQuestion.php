@@ -130,14 +130,14 @@ class SimpleChoiceQuestion {
 		 */
 		global $ilDB;
 		$question_id = $ilDB->nextId('rep_robj_xvid_question');
-		if((int) $_POST['type'] === 0)
+		/*if((int) $_POST['type'] === 0)
 		{
 			$this->setType(self::SINGLE_CHOICE);
 		}
 		else
 		{
 			$this->setType(self::MULTIPLE_CHOICE);
-		}
+		}*/
 		$ilDB->insert('rep_robj_xvid_question',
 			array(
 				'question_id'	 => array('integer', $question_id),
@@ -374,6 +374,32 @@ class SimpleChoiceQuestion {
 		return (int) $row['count'];
 	}
 
+    /**
+     * @param $oid object_id
+     * @return array
+     */
+    public function getQuestionIdsForObject($oid)
+    {
+        global $ilDB;
+        $result_set = array();
+        $res = $ilDB->queryF(
+            'SELECT question_id, comment_title FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
+					 WHERE comments.comment_id = questions.comment_id AND  is_interactive = 1 AND obj_id = %s ORDER BY question_id',
+            array('integer'),
+            array((int) $oid)
+        );
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            $title = $row['comment_title'];
+            if( $title == null )
+            {
+                $title = $row['question_id'];
+            }
+            $result_set[$row['question_id']] = $title;
+        }
+        return $result_set;
+    }
+    
 	public function getAnsweredQuestionsFromUser($oid, $uid)
 	{
 		global $ilDB;
@@ -389,6 +415,63 @@ class SimpleChoiceQuestion {
 		return (int) $row['count'];
 	}
 
+	public function getScoreForAllQuestionsAndAllUser($oid)
+	{
+		$questions_list = $this->getQuestionIdsForObject($oid);
+        $questions_count= $this->getQuestionCountForObject($oid);
+        /**
+         * @var $ilDB   ilDB
+         */
+
+        global $ilDB, $ilUser;
+        $res     = $ilDB->queryF('
+			SELECT score.user_id, points,questions.question_id  
+			FROM 	rep_robj_xvid_comments comments, 
+				 	rep_robj_xvid_question questions, 
+				 	rep_robj_xvid_score score  
+			WHERE 	comments.comment_id   = questions.comment_id 
+			AND 	questions.question_id = score.question_id 
+			AND 	obj_id = %s  ORDER BY question_id',
+            array('integer'), array((int)$oid)
+        );
+        $return_value = array('users' => array(), 'question' => array());
+        $return_sums  = array();
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            $name = $ilUser->_lookupFullname($row['user_id']);
+            $id   = $row['user_id'];
+            $return_value['users'][$id]['name']     = $name;
+            if( !isset($return_sums[$id]['answered']))
+            {
+                $return_sums[$id]['answered'] = 0;
+                $return_sums[$id]['sum']      = 0;
+            }
+            foreach($questions_list as $key => $value)
+            {
+                if($key == $row['question_id'])
+                {
+                    $points = $row['points'];
+                    $return_sums[$id]['answered'] ++;
+                    $return_sums[$id]['sum']      += $points;
+                    $return_value['users'][$id][$key]      = $points;
+                    $return_value['question'][$key]        = $value;
+
+                }
+                if( !isset($return_value['users'][$id][$key]) )
+                {
+                    $return_value['users'][$id][$key] = '-';
+                }
+            }
+        }
+
+        foreach( $return_sums as $key => $value )
+        {
+            $return_value['users'][$key]['answerd'] = $value['answered'] . '/' . $questions_count;
+            $return_value['users'][$key]['sum']     = $value['sum'] . '/' . $questions_count;
+        }
+        return $return_value;
+	}
+	
 	/**
 	 * @param int $oid object_id
 	 * @return array
@@ -445,12 +528,12 @@ class SimpleChoiceQuestion {
 		return $results;
 
 	}
-
+    
 	/**
 	 * @param int $qid question_id
 	 * @return int
 	 */
-	public function getScoreForQuestion($qid)
+	public function getScoreForQuestionOnUserId($qid)
 	{
 		/**
 		 * @var $ilDB   ilDB
@@ -475,7 +558,7 @@ class SimpleChoiceQuestion {
 	 */
 	public function getFeedbackForQuestion($qid)
 	{
-		$score = $this->getScoreForQuestion($qid);	
+		$score = $this->getScoreForQuestionOnUserId($qid);	
 		$feedback = $this->getFeedbackByQuestionId($qid);
 		$json = array();
 		if(is_array($feedback))
@@ -615,7 +698,7 @@ class SimpleChoiceQuestion {
 			{
 				$results[$counter]['answered'] 	= 1;
 				$answered_questions++;
-				$question_points = self::getScoreForQuestion($row['question_id']);
+				$question_points = self::getScoreForQuestionOnUserId($row['question_id']);
 				if($question_points > 0)
 				{
 					$results[$counter]['points'] 	=  round(($answered[$row['question_id']] / $question_points) * 100, 2);

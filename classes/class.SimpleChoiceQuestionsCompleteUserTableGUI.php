@@ -15,7 +15,7 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI{
 	 * @param ilObjectGUI $a_parent_obj
 	 * @param string      $a_parent_cmd
 	 */
-	public function __construct($a_parent_obj, $a_parent_cmd)
+	public function __construct($a_parent_obj, $a_parent_cmd, $colum_head)
 	{
 		/**
 		 * @var $ilCtrl ilCtrl
@@ -26,25 +26,19 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI{
 
 		$this->setId('xvid_questions_' . $a_parent_obj->object->getId());
 		parent::__construct($a_parent_obj, $a_parent_cmd);
-
-		$this->setFormAction($this->ctrl->getFormAction($a_parent_obj, $a_parent_cmd));
-		$this->setDefaultOrderDirection('ASC');
-		$this->setDefaultOrderField('cid');
-
-		$this->setTitle($a_parent_obj->plugin->txt('question_results'));
-		$this->setRowTemplate('tpl.row_questions.html', $a_parent_obj->plugin->getDirectory());
+        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj, $a_parent_cmd));
+		$this->setTitle($a_parent_obj->plugin->txt('complete_question_results'));
 		$this->setRowTemplate('tpl.dynamic_question_row.html', $a_parent_obj->plugin->getDirectory());
-		$bla = array('1','2','3', 'dfasdf', 'dasfgadsf', 'dsfasdf');
-		$this->addColumn('', 'user_id');
-		$this->addColumn($lng->txt('name'), 'name');
-		foreach($bla as $value)
-		{
-			$this->addColumn($value,  'VAL');
-		}
-		$this->setSelectAllCheckbox('user_id');
-		$this->addMultiCommand('confirmDeleteQuestionsResults', $this->lng->txt('delete'));
-
+        $this->addCommandButton('completeCsvExport', $a_parent_obj->plugin->txt('csv_export'));
+        $this->addColumn( $lng->txt('name'));
+        foreach($colum_head as $key => $value)
+        {
+            $this->addColumn($value);
+        }
+        $this->addColumn( $a_parent_obj->plugin->txt('answered'));
+        $this->addColumn( $a_parent_obj->plugin->txt('sum'));
 		$this->setShowRowsSelector(false);
+
 	}
 
 	/**
@@ -70,12 +64,13 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI{
 		$current_selection_list = new ilAdvancedSelectionListGUI();
 		$current_selection_list->setListTitle($this->lng->txt('actions'));
 		$current_selection_list->setId('act_' . $row['user_id']);
+        foreach($row as $key => $value)
+        {
+            $this->tpl->setCurrentBlock('dynamic_table_column');
+            $this->tpl->setVariable('VAL', $value);
+            $this->tpl->parseCurrentBlock();
+        }
 
-		$this->tpl->setVariable('QUESTION_ID', ilUtil::formCheckbox(0, 'question_id[]', $row['question_id']));
-		$this->tpl->setVariable('COMMENT_TITLE', $row['comment_title']);
-		$this->tpl->setVariable('USER_ANSWERED', $row['answered']);
-		$this->tpl->setVariable('USER_ANSWERED_CORRECT', $row['correct']);
-		$this->tpl->setVariable('PERCENTAGE', $row['percentage']);
 		$this->ctrl->setParameter($this->parent_obj, 'user_id', $row['user_id']);
 	}
 }

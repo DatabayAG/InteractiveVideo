@@ -100,8 +100,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					case 'deleteComment': 
 					case 'editComments':  
 				    case 'editQuestion': 
-				    case 'insertQuestion': 
-						$this->checkPermission('write');
+				    case 'insertQuestion':
+                    case 'completeCsvExport':
+                    $this->checkPermission('write');
 						$this->$cmd();
 						break;
 
@@ -480,7 +481,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question_text = new ilTextAreaInputGUI($this->plugin->txt('question_text'), 'question_text');
 		$form->addItem($question_text);
 
-		$question_type = new ilSelectInputGUI($this->plugin->txt('question_type'));
+		$question_type = new ilSelectInputGUI($this->plugin->txt('question_type'), 'question_type');
 		$type_options = array(0 => $this->plugin->txt('single_choice'), 1 => $this->plugin->txt('multiple_choice'));
 		$question_type->setOptions($type_options);
 		$form->addItem($question_type);
@@ -630,6 +631,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$question_data = $this->object->getQuestionDataById((int)$_GET['comment_id']);
 
 			$values['question_text']      = $question_data['question_data']['question_text'];
+            $values['question_type']      = $question_data['question_data']['type'];
 			$values['feedback_correct']   = $question_data['question_data']['feedback_correct'];
 			$values['is_jump_correct']    = $question_data['question_data']['is_jump_correct'];
 			$values['jump_correct_ts']    = $question_data['question_data']['jump_correct_ts'];
@@ -1268,7 +1270,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('showCompleteOverviewOverAllResults');
 		$this->plugin->includeClass('class.SimpleChoiceQuestionsCompleteUserTableGUI.php');
-		$tbl = new SimpleChoiceQuestionsCompleteUserTableGUI($this, 'showCompleteResults');
+        $simple = new SimpleChoiceQuestion();
+        $data = $simple->getScoreForAllQuestionsAndAllUser($this->obj_id);
+		$tbl = new SimpleChoiceQuestionsCompleteUserTableGUI($this, 'showCompleteResults', $data['question']);
+		$tbl_data = $data['users'];
 		$tbl->setData($tbl_data);
 		$tpl->setContent($tbl->getHTML());
 
@@ -1706,10 +1711,45 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				{
 					$ilTabs->addSubTab('showResults', $this->plugin->txt('user_results'), $this->ctrl->getLinkTarget($this, 'showResults'));
 					$ilTabs->addSubTab('showQuestionsResults', $this->plugin->txt('question_results'), $this->ctrl->getLinkTarget($this, 'showQuestionsResults'));
-					$ilTabs->addSubTab('showCompleteOverviewOverAllResults', $this->plugin->txt('dummy_complete_results'), $this->ctrl->getLinkTarget($this, 'showCompleteOverviewOverAllResults'));
+					$ilTabs->addSubTab('showCompleteOverviewOverAllResults', $this->plugin->txt('complete_question_results'), $this->ctrl->getLinkTarget($this, 'showCompleteOverviewOverAllResults'));
 				}
 				break;
 		}
 	}
 
+    public function completeCsvExport()
+    {
+        
+        global $lng;
+        $simple = new SimpleChoiceQuestion();
+        $data = $simple->getScoreForAllQuestionsAndAllUser($this->obj_id);
+       
+        $csv = array();
+        $separator = ";";
+
+        $head_row = array();
+        array_push($head_row, $lng->txt('name'));
+        foreach ($data['question'] as $key => $row)
+        {
+            array_push($head_row, trim($row, '"'));
+        }
+        array_push($head_row, $this->plugin->txt('answered') );
+        array_push($head_row, $this->plugin->txt('sum'));
+        array_push($csv, ilUtil::processCSVRow($head_row, TRUE, $separator) );
+        foreach ($data['users'] as $key => $row)
+        {
+            $csvrow = array();
+            foreach ( $row as $type => $value)
+            {
+                array_push($csvrow, trim($value, '"'));
+            }
+            array_push($csv, ilUtil::processCSVRow($csvrow, TRUE, $separator));
+        }
+        $csvoutput = "";
+        foreach ($csv as $row)
+        {
+            $csvoutput .= join($row, $separator) . "\n";
+        }
+        ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
+    }
 }
