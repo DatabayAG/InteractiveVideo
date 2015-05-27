@@ -48,20 +48,8 @@ class SimpleChoiceQuestionScoring {
             array('integer'),
             array((int)$qid)
         );
-        $data = array();
-
-        while($row = $ilDB->fetchAssoc($res))
-        {
-            $data['limit_attempts']  = $row['limit_attempts'];
-            $data['correct']         = $row['feedback_correct'];
-            $data['is_jump_correct'] = $row['is_jump_correct'];
-            $data['jump_correct_ts'] = $row['jump_correct_ts'];
-            $data['wrong']           = $row['feedback_one_wrong'];
-            $data['is_jump_wrong']   = $row['is_jump_wrong'];
-            $data['jump_wrong_ts']   = $row['jump_wrong_ts'];
-        }
-        return $data;
-
+        
+        return $ilDB->fetchAssoc($res);
     }
     
     /**
@@ -89,8 +77,7 @@ class SimpleChoiceQuestionScoring {
             $answered[$row['question_id']] = $row['points'];
         }
 
-        $res                = $ilDB->queryF('
-			SELECT * FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
+        $res = $ilDB->queryF('SELECT * FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
 					 WHERE comments.comment_id = questions.comment_id AND  is_interactive = 1 AND obj_id = %s',
             array('integer'), array($oid)
         );
