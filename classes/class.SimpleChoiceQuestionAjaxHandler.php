@@ -27,7 +27,7 @@ class SimpleChoiceQuestionAjaxHandler {
                 {
                     $feedback['wrong'] = '';
                 }
-                $json['html']     = '<div class="wrong">' . $feedback['wrong'] . '</div>';
+                $json['html']     = '<div class="wrong">' . $feedback['feedback_one_wrong'] . '</div>';
                 $json['is_timed'] = $feedback['is_jump_wrong'];
                 $json['time']     = $feedback['jump_wrong_ts'];
             }
@@ -37,7 +37,7 @@ class SimpleChoiceQuestionAjaxHandler {
                 {
                     $feedback['correct'] = '';
                 }
-                $json['html']     = '<div class="correct">' . $feedback['correct'] . '</div>';
+                $json['html']     = '<div class="correct">' . $feedback['feedback_correct'] . '</div>';
                 $json['is_timed'] = $feedback['is_jump_correct'];
                 $json['time']     = $feedback['jump_correct_ts'];
             }
