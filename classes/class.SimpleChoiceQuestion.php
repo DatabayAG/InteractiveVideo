@@ -50,18 +50,22 @@ class SimpleChoiceQuestion
      * @var int
      */
     protected $limit_attempts = 0;
+    
     /**
      * @var int
      */
     protected $is_jump_correct = 0;
+    
     /**
      * @var int
      */
     protected $jump_correct_ts = 0;
+    
     /**
      * @var int
      */
     protected $is_jump_wrong = 0;
+    
     /**
      * @var int
      */
@@ -153,9 +157,9 @@ class SimpleChoiceQuestion
                 'question_id'        => array('integer', $question_id),
                 'comment_id'         => array('integer', $this->getCommentId()),
                 'type'               => array('integer', $this->getType()),
-                'question_text'      => array('text', $this->getQuestionText()),
-                'feedback_correct'   => array('text', $this->getFeedbackCorrect()),
-                'feedback_one_wrong' => array('text', $this->getFeedbackOneWrong()),
+                'question_text'      => array('text',    $this->getQuestionText()),
+                'feedback_correct'   => array('text',    $this->getFeedbackCorrect()),
+                'feedback_one_wrong' => array('text',    $this->getFeedbackOneWrong()),
                 'limit_attempts'     => array('integer', $this->getLimitAttempts()),
                 'is_jump_correct'    => array('integer', $this->getIsJumpCorrect()),
                 'jump_correct_ts'    => array('integer', $this->getJumpCorrectTs()),

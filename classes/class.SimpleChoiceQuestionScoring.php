@@ -1,11 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: gvollbach
- * Date: 27.05.15
- * Time: 15:06
- */
-
+/* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 class SimpleChoiceQuestionScoring {
 
 

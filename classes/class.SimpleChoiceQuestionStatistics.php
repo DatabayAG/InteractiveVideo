@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: gvollbach
- * Date: 27.05.15
- * Time: 14:55
- */
+/* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 class SimpleChoiceQuestionStatistics {
 
@@ -113,6 +108,7 @@ class SimpleChoiceQuestionStatistics {
                 if(!isset($return_value['users'][$id][$key]))
                 {
                     $return_value['users'][$id][$key] = '-';
+                    $return_value['question'][$key]   = $value;
                 }
             }
         }
