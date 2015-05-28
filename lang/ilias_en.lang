@@ -77,7 +77,7 @@ is_public_info#:#If enabled all users are able to read all comments, otherwise t
 correct_answered#:#Correct answered
 show_my_results#:#My Results
 is_jump_correct#:#Use 'Correct'-Jump Label
-is_jump_wrong#:#"Use 'Wrong'-Jump Label
+is_jump_wrong#:#Use 'Wrong'-Jump Label
 limit_attempts#:#Limit attempts
 limit_attempts_info#:#If enabled the user only can answer a question once.
 is_private_comment#:#Private Comment
