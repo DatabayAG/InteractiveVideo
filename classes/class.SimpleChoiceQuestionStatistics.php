@@ -66,7 +66,7 @@ class SimpleChoiceQuestionStatistics {
     public function getScoreForAllQuestionsAndAllUser($oid)
     {
         $questions_list  = $this->getQuestionIdsForObject($oid);
-        $questions_count = $this->getQuestionCountForObject($oid);
+        //$questions_count = $this->getQuestionCountForObject($oid);
         /**
          * @var $ilDB   ilDB
          */
@@ -115,8 +115,8 @@ class SimpleChoiceQuestionStatistics {
 
         foreach($return_sums as $key => $value)
         {
-            $return_value['users'][$key]['answerd'] = $value['answered'] . '/' . $questions_count;
-            $return_value['users'][$key]['sum']     = $value['sum'] . '/' . $questions_count;
+            $return_value['users'][$key]['answerd'] = $value['answered'];
+            $return_value['users'][$key]['sum']     = $value['sum'];
         }
         return $return_value;
     }
