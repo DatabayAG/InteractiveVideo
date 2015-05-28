@@ -3,6 +3,7 @@
 
 require_once 'Services/Repository/classes/class.ilObjectPlugin.php';
 require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
+require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
 
 /**
