@@ -185,7 +185,7 @@ $.fn.buildListElement = function (comment, time, username, counter)
 												if (comments[i].is_interactive == 1 && $.inArray(comments[i].comment_id, ignore_questions) == -1) 
 												{
 													stop_video = 1;
-													$().getQuestionPerAjax(comments[i].comment_id, player);
+													InteractiveVideoQuestionViewer.getQuestionPerAjax(comments[i].comment_id, player);
 												}
 												else
 												{
