@@ -87,7 +87,7 @@ $.fn.resumeVideo = function ()
 
 };
 
-$.fn.buildListElement = function (comment, time, username)
+$.fn.buildListElement = function (comment, time, username, counter)
 {
 	var comment_tags = '';
 	if(comment.comment_title == null)
@@ -106,7 +106,7 @@ $.fn.buildListElement = function (comment, time, username)
 	{
 		username = '[' + username + ']';
 	}
-	return '<li>' + 
+	return '<li class="list_item_' + counter + '">' + 
 				'<time class="time">'+ mejs.Utility.secondsToTimeCode(time)  + '</time> '  + 
 		   		'<span class="comment_username"> ' + username                + '</span> '  +
 				'<span class="comment_title">' 	   + comment.comment_title   + '</span> '  +
@@ -180,12 +180,16 @@ $.fn.buildListElement = function (comment, time, username)
 											{
 												if(comments[i].comment_text != null)
 												{
-													$("#ul_scroll").prepend($().buildListElement(comments[i], media.currentTime, username));
+													$("#ul_scroll").prepend($().buildListElement(comments[i], media.currentTime, username, i));
 												}
 												if (comments[i].is_interactive == 1 && $.inArray(comments[i].comment_id, ignore_questions) == -1) 
 												{
 													stop_video = 1;
 													$().getQuestionPerAjax(comments[i].comment_id, player);
+												}
+												else
+												{
+													$('.list_item_' + i).find('.comment_text').append(' ' + answered_text);
 												}
 											}
 										}
