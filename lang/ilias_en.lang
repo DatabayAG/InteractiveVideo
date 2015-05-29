@@ -74,7 +74,7 @@ is_anonymized#:#Anonymize Comments
 is_anonymized_info#:#If enabled all comments are shown without usernames 
 is_public#:#Publish All Comments
 is_public_info#:#If enabled all users are able to read all comments, otherwise they are only able to see their own comments
-correct_answered#:#Correct answered
+correct_answered#:#Answered correctly
 show_my_results#:#My Results
 is_jump_correct#:#Use 'Correct'-Jump Label
 is_jump_wrong#:#Use 'Wrong'-Jump Label
@@ -87,3 +87,4 @@ sum#:#Sum
 answered#:#Answered
 csv_export#:#CSV Export
 complete_question_results#:#Complete Question Results Overview
+feedback#:#Feedback

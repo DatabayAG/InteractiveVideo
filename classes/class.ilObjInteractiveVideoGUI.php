@@ -404,6 +404,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$form->addItem($time);
 
+		if($ilUser->getId() != ANONYMOUS_USER_ID)
+		{
+			$is_private = new ilCheckboxInputGUI($this->plugin->txt('is_private_comment'), 'is_private');
+			$form->addItem($is_private);
+		}
+		
 		$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($this->plugin->txt('comment'));
 		$form->addItem($section_header);
@@ -415,11 +421,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tags = new ilTextAreaInputGUI($this->plugin->txt('tags'), 'comment_tags');
 		$form->addItem($tags);
 		
-		if($ilUser->getId() != ANONYMOUS_USER_ID)
-		{
-			$is_private = new ilCheckboxInputGUI($this->plugin->txt('is_private_comment'), 'is_private');
-			$form->addItem($is_private);
-		}
 		return $form;
 	}
 
@@ -457,7 +458,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form = new ilPropertyFormGUI();
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertQuestion'));
 		$form->setTitle($this->plugin->txt('insert_question'));
-
+		
 		$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($this->plugin->txt('general'));
 		$form->addItem($section_header);
@@ -477,22 +478,36 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$form->addItem($time);
 
+		$repeat_question = new ilCheckboxInputGUI($this->plugin->txt('repeat_question'), 'repeat_question');
+		$repeat_question->setInfo($this->plugin->txt('repeat_question_info'));
+		$form->addItem($repeat_question);
+
+		$limit_attempts = new ilCheckboxInputGUI($this->plugin->txt('limit_attempts'), 'limit_attempts');
+		$limit_attempts->setInfo($this->plugin->txt('limit_attempts_info'));
+		$form->addItem($limit_attempts);
+		
 		$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($this->plugin->txt('question'));
 		$form->addItem($section_header);
 		
-		$question_text = new ilTextAreaInputGUI($this->plugin->txt('question_text'), 'question_text');
-		$form->addItem($question_text);
-
 		$question_type = new ilSelectInputGUI($this->plugin->txt('question_type'), 'question_type');
 		$type_options = array(0 => $this->plugin->txt('single_choice'), 1 => $this->plugin->txt('multiple_choice'));
 		$question_type->setOptions($type_options);
 		$form->addItem($question_type);
+		
+		$question_text = new ilTextAreaInputGUI($this->plugin->txt('question_text'), 'question_text');
+		$form->addItem($question_text);
 
 		$answer = new ilCustomInputGUI($this->lng->txt('answers'), 'answer_text');
 		$answer->setHtml($this->getInteractiveForm());
 		$form->addItem($answer);
 		
+		//New Section: Feedback
+
+		$section_header = new ilFormSectionHeaderGUI();
+		$section_header->setTitle($this->plugin->txt('feedback'));
+		$form->addItem($section_header);
+
 		// Feedback correct
 		$feedback_correct = new ilTextAreaInputGUI($this->plugin->txt('feedback_correct'), 'feedback_correct');
 		$is_jump_correct = new ilCheckboxInputGUI($this->plugin->txt('is_jump_correct'), 'is_jump_correct');
@@ -526,15 +541,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_jump_wrong->addSubItem($jump_wrong_ts);
 		$feedback_one_wrong->addSubItem($is_jump_wrong);
 		$form->addItem($feedback_one_wrong);
-		
-		$repeat_question = new ilCheckboxInputGUI($this->plugin->txt('repeat_question'), 'repeat_question');
-		$repeat_question->setInfo($this->plugin->txt('repeat_question_info'));
-		$form->addItem($repeat_question);
-
-		$limit_attempts = new ilCheckboxInputGUI($this->plugin->txt('limit_attempts'), 'limit_attempts');
-		$limit_attempts->setInfo($this->plugin->txt('limit_attempts_info'));
-		$form->addItem($limit_attempts);
-		
 		$is_interactive = new ilHiddenInputGUI('is_interactive');
 		$is_interactive->setValue(1);
 		$form->addItem($is_interactive);
@@ -602,7 +608,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$form->setValuesByPost();
 			ilUtil::sendFailure($this->lng->txt('err_check_input'));
-			return $this->showTutorInsertCommentForm();
+			return $this->showTutorInsertQuestionForm();
 		}
 	}
 	
