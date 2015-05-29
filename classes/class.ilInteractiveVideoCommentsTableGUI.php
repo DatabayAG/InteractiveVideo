@@ -110,6 +110,14 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 				$time = xvidUtils::timespanArray($value);
 				$value = $time['h'].':'.$time['m'].':'.$time['s'];
 			}
+			switch($key) 
+			{
+				case 'is_private': 
+				case 'is_tutor': 
+				case 'is_interactive': 
+				$txt_value = $value == 1 ? 'yes' : 'no'; 
+				$value = $this->lng->txt($txt_value);
+			}
 
 			$this->tpl->setVariable('VAL_'.strtoupper($key), $value);
 		}
