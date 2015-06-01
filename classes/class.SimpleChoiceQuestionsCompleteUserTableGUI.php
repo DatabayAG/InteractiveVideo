@@ -61,17 +61,30 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI{
 	 */
 	protected function fillRow(array $row)
 	{
-
+		global $lng;
 		$current_selection_list = new ilAdvancedSelectionListGUI();
 		$current_selection_list->setListTitle($this->lng->txt('actions'));
 		$current_selection_list->setId('act_' . $row['user_id']);
+		$max_columns = count($row);
+		$counter = 0;
         foreach($row as $key => $value)
         {
             $this->tpl->setCurrentBlock('dynamic_table_column');
+	        if($key != 0 && ( $counter != $max_columns || $counter != $max_columns -1) )
+	        {
+		        if( $value == '0' )
+		        {
+			        $value = $lng->txt('no');
+		        }
+		        else if( $value == '1')
+		        {
+			        $value = $lng->txt('yes');
+		        }
+	        }
             $this->tpl->setVariable('VAL', $value);
             $this->tpl->parseCurrentBlock();
+	        $counter ++;
         }
-
 		$this->ctrl->setParameter($this->parent_obj, 'user_id', $row['user_id']);
 	}
 }
