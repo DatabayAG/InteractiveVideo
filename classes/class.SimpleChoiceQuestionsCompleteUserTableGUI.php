@@ -70,7 +70,7 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI{
         foreach($row as $key => $value)
         {
             $this->tpl->setCurrentBlock('dynamic_table_column');
-	        if($counter != 0 && ( $counter != $max_columns || $counter != $max_columns -1) )
+	        if($counter != 0 && $counter != $max_columns && $counter != $max_columns -1 )
 	        {
 		        if( $value == '0' )
 		        {
