@@ -185,7 +185,7 @@ $.fn.buildListElement = function (comment, time, username, counter)
 													stop_video = 1;
 													InteractiveVideoQuestionViewer.getQuestionPerAjax(comments[i].comment_id, player);
 												}
-												else
+												else if (comments[i].is_interactive == 1)
 												{
 													$('.list_item_' + i).find('.comment_text').append(' ' + answered_text);
 												}

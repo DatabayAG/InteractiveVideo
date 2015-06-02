@@ -172,25 +172,39 @@ class SimpleChoiceQuestion
                 'jump_wrong_ts'      => array('integer', $this->getJumpWrongTs()),
                 'repeat_question'    => array('integer', $this->getRepeatQuestion())
             ));
-        foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
-        {
-            $answer_id = $ilDB->nextId('rep_robj_xvid_qus_text');
-            if(array_key_exists($key, ilUtil::stripSlashesRecursive($_POST['correct'])))
-            {
-                $correct = 1;
-            }
-            else
-            {
-                $correct = 0;
-            }
-            $ilDB->insert('rep_robj_xvid_qus_text',
-                array(
-                    'answer_id'   => array('integer', $answer_id),
-                    'question_id' => array('integer', $question_id),
-                    'answer'      => array('text', $value),
-                    'correct'     => array('integer', $correct)
-                ));
-        }
+	    if( count($_POST['answer']) > 0 && $_POST['answer'][0] != '')
+	    {
+		    foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
+		    {
+			    $answer_id = $ilDB->nextId('rep_robj_xvid_qus_text');
+			    if(array_key_exists($key, ilUtil::stripSlashesRecursive($_POST['correct'])))
+			    {
+				    $correct = 1;
+			    }
+			    else
+			    {
+				    $correct = 0;
+			    }
+			    $ilDB->insert('rep_robj_xvid_qus_text',
+				    array(
+					    'answer_id'   => array('integer', $answer_id),
+					    'question_id' => array('integer', $question_id),
+					    'answer'      => array('text', $value),
+					    'correct'     => array('integer', $correct)
+				    ));
+		    }
+	    }
+	    else if($this->getType() == self::REFLECTION)
+	    {
+		    $answer_id = $ilDB->nextId('rep_robj_xvid_qus_text');
+		    $ilDB->insert('rep_robj_xvid_qus_text',
+			    array(
+				    'answer_id'   => array('integer', $answer_id),
+				    'question_id' => array('integer', $question_id),
+				    'answer'      => array('text',   ' '),
+				    'correct'     => array('integer', 1)
+			    ));
+	    }
     }
 
     /**
@@ -201,15 +215,15 @@ class SimpleChoiceQuestion
         $status  = true;
         $correct = 0;
 
-        if((int)$_POST['type'] === 0)
+        if((int)$_POST['question_type'] === 0)
         {
             $this->setType(self::SINGLE_CHOICE);
         }
-        else if((int)$_POST['type'] === 1)
+        else if((int)$_POST['question_type'] === 1)
         {
             $this->setType(self::MULTIPLE_CHOICE);
         }
-        else if((int)$_POST['type'] === 2)
+        else if((int)$_POST['question_type'] === 2)
         {
 	        $this->setType(self::REFLECTION);
         }

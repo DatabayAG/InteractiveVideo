@@ -121,6 +121,16 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$mob = new ilObjMediaObject($this->getMobId());
 		ilObjMediaObject::_removeUsage($this->getMobId(), $this->getType(), $this->getId());
 		$mob->delete();
+		global $ilDB;
+
+		$comment_ids = array();
+		$res = $ilDB->queryF('SELECT comment_id FROM rep_robj_xvid_comments WHERE obj_id = %s',
+			array('integer'), array($this->getId()));
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$comment_ids[] = $row['comment_id'];
+		}
+		self::deleteComments($comment_ids);
 	}
 
 	/**
@@ -134,7 +144,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		global $ilDB;
 
 		$ilDB->manipulate('DELETE FROM rep_robj_xvid_objects WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
-		$ilDB->manipulate('DELETE FROM rep_robj_xvid_comments WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
+		//$ilDB->manipulate('DELETE FROM rep_robj_xvid_comments WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
 
 		parent::doDelete();
 

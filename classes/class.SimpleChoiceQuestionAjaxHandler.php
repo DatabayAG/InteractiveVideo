@@ -55,8 +55,8 @@ class SimpleChoiceQuestionAjaxHandler {
 			SELECT * 
 			FROM  rep_robj_xvid_question question, 
 				  rep_robj_xvid_qus_text answers 
-			WHERE question.comment_id = %s 
-			AND   question.question_id = answers.question_id',
+			WHERE question.comment_id = %s ',
+			//AND   question.question_id = answers.question_id',
             array('integer'), array((int)$cid)
         );
 
@@ -114,11 +114,15 @@ class SimpleChoiceQuestionAjaxHandler {
         $res = $ilDB->queryF('SELECT answer_id, answer, correct FROM rep_robj_xvid_qus_text WHERE question_id = %s',
             array('integer'), array((int)$qid));
 
+	    $question_data = array();
         while($row = $ilDB->fetchAssoc($res))
         {
             $question_data[] = $row;
         }
-
+		if(count($question_data) === 0)
+		{
+			$question_data[] = '';
+		}
         return json_encode($question_data);
     }
 }
