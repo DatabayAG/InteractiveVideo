@@ -55,8 +55,8 @@ class SimpleChoiceQuestionAjaxHandler {
 			SELECT * 
 			FROM  rep_robj_xvid_question question, 
 				  rep_robj_xvid_qus_text answers 
-			WHERE question.comment_id = %s ',
-			//AND   question.question_id = answers.question_id',
+			WHERE question.comment_id = %s 
+			AND   question.question_id = answers.question_id',
             array('integer'), array((int)$cid)
         );
 

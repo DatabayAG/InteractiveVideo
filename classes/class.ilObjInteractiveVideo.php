@@ -121,16 +121,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$mob = new ilObjMediaObject($this->getMobId());
 		ilObjMediaObject::_removeUsage($this->getMobId(), $this->getType(), $this->getId());
 		$mob->delete();
-		global $ilDB;
-
-		$comment_ids = array();
-		$res = $ilDB->queryF('SELECT comment_id FROM rep_robj_xvid_comments WHERE obj_id = %s',
-			array('integer'), array($this->getId()));
-		while($row = $ilDB->fetchAssoc($res))
-		{
-			$comment_ids[] = $row['comment_id'];
-		}
-		self::deleteComments($comment_ids);
+		self::deleteComments(self::getCommentIdsByObjId($this->getId(), false));
 	}
 
 	/**
@@ -144,7 +135,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		global $ilDB;
 
 		$ilDB->manipulate('DELETE FROM rep_robj_xvid_objects WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
-		//$ilDB->manipulate('DELETE FROM rep_robj_xvid_comments WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
 
 		parent::doDelete();
 
@@ -210,7 +200,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		}
 		return $question_ids;
 	}
-	
+
+	/**
+	 * @return array
+	 */
 	public function getCommentsTableData()
 	{
 		global $ilDB;
@@ -239,6 +232,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getCommentsTableDataByUserId()
 	{
 		global $ilDB, $ilUser;
@@ -269,6 +265,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		return $table_data;
 	}
 
+	/**
+	 * @param $comment_id
+	 * @return mixed
+	 */
 	public function getCommentDataById($comment_id)
 	{
 		global $ilDB;
@@ -280,7 +280,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		return $row;
 
 	}
-	
+
+	/**
+	 * @param $comment_id
+	 * @return mixed
+	 */
 	public function getQuestionDataById($comment_id)
 	{
 		global $ilDB;
@@ -295,7 +299,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	}
 
 	/**
-	 * @param int $comment_id
+	 * @param $comment_id
+	 * @return string
 	 */
 	public function getCommentTextById($comment_id)
 	{
@@ -310,10 +315,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	}
 
 	/**
-	 * @param $obj_id
+	 * @param      $obj_id
+	 * @param bool $with_user_id
 	 * @return array
 	 */
-	public function getCommentIdsByObjId($obj_id)
+	public function getCommentIdsByObjId($obj_id, $with_user_id = true)
 	{
 		global $ilDB;
 		
@@ -323,7 +329,14 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$comment_ids[$row['comment_id']] = $row['user_id'];
+			if($with_user_id == true)
+			{
+				$comment_ids[$row['comment_id']] = $row['user_id'];
+			}
+			else
+			{
+				$comment_ids[] = $row['comment_id'];
+			}
 		}
 		return $comment_ids;
 	}
