@@ -79,7 +79,7 @@ class SimpleChoiceQuestionStatistics {
 				 	rep_robj_xvid_score score  
 			WHERE 	comments.comment_id   = questions.comment_id 
 			AND 	questions.question_id = score.question_id 
-			AND 	obj_id = %s  ORDER BY question_id',
+			AND 	obj_id = %s  ORDER BY comments.comment_time',
             array('integer'), array((int)$oid)
         );
         $return_value = array('users' => array(), 'question' => array());
@@ -131,7 +131,7 @@ class SimpleChoiceQuestionStatistics {
         $result_set = array();
         $res        = $ilDB->queryF(
             'SELECT question_id, comment_title FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
-					 WHERE comments.comment_id = questions.comment_id AND  is_interactive = 1 AND obj_id = %s ORDER BY question_id',
+					 WHERE comments.comment_id = questions.comment_id AND  is_interactive = 1 AND obj_id = %s ORDER BY comment_time',
             array('integer'),
             array((int)$oid)
         );

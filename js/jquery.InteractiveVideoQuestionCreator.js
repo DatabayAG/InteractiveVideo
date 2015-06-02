@@ -50,6 +50,7 @@ var InteractiveVideoQuestionCreator = (function () {
 			}
 			return false;
 		});
+		showHideFormElementsForReflectionType();
 	}
 
 	function createQuestionForm() {
@@ -83,6 +84,22 @@ var InteractiveVideoQuestionCreator = (function () {
 		appendMultiListener();
 	}
 	
+	function showHideFormElementsForReflectionType()
+	{
+		if( IVQuestionCreator.type == 2)
+		{
+			$('#il_prop_cont_answer_text').hide();
+			$('#il_prop_cont_feedback_correct').hide();
+			$('#il_prop_cont_feedback_one_wrong').hide();
+		}
+		else
+		{
+			$('#il_prop_cont_answer_text').show();
+			$('#il_prop_cont_feedback_correct').show();
+			$('#il_prop_cont_feedback_one_wrong').show();
+		}
+	}
+	
 	//Public method
 	pub.Init = function () {
 		var question_form = $('#addQuestion');
@@ -103,6 +120,7 @@ var InteractiveVideoQuestionCreator = (function () {
 	pub.appendSingleListener = function () {
 		$('#question_type').on('change', function (){
 			IVQuestionCreator.type = parseInt($(this).val(),10);
+			showHideFormElementsForReflectionType();
 		});
 	};
 
