@@ -83,7 +83,6 @@ var InteractiveVideoQuestionCreator = (function () {
 		appendMultiListener();
 	}
 	
-
 	//Public method
 	pub.Init = function () {
 		var question_form = $('#addQuestion');
@@ -93,9 +92,10 @@ var InteractiveVideoQuestionCreator = (function () {
 
 	pub.appendEmptyJSON = function () {
 		IVQuestionCreator.JSON =
-			[{'answer' 	: '',
+			[{
+				 'answer' 	: '',
 				 'correct'	: 0,
-				 'answer_id'	: 0
+				 'answer_id': 0
 			 }];
 		IVQuestionCreator.type = 0;
 	};
