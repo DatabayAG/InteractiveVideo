@@ -491,17 +491,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$limit_attempts = new ilCheckboxInputGUI($this->plugin->txt('limit_attempts'), 'limit_attempts');
 		$limit_attempts->setInfo($this->plugin->txt('limit_attempts_info'));
 		$form->addItem($limit_attempts);
-
-		$reflection = new ilCheckboxInputGUI($this->plugin->txt('reflection'), 'reflection');
-		$reflection->setInfo($this->plugin->txt('reflection_info'));
-		$form->addItem($reflection);
 		
 		$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($this->plugin->txt('question'));
 		$form->addItem($section_header);
 		
 		$question_type = new ilSelectInputGUI($this->plugin->txt('question_type'), 'question_type');
-		$type_options = array(0 => $this->plugin->txt('single_choice'), 1 => $this->plugin->txt('multiple_choice'));
+		$type_options = array(0 => $this->plugin->txt('single_choice'), 1 => $this->plugin->txt('multiple_choice'), 2 => $this->plugin->txt('reflection'));
 		$question_type->setOptions($type_options);
 		$form->addItem($question_type);
 		

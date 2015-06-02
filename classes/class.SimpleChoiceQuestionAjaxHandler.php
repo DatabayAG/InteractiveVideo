@@ -96,7 +96,7 @@ class SimpleChoiceQuestionAjaxHandler {
         $build_json['is_jump_wrong']   = $is_jump_wrong;
         $build_json['jump_wrong_ts']   = $jump_wrong_ts;
         $build_json['repeat_question'] = $repeat_question;
-
+	    
         return json_encode($build_json);
     }
 

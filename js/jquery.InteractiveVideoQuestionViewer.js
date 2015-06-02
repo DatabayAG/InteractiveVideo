@@ -3,17 +3,24 @@ var InteractiveVideoQuestionViewer = (function () {
 	//Private method
 	function buildQuestionForm() {
 		var modal = $('.modal-body');
+		var type  = parseInt(pub.QuestionObject.type, 10);
 		modal.html('');
 		modal.append('<h2>' + pub.QuestionObject.question_title + '</h2>');
 		modal.append('<p>' + pub.QuestionObject.question_text + '</p>');
-		if (parseInt(pub.QuestionObject.type, 10) === 0) {
+		if (type === 0) {
 			addAnswerPossibilities('radio');
+			addFeedbackDiv();
+			addButtons();
 		}
-		else {
+		else if (type === 1){
 			addAnswerPossibilities('checkbox');
+			addFeedbackDiv();
+			addButtons();
 		}
-		addFeedbackDiv();
-		addButtons();
+		else if (type === 2)
+		{
+			addSelfReflectionLayout();
+		}
 	}
 
 	function addAnswerPossibilities(input_type) {
@@ -29,10 +36,22 @@ var InteractiveVideoQuestionViewer = (function () {
 		$('.modal-body').append(html);
 	}
 
+	function addSelfReflectionLayout() {
+		$('.modal-body').append('<div class="modal_feedback">' + createButtonButtons('close_form', close_text) +'</div>');
+		appendCloseButtonListener();
+		$.ajax({
+			type:    "POST",
+			cache:   false,
+			url:     question_post_url,
+			data:    {'qid' : pub.QuestionObject.question_id},
+			success: function () {}
+		});
+	}
+	
 	function addFeedbackDiv() {
 		$('#question_form').append('<div class="modal_feedback"></div>');
 	}
-
+	
 	function addButtons() {
 		var question_form = $('#question_form');
 		question_form.append(createButtonButtons('sendForm', send_text));
@@ -68,13 +87,17 @@ var InteractiveVideoQuestionViewer = (function () {
 				}
 			});
 		});
-
+		appendCloseButtonListener();
+	}
+	
+	function appendCloseButtonListener()
+	{
 		$('#close_form').on('click', function (e) {
 			$('#ilQuestionModal').modal('hide');
 			$().resumeVideo();
 		});
 	}
-
+	
 	function createButtonButtons(id, value) {
 		return '<input id="' + id + '" class="btn btn-default btn-sm" type="submit" value="' + value + '">';
 	}

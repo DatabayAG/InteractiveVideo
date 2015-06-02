@@ -14,6 +14,10 @@ class SimpleChoiceQuestion
      *
      */
     const MULTIPLE_CHOICE = 1;
+	/**
+	 *
+	 */
+	const REFLECTION     = 2;
     /**
      * @var integer
      */
@@ -201,33 +205,38 @@ class SimpleChoiceQuestion
         {
             $this->setType(self::SINGLE_CHOICE);
         }
-        else
+        else if((int)$_POST['type'] === 1)
         {
             $this->setType(self::MULTIPLE_CHOICE);
         }
-
+        else if((int)$_POST['type'] === 2)
+        {
+	        $this->setType(self::REFLECTION);
+        }
         $question_text = ilUtil::stripSlashes($_POST['question_text']);
 
         if($question_text === '')
         {
             $status = false;
         }
-        foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
-        {
-            if(is_array($_POST['correct']) && array_key_exists($key, ilUtil::stripSlashesRecursive($_POST['correct'])))
-            {
-                $correct += 1;
-            }
-            if($value === '')
-            {
-                $status = false;
-            }
-        }
-        if($correct === 0)
-        {
-            $status = false;
-        }
-
+	    if($this->getType() != self::REFLECTION)
+	    {
+		    foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
+		    {
+			    if(is_array($_POST['correct']) && array_key_exists($key, ilUtil::stripSlashesRecursive($_POST['correct'])))
+			    {
+				    $correct += 1;
+			    }
+			    if($value === '')
+			    {
+				    $status = false;
+			    }
+		    }
+		    if($correct === 0)
+		    {
+			    $status = false;
+		    }
+	    }
         return $status;
     }
 
@@ -455,7 +464,7 @@ class SimpleChoiceQuestion
                     'points'      => array('integer', $points)
                 ));
         }
-        else
+        else if($type === self::MULTIPLE_CHOICE)
         {
             $points = 1;
             foreach($answers as $key => $value)
@@ -478,6 +487,17 @@ class SimpleChoiceQuestion
                     'user_id'     => array('integer', $usr_id),
                     'points'      => array('integer', $points)
                 ));
+        }
+        else if($type === self::REFLECTION)
+        {
+	        $points = 1;
+	        $ilDB->insert('rep_robj_xvid_score',
+		        array(
+			        'question_id' => array('integer', $qid),
+			        'user_id'     => array('integer', $usr_id),
+			        'points'      => array('integer', $points)
+		        )
+	        );
         }
     }
 
