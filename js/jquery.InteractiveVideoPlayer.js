@@ -9,9 +9,8 @@ $( document ).ready(function() {
 				'is_interactive': '0',
 				'is_private': $('#is_private').val()
 			};
-		$().sliceCommentAndStopPointsInCorrectPostion(tmp_obj, tmp_obj.comment_time);
+		$().sliceCommentAndStopPointsInCorrectPosition(tmp_obj, tmp_obj.comment_time);
 		
-
 		$("#ul_scroll").prepend($().buildListElement(tmp_obj, tmp_obj.comment_time, username));
 		
 		$.ajax({
@@ -33,12 +32,13 @@ $( document ).ready(function() {
 	$("#ilInteractiveVideoTutorCommentSubmit").on("click", function(e) {
 		$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
 	});
+	
 	$("#ilInteractiveVideoTutorQuestionSubmit").on("click", function(e) {
 		$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
 	});
 });
 
-$.fn.sliceCommentAndStopPointsInCorrectPostion = function (tmp_obj, time)
+$.fn.sliceCommentAndStopPointsInCorrectPosition = function (tmp_obj, time)
 {
 	var pos = 0;
 	for (var i = 0; i < Object.keys(comments).length; i++)
@@ -51,7 +51,6 @@ $.fn.sliceCommentAndStopPointsInCorrectPostion = function (tmp_obj, time)
 	comments.splice( pos + 1, 0 , tmp_obj);
 	stopPoints.splice( pos + 1, 0, Math.floor(time));
 };
-
 
 $.fn.replaceCommentsAfterSeeking = function (time)
 {
@@ -84,7 +83,6 @@ $.fn.resumeVideo = function ()
 	{
 		$('#ilInteractiveVideo')["0"].play();
 	}
-
 };
 
 $.fn.buildListElement = function (comment, time, username, counter)
