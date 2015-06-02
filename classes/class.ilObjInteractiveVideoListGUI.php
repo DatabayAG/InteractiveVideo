@@ -22,8 +22,6 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 	 */
 	public function initCommands()
 	{
-		$this->copy_enabled = false;
-
 		return array
 		(
 			array(
