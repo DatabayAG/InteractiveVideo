@@ -422,6 +422,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$tags = new ilTextAreaInputGUI($this->plugin->txt('tags'), 'comment_tags');
 		$form->addItem($tags);
+
+		$frm_id = new ilHiddenInputGUI('comment_id');
+		$form->addItem($frm_id);
 		
 		return $form;
 	}
@@ -466,6 +469,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($section_header);
 
 		$title = new ilTextInputGUI($this->lng->txt('title'), 'comment_title');
+		$title->setRequired(true);
 		$form->addItem($title);
 
 		$this->plugin->includeClass('class.ilTimeInputGUI.php');
@@ -498,6 +502,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($question_type);
 		
 		$question_text = new ilTextAreaInputGUI($this->plugin->txt('question_text'), 'question_text');
+		$question_text->setRequired(true);
 		$form->addItem($question_text);
 
 		$answer = new ilCustomInputGUI($this->lng->txt('answers'), 'answer_text');
@@ -543,6 +548,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_jump_wrong->addSubItem($jump_wrong_ts);
 		$feedback_one_wrong->addSubItem($is_jump_wrong);
 		$form->addItem($feedback_one_wrong);
+	
 		$is_interactive = new ilHiddenInputGUI('is_interactive');
 		$is_interactive->setValue(1);
 		$form->addItem($is_interactive);
@@ -550,14 +556,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment_text = new ilHiddenInputGUI('comment_text');
 		$comment_text->setValue('dummy text');
 		$form->addItem($comment_text);
-		$comment_id = new ilHiddenInputGUI('comment_id');
 		
+		$comment_id = new ilHiddenInputGUI('comment_id');
 		$form->addItem($comment_id);
 
 		return $form;
 	}
-	
-	public function showTutorInsertQuestionForm()
+
+	/**
+	 * @param ilPropertyFormGUI $form
+	 */
+	public function showTutorInsertQuestionForm(ilPropertyFormGUI $form = NULL)
 	{
 		/**
 		 * @var $tpl    ilTemplate
@@ -570,7 +579,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('editComments');
 
-		$form = $this->initQuestionForm();
+		if(!($form instanceof ilPropertyFormGUI))
+		{
+			$form = $this->initQuestionForm();	
+		}
+		
 		$form->addCommandButton('insertQuestion', $this->lng->txt('insert'));
 		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
 		$tpl->setContent($form->getHTML());
@@ -610,11 +623,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$form->setValuesByPost();
 			ilUtil::sendFailure($this->lng->txt('err_check_input'));
-			return $this->showTutorInsertQuestionForm();
+			return $this->showTutorInsertQuestionForm($form);
 		}
 	}
-	
-	public function editQuestion()
+
+	/**
+	 * @param ilPropertyFormGUI $form
+	 */
+	public function editQuestion(ilPropertyFormGUI $form = NULL)
 	{
 		/**
 		 * @var $tpl    ilTemplate
@@ -627,40 +643,60 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('editComments');
 
-		$form = $this->initQuestionForm();
-		
-		if(isset($_GET['comment_id']))
+		if(!($form instanceof ilPropertyFormGUI))
 		{
-			$comment_data              = $this->object->getCommentDataById((int)$_GET['comment_id']);
-			$values['comment_id']      = $comment_data['comment_id'];
-			$values['comment_time']    = $comment_data['comment_time'];
-			$values['comment_text']    = $comment_data['comment_text'];
-			$values['is_interactive']  = $comment_data['is_interactive'];
-			$values['comment_title']   = $comment_data['comment_title'];
-			$values['comment_tags']    = $comment_data['comment_tags'];
-
-			$question_data = $this->object->getQuestionDataById((int)$_GET['comment_id']);
-
-			$values['question_text']      = $question_data['question_data']['question_text'];
-            $values['question_type']      = $question_data['question_data']['type'];
-			$values['feedback_correct']   = $question_data['question_data']['feedback_correct'];
-			$values['is_jump_correct']    = $question_data['question_data']['is_jump_correct'];
-			$values['jump_correct_ts']    = $question_data['question_data']['jump_correct_ts'];
-			$values['feedback_one_wrong'] = $question_data['question_data']['feedback_one_wrong'];
-			$values['is_jump_wrong']      = $question_data['question_data']['is_jump_wrong'];
-			$values['jump_wrong_ts']      = $question_data['question_data']['jump_wrong_ts'];
-			$values['limit_attempts']     = $question_data['question_data']['limit_attempts'];
-			$values['repeat_question'] 	  = $question_data['question_data']['repeat_question'];
-			
-			$form->setValuesByArray($values);
+			$form = $this->initQuestionForm();
+			$form->setValuesByArray($this->getQuestionFormValues(),true);
 		}
-
+	
 		$this->getAnswerDefinitionsJSON();
 		
 		$form->addCommandButton('updateQuestion', $this->lng->txt('update'));
 		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
 		$tpl->setContent($form->getHTML());
 	}
+
+	/**
+	 * @param int $comment_id
+	 */
+	private function getQuestionFormValues($comment_id = 0)
+	{
+		if($comment_id == 0)
+		{
+			if(!isset($_GET['comment_id']) && !isset($_POST['comment_id']))
+			{
+				ilUtil::sendFailure($this->plugin->txt('no_comment_id_given'), true);
+				return $this->editComments();
+			}
+			else
+			{
+				$comment_id = (int)$_GET['comment_id'] ? (int)$_GET['comment_id'] : (int)$_POSt['comment_id'];
+			}
+		}
+
+		$comment_data             = $this->object->getCommentDataById((int)$comment_id);
+		$values['comment_id']     = $comment_data['comment_id'];
+		$values['comment_time']   = $comment_data['comment_time'];
+		$values['comment_text']   = $comment_data['comment_text'];
+		$values['is_interactive'] = $comment_data['is_interactive'];
+		$values['comment_title']  = $comment_data['comment_title'];
+		$values['comment_tags']   = $comment_data['comment_tags'];
+
+		$question_data = $this->object->getQuestionDataById((int)$comment_id);
+
+		$values['question_text']      = $question_data['question_data']['question_text'];
+		$values['question_type']      = $question_data['question_data']['type'];
+		$values['feedback_correct']   = $question_data['question_data']['feedback_correct'];
+		$values['is_jump_correct']    = $question_data['question_data']['is_jump_correct'];
+		$values['jump_correct_ts']    = $question_data['question_data']['jump_correct_ts'];
+		$values['feedback_one_wrong'] = $question_data['question_data']['feedback_one_wrong'];
+		$values['is_jump_wrong']      = $question_data['question_data']['is_jump_wrong'];
+		$values['jump_wrong_ts']      = $question_data['question_data']['jump_wrong_ts'];
+		$values['limit_attempts']     = $question_data['question_data']['limit_attempts'];
+		$values['repeat_question']    = $question_data['question_data']['repeat_question'];
+
+		return $values;
+}
 
 	public function updateQuestion()
 	{
@@ -692,7 +728,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		else
 		{
 			$form->setValuesByPost();
-			$this->editComment();
+			return $this->editQuestion($form);
 		}
 	}
 
@@ -733,7 +769,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$question->setRepeatQuestion((int)$form->getInput('repeat_question'));
 				$question->deleteQuestionsIdByCommentId($comment_id);
 				$question->create();
-			}
+		}
 		else
 		{
 			#$form->setValuesByPost();
@@ -798,7 +834,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->showContent();
 		}
 	}
-	public function editMyComment()
+
+	/**
+	 * @param ilPropertyFormGUI $form
+	 */
+	public function editMyComment(ilPropertyFormGUI $form = NULL)
 	{
 		/**
 		 * @var $tpl    ilTemplate
@@ -810,35 +850,25 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->setSubTabs('editComments');
 		$ilTabs->activateSubTab('editMyComments');
 		
-		$form = $this->initCommentForm();
-
-		$frm_id = new ilHiddenInputGUI('comment_id');
-		$form->addItem($frm_id);
+		if(!($form instanceof ilPropertyFormGUI))
+		{
+			$form = $this->initCommentForm();
+			$form->setValuesByArray($this->getCommentFormValues(), true);
+		}	
 
 		$form->setFormAction($this->ctrl->getFormAction($this, 'updateMyComment'));
 		$form->setTitle($this->plugin->txt('edit_comment'));
 
 		$form->addCommandButton('updateMyComment', $this->lng->txt('save'));
 		$form->addCommandButton('editMyComments', $this->lng->txt('cancel'));
-
-		if(isset($_GET['comment_id']))
-		{
-			$comment_data             = $this->object->getCommentDataById((int)$_GET['comment_id']);
-			$values['comment_id']     = $comment_data['comment_id'];
-			$values['comment_time']   = $comment_data['comment_time'];
-			$values['comment_text']   = $comment_data['comment_text'];
-			$values['is_interactive'] = $comment_data['is_interactive'];
-			$values['is_private']	  = $comment_data['is_private'];	
-
-			$form->setValuesByArray($values, true);
-		}
+			
 		$tpl->setContent($form->getHTML());
 	}
 
 	/**
-	 * 
+	 * @param ilPropertyFormGUI $form
 	 */
-	public function editComment()
+	public function editComment(ilPropertyFormGUI $form = NULL)
 	{
 		/**
 		 * @var $tpl    ilTemplate
@@ -846,43 +876,51 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $ilTabs;
 
-		if(isset($_GET['comment_id']))
+		$ilTabs->activateTab('editComments');
+		if(!($form instanceof ilPropertyFormGUI))
 		{
-			$comment_data              = $this->object->getCommentDataById((int)$_GET['comment_id']);
-			$values['comment_id']      = $comment_data['comment_id'];
-			$values['comment_time']    = $comment_data['comment_time'];
-			$values['comment_text']    = $comment_data['comment_text'];
-			$values['is_interactive']  = $comment_data['is_interactive'];
-			$values['comment_title']   = $comment_data['comment_title'];
-			$values['comment_tags']    = $comment_data['comment_tags'];
-			$values['is_private'] = $comment_data['is_private'];
-			
-	
-			$ilTabs->activateTab('editComments');
 			$form = $this->initCommentForm();
-
-			$frm_id = new ilHiddenInputGUI('comment_id');
-			$form->addItem($frm_id);
-
-			$form->setFormAction($this->ctrl->getFormAction($this, 'updateComment'));
-			$form->setTitle($this->plugin->txt('edit_comment'));
-
-			$form->addCommandButton('updateComment', $this->lng->txt('save'));
-			$form->addCommandButton('editComments', $this->lng->txt('cancel'));
-
-			if(isset($_GET['comment_id']))
-			{
-				$form->setValuesByArray($values, true);
-			}
-			$tpl->setContent($form->getHTML());
+			$form->setValuesByArray($this->getCommentFormValues(), true);
 		}
-		else
-		{
-			return ilUtil::sendFailure($this->plugin->txt('no_comment_id_given'));
-		}
+
+		$form->setFormAction($this->ctrl->getFormAction($this, 'updateComment'));
+		$form->setTitle($this->plugin->txt('edit_comment'));
+		$form->addCommandButton('updateComment', $this->lng->txt('save'));
+		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
+
+		$tpl->setContent($form->getHTML());
 	}
-	
-	
+
+	/**
+	 * @param int $comment_id
+	 */
+	private function getCommentFormValues($comment_id = 0)
+	{
+		if($comment_id == 0)
+		{
+			if(!isset($_GET['comment_id']) && !isset($_POST['comment_id']))
+			{
+				ilUtil::sendFailure($this->plugin->txt('no_comment_id_given'), true);
+				return $this->showContent();
+			}
+			else
+			{
+				$comment_id = (int)$_GET['comment_id'] ? (int)$_GET['comment_id'] : (int)$_POST['comment_id'] ;
+			}
+		}
+		
+		$comment_data              = $this->object->getCommentDataById($comment_id);
+		$values['comment_id']      = $comment_data['comment_id'];
+		$values['comment_time']    = $comment_data['comment_time'];
+		$values['comment_text']    = $comment_data['comment_text'];
+		$values['is_interactive']  = $comment_data['is_interactive'];
+		$values['comment_title']   = $comment_data['comment_title'];
+		$values['comment_tags']    = $comment_data['comment_tags'];
+		$values['is_private'] = $comment_data['is_private'];
+		
+		return $values;
+	}	
+		
 	public function getAnswerDefinitionsJSON()
 	{
 		$simple_choice = new SimpleChoiceQuestion();
@@ -936,6 +974,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function updateComment()
 	{
 		$form = $this->initCommentForm();
+		
 		if($form->checkInput())
 		{
 			$comment_id = $form->getInput('comment_id');
@@ -945,9 +984,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			}
 			$this->objComment->setCommentText($form->getInput('comment_text'));
-			$this->objComment->setInteractive((int)$form->getInput('is_interactive'));
 			$this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
+			$this->objComment->setInteractive(0);
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
 
 			// calculate seconds
@@ -958,38 +997,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTime($seconds);
 			$this->objComment->update();
 
-			if((int)$form->getInput('is_interactive') === 1)
-			{
-				$question_id = $form->getInput('question_id');
-				$question = new SimpleChoiceQuestion();
-				if($question->checkInput())
-				{
-					$question->deleteQuestion($question_id);
-					$question->create();
-				}
-				else
-				{
-					#$form->setValuesByPost();
-					#ilUtil::sendFailure($this->lng->txt('err_check_input'));
-					#return $this->editComment();
-				}
-
-			}
-			else
-			{
-				$question = new SimpleChoiceQuestion();
-				$question_id = $question->existQuestionForCommentId($comment_id);
-				if($question_id > 0)
-				{
-					$question->deleteQuestion($question_id);
-				}
-			}
-			$this->ctrl->redirect($this, 'editComments');
+			$this->editComments();
 		}
 		else
 		{
 			$form->setValuesByPost();
-			$this->ctrl->redirect($this, 'editComments');
+			$this->editComment($form);
 		}
 	}
 
@@ -1038,9 +1051,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$modal = ilModalGUI::getInstance();
 		$modal->setId("ilQuestionModal");
 		$modal->setBody('');
-//		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
-//		$video_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTarget($this, 'getQuestionPerAjax', '', true, false));
-//		$video_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTarget($this, 'postAnswerPerAjax', '', true, false));
 		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postTutorComment', '', false, false));
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoPlayer.js');
@@ -1094,6 +1104,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			}
 			$this->objComment->setCommentText($form->getInput('comment_text'));
+			$this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
+			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
 			$this->objComment->setInteractive(0);
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
 
@@ -1110,7 +1122,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		else
 		{
 			$form->setValuesByPost();
-			$this->ctrl->redirect($this, 'editMyComment');
+			return $this->editMyComment($form);
 		}
 	}
 
