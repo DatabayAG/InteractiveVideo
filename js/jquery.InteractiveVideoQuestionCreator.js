@@ -89,13 +89,13 @@ var InteractiveVideoQuestionCreator = (function () {
 		if( IVQuestionCreator.type == 2)
 		{
 			$('#il_prop_cont_answer_text').hide();
-			$('#il_prop_cont_feedback_correct').hide();
+			$('#il_prop_cont_feedback_correct').hide().prev('.ilFormHeader').hide();
 			$('#il_prop_cont_feedback_one_wrong').hide();
 		}
 		else
 		{
 			$('#il_prop_cont_answer_text').show();
-			$('#il_prop_cont_feedback_correct').show();
+			$('#il_prop_cont_feedback_correct').show().prev('.ilFormHeader').show();
 			$('#il_prop_cont_feedback_one_wrong').show();
 		}
 	}
