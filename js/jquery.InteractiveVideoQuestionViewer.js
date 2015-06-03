@@ -27,13 +27,21 @@ var InteractiveVideoQuestionViewer = (function () {
 		var html = '';
 		html = '<form id="question_form">';
 		$.each(pub.QuestionObject.answers, function (l, value) {
-			html += '<label for="answer_' + value.answer_id + '">' +
-			'<input type="' + input_type + '" id="answer_' + value.answer_id + '" name="answer[]" value="' + value.answer_id + '">' +
-			value.answer + '</label><br/>';
+			html += buildAnswerInputElement(input_type, value);
 		});
 		html += '<input type="hidden" name="qid" value ="' + pub.QuestionObject.question_id + '"/>';
 		html += '</form>';
 		$('.modal-body').append(html);
+	}
+	
+	function buildAnswerInputElement(input_type, value)
+	{
+		return  '<label for="answer_'   + value.answer_id + '">' +
+					'<input type="'     + input_type + 
+						'" id="answer_' + value.answer_id + '" name="answer[]" ' +
+						' value="'      + value.answer_id + '">' +
+										  value.answer + 
+				'</label><br/>';
 	}
 
 	function addSelfReflectionLayout() {
