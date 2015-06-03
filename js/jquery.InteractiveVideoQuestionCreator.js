@@ -7,7 +7,6 @@ $( document ).ready(function() {
 		InteractiveVideoQuestionCreator.appendEmptyJSON();
 	}
 	InteractiveVideoQuestionCreator.Init();
-	InteractiveVideoQuestionCreator.appendSingleListener();
 	$('.question_type').val(IVQuestionCreator.type);
 });
 
@@ -99,12 +98,19 @@ var InteractiveVideoQuestionCreator = (function () {
 			$('#il_prop_cont_feedback_one_wrong').show();
 		}
 	}
-	
+
+	function appendSingleListener() {
+		$('#question_type').on('change', function (){
+			IVQuestionCreator.type = parseInt($(this).val(),10);
+			showHideFormElementsForReflectionType();
+		});
+	}
 	//Public method
 	pub.Init = function () {
 		var question_form = $('#addQuestion');
 		$('#is_interactive').parent().parent().parent().parent().append(question_form);
 		createQuestionForm();
+		appendSingleListener();
 	};
 
 	pub.appendEmptyJSON = function () {
@@ -115,13 +121,6 @@ var InteractiveVideoQuestionCreator = (function () {
 				 'answer_id': 0
 			 }];
 		IVQuestionCreator.type = 0;
-	};
-
-	pub.appendSingleListener = function () {
-		$('#question_type').on('change', function (){
-			IVQuestionCreator.type = parseInt($(this).val(),10);
-			showHideFormElementsForReflectionType();
-		});
 	};
 
 	//Return just the public parts

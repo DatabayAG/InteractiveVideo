@@ -122,7 +122,7 @@ class SimpleChoiceQuestionScoring {
      * @param int $qid question_id
      * @return array
      */
-    public function getCorrectAnswersCountForQuestion($qid)
+    public function getCorrectAnswersForQuestion($qid)
     {
         /**
          * @var $ilDB   ilDB

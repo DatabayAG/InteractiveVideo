@@ -187,7 +187,7 @@ $.fn.buildListElement = function (comment, time, username, counter)
 												}
 												else if (comments[i].is_interactive == 1)
 												{
-													$('.list_item_' + i).find('.comment_text').append(' ' + answered_text);
+													$('.list_item_' + i).find('.comment_text').append(' (' + answered_text + ') ');
 												}
 											}
 										}

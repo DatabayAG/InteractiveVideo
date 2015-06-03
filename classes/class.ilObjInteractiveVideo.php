@@ -64,6 +64,14 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		return true;
 	}
 
+	protected function beforeCloneObject()
+	{
+		$mob = new ilObjMediaObject($this->mob_id);
+		//Todo: fix this shit
+		$a = $mob->duplicate();
+		$_FILES['video_file'] = $mob->media_items[0];
+		return true;
+	}
 	/**
 	 * 
 	 */
