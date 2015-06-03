@@ -397,7 +397,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($section_header);
 
 		$title = new ilTextInputGUI($this->lng->txt('title'), 'comment_title');
-		$title->setRequired(true);
+		//Todo: why is the title on comments forced again?
+		//$title->setRequired(true);
 		$form->addItem($title);
 		
 		$this->plugin->includeClass('class.ilTimeInputGUI.php');
