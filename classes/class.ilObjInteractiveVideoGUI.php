@@ -169,6 +169,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$simple_choice = new SimpleChoiceQuestion();
 			$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
 		}
+		else if(SimpleChoiceQuestion::existUserAnswerForQuestionId((int)$_POST['qid']) == false)
+		{
+			$answer = is_array($_POST['answer']) ? ilUtil::stripSlashesRecursive($_POST['answer']) : array();
+			$simple_choice = new SimpleChoiceQuestion();
+			$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
+		}
 		$this->showFeedbackPerAjax();
 		exit();
 	}
@@ -224,7 +230,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('COMMENTS', json_encode($comments));
 
 		$simple_choice = new SimpleChoiceQuestion();
-		$question_id = $simple_choice->getAllNonRepeatCorrectAnswerQuestion($ilUser->getId());
+		$question_id = $simple_choice->getAllNonRepeatAnsweredQuestion($ilUser->getId());
 		$video_tpl->setVariable('IGNORE_QUESTIONS', json_encode($question_id));
 		if($this->object->isAnonymized())
 		{

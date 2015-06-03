@@ -328,7 +328,7 @@ class SimpleChoiceQuestion
 	 * @param int $user_id
 	 * @return array
 	 */
-	public function getAllNonRepeatCorrectAnswerQuestion($user_id)
+	public function getAllNonRepeatAnsweredQuestion($user_id)
 	{
 		global $ilDB;
 		$res     = $ilDB->queryF('
@@ -338,11 +338,10 @@ class SimpleChoiceQuestion
 				rep_robj_xvid_score  score  
 			WHERE comments.comment_id = questions.comment_id 
 			AND questions.question_id = score.question_id 
-			AND questions.repeat_question = %s 
-			AND score.points = %s 
+			AND questions.repeat_question = %s
 			AND score.user_id = %s',
-			array('integer', 'integer', 'integer'),
-			array(0, 1, (int)$user_id)
+			array('integer', 'integer'),
+			array(0, (int)$user_id)
 		);
 		$results = array();
 		while($row = $ilDB->fetchAssoc($res))
@@ -613,6 +612,28 @@ class SimpleChoiceQuestion
 			AND user_id = %s
 			',
 			array('integer', 'integer'), array($comment_id, $ilUser->getId()));
+
+		if($ilDB->numRows($res) > 0)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @param $question_id
+	 * @return bool
+	 */
+	public static function existUserAnswerForQuestionId($question_id)
+	{
+		global $ilUser, $ilDB;
+
+		$res = $ilDB->queryF('
+			SELECT * FROM rep_robj_xvid_answers 			
+			WHERE question_id = %s 
+			AND user_id = %s
+			',
+			array('integer', 'integer'), array($question_id, $ilUser->getId()));
 
 		if($ilDB->numRows($res) > 0)
 		{
