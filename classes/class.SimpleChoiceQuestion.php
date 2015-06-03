@@ -463,6 +463,12 @@ class SimpleChoiceQuestion
 			{
 				$points = 1;
 			}
+			$ilDB->insert('rep_robj_xvid_answers',
+				array(
+					'question_id' => array('integer', $qid),
+					'user_id'     => array('integer', $usr_id),
+					'answer_id'   => array('integer', $answers[0])
+				));
 		}
 		else if($type === self::MULTIPLE_CHOICE)
 		{

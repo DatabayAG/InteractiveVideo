@@ -38,7 +38,7 @@ class SimpleChoiceQuestionAjaxHandler {
                 $json['time']     = $feedback['jump_correct_ts'];
             }
         }
-        return json_encode($json);
+	    return json_encode($json);
     }
 
     /**
@@ -50,7 +50,7 @@ class SimpleChoiceQuestionAjaxHandler {
         /**
          * @var $ilDB   ilDB
          */
-        global $ilDB;
+        global $ilDB, $ilUser;
         $res = $ilDB->queryF('
 			SELECT * 
 			FROM  rep_robj_xvid_question question, 
@@ -79,9 +79,23 @@ class SimpleChoiceQuestionAjaxHandler {
             $is_jump_wrong                        = $row['is_jump_wrong'];
             $jump_wrong_ts                        = $row['jump_wrong_ts'];
             $repeat_question                      = $row['repeat_question'];
-
             $counter++;
         }
+
+	    $res = $ilDB->queryF('
+			SELECT * 
+			FROM  rep_robj_xvid_answers
+			WHERE question_id = %s 
+			AND   user_id = %s',
+		    array('integer', 'integer'), array($question_id, $ilUser->getId())
+	    );
+	    $counter       = 0;
+	    $answered = array();
+	    while($row = $ilDB->fetchAssoc($res))
+	    {
+		    $answered[$counter] = $row['answer_id'];
+		    $counter++;
+	    }
         $build_json = array();
         //$build_json['title'] 		  = $question_data;
         $build_json['answers']         = $question_data;
@@ -96,6 +110,12 @@ class SimpleChoiceQuestionAjaxHandler {
         $build_json['is_jump_wrong']   = $is_jump_wrong;
         $build_json['jump_wrong_ts']   = $jump_wrong_ts;
         $build_json['repeat_question'] = $repeat_question;
+	    
+	    if( sizeof($answered) > 0)
+	    {
+		    $build_json['previous_answer'] = $answered;
+		    $build_json['feedback']        = json_decode(self::getFeedbackForQuestion($question_id));
+	    }
 	    
         return json_encode($build_json);
     }

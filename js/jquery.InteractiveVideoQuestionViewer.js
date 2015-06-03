@@ -21,8 +21,23 @@ var InteractiveVideoQuestionViewer = (function () {
 		{
 			addSelfReflectionLayout();
 		}
+		showPreviousAnswer();
 	}
 
+	function showPreviousAnswer()
+	{
+		if(pub.QuestionObject.feedback !== undefined && pub.QuestionObject.previous_answer !== undefined)
+		{
+			$.each(pub.QuestionObject.previous_answer, function (l, value) {
+				$('#answer_' + value).attr('checked', true);
+			});
+			if(pub.QuestionObject.type != 2)
+			{
+				showFeedback(pub.QuestionObject.feedback);
+			}
+		}
+	}
+	
 	function addAnswerPossibilities(input_type) {
 		var html = '';
 		html = '<form id="question_form">';
@@ -122,7 +137,7 @@ var InteractiveVideoQuestionViewer = (function () {
 			})
 		).then(function (array) {
 				//Todo get answerd state of question also if question can be answered multiple times 
-				pub.QuestionObject = array;
+				pub.QuestionObject        = array;
 				pub.QuestionObject.player = player;
 				buildQuestionForm();
 				if (pub.QuestionObject.player.isFullScreen === true) {
