@@ -1764,16 +1764,26 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         foreach ($data['question'] as $key => $row)
         {
             array_push($head_row, trim($row, '"'));
+	        array_push($head_row, trim($row, '"') . ' ' .$this->plugin->txt('answers') );
         }
         array_push($head_row, $this->plugin->txt('answered') );
         array_push($head_row, $this->plugin->txt('sum'));
         array_push($csv, ilUtil::processCSVRow($head_row, TRUE, $separator) );
+	    $ignore_colum = array('name','answerd', 'sum');
         foreach ($data['users'] as $key => $row)
         {
             $csvrow = array();
             foreach ( $row as $type => $value)
             {
-                array_push($csvrow, trim($value, '"'));
+	            array_push($csvrow, trim($value, '"'));
+	            if(isset($data['answers'][$key][$type]))
+	            {
+		            array_push($csvrow, trim($data['answers'][$key][$type], '"'));
+	            }
+	            else if(!in_array($type, $ignore_colum))
+	            {
+		            array_push($csvrow, '');
+	            }
             }
             array_push($csv, ilUtil::processCSVRow($csvrow, TRUE, $separator));
         }

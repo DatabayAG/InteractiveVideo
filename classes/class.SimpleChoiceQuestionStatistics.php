@@ -66,7 +66,7 @@ class SimpleChoiceQuestionStatistics {
     public function getScoreForAllQuestionsAndAllUser($oid)
     {
         $questions_list  = $this->getQuestionIdsForObject($oid);
-        //$questions_count = $this->getQuestionCountForObject($oid);
+        $questions_count = $this->getQuestionCountForObject($oid);
         /**
          * @var $ilDB   ilDB
          */
@@ -82,7 +82,7 @@ class SimpleChoiceQuestionStatistics {
 			AND 	obj_id = %s  ORDER BY comments.comment_time',
             array('integer'), array((int)$oid)
         );
-        $return_value = array('users' => array(), 'question' => array());
+        $return_value = array('users' => array(), 'question' => array(), 'answers' => array());
         $return_sums  = array();
         while($row = $ilDB->fetchAssoc($res))
         {
@@ -112,12 +112,41 @@ class SimpleChoiceQuestionStatistics {
                 }
             }
         }
-
         foreach($return_sums as $key => $value)
         {
-            $return_value['users'][$key]['answerd'] = $value['answered'];
-            $return_value['users'][$key]['sum']     = $value['sum'];
+	        if($value['answered'] > 0)
+	        {
+		        $return_value['users'][$key]['answerd'] = round(($value['answered'] /$questions_count) * 100, 2) . '%';
+	        }
+	        else
+	        {
+		        $return_value['users'][$key]['answerd'] = '0%';
+	        }
+	        if($value['answered'] > 0)
+	        {
+		        $return_value['users'][$key]['sum']     = round(($value['sum'] /$questions_count) * 100, 2) . '%';
+	        }
+	        else
+	        {
+		        $return_value['users'][$key]['sum'] = '0%';
+	        }
+
         }
+
+	    $res = $ilDB->queryF('SELECT answers.user_id, text.answer, text.correct, answers.answer_id, questions.question_id
+			FROM 	rep_robj_xvid_question questions,
+					rep_robj_xvid_answers answers,
+					rep_robj_xvid_comments comments,
+					rep_robj_xvid_qus_text text
+			WHERE   questions.question_id = answers.question_id
+			AND 	comments.comment_id   = questions.comment_id 
+			AND 	text.answer_id = answers.answer_id
+			AND 	obj_id = %s  ORDER BY comments.comment_time',
+		    array('integer'), array((int)$oid));
+	    while($row = $ilDB->fetchAssoc($res))
+	    {
+		    $return_value['answers'][$row['user_id']][$row['question_id']] .= chr(13) . $row['answer'];
+	    }
         return $return_value;
     }
     
