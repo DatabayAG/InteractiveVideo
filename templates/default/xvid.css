@@ -125,3 +125,6 @@
 .comment_text{
     
 }
+#question_form label input{
+	margin-right: 5px;
+}
