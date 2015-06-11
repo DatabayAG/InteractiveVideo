@@ -103,6 +103,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					case 'deleteComment': 
 					case 'editComments':  
 				    case 'editQuestion': 
+					case 'confirmUpdateQuestion': 	
 				    case 'insertQuestion':
                     case 'completeCsvExport':
                     $this->checkPermission('write');
@@ -658,7 +659,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	
 		$this->getAnswerDefinitionsJSON();
 		
-		$form->addCommandButton('updateQuestion', $this->lng->txt('update'));
+		$form->addCommandButton('confirmUpdateQuestion', $this->lng->txt('update'));
 		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
 		$tpl->setContent($form->getHTML());
 	}
@@ -704,10 +705,59 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		return $values;
 }
+	
+	
+	public function confirmUpdateQuestion()
+	{
+		/**
+		 * @var $tpl    ilTemplate
+		 * @var $ilTabs ilTabsGUI
+		 */
+		global $tpl, $ilTabs;
+
+		$this->setSubTabs('editComments');
+
+		$ilTabs->activateTab('editComments');
+		$ilTabs->activateSubTab('editComments');
+		
+		$comment_id = (int)$_POST['comment_id'];
+		
+		if(!$chk =  SimpleChoiceQuestion::existUserAnswer($comment_id))
+		{
+			$this->updateQuestion();
+		}	
+		else
+		{
+			require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
+			$confirm = new ilConfirmationGUI();
+			$confirm->setFormAction($this->ctrl->getFormAction($this, 'updateQuestion'));
+			$confirm->setHeaderText($this->plugin->txt('sure_update_question'));
+
+			$confirm->setCancel($this->lng->txt('cancel'), 'editComments');
+			$confirm->setConfirm($this->lng->txt('update'), 'updateQuestion');
+			foreach($_POST as $key=>$value)
+			{
+				//@todo .... very quick ... very dirty .... 
+				if($key != 'cmd')
+				{
+					$form_values[$key] = $value;
+				}
+			}
+			$confirm->addHiddenItem('form_values', serialize($form_values));
+
+			$tpl->setContent($confirm->getHTML());
+		}
+	}
 
 	public function updateQuestion()
 	{
 		$form = $this->initQuestionForm();
+		if(isset($_POST['form_values']))
+		{
+			//@todo .... very quick ... very wtf .... 
+			$_POST = unserialize($_POST['form_values']);
+		}
+		
 		if($form->checkInput())
 		{
 			$comment_id = $form->getInput('comment_id');
