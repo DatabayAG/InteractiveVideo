@@ -56,20 +56,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	 */
 	protected function beforeCreate()
 	{
-		if(!isset($_FILES) || !is_array($_FILES) || !isset($_FILES['video_file']))
-		{
-			throw new ilException(sprintf("%s: Missing file", __METHOD__));
-		}
-
 		return true;
 	}
 
 	protected function beforeCloneObject()
 	{
-		$mob = new ilObjMediaObject($this->mob_id);
-		//Todo: fix this shit
-		$a = $mob->duplicate();
-		$_FILES['video_file'] = $mob->media_items[0];
 		return true;
 	}
 	/**
@@ -159,6 +150,24 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		parent::doCloneObject($new_obj, $a_target_id, $a_copy_id);
 
 		$this->cloneMetaData($new_obj);
+
+		global $ilDB;
+
+		$mob = new ilObjMediaObject($this->mob_id);
+		$new_mob = $mob->duplicate();
+		
+		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_objects WHERE obj_id = %s',
+			array('integer'), array($new_obj->getId()));
+
+		$ilDB->insert(
+			'rep_robj_xvid_objects',
+			array(
+				'obj_id'        => array('integer', $new_obj->getId()),
+				'mob_id'        => array('integer', $new_mob->getId()),
+				'is_anonymized' => array('integer', $new_obj->isAnonymized()),
+				'is_public'     => array('integer', $new_obj->isPublic())
+			)
+		);
 	}
 
 	/**
@@ -354,8 +363,24 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	 */
 	public function uploadVideoFile()
 	{
-		global $ilDB;
+		global $ilDB, $ilCtrl;
 
+		
+		
+		if(!isset($_FILES) || !is_array($_FILES)|| !isset($_FILES['video_file']))
+		{
+			$cmd = $ilCtrl->getCmd();
+			if($cmd == 'saveTarget')
+			{
+				// doClone .. 
+				return true;
+			} 
+			else
+			{
+				throw new ilException(sprintf("%s: Missing file", __METHOD__));
+			}	 
+		}
+		
 		$new_file = $_FILES['video_file'];
 
 		$mob = new ilObjMediaObject();
