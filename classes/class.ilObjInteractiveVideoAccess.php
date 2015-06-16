@@ -33,6 +33,7 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess
 		switch($a_permission)
 		{
 			case 'read':
+			case 'visible':
 				if(
 					!ilObjInteractiveVideoAccess::checkOnline($a_obj_id) &&
 					!$ilAccess->checkAccessOfUser($a_user_id, 'write', '', $a_ref_id)
