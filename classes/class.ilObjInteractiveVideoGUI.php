@@ -1594,12 +1594,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$upload_field->setSuffixes(array('mp4', 'mov'));
 		$a_form->addItem($upload_field);
 
+		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
+		$a_form->addItem($online);
+		
 		$anonymized = new ilCheckboxInputGUI($this->plugin->txt('is_anonymized'), 'is_anonymized');
 		$anonymized->setInfo($this->plugin->txt('is_anonymized_info'));
 		$a_form->addItem($anonymized);
-
-		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
-		$a_form->addItem($online);
 		
 		$is_public = new ilCheckboxInputGUI($this->plugin->txt('is_public'), 'is_public');
 		$is_public->setInfo($this->plugin->txt('is_public_info'));
