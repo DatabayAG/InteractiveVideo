@@ -786,7 +786,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->performQuestionRefresh($comment_id, $form);
 
 			ilUtil::sendSuccess($this->lng->txt('saved_successfully'));
-			$this->editComments();
+			return $this->editComments();
 		}
 		else
 		{
@@ -1072,7 +1072,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $ilTabs;
 
-		$this->setSubTabs('editComments');
 
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('editComments');
