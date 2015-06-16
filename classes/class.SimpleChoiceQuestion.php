@@ -178,7 +178,8 @@ class SimpleChoiceQuestion
 			foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
 			{
 				$answer_id = $ilDB->nextId('rep_robj_xvid_qus_text');
-				if(array_key_exists($key, ilUtil::stripSlashesRecursive($_POST['correct'])))
+				if($value == null){$value = ' ';}
+				if(is_array($_POST['correct']) && array_key_exists($key, ilUtil::stripSlashesRecursive($_POST['correct'])))
 				{
 					$correct = 1;
 				}

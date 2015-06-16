@@ -803,42 +803,34 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$question    = new SimpleChoiceQuestion($comment_id);
 		$question_id = $question->existQuestionForCommentId($comment_id);
+		
+		$question->setCommentId($comment_id);
+		$question->setType((int)$form->getInput('question_type'));
+		$question->setQuestionText(ilUtil::stripSlashes($form->getInput('question_text')));
+		$question->setFeedbackCorrect(ilUtil::stripSlashes($form->getInput('feedback_correct')));
+		$question->setFeedbackOneWrong(ilUtil::stripSlashes($form->getInput('feedback_one_wrong')));
+		
+		$question->setLimitAttempts((int)$form->getInput('limit_attempts'));
+		$question->setIsJumpCorrect((int)$form->getInput('is_jump_correct'));
+		
+		$jmp_correct_time = $form->getInput('jump_correct_ts');
+		$correct_seconds  = $jmp_correct_time['time']['h'] * 3600
+		+ $jmp_correct_time['time']['m'] * 60
+		+ $jmp_correct_time['time']['s'];
+		$question->setJumpCorrectTs($correct_seconds);
+		
+		$question->setIsJumpWrong((int)$form->getInput('is_jump_wrong'));
+		
+		$jmp_wrong_time = $form->getInput('jump_wrong_ts');
+		$wrong_seconds  = $jmp_wrong_time['time']['h'] * 3600
+		+ $jmp_wrong_time['time']['m'] * 60
+		+ $jmp_wrong_time['time']['s'];
+		$question->setJumpWrongTs($wrong_seconds);
+		
+		$question->setRepeatQuestion((int)$form->getInput('repeat_question'));
+		$question->deleteQuestionsIdByCommentId($comment_id);
+		$question->create();
 
-		if($question->checkInput())
-		{
-				$question->setCommentId($comment_id);
-				$question->setType((int)$form->getInput('question_type'));
-				$question->setQuestionText(ilUtil::stripSlashes($form->getInput('question_text')));
-				$question->setFeedbackCorrect(ilUtil::stripSlashes($form->getInput('feedback_correct')));
-				$question->setFeedbackOneWrong(ilUtil::stripSlashes($form->getInput('feedback_one_wrong')));
-				
-				$question->setLimitAttempts((int)$form->getInput('limit_attempts'));
-				$question->setIsJumpCorrect((int)$form->getInput('is_jump_correct'));
-				
-				$jmp_correct_time = $form->getInput('jump_correct_ts');
-				$correct_seconds  = $jmp_correct_time['time']['h'] * 3600
-				+ $jmp_correct_time['time']['m'] * 60
-				+ $jmp_correct_time['time']['s'];
-				$question->setJumpCorrectTs($correct_seconds);
-				
-				$question->setIsJumpWrong((int)$form->getInput('is_jump_wrong'));
-				
-				$jmp_wrong_time = $form->getInput('jump_wrong_ts');
-				$wrong_seconds  = $jmp_wrong_time['time']['h'] * 3600
-				+ $jmp_wrong_time['time']['m'] * 60
-				+ $jmp_wrong_time['time']['s'];
-				$question->setJumpWrongTs($wrong_seconds);
-				
-				$question->setRepeatQuestion((int)$form->getInput('repeat_question'));
-				$question->deleteQuestionsIdByCommentId($comment_id);
-				$question->create();
-		}
-		else
-		{
-			#$form->setValuesByPost();
-			#ilUtil::sendFailure($this->lng->txt('err_check_input'));
-			#return $this->editComment();
-		}
 	}
 	
 	/**
