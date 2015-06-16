@@ -67,8 +67,18 @@ var InteractiveVideoQuestionViewer = (function () {
 			cache:   false,
 			url:     question_post_url,
 			data:    {'qid' : pub.QuestionObject.question_id},
-			success: function () {}
+			success: function () {
+				addToLocalIgnoreArrayIfNonRepeatable();
+			}
 		});
+	}
+	
+	function addToLocalIgnoreArrayIfNonRepeatable(){
+		var non_repeat = parseInt(InteractiveVideoQuestionViewer.QuestionObject.repeat_question, 10);
+		if(non_repeat === 0)
+		{
+			ignore_questions.push(pub.comment_id );
+		}
 	}
 	
 	function addFeedbackDiv() {
@@ -107,6 +117,8 @@ var InteractiveVideoQuestionViewer = (function () {
 				success: function (feedback) {
 					var obj = JSON.parse(feedback);
 					showFeedback(obj);
+					addToLocalIgnoreArrayIfNonRepeatable();
+					//todo check question object and add to ignore if only once
 				}
 			});
 		});
@@ -137,6 +149,7 @@ var InteractiveVideoQuestionViewer = (function () {
 			})
 		).then(function (array) {
 				//Todo get answerd state of question also if question can be answered multiple times 
+				pub.comment_id            = comment_id;
 				pub.QuestionObject        = array;
 				pub.QuestionObject.player = player;
 				buildQuestionForm();
