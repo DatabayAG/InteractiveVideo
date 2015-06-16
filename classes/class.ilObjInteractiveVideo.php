@@ -13,6 +13,11 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestio
 class ilObjInteractiveVideo extends ilObjectPlugin
 {
 	/**
+	 * @var bool
+	 */
+	protected $is_online = false;
+	
+	/**
 	 * @var integer
 	 */
 	protected $mob_id = 0;
@@ -46,10 +51,27 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$this->setMobId($row['mob_id']);
 		$this->setIsAnonymized($row['is_anonymized']);
 		$this->setIsPublic($row['is_public']);
+		$this->setOnline((bool)$row['is_online']);
 
 		parent::doRead();
 	}
 
+	/**
+	 * @param $status
+	 */
+	public function setOnline($status)
+	{
+		$this->is_online = (bool)$status;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isOnline()
+	{
+		return (bool)$this->is_online;
+	}
+	
 	/**
 	 * @return bool
 	 * @throws ilException
@@ -107,8 +129,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$this->updateMetaData();
 		
 		$ilDB->update('rep_robj_xvid_objects',
-			array('is_anonymized' => array('integer', $this->isAnonymized()),
-				'is_public' =>array('integer', $this->isPublic())),
+			array(	'is_anonymized' => array('integer', $this->isAnonymized()), 
+				  	'is_public' =>array('integer', $this->isPublic()),
+					'is_online' => array('integer', $this->isOnline())
+					),
 			array('obj_id' => array('integer', $this->getId())));
 	}
 

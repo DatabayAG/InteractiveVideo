@@ -436,3 +436,19 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 		$ilDB->dropTableColumn('rep_robj_xvid_comments','repeat_question');
 	}
 ?>
+<#18>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_objects'))
+{
+
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'is_online'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_objects', 'is_online',
+			array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => true,
+				'default' => 0));
+	}
+}
+?>

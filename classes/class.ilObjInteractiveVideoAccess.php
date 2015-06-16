@@ -29,7 +29,34 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess
 		{
 			$a_user_id = $ilUser->getId();
 		}
-
+		
+		switch($a_permission)
+		{
+			case 'read':
+				if(
+					!ilObjInteractiveVideoAccess::checkOnline($a_obj_id) &&
+					!$ilAccess->checkAccessOfUser($a_user_id, 'write', '', $a_ref_id)
+				)
+				{
+					return false;
+				}
+				break;
+		}
+		
 		return true;
+	}
+
+	public static function checkOnline($a_id)
+	{
+		/**
+		 * @var $ilDB iLDB
+		 */
+		global $ilDB;
+
+		$set = $ilDB->query('
+			SELECT is_online FROM rep_robj_xvid_objects WHERE obj_id = ' . $ilDB->quote($a_id, 'integer')
+		);
+		$rec = $ilDB->fetchAssoc($set);
+		return (bool)$rec['is_online'];
 	}
 }

@@ -684,7 +684,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 			else
 			{
-				$comment_id = (int)$_GET['comment_id'] ? (int)$_GET['comment_id'] : (int)$_POSt['comment_id'];
+				$comment_id = (int)$_GET['comment_id'] ? (int)$_GET['comment_id'] : (int)$_POST['comment_id'];
 			}
 		}
 
@@ -1526,6 +1526,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_public = $a_form->getInput('is_public');
 		$this->object->setIsPublic((int)$is_public);
 
+		$is_online = $a_form->getInput('is_online');
+		$this->object->setOnline((int)$is_online);
+		
 		$this->object->update();
 		
 		// @todo: Store the new file (delegate to application class)
@@ -1595,6 +1598,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$anonymized->setInfo($this->plugin->txt('is_anonymized_info'));
 		$a_form->addItem($anonymized);
 
+		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
+		$a_form->addItem($online);
+		
 		$is_public = new ilCheckboxInputGUI($this->plugin->txt('is_public'), 'is_public');
 		$is_public->setInfo($this->plugin->txt('is_public_info'));
 		$a_form->addItem($is_public);
@@ -1606,9 +1612,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function getEditFormCustomValues(array &$a_values)
 	{
-		$a_values['video_file'] = ilObject::_lookupTitle($this->object->getMobId());
-		$a_values['is_anonymized'] = $this->object->isAnonymized();
-		$a_values['is_public']     = $this->object->isPublic();
+		$a_values['video_file'] 	= ilObject::_lookupTitle($this->object->getMobId());
+		$a_values['is_anonymized'] 	= $this->object->isAnonymized();
+		$a_values['is_public']     	= $this->object->isPublic();
+		$a_values["is_online"]		= $this->object->isOnline();
 	}
 
 	/**
