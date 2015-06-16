@@ -48,7 +48,7 @@ class SimpleChoiceQuestionStatistics {
         $counter = 0;
         while($row = $ilDB->fetchAssoc($res))
         {
-            $results[$counter]['name']       = $ilUser->_lookupFullname($row['user_id']);
+            $results[$counter]['name']       = $ilUser->_lookupFullname($row['user_id']) . ' (' .$ilUser->getLoginByUserId($row['user_id']). ')';;
             $results[$counter]['user_id']    = $row['user_id'];
             $results[$counter]['answered']   = $this->getAnsweredQuestionsFromUser($oid, $row['user_id']);
             $results[$counter]['correct']    = $row['points'];
@@ -86,7 +86,7 @@ class SimpleChoiceQuestionStatistics {
         $return_sums  = array();
         while($row = $ilDB->fetchAssoc($res))
         {
-            $name                               = $ilUser->_lookupFullname($row['user_id']);
+            $name                               = $ilUser->_lookupFullname($row['user_id']) . ' (' .$ilUser->getLoginByUserId($row['user_id']). ')';
             $id                                 = $row['user_id'];
             $return_value['users'][$id]['name'] = $name;
             if(!isset($return_sums[$id]['answered']))

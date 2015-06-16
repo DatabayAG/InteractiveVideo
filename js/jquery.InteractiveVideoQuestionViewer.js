@@ -74,8 +74,8 @@ var InteractiveVideoQuestionViewer = (function () {
 	}
 	
 	function addToLocalIgnoreArrayIfNonRepeatable(){
-		var non_repeat = parseInt(InteractiveVideoQuestionViewer.QuestionObject.repeat_question, 10);
-		if(non_repeat === 0)
+		var repeat = parseInt(InteractiveVideoQuestionViewer.QuestionObject.repeat_question, 10);
+		if(repeat === 0)
 		{
 			ignore_questions.push(pub.comment_id );
 		}
@@ -118,7 +118,6 @@ var InteractiveVideoQuestionViewer = (function () {
 					var obj = JSON.parse(feedback);
 					showFeedback(obj);
 					addToLocalIgnoreArrayIfNonRepeatable();
-					//todo check question object and add to ignore if only once
 				}
 			});
 		});
