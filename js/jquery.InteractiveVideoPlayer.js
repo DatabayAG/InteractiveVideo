@@ -17,7 +17,7 @@ $( document ).ready(function() {
 			type     : "POST",
 			dataType : "JSON",
 			url      : post_comment_url,
-			data     : {"comment_time":$("video#ilInteractiveVideo")[0].currentTime, "comment_text": $('#comment_text').val(), 'is_private': $('#is_private').val()},
+			data     : {"comment_time":$("video#ilInteractiveVideo")[0].currentTime, "comment_text": $('#comment_text').val(), 'is_private': $('#is_private').prop( "checked" )},
 			success  : function(data) {
 				console.log("ok");
 				$('#comment_text').val("");
@@ -178,7 +178,7 @@ $.fn.buildListElement = function (comment, time, username, counter)
 											{
 												if(comments[i].comment_text != null)
 												{
-													$("#ul_scroll").prepend($().buildListElement(comments[i], media.currentTime, username, i));
+													$("#ul_scroll").prepend($().buildListElement(comments[i], media.currentTime, comments[i].user_name, i));
 												}
 												if (comments[i].is_interactive == 1 && $.inArray(comments[i].comment_id, ignore_questions) == -1) 
 												{

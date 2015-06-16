@@ -13,7 +13,7 @@
 					<input type="hidden" name="comment_time" id="comment_time" value="">
 				</div>
 				<div class="col-sm-9">
-					<input type="checkbox" value="" name="is_private" id="is_private" onclick=""> {TXT_IS_PRIVATE}
+					<input type="checkbox" name="is_private" value="1" id="is_private"/> {TXT_IS_PRIVATE}
 				</div>
 			</div>
 			<div class="ilFormFooter clearfix">
@@ -50,7 +50,7 @@
 		{
 			auto_resume	: false,
 			iv_debug	: false
-		}
+		};
 				
 		$.fn.debugPrinter = function (message, element)
 		{

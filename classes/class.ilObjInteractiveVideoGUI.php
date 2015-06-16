@@ -298,8 +298,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$comment->setIsPrivate(0);
 		}
 		else
-		{		
-			$comment->setIsPrivate((int)$_POST['is_private']);
+		{	
+			$is_private = 0;
+			if( $_POST['is_private'] == "true" )
+				{
+					$is_private = 1; 
+				}
+
+			$comment->setIsPrivate($is_private );
 		}
 		$comment->create();
 		exit();
