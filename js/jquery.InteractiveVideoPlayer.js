@@ -7,7 +7,7 @@ $( document ).ready(function() {
 				'comment_text': $('#comment_text').val(),
 				'user_name': username,
 				'is_interactive': '0',
-				'is_private': $('#is_private').val()
+				'is_private': $('#is_private').prop( "checked" )
 			};
 		$().sliceCommentAndStopPointsInCorrectPosition(tmp_obj, tmp_obj.comment_time);
 		
@@ -17,9 +17,12 @@ $( document ).ready(function() {
 			type     : "POST",
 			dataType : "JSON",
 			url      : post_comment_url,
-			data     : {"comment_time":$("video#ilInteractiveVideo")[0].currentTime, "comment_text": $('#comment_text').val(), 'is_private': $('#is_private').prop( "checked" )},
+			data     : {
+						    "comment_time":$("video#ilInteractiveVideo")[0].currentTime, 
+							"comment_text": $('#comment_text').val(), 
+							'is_private': $('#is_private').prop( "checked" )
+						},
 			success  : function(data) {
-				console.log("ok");
 				$('#comment_text').val("");
 			}
 		});
@@ -87,7 +90,8 @@ $.fn.resumeVideo = function ()
 
 $.fn.buildListElement = function (comment, time, username, counter)
 {
-	var comment_tags = '';
+	var comment_tags    = '';
+	var private_comment = '';
 	if(comment.comment_title == null)
 	{
 		comment.comment_title = '';
@@ -104,11 +108,24 @@ $.fn.buildListElement = function (comment, time, username, counter)
 	{
 		username = '[' + username + ']';
 	}
+	if(comment.is_interactive == 1)
+	{
+		username  = '[' + question_text + ']';
+	}
+	if(comment.is_private == 1)
+	{
+		private_comment = ' (' + private_text + ')';
+	}
+	else
+	{
+		private_comment = '';
+	}
 	return '<li class="list_item_' + counter + '">' + 
 				'<time class="time">'+ mejs.Utility.secondsToTimeCode(time)  + '</time> '  + 
 		   		'<span class="comment_username"> ' + username                + '</span> '  +
 				'<span class="comment_title">' 	   + comment.comment_title   + '</span> '  +
 				'<span class="comment_text">'      + comment.comment_text    + '</span> '  +
+				'<span class="private_text">'      + private_comment         + '</span> '  +
 				'<br/><div class="comment_tags">'  + comment_tags    		 + '</div> '  +
 		   '</li>';
 };
