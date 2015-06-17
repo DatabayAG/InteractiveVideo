@@ -156,6 +156,7 @@ $.fn.buildListElement = function (comment, time, username, counter)
 					clearInterval(interval);
 					if (_lastTime > media.currentTime) {
 						_lastTime = media.currentTime;
+						last_stopPoint = -1;
 					} else if (_lastTime < media.currentTime) {
 						_lastTime = media.currentTime;
 					}
