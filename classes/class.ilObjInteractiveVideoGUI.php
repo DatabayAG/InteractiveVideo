@@ -1071,7 +1071,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $ilTabs ilTabsGUI
 		 */
 		global $tpl, $ilTabs;
-
+		
+		
+		$this->setSubTabs('editComments');
 
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('editComments');

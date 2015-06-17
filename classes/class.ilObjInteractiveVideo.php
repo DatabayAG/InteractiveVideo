@@ -5,6 +5,7 @@ require_once 'Services/Repository/classes/class.ilObjectPlugin.php';
 require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
 
 /**
  * Class ilObjInteractiveVideo
@@ -192,6 +193,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 				'is_public'     => array('integer', $new_obj->isPublic())
 			)
 		);
+		$comment = new ilObjComment();
+		$comment->cloneTutorComments($this->getId(), $new_obj->getId());
 	}
 
 	/**

@@ -209,6 +209,32 @@ class SimpleChoiceQuestion
 		}
 	}
 
+	public function cloneQuestionObject($old_comment_is, $new_comment_id)
+	{
+		global $ilDB;
+		$res = $ilDB->queryF('
+				SELECT * 
+				FROM rep_robj_xvid_question 
+				WHERE comment_id = %s',
+			array('integer'), array($old_comment_is)
+		);
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$this->setCommentId($new_comment_id);
+			$this->setQuestionText($row['question_text']);
+			$this->setType($row['type']);
+			$this->setFeedbackCorrect($row['feedback_correct']);
+			$this->setFeedbackOneWrong($row['feedback_one_wrong']);
+			$this->setLimitAttempts($row['limit_attempts']);
+			$this->setIsJumpCorrect($row['is_jump_correct']);
+			$this->setJumpCorrectTs($row['jump_correct_ts']);
+			$this->setIsJumpWrong($row['is_jump_wrong']);
+			$this->setJumpWrongTs($row['jump_wrong_ts']);
+			$this->setRepeatQuestion($row['repeat_question']);
+			$_POST['answer'] = $this->readAnswerDefinitions();
+			$this->create();
+		}
+	}
 	/**
 	 * @return bool
 	 */

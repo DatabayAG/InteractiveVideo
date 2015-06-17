@@ -104,7 +104,7 @@ class ilObjComment
 		$this->setIsPrivate($row['is_private']);
 	}
 
-	public function create()
+	public function create($return_next_id = false)
 	{
 		/**
 		 * @var $ilDB   ilDB
@@ -128,6 +128,10 @@ class ilObjComment
 				'comment_tags'	=> array('text', $this->getCommentTags()),
 				'is_private'	=> array('integer', $this->getIsPrivate())
 			));
+		if($return_next_id)
+		{
+			return $next_id;
+		}
 	}
 
 	public function update()
@@ -284,6 +288,43 @@ class ilObjComment
 		return $comments;
 	}
 
+	public function cloneTutorComments($old_id, $new_id)
+	{
+		global $ilDB;
+		$questions_array = array();
+		$res = $ilDB->queryF(
+			'SELECT *
+			FROM rep_robj_xvid_comments
+			WHERE obj_id = %s
+			AND is_tutor = 1
+			ORDER BY comment_time, comment_id ASC',
+			array('integer'),
+			array($old_id)
+		);
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$this->setObjId($new_id);
+			$this->setCommentText($row['comment_text']);
+			$this->setCommentTime($row['comment_time']);
+			$this->setInteractive((bool)$row['is_interactive']);
+			$this->setIsTutor((bool)$row['is_tutor']);
+			$this->setUserId($row['user_id']);
+			$this->setCommentTitle($row['comment_title']);
+			$this->setCommentTags($row['comment_tags']);
+			$this->setIsPrivate($row['is_private']);
+			$new_id = $this->create(true);
+			if((bool)$row['is_interactive'])
+			{
+				$questions_array[$row['comment_id']] = $new_id;
+			}
+		}
+		$simple = new SimpleChoiceQuestion();
+		foreach($questions_array as $key => $value)
+		{
+			$simple->cloneQuestionObject($key, $value);	
+		}
+	}
+	
 	/**
 	 * @param $user_id
 	 * @return mixed
