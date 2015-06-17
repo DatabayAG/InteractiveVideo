@@ -312,10 +312,10 @@ class ilObjComment
 			$this->setCommentTitle($row['comment_title']);
 			$this->setCommentTags($row['comment_tags']);
 			$this->setIsPrivate($row['is_private']);
-			$new_id = $this->create(true);
+			$new_comment_id = $this->create(true);
 			if((bool)$row['is_interactive'])
 			{
-				$questions_array[$row['comment_id']] = $new_id;
+				$questions_array[$row['comment_id']] = $new_comment_id;
 			}
 		}
 		$simple = new SimpleChoiceQuestion();
