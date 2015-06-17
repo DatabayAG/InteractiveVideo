@@ -479,8 +479,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 			array(
 				'obj_id'        => array('integer', $this->getId()),
 				'mob_id'        => array('integer', $this->getMobId()),
-				'is_anonymized' => array('integer', $this->isAnonymized()),
-				'is_public'     => array('integer', $this->isPublic())
+				'is_anonymized' => array('integer', (int) $_POST['is_anonymized']),
+				'is_public'     => array('integer', (int) $_POST['is_public'])
 			)
 		);
 	}
