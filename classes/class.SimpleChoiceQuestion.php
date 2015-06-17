@@ -209,14 +209,30 @@ class SimpleChoiceQuestion
 		}
 	}
 
-	public function cloneQuestionObject($old_comment_is, $new_comment_id)
+	public function cloneQuestionObject($old_comment_id, $new_comment_id)
 	{
 		global $ilDB;
 		$res = $ilDB->queryF('
 				SELECT * 
+				FROM rep_robj_xvid_qus_text  
+				WHERE question_id = %s',
+			array('integer'), array($this->getQuestionIdByCommentId($old_comment_id))
+		);
+		$counter = 0;
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$_POST['answer'][] = $row['answer'];
+			if($row['correct'] == 1)
+			{
+				$_POST['correct'][$counter] = 1;
+			}
+			$counter++;
+		}
+		$res = $ilDB->queryF('
+				SELECT * 
 				FROM rep_robj_xvid_question 
 				WHERE comment_id = %s',
-			array('integer'), array($old_comment_is)
+			array('integer'), array($old_comment_id)
 		);
 		while($row = $ilDB->fetchAssoc($res))
 		{
@@ -231,7 +247,7 @@ class SimpleChoiceQuestion
 			$this->setIsJumpWrong($row['is_jump_wrong']);
 			$this->setJumpWrongTs($row['jump_wrong_ts']);
 			$this->setRepeatQuestion($row['repeat_question']);
-			$_POST['answer'] = $this->readAnswerDefinitions();
+			$_POST['question_type'] = $row['type'];
 			$this->create();
 		}
 	}
@@ -467,6 +483,17 @@ class SimpleChoiceQuestion
 
 	}
 
+	public function getQuestionIdByCommentId($comment_id)
+	{
+		global $ilDB;
+
+		$res = $ilDB->queryF('SELECT question_id FROM rep_robj_xvid_question WHERE comment_id = %s',
+			array('integer'), array($comment_id));
+
+		$row = $ilDB->fetchAssoc($res);
+		return $row['question_id'];
+	}
+	
 	/**
 	 * @param $qid
 	 * @param $answers
