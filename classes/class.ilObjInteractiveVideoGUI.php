@@ -588,10 +588,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $ilTabs;
 
-		$this->setSubTabs('editComments');
-
 		$ilTabs->activateTab('editComments');
-		$ilTabs->activateSubTab('editComments');
 
 		if(!($form instanceof ilPropertyFormGUI))
 		{
@@ -652,11 +649,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $ilTabs;
 
-		$this->setSubTabs('editComments');
-
 		$ilTabs->activateTab('editComments');
-		$ilTabs->activateSubTab('editComments');
-
+		
 		if(!($form instanceof ilPropertyFormGUI))
 		{
 			$form = $this->initQuestionForm();
@@ -720,11 +714,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $ilTabs ilTabsGUI
 		 */
 		global $tpl, $ilTabs;
-
-		$this->setSubTabs('editComments');
-
 		$ilTabs->activateTab('editComments');
-		$ilTabs->activateSubTab('editComments');
 		
 		$comment_id = (int)$_POST['comment_id'];
 		
@@ -786,12 +776,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->performQuestionRefresh($comment_id, $form);
 
 			ilUtil::sendSuccess($this->lng->txt('saved_successfully'));
-			return $this->editComments();
+			$this->editComments();
 		}
 		else
 		{
 			$form->setValuesByPost();
-			return $this->editQuestion($form);
+			$this->editQuestion($form);
 		}
 	}
 
