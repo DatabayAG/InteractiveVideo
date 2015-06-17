@@ -173,7 +173,7 @@ class SimpleChoiceQuestion
 				'jump_wrong_ts'      => array('integer', $this->getJumpWrongTs()),
 				'repeat_question'    => array('integer', $this->getRepeatQuestion())
 			));
-		if(count($_POST['answer']) > 0 && $_POST['answer'][0] != '')
+		if(count($_POST['answer']) > 0 && $_POST['question_type'] != self::REFLECTION)
 		{
 			foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
 			{
@@ -196,7 +196,7 @@ class SimpleChoiceQuestion
 					));
 			}
 		}
-		else if($this->getType() == self::REFLECTION)
+		else
 		{
 			$answer_id = $ilDB->nextId('rep_robj_xvid_qus_text');
 			$ilDB->insert('rep_robj_xvid_qus_text',

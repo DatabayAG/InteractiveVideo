@@ -1072,7 +1072,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $ilTabs;
 		
-		
+		//Todo: fix double tabs after question editing
 		$this->setSubTabs('editComments');
 
 		$ilTabs->activateTab('editComments');
