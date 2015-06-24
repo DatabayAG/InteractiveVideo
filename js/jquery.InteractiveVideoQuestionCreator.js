@@ -13,7 +13,6 @@ $( document ).ready(function() {
 
 var InteractiveVideoQuestionCreator = (function () {
 	var pub = {};
-	//Private method
 	
 	function appendMultiListener() {
 		$('.text_field').on('blur', function (){
@@ -105,7 +104,7 @@ var InteractiveVideoQuestionCreator = (function () {
 			showHideFormElementsForReflectionType();
 		});
 	}
-	//Public method
+
 	pub.Init = function () {
 		var question_form = $('#addQuestion');
 		$('#is_interactive').parent().parent().parent().parent().append(question_form);
@@ -122,8 +121,7 @@ var InteractiveVideoQuestionCreator = (function () {
 			 }];
 		IVQuestionCreator.type = 0;
 	};
-
-	//Return just the public parts
+	
 	return pub;
 
 }());

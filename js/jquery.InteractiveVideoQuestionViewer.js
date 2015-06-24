@@ -1,6 +1,6 @@
 var InteractiveVideoQuestionViewer = (function () {
 	var pub = {};
-	//Private method
+
 	function buildQuestionForm() {
 		var modal = $('.modal-body');
 		var type  = parseInt(pub.QuestionObject.type, 10);
@@ -135,11 +135,9 @@ var InteractiveVideoQuestionViewer = (function () {
 	function createButtonButtons(id, value) {
 		return '<input id="' + id + '" class="btn btn-default btn-sm" type="submit" value="' + value + '">';
 	}
-
-	//Public property
+	
 	pub.QuestionObject = {};
-
-	//Public method
+	
 	pub.getQuestionPerAjax = function (comment_id, player) {
 		$.when(
 			$.ajax({
@@ -147,7 +145,6 @@ var InteractiveVideoQuestionViewer = (function () {
 				type: 'GET', dataType: 'json'
 			})
 		).then(function (array) {
-				//Todo get answerd state of question also if question can be answered multiple times 
 				pub.comment_id            = comment_id;
 				pub.QuestionObject        = array;
 				pub.QuestionObject.player = player;
@@ -158,8 +155,7 @@ var InteractiveVideoQuestionViewer = (function () {
 				$('#ilQuestionModal').modal('show');
 			});
 	};
-
-	//Return just the public parts
+	
 	return pub;
 
 }());

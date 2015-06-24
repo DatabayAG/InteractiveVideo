@@ -1555,7 +1555,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form = parent::initCreateForm($type);
 
 		$upload_field = new ilFileInputGUI($this->plugin->txt('video_file'), 'video_file');
-		$upload_field->setSuffixes(array('mp4', 'mov'));
+		$upload_field->setSuffixes(array('mp4', 'mov', 'mp3', 'flv', 'm4v', 'ogg', 'ogv', 'webm'));
 		$upload_field->setRequired(true);
 		$form->addItem($upload_field);
 
@@ -1585,7 +1585,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateSubTab('editProperties');
 
 		$upload_field = new ilFileInputGUI($this->plugin->txt('video_file'), 'video_file');
-		$upload_field->setSuffixes(array('mp4', 'mov'));
+		$upload_field->setSuffixes(array('mp4', 'mov', 'mp3', 'flv', 'm4v', 'ogg', 'ogv', 'webm'));
 		$a_form->addItem($upload_field);
 
 		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
