@@ -450,9 +450,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		}
 
 		$format = $mob->getMediaItem('Standard')->getFormat();
-		if(strpos($format, 'video') === false)
+		if(strpos($format, 'video') === false && strpos($format, 'audio') === false)
 		{
-			throw new ilException(sprintf("%s: No video file given", __METHOD__));
+			throw new ilException(sprintf("%s: No audio/video file given", __METHOD__));
 		}
 
 		//delete old mob-data 
