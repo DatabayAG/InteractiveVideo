@@ -90,3 +90,6 @@ reflection#:#Reflexionsfrage
 answers#:#Antworten
 sure_update_question#:#Sind Sie sicher, dass Sie die Frage überschreiben wollen? Vorhandene Benutzerergebnisse werden gelöscht!
 question_type_info#:#Sie können zwischen drei Fragetypen wählen: Single Choice, Multiple Choice und Reflexionsfragen. Eine Reflexionsfrage wird wie eine SC bzw. eine MC Frage angezeigt, enthält jedoch keine Antwortmöglichkeiten. Sie wird sofort als bestanden gewertet, wenn Sie einem Nutzer mindestens einmal angezeigt wurde.
+is_jump_correct_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage richtig beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblended.
+is_jump_wrong_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage falsch beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblended.
+

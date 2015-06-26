@@ -92,4 +92,7 @@ already_answered#:#Question already answered.
 reflection#:#Reflective question
 answers#:#Answers
 sure_update_question#:#Are you sure, you want to save the question? Existing user results will be deleted! 
-question_type_info#:#You can choose between one of three avalibale quetsion types: a single choice, a multiple choice or a self-reflexion quertion. Self-refelxion questions do not have answer options and will be marked as "passed" once they have been shown to a user at least once.
+question_type_info#:#You can choose between one of three avalibale quetsion types: a single choice, a multiple choice or a self-reflexion quertion. Self-reflexion questions do not have answer options and will be marked as "passed" once they have been shown to a user at least once.
+is_jump_correct_info#:#In case the question was answered correctly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
+is_jump_wrong_info#:#In case the question was answered incorrectly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
+
