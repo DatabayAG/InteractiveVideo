@@ -92,3 +92,4 @@ already_answered#:#Question already answered.
 reflection#:#Reflective question
 answers#:#Answers
 sure_update_question#:#Are you sure, you want to save the question? Existing user results will be deleted! 
+question_type_info#:#You can choose between one of three avalibale quetsion types: a single choice, a multiple choice or a self-reflexion quertion. Self-refelxion questions do not have answer options and will be marked as "passed" once they have been shown to a user at least once.
