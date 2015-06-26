@@ -536,7 +536,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		// Feedback correct
 		$feedback_correct = new ilTextAreaInputGUI($this->plugin->txt('feedback_correct'), 'feedback_correct');
 		$is_jump_correct = new ilCheckboxInputGUI($this->plugin->txt('is_jump_correct'), 'is_jump_correct');
-		$is_jump_correct->setInfo($this->plugin->txt('is_jump_correct_info');
+		$is_jump_correct->setInfo($this->plugin->txt('is_jump_correct_info'));
 
 		$jump_correct_ts = new ilTimeInputGUI($this->lng->txt('time'), 'jump_correct_ts');
 		$jump_correct_ts->setShowTime(true);
@@ -554,7 +554,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		// Feedback wrong
 		$feedback_one_wrong = new ilTextAreaInputGUI($this->plugin->txt('feedback_one_wrong'), 'feedback_one_wrong');
 		$is_jump_wrong = new ilCheckboxInputGUI($this->plugin->txt('is_jump_wrong'), 'is_jump_wrong');
-		$is_jump_wrong->setInfo($this->plugin->txt('is_jump_wrong_info');
+		$is_jump_wrong->setInfo($this->plugin->txt('is_jump_wrong_info'));
 
 		$jump_wrong_ts = new ilTimeInputGUI($this->lng->txt('time'), 'jump_wrong_ts');
 		$jump_wrong_ts->setShowTime(true);
