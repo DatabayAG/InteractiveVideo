@@ -88,4 +88,5 @@ feedback#:#Feedback
 already_answered#:#Frage wurde bereits beantwortet.
 reflection#:#Reflexionsfrage
 answers#:#Antworten
-sure_update_question#:#Sind Sie sicher, dass Sie die Frage überschreiben wollen? Vorhandene Benutzerergebnisse werden gelöscht! 
+sure_update_question#:#Sind Sie sicher, dass Sie die Frage überschreiben wollen? Vorhandene Benutzerergebnisse werden gelöscht!
+question_type_info#:#Sie können zwischen drei Fragetypen wählen: Single Choice, Multiple Choice und Reflexionsfragen. Eine Reflexionsfrage wird wie eine SC bzw. eine MC Frage angezeigt, enthält jedoch keine Antwortmöglichkeiten. Sie wird sofort als bestanden gewertet, wenn Sie einem Nutzer mindestens einmal angezeigt wurde.
