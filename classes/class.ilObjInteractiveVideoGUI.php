@@ -514,7 +514,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		
 		$question_type = new ilSelectInputGUI($this->plugin->txt('question_type'), 'question_type');
 		$type_options = array(0 => $this->plugin->txt('single_choice'), 1 => $this->plugin->txt('multiple_choice'), 2 => $this->plugin->txt('reflection'));
+
 		$question_type->setOptions($type_options);
+		$question_type->setInfo($this->plugin->txt('question_type_info'));
 		$form->addItem($question_type);
 		
 		$question_text = new ilTextAreaInputGUI($this->plugin->txt('question_text'), 'question_text');
