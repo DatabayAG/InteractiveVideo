@@ -121,7 +121,7 @@ $.fn.buildListElement = function (comment, time, username, counter)
 		private_comment = '';
 	}
 	return '<li class="list_item_' + counter + '">' + 
-				'<time class="time">'+ mejs.Utility.secondsToTimeCode(time)  + '</time> '  + 
+				'<time class="time"> <a onClick="$().jumpToTimeInVideo(' + time + '); return false;">'+ mejs.Utility.secondsToTimeCode(time)  + '</a></time> '  + 
 		   		'<span class="comment_username"> ' + username                + '</span> '  +
 				'<span class="comment_title">' 	   + comment.comment_title   + '</span> '  +
 				'<span class="comment_text">'      + comment.comment_text    + '</span> '  +

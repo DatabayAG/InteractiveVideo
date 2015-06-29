@@ -31,10 +31,11 @@
 	width: 100%!important;
 	height: 100px;
 	margin: 0;
+	padding-left: 5px;	
 }
 .scroll-text ul li {
 	/*height: 1.5em;*/
-	list-style: none;	
+	list-style: none;
 }
 
 .simple_question_editor{
