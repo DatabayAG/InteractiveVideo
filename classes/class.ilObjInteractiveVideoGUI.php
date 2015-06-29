@@ -253,6 +253,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('SEND_BUTTON', $this->plugin->txt('send'));
 		$video_tpl->setVariable('CLOSE_BUTTON', $this->plugin->txt('close'));
 		$video_tpl->setVariable('FEEDBACK_JUMP_TEXT', $this->plugin->txt('feedback_jump_text'));
+		$video_tpl->setVariable('LEARNING_RECOMMENDATION_TEXT', $this->plugin->txt('learning_recommendation'));
         $video_tpl->setVariable('ALREADY_ANSWERED_TEXT', $this->plugin->txt('already_answered'));
 		$video_tpl->setVariable('QUESTION_TEXT', $this->plugin->txt('question'));
 		$video_tpl->setVariable('PRIVATE_TEXT', $this->plugin->txt('is_private_comment'));

@@ -94,10 +94,22 @@ var InteractiveVideoQuestionViewer = (function () {
 
 	function showFeedback(feedback) {
 		var modal = $('.modal_feedback');
+		// Hours, minutes and seconds
+		var hrs = ~~(feedback.time / 3600);
+		var mins = ~~((feedback.time % 3600) / 60);
+		var secs = feedback.time % 60;
+		// Output like "1:01" or "4:03:59" or "123:03:59"
+		formatted_feedback_time = "";
+		
+		if (hrs > 0)
+			formatted_feedback_time += "" + hrs + ":" + (mins < 10 ? "0" : "");
+		formatted_feedback_time += "" + mins + ":" + (secs < 10 ? "0" : "");
+		formatted_feedback_time += "" + secs;
+
 		modal.html('');
 		modal.html(feedback.html);
 		if (feedback.is_timed == 1) {
-			modal.append('<div class="align_button">' + createButtonButtons('jumpToTimeInVideo', feedback_button_text) + '</div>');
+			modal.append('<div class="learning_recommendation"><br/>' + learning_recommendation_text + ': ' + createButtonButtons('jumpToTimeInVideo', feedback_button_text + ' ' + formatted_feedback_time) + '</div>');
 			$('#jumpToTimeInVideo').on('click', function (e) {
 				$('#ilQuestionModal').modal('hide');
 				$().jumpToTimeInVideo(feedback.time);

@@ -93,6 +93,9 @@
     width: 100%;
     text-align:center;
 }
+.learning_recommendation{
+    text-align:left;
+}
 .comment_tags{
     padding-left:3em;
 }
