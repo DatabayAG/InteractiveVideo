@@ -223,6 +223,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comments = $this->objComment->getContentComments();
 		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
 		$video_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
+		$video_tpl->setVariable('TXT_COMMENTS', $this->plugin->txt('comments'));
 		
 		$video_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
 		$video_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
