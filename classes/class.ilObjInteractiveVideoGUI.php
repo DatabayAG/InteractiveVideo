@@ -152,7 +152,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		
 		$is_repeat_question = SimpleChoiceQuestion::isRepeatQuestionEnabled((int)$_GET['comment_id']);
 		$tpl_json      = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
-		if($is_repeat_question == true 
+		if(($is_repeat_question == true)  
 		|| ($is_repeat_question == false && $existUserAnswer == false))
 		{
 			$tpl_json->setVariable('JSON', $ajax_object->getJsonForCommentId((int)$_GET['comment_id']));
@@ -233,6 +233,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$simple_choice = new SimpleChoiceQuestion();
 		$question_id = $simple_choice->getAllNonRepeatAnsweredQuestion($ilUser->getId());
+		$correct_question_id = $simple_choice->getAllRepeatCorrectlyAnsweredQuestion($ilUser->getId()); //marko - only show remaining incorrectly answered questions
+		$question_id = array_merge($question_id,$correct_question_id);  //marko - see above
 		$video_tpl->setVariable('IGNORE_QUESTIONS', json_encode($question_id));
 		if($this->object->isAnonymized())
 		{
@@ -254,7 +256,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('CLOSE_BUTTON', $this->plugin->txt('close'));
 		$video_tpl->setVariable('FEEDBACK_JUMP_TEXT', $this->plugin->txt('feedback_jump_text'));
 		$video_tpl->setVariable('LEARNING_RECOMMENDATION_TEXT', $this->plugin->txt('learning_recommendation'));
-        $video_tpl->setVariable('ALREADY_ANSWERED_TEXT', $this->plugin->txt('already_answered'));
+	        $video_tpl->setVariable('ALREADY_ANSWERED_TEXT', $this->plugin->txt('already_answered'));
 		$video_tpl->setVariable('QUESTION_TEXT', $this->plugin->txt('question'));
 		$video_tpl->setVariable('PRIVATE_TEXT', $this->plugin->txt('is_private_comment'));
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
@@ -710,6 +712,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['jump_wrong_ts']      = $question_data['question_data']['jump_wrong_ts'];
 		$values['limit_attempts']     = $question_data['question_data']['limit_attempts'];
 		$values['repeat_question']    = $question_data['question_data']['repeat_question'];
+//		$values['question_correct']   = $question_data['question_data']['question_correct']; //marko
 
 		return $values;
 }

@@ -395,6 +395,34 @@ class SimpleChoiceQuestion
 	}
 
 	/**
+	 * @param int $user_id
+	 * @return array
+	 */
+	public function getAllRepeatCorrectlyAnsweredQuestion($user_id)
+	{
+		global $ilDB;
+		$res     = $ilDB->queryF('
+			SELECT comments.comment_id  comment 
+			FROM rep_robj_xvid_comments comments, 
+				rep_robj_xvid_question  questions, 
+				rep_robj_xvid_score  score  
+			WHERE comments.comment_id = questions.comment_id 
+			AND questions.question_id = score.question_id 
+			AND score.points = %s
+			AND questions.repeat_question = %s
+			AND score.user_id = %s',
+			array('integer', 'integer', 'integer'),
+			array(1, 1, (int)$user_id)
+		);
+		$results = array();
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$results[] = $row['comment'];
+		}
+		return $results;
+	}
+
+	/**
 	 * @param array $user_ids
 	 * @param int   $obj_id
 	 */

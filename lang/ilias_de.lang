@@ -79,7 +79,7 @@ limit_attempts#:#Versuche begrenzen
 limit_attempts_info#:#Der Benutzer darf die Frage nur einmal beantworten
 is_private_comment#:#Privater Kommentar
 feedback_jump_text#:#Springe zu
-repeat_question_info#:#Die Frage wird immer wieder angezeigt
+repeat_question_info#:#Die Frage wird solange immer wieder angezeigt, bis sie korrekt beantwortet wurde.
 sum#:#Summe
 answered#:#Beantwortet
 csv_export#:#CSV Export
