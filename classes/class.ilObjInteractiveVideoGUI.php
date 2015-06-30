@@ -443,10 +443,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment = new ilTextAreaInputGUI($this->lng->txt('comment'), 'comment_text');
 		$comment->setRequired(true);
 		$form->addItem($comment);
-
+		/** tags are deactivated for the moment
 		$tags = new ilTextAreaInputGUI($this->plugin->txt('tags'), 'comment_tags');
 		$form->addItem($tags);
-
+		**/
 		$frm_id = new ilHiddenInputGUI('comment_id');
 		$form->addItem($frm_id);
 		
@@ -861,7 +861,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentText($form->getInput('comment_text'));
 			$this->objComment->setInteractive(0);
 			
-			$this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
+			// $this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
 
@@ -1044,7 +1044,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			}
 			$this->objComment->setCommentText($form->getInput('comment_text'));
-			$this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
+			// $this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
 			$this->objComment->setInteractive(0);
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
@@ -1165,7 +1165,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			}
 			$this->objComment->setCommentText($form->getInput('comment_text'));
-			$this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
+			// $this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
 			$this->objComment->setInteractive(0);
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
