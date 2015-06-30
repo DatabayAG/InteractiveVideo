@@ -452,3 +452,19 @@ if($ilDB->tableExists('rep_robj_xvid_objects'))
 	}
 }
 ?>
+<#19>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_objects'))
+{
+
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'is_repeat'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_objects', 'is_repeat',
+			array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => true,
+				'default' => 1));
+	}
+}
+?>

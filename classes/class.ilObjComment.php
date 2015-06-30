@@ -537,5 +537,21 @@ class ilObjComment
 	{
 		$this->is_anonymized = $is_anonymized;
 	}
+	
+	/**
+	 * @return int
+	 */
+	public function isRepeat()
+	{
+		return $this->is_repeat;
+	}
+
+	/**
+	 * @param int $is_repeat
+	 */
+	public function setIsRepeat($is_repeat)
+	{
+		$this->is_repeat = $is_repeat;
+	}
 
 }

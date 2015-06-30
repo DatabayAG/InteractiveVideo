@@ -218,6 +218,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->objComment->setObjId($this->object->getId());
 		$this->objComment->setIsPublic($this->object->isPublic());
 		$this->objComment->setIsAnonymized($this->object->isAnonymized());
+		$this->objComment->setIsRepeat($this->object->isRepeat());
 
 		$stop_points = $this->objComment->getStopPoints();
 		$comments = $this->objComment->getContentComments();
@@ -233,8 +234,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$simple_choice = new SimpleChoiceQuestion();
 		$question_id = $simple_choice->getAllNonRepeatAnsweredQuestion($ilUser->getId());
-		$repeatCorrect = 1;  //switch this: 1 --> repeat questons disregarding status, 0 --> only repeat incorrectly answered
-		if ($repeatCorrect == 0)
+//		$repeatCorrect = 1;  //switch this: 1 --> repeat questons disregarding status, 0 --> only repeat incorrectly answered
+		if(!$this->object->isRepeat())
 		{
 			$correct_question_id = $simple_choice->getAllRepeatCorrectlyAnsweredQuestion($ilUser->getId()); //marko - only show remaining incorrectly answered questions
 			$question_id = array_merge($question_id,$correct_question_id);  //marko - see above
@@ -1529,6 +1530,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$is_anonymized = $a_form->getInput('is_anonymized');
 		$this->object->setIsAnonymized((int)$is_anonymized);
+
+		$is_repeat = $a_form->getInput('is_repeat');
+		$this->object->setIsRepeat((int)$is_repeat);
 		
 		$is_public = $a_form->getInput('is_public');
 		$this->object->setIsPublic((int)$is_public);
@@ -1581,6 +1585,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_public->setChecked(true);
 		$form->addItem($is_public);
 
+		$repeat = new ilCheckboxInputGUI($this->plugin->txt('is_repeat'), 'is_repeat');
+		$repeat->setInfo($this->plugin->txt('is_repeat_info'));
+		$repeat->setChecked(true);
+		$form->addItem($repeat);
+
 		return $form;
 	}
 
@@ -1611,6 +1620,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_public = new ilCheckboxInputGUI($this->plugin->txt('is_public'), 'is_public');
 		$is_public->setInfo($this->plugin->txt('is_public_info'));
 		$a_form->addItem($is_public);
+		
+		$repeat = new ilCheckboxInputGUI($this->plugin->txt('is_repeat'), 'is_repeat');
+		$repeat->setInfo($this->plugin->txt('is_repeat_info'));
+		$a_form->addItem($repeat);
+		
 
 	}
 
@@ -1621,6 +1635,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$a_values['video_file'] 	= ilObject::_lookupTitle($this->object->getMobId());
 		$a_values['is_anonymized'] 	= $this->object->isAnonymized();
+		$a_values['is_repeat'] 		= $this->object->isRepeat();
 		$a_values['is_public']     	= $this->object->isPublic();
 		$a_values["is_online"]		= $this->object->isOnline();
 	}

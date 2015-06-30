@@ -30,6 +30,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	/**
 	 * @var int
 	 */
+	protected $is_repeat = 0;
+	/**
+	 * @var int
+	 */
 	protected $is_public = 0;
 
 	/**
@@ -51,6 +55,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 
 		$this->setMobId($row['mob_id']);
 		$this->setIsAnonymized($row['is_anonymized']);
+		$this->setIsRepeat($row['is_repeat']);
 		$this->setIsPublic($row['is_public']);
 		$this->setOnline((bool)$row['is_online']);
 
@@ -131,6 +136,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		
 		$ilDB->update('rep_robj_xvid_objects',
 			array(	'is_anonymized' => array('integer', $this->isAnonymized()), 
+				  	'is_repeat' =>array('integer', $this->isRepeat()),
 				  	'is_public' =>array('integer', $this->isPublic()),
 					'is_online' => array('integer', $this->isOnline())
 					),
@@ -190,6 +196,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 				'obj_id'        => array('integer', $new_obj->getId()),
 				'mob_id'        => array('integer', $new_mob->getId()),
 				'is_anonymized' => array('integer', $new_obj->isAnonymized()),
+				'is_repeat' => array('integer', $new_obj->isRepeat()),
 				'is_public'     => array('integer', $new_obj->isPublic())
 			)
 		);
@@ -480,6 +487,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 				'obj_id'        => array('integer', $this->getId()),
 				'mob_id'        => array('integer', $this->getMobId()),
 				'is_anonymized' => array('integer', (int) $_POST['is_anonymized']),
+				'is_repeat' 	=> array('integer', (int) $_POST['is_repeat']),
 				'is_public'     => array('integer', (int) $_POST['is_public'])
 			)
 		);
@@ -517,6 +525,22 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	public function setIsAnonymized($is_anonymized)
 	{
 		$this->is_anonymized = $is_anonymized;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function isRepeat()
+	{
+		return $this->is_repeat;
+	}
+
+	/**
+	 * @param int $is_repeat
+	 */
+	public function setIsRepeat($is_repeat)
+	{
+		$this->is_repeat = $is_repeat;
 	}
 
 	/**

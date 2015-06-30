@@ -82,7 +82,7 @@ limit_attempts#:#Limit attempts
 limit_attempts_info#:#If enabled the user only can answer a question once.
 is_private_comment#:#Private Comment
 feedback_jump_text#:#Jump To
-repeat_question_info#:#The question will be displayed again until it has been answered correctly.
+repeat_question_info#:#The question will be displayed again on every playback of the video. If the option "Repeat correctly answered questions" has been deactivated in the video options, it will only be shown until it has been answered correctly and be skipped from then on.
 sum#:#Sum
 answered#:#Answered
 csv_export#:#CSV Export
@@ -96,3 +96,5 @@ question_type_info#:#You can choose between one of three avalibale quetsion type
 is_jump_correct_info#:#In case the question was answered correctly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
 is_jump_wrong_info#:#In case the question was answered incorrectly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
 learning_recommendation#:#Learning recommendation within the video at
+is_repeat#:#Show correctly answered questions repeatedly
+is_repeat_info#:#If this option is activated, repeatable questions will be shown every time the video is played. If this is deactived, questions that have already been answered correctly will be skipped during playback.
