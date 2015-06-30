@@ -7,7 +7,7 @@ ILIAS Interactive Video Plugin
 3. Select **Plugins** from the **Administration** main menu drop down.
 4. Search the **InteractiveVideo** plugin in the list of plugin and choose **Activate** from the **Actions** drop down.
 
-#Patch for to make Interactive Videos work woth the Web Access Checker
+###Patch for to make Interactive Videos work woth the Web Access Checker
 Simply insert the following line into the file 'Services/MediaObjects/classes/class.ilObjMediaObject.php' at round about line number 1397, which should read like this in the original:
 
 	case "mep":
