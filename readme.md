@@ -7,6 +7,22 @@ ILIAS Interactive Video Plugin
 3. Select **Plugins** from the **Administration** main menu drop down.
 4. Search the **InteractiveVideo** plugin in the list of plugin and choose **Activate** from the **Actions** drop down.
 
+#Patch for to make Interactive Videos work woth the Web Access Checker
+Simply insert the following line into the file 'Services/MediaObjects/classes/class.ilObjMediaObject.php' at round about line number 1397, which should read like this in the original:
+
+	case "mep":
+		$obj_id = $id;
+		break;
+
+Insert     case "xvid":    to make it read like this:
+
+	case "mep":
+	case "xvid":
+		$obj_id = $id;
+		break;
+
+That's it.
+
 # What is it for?
 The InteractiveVideo Plugin for ILIAS gives you the possibility to create a video object, where your students can communicate in a asynchrone way. Please note that this is *NOT* a chat. They can leave notes on different timestamps in the video for other students to read, or only for themselves. Further a tutor can insert questions on various positions in the video for the students to answer. At the moment three questions types are supported single and multiple choice and a reflective type. 
 
