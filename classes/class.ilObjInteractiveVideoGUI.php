@@ -233,8 +233,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$simple_choice = new SimpleChoiceQuestion();
 		$question_id = $simple_choice->getAllNonRepeatAnsweredQuestion($ilUser->getId());
-		$correct_question_id = $simple_choice->getAllRepeatCorrectlyAnsweredQuestion($ilUser->getId()); //marko - only show remaining incorrectly answered questions
-		$question_id = array_merge($question_id,$correct_question_id);  //marko - see above
+		$repeatCorrect = 1;  //switch this: 1 --> repeat questons disregarding status, 0 --> only repeat incorrectly answered
+		if ($repeatCorrect == 0)
+		{
+			$correct_question_id = $simple_choice->getAllRepeatCorrectlyAnsweredQuestion($ilUser->getId()); //marko - only show remaining incorrectly answered questions
+			$question_id = array_merge($question_id,$correct_question_id);  //marko - see above
+		}
 		$video_tpl->setVariable('IGNORE_QUESTIONS', json_encode($question_id));
 		if($this->object->isAnonymized())
 		{
