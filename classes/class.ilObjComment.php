@@ -138,12 +138,14 @@ class ilObjComment
 	{
 		/**
 		 * @var $ilDB ilDB
+		 * @var $ilUser ilObjUser
 		 */
-		global $ilDB;
+		global $ilDB, $ilUser;
 
 		$ilDB->update('rep_robj_xvid_comments',
 			array(
 				'is_interactive' => array('integer', (int)$this->isInteractive()),
+				'user_id'        => array('integer', $ilUser->getId()),
 				// @todo: Change rounding and database type in case we should store milli seconds
 				'comment_time'   => array('integer', round($this->getCommentTime(), 2)),
 				'comment_text'   => array('text', $this->getCommentText()),
