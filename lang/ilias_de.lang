@@ -93,5 +93,5 @@ question_type_info#:#Sie können zwischen drei Fragetypen wählen: Single Choice
 is_jump_correct_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage richtig beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblended.
 is_jump_wrong_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage falsch beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblended.
 learning_recommendation#:#Lernempfehlung an folgender Stelle im Video
-is_repeat#:#Korrekt beantwortete Fragen mehrfach anzeigen
-is_repeat_info#:#Wenn diese Option aktiviert ist, werden zu wiederholende Fragen bei jedem Abspielen erneut angezeigt, auch wenn sie bereits korrekt beantwortet wurden. Ist diese Option deaktiviert, werden bereits korrekt beantwortete Fragen übersprungen.
+is_repeat#:#Korrekt beantwortete Fragen überspringen
+is_repeat_info#:#Wenn diese Option aktiviert ist, werden bereits korrekt beantwortete Fragen beim Abspielen übersprungen.

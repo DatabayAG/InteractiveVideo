@@ -235,7 +235,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$simple_choice = new SimpleChoiceQuestion();
 		$question_id = $simple_choice->getAllNonRepeatAnsweredQuestion($ilUser->getId());
 //		$repeatCorrect = 1;  //switch this: 1 --> repeat questons disregarding status, 0 --> only repeat incorrectly answered
-		if(!$this->object->isRepeat())
+		if($this->object->isRepeat())
 		{
 			$correct_question_id = $simple_choice->getAllRepeatCorrectlyAnsweredQuestion($ilUser->getId()); //marko - only show remaining incorrectly answered questions
 			$question_id = array_merge($question_id,$correct_question_id);  //marko - see above
@@ -1587,7 +1587,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$repeat = new ilCheckboxInputGUI($this->plugin->txt('is_repeat'), 'is_repeat');
 		$repeat->setInfo($this->plugin->txt('is_repeat_info'));
-		$repeat->setChecked(true);
 		$form->addItem($repeat);
 
 		return $form;

@@ -96,5 +96,5 @@ question_type_info#:#You can choose between one of three avalibale quetsion type
 is_jump_correct_info#:#In case the question was answered correctly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
 is_jump_wrong_info#:#In case the question was answered incorrectly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
 learning_recommendation#:#Learning recommendation within the video at
-is_repeat#:#Show correctly answered questions repeatedly
-is_repeat_info#:#If this option is activated, repeatable questions will be shown every time the video is played. If this is deactived, questions that have already been answered correctly will be skipped during playback.
+is_repeat#:#Skip correctly answered questions
+is_repeat_info#:#If this option is activated, questions that have already been answered correctly will be skipped during playback.
