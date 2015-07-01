@@ -464,7 +464,7 @@ if($ilDB->tableExists('rep_robj_xvid_objects'))
 				'type'    => 'integer',
 				'length'  => '1',
 				'notnull' => true,
-				'default' => 1));
+				'default' => 0));
 	}
 }
 ?>
