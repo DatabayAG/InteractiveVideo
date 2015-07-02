@@ -468,3 +468,12 @@ if($ilDB->tableExists('rep_robj_xvid_objects'))
 	}
 }
 ?>
+<#20>
+<?php
+$ilDB->addPrimaryKey('rep_robj_xvid_answers', array('question_id', 'answer_id', 'user_id'));
+$ilDB->addPrimaryKey('rep_robj_xvid_score', array('question_id', 'user_id'));
+?>
+<#21>
+<?php
+$ilDB->addIndex('rep_robj_xvid_question', array('comment_id'), 'ci');
+?>
