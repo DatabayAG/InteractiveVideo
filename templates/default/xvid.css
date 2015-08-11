@@ -46,17 +46,8 @@
 }
 
 #ilFooter {
-	background-color: #4c6586;
 	bottom: -1px !important;
-	color: white;
-	font-size: 0.9em;
-	height: 160px;
-	left: 0;
-	margin: 0 auto;
-	padding: 20px 0 0;
 	position: relative;
-	right: 0;
-	text-align: left;
 }
 
 .modal_feedback{
