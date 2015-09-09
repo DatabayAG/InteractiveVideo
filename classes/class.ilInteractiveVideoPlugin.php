@@ -60,4 +60,9 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 	{
 		return self::PNAME;
 	}
+
+	protected function uninstallCustom()
+	{
+		// TODO: Implement uninstallCustom() method.
+	}
 }

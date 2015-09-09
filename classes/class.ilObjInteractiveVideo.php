@@ -200,6 +200,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 				'is_public'     => array('integer', $new_obj->isPublic())
 			)
 		);
+
+		ilObjMediaObject::_saveUsage( $new_mob->getId(), $this->getType(), $new_obj->getId());
 		$comment = new ilObjComment();
 		$comment->cloneTutorComments($this->getId(), $new_obj->getId());
 	}
