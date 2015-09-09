@@ -50,4 +50,22 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 	{
 		$this->setType('xvid');
 	}
+
+	/**
+	 * @return array
+	 */
+	public function getProperties()
+	{
+		$props = array();
+
+		$this->plugin->includeClass('class.ilObjInteractiveVideoAccess.php');
+		if(!ilObjInteractiveVideoAccess::checkOnline($this->obj_id))
+		{
+			$props[] = array(
+				'alert' => true, 'property' => $this->txt('status'),
+				'value' => $this->txt('offline')
+			);
+		}
+		return $props;
+	}
 }

@@ -98,3 +98,5 @@ is_jump_wrong_info#:#In case the question was answered incorrectly, you can sele
 learning_recommendation#:#Learning recommendation within the video at
 is_repeat#:#Skip correctly answered questions
 is_repeat_info#:#If this option is activated, questions that have already been answered correctly will be skipped during playback.
+offline#:#Offline
+status#:#Status

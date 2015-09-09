@@ -95,3 +95,5 @@ is_jump_wrong_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stell
 learning_recommendation#:#Lernempfehlung an folgender Stelle im Video
 is_repeat#:#Korrekt beantwortete Fragen überspringen
 is_repeat_info#:#Wenn diese Option aktiviert ist, werden bereits korrekt beantwortete Fragen beim Abspielen übersprungen.
+offline#:#Offline
+status#:#Status
