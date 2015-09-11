@@ -56,8 +56,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $ilTabs ilTabsGUI
 		 * @var $tpl    ilTemplate
 		 */
-		global $ilTabs, $tpl;
-		$tpl->setDescription($this->object->getDescription());
+		global $ilTabs;
+		$this->setTitleAndDescription();
 
 		$next_class = $this->ctrl->getNextClass($this);
 		switch($next_class)
@@ -1747,7 +1747,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $ilUser;
 
 		$lg = parent::initHeaderAction();
-
+		
 		if($lg instanceof ilObjInteractiveVideoListGUI)
 		{
 			if($ilUser->getId() != ANONYMOUS_USER_ID)
