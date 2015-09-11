@@ -39,6 +39,12 @@ $( document ).ready(function() {
 	$("#ilInteractiveVideoTutorQuestionSubmit").on("click", function(e) {
 		$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
 	});
+	$('#comment_text').on('click', function(){
+		if(InteractiveVideo.pause_on_click_in_comment_field)
+		{
+			$('#ilInteractiveVideo')["0"].pause();
+		}
+	});
 });
 
 $.fn.sliceCommentAndStopPointsInCorrectPosition = function (tmp_obj, time)
