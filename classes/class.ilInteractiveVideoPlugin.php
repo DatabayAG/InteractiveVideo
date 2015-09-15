@@ -63,6 +63,24 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 
 	protected function uninstallCustom()
 	{
-		// TODO: Implement uninstallCustom() method.
+		/**
+		 * @var $ilDB ilDB
+		 */
+		global $ilDB;
+		$ilDB->query('DROP TABLE 	rep_robj_xvid_comments, rep_robj_xvid_objects, 
+									rep_robj_xvid_qus_text, rep_robj_xvid_question,
+									rep_robj_xvid_answers, rep_robj_xvid_score');
+		if($ilDB->sequenceExists('rep_robj_xvid_comments'))
+		{
+			$ilDB->dropSequence('rep_robj_xvid_comments');
+		}
+		if($ilDB->sequenceExists('rep_robj_xvid_question'))
+		{
+			$ilDB->dropSequence('rep_robj_xvid_question');
+		}
+		if($ilDB->sequenceExists('rep_robj_xvid_qus_text'))
+		{
+			$ilDB->dropSequence('rep_robj_xvid_qus_text');
+		}
 	}
 }
