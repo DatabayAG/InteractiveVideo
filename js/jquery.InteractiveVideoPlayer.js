@@ -225,7 +225,7 @@ $.fn.buildListElement = function (comment, time, username, counter)
 							}
 							_lastTime = media.currentTime;
 						}
-					}, 500);
+					}, 250);
 
 				}, false);
 			}
