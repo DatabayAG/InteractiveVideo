@@ -190,7 +190,7 @@ $.fn.buildListElement = function (comment, time, username, counter)
 
 							for (var j = stopPoints.length - 1; j >= 0; j--) 
 							{
-								var cueTime = stopPoints[j];
+								var cueTime = parseInt(stopPoints[j], 10);
 								if (cueTime >= _lastTime && cueTime <= media.currentTime) 
 								{
 									var stop_video = 0;
@@ -220,7 +220,7 @@ $.fn.buildListElement = function (comment, time, username, counter)
 											stop_video = 0;
 										}
 									}
-									last_stopPoint = cueTime;
+									last_stopPoint = parseInt(cueTime, 10);
 								}
 							}
 							_lastTime = media.currentTime;
