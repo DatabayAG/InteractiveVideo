@@ -157,6 +157,7 @@ var InteractiveVideoQuestionViewer = (function () {
 			});
 	};
 	
+	pub.protect = pro;
 	return pub;
 
 }());
