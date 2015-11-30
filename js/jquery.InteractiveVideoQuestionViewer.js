@@ -1,30 +1,31 @@
 var InteractiveVideoQuestionViewer = (function () {
-	var pub = {};
+	var pub = {},
+		pro = {};
 
-	function buildQuestionForm() {
+	pro.buildQuestionForm = function() {
 		var modal = $('.modal-body');
 		var type  = parseInt(pub.QuestionObject.type, 10);
 		modal.html('');
 		modal.append('<h2>' + pub.QuestionObject.question_title + '</h2>');
 		modal.append('<p>' + pub.QuestionObject.question_text + '</p>');
 		if (type === 0) {
-			addAnswerPossibilities('radio');
-			addFeedbackDiv();
-			addButtons();
+			pro.addAnswerPossibilities('radio');
+			pro.addFeedbackDiv();
+			pro.addButtons();
 		}
 		else if (type === 1){
-			addAnswerPossibilities('checkbox');
-			addFeedbackDiv();
-			addButtons();
+			pro.addAnswerPossibilities('checkbox');
+			pro.addFeedbackDiv();
+			pro.addButtons();
 		}
 		else if (type === 2)
 		{
-			addSelfReflectionLayout();
+			pro.addSelfReflectionLayout();
 		}
-		showPreviousAnswer();
-	}
+		pro.showPreviousAnswer();
+	};
 
-	function showPreviousAnswer()
+	pro.showPreviousAnswer = function()
 	{
 		if(pub.QuestionObject.feedback !== undefined && pub.QuestionObject.previous_answer !== undefined)
 		{
@@ -33,23 +34,23 @@ var InteractiveVideoQuestionViewer = (function () {
 			});
 			if(pub.QuestionObject.type != 2)
 			{
-				showFeedback(pub.QuestionObject.feedback);
+				pro.showFeedback(pub.QuestionObject.feedback);
 			}
 		}
-	}
+	};
 	
-	function addAnswerPossibilities(input_type) {
+	pro.addAnswerPossibilities = function(input_type) {
 		var html = '';
 		html = '<form id="question_form">';
 		$.each(pub.QuestionObject.answers, function (l, value) {
-			html += buildAnswerInputElement(input_type, value);
+			html += pro.buildAnswerInputElement(input_type, value);
 		});
 		html += '<input type="hidden" name="qid" value ="' + pub.QuestionObject.question_id + '"/>';
 		html += '</form>';
 		$('.modal-body').append(html);
-	}
+	};
 	
-	function buildAnswerInputElement(input_type, value)
+	pro.buildAnswerInputElement = function(input_type, value)
 	{
 		return  '<label for="answer_'   + value.answer_id + '">' +
 					'<input type="'     + input_type + 
@@ -57,55 +58,55 @@ var InteractiveVideoQuestionViewer = (function () {
 						' value="'      + value.answer_id + '">' +
 										  value.answer + 
 				'</label><br/>';
-	}
+	};
 
-	function addSelfReflectionLayout() {
-		$('.modal-body').append('<div class="modal_feedback">' + createButtonButtons('close_form', close_text) +'</div>');
-		appendCloseButtonListener();
+	pro.addSelfReflectionLayout = function() {
+		$('.modal-body').append('<div class="modal_feedback">' + pro.createButtonButtons('close_form', close_text) +'</div>');
+		pro.appendCloseButtonListener();
 		$.ajax({
 			type:    "POST",
 			cache:   false,
 			url:     question_post_url,
 			data:    {'qid' : pub.QuestionObject.question_id},
 			success: function () {
-				addToLocalIgnoreArrayIfNonRepeatable();
+				pro.addToLocalIgnoreArrayIfNonRepeatable();
 			}
 		});
-	}
+	};
 	
-	function addToLocalIgnoreArrayIfNonRepeatable(){
+	pro.addToLocalIgnoreArrayIfNonRepeatable = function(){
 		var repeat = parseInt(InteractiveVideoQuestionViewer.QuestionObject.repeat_question, 10);
 		if(repeat === 0)
 		{
 			ignore_questions.push(pub.comment_id );
 		}
-	}
+	};
 	
-	function addFeedbackDiv() {
+	pro.addFeedbackDiv = function() {
 		$('#question_form').append('<div class="modal_feedback"></div>');
-	}
+	};
 	
-	function addButtons() {
+	pro.addButtons = function() {
 		var question_form = $('#question_form');
-		question_form.append(createButtonButtons('sendForm', send_text));
-		question_form.append(createButtonButtons('close_form', close_text));
-		appendButtonListener();
-	}
+		question_form.append(pro.createButtonButtons('sendForm', send_text));
+		question_form.append(pro.createButtonButtons('close_form', close_text));
+		pro.appendButtonListener();
+	};
 
-	function showFeedback(feedback) {
+	pro.showFeedback = function(feedback) {
 		var modal = $('.modal_feedback');
 		modal.html('');
 		modal.html(feedback.html);
 		if (feedback.is_timed == 1) {
-			modal.append('<div class="learning_recommendation"><br/>' + learning_recommendation_text + ': ' + createButtonButtons('jumpToTimeInVideo', feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>');
+			modal.append('<div class="learning_recommendation"><br/>' + learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>');
 			$('#jumpToTimeInVideo').on('click', function (e) {
 				$('#ilQuestionModal').modal('hide');
 				$().jumpToTimeInVideo(feedback.time);
 			});
 		}
-	}
+	};
 
-	function appendButtonListener() {
+	pro.appendButtonListener = function() {
 		$('#question_form').on('submit', function (e) {
 			e.preventDefault();
 			$().debugPrinter('pub.QuestionObject Ajax', $(this).serialize());
@@ -116,25 +117,25 @@ var InteractiveVideoQuestionViewer = (function () {
 				data:    $(this).serialize(),
 				success: function (feedback) {
 					var obj = JSON.parse(feedback);
-					showFeedback(obj);
-					addToLocalIgnoreArrayIfNonRepeatable();
+					pro.showFeedback(obj);
+					pro.addToLocalIgnoreArrayIfNonRepeatable();
 				}
 			});
 		});
-		appendCloseButtonListener();
-	}
+		pro.appendCloseButtonListener();
+	};
 	
-	function appendCloseButtonListener()
+	pro.appendCloseButtonListener = function()
 	{
 		$('#close_form').on('click', function (e) {
 			$('#ilQuestionModal').modal('hide');
 			$().resumeVideo();
 		});
-	}
+	};
 	
-	function createButtonButtons(id, value) {
+	pro.createButtonButtons = function(id, value) {
 		return '<input id="' + id + '" class="btn btn-default btn-sm" type="submit" value="' + value + '">';
-	}
+	};
 	
 	pub.QuestionObject = {};
 	
@@ -148,7 +149,7 @@ var InteractiveVideoQuestionViewer = (function () {
 				pub.comment_id            = comment_id;
 				pub.QuestionObject        = array;
 				pub.QuestionObject.player = player;
-				buildQuestionForm();
+				pro.buildQuestionForm();
 				if (pub.QuestionObject.player.isFullScreen === true) {
 					pub.QuestionObject.player.exitFullScreen();
 				}
