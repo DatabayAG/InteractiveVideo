@@ -53,9 +53,10 @@
 		var seekTime			= 0;
 		var InteractiveVideo 	= 
 		{
-			auto_resume	: false,
+			auto_resume						: false,
 			pause_on_click_in_comment_field	: true,
-			iv_debug	: false
+			iv_debug						: false,
+			last_stopPoint 					: -1
 		};
 				
 		$.fn.debugPrinter = function (message, element)
