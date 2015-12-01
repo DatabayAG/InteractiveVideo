@@ -1,6 +1,6 @@
 var InteractiveVideoQuestionViewer = (function () {
 	var pub = {},
-		pro = {};
+	    pro = {};
 
 	pro.buildQuestionForm = function() {
 		var modal = $('.modal-body');
@@ -38,7 +38,7 @@ var InteractiveVideoQuestionViewer = (function () {
 			}
 		}
 	};
-	
+
 	pro.addAnswerPossibilities = function(input_type) {
 		var html = '';
 		html = '<form id="question_form">';
@@ -49,15 +49,15 @@ var InteractiveVideoQuestionViewer = (function () {
 		html += '</form>';
 		$('.modal-body').append(html);
 	};
-	
+
 	pro.buildAnswerInputElement = function(input_type, value)
 	{
 		return  '<label for="answer_'   + value.answer_id + '">' +
-					'<input type="'     + input_type + 
-						'" id="answer_' + value.answer_id + '" name="answer[]" ' +
-						' value="'      + value.answer_id + '">' +
-										  value.answer + 
-				'</label><br/>';
+			'<input type="'     + input_type +
+			'" id="answer_' + value.answer_id + '" name="answer[]" ' +
+			' value="'      + value.answer_id + '">' +
+			value.answer +
+			'</label><br/>';
 	};
 
 	pro.addSelfReflectionLayout = function() {
@@ -73,7 +73,7 @@ var InteractiveVideoQuestionViewer = (function () {
 			}
 		});
 	};
-	
+
 	pro.addToLocalIgnoreArrayIfNonRepeatable = function(){
 		var repeat = parseInt(InteractiveVideoQuestionViewer.QuestionObject.repeat_question, 10);
 		if(repeat === 0)
@@ -81,11 +81,11 @@ var InteractiveVideoQuestionViewer = (function () {
 			ignore_questions.push(pub.comment_id );
 		}
 	};
-	
+
 	pro.addFeedbackDiv = function() {
 		$('#question_form').append('<div class="modal_feedback"></div>');
 	};
-	
+
 	pro.addButtons = function() {
 		var question_form = $('#question_form');
 		question_form.append(pro.createButtonButtons('sendForm', send_text));
@@ -124,7 +124,7 @@ var InteractiveVideoQuestionViewer = (function () {
 		});
 		pro.appendCloseButtonListener();
 	};
-	
+
 	pro.appendCloseButtonListener = function()
 	{
 		$('#close_form').on('click', function (e) {
@@ -132,13 +132,13 @@ var InteractiveVideoQuestionViewer = (function () {
 			$().resumeVideo();
 		});
 	};
-	
+
 	pro.createButtonButtons = function(id, value) {
 		return '<input id="' + id + '" class="btn btn-default btn-sm" type="submit" value="' + value + '">';
 	};
-	
+
 	pub.QuestionObject = {};
-	
+
 	pub.getQuestionPerAjax = function (comment_id, player) {
 		$.when(
 			$.ajax({
@@ -156,7 +156,7 @@ var InteractiveVideoQuestionViewer = (function () {
 				$('#ilQuestionModal').modal('show');
 			});
 	};
-	
+
 	pub.protect = pro;
 	return pub;
 

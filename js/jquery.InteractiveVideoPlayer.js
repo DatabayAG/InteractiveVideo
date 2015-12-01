@@ -99,6 +99,8 @@ $.fn.buildListElement = function (comment, time, username, counter)
 {
 	var comment_tags    = '';
 	var private_comment = '';
+	var display_time = 0;
+	display_time = time;
 	if(comment.comment_title == null)
 	{
 		comment.comment_title = '';
@@ -118,6 +120,7 @@ $.fn.buildListElement = function (comment, time, username, counter)
 	if(comment.is_interactive == 1)
 	{
 		username  = '[' + question_text + ']';
+		time = Math.abs(Math.round(time) - 0.1);
 	}
 	if(comment.is_private == 1)
 	{
@@ -128,7 +131,7 @@ $.fn.buildListElement = function (comment, time, username, counter)
 		private_comment = '';
 	}
 	return '<li class="list_item_' + counter + '">' + 
-				'<time class="time"> <a onClick="$().jumpToTimeInVideo(' + time + '); return false;">'+ mejs.Utility.secondsToTimeCode(time)  + '</a></time> '  + 
+				'<time class="time"> <a onClick="$().jumpToTimeInVideo(' + time + '); return false;">'+ mejs.Utility.secondsToTimeCode(display_time)  + '</a></time> '  + 
 		   		'<span class="comment_username"> ' + username                + '</span> '  +
 				'<span class="comment_title">' 	   + comment.comment_title   + '</span> '  +
 				'<span class="comment_text">'      + comment.comment_text    + '</span> '  +

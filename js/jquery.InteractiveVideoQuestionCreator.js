@@ -1,7 +1,7 @@
 $( document ).ready(function() {
 
 	$('#addQuestion').show();
-	
+
 	if(IVQuestionCreator.JSON.length === 0)
 	{
 		InteractiveVideoQuestionCreator.appendEmptyJSON();
@@ -13,7 +13,7 @@ $( document ).ready(function() {
 
 var InteractiveVideoQuestionCreator = (function () {
 	var pub = {}, pro = {};
-	
+
 	pro.appendMultiListener = function() {
 		$('.text_field').on('blur', function (){
 			var pos = parseInt($(this).attr('meta'), 10);
@@ -81,7 +81,7 @@ var InteractiveVideoQuestionCreator = (function () {
 		});
 		pro.appendMultiListener();
 	};
-	
+
 	pro.showHideFormElementsForReflectionType = function()
 	{
 		if( IVQuestionCreator.type == 2)
@@ -115,13 +115,13 @@ var InteractiveVideoQuestionCreator = (function () {
 	pub.appendEmptyJSON = function () {
 		IVQuestionCreator.JSON =
 			[{
-				 'answer' 	: '',
-				 'correct'	: 0,
-				 'answer_id': 0
-			 }];
+				'answer' 	: '',
+				'correct'	: 0,
+				'answer_id': 0
+			}];
 		IVQuestionCreator.type = 0;
 	};
-	
+
 	pub.protect = pro;
 	return pub;
 
