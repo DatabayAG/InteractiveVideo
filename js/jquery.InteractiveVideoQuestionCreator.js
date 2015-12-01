@@ -1,7 +1,7 @@
 $( document ).ready(function() {
 
 	$('#addQuestion').show();
-	
+
 	if(IVQuestionCreator.JSON.length === 0)
 	{
 		InteractiveVideoQuestionCreator.appendEmptyJSON();
@@ -12,9 +12,9 @@ $( document ).ready(function() {
 
 
 var InteractiveVideoQuestionCreator = (function () {
-	var pub = {};
-	
-	function appendMultiListener() {
+	var pub = {}, pro = {};
+
+	pro.appendMultiListener = function() {
 		$('.text_field').on('blur', function (){
 			var pos = parseInt($(this).attr('meta'), 10);
 			IVQuestionCreator.JSON[pos].answer = $(this).val();
@@ -36,7 +36,7 @@ var InteractiveVideoQuestionCreator = (function () {
 				correct: 0
 			});
 			IVQuestionCreator.JSON.splice(parseInt($(this).parent().attr('meta'), 10), 0, insert);
-			createQuestionForm();
+			pro.createQuestionForm();
 			return false;
 		});
 		$('.clone_fields_remove').on('click', function ()
@@ -44,14 +44,14 @@ var InteractiveVideoQuestionCreator = (function () {
 			if(IVQuestionCreator.JSON.length > 1)
 			{
 				IVQuestionCreator.JSON.splice(parseInt($(this).parent().attr('meta'), 10), 1);
-				createQuestionForm();
+				pro.createQuestionForm();
 			}
 			return false;
 		});
-		showHideFormElementsForReflectionType();
-	}
+		pro.showHideFormElementsForReflectionType();
+	};
 
-	function createQuestionForm() {
+	pro.createQuestionForm = function() {
 		var prototype 	= $('#inner_question_editor_prototype');
 		var table		= $('#table_body_question_editor');
 		var inner		= '';
@@ -79,10 +79,10 @@ var InteractiveVideoQuestionCreator = (function () {
 			}
 			inner.find('.clone_fields_add').parent().attr('meta', l);
 		});
-		appendMultiListener();
-	}
-	
-	function showHideFormElementsForReflectionType()
+		pro.appendMultiListener();
+	};
+
+	pro.showHideFormElementsForReflectionType = function()
 	{
 		if( IVQuestionCreator.type == 2)
 		{
@@ -96,32 +96,33 @@ var InteractiveVideoQuestionCreator = (function () {
 			$('#il_prop_cont_feedback_correct').show().prev('.ilFormHeader').show();
 			$('#il_prop_cont_feedback_one_wrong').show();
 		}
-	}
+	};
 
-	function appendSingleListener() {
+	pro.appendSingleListener = function() {
 		$('#question_type').on('change', function (){
 			IVQuestionCreator.type = parseInt($(this).val(),10);
-			showHideFormElementsForReflectionType();
+			pro.showHideFormElementsForReflectionType();
 		});
-	}
+	};
 
 	pub.Init = function () {
 		var question_form = $('#addQuestion');
 		$('#is_interactive').parent().parent().parent().parent().append(question_form);
-		createQuestionForm();
-		appendSingleListener();
+		pro.createQuestionForm();
+		pro.appendSingleListener();
 	};
 
 	pub.appendEmptyJSON = function () {
 		IVQuestionCreator.JSON =
 			[{
-				 'answer' 	: '',
-				 'correct'	: 0,
-				 'answer_id': 0
-			 }];
+				'answer' 	: '',
+				'correct'	: 0,
+				'answer_id': 0
+			}];
 		IVQuestionCreator.type = 0;
 	};
-	
+
+	pub.protect = pro;
 	return pub;
 
 }());
