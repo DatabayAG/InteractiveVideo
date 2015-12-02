@@ -1,4 +1,5 @@
 var InteractiveVideoQuestionViewer = (function () {
+	'use strict';
 	var pub = {},
 	    pro = {};
 
@@ -101,7 +102,7 @@ var InteractiveVideoQuestionViewer = (function () {
 			modal.append('<div class="learning_recommendation"><br/>' + learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>');
 			$('#jumpToTimeInVideo').on('click', function (e) {
 				$('#ilQuestionModal').modal('hide');
-				$().jumpToTimeInVideo(feedback.time);
+				il.InteractiveVideoPlayerUtils.jumpToTimeInVideo(feedback.time);
 			});
 		}
 	};
@@ -129,7 +130,7 @@ var InteractiveVideoQuestionViewer = (function () {
 	{
 		$('#close_form').on('click', function (e) {
 			$('#ilQuestionModal').modal('hide');
-			$().resumeVideo();
+			il.InteractiveVideoPlayerUtils.resumeVideo();
 		});
 	};
 

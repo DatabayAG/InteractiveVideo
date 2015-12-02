@@ -13,9 +13,11 @@ module.exports = function(config) {
 
 		// list of files / patterns to load in the browser
 		files: [ 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js',
-		         '../jquery.InteractiveVideoQuestionViewer.js', 'InteractiveVideoQuestionViewerTest.js',
-				 '../jquery.InteractiveVideoQuestionCreator.js', 'InteractiveVideoQuestionCreatorTest.js',
-		         {pattern: 'spec/javascripts/fixtures/*'}
+				'globalVariables.js',
+				'../jquery.InteractiveVideoQuestionViewer.js', 'InteractiveVideoQuestionViewerTest.js',
+				'../jquery.InteractiveVideoQuestionCreator.js', 'InteractiveVideoQuestionCreatorTest.js',
+				'../InteractiveVideoPlayerUtils.js', 'InteractiveVideoPlayerUtilsTest.js',
+				{pattern: 'spec/javascripts/fixtures/*'}
 		],
 
 
@@ -30,7 +32,8 @@ module.exports = function(config) {
 		reporters: ['progress', 'coverage'],
 
 		preprocessors: {    '../jquery.InteractiveVideoQuestionViewer.js': ['coverage'],
-							'../jquery.InteractiveVideoQuestionCreator.js': ['coverage']
+							'../jquery.InteractiveVideoQuestionCreator.js': ['coverage'],
+							'../InteractiveVideoPlayerUtils.js': ['coverage']
 		},
 
 		coverageReporter: { type : 'html', dir : 'coverage/' },
