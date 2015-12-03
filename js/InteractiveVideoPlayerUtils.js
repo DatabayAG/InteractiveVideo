@@ -24,7 +24,7 @@ il.InteractiveVideoPlayerUtils = (function () {
 		var i;
 		for (i  = 0; i < Object.keys(comments).length; i++)
 		{
-			if (comments[i].comment_time <= time && comments[i].comment_text != null && comments[i].is_interactive == 0)
+			if (comments[i].comment_time <= time && comments[i].comment_text !== null && parseInt(comments[i].is_interactive, 10) === 0)
 			{
 				html = pub.buildListElement(comments[i], comments[i].comment_time, comments[i].user_name) + html;
 			}
@@ -64,7 +64,7 @@ il.InteractiveVideoPlayerUtils = (function () {
 					pro.builCommentTagsHtml(comment.comment_tags) +
 				'</li>';
 	};
-	
+
 	pro.builCommentTimeHtml = function (time, is_interactice)
 	{
 		var display_time 	= time;
@@ -133,7 +133,8 @@ il.InteractiveVideoPlayerUtils = (function () {
 		}
 		return '<br/><div class="comment_tags">' + comment_tags + '</div>';
 	};
-	
+
 	pub.protect = pro;
 	return pub;
+
 }());

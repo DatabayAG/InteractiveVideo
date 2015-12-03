@@ -133,7 +133,9 @@ describe("InteractiveVideoQuestionViewer Tests", function() {
 
 		describe("Utils functions", function() {
 			beforeEach(function () {
+				
 				ignore_questions = [];
+				IVQuestionCreator = {JSON : []};
 			});
 			afterEach(function () {
 				ignore_questions = [];
@@ -149,6 +151,7 @@ describe("InteractiveVideoQuestionViewer Tests", function() {
 				InteractiveVideoQuestionViewer.protect.addToLocalIgnoreArrayIfNonRepeatable() ;
 				expect(ignore_questions.length).toEqual(1);
 			});
+
 		});
 		
 	});
