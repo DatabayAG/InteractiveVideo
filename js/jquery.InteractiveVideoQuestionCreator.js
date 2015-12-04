@@ -12,6 +12,8 @@ $( document ).ready(function() {
 
 
 var InteractiveVideoQuestionCreator = (function () {
+	'use strict';
+
 	var pub = {}, pro = {};
 
 	pro.appendMultiListener = function() {

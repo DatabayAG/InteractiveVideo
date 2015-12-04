@@ -266,6 +266,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('PRIVATE_TEXT', $this->plugin->txt('is_private_comment'));
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoPlayer.js');
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerUtils.js');
 		$tpl->setContent($video_tpl->get());
 	}
 

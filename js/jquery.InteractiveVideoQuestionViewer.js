@@ -1,4 +1,5 @@
 var InteractiveVideoQuestionViewer = (function () {
+	'use strict';
 	var pub = {},
 	    pro = {};
 
@@ -97,11 +98,11 @@ var InteractiveVideoQuestionViewer = (function () {
 		var modal = $('.modal_feedback');
 		modal.html('');
 		modal.html(feedback.html);
-		if (feedback.is_timed == 1) {
+		if (parseInt(feedback.is_timed, 10) === 1) {
 			modal.append('<div class="learning_recommendation"><br/>' + learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>');
 			$('#jumpToTimeInVideo').on('click', function (e) {
 				$('#ilQuestionModal').modal('hide');
-				$().jumpToTimeInVideo(feedback.time);
+				il.InteractiveVideoPlayerUtils.jumpToTimeInVideo(feedback.time);
 			});
 		}
 	};
@@ -129,7 +130,7 @@ var InteractiveVideoQuestionViewer = (function () {
 	{
 		$('#close_form').on('click', function (e) {
 			$('#ilQuestionModal').modal('hide');
-			$().resumeVideo();
+			il.InteractiveVideoPlayerUtils.resumeVideo();
 		});
 	};
 
@@ -146,17 +147,21 @@ var InteractiveVideoQuestionViewer = (function () {
 				type: 'GET', dataType: 'json'
 			})
 		).then(function (array) {
-				pub.comment_id            = comment_id;
-				pub.QuestionObject        = array;
-				pub.QuestionObject.player = player;
-				pro.buildQuestionForm();
-				if (pub.QuestionObject.player.isFullScreen === true) {
-					pub.QuestionObject.player.exitFullScreen();
-				}
-				$('#ilQuestionModal').modal('show');
+				pro.showQuestionInteractionForm(comment_id, array, player);
 			});
 	};
-
+	
+	pro.showQuestionInteractionForm = function(comment_id, array, player) {
+		pub.comment_id = comment_id;
+		pub.QuestionObject = array;
+		pub.QuestionObject.player = player;
+		pro.buildQuestionForm();
+		if (pub.QuestionObject.player.isFullScreen === true) {
+			pub.QuestionObject.player.exitFullScreen();
+		}
+		$('#ilQuestionModal').modal('show');
+	};
+	
 	pub.protect = pro;
 	return pub;
 
