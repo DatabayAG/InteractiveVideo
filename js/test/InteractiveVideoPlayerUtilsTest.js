@@ -114,17 +114,49 @@ describe("InteractiveVideoPlayerUtils Tests", function () {
 
 		it("replaceCommentsAfterSeeking", function () {
 			var expec = '';
+			InteractiveVideo.is_show_all_active = false;
+			InteractiveVideo.filter_by_user = false;
 			loadFixtures('InteractiveVideoPlayerUtils_fixtures.html');
 			il.InteractiveVideoPlayerUtils.replaceCommentsAfterSeeking(1);
 			expect($("#ul_scroll").html()).toEqual(expec);
-			expec = '<li class="list_item_undefined"><time class="time"> <a onclick="il.InteractiveVideoPlayerUtils.jumpToTimeInVideo(1); return false;">undefined</a></time><span class="comment_username"> [undefined]</span> <span class="comment_title">undefined</span> <span class="comment_text">Text</span> <span class="private_text"></span> <br><div class="comment_tags"></div></li>';
-			comments = [{comment_time: 1, comment_text: 'Text', is_interactive: 0, comment_tags: null}];
-			il.InteractiveVideoPlayerUtils.replaceCommentsAfterSeeking(5);
-			expect($("#ul_scroll").html()).toEqual(expec);
 			expec = '';
 			comments = [{comment_time: 5, comment_text: 'Text', is_interactive: 1, comment_tags: null}];
-			il.InteractiveVideoPlayerUtils.replaceCommentsAfterSeeking(1);
+			il.InteractiveVideoPlayerUtils.replaceCommentsAfterSeeking(6);
 			expect('').toEqual(expec);
+		});
+
+		it("isBuildListElementAllowed", function () {
+			InteractiveVideo.is_show_all_active = true;
+			expect(il.InteractiveVideoPlayerUtils.protect.isBuildListElementAllowed('dummy')).toEqual(false);
+			InteractiveVideo.is_show_all_active = false;
+			expect(il.InteractiveVideoPlayerUtils.protect.isBuildListElementAllowed('dummy')).toEqual(false);
+			InteractiveVideo.filter_by_user = true;
+			InteractiveVideo.filter_by_user = 'dummy';
+			expect(il.InteractiveVideoPlayerUtils.protect.isBuildListElementAllowed('dummy')).toEqual(true);
+		});
+
+		it("getAllUserWithComment", function () {
+			var expec = [];
+			expec['my name'] = 'my name';
+			comments = [{'user_name': 'my name'}];
+			expect(il.InteractiveVideoPlayerUtils.protect.getAllUserWithComment()).toEqual(expec);
+			expec['my name2'] = 'my name2';
+			comments = [{'user_name': 'my name'}, {'user_name': 'my name2'}];
+			expect(il.InteractiveVideoPlayerUtils.protect.getAllUserWithComment()).toEqual(expec);
+			comments = [{'user_name': 'my name'}, {'user_name': 'my name2'}, {'user_name': 'my name2'}, {'user_name': 'my name2'}];
+			expect(il.InteractiveVideoPlayerUtils.protect.getAllUserWithComment()).toEqual(expec);
+		});
+
+		it("loadAllUserWithCommentsIntoFilterList", function () {
+			var expec = '<li><a href="#">my name</a></li>';
+			loadFixtures('InteractiveVideoPlayerUtils_fixtures.html');
+			comments = [{'user_name': 'my name'}];
+			il.InteractiveVideoPlayerUtils.loadAllUserWithCommentsIntoFilterList();
+			expect($('#dropdownMenuInteraktiveList').html()).toEqual(expec);
+			comments = [{'user_name': 'my name'}, {'user_name': 'my name2'}];
+			expec = '<li><a href="#">my name</a></li><li><a href="#">my name2</a></li>';
+			il.InteractiveVideoPlayerUtils.loadAllUserWithCommentsIntoFilterList()
+			expect($('#dropdownMenuInteraktiveList').html()).toEqual(expec);
 		});
 
 		describe("Utils Test Calling Cases", function () {

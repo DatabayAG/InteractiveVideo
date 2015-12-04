@@ -203,6 +203,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('content');
 
 		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
+		$tpl->addCss($this->plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.css');
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.js');
 		ilObjMediaObjectGUI::includePresentationJS($tpl);
 
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $this->plugin->getDirectory());
@@ -264,6 +266,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	        $video_tpl->setVariable('ALREADY_ANSWERED_TEXT', $this->plugin->txt('already_answered'));
 		$video_tpl->setVariable('QUESTION_TEXT', $this->plugin->txt('question'));
 		$video_tpl->setVariable('PRIVATE_TEXT', $this->plugin->txt('is_private_comment'));
+		$video_tpl->setVariable('RESET_TEXT', $this->plugin->txt('reset'));
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoPlayer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerUtils.js');

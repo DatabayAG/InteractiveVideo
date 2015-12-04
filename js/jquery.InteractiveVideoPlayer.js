@@ -27,7 +27,7 @@ $( document ).ready(function() {
 			}
 		});
 	});
-
+	
 	$("#ilInteractiveVideoCommentCancel").on("click", function(e) {
 		$('#comment_text').val("");
 	});
@@ -44,6 +44,27 @@ $( document ).ready(function() {
 		{
 			$('#ilInteractiveVideo')["0"].pause();
 		}
+	});
+	$('#show_all_comments').change(function() {
+		il.InteractiveVideoPlayerUtils.displayAllCommentsAndDeactivateCommentStream($(this).prop('checked'));
+	});
+
+	il.InteractiveVideoPlayerUtils.loadAllUserWithCommentsIntoFilterList();
+
+	$('#dropdownMenuInteraktiveList a').click(function(){
+		var value = $(this).html();
+		var is_show_all_active = InteractiveVideo.is_show_all_active;
+		if(value === reset_text)
+		{
+			InteractiveVideo.filter_by_user = false;
+		}
+		else
+		{
+			InteractiveVideo.filter_by_user = value;
+		}
+		InteractiveVideo.is_show_all_active = false;
+		il.InteractiveVideoPlayerUtils.displayAllCommentsAndDeactivateCommentStream(is_show_all_active);
+		InteractiveVideo.is_show_all_active = is_show_all_active;
 	});
 });
 
@@ -76,7 +97,11 @@ $( document ).ready(function() {
 					} else if (InteractiveVideo.last_time < media.currentTime) {
 						InteractiveVideo.last_time = media.currentTime;
 					}
-					il.InteractiveVideoPlayerUtils.replaceCommentsAfterSeeking(media.currentTime);
+					if(	InteractiveVideo.is_show_all_active === false)
+					{
+						il.InteractiveVideoPlayerUtils.replaceCommentsAfterSeeking(media.currentTime);
+					}
+
 				}, false);
 
 				media.addEventListener('pause', function(e) {

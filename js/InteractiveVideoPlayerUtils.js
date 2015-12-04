@@ -24,7 +24,7 @@ il.InteractiveVideoPlayerUtils = (function () {
 		var i;
 		for (i  = 0; i < Object.keys(comments).length; i++)
 		{
-			if (comments[i].comment_time <= time && comments[i].comment_text !== null && parseInt(comments[i].is_interactive, 10) === 0)
+			if (comments[i].comment_time <= time && comments[i].comment_text !== null)
 			{
 				html = pub.buildListElement(comments[i], comments[i].comment_time, comments[i].user_name) + html;
 			}
@@ -53,16 +53,36 @@ il.InteractiveVideoPlayerUtils = (function () {
 		}
 	};
 
+	pro.isBuildListElementAllowed = function(username)
+	{
+		if(InteractiveVideo.is_show_all_active === false)
+		{
+			if(InteractiveVideo.filter_by_user === false ||
+					(InteractiveVideo.filter_by_user !== false && InteractiveVideo.filter_by_user === username))
+			{
+				return true;
+			}
+		}
+		return false;
+	};
+	
 	pub.buildListElement = function (comment, time, username, counter)
 	{
-		return 	'<li class="list_item_' + counter + '">' +
+		if(pro.isBuildListElementAllowed(username))
+		{
+			return 	'<li class="list_item_' + counter + '">' +
 					pro.builCommentTimeHtml(time, comment.is_interactive) +
 					pro.builCommentUsernameHtml(username, comment.is_interactive) +
 					pro.builCommentTitleHtml(comment.comment_title) +
 					pro.builCommentTextHtml(comment.comment_text ) +
 					pro.appendPrivateHtml(comment.is_private) +
 					pro.builCommentTagsHtml(comment.comment_tags) +
-				'</li>';
+					'</li>';
+		}
+		else
+		{
+			return '';
+		}
 	};
 
 	pro.builCommentTimeHtml = function (time, is_interactice)
@@ -94,7 +114,7 @@ il.InteractiveVideoPlayerUtils = (function () {
 
 	pro.builCommentTitleHtml = function (title)
 	{
-		if(title === null)
+		if(title === null || title === undefined)
 		{
 			title = '';
 		}
@@ -134,6 +154,55 @@ il.InteractiveVideoPlayerUtils = (function () {
 		return '<br/><div class="comment_tags">' + comment_tags + '</div>';
 	};
 
+	pub.displayAllCommentsAndDeactivateCommentStream = function(on)
+	{
+		var html = '';
+		var i;
+		if(on)
+		{
+			for (i  = 0; i < Object.keys(comments).length; i++)
+			{
+				if (comments[i].comment_text !== null)
+				{
+					html = pub.buildListElement(comments[i], comments[i].comment_time, comments[i].user_name) + html;
+				}
+			}
+			InteractiveVideo.is_show_all_active = true;
+			$("#ul_scroll").html(html);
+		}
+		else
+		{
+			InteractiveVideo.is_show_all_active = false;
+			pub.replaceCommentsAfterSeeking(InteractiveVideo.last_time);
+		}
+	};
+	
+	pro.getAllUserWithComment = function()
+	{
+		var i, author_list = [];
+		for (i  = 0; i < Object.keys(comments).length; i++)
+		{
+			if ($.inArray( comments[i].user_name, author_list ) === -1)
+			{
+				author_list[comments[i].user_name] = comments[i].user_name;
+			}
+		}
+		return author_list;
+	};
+
+	pub.loadAllUserWithCommentsIntoFilterList = function()
+	{
+		var element;
+		var author_list = pro.getAllUserWithComment();
+		var dropdownList = $('#dropdownMenuInteraktiveList');
+		dropdownList.html('');
+		for ( element in author_list) 
+		{
+			element = '<li><a href="#">' + element + '</a></li>';
+			dropdownList.append(element);
+		}
+	};
+	
 	pub.protect = pro;
 	return pub;
 

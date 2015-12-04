@@ -1,3 +1,31 @@
+<nav class="ilToolbar navbar navbar-default" role="navigation">
+	<div class="collapse navbar-collapse" id="tb-collapse-2">
+		<ul class="ilToolbarItems nav navbar-nav ilFloatRight">
+			<li>
+				<div class="navbar-form">
+					<div class="dropdown">
+						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuInteraktiveVideo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							xxxAuthorfilter
+							<span class="caret"></span>
+						</button>
+						<ul id="dropdownMenuInteraktiveList" class="dropdown-menu" aria-labelledby="dropdownMenuInteraktiveVideo">
+							<li><a href="#">{RESET_TEXT}</a></li>
+							<li role="separator" class="divider"></li>
+						</ul>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="navbar-form">
+					<label>
+						xxxShow all Comments:
+					</label>
+						<input id="show_all_comments" type="checkbox" data-toggle="toggle" data-width="50" data-height="30">
+				</div>
+			</li>
+		</ul>
+	</div>
+</nav>
 <div class="row">
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 		<div id="ilInteractiveVideoPlayerContainer">
@@ -46,6 +74,7 @@
 		var answered_text	    = "{ALREADY_ANSWERED_TEXT}";
 		var question_text	    = "{QUESTION_TEXT}";
 		var private_text	   	= "{PRIVATE_TEXT}";
+		var reset_text	   		= "{RESET_TEXT}";
 		var comments 			= {COMMENTS};
 		var stopPoints 			= {STOP_POINTS};
 		var ignore_questions	= {IGNORE_QUESTIONS};
@@ -57,7 +86,9 @@
 			pause_on_click_in_comment_field	: true,
 			iv_debug						: false,
 			last_stopPoint 					: -1,
-			last_time						: 0
+			last_time						: 0,
+			is_show_all_active				: false,
+			filter_by_user					: false
 		};
 				
 		$.fn.debugPrinter = function (message, element)
