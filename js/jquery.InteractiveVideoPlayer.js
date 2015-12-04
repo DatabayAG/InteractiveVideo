@@ -66,7 +66,7 @@ $.fn.replaceCommentsAfterSeeking = function (time)
 	var html = '';
 	for (var i = 0; i < Object.keys(comments).length; i++)
 	{
-		if (comments[i].comment_time <= time && comments[i].comment_text != null && comments[i].is_interactive == 0)
+		if (comments[i].comment_time <= time && comments[i].comment_text != null )// not sure why we did this here && comments[i].is_interactive == 0)
 		{
 			html = $().buildListElement(comments[i], comments[i].comment_time, comments[i].user_name) + html;
 		}
@@ -144,10 +144,10 @@ $.fn.buildListElement = function (comment, time, username, counter)
 
 	il.Util.addOnLoad(function () {
 		var _lastTime = 0,
-
+		    player = null,
 			interval = null;
 		InteractiveVideo.last_stopPoint = -1;
-		var player = new MediaElementPlayer("#ilInteractiveVideo", {
+		player = new MediaElementPlayer("#ilInteractiveVideo", {
 			timerRate: 50,
 			enablePluginDebug: false,
 			success:           function(media) {
