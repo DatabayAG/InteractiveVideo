@@ -51,8 +51,7 @@ $( document ).ready(function() {
 (function ($) {
 
 	il.Util.addOnLoad(function () {
-		var _lastTime = 0,
-			player = null,
+		var player = null,
 			interval = null;
 		InteractiveVideo.last_stopPoint = -1;
 		player = new MediaElementPlayer("#ilInteractiveVideo", {
@@ -71,11 +70,11 @@ $( document ).ready(function() {
 				media.addEventListener('seeked', function(e) {
 					$().debugPrinter('Player', 'seeked');
 					clearInterval(interval);
-					if (_lastTime > media.currentTime) {
-						_lastTime = media.currentTime;
+					if (InteractiveVideo.last_time > media.currentTime) {
+						InteractiveVideo.last_time = media.currentTime;
 						InteractiveVideo.last_stopPoint = -1;
-					} else if (_lastTime < media.currentTime) {
-						_lastTime = media.currentTime;
+					} else if (InteractiveVideo.last_time < media.currentTime) {
+						InteractiveVideo.last_time = media.currentTime;
 					}
 					il.InteractiveVideoPlayerUtils.replaceCommentsAfterSeeking(media.currentTime);
 				}, false);
@@ -83,13 +82,14 @@ $( document ).ready(function() {
 				media.addEventListener('pause', function(e) {
 					$().debugPrinter('Player', 'paused');
 					clearInterval(interval);
-					_lastTime = media.currentTime;
+					InteractiveVideo.last_time = media.currentTime;
 				}, false);
 
 				media.addEventListener('ended', function(e) {
 					$().debugPrinter('Player', 'video finished');
 				}, false);
 				media.addEventListener('playing', function(e) {
+					var cueTime, stop_video, i, j;
 					$().debugPrinter('Player', 'playing');
 					interval = setInterval(function () {
 						if (media.currentTime >= media.duration) {
@@ -99,15 +99,15 @@ $( document ).ready(function() {
 						if (!isNaN(media.currentTime) && media.currentTime > 0) {
 							// @todo: Evtl. use a better way to detect the relevant stopping point
 
-							for (var j = stopPoints.length - 1; j >= 0; j--) 
+							for (j = stopPoints.length - 1; j >= 0; j--) 
 							{
-								var cueTime = parseInt(stopPoints[j], 10);
-								if (cueTime >= _lastTime && cueTime <= media.currentTime) 
+								cueTime = parseInt(stopPoints[j], 10);
+								if (cueTime >= InteractiveVideo.last_time && cueTime <= media.currentTime) 
 								{
-									var stop_video = 0;
+									stop_video = 0;
 									if (InteractiveVideo.last_stopPoint < cueTime) 
 									{
-										for (var i = 0; i < Object.keys(comments).length; i++) 
+										for (i = 0; i < Object.keys(comments).length; i++) 
 										{
 											if (comments[i].comment_time == cueTime) 
 											{
@@ -134,7 +134,7 @@ $( document ).ready(function() {
 									InteractiveVideo.last_stopPoint = parseInt(cueTime, 10);
 								}
 							}
-							_lastTime = media.currentTime;
+							InteractiveVideo.last_time = media.currentTime;
 						}
 					}, 500);
 

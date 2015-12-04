@@ -24,37 +24,37 @@ describe("InteractiveVideoPlayerUtils Tests", function () {
 		});
 
 		it("builCommentTextHtml must return html", function () {
-			var expec = '<span class="comment_text">My little text</span>';
+			var expec = '<span class="comment_text">My little text</span> ';
 			var value = il.InteractiveVideoPlayerUtils.protect.builCommentTextHtml('My little text');
 			expect(value).toEqual(expec);
 		});
 
 		it("builCommentTitleHtml must return html", function () {
-			var expec = '<span class="comment_title">My little text</span>';
+			var expec = '<span class="comment_title">My little text</span> ';
 			var value = il.InteractiveVideoPlayerUtils.protect.builCommentTitleHtml('My little text');
 			expect(value).toEqual(expec);
-			expec = '<span class="comment_title"></span>';
+			expec = '<span class="comment_title"></span> ';
 			value = il.InteractiveVideoPlayerUtils.protect.builCommentTitleHtml(null);
 			expect(value).toEqual(expec);
 		});
 
 		it("builCommentUsernameHtml must return html", function () {
-			var expec = '<span class="comment_username"> [Username]</span>';
+			var expec = '<span class="comment_username"> [Username]</span> ';
 			var value = il.InteractiveVideoPlayerUtils.protect.builCommentUsernameHtml('Username', 0);
 			expect(value).toEqual(expec);
-			expec = '<span class="comment_username"> [Question]</span>';
+			expec = '<span class="comment_username"> [Question]</span> ';
 			value = il.InteractiveVideoPlayerUtils.protect.builCommentUsernameHtml('Username', 1);
 			expect(value).toEqual(expec);
-			expec = '<span class="comment_username"> </span>';
+			expec = '<span class="comment_username"> </span> ';
 			value = il.InteractiveVideoPlayerUtils.protect.builCommentUsernameHtml('', 0);
 			expect(value).toEqual(expec);
 		});
 
 		it("builCommentPrivateHtml must return html", function () {
-			var expec = '<span class="private_text"> (private)</span>';
+			var expec = '<span class="private_text"> (private)</span> ';
 			var value = il.InteractiveVideoPlayerUtils.protect.appendPrivateHtml(1);
 			expect(value).toEqual(expec);
-			expec = '<span class="private_text"></span>';
+			expec = '<span class="private_text"></span> ';
 			value = il.InteractiveVideoPlayerUtils.protect.appendPrivateHtml(0);
 			expect(value).toEqual(expec);
 		});
@@ -70,7 +70,7 @@ describe("InteractiveVideoPlayerUtils Tests", function () {
 
 		it("builCommentTagsHtml must return html", function () {
 			var tags = 'Tag1, Tag2';
-			var expec = '<br/><div class="comment_tags"><span class="tag">Tag1</span> <span class="tag"> Tag2</span></div>';
+			var expec = '<br/><div class="comment_tags"><span class="tag">Tag1</span> <span class="tag"> Tag2</span> </div>';
 			var value = il.InteractiveVideoPlayerUtils.protect.builCommentTagsHtml(tags);
 			expect(value).toEqual(expec);
 			expec = '<br/><div class="comment_tags"></div>';
@@ -117,7 +117,7 @@ describe("InteractiveVideoPlayerUtils Tests", function () {
 			loadFixtures('InteractiveVideoPlayerUtils_fixtures.html');
 			il.InteractiveVideoPlayerUtils.replaceCommentsAfterSeeking(1);
 			expect($("#ul_scroll").html()).toEqual(expec);
-			expec = '<li class="list_item_undefined"><time class="time"> <a onclick="il.InteractiveVideoPlayerUtils.jumpToTimeInVideo(1); return false;">undefined</a></time><span class="comment_username"> [undefined]</span><span class="comment_title">undefined</span><span class="comment_text">Text</span><span class="private_text"></span><br><div class="comment_tags"></div></li>';
+			expec = '<li class="list_item_undefined"><time class="time"> <a onclick="il.InteractiveVideoPlayerUtils.jumpToTimeInVideo(1); return false;">undefined</a></time><span class="comment_username"> [undefined]</span> <span class="comment_title">undefined</span> <span class="comment_text">Text</span> <span class="private_text"></span> <br><div class="comment_tags"></div></li>';
 			comments = [{comment_time: 1, comment_text: 'Text', is_interactive: 0, comment_tags: null}];
 			il.InteractiveVideoPlayerUtils.replaceCommentsAfterSeeking(5);
 			expect($("#ul_scroll").html()).toEqual(expec);

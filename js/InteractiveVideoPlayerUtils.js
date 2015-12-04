@@ -85,11 +85,11 @@ il.InteractiveVideoPlayerUtils = (function () {
 		{
 			username = '[' + username + ']';
 		}
-		if(parseInt(is_interactive, 10) == 1)
+		if(parseInt(is_interactive, 10) === 1)
 		{
 			username  = '[' + question_text + ']';
 		}
-		return 	'<span class="comment_username"> ' + username + '</span>';
+		return 	'<span class="comment_username"> ' + username + '</span> ';
 	};
 
 	pro.builCommentTitleHtml = function (title)
@@ -98,12 +98,12 @@ il.InteractiveVideoPlayerUtils = (function () {
 		{
 			title = '';
 		}
-		return 	'<span class="comment_title">' + title + '</span>';
+		return 	'<span class="comment_title">' + title + '</span> ';
 	};
 
 	pro.builCommentTextHtml = function (text)
 	{
-		return '<span class="comment_text">' + text + '</span>';
+		return '<span class="comment_text">' + text + '</span> ';
 	};
 
 	pro.appendPrivateHtml = function (is_private)
@@ -117,19 +117,19 @@ il.InteractiveVideoPlayerUtils = (function () {
 		{
 			private_comment = '';
 		}
-		return '<span class="private_text">'+ private_comment + '</span>';
+		return '<span class="private_text">'+ private_comment + '</span> ';
 	};
 
 	pro.builCommentTagsHtml = function (tags)
 	{
 		var comment_tags    = '';
-		if(tags === null)
+		if(tags == null)
 		{
 			comment_tags = '';
 		}
 		else
 		{
-			comment_tags = '<span class="tag">' + tags.split(',').join('</span> <span class="tag">') + '</span>';
+			comment_tags = '<span class="tag">' + tags.split(',').join('</span> <span class="tag">') + '</span> ';
 		}
 		return '<br/><div class="comment_tags">' + comment_tags + '</div>';
 	};
