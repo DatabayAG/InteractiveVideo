@@ -123,3 +123,19 @@
 #question_form label input{
 	margin-right: 5px;
 }
+
+.crow1{
+    background-color: rgba(35, 0, 185, 0.13);
+}
+
+.crow2{
+    background-color: rgba(0, 144, 185, 0.13);
+}
+
+.crow3{
+    background-color: rgba(35, 0, 185, 0.13);
+}
+
+.crow4{
+    background-color: rgba(0, 144, 185, 0.13);
+}

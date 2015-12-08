@@ -10,6 +10,7 @@ xvid_write#:#User can edit Interactive Video
 xvid_delete#:#User can move or delete Interactive Video
 xvid_edit_permission#:#User can change permission settings
 xvid_visible#:#Interactive Video is visible
+reset#:#Reset
 crs_create_xvid#:#Create Interactive Video
 grp_create_xvid#:#Create Interactive Video
 fold_create_xvid#:#Create Interactive Video
@@ -22,6 +23,8 @@ sure_delete_comments#:#Are you sure you want to delete the selected comments?
 video_file#:#Video
 comment#:#Comment
 comments#:#Comments
+switch_on#:#On
+switch_off#:#Off
 post#:#Post
 cancel#:#Cancel
 sure_delete_comment#:#Are you sure, you want to delete the selected comments?
@@ -29,7 +32,8 @@ missing_comment_text#:#Please enter a comment.
 missing_stopping_point#:#The stopping point was not trasnferred to the server. Please try again.
 invalid_comment_ids#:#Some comments could not be found.
 comments_successfully_deleted#:#The selected comments were deleted successfully.
-insert_comment#:#Insert new question / new comment
+show_all_comments#:#Show all Comments:
+author_filter#:#Filter by author
 edit_comment#:#Edit comment
 correct_solution#:#Correct
 add_question#:#Add Question

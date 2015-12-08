@@ -10,6 +10,9 @@ xvid_write#:#Interaktives Video bearbeiten
 xvid_delete#:#Interaktives Video löschen
 xvid_edit_permission#:#Rechteeinstellungen ändern
 xvid_visible#:#Interaktives Video ist sichtbar
+reset#:#Zurücksetzen
+show_all_comments#:#Alle Kommentare anzeigen: 
+author_filter#:#Authorenfilter
 crs_create_xvid#:#Neues Interaktives Video anlegen
 grp_create_xvid#:#Neues Interaktives Video anlegen
 fold_create_xvid#:#Neues Interaktives Video anlegen
@@ -32,6 +35,8 @@ comments_successfully_deleted#:#Die gewählten Kommentare wurden erfolgreich gel
 insert_comment#:#Neue Frage / Neuen Kommentar einfügen
 edit_comment#:#Kommentar bearbeiten
 user#:#Benutzer
+switch_on#:#An
+switch_off#:#Aus
 correct#:#Richtig
 correct_solution#:#Richtige Lösung
 add_question#:#Frage hinzufügen

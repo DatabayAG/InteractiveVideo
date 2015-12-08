@@ -227,6 +227,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
 		$video_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
 		$video_tpl->setVariable('TXT_COMMENTS', $this->plugin->txt('comments'));
+		$video_tpl->setVariable('SHOW_ALL_COMMENTS', $this->plugin->txt('show_all_comments'));
+		$video_tpl->setVariable('AUTHOR_FILTER', $this->plugin->txt('author_filter'));
 		
 		$video_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
 		$video_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
@@ -263,10 +265,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('CLOSE_BUTTON', $this->plugin->txt('close'));
 		$video_tpl->setVariable('FEEDBACK_JUMP_TEXT', $this->plugin->txt('feedback_jump_text'));
 		$video_tpl->setVariable('LEARNING_RECOMMENDATION_TEXT', $this->plugin->txt('learning_recommendation'));
-	        $video_tpl->setVariable('ALREADY_ANSWERED_TEXT', $this->plugin->txt('already_answered'));
+		$video_tpl->setVariable('ALREADY_ANSWERED_TEXT', $this->plugin->txt('already_answered'));
 		$video_tpl->setVariable('QUESTION_TEXT', $this->plugin->txt('question'));
 		$video_tpl->setVariable('PRIVATE_TEXT', $this->plugin->txt('is_private_comment'));
 		$video_tpl->setVariable('RESET_TEXT', $this->plugin->txt('reset'));
+		$video_tpl->setVariable('SWITCH_ON', $this->plugin->txt('switch_on'));
+		$video_tpl->setVariable('SWITCH_OFF', $this->plugin->txt('switch_off'));
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoPlayer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerUtils.js');

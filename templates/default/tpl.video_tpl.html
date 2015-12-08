@@ -5,22 +5,19 @@
 				<div class="navbar-form">
 					<div class="dropdown">
 						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuInteraktiveVideo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							xxxAuthorfilter
+							{AUTHOR_FILTER}
 							<span class="caret"></span>
 						</button>
-						<ul id="dropdownMenuInteraktiveList" class="dropdown-menu" aria-labelledby="dropdownMenuInteraktiveVideo">
-							<li><a href="#">{RESET_TEXT}</a></li>
-							<li role="separator" class="divider"></li>
-						</ul>
+						<ul id="dropdownMenuInteraktiveList" class="dropdown-menu" aria-labelledby="dropdownMenuInteraktiveVideo"></ul>
 					</div>
 				</div>
 			</li>
 			<li>
 				<div class="navbar-form">
 					<label>
-						xxxShow all Comments:
+						{SHOW_ALL_COMMENTS}
 					</label>
-						<input id="show_all_comments" type="checkbox" data-toggle="toggle" data-width="50" data-height="30">
+						<input id="show_all_comments" type="checkbox">
 				</div>
 			</li>
 		</ul>
@@ -79,8 +76,10 @@
 		var stopPoints 			= {STOP_POINTS};
 		var ignore_questions	= {IGNORE_QUESTIONS};
 		var username			= "{USERNAME}";
+		var switch_on			= "{SWITCH_ON}";
+		var switch_off			= "{SWITCH_OFF}";
 		var seekTime			= 0;
-		var InteractiveVideo 	= 
+		il.InteractiveVideo 	= 
 		{
 			auto_resume						: false,
 			pause_on_click_in_comment_field	: true,
@@ -93,7 +92,7 @@
 				
 		$.fn.debugPrinter = function (message, element)
 		{
-			if( InteractiveVideo.iv_debug )
+			if( il.InteractiveVideo.iv_debug )
 			{
 				console.log(message + ': ');
 				console.log(element);

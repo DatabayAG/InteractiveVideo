@@ -39,12 +39,21 @@ $( document ).ready(function() {
 	$("#ilInteractiveVideoTutorQuestionSubmit").on("click", function(e) {
 		$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
 	});
+	
 	$('#comment_text').on('click', function(){
-		if(InteractiveVideo.pause_on_click_in_comment_field)
+		if(il.InteractiveVideo.pause_on_click_in_comment_field)
 		{
 			$('#ilInteractiveVideo')["0"].pause();
 		}
 	});
+	
+	$('#show_all_comments').bootstrapToggle({
+		on: switch_on,
+		off: switch_off,
+		width: 50,
+		height: 30
+	});
+	
 	$('#show_all_comments').change(function() {
 		il.InteractiveVideoPlayerUtils.displayAllCommentsAndDeactivateCommentStream($(this).prop('checked'));
 	});
@@ -53,18 +62,18 @@ $( document ).ready(function() {
 
 	$('#dropdownMenuInteraktiveList a').click(function(){
 		var value = $(this).html();
-		var is_show_all_active = InteractiveVideo.is_show_all_active;
+		var show_all_active_temp = il.InteractiveVideo.is_show_all_active;
 		if(value === reset_text)
 		{
-			InteractiveVideo.filter_by_user = false;
+			il.InteractiveVideo.filter_by_user = false;
 		}
 		else
 		{
-			InteractiveVideo.filter_by_user = value;
+			il.InteractiveVideo.filter_by_user = value;
 		}
-		InteractiveVideo.is_show_all_active = false;
-		il.InteractiveVideoPlayerUtils.displayAllCommentsAndDeactivateCommentStream(is_show_all_active);
-		InteractiveVideo.is_show_all_active = is_show_all_active;
+		il.InteractiveVideo.is_show_all_active = false;
+		il.InteractiveVideoPlayerUtils.displayAllCommentsAndDeactivateCommentStream(show_all_active_temp);
+		il.InteractiveVideo.is_show_all_active = show_all_active_temp;
 	});
 });
 
@@ -74,7 +83,7 @@ $( document ).ready(function() {
 	il.Util.addOnLoad(function () {
 		var player = null,
 			interval = null;
-		InteractiveVideo.last_stopPoint = -1;
+		il.InteractiveVideo.last_stopPoint = -1;
 		player = new MediaElementPlayer("#ilInteractiveVideo", {
 			timerRate: 50,
 			enablePluginDebug: false,
@@ -91,13 +100,13 @@ $( document ).ready(function() {
 				media.addEventListener('seeked', function(e) {
 					$().debugPrinter('Player', 'seeked');
 					clearInterval(interval);
-					if (InteractiveVideo.last_time > media.currentTime) {
-						InteractiveVideo.last_time = media.currentTime;
-						InteractiveVideo.last_stopPoint = -1;
-					} else if (InteractiveVideo.last_time < media.currentTime) {
-						InteractiveVideo.last_time = media.currentTime;
+					if (il.InteractiveVideo.last_time > media.currentTime) {
+						il.InteractiveVideo.last_time = media.currentTime;
+						il.InteractiveVideo.last_stopPoint = -1;
+					} else if (il.InteractiveVideo.last_time < media.currentTime) {
+						il.InteractiveVideo.last_time = media.currentTime;
 					}
-					if(	InteractiveVideo.is_show_all_active === false)
+					if(	il.InteractiveVideo.is_show_all_active === false)
 					{
 						il.InteractiveVideoPlayerUtils.replaceCommentsAfterSeeking(media.currentTime);
 					}
@@ -107,7 +116,7 @@ $( document ).ready(function() {
 				media.addEventListener('pause', function(e) {
 					$().debugPrinter('Player', 'paused');
 					clearInterval(interval);
-					InteractiveVideo.last_time = media.currentTime;
+					il.InteractiveVideo.last_time = media.currentTime;
 				}, false);
 
 				media.addEventListener('ended', function(e) {
@@ -127,10 +136,10 @@ $( document ).ready(function() {
 							for (j = stopPoints.length - 1; j >= 0; j--) 
 							{
 								cueTime = parseInt(stopPoints[j], 10);
-								if (cueTime >= InteractiveVideo.last_time && cueTime <= media.currentTime) 
+								if (cueTime >= il.InteractiveVideo.last_time && cueTime <= media.currentTime) 
 								{
 									stop_video = 0;
-									if (InteractiveVideo.last_stopPoint < cueTime) 
+									if (il.InteractiveVideo.last_stopPoint < cueTime) 
 									{
 										for (i = 0; i < Object.keys(comments).length; i++) 
 										{
@@ -156,10 +165,10 @@ $( document ).ready(function() {
 											stop_video = 0;
 										}
 									}
-									InteractiveVideo.last_stopPoint = parseInt(cueTime, 10);
+									il.InteractiveVideo.last_stopPoint = parseInt(cueTime, 10);
 								}
 							}
-							InteractiveVideo.last_time = media.currentTime;
+							il.InteractiveVideo.last_time = media.currentTime;
 						}
 					}, 500);
 
