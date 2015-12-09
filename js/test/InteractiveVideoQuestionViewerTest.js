@@ -37,7 +37,7 @@ describe("InteractiveVideoQuestionViewer Tests", function() {
 			});
 			
 			it("createButtonButtons must return button code", function () {
-				var expec = '<input id="1" class="btn btn-default btn-sm" type="submit" value="hello">';
+				var expec = '<input id="1" class="btn btn-default btn-sm" value="hello" type="submit">';
 				var build = InteractiveVideoQuestionViewer.protect.createButtonButtons(1, 'hello') ;
 				expect(expec).toEqual(build);
 				build = InteractiveVideoQuestionViewer.protect.createButtonButtons(0, 'hello 2') ;
@@ -53,7 +53,7 @@ describe("InteractiveVideoQuestionViewer Tests", function() {
 			});
 
 			it("buildAnswerInputElement must return input element", function () {
-				var expec = '<label for="answer_1"><input type="text" id="answer_1" name="answer[]"  value="1">Hello</label><div class="progress rf_listener response_frequency_1 ilNoDisplay"></div><br/>';
+				var expec = '<label for="answer_1"><input id="answer_1" name="answer[]" value="1" type="text">Hello</label><div class="progress rf_listener response_frequency_1 ilNoDisplay"></div><br/>';
 				var build = InteractiveVideoQuestionViewer.protect.buildAnswerInputElement("text",  {'answer_id' : 1, 'answer' : 'Hello'}) ;
 				expect(expec).toEqual(build);
 				build = InteractiveVideoQuestionViewer.protect.buildAnswerInputElement("text",  {'answer_id' : 2, 'answer' : 'Hello 2'}) ;
@@ -61,7 +61,7 @@ describe("InteractiveVideoQuestionViewer Tests", function() {
 			});
 
 			it("addAnswerPossibilities must append answer element", function () {
-				var expec = 'Modal Body<form id="question_form"><label for="answer_1"><input type="text" id="answer_1" name="answer[]" value="1">Hello</label><div class="progress rf_listener response_frequency_1 ilNoDisplay"></div><br><input type="hidden" name="qid" value="1"></form>';
+				var expec = 'Modal Body<form id="question_form"><label for="answer_1"><input id="answer_1" name="answer[]" value="1" type="text">Hello</label><div class="progress rf_listener response_frequency_1 ilNoDisplay"></div><br><input name="qid" value="1" type="hidden"></form>';
 				loadFixtures('InteractiveVideoQuestionViewer_fixture.html');
 				InteractiveVideoQuestionViewer.QuestionObject.answers = [{'answer_id' : 1, 'answer' : 'Hello'}];
 				InteractiveVideoQuestionViewer.QuestionObject.question_id = 1;
@@ -80,7 +80,7 @@ describe("InteractiveVideoQuestionViewer Tests", function() {
 				expect($('#close_form').length).toEqual(1);
 			});
 			it("showFeedback must display feedback", function () {
-				var expec = 'Great Job.<div class="learning_recommendation"><br>Further Information: <input id="jumpToTimeInVideo" class="btn btn-default btn-sm" type="submit" value="feedback undefined"></div>';
+				var expec = 'Great Job.<div class="learning_recommendation"><br>Further Information: <input id="jumpToTimeInVideo" class="btn btn-default btn-sm" value="feedback undefined" type="submit"></div>';
 				var feedback = { 'html' : 'Great Job.' , 'is_timed' : 1, 'time' : 0};
 				loadFixtures('InteractiveVideoQuestionViewer_fixture.html');
 				$('.modal-body').append('<div class="modal_feedback"></div>');
@@ -106,19 +106,19 @@ describe("InteractiveVideoQuestionViewer Tests", function() {
 					InteractiveVideoQuestionViewer.QuestionObject.question_text = 'Text';
 				});
 				it("buildQuestionForm should append buttons to form type 0", function () {
-					var expec_0 = '<h2>Title</h2><p>Text</p><form id="question_form"><label for="answer_1"><input type="radio" id="answer_1" name="answer[]" value="1">Hello</label><div class="progress rf_listener response_frequency_1 ilNoDisplay"></div><br><input type="hidden" name="qid" value="1"></form>';
+					var expec_0 = '<h2>Title</h2><p>Text</p><form id="question_form"><label for="answer_1"><input id="answer_1" name="answer[]" value="1" type="radio">Hello</label><div class="progress rf_listener response_frequency_1 ilNoDisplay"></div><br><input name="qid" value="1" type="hidden"></form>';
 					InteractiveVideoQuestionViewer.QuestionObject.type = 0;
 					InteractiveVideoQuestionViewer.protect.buildQuestionForm();
 					expect($('.modal-body').html()).toEqual(expec_0);
 				});
 				it("buildQuestionForm should append buttons to form type 1", function () {
-					var expec_1 = '<h2>Title</h2><p>Text</p><form id="question_form"><label for="answer_1"><input type="checkbox" id="answer_1" name="answer[]" value="1">Hello</label><div class="progress rf_listener response_frequency_1 ilNoDisplay"></div><br><input type="hidden" name="qid" value="1"></form>';
+					var expec_1 = '<h2>Title</h2><p>Text</p><form id="question_form"><label for="answer_1"><input id="answer_1" name="answer[]" value="1" type="checkbox">Hello</label><div class="progress rf_listener response_frequency_1 ilNoDisplay"></div><br><input name="qid" value="1" type="hidden"></form>';
 					InteractiveVideoQuestionViewer.QuestionObject.type = 1;
 					InteractiveVideoQuestionViewer.protect.buildQuestionForm();
 					expect($('.modal-body').html()).toEqual(expec_1);
 				});
 				it("buildQuestionForm should append buttons to form type 2", function () {
-					var expec_2 = '<h2>Title</h2><p>Text</p><div class="modal_feedback"><input id="close_form" class="btn btn-default btn-sm" type="submit" value="close"></div>';
+					var expec_2 = '<h2>Title</h2><p>Text</p><div class="modal_feedback"><input id="close_form" class="btn btn-default btn-sm" value="close" type="submit"></div>';
 					InteractiveVideoQuestionViewer.QuestionObject.type = 2;
 					InteractiveVideoQuestionViewer.protect.buildQuestionForm();
 					expect($('.modal-body').html()).toEqual(expec_2);

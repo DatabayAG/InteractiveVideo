@@ -46,7 +46,7 @@ var InteractiveVideoQuestionViewer = (function () {
 		$.each(pub.QuestionObject.answers, function (l, value) {
 			html += pro.buildAnswerInputElement(input_type, value);
 		});
-		html += '<input type="hidden" name="qid" value ="' + pub.QuestionObject.question_id + '"/>';
+		html += '<input name="qid" value ="' + pub.QuestionObject.question_id + '" type="hidden"/>';
 		html += '</form>';
 		$('.modal-body').append(html);
 	};
@@ -54,9 +54,10 @@ var InteractiveVideoQuestionViewer = (function () {
 	pro.buildAnswerInputElement = function(input_type, value)
 	{
 		return  '<label for="answer_'   + value.answer_id + '">' +
-			'<input type="'     + input_type +
-			'" id="answer_' + value.answer_id + '" name="answer[]" ' +
-			' value="'      + value.answer_id + '">' +
+			'<input' +
+			' id="answer_' + value.answer_id + '" name="answer[]"' +
+			' value="'      + value.answer_id + '"' +
+			' type="'     + input_type + '">' +
 			value.answer +
 			'</label>' + 
 			'<div class="progress rf_listener response_frequency_' + value.answer_id + ' ilNoDisplay"></div>' +
@@ -159,7 +160,7 @@ var InteractiveVideoQuestionViewer = (function () {
 	};
 
 	pro.createButtonButtons = function(id, value) {
-		return '<input id="' + id + '" class="btn btn-default btn-sm" type="submit" value="' + value + '">';
+		return '<input id="' + id + '" class="btn btn-default btn-sm" value="' + value + '" '+ 'type="submit">';
 	};
 
 	pub.QuestionObject = {};
