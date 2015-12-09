@@ -315,6 +315,10 @@ il.InteractiveVideoPlayerUtils = (function () {
 		options = '';
 		for(i=1; i <= h; i++)
 		{
+			if(i<10)
+			{
+				i = '0' + i;
+			}
 			options += '<option value="' + i + '">' + i + '</option>';
 			h_exists = true;
 		}

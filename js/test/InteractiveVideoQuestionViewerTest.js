@@ -53,7 +53,7 @@ describe("InteractiveVideoQuestionViewer Tests", function() {
 			});
 
 			it("buildAnswerInputElement must return input element", function () {
-				var expec = '<label for="answer_1"><input type="text" id="answer_1" name="answer[]"  value="1">Hello</label><br/>';
+				var expec = '<label for="answer_1"><input type="text" id="answer_1" name="answer[]"  value="1">Hello</label><div class="progress rf_listener response_frequency_1 ilNoDisplay"></div><br/>';
 				var build = InteractiveVideoQuestionViewer.protect.buildAnswerInputElement("text",  {'answer_id' : 1, 'answer' : 'Hello'}) ;
 				expect(expec).toEqual(build);
 				build = InteractiveVideoQuestionViewer.protect.buildAnswerInputElement("text",  {'answer_id' : 2, 'answer' : 'Hello 2'}) ;
@@ -61,7 +61,7 @@ describe("InteractiveVideoQuestionViewer Tests", function() {
 			});
 
 			it("addAnswerPossibilities must append answer element", function () {
-				var expec = 'Modal Body<form id="question_form"><label for="answer_1"><input type="text" id="answer_1" name="answer[]" value="1">Hello</label><br><input type="hidden" name="qid" value="1"></form>';
+				var expec = 'Modal Body<form id="question_form"><label for="answer_1"><input type="text" id="answer_1" name="answer[]" value="1">Hello</label><div class="progress rf_listener response_frequency_1 ilNoDisplay"></div><br><input type="hidden" name="qid" value="1"></form>';
 				loadFixtures('InteractiveVideoQuestionViewer_fixture.html');
 				InteractiveVideoQuestionViewer.QuestionObject.answers = [{'answer_id' : 1, 'answer' : 'Hello'}];
 				InteractiveVideoQuestionViewer.QuestionObject.question_id = 1;
@@ -106,13 +106,13 @@ describe("InteractiveVideoQuestionViewer Tests", function() {
 					InteractiveVideoQuestionViewer.QuestionObject.question_text = 'Text';
 				});
 				it("buildQuestionForm should append buttons to form type 0", function () {
-					var expec_0 = '<h2>Title</h2><p>Text</p><form id="question_form"><label for="answer_1"><input type="radio" id="answer_1" name="answer[]" value="1">Hello</label><br><input type="hidden" name="qid" value="1"></form>';
+					var expec_0 = '<h2>Title</h2><p>Text</p><form id="question_form"><label for="answer_1"><input type="radio" id="answer_1" name="answer[]" value="1">Hello</label><div class="progress rf_listener response_frequency_1 ilNoDisplay"></div><br><input type="hidden" name="qid" value="1"></form>';
 					InteractiveVideoQuestionViewer.QuestionObject.type = 0;
 					InteractiveVideoQuestionViewer.protect.buildQuestionForm();
 					expect($('.modal-body').html()).toEqual(expec_0);
 				});
 				it("buildQuestionForm should append buttons to form type 1", function () {
-					var expec_1 = '<h2>Title</h2><p>Text</p><form id="question_form"><label for="answer_1"><input type="checkbox" id="answer_1" name="answer[]" value="1">Hello</label><br><input type="hidden" name="qid" value="1"></form>';
+					var expec_1 = '<h2>Title</h2><p>Text</p><form id="question_form"><label for="answer_1"><input type="checkbox" id="answer_1" name="answer[]" value="1">Hello</label><div class="progress rf_listener response_frequency_1 ilNoDisplay"></div><br><input type="hidden" name="qid" value="1"></form>';
 					InteractiveVideoQuestionViewer.QuestionObject.type = 1;
 					InteractiveVideoQuestionViewer.protect.buildQuestionForm();
 					expect($('.modal-body').html()).toEqual(expec_1);
