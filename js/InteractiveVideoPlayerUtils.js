@@ -129,13 +129,11 @@ il.InteractiveVideoPlayerUtils = (function () {
 	
 	pub.addHighlightToComment = function (id)
 	{
-		console.log('add', $('.list_item_' + id))
 		$('.list_item_' + id).addClass('activeComment');
 	};
 
 	pro.removeHighlightFromComment = function (id)
 	{
-		console.log('remove', $('.list_item_' + id))
 		$('.list_item_' + id).removeClass('activeComment');
 	};
 

@@ -251,4 +251,24 @@ class SimpleChoiceQuestionStatistics {
         $row = $ilDB->fetchAssoc($res);
         return (int)$row['count'];
     }
+    
+    public function getResponseFrequency($question_id)
+    {
+        global $ilDB;
+        $res = $ilDB->queryF(
+            'SELECT rep_robj_xvid_qus_text.answer_id, count(rep_robj_xvid_answers.answer_id) AS counter, answer, rep_robj_xvid_question.question_id FROM rep_robj_xvid_question
+				LEFT JOIN rep_robj_xvid_qus_text ON rep_robj_xvid_qus_text.question_id = rep_robj_xvid_question.question_id 
+				RIGHT JOIN rep_robj_xvid_answers ON rep_robj_xvid_qus_text.answer_id = rep_robj_xvid_answers.answer_id
+				WHERE  rep_robj_xvid_question.question_id = %s GROUP BY rep_robj_xvid_answers.answer_id',
+            array('integer'),
+            array((int) $question_id)
+        );
+		$answer_stats = array();
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$answer_stats[$row['answer_id']] = $row['counter'];
+		}
+        return $answer_stats;
+
+    }
 }

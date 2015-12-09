@@ -58,7 +58,9 @@ var InteractiveVideoQuestionViewer = (function () {
 			'" id="answer_' + value.answer_id + '" name="answer[]" ' +
 			' value="'      + value.answer_id + '">' +
 			value.answer +
-			'</label><br/>';
+			'</label>' + 
+			'<div class="progress rf_listener response_frequency_' + value.answer_id + ' ilNoDisplay"></div>' +
+			'<br/>';
 	};
 
 	pro.addSelfReflectionLayout = function() {
@@ -97,12 +99,34 @@ var InteractiveVideoQuestionViewer = (function () {
 	pro.showFeedback = function(feedback) {
 		var modal = $('.modal_feedback');
 		modal.html('');
+		pro.showResponseFrequency(feedback.response_frequency);
 		modal.html(feedback.html);
 		if (parseInt(feedback.is_timed, 10) === 1) {
 			modal.append('<div class="learning_recommendation"><br/>' + learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>');
 			$('#jumpToTimeInVideo').on('click', function (e) {
 				$('#ilQuestionModal').modal('hide');
 				il.InteractiveVideoPlayerUtils.jumpToTimeInVideo(feedback.time);
+			});
+		}
+	};
+
+	pro.showResponseFrequency = function(response_frequency) 
+	{
+		var answers_count = 0;
+		var percentage = 0;
+		if(parseInt(pub.QuestionObject.show_response_frequency, 10) === 1)
+		{
+			$.each(response_frequency, function (l, value) {
+				answers_count += parseInt(value, 10);
+			});
+
+			$.each($('.rf_listener'), function () {
+				$(this).removeClass('ilNoDisplay');
+				$(this).html('<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>');
+			});
+			$.each(response_frequency, function (l, value) {
+				percentage = (value / answers_count) * 100;
+				$('.response_frequency_' + l).html('<div class="progress-bar" role="progressbar" aria-valuenow="' + percentage + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + percentage + '%;">' + percentage + '%</div>');
 			});
 		}
 	};

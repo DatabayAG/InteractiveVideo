@@ -3,6 +3,7 @@
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionScoring.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionStatistics.php');
 class SimpleChoiceQuestionAjaxHandler {
 
     /**
@@ -38,6 +39,8 @@ class SimpleChoiceQuestionAjaxHandler {
                 $json['time']     = $feedback['jump_correct_ts'];
             }
         }
+        $simple = new SimpleChoiceQuestionStatistics();
+        $json['response_frequency'] = $simple->getResponseFrequency((int) $qid);
 	    return json_encode($json);
     }
 
@@ -78,6 +81,7 @@ class SimpleChoiceQuestionAjaxHandler {
             $jump_correct_ts                      = $row['jump_correct_ts'];
             $is_jump_wrong                        = $row['is_jump_wrong'];
             $jump_wrong_ts                        = $row['jump_wrong_ts'];
+			$show_response_frequency              = $row['show_response_frequency'];
             $repeat_question                      = $row['repeat_question'];
             $counter++;
         }
@@ -109,6 +113,7 @@ class SimpleChoiceQuestionAjaxHandler {
         $build_json['jump_correct_ts'] = $jump_correct_ts;
         $build_json['is_jump_wrong']   = $is_jump_wrong;
         $build_json['jump_wrong_ts']   = $jump_wrong_ts;
+		$build_json['show_response_frequency']   = $show_response_frequency;
         $build_json['repeat_question'] = $repeat_question;
 	    
 	    if( sizeof($answered) > 0)
