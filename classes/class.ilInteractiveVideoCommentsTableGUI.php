@@ -44,6 +44,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$this->addColumn('', 'comment_id',  '1px', true);
 
 		$this->addColumn($this->lng->txt('time'), 'comment_time');
+		$this->addColumn($this->lng->txt('time_end'), 'comment_time_end');
 		$this->addColumn($this->lng->txt('user'), 'user_id');
 		$this->addColumn($this->lng->txt('comment'), 'comment_text');
 		if($ilAccess->checkAccess('write', '', $a_parent_obj->object->getRefId()) && $a_parent_cmd == 'editComments')
@@ -79,7 +80,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	 */
 	public function numericOrdering($column)
 	{
-		if('comment_time' == $column)
+		if('comment_time' == $column || 'comment_time' ==  $column )
 		{
 			return true;
 		}
@@ -110,6 +111,20 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 				$time = xvidUtils::timespanArray($value);
 				$value = $time['h'].':'.$time['m'].':'.$time['s'];
 			}
+
+			if($key == 'comment_time_end')
+			{
+				if($value == 0)
+				{
+					$value = '';
+				}
+				else
+				{
+					$time = xvidUtils::timespanArray($value);
+					$value = $time['h'].':'.$time['m'].':'.$time['s'];
+				}
+			}
+			
 			switch($key) 
 			{
 				case 'is_private': 

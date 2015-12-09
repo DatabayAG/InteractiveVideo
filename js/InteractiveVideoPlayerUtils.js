@@ -22,17 +22,23 @@ il.InteractiveVideoPlayerUtils = (function () {
 	};
 
 	pub.replaceCommentsAfterSeeking = function (time)
-	{	
-		var html = '';
+	{
 		var i;
+		var j_object = $("#ul_scroll");
+		j_object.html('');
+		pub.resetCommentsTimeEndBlacklist();
 		for (i  = 0; i < Object.keys(comments).length; i++)
 		{
 			if (comments[i].comment_time <= time && comments[i].comment_text !== null)
 			{
-				html = pub.buildListElement(comments[i], comments[i].comment_time, comments[i].user_name) + html;
+				j_object.prepend(pub.buildListElement(comments[i], comments[i].comment_time, comments[i].user_name));
+				if(comments[i].comment_time_end > 0)
+				{
+					pub.fillCommentsTimeEndBlacklist(comments[i].comment_time_end, comments[i].comment_id);
+				}
 			}
 		}
-		$("#ul_scroll").html(html);
+		pub.clearCommentsWhereTimeEndEndded(time);
 	};
 
 	pub.jumpToTimeInVideo = function (time)
@@ -69,14 +75,15 @@ il.InteractiveVideoPlayerUtils = (function () {
 		return false;
 	};
 	
-	pub.buildListElement = function (comment, time, username, counter)
+	pub.buildListElement = function (comment, time, username)
 	{
-		var css_class = '';
+		var css_class;
 		if(pro.isBuildListElementAllowed(username))
 		{
 			css_class = pro.getCSSClassForListelement();
-			return 	'<li class="list_item_' + counter + ' ' + css_class +'">' +
+			return 	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class +'">' +
 					pro.builCommentTimeHtml(time, comment.is_interactive) +
+					pro.builCommentTimeEndHtml(comment) +
 					pro.builCommentUsernameHtml(username, comment.is_interactive) +
 					pro.builCommentTitleHtml(comment.comment_title) +
 					pro.builCommentTextHtml(comment.comment_text ) +
@@ -89,7 +96,54 @@ il.InteractiveVideoPlayerUtils = (function () {
 			return '';
 		}
 	};
+	
+	pub.fillCommentsTimeEndBlacklist = function (comment_time_end, comment_id)
+	{
+		if(il.InteractiveVideo.blacklist_time_end[comment_time_end] === undefined)
+		{
+			il.InteractiveVideo.blacklist_time_end[comment_time_end] = [comment_id];
+		}
+		else
+		{
+			il.InteractiveVideo.blacklist_time_end[comment_time_end].push(comment_id);
+		}
+		pub.addHighlightToComment(comment_id);
+	};
 
+	pub.clearCommentsWhereTimeEndEndded = function (time)
+	{
+		var timestamp, id;
+		for (timestamp in il.InteractiveVideo.blacklist_time_end) 
+		{
+			if(timestamp <= time)
+			{
+				for (id in il.InteractiveVideo.blacklist_time_end[timestamp]) 
+				{
+					pro.removeHighlightFromComment(il.InteractiveVideo.blacklist_time_end[timestamp][id]);
+				}
+
+				delete il.InteractiveVideo.blacklist_time_end[timestamp];
+			}
+		}
+	};
+	
+	pub.addHighlightToComment = function (id)
+	{
+		console.log('add', $('.list_item_' + id))
+		$('.list_item_' + id).addClass('activeComment');
+	};
+
+	pro.removeHighlightFromComment = function (id)
+	{
+		console.log('remove', $('.list_item_' + id))
+		$('.list_item_' + id).removeClass('activeComment');
+	};
+
+	pub.resetCommentsTimeEndBlacklist = function ()
+	{
+		il.InteractiveVideo.blacklist_time_end = [];
+	};
+	
 	pro.getCSSClassForListelement = function()
 	{
 		var css_class;
@@ -115,6 +169,35 @@ il.InteractiveVideoPlayerUtils = (function () {
 						mejs.Utility.secondsToTimeCode(display_time)  + 
 					'</a>' +
 				'</time>' ;
+	};
+
+	pro.builCommentTimeEndHtml = function (comment)
+	{
+		var h, m, s,display_time;
+		if(comment.comment_time_end === undefined)
+		{
+			h = parseInt(comment.comment_time_end_h, 10) * 3600;
+			m = parseInt(comment.comment_time_end_m, 10) * 60;
+			s = parseInt(comment.comment_time_end_s, 10);
+			display_time 	= h + m + s;
+		}
+		else
+		{
+			display_time 	= comment.comment_time_end;
+		}
+		if(display_time > 0)
+		{
+			return 	'<time class="time_end"> - ' +
+					'<a onClick="il.InteractiveVideoPlayerUtils.jumpToTimeInVideo(' + display_time + '); return false;">'+
+					mejs.Utility.secondsToTimeCode(display_time)  +
+					'</a>' +
+					'</time>' ;
+		}
+		else
+		{
+			return '';
+		}
+
 	};
 
 	pro.builCommentUsernameHtml = function (username, is_interactive)
@@ -221,6 +304,52 @@ il.InteractiveVideoPlayerUtils = (function () {
 			element = '<li><a href="#">' + element + '</a></li>';
 			dropdownList.append(element);
 		}
+	};
+	
+	pub.fillEndTimeSelector = function(seconds)
+	{
+		var h, m, s, i, options;
+		var h_exists = false;
+		var m_exists = false;
+		h = Math.floor(seconds / 3600) % 24; 
+		m = Math.floor(seconds / 60) % 60;
+		s = Math.floor(seconds % 60);
+		options = '';
+		for(i=1; i <= h; i++)
+		{
+			options += '<option value="' + i + '">' + i + '</option>';
+			h_exists = true;
+		}
+		$('#comment_time_end\\[time\\]_h').append(options);
+		options = '';
+		if(h_exists === true)
+		{
+			m = 59;
+		}
+		for(i=1; i <= m; i++)
+		{
+			if(i<10)
+			{
+				i = '0' + i;
+			}
+			options += '<option value="' + i + '">' + i + '</option>';
+			m_exists = true;
+		}
+		$('#comment_time_end\\[time\\]_m').append(options);
+		options = '';
+		if(m_exists === true)
+		{
+			s = 59;
+		}
+		for(i=1; i <= s; i++)
+		{
+			if(i<10)
+			{
+				i = '0' + i;
+			}
+			options += '<option value="' + i + '">' + i + '</option>';
+		}
+		$('#comment_time_end\\[time\\]_s').append(options);
 	};
 	
 	pub.protect = pro;

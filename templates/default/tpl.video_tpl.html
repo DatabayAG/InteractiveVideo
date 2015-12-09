@@ -40,6 +40,21 @@
 				<div class="col-sm-9">
 					<input type="checkbox" name="is_private" value="1" id="is_private"/> {TXT_IS_PRIVATE}
 				</div>
+				<div class="col-sm-9">
+					<input type="checkbox" name="comment_time_end" value="1" id="comment_time_end"/> {COMMENT_TIME_END}
+						<div class="form-inline end_time_selector" style="display:none">
+							<select name="comment_time_end[time][h]" id="comment_time_end[time]_h" class="form-control">
+								<option value="0" selected="selected">00</option>
+							</select>
+							<select name="comment_time_end[time][m]" id="comment_time_end[time]_m" class="form-control">
+								<option value="0" selected="selected">00</option>
+							</select>
+							<select name="comment_time_end[time][s]" id="comment_time_end[time]_s" class="form-control">
+								<option value="0" selected="selected">00</option>
+							</select>
+							<div class="help-block">(HH:MM:SS)</div>
+					</div>
+				</div>
 			</div>
 			<div class="ilFormFooter clearfix">
 				<div class="col-sm-9 ilFormRequired"></div>
@@ -87,7 +102,9 @@
 			last_stopPoint 					: -1,
 			last_time						: 0,
 			is_show_all_active				: false,
-			filter_by_user					: false
+			filter_by_user					: false,
+			is_chronologic					: '{IS_CHRONOLOGIC_VALUE}',
+			blacklist_time_end				: []
 		};
 				
 		$.fn.debugPrinter = function (message, element)

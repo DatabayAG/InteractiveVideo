@@ -102,3 +102,8 @@ is_repeat#:#Korrekt beantwortete Fragen überspringen
 is_repeat_info#:#Wenn diese Option aktiviert ist, werden bereits korrekt beantwortete Fragen beim Abspielen übersprungen.
 offline#:#Offline
 status#:#Status
+is_chronologic#:#Zeige Kommentare in chronologischer Reihenfolge
+is_chronologic_info#:#Wenn diese Option deaktiviert wird werden alle Kommentare angezeigt.
+time_end#:#Endzeit
+show_response_frequency#:#Zeige Antworthäufigkeit
+show_response_frequency_info#:#Zeige Antworthäufigkeit Info

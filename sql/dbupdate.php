@@ -477,3 +477,48 @@ $ilDB->addPrimaryKey('rep_robj_xvid_score', array('question_id', 'user_id'));
 <?php
 $ilDB->addIndex('rep_robj_xvid_question', array('comment_id'), 'ci');
 ?>
+<#22>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_objects'))
+{
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'is_chronologic'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_objects', 'is_chronologic',
+				array(
+						'type'    => 'integer',
+						'length'  => '1',
+						'notnull' => true,
+						'default' => 1));
+	}
+}
+?>
+<#23>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_comments'))
+{
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_comments', 'comment_time_end'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_comments', 'comment_time_end',
+				array(
+						'type'    => 'integer',
+						'length'  => '4',
+						'notnull' => true,
+						'default' => 0));
+	}
+}
+?>
+<#24>
+	<?php
+	if($ilDB->tableExists('rep_robj_xvid_question'))
+	{
+		if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'show_response_frequency'))
+		{
+			$ilDB->addTableColumn('rep_robj_xvid_question', 'show_response_frequency',
+					array(
+							'type'    => 'integer',
+							'length'  => '1',
+							'notnull' => true,
+							'default' => 0));
+		}
+	} 
+?>

@@ -5,6 +5,9 @@ $( document ).ready(function() {
 				'comment_id': '0',
 				'comment_time': $("video#ilInteractiveVideo")[0].currentTime,
 				'comment_text': $('#comment_text').val(),
+				"comment_time_end_h": $('#comment_time_end\\[time\\]_h').val(),
+				"comment_time_end_m": $('#comment_time_end\\[time\\]_m').val(),
+				"comment_time_end_s": $('#comment_time_end\\[time\\]_s').val(),
 				'user_name': username,
 				'is_interactive': '0',
 				'is_private': $('#is_private').prop( "checked" )
@@ -18,7 +21,10 @@ $( document ).ready(function() {
 			dataType : "JSON",
 			url      : post_comment_url,
 			data     : {
-						    "comment_time":$("video#ilInteractiveVideo")[0].currentTime, 
+							"comment_time": $("video#ilInteractiveVideo")[0].currentTime,
+							"comment_time_end_h": $('#comment_time_end\\[time\\]_h').val(),
+							"comment_time_end_m": $('#comment_time_end\\[time\\]_m').val(),
+							"comment_time_end_s": $('#comment_time_end\\[time\\]_s').val(),
 							"comment_text": $('#comment_text').val(), 
 							'is_private': $('#is_private').prop( "checked" )
 						},
@@ -46,17 +52,35 @@ $( document ).ready(function() {
 			$('#ilInteractiveVideo')["0"].pause();
 		}
 	});
+
+	$('#show_all_comments').change(function() {
+		il.InteractiveVideoPlayerUtils.displayAllCommentsAndDeactivateCommentStream($(this).prop('checked'));
+	});
+	
+	$('#comment_time_end').change(function() {
+		if($(this).is(':checked'))
+		{
+			$('.end_time_selector').show( 'fast' );
+		}
+		else
+		{
+			$('.end_time_selector').hide( 'fast' );
+		}
+
+	});
 	
 	$('#show_all_comments').bootstrapToggle({
 		on: switch_on,
 		off: switch_off,
 		width: 50,
 		height: 30
-	});
+	}, function(){
+		if(il.InteractiveVideo.is_chronologic === '0')
+		{
+			$('#show_all_comments').click();
+		}
+	}());
 	
-	$('#show_all_comments').change(function() {
-		il.InteractiveVideoPlayerUtils.displayAllCommentsAndDeactivateCommentStream($(this).prop('checked'));
-	});
 
 	il.InteractiveVideoPlayerUtils.loadAllUserWithCommentsIntoFilterList();
 
@@ -89,6 +113,10 @@ $( document ).ready(function() {
 			enablePluginDebug: false,
 			success:           function(media) {
 
+				media.addEventListener('loadeddata', function (e) {
+					il.InteractiveVideoPlayerUtils.fillEndTimeSelector( $('#ilInteractiveVideo')['0'].duration);
+				}, false);
+				
 				media.addEventListener('loadedmetadata', function (e) {
 					$().debugPrinter('Player', 'loadedmetadata');
 					if (seekTime > 0) {
@@ -132,7 +160,7 @@ $( document ).ready(function() {
 						}
 						if (!isNaN(media.currentTime) && media.currentTime > 0) {
 							// @todo: Evtl. use a better way to detect the relevant stopping point
-
+							il.InteractiveVideoPlayerUtils.clearCommentsWhereTimeEndEndded(media.currentTime);
 							for (j = stopPoints.length - 1; j >= 0; j--) 
 							{
 								cueTime = parseInt(stopPoints[j], 10);
@@ -147,7 +175,11 @@ $( document ).ready(function() {
 											{
 												if(comments[i].comment_text != null)
 												{
-													$("#ul_scroll").prepend(il.InteractiveVideoPlayerUtils.buildListElement(comments[i], media.currentTime, comments[i].user_name, i));
+													$("#ul_scroll").prepend(il.InteractiveVideoPlayerUtils.buildListElement(comments[i], media.currentTime, comments[i].user_name));
+													if(comments[i].comment_time_end > 0)
+													{
+														il.InteractiveVideoPlayerUtils.fillCommentsTimeEndBlacklist(comments[i].comment_time_end, comments[i].comment_id);
+													}
 												}
 												if (comments[i].is_interactive == 1 && $.inArray(comments[i].comment_id, ignore_questions) == -1) 
 												{

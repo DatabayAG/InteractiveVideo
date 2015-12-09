@@ -26,6 +26,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public $objComment;
 
 	/**
+	 * @param $comment_time
+	 * @return mixed
+	 */
+	protected function getSecondsFromCommentTimeArray($comment_time)
+	{
+		$seconds = $comment_time['time']['h'] * 3600
+				+ $comment_time['time']['m'] * 60
+				+ $comment_time['time']['s'];
+		return $seconds;
+	}
+
+	/**
 	 * Functions that must be overwritten
 	 */
 	public function getType()
@@ -229,6 +241,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('TXT_COMMENTS', $this->plugin->txt('comments'));
 		$video_tpl->setVariable('SHOW_ALL_COMMENTS', $this->plugin->txt('show_all_comments'));
 		$video_tpl->setVariable('AUTHOR_FILTER', $this->plugin->txt('author_filter'));
+		$video_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
 		
 		$video_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
 		$video_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
@@ -271,6 +284,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('RESET_TEXT', $this->plugin->txt('reset'));
 		$video_tpl->setVariable('SWITCH_ON', $this->plugin->txt('switch_on'));
 		$video_tpl->setVariable('SWITCH_OFF', $this->plugin->txt('switch_off'));
+		$video_tpl->setVariable('COMMENT_TIME_END', $this->plugin->txt('time_end'));
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoPlayer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerUtils.js');
@@ -305,11 +319,25 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			return;
 		}
 		
+		if(isset($_POST['comment_time_end_h']))
+		{
+			$seconds_end = $this->getSecondsFromCommentTimeArray(array('time' => array(
+																			'h' => (int) $_POST['comment_time_end_h'],
+																			'm' => (int) $_POST['comment_time_end_m'],
+																			's' => (int) $_POST['comment_time_end_s']
+			)));
+		}
+		else
+		{
+			$seconds_end = 0;
+		}
+		
 		$comment = new ilObjComment();
 		$comment->setObjId($this->object->getId());
 		$comment->setUserId($ilUser->getId());
 		$comment->setCommentText(trim(ilUtil::stripSlashes($_POST['comment_text'])));
 		$comment->setCommentTime((float)$_POST['comment_time']);
+		$comment->setCommentTimeEnd($seconds_end);
 		
 		if($ilUser->getId() == ANONYMOUS_USER_ID)
 		{
@@ -438,6 +466,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$time->setValueByArray(array('comment_time' => (int)$seconds));
 		}
 		$form->addItem($time);
+		
+		$time_end = new ilTimeInputGUI($this->lng->txt('time_end'), 'comment_time_end');
+		$time_end->setShowTime(true);
+		$time_end->setShowSeconds(true);
+
+		if(isset($_POST['comment_time_end']))
+		{
+			$seconds = $_POST['comment_time_end'];
+			$time_end->setValueByArray(array('comment_time_end' => (int)$seconds));
+		}
+		$form->addItem($time_end);
 
 		if($ilUser->getId() != ANONYMOUS_USER_ID)
 		{
@@ -517,6 +556,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$form->addItem($time);
 
+		$time_end = new ilTimeInputGUI($this->lng->txt('time_end'), 'comment_time_end');
+		$time_end->setShowTime(true);
+		$time_end->setShowSeconds(true);
+
+		if(isset($_POST['comment_time_end']))
+		{
+			$seconds = $_POST['comment_time_end'];
+			$time_end->setValueByArray(array('comment_time_end' => (int)$seconds));
+		}
+		$form->addItem($time_end);
+
 		$repeat_question = new ilCheckboxInputGUI($this->plugin->txt('repeat_question'), 'repeat_question');
 		$repeat_question->setInfo($this->plugin->txt('repeat_question_info'));
 		$form->addItem($repeat_question);
@@ -585,7 +635,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_jump_wrong->addSubItem($jump_wrong_ts);
 		$feedback_one_wrong->addSubItem($is_jump_wrong);
 		$form->addItem($feedback_one_wrong);
-	
+
+		$show_response_frequency = new ilCheckboxInputGUI($this->plugin->txt('show_response_frequency'), 'show_response_frequency');
+		$show_response_frequency->setInfo($this->plugin->txt('show_response_frequency_info'));
+		$form->addItem($show_response_frequency);
+		
 		$is_interactive = new ilHiddenInputGUI('is_interactive');
 		$is_interactive->setValue(1);
 		$form->addItem($is_interactive);
@@ -641,10 +695,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
-			$seconds      = $comment_time['time']['h'] * 3600
-				+ $comment_time['time']['m'] * 60
-				+ $comment_time['time']['s'];
+			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time);
 			$this->objComment->setCommentTime($seconds);
+			$comment_time_end = $form->getInput('comment_time_end');
+			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time_end);
+			$this->objComment->setCommentTimeEnd($seconds);
 			$this->objComment->setIsTutor(1);
 			$this->objComment->create();
 			
@@ -705,13 +760,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 		}
 
-		$comment_data             = $this->object->getCommentDataById((int)$comment_id);
-		$values['comment_id']     = $comment_data['comment_id'];
-		$values['comment_time']   = $comment_data['comment_time'];
-		$values['comment_text']   = $comment_data['comment_text'];
-		$values['is_interactive'] = $comment_data['is_interactive'];
-		$values['comment_title']  = $comment_data['comment_title'];
-		$values['comment_tags']   = $comment_data['comment_tags'];
+		$comment_data				= $this->object->getCommentDataById((int)$comment_id);
+		$values['comment_id']		= $comment_data['comment_id'];
+		$values['comment_time']		= $comment_data['comment_time'];
+		$values['comment_time_end']	= $comment_data['comment_time_end'];
+		$values['comment_text']		= $comment_data['comment_text'];
+		$values['is_interactive']	= $comment_data['is_interactive'];
+		$values['comment_title']	= $comment_data['comment_title'];
+		$values['comment_tags']		= $comment_data['comment_tags'];
 
 		$question_data = $this->object->getQuestionDataById((int)$comment_id);
 
@@ -721,6 +777,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['is_jump_correct']    = $question_data['question_data']['is_jump_correct'];
 		$values['jump_correct_ts']    = $question_data['question_data']['jump_correct_ts'];
 		$values['feedback_one_wrong'] = $question_data['question_data']['feedback_one_wrong'];
+		$values['show_response_frequency'] = $question_data['question_data']['show_response_frequency'];
 		$values['is_jump_wrong']      = $question_data['question_data']['is_jump_wrong'];
 		$values['jump_wrong_ts']      = $question_data['question_data']['jump_wrong_ts'];
 		$values['limit_attempts']     = $question_data['question_data']['limit_attempts'];
@@ -791,10 +848,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
-			$seconds      = $comment_time['time']['h'] * 3600
-				+ $comment_time['time']['m'] * 60
-				+ $comment_time['time']['s'];
+			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time);
 			$this->objComment->setCommentTime($seconds);
+			$comment_time_end = $form->getInput('comment_time_end');
+			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time_end);
+			$this->objComment->setCommentTimeEnd($seconds);
 			$this->objComment->update();
 
 			$this->performQuestionRefresh($comment_id, $form);
@@ -840,7 +898,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		+ $jmp_wrong_time['time']['m'] * 60
 		+ $jmp_wrong_time['time']['s'];
 		$question->setJumpWrongTs($wrong_seconds);
-		
+
+		$question->setShowResponseFrequency((int)$form->getInput('show_response_frequency'));
 		$question->setRepeatQuestion((int)$form->getInput('repeat_question'));
 		$question->deleteQuestionsIdByCommentId($comment_id);
 		$question->create();
@@ -875,11 +934,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
 
 			// calculate seconds
-			$comment_time = $form->getInput('comment_time');
-			$seconds      = $comment_time['time']['h'] * 3600
-				+ $comment_time['time']['m'] * 60
-				+ $comment_time['time']['s'];
+			$comment_time		= $form->getInput('comment_time');
+			$seconds			= $this->getSecondsFromCommentTimeArray($comment_time);
 			$this->objComment->setCommentTime($seconds);
+			$comment_time_end	= $form->getInput('comment_time_end');
+			$seconds			= $this->getSecondsFromCommentTimeArray($comment_time_end);
+			$this->objComment->setCommentTimeEnd($seconds);
 			$this->objComment->setIsTutor($is_tutor);
 			
 			$this->objComment->create();
@@ -978,14 +1038,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 		}
 		
-		$comment_data              = $this->object->getCommentDataById($comment_id);
-		$values['comment_id']      = $comment_data['comment_id'];
-		$values['comment_time']    = $comment_data['comment_time'];
-		$values['comment_text']    = $comment_data['comment_text'];
-		$values['is_interactive']  = $comment_data['is_interactive'];
-		$values['comment_title']   = $comment_data['comment_title'];
-		$values['comment_tags']    = $comment_data['comment_tags'];
-		$values['is_private'] = $comment_data['is_private'];
+		$comment_data				= $this->object->getCommentDataById($comment_id);
+		$values['comment_id']		= $comment_data['comment_id'];
+		$values['comment_time']		= $comment_data['comment_time'];
+		$values['comment_time_end']	= $comment_data['comment_time_end'];
+		$values['comment_text']		= $comment_data['comment_text'];
+		$values['is_interactive']	= $comment_data['is_interactive'];
+		$values['comment_title']	= $comment_data['comment_title'];
+		$values['comment_tags']		= $comment_data['comment_tags'];
+		$values['is_private']		= $comment_data['is_private'];
 		
 		return $values;
 	}	
@@ -1060,10 +1121,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
-			$seconds      = $comment_time['time']['h'] * 3600
-				+ $comment_time['time']['m'] * 60
-				+ $comment_time['time']['s'];
+			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time);
 			$this->objComment->setCommentTime($seconds);
+			$comment_time_end = $form->getInput('comment_time_end');
+			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time_end);
+			$this->objComment->setCommentTimeEnd($seconds);
 			$this->objComment->update();
 
 			$this->editComments();
@@ -1181,10 +1243,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
-			$seconds      = $comment_time['time']['h'] * 3600
-				+ $comment_time['time']['m'] * 60
-				+ $comment_time['time']['s'];
+			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time);
 			$this->objComment->setCommentTime($seconds);
+			
+			$comment_time_end = $form->getInput('comment_time_end');
+			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time_end);
+			$this->objComment->setCommentTimeEnd($seconds);
 			$this->objComment->update();
 
 			$this->editMyComments();
@@ -1314,6 +1378,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment->setUserId($ilUser->getId());
 		$comment->setCommentText(trim(ilUtil::stripSlashes($_POST['comment_text'])));
 		$comment->setCommentTime((float)$_POST['comment_time']);
+		$comment->setCommentTimeEnd((float)$_POST['comment_time_end']);
 		$comment->setIsTutor(true);
 		$comment->create();
 		
@@ -1547,6 +1612,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$is_online = $a_form->getInput('is_online');
 		$this->object->setOnline((int)$is_online);
+
+		$is_chronologic = $a_form->getInput('is_chronologic');
+		$this->object->setIsChronologic((int)$is_chronologic);
 		
 		$this->object->update();
 		
@@ -1597,6 +1665,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$repeat->setInfo($this->plugin->txt('is_repeat_info'));
 		$form->addItem($repeat);
 
+		$chrono = new ilCheckboxInputGUI($this->plugin->txt('is_chronologic'), 'is_chronologic');
+		$chrono->setInfo($this->plugin->txt('is_chronologic_info'));
+		$chrono->setChecked(true);
+		$form->addItem($chrono);
+
 		return $form;
 	}
 
@@ -1631,7 +1704,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$repeat = new ilCheckboxInputGUI($this->plugin->txt('is_repeat'), 'is_repeat');
 		$repeat->setInfo($this->plugin->txt('is_repeat_info'));
 		$a_form->addItem($repeat);
-		
+
+		$chrono = new ilCheckboxInputGUI($this->plugin->txt('is_chronologic'), 'is_chronologic');
+		$chrono->setInfo($this->plugin->txt('is_chronologic_info'));
+		$a_form->addItem($chrono);		
 
 	}
 
@@ -1645,6 +1721,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values['is_repeat'] 		= $this->object->isRepeat();
 		$a_values['is_public']     	= $this->object->isPublic();
 		$a_values["is_online"]		= $this->object->isOnline();
+		$a_values["is_chronologic"]	= $this->object->isChronologic();
 	}
 
 	/**

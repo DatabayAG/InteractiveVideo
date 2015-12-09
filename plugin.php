@@ -3,7 +3,7 @@
 $id = 'xvid';
 
 // code version; must be changed for all code changes
-$version = '1.0.24';
+$version = '1.0.27';
 
 // ilias min and max version; must always reflect the versions that should
 // run with the plugin

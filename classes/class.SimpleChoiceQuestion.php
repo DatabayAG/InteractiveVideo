@@ -81,7 +81,12 @@ class SimpleChoiceQuestion
 	 * @var int
 	 */
 	protected $repeat_question = 0;
-
+	
+	/**
+	 * @var int
+	 */
+	protected $show_response_frequency = 0;
+	
 	/**
 	 * @param int $comment_id
 	 */
@@ -121,6 +126,7 @@ class SimpleChoiceQuestion
 			$this->setJumpCorrectTs($row['jump_correct_ts']);
 			$this->setIsJumpWrong($row['is_jump_wrong']);
 			$this->setJumpWrongTs($row['jump_wrong_ts']);
+			$this->setShowResponseFrequency($row['show_response_frequency']);
 			$this->setRepeatQuestion($row['repeat_question']);
 		}
 
@@ -171,6 +177,7 @@ class SimpleChoiceQuestion
 				'jump_correct_ts'    => array('integer', $this->getJumpCorrectTs()),
 				'is_jump_wrong'      => array('integer', $this->getIsJumpWrong()),
 				'jump_wrong_ts'      => array('integer', $this->getJumpWrongTs()),
+				'show_response_frequency' => array('integer', $this->getShowResponseFrequency()),
 				'repeat_question'    => array('integer', $this->getRepeatQuestion())
 			));
 		if(count($_POST['answer']) > 0 && $_POST['question_type'] != self::REFLECTION)
@@ -246,6 +253,7 @@ class SimpleChoiceQuestion
 			$this->setJumpCorrectTs($row['jump_correct_ts']);
 			$this->setIsJumpWrong($row['is_jump_wrong']);
 			$this->setJumpWrongTs($row['jump_wrong_ts']);
+			$this->setShowResponseFrequency($row['show_response_frequency']);
 			$this->setRepeatQuestion($row['repeat_question']);
 			$_POST['question_type'] = $row['type'];
 			$this->create();
@@ -931,5 +939,22 @@ class SimpleChoiceQuestion
 	{
 		$this->repeat_question = $repeat_question;
 	}
+
+	/**
+	 * @return int
+	 */
+	public function getShowResponseFrequency()
+	{
+		return $this->show_response_frequency;
+	}
+
+	/**
+	 * @param int $show_response_frequency
+	 */
+	public function setShowResponseFrequency($show_response_frequency)
+	{
+		$this->show_response_frequency = $show_response_frequency;
+	}
+
 
 } 
