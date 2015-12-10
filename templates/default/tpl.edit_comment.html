@@ -45,7 +45,16 @@
 			pause_on_click_in_comment_field	: true,
 			iv_debug	: false
 		};
-		var IVQuestionCreator = { JSON : [], type : null};
+
+	$("#ilInteractiveVideoTutorCommentSubmit").on("click", function(e) {
+		$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
+	});
+	
+	$("#ilInteractiveVideoTutorQuestionSubmit").on("click", function(e) {
+		$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
+	});
+
+var IVQuestionCreator = { JSON : [], type : null};
 		
 		$.fn.debugPrinter = function (){};
 	</script>

@@ -1,13 +1,20 @@
 $( document ).ready(function() {
 	$("#ilInteractiveVideoCommentSubmit").on("click", function(e) {
+		var tmp_obj, h, m, s;
+		if( $('#comment_time_end').prop( "checked" ))
+		{
+			h =  $('#comment_time_end\\[time\\]_h').val();
+			m =  $('#comment_time_end\\[time\\]_m').val();
+			s =  $('#comment_time_end\\[time\\]_s').val();
+		}
 		tmp_obj = 
 			{
-				'comment_id': '0',
+				'comment_id' : '0',
 				'comment_time': $("video#ilInteractiveVideo")[0].currentTime,
 				'comment_text': $('#comment_text').val(),
-				"comment_time_end_h": $('#comment_time_end\\[time\\]_h').val(),
-				"comment_time_end_m": $('#comment_time_end\\[time\\]_m').val(),
-				"comment_time_end_s": $('#comment_time_end\\[time\\]_s').val(),
+				"comment_time_end_h": h,
+				"comment_time_end_m": m,
+				"comment_time_end_s": s,
 				'user_name': username,
 				'is_interactive': '0',
 				'is_private': $('#is_private').prop( "checked" )
@@ -22,28 +29,21 @@ $( document ).ready(function() {
 			url      : post_comment_url,
 			data     : {
 							"comment_time": $("video#ilInteractiveVideo")[0].currentTime,
-							"comment_time_end_h": $('#comment_time_end\\[time\\]_h').val(),
-							"comment_time_end_m": $('#comment_time_end\\[time\\]_m').val(),
-							"comment_time_end_s": $('#comment_time_end\\[time\\]_s').val(),
+							"comment_time_end_h": h,
+							"comment_time_end_m": m,
+							"comment_time_end_s": s,
 							"comment_text": $('#comment_text').val(), 
 							'is_private': $('#is_private').prop( "checked" )
 						},
 			success  : function(data) {
 				$('#comment_text').val("");
+				il.InteractiveVideoPlayerUtils.rebuildCommentsViewIfShowAllIsActive();
 			}
 		});
 	});
 	
 	$("#ilInteractiveVideoCommentCancel").on("click", function(e) {
 		$('#comment_text').val("");
-	});
-
-	$("#ilInteractiveVideoTutorCommentSubmit").on("click", function(e) {
-		$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
-	});
-	
-	$("#ilInteractiveVideoTutorQuestionSubmit").on("click", function(e) {
-		$('#comment_time').val($("video#ilInteractiveVideo")[0].currentTime);
 	});
 	
 	$('#comment_text').on('click', function(){
@@ -61,6 +61,7 @@ $( document ).ready(function() {
 		if($(this).is(':checked'))
 		{
 			$('.end_time_selector').show( 'fast' );
+			il.InteractiveVideoPlayerUtils.preselectActualTimeInVideo($('#ilInteractiveVideo')['0'].currentTime);
 		}
 		else
 		{
@@ -138,7 +139,11 @@ $( document ).ready(function() {
 					{
 						il.InteractiveVideoPlayerUtils.replaceCommentsAfterSeeking(media.currentTime);
 					}
-
+					else
+					{
+						il.InteractiveVideoPlayerUtils.clearAndRemarkCommentsAfterSeeking(media.currentTime);
+					}
+					il.InteractiveVideoPlayerUtils.preselectActualTimeInVideo(media.currentTime);
 				}, false);
 
 				media.addEventListener('pause', function(e) {

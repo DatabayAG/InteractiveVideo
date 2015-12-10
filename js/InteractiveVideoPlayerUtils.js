@@ -126,6 +126,34 @@ il.InteractiveVideoPlayerUtils = (function () {
 			}
 		}
 	};
+
+	pub.clearAndRemarkCommentsAfterSeeking = function (time)
+	{
+		var i ;
+		for (i  = 0; i < Object.keys(comments).length; i++)
+		{
+			if (comments[i].comment_text !== null)
+			{
+				pro.removeHighlightFromComment(comments[i].comment_id);
+				if(comments[i].comment_time_end > 0 && comments[i].comment_time <= time && comments[i].comment_time_end >= time)
+				{
+					pub.addHighlightToComment(comments[i].comment_id);
+				}
+			}
+		}
+	};
+
+	pro.setCorrectAttributeForTimeInCommentAfterPosting = function (id, time)
+	{
+		var i ;
+		for (i  = 0; i < Object.keys(comments).length; i++)
+		{
+			if (comments[i].comment_id === id)
+			{
+				comments[i].comment_time_end = time;
+			}
+		}
+	};
 	
 	pub.addHighlightToComment = function (id)
 	{
@@ -178,6 +206,7 @@ il.InteractiveVideoPlayerUtils = (function () {
 			m = parseInt(comment.comment_time_end_m, 10) * 60;
 			s = parseInt(comment.comment_time_end_s, 10);
 			display_time 	= h + m + s;
+			pro.setCorrectAttributeForTimeInCommentAfterPosting(comment.comment_id, display_time);
 		}
 		else
 		{
@@ -228,7 +257,7 @@ il.InteractiveVideoPlayerUtils = (function () {
 	pro.appendPrivateHtml = function (is_private)
 	{
 		var private_comment = '';
-		if(parseInt(is_private, 10) === 1)
+		if(parseInt(is_private, 10) === 1 || is_private === true)
 		{
 			private_comment = ' (' + private_text + ')';
 		}
@@ -255,19 +284,24 @@ il.InteractiveVideoPlayerUtils = (function () {
 
 	pub.displayAllCommentsAndDeactivateCommentStream = function(on)
 	{
-		var html = '';
 		var i;
+		var j_object = $("#ul_scroll");
+		j_object.html('');
 		if(on)
 		{
 			for (i  = 0; i < Object.keys(comments).length; i++)
 			{
 				if (comments[i].comment_text !== null)
 				{
-					html = pub.buildListElement(comments[i], comments[i].comment_time, comments[i].user_name) + html;
+					j_object.prepend(pub.buildListElement(comments[i], comments[i].comment_time, comments[i].user_name));
+					if(comments[i].comment_time_end > 0 && comments[i].comment_time <= il.InteractiveVideo.last_time)
+					{
+						pub.fillCommentsTimeEndBlacklist(comments[i].comment_time_end, comments[i].comment_id);
+					}
 				}
 			}
 			il.InteractiveVideo.is_show_all_active = true;
-			$("#ul_scroll").html(html);
+			pub.clearCommentsWhereTimeEndEndded(il.InteractiveVideo.last_time);
 		}
 		else
 		{
@@ -275,7 +309,20 @@ il.InteractiveVideoPlayerUtils = (function () {
 			pub.replaceCommentsAfterSeeking(il.InteractiveVideo.last_time);
 		}
 	};
-	
+
+	pub.rebuildCommentsViewIfShowAllIsActive = function()
+	{
+		if(il.InteractiveVideo.is_show_all_active === true)
+		{
+			var j_object = $('#ilInteractiveVideoComments');
+			var position = j_object.scrollTop();
+			var height   = $('#ul_scroll').find('li').first().height();
+			il.InteractiveVideo.is_show_all_active = false;
+			pub.displayAllCommentsAndDeactivateCommentStream(true);
+			j_object.scrollTop(position + height);
+		}
+	};
+
 	pro.getAllUserWithComment = function()
 	{
 		var i, author_list = [];
@@ -353,7 +400,30 @@ il.InteractiveVideoPlayerUtils = (function () {
 		}
 		$('#comment_time_end\\[time\\]_s').append(options);
 	};
-	
+
+	pub.preselectActualTimeInVideo = function(seconds)
+	{
+		var h, m, s;
+		h = Math.floor(seconds / 3600) % 24;
+		pro.preselectValueOfEndTimeSelection(h, $('#comment_time_end\\[time\\]_h'));
+
+		m = Math.floor(seconds / 60) % 60;
+		pro.preselectValueOfEndTimeSelection(m, $('#comment_time_end\\[time\\]_m'));
+
+		s = Math.floor(seconds % 60);
+		pro.preselectValueOfEndTimeSelection(s, $('#comment_time_end\\[time\\]_s'));
+
+	};
+
+	pro.preselectValueOfEndTimeSelection = function(time, element)
+	{
+		if(time < 10)
+		{
+			time = '0' + time;
+		}
+		element.val(time);
+	};
+
 	pub.protect = pro;
 	return pub;
 
