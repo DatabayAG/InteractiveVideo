@@ -287,6 +287,7 @@ il.InteractiveVideoPlayerUtils = (function () {
 		var i;
 		var j_object = $("#ul_scroll");
 		j_object.html('');
+		pri.cssIterator = 0;
 		if(on)
 		{
 			for (i  = 0; i < Object.keys(comments).length; i++)

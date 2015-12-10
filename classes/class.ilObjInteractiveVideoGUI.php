@@ -288,6 +288,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoPlayer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerUtils.js');
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstraction.js');
 		$tpl->setContent($video_tpl->get());
 	}
 
@@ -467,7 +468,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$form->addItem($time);
 		
-		$time_end = new ilTimeInputGUI($this->lng->txt('time_end'), 'comment_time_end');
+		$time_end = new ilTimeInputGUI($this->plugin->txt('time_end'), 'comment_time_end');
 		$time_end->setShowTime(true);
 		$time_end->setShowSeconds(true);
 
@@ -556,7 +557,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$form->addItem($time);
 
-		$time_end = new ilTimeInputGUI($this->lng->txt('time_end'), 'comment_time_end');
+		$time_end = new ilTimeInputGUI($this->plugin->txt('time_end'), 'comment_time_end');
 		$time_end->setShowTime(true);
 		$time_end->setShowSeconds(true);
 
@@ -1186,6 +1187,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postTutorComment', '', false, false));
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoPlayer.js');
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstraction.js');
 		
 		$tbl_data = $this->object->getCommentsTableData();
 		$this->plugin->includeClass('class.ilInteractiveVideoCommentsTableGUI.php');

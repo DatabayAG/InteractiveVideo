@@ -7,7 +7,7 @@ var InteractiveVideoQuestionViewer = (function () {
 		var modal = $('.modal-body');
 		var type  = parseInt(pub.QuestionObject.type, 10);
 		modal.html('');
-		modal.append('<h2>' + pub.QuestionObject.question_title + '</h2>');
+		$('.modal-title').html(pub.QuestionObject.question_title);
 		modal.append('<p>' + pub.QuestionObject.question_text + '</p>');
 		if (type === 0) {
 			pro.addAnswerPossibilities('radio');
