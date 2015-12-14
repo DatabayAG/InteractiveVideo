@@ -1,4 +1,4 @@
-il.InteractiveVideoPlayerUtils = (function () {
+il.InteractiveVideoPlayerUtils = (function (scope) {
 	'use strict';
 
 	var pub = {}, pro = {}, pri = {};
@@ -10,14 +10,14 @@ il.InteractiveVideoPlayerUtils = (function () {
 	{
 		var pos = 0;
 		var i;
-		for (i = 0; i < Object.keys(comments).length; i++)
+		for (i = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 		{
-			if (comments[i].comment_time <= time)
+			if (scope.InteractiveVideo.comments[i].comment_time <= time)
 			{
 				pos = i;
 			}
 		}
-		comments.splice( pos + 1, 0 , tmp_obj);
+		scope.InteractiveVideo.comments.splice( pos + 1, 0 , tmp_obj);
 		stopPoints.splice( pos + 1, 0, Math.floor(time));
 	};
 
@@ -27,14 +27,14 @@ il.InteractiveVideoPlayerUtils = (function () {
 		var j_object = $("#ul_scroll");
 		j_object.html('');
 		pub.resetCommentsTimeEndBlacklist();
-		for (i  = 0; i < Object.keys(comments).length; i++)
+		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 		{
-			if (comments[i].comment_time <= time && comments[i].comment_text !== null)
+			if (scope.InteractiveVideo.comments[i].comment_time <= time && scope.InteractiveVideo.comments[i].comment_text !== null)
 			{
-				j_object.prepend(pub.buildListElement(comments[i], comments[i].comment_time, comments[i].user_name));
-				if(comments[i].comment_time_end > 0)
+				j_object.prepend(pub.buildListElement(scope.InteractiveVideo.comments[i], scope.InteractiveVideo.comments[i].comment_time, scope.InteractiveVideo.comments[i].user_name));
+				if(scope.InteractiveVideo.comments[i].comment_time_end > 0)
 				{
-					pub.fillCommentsTimeEndBlacklist(comments[i].comment_time_end, comments[i].comment_id);
+					pub.fillCommentsTimeEndBlacklist(scope.InteractiveVideo.comments[i].comment_time_end, scope.InteractiveVideo.comments[i].comment_id);
 				}
 			}
 		}
@@ -43,31 +43,30 @@ il.InteractiveVideoPlayerUtils = (function () {
 
 	pub.jumpToTimeInVideo = function (time)
 	{
-		var video_player = $('#ilInteractiveVideo')['0'];
-		video_player.play();
-		video_player.pause();
+		scope.InteractiveVideoPlayerAbstract.play();
+		scope.InteractiveVideoPlayerAbstract.pause();
 		if(time !== null)
 		{
-			video_player.setCurrentTime(time);
-			il.InteractiveVideo.last_stopPoint = time;
+			scope.InteractiveVideoPlayerAbstract.setCurrentTime(time);
+			scope.InteractiveVideo.last_stopPoint = time;
 		}
 		pub.resumeVideo();
 	};
 
 	pub.resumeVideo = function ()
 	{
-		if(il.InteractiveVideo.auto_resume === true)
+		if(scope.InteractiveVideo.auto_resume === true)
 		{
-			$('#ilInteractiveVideo')['0'].play();
+			scope.InteractiveVideoPlayerAbstract.play();
 		}
 	};
 
 	pro.isBuildListElementAllowed = function(username)
 	{
-		if(il.InteractiveVideo.is_show_all_active === false)
+		if(scope.InteractiveVideo.is_show_all_active === false)
 		{
-			if(il.InteractiveVideo.filter_by_user === false ||
-					(il.InteractiveVideo.filter_by_user !== false && il.InteractiveVideo.filter_by_user === username))
+			if(scope.InteractiveVideo.filter_by_user === false ||
+					(scope.InteractiveVideo.filter_by_user !== false && scope.InteractiveVideo.filter_by_user === username))
 			{
 				return true;
 			}
@@ -99,13 +98,13 @@ il.InteractiveVideoPlayerUtils = (function () {
 	
 	pub.fillCommentsTimeEndBlacklist = function (comment_time_end, comment_id)
 	{
-		if(il.InteractiveVideo.blacklist_time_end[comment_time_end] === undefined)
+		if(scope.InteractiveVideo.blacklist_time_end[comment_time_end] === undefined)
 		{
-			il.InteractiveVideo.blacklist_time_end[comment_time_end] = [comment_id];
+			scope.InteractiveVideo.blacklist_time_end[comment_time_end] = [comment_id];
 		}
 		else
 		{
-			il.InteractiveVideo.blacklist_time_end[comment_time_end].push(comment_id);
+			scope.InteractiveVideo.blacklist_time_end[comment_time_end].push(comment_id);
 		}
 		pub.addHighlightToComment(comment_id);
 	};
@@ -113,16 +112,16 @@ il.InteractiveVideoPlayerUtils = (function () {
 	pub.clearCommentsWhereTimeEndEndded = function (time)
 	{
 		var timestamp, id;
-		for (timestamp in il.InteractiveVideo.blacklist_time_end) 
+		for (timestamp in scope.InteractiveVideo.blacklist_time_end) 
 		{
 			if(timestamp <= time)
 			{
-				for (id in il.InteractiveVideo.blacklist_time_end[timestamp]) 
+				for (id in scope.InteractiveVideo.blacklist_time_end[timestamp]) 
 				{
 					pro.removeHighlightFromComment(il.InteractiveVideo.blacklist_time_end[timestamp][id]);
 				}
 
-				delete il.InteractiveVideo.blacklist_time_end[timestamp];
+				delete scope.InteractiveVideo.blacklist_time_end[timestamp];
 			}
 		}
 	};
@@ -130,14 +129,14 @@ il.InteractiveVideoPlayerUtils = (function () {
 	pub.clearAndRemarkCommentsAfterSeeking = function (time)
 	{
 		var i ;
-		for (i  = 0; i < Object.keys(comments).length; i++)
+		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 		{
-			if (comments[i].comment_text !== null)
+			if (scope.InteractiveVideo.comments[i].comment_text !== null)
 			{
-				pro.removeHighlightFromComment(comments[i].comment_id);
-				if(comments[i].comment_time_end > 0 && comments[i].comment_time <= time && comments[i].comment_time_end >= time)
+				pro.removeHighlightFromComment(scope.InteractiveVideo.comments[i].comment_id);
+				if(scope.InteractiveVideo.comments[i].comment_time_end > 0 && scope.InteractiveVideo.comments[i].comment_time <= time && scope.InteractiveVideo.comments[i].comment_time_end >= time)
 				{
-					pub.addHighlightToComment(comments[i].comment_id);
+					pub.addHighlightToComment(scope.InteractiveVideo.comments[i].comment_id);
 				}
 			}
 		}
@@ -146,11 +145,11 @@ il.InteractiveVideoPlayerUtils = (function () {
 	pro.setCorrectAttributeForTimeInCommentAfterPosting = function (id, time)
 	{
 		var i ;
-		for (i  = 0; i < Object.keys(comments).length; i++)
+		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 		{
-			if (comments[i].comment_id === id)
+			if (scope.InteractiveVideo.comments[i].comment_id === id)
 			{
-				comments[i].comment_time_end = time;
+				scope.InteractiveVideo.comments[i].comment_time_end = time;
 			}
 		}
 	};
@@ -167,7 +166,7 @@ il.InteractiveVideoPlayerUtils = (function () {
 
 	pub.resetCommentsTimeEndBlacklist = function ()
 	{
-		il.InteractiveVideo.blacklist_time_end = [];
+		scope.InteractiveVideo.blacklist_time_end = [];
 	};
 	
 	pro.getCSSClassForListelement = function()
@@ -235,7 +234,7 @@ il.InteractiveVideoPlayerUtils = (function () {
 		}
 		if(parseInt(is_interactive, 10) === 1)
 		{
-			username  = '[' + question_text + ']';
+			username  = '[' + il.InteractiveVideo.lang.question_text + ']';
 		}
 		return 	'<span class="comment_username"> ' + username + '</span> ';
 	};
@@ -259,7 +258,7 @@ il.InteractiveVideoPlayerUtils = (function () {
 		var private_comment = '';
 		if(parseInt(is_private, 10) === 1 || is_private === true)
 		{
-			private_comment = ' (' + private_text + ')';
+			private_comment = ' (' + il.InteractiveVideo.lang.private_text + ')';
 		}
 		else
 		{
@@ -290,35 +289,35 @@ il.InteractiveVideoPlayerUtils = (function () {
 		pri.cssIterator = 0;
 		if(on)
 		{
-			for (i  = 0; i < Object.keys(comments).length; i++)
+			for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 			{
-				if (comments[i].comment_text !== null)
+				if (scope.InteractiveVideo.comments[i].comment_text !== null)
 				{
-					j_object.prepend(pub.buildListElement(comments[i], comments[i].comment_time, comments[i].user_name));
-					if(comments[i].comment_time_end > 0 && comments[i].comment_time <= il.InteractiveVideo.last_time)
+					j_object.prepend(pub.buildListElement(scope.InteractiveVideo.comments[i], scope.InteractiveVideo.comments[i].comment_time, scope.InteractiveVideo.comments[i].user_name));
+					if(scope.InteractiveVideo.comments[i].comment_time_end > 0 && scope.InteractiveVideo.comments[i].comment_time <= scope.InteractiveVideo.last_time)
 					{
-						pub.fillCommentsTimeEndBlacklist(comments[i].comment_time_end, comments[i].comment_id);
+						pub.fillCommentsTimeEndBlacklist(scope.InteractiveVideo.comments[i].comment_time_end, scope.InteractiveVideo.comments[i].comment_id);
 					}
 				}
 			}
-			il.InteractiveVideo.is_show_all_active = true;
-			pub.clearCommentsWhereTimeEndEndded(il.InteractiveVideo.last_time);
+			scope.InteractiveVideo.is_show_all_active = true;
+			pub.clearCommentsWhereTimeEndEndded(scope.InteractiveVideo.last_time);
 		}
 		else
 		{
-			il.InteractiveVideo.is_show_all_active = false;
-			pub.replaceCommentsAfterSeeking(il.InteractiveVideo.last_time);
+			scope.InteractiveVideo.is_show_all_active = false;
+			pub.replaceCommentsAfterSeeking(scope.InteractiveVideo.last_time);
 		}
 	};
 
 	pub.rebuildCommentsViewIfShowAllIsActive = function()
 	{
-		if(il.InteractiveVideo.is_show_all_active === true)
+		if(scope.InteractiveVideo.is_show_all_active === true)
 		{
 			var j_object = $('#ilInteractiveVideoComments');
 			var position = j_object.scrollTop();
 			var height   = $('#ul_scroll').find('li').first().height();
-			il.InteractiveVideo.is_show_all_active = false;
+			scope.InteractiveVideo.is_show_all_active = false;
 			pub.displayAllCommentsAndDeactivateCommentStream(true);
 			j_object.scrollTop(position + height);
 		}
@@ -327,11 +326,11 @@ il.InteractiveVideoPlayerUtils = (function () {
 	pro.getAllUserWithComment = function()
 	{
 		var i, author_list = [];
-		for (i  = 0; i < Object.keys(comments).length; i++)
+		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 		{
-			if ($.inArray( comments[i].user_name, author_list ) === -1)
+			if ($.inArray( scope.InteractiveVideo.comments[i].user_name, author_list ) === -1)
 			{
-				author_list[comments[i].user_name] = comments[i].user_name;
+				author_list[scope.InteractiveVideo.comments[i].user_name] = scope.InteractiveVideo.comments[i].user_name;
 			}
 		}
 		return author_list;
@@ -342,7 +341,7 @@ il.InteractiveVideoPlayerUtils = (function () {
 		var element;
 		var author_list = pro.getAllUserWithComment();
 		var dropdownList = $('#dropdownMenuInteraktiveList');
-		var reset_elem = '<li><a href="#">' + reset_text + '</a></li><li role="separator" class="divider"></li>';
+		var reset_elem = '<li><a href="#">' + scope.InteractiveVideo.lang.reset_text + '</a></li><li role="separator" class="divider"></li>';
 		dropdownList.html('');
 		dropdownList.append(reset_elem);
 		for ( element in author_list) 
@@ -428,4 +427,4 @@ il.InteractiveVideoPlayerUtils = (function () {
 	pub.protect = pro;
 	return pub;
 
-}());
+}(il));

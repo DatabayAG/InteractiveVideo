@@ -92,8 +92,8 @@ var InteractiveVideoQuestionViewer = (function () {
 
 	pro.addButtons = function() {
 		var question_form = $('#question_form');
-		question_form.append(pro.createButtonButtons('sendForm', send_text));
-		question_form.append(pro.createButtonButtons('close_form', close_text));
+		question_form.append(pro.createButtonButtons('sendForm', il.InteractiveVideo.lang.send_text));
+		question_form.append(pro.createButtonButtons('close_form', il.InteractiveVideo.lang.close_text));
 		pro.appendButtonListener();
 	};
 
@@ -103,7 +103,7 @@ var InteractiveVideoQuestionViewer = (function () {
 		pro.showResponseFrequency(feedback.response_frequency);
 		modal.html(feedback.html);
 		if (parseInt(feedback.is_timed, 10) === 1) {
-			modal.append('<div class="learning_recommendation"><br/>' + learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>');
+			modal.append('<div class="learning_recommendation"><br/>' + il.InteractiveVideo.lang.learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', il.InteractiveVideo.lang.feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>');
 			$('#jumpToTimeInVideo').on('click', function (e) {
 				$('#ilQuestionModal').modal('hide');
 				il.InteractiveVideoPlayerUtils.jumpToTimeInVideo(feedback.time);

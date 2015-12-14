@@ -27,10 +27,9 @@ describe("InteractiveVideoQuestionViewer Tests", function() {
 
 		describe("HTML builders", function() {
 			beforeEach(function () {
-				send_text = 'send';
-				close_text= 'close';
-				learning_recommendation_text = 'Further Information';
-				feedback_button_text = 'feedback';
+				il.InteractiveVideo = {lang : {send_text : 'send', close_text : 'close', 
+											learning_recommendation_text : 'Further Information',
+											feedback_button_text : 'feedback'}};
 				question_post_url = '';
 				mejs = { 'Utility' : {secondsToTimeCode : function(a){}}};
 				$().jumpToTimeInVideo = function(time){};

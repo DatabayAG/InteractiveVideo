@@ -13,8 +13,10 @@ describe("InteractiveVideoPlayerUtils Tests", function () {
 
 	describe("HTML Builder Test Cases", function () {
 		beforeEach(function () {
-			question_text = 'Question';
-			private_text = 'private';
+			il.InteractiveVideo = {lang : {send_text : 'send', close_text : 'close',
+				learning_recommendation_text : 'Further Information',
+				feedback_button_text : 'feedback', private_text : 'private', question_text : 'Question'}};
+			il.InteractiveVideo.comments = [];
 		});
 		afterEach(function () {
 		});
@@ -128,6 +130,10 @@ describe("InteractiveVideoPlayerUtils Tests", function () {
 			stopPoints = [];
 			called = false;
 			il.InteractiveVideo = {};
+			il.InteractiveVideo = {lang : {send_text : 'send', close_text : 'close',
+				learning_recommendation_text : 'Further Information', reset_text: 'reset',
+				feedback_button_text : 'feedback', private_text : 'private', question_text : 'Question'}};
+			il.InteractiveVideo.comments = [];
 			callHelper = {
 				play: function () {
 					called = true;
@@ -146,18 +152,20 @@ describe("InteractiveVideoPlayerUtils Tests", function () {
 
 		it("sliceCommentAndStopPointsInCorrectPosition", function () {
 			var expec = [{comment_time: 5}];
+			il.InteractiveVideo.comments = [];
 			il.InteractiveVideoPlayerUtils.sliceCommentAndStopPointsInCorrectPosition({comment_time: 5}, 5);
-			expect(comments).toEqual(expec);
+			expect(il.InteractiveVideo.comments).toEqual(expec);
 			il.InteractiveVideoPlayerUtils.sliceCommentAndStopPointsInCorrectPosition({comment_time: 6}, 6);
 			expec = [{comment_time: 5}, {comment_time: 6}];
-			expect(comments).toEqual(expec);
+			expect(il.InteractiveVideo.comments).toEqual(expec);
 			il.InteractiveVideoPlayerUtils.sliceCommentAndStopPointsInCorrectPosition({comment_time: 0}, 0);
 			expec = [{comment_time: 5}, {comment_time: 0}, {comment_time: 6}];
-			expect(comments).toEqual(expec);
+			expect(il.InteractiveVideo.comments).toEqual(expec);
 		});
 
 		it("replaceCommentsAfterSeeking", function () {
 			var expec = '';
+			il.InteractiveVideo.comments = [];
 			il.InteractiveVideo.is_show_all_active = false;
 			il.InteractiveVideo.filter_by_user = false;
 			loadFixtures('InteractiveVideoPlayerUtils_fixtures.html');
@@ -182,12 +190,12 @@ describe("InteractiveVideoPlayerUtils Tests", function () {
 		it("getAllUserWithComment", function () {
 			var expec = [];
 			expec['my name'] = 'my name';
-			comments = [{'user_name': 'my name'}];
+			il.InteractiveVideo.comments = [{'user_name': 'my name'}];
 			expect(il.InteractiveVideoPlayerUtils.protect.getAllUserWithComment()).toEqual(expec);
 			expec['my name2'] = 'my name2';
-			comments = [{'user_name': 'my name'}, {'user_name': 'my name2'}];
+			il.InteractiveVideo.comments = [{'user_name': 'my name'}, {'user_name': 'my name2'}];
 			expect(il.InteractiveVideoPlayerUtils.protect.getAllUserWithComment()).toEqual(expec);
-			comments = [{'user_name': 'my name'}, {'user_name': 'my name2'}, {'user_name': 'my name2'}, {'user_name': 'my name2'}];
+			il.InteractiveVideo.comments = [{'user_name': 'my name'}, {'user_name': 'my name2'}, {'user_name': 'my name2'}, {'user_name': 'my name2'}];
 			expect(il.InteractiveVideoPlayerUtils.protect.getAllUserWithComment()).toEqual(expec);
 		});
 
@@ -210,12 +218,11 @@ describe("InteractiveVideoPlayerUtils Tests", function () {
 
 		it("loadAllUserWithCommentsIntoFilterList", function () {
 			var expec = '<li><a href="#">reset</a></li><li role="separator" class="divider"></li><li><a href="#">my name</a></li>';
-			reset_text = 'reset';
 			loadFixtures('InteractiveVideoPlayerUtils_fixtures.html');
-			comments = [{'user_name': 'my name'}];
+			il.InteractiveVideo.comments = [{'user_name': 'my name'}];
 			il.InteractiveVideoPlayerUtils.loadAllUserWithCommentsIntoFilterList();
 			expect($('#dropdownMenuInteraktiveList').html()).toEqual(expec);
-			comments = [{'user_name': 'my name'}, {'user_name': 'my name2'}];
+			il.InteractiveVideo.comments = [{'user_name': 'my name'}, {'user_name': 'my name2'}];
 			expec = '<li><a href="#">reset</a></li><li role="separator" class="divider"></li><li><a href="#">my name</a></li><li><a href="#">my name2</a></li>';
 			il.InteractiveVideoPlayerUtils.loadAllUserWithCommentsIntoFilterList();
 			expect($('#dropdownMenuInteraktiveList').html()).toEqual(expec);
@@ -227,7 +234,7 @@ describe("InteractiveVideoPlayerUtils Tests", function () {
 				comments = [];
 				stopPoints = [];
 				called = false;
-				il.InteractiveVideo = {auto_resume: true,};
+				il.InteractiveVideo = {auto_resume: true};
 				callHelper = {
 					play: function () {
 						called = true;

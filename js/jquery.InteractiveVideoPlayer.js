@@ -1,20 +1,30 @@
 $( document ).ready(function() {
-	il.InteractiveVideoPlayerAbstraction.appendInteractionEvents();
+	il.InteractiveVideoPlayerFunction.appendInteractionEvents();
 });
 
 (function ($) {
-
 	il.Util.addOnLoad(function () {
 		var player = null,
 			interval = null;
 		il.InteractiveVideo.last_stopPoint = -1;
 		player = new MediaElementPlayer("#ilInteractiveVideo", {
+
 			timerRate: 50,
 			enablePluginDebug: false,
-			success:           function(media) {
+			success: function(media) {
 
 				media.addEventListener('loadeddata', function (e) {
-					il.InteractiveVideoPlayerUtils.fillEndTimeSelector( media.duration);
+					var player = $("video#ilInteractiveVideo")[0];
+					
+					il.InteractiveVideoPlayerUtils.fillEndTimeSelector(media.duration);
+					
+					il.InteractiveVideoPlayerAbstract.config = {
+							pauseCallback           : (function (){player.pause();}),
+							playCallback            : (function (){player.play();}),
+							durationCallback        : (function (){return player.duration;}),
+							currentTimeCallback     : (function (){return player.currentTime;}),
+							setCurrentTimeCallback  : (function (time){player.setCurrentTime(time);})
+					};
 				}, false);
 
 				media.addEventListener('loadedmetadata', function (e) {
@@ -26,12 +36,12 @@ $( document ).ready(function() {
 
 				media.addEventListener('seeked', function(e) {
 					clearInterval(interval);
-					il.InteractiveVideoPlayerAbstraction.seekingEventHandler(media.currentTime);
+					il.InteractiveVideoPlayerFunction.seekingEventHandler();
 				}, false);
 
 				media.addEventListener('pause', function(e) {
 					clearInterval(interval);
-					il.InteractiveVideo.last_time = media.currentTime;
+					il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime();
 				}, false);
 
 				media.addEventListener('ended', function(e) {
@@ -39,7 +49,7 @@ $( document ).ready(function() {
 
 				media.addEventListener('playing', function(e) {
 					interval = setInterval(function () {
-						il.InteractiveVideoPlayerAbstraction.playingEventHandler(media.currentTime, media.duration, interval, player);
+						il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
 					}, 500);
 
 				}, false);
@@ -47,4 +57,3 @@ $( document ).ready(function() {
 		});
 	});
 })(jQuery);
-
