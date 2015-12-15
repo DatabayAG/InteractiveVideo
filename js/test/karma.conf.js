@@ -12,12 +12,13 @@ module.exports = function(config) {
 
 
 		// list of files / patterns to load in the browser
-		files: [ 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js',
-				'globalVariables.js',
-				'../jquery.InteractiveVideoQuestionViewer.js', 'InteractiveVideoQuestionViewerTest.js',
-				'../jquery.InteractiveVideoQuestionCreator.js', 'InteractiveVideoQuestionCreatorTest.js',
-				'../InteractiveVideoPlayerUtils.js', 'InteractiveVideoPlayerUtilsTest.js',
-				{pattern: 'spec/javascripts/fixtures/*'}
+		files: ['https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js',
+		        'globalVariables.js',
+		        '../jquery.InteractiveVideoQuestionViewer.js', 'InteractiveVideoQuestionViewerTest.js',
+		        '../jquery.InteractiveVideoQuestionCreator.js', 'InteractiveVideoQuestionCreatorTest.js',
+		        '../InteractiveVideoPlayerComments.js', 'InteractiveVideoPlayerCommentsTest.js',
+		        '../InteractiveVideoPlayerAbstract.js', 'InteractiveVideoPlayerAbstractTests.js',
+		        {pattern: 'spec/javascripts/fixtures/*'}
 		],
 
 
@@ -33,7 +34,8 @@ module.exports = function(config) {
 
 		preprocessors: {    '../jquery.InteractiveVideoQuestionViewer.js': ['coverage'],
 							'../jquery.InteractiveVideoQuestionCreator.js': ['coverage'],
-							'../InteractiveVideoPlayerUtils.js': ['coverage']
+							'../InteractiveVideoPlayerComments.js': ['coverage'],
+							'../InteractiveVideoPlayerAbstract.js' : ['coverage']
 		},
 
 		coverageReporter: { type : 'html', dir : 'coverage/' },

@@ -1,4 +1,4 @@
-il.InteractiveVideoPlayerUtils = (function (scope) {
+il.InteractiveVideoPlayerComments = (function (scope) {
 	'use strict';
 
 	var pub = {}, pro = {}, pri = {};
@@ -18,7 +18,7 @@ il.InteractiveVideoPlayerUtils = (function (scope) {
 			}
 		}
 		scope.InteractiveVideo.comments.splice( pos + 1, 0 , tmp_obj);
-		stopPoints.splice( pos + 1, 0, Math.floor(time));
+		scope.InteractiveVideo.stopPoints.splice( pos + 1, 0, Math.floor(time));
 	};
 
 	pub.replaceCommentsAfterSeeking = function (time)
@@ -41,46 +41,27 @@ il.InteractiveVideoPlayerUtils = (function (scope) {
 		pub.clearCommentsWhereTimeEndEndded(time);
 	};
 
-	pub.jumpToTimeInVideo = function (time)
-	{
-		scope.InteractiveVideoPlayerAbstract.play();
-		scope.InteractiveVideoPlayerAbstract.pause();
-		if(time !== null)
-		{
-			scope.InteractiveVideoPlayerAbstract.setCurrentTime(time);
-			scope.InteractiveVideo.last_stopPoint = time;
-		}
-		pub.resumeVideo();
-	};
-
-	pub.resumeVideo = function ()
-	{
-		if(scope.InteractiveVideo.auto_resume === true)
-		{
-			scope.InteractiveVideoPlayerAbstract.play();
-		}
-	};
-
 	pro.isBuildListElementAllowed = function(username)
 	{
+		var value = false;
 		if(scope.InteractiveVideo.is_show_all_active === false)
 		{
 			if(scope.InteractiveVideo.filter_by_user === false ||
 					(scope.InteractiveVideo.filter_by_user !== false && scope.InteractiveVideo.filter_by_user === username))
 			{
-				return true;
+				value = true;
 			}
 		}
-		return false;
+		return value;
 	};
 	
 	pub.buildListElement = function (comment, time, username)
 	{
-		var css_class;
+		var css_class, value;
 		if(pro.isBuildListElementAllowed(username))
 		{
 			css_class = pro.getCSSClassForListelement();
-			return 	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class +'">' +
+			value =	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class +'">' +
 					pro.builCommentTimeHtml(time, comment.is_interactive) +
 					pro.builCommentTimeEndHtml(comment) +
 					pro.builCommentUsernameHtml(username, comment.is_interactive) +
@@ -92,8 +73,9 @@ il.InteractiveVideoPlayerUtils = (function (scope) {
 		}
 		else
 		{
-			return '';
+			value = '';
 		}
+		return value;
 	};
 	
 	pub.fillCommentsTimeEndBlacklist = function (comment_time_end, comment_id)
@@ -118,7 +100,7 @@ il.InteractiveVideoPlayerUtils = (function (scope) {
 			{
 				for (id in scope.InteractiveVideo.blacklist_time_end[timestamp]) 
 				{
-					pro.removeHighlightFromComment(il.InteractiveVideo.blacklist_time_end[timestamp][id]);
+					pro.removeHighlightFromComment(scope.InteractiveVideo.blacklist_time_end[timestamp][id]);
 				}
 
 				delete scope.InteractiveVideo.blacklist_time_end[timestamp];
@@ -134,7 +116,10 @@ il.InteractiveVideoPlayerUtils = (function (scope) {
 			if (scope.InteractiveVideo.comments[i].comment_text !== null)
 			{
 				pro.removeHighlightFromComment(scope.InteractiveVideo.comments[i].comment_id);
-				if(scope.InteractiveVideo.comments[i].comment_time_end > 0 && scope.InteractiveVideo.comments[i].comment_time <= time && scope.InteractiveVideo.comments[i].comment_time_end >= time)
+				if(scope.InteractiveVideo.comments[i].comment_time_end > 0 && 
+						scope.InteractiveVideo.comments[i].comment_time <= time && 
+						scope.InteractiveVideo.comments[i].comment_time_end >= time
+					)
 				{
 					pub.addHighlightToComment(scope.InteractiveVideo.comments[i].comment_id);
 				}
@@ -182,16 +167,16 @@ il.InteractiveVideoPlayerUtils = (function (scope) {
 		return css_class;
 	};
 
-	pro.builCommentTimeHtml = function (time, is_interactice)
+	pro.builCommentTimeHtml = function (time, is_interactive)
 	{
 		var display_time 	= time;
-		if(parseInt(is_interactice, 10) === 1)
+		if(parseInt(is_interactive, 10) === 1)
 		{
 			time = Math.abs(Math.round(time) - 0.1);
 		}
 		return 	'<time class="time"> ' +
-					'<a onClick="il.InteractiveVideoPlayerUtils.jumpToTimeInVideo(' + time + '); return false;">'+ 
-						mejs.Utility.secondsToTimeCode(display_time)  + 
+					'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + time + '); return false;">'+ 
+						pro.secondsToTimeCode(display_time)  + 
 					'</a>' +
 				'</time>' ;
 	};
@@ -214,8 +199,8 @@ il.InteractiveVideoPlayerUtils = (function (scope) {
 		if(display_time > 0)
 		{
 			return 	'<time class="time_end"> - ' +
-					'<a onClick="il.InteractiveVideoPlayerUtils.jumpToTimeInVideo(' + display_time + '); return false;">'+
-					mejs.Utility.secondsToTimeCode(display_time)  +
+					'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + display_time + '); return false;">'+
+					pro.secondsToTimeCode(display_time)  +
 					'</a>' +
 					'</time>' ;
 		}
@@ -228,24 +213,26 @@ il.InteractiveVideoPlayerUtils = (function (scope) {
 
 	pro.builCommentUsernameHtml = function (username, is_interactive)
 	{
-		if(username !== '')
+		var name = username;
+		if(name !== '')
 		{
-			username = '[' + username + ']';
+			name = '[' + name + ']';
 		}
 		if(parseInt(is_interactive, 10) === 1)
 		{
-			username  = '[' + il.InteractiveVideo.lang.question_text + ']';
+			name  = '[' + il.InteractiveVideo.lang.question_text + ']';
 		}
-		return 	'<span class="comment_username"> ' + username + '</span> ';
+		return 	'<span class="comment_username"> ' + name + '</span> ';
 	};
 
 	pro.builCommentTitleHtml = function (title)
 	{
-		if(title === null || title === undefined)
+		var t = title;
+		if(t === null || t === undefined)
 		{
-			title = '';
+			t = '';
 		}
-		return 	'<span class="comment_title">' + title + '</span> ';
+		return 	'<span class="comment_title">' + t + '</span> ';
 	};
 
 	pro.builCommentTextHtml = function (text)
@@ -312,11 +299,12 @@ il.InteractiveVideoPlayerUtils = (function (scope) {
 
 	pub.rebuildCommentsViewIfShowAllIsActive = function()
 	{
+		var j_object, position, height;
 		if(scope.InteractiveVideo.is_show_all_active === true)
 		{
-			var j_object = $('#ilInteractiveVideoComments');
-			var position = j_object.scrollTop();
-			var height   = $('#ul_scroll').find('li').first().height();
+			j_object = $('#ilInteractiveVideoComments');
+			position = j_object.scrollTop();
+			height   = $('#ul_scroll').find('li').first().height();
 			scope.InteractiveVideo.is_show_all_active = false;
 			pub.displayAllCommentsAndDeactivateCommentStream(true);
 			j_object.scrollTop(position + height);
@@ -356,9 +344,10 @@ il.InteractiveVideoPlayerUtils = (function (scope) {
 		var h, m, s, i, options;
 		var h_exists = false;
 		var m_exists = false;
-		h = Math.floor(seconds / 3600) % 24; 
-		m = Math.floor(seconds / 60) % 60;
-		s = Math.floor(seconds % 60);
+		var obj = pro.convertSecondsToTimeObject(seconds);
+		h = obj.hours; 
+		m = obj.minutes;
+		s = obj.seconds;
 		options = '';
 		for(i=1; i <= h; i++)
 		{
@@ -403,16 +392,31 @@ il.InteractiveVideoPlayerUtils = (function (scope) {
 
 	pub.preselectActualTimeInVideo = function(seconds)
 	{
-		var h, m, s;
-		h = Math.floor(seconds / 3600) % 24;
-		pro.preselectValueOfEndTimeSelection(h, $('#comment_time_end\\[time\\]_h'));
+		var obj = pro.convertSecondsToTimeObject(seconds);
+		pro.preselectValueOfEndTimeSelection(obj.hours, $('#comment_time_end\\[time\\]_h'));
+		
+		pro.preselectValueOfEndTimeSelection(obj.minutes, $('#comment_time_end\\[time\\]_m'));
+		
+		pro.preselectValueOfEndTimeSelection(obj.seconds, $('#comment_time_end\\[time\\]_s'));
 
-		m = Math.floor(seconds / 60) % 60;
-		pro.preselectValueOfEndTimeSelection(m, $('#comment_time_end\\[time\\]_m'));
+	};
 
-		s = Math.floor(seconds % 60);
-		pro.preselectValueOfEndTimeSelection(s, $('#comment_time_end\\[time\\]_s'));
-
+	pro.secondsToTimeCode = function(time) 
+	{
+		var obj = pro.convertSecondsToTimeObject(time);
+		return ( (obj.hours > 0) ? (obj.hours < 10 ? '0' + obj.hours : obj.hours) + ':' : '') + 
+				(obj.minutes < 10 ? '0' + obj.minutes : obj.minutes) + 
+				':' + (obj.seconds < 10 ? '0' + obj.seconds : obj.seconds);
+	};
+	
+	pro.convertSecondsToTimeObject = function(time)
+	{
+		var obj = {};
+		obj.hours  =  Math.floor(time / 3600) % 24;
+		obj.minutes = Math.floor(time / 60) % 60;
+		obj.seconds = Math.floor(time % 60);
+		
+		return obj;
 	};
 
 	pro.preselectValueOfEndTimeSelection = function(time, element)

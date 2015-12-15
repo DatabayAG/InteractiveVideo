@@ -75,50 +75,6 @@
 			</ul>
 		</div>
 	</div>
-	<script type="text/javascript">
-		var question_get_url 	= "{QUESTION_GET_URL}";
-		var question_post_url 	= "{QUESTION_POST_URL}";
-		var post_comment_url 	= "{POST_COMMENT_URL}";
-		var send_text			= "{SEND_BUTTON}";
-		var close_text			= "{CLOSE_BUTTON}";
-		var feedback_button_text= "{FEEDBACK_JUMP_TEXT}";
-		var learning_recommendation_text= "{LEARNING_RECOMMENDATION_TEXT}";
-		var answered_text	    = "{ALREADY_ANSWERED_TEXT}";
-		var question_text	    = "{QUESTION_TEXT}";
-		var private_text	   	= "{PRIVATE_TEXT}";
-		var reset_text	   		= "{RESET_TEXT}";
-		var comments 			= {COMMENTS};
-		var stopPoints 			= {STOP_POINTS};
-		var ignore_questions	= {IGNORE_QUESTIONS};
-		var username			= "{USERNAME}";
-		var switch_on			= "{SWITCH_ON}";
-		var switch_off			= "{SWITCH_OFF}";
-		var seekTime			= 0;
-		il.InteractiveVideo 	= 
-		{
-			auto_resume						: false,
-			pause_on_click_in_comment_field	: true,
-			iv_debug						: false,
-			last_stopPoint 					: -1,
-			last_time						: 0,
-			is_show_all_active				: false,
-			filter_by_user					: false,
-			is_chronologic					: '{IS_CHRONOLOGIC_VALUE}',
-			blacklist_time_end				: []
-		};
-				
-		$.fn.debugPrinter = function (message, element)
-		{
-			if( il.InteractiveVideo.iv_debug )
-			{
-				console.log(message + ': ');
-				console.log(element);
-			}
-		};
-//		$().debugPrinter('Comments', comments);
-//		$().debugPrinter('stopPoints', stopPoints);
-		
-	</script>
 </div>
-</div>
+{CONFIG}
 {MODAL_OVERLAY}

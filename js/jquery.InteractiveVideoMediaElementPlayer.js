@@ -5,6 +5,7 @@ $( document ).ready(function() {
 (function ($) {
 	il.Util.addOnLoad(function () {
 		var player = null,
+		    seekTime= 0,
 			interval = null;
 		il.InteractiveVideo.last_stopPoint = -1;
 		player = new MediaElementPlayer("#ilInteractiveVideo", {
@@ -15,9 +16,7 @@ $( document ).ready(function() {
 
 				media.addEventListener('loadeddata', function (e) {
 					var player = $("video#ilInteractiveVideo")[0];
-					
-					il.InteractiveVideoPlayerUtils.fillEndTimeSelector(media.duration);
-					
+
 					il.InteractiveVideoPlayerAbstract.config = {
 							pauseCallback           : (function (){player.pause();}),
 							playCallback            : (function (){player.play();}),
@@ -25,6 +24,8 @@ $( document ).ready(function() {
 							currentTimeCallback     : (function (){return player.currentTime;}),
 							setCurrentTimeCallback  : (function (time){player.setCurrentTime(time);})
 					};
+
+					il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
 				}, false);
 
 				media.addEventListener('loadedmetadata', function (e) {

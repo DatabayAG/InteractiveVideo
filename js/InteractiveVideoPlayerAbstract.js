@@ -1,7 +1,7 @@
-il.InteractiveVideoPlayerAbstract = (function () {
+il.InteractiveVideoPlayerAbstract = (function (scope) {
 	'use strict';
 
-	var pub = {}, pro = {}, pri = {};
+	var pub = {}, pro = {};
 	
 	pub.config = {
 		pauseCallback           : null,
@@ -27,26 +27,50 @@ il.InteractiveVideoPlayerAbstract = (function () {
 
 	pub.duration = function()
 	{
+		var value = -1;
 		if (typeof pub.config.durationCallback === 'function') {
-			return pub.config.durationCallback();
+			value = pub.config.durationCallback();
 		}
+		return value;
 	};
 
 	pub.currentTime = function()
 	{
+		var value = -1;
 		if (typeof pub.config.currentTimeCallback === 'function') {
-			return pub.config.currentTimeCallback();
+			value = pub.config.currentTimeCallback();
 		}
+		return value;
 	};
 
 	pub.setCurrentTime = function(time)
 	{
 		if (typeof pub.config.setCurrentTimeCallback === 'function') {
-			return pub.config.setCurrentTimeCallback(time);
+			pub.config.setCurrentTimeCallback(time);
+		}
+	};
+
+	pub.jumpToTimeInVideo = function (time)
+	{
+		pub.play();
+		pub.pause();
+		if(time !== null)
+		{
+			pub.setCurrentTime(time);
+			scope.InteractiveVideo.last_stopPoint = time;
+		}
+		pub.resumeVideo();
+	};
+
+	pub.resumeVideo = function ()
+	{
+		if(scope.InteractiveVideo.auto_resume === true)
+		{
+			pub.play();
 		}
 	};
 
 	pub.protect = pro;
 	return pub;
 
-}());
+}(il));

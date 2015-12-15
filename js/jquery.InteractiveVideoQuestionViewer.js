@@ -70,7 +70,7 @@ var InteractiveVideoQuestionViewer = (function () {
 		$.ajax({
 			type:    "POST",
 			cache:   false,
-			url:     question_post_url,
+			url:     il.InteractiveVideo.question_post_url,
 			data:    {'qid' : pub.QuestionObject.question_id},
 			success: function () {
 				pro.addToLocalIgnoreArrayIfNonRepeatable();
@@ -82,7 +82,7 @@ var InteractiveVideoQuestionViewer = (function () {
 		var repeat = parseInt(InteractiveVideoQuestionViewer.QuestionObject.repeat_question, 10);
 		if(repeat === 0)
 		{
-			ignore_questions.push(pub.comment_id );
+			il.InteractiveVideo.ignore_questions.push(pub.comment_id );
 		}
 	};
 
@@ -106,7 +106,7 @@ var InteractiveVideoQuestionViewer = (function () {
 			modal.append('<div class="learning_recommendation"><br/>' + il.InteractiveVideo.lang.learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', il.InteractiveVideo.lang.feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>');
 			$('#jumpToTimeInVideo').on('click', function (e) {
 				$('#ilQuestionModal').modal('hide');
-				il.InteractiveVideoPlayerUtils.jumpToTimeInVideo(feedback.time);
+				il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(feedback.time);
 			});
 		}
 	};
@@ -135,11 +135,10 @@ var InteractiveVideoQuestionViewer = (function () {
 	pro.appendButtonListener = function() {
 		$('#question_form').on('submit', function (e) {
 			e.preventDefault();
-			$().debugPrinter('pub.QuestionObject Ajax', $(this).serialize());
 			$.ajax({
 				type:    "POST",
 				cache:   false,
-				url:     question_post_url,
+				url:     il.InteractiveVideo.question_post_url,
 				data:    $(this).serialize(),
 				success: function (feedback) {
 					var obj = JSON.parse(feedback);
@@ -155,7 +154,7 @@ var InteractiveVideoQuestionViewer = (function () {
 	{
 		$('#close_form').on('click', function (e) {
 			$('#ilQuestionModal').modal('hide');
-			il.InteractiveVideoPlayerUtils.resumeVideo();
+			il.InteractiveVideoPlayerAbstract.resumeVideo();
 		});
 	};
 
@@ -168,7 +167,7 @@ var InteractiveVideoQuestionViewer = (function () {
 	pub.getQuestionPerAjax = function (comment_id, player) {
 		$.when(
 			$.ajax({
-				url:  question_get_url + '&comment_id=' + comment_id,
+				url:  il.InteractiveVideo.question_get_url + '&comment_id=' + comment_id,
 				type: 'GET', dataType: 'json'
 			})
 		).then(function (array) {

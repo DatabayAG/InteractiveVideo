@@ -214,9 +214,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$ilTabs->activateTab('content');
 
-		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
-		$tpl->addCss($this->plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.css');
-		$tpl->addJavaScript($this->plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.js');
 		ilObjMediaObjectGUI::includePresentationJS($tpl);
 
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $this->plugin->getDirectory());
@@ -233,62 +230,23 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->objComment->setIsPublic($this->object->isPublic());
 		$this->objComment->setIsAnonymized($this->object->isAnonymized());
 		$this->objComment->setIsRepeat($this->object->isRepeat());
-
-		$stop_points = $this->objComment->getStopPoints();
-		$comments = $this->objComment->getContentComments();
-		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
-		$video_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
-		$video_tpl->setVariable('TXT_COMMENTS', $this->plugin->txt('comments'));
-		$video_tpl->setVariable('SHOW_ALL_COMMENTS', $this->plugin->txt('show_all_comments'));
-		$video_tpl->setVariable('AUTHOR_FILTER', $this->plugin->txt('author_filter'));
-		$video_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
-		
-		$video_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
-		$video_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
-
-		$video_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
-		$video_tpl->setVariable('COMMENTS', json_encode($comments));
-
-		$simple_choice = new SimpleChoiceQuestion();
-		$question_id = $simple_choice->getAllNonRepeatAnsweredQuestion($ilUser->getId());
-//		$repeatCorrect = 1;  //switch this: 1 --> repeat questons disregarding status, 0 --> only repeat incorrectly answered
-		if($this->object->isRepeat())
-		{
-			$correct_question_id = $simple_choice->getAllRepeatCorrectlyAnsweredQuestion($ilUser->getId()); //marko - only show remaining incorrectly answered questions
-			$question_id = array_merge($question_id,$correct_question_id);  //marko - see above
-		}
-		$video_tpl->setVariable('IGNORE_QUESTIONS', json_encode($question_id));
-		if($this->object->isAnonymized())
-		{
-			$video_tpl->setVariable('USERNAME', '');
-		}
-		else
-		{
-			$video_tpl->setVariable('USERNAME', $ilUser->getPublicName());
-		}
 		require_once("./Services/UIComponent/Modal/classes/class.ilModalGUI.php");
 		$modal = ilModalGUI::getInstance();
 		$modal->setId("ilQuestionModal");
 		$modal->setBody('');
 		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
-		$video_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTarget($this, 'getQuestionPerAjax', '', true, false));
-		$video_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTarget($this, 'postAnswerPerAjax', '', true, false));
-		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postComment', '', true, false));
-		$video_tpl->setVariable('SEND_BUTTON', $this->plugin->txt('send'));
-		$video_tpl->setVariable('CLOSE_BUTTON', $this->plugin->txt('close'));
-		$video_tpl->setVariable('FEEDBACK_JUMP_TEXT', $this->plugin->txt('feedback_jump_text'));
-		$video_tpl->setVariable('LEARNING_RECOMMENDATION_TEXT', $this->plugin->txt('learning_recommendation'));
-		$video_tpl->setVariable('ALREADY_ANSWERED_TEXT', $this->plugin->txt('already_answered'));
-		$video_tpl->setVariable('QUESTION_TEXT', $this->plugin->txt('question'));
-		$video_tpl->setVariable('PRIVATE_TEXT', $this->plugin->txt('is_private_comment'));
-		$video_tpl->setVariable('RESET_TEXT', $this->plugin->txt('reset'));
-		$video_tpl->setVariable('SWITCH_ON', $this->plugin->txt('switch_on'));
-		$video_tpl->setVariable('SWITCH_OFF', $this->plugin->txt('switch_off'));
+
 		$video_tpl->setVariable('COMMENT_TIME_END', $this->plugin->txt('time_end'));
-		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
-		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoPlayer.js');
-		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerUtils.js');
-		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstraction.js');
+		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
+		$video_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
+		$video_tpl->setVariable('TXT_COMMENTS', $this->plugin->txt('comments'));
+		$video_tpl->setVariable('SHOW_ALL_COMMENTS', $this->plugin->txt('show_all_comments'));
+		$video_tpl->setVariable('AUTHOR_FILTER', $this->plugin->txt('author_filter'));
+
+		$video_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
+		$video_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
+		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig());
+		
 		$tpl->setContent($video_tpl->get());
 	}
 
@@ -1155,7 +1113,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('editComments');
 
-		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
+		
 		ilObjMediaObjectGUI::includePresentationJS($tpl);
 
 		$video_tpl = new ilTemplate("tpl.edit_comment.html", true, true, $this->plugin->getDirectory());
@@ -1171,35 +1129,86 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->objComment = new ilObjComment();
 		$this->objComment->setObjId($this->object->getId());
 
-		$stop_points = $this->objComment->getStopPoints();
-		$comments = $this->objComment->getAllComments();
+
 		$video_tpl->setVariable('TXT_INS_COMMENT', $this->plugin->txt('insert_comment'));
 		$video_tpl->setVariable('TXT_INS_QUESTION', $this->plugin->txt('insert_question'));
-
-		$video_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
-		$video_tpl->setVariable('COMMENTS', json_encode($comments));
-		$video_tpl->setVAriable('CURRENT_TIME', json_encode($current_time));
 
 		require_once("./Services/UIComponent/Modal/classes/class.ilModalGUI.php");
 		$modal = ilModalGUI::getInstance();
 		$modal->setId("ilQuestionModal");
 		$modal->setBody('');
-		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postTutorComment', '', false, false));
-		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
-		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoPlayer.js');
-		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstraction.js');
+		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
 		
+		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postTutorComment', '', false, false));
+
+		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig());
+
 		$tbl_data = $this->object->getCommentsTableData();
 		$this->plugin->includeClass('class.ilInteractiveVideoCommentsTableGUI.php');
 		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editComments');
-
 		$tbl->setData($tbl_data);
-
 		$video_tpl->setVariable('TABLE', $tbl->getHTML());
-		
 		$tpl->setContent($video_tpl->get());
 	}
 
+	protected function initPlayerConfig()
+	{
+		global $ilUser, $tpl;
+
+		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
+		$tpl->addCss($this->plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.css');
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.js');
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoMediaElementPlayer.js');
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerComments.js');
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerFunctions.js');
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstract.js');
+
+		$config_tpl = new ilTemplate("tpl.video_config.html", true, true, $this->plugin->getDirectory());
+		$config_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTarget($this, 'getQuestionPerAjax', '', true, false));
+		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTarget($this, 'postAnswerPerAjax', '', true, false));
+		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postComment', '', true, false));
+		$config_tpl->setVariable('SEND_BUTTON', $this->plugin->txt('send'));
+		$config_tpl->setVariable('CLOSE_BUTTON', $this->plugin->txt('close'));
+		$config_tpl->setVariable('FEEDBACK_JUMP_TEXT', $this->plugin->txt('feedback_jump_text'));
+		$config_tpl->setVariable('LEARNING_RECOMMENDATION_TEXT', $this->plugin->txt('learning_recommendation'));
+		$config_tpl->setVariable('ALREADY_ANSWERED_TEXT', $this->plugin->txt('already_answered'));
+		$config_tpl->setVariable('QUESTION_TEXT', $this->plugin->txt('question'));
+		$config_tpl->setVariable('PRIVATE_TEXT', $this->plugin->txt('is_private_comment'));
+		$config_tpl->setVariable('RESET_TEXT', $this->plugin->txt('reset'));
+		$config_tpl->setVariable('SWITCH_ON', $this->plugin->txt('switch_on'));
+		$config_tpl->setVariable('SWITCH_OFF', $this->plugin->txt('switch_off'));
+		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
+
+		$simple_choice = new SimpleChoiceQuestion();
+		$ignore = $simple_choice->getAllNonRepeatAnsweredQuestion($ilUser->getId());
+//		$repeatCorrect = 1;  //switch this: 1 --> repeat questons disregarding status, 0 --> only repeat incorrectly answered
+		if($this->object->isRepeat())
+		{
+			$correct_question_id = $simple_choice->getAllRepeatCorrectlyAnsweredQuestion($ilUser->getId()); //marko - only show remaining incorrectly answered questions
+			$ignore = array_merge($ignore,$correct_question_id);  //marko - see above
+		}
+		$config_tpl->setVariable('IGNORE_QUESTIONS', json_encode($ignore));
+
+		if($this->object->isAnonymized())
+		{
+			$config_tpl->setVariable('USERNAME', '');
+		}
+		else
+		{
+			$config_tpl->setVariable('USERNAME', $ilUser->getPublicName());
+		}
+		
+
+		$stop_points = $this->objComment->getStopPoints();
+		$comments = $this->objComment->getContentComments();
+
+		$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
+		$config_tpl->setVariable('COMMENTS', json_encode($comments));
+		
+		return $config_tpl->get();
+	}
+	
 	/**
 	 *
 	 */

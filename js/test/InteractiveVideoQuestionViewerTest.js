@@ -132,23 +132,23 @@ describe("InteractiveVideoQuestionViewer Tests", function() {
 
 		describe("Utils functions", function() {
 			beforeEach(function () {
-				
-				ignore_questions = [];
+
+				il.InteractiveVideo.ignore_questions = [];
 				IVQuestionCreator = {JSON : []};
 			});
 			afterEach(function () {
-				ignore_questions = [];
+				il.InteractiveVideo.ignore_questions = [];
 			});
 
 			it("addToLocalIgnoreArrayIfNonRepeatable then ignore array must be filled", function () {
 				InteractiveVideoQuestionViewer.comment_id = 1;
 				InteractiveVideoQuestionViewer.QuestionObject = {'repeat_question' : 0};
-				expect(ignore_questions.length).toEqual(0);
+				expect(il.InteractiveVideo.ignore_questions.length).toEqual(0);
 				InteractiveVideoQuestionViewer.protect.addToLocalIgnoreArrayIfNonRepeatable() ;
-				expect(ignore_questions.length).toEqual(1);
+				expect(il.InteractiveVideo.ignore_questions.length).toEqual(1);
 				InteractiveVideoQuestionViewer.QuestionObject = {'repeat_question' : 1};
 				InteractiveVideoQuestionViewer.protect.addToLocalIgnoreArrayIfNonRepeatable() ;
-				expect(ignore_questions.length).toEqual(1);
+				expect(il.InteractiveVideo.ignore_questions.length).toEqual(1);
 			});
 
 		});
