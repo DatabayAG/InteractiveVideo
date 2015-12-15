@@ -665,13 +665,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->performQuestionRefresh($this->objComment->getCommentId(), $form);
 			
 			ilUtil::sendSuccess($this->lng->txt('saved_successfully'));
-			return $this->editComments();
+			$this->ctrl->redirect($this, 'editComments');
 		}
 		else
 		{
 			$form->setValuesByPost();
 			ilUtil::sendFailure($this->lng->txt('err_check_input'));
-			return $this->showTutorInsertQuestionForm($form);
+			$this->showTutorInsertQuestionForm($form);
 		}
 	}
 

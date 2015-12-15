@@ -220,7 +220,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		}
 		if(parseInt(is_interactive, 10) === 1)
 		{
-			name  = '[' + il.InteractiveVideo.lang.question_text + ']';
+			name  = '[' + scope.InteractiveVideo.lang.question_text + ']';
 		}
 		return 	'<span class="comment_username"> ' + name + '</span> ';
 	};
@@ -245,7 +245,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		var private_comment = '';
 		if(parseInt(is_private, 10) === 1 || is_private === true)
 		{
-			private_comment = ' (' + il.InteractiveVideo.lang.private_text + ')';
+			private_comment = ' (' + scope.InteractiveVideo.lang.private_text + ')';
 		}
 		else
 		{
@@ -421,11 +421,12 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.preselectValueOfEndTimeSelection = function(time, element)
 	{
-		if(time < 10)
+		var t = time;
+		if(t < 10)
 		{
-			time = '0' + time;
+			t = '0' + t;
 		}
-		element.val(time);
+		element.val(t);
 	};
 
 	pub.protect = pro;

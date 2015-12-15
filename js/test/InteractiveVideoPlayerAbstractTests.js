@@ -13,7 +13,7 @@ jasmine.getFixtures().fixturesPath = path + 'spec/javascripts/fixtures';
 
 describe("InteractiveVideoPlayerAbstract Tests", function() {
 
-	describe("Utils Test Calling Cases", function () {
+	describe("Function Tests", function () {
 		beforeEach(function () {
 			callHelper = {
 				play: function () {

@@ -237,6 +237,30 @@ describe("InteractiveVideoPlayerComments Tests", function () {
 			expect(element).toEqual('crow1');
 		});
 
+		it("secondsToTimeCode", function () {
+			var obj = '00:00';
+			var expec = il.InteractiveVideoPlayerComments.protect.secondsToTimeCode(0);
+			expect(expec).toEqual(obj);
+			obj = '01:00';
+			expec = il.InteractiveVideoPlayerComments.protect.secondsToTimeCode(60);
+			expect(expec).toEqual(obj);
+			obj = '12:31:21';
+			expec = il.InteractiveVideoPlayerComments.protect.secondsToTimeCode(217881);
+			expect(expec).toEqual(obj);
+		});
+
+		it("displayAllCommentsAndDeactivateCommentStream", function () {
+			var expec = '<li class="list_item_0 fadeOut crow1"><time class="time"> <a onclick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(60); return false;">01:00</a></time><span class="comment_username"> [undefined]</span> <span class="comment_title"></span> <span class="comment_text">bla</span> <span class="private_text"></span> <br><div class="comment_tags"></div></li>';
+			loadFixtures('InteractiveVideoPlayerUtils_fixtures.html');
+			il.InteractiveVideo.comments = [{comment_time : 60, comment_time_end : 0, comment_id :0, comment_text : 'bla'}]
+			il.InteractiveVideoPlayerComments.displayAllCommentsAndDeactivateCommentStream(false);
+			expect($("#ul_scroll").html()).toEqual('');
+			expect(il.InteractiveVideo.is_show_all_active).toEqual(false);
+			il.InteractiveVideoPlayerComments.displayAllCommentsAndDeactivateCommentStream(true);
+			expect($("#ul_scroll").html()).toEqual(expec);
+			expect(il.InteractiveVideo.is_show_all_active).toEqual(true);
+			
+		});
 
 		it("builCommentTimeEndHtml", function () {
 			var comment = {comment_time_end_h : 1, comment_time_end_m : 1 ,comment_time_end_s : 1, comment_id :0};

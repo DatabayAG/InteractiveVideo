@@ -12,6 +12,7 @@ $( document ).ready(function() {
 
 			timerRate: 50,
 			enablePluginDebug: false,
+
 			success: function(media) {
 
 				media.addEventListener('loadeddata', function (e) {
