@@ -3,6 +3,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	var pub = {}, pro = {}, pri = {};
 
+	pri.utils = scope.InteractiveVideoPlayerComments;
+
 	pub.seekingEventHandler = function()
 	{
 		var current_time = scope.InteractiveVideoPlayerAbstract.currentTime();
@@ -87,8 +89,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		pro.addDropDownEvent();
 	};
 
-	pri.utils = scope.InteractiveVideoPlayerComments;
-
 	pro.commentsObjectActions = function(i, current_time, player)
 	{
 		var is_interactive = parseInt(scope.InteractiveVideo.comments[i].is_interactive, 10);
@@ -155,7 +155,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 					'is_private': $('#is_private').prop( "checked" )
 				},
 				success  : function(data) {
-					$('#comment_text').val("");
+					pro.resetCommentForm();
 					pri.utils.rebuildCommentsViewIfShowAllIsActive();
 				}
 			});
@@ -165,11 +165,16 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pro.resetCommentFormOnClick = function()
 	{
 		$("#ilInteractiveVideoCommentCancel").on("click", function(e) {
-			$('#comment_text').val('');
-			$('#is_private').prop( 'checked', false );
-			$('#comment_time_end').prop( 'checked', false );
-			$('.end_time_selector').hide( 'fast' );
+			pro.resetCommentForm();
 		});
+	};
+	
+	pro.resetCommentForm = function()
+	{
+		$('#comment_text').val('');
+		$('#is_private').prop( 'checked', false );
+		$('#comment_time_end').prop( 'checked', false );
+		$('.end_time_selector').hide( 'fast' );
 	};
 	
 	pro.addPausePlayerOnClick = function()
@@ -212,13 +217,17 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			width: 50,
 			height: 27
 		}, function(){
-			if(scope.InteractiveVideo.is_chronologic === '0')
-			{
-				$('#show_all_comments').click();
-			}
+			pro.isChronologicViewDeactivatedShowAllComments();
 		}());
 	};
 	
+	pro.isChronologicViewDeactivatedShowAllComments = function()
+	{
+		if(scope.InteractiveVideo.is_chronologic === '0')
+		{
+			$('#show_all_comments').click();
+		}
+	};
 	pro.addDropDownEvent = function()
 	{
 		pri.utils.loadAllUserWithCommentsIntoFilterList();
