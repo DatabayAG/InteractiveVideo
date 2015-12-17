@@ -31,7 +31,9 @@ module.exports = function(config) {
 		// possible values: 'dots', 'progress'
 		// available reporters: https://npmjs.org/browse/keyword/karma-reporter
 		reporters: ['progress', 'coverage', 'allure'],
-
+		 allureReport: {
+		      reportDir: '',
+		    },
 		preprocessors: {    '../jquery.InteractiveVideoQuestionViewer.js': ['coverage'],
 							'../jquery.InteractiveVideoQuestionCreator.js': ['coverage'],
 							'../InteractiveVideoPlayerComments.js': ['coverage'],
