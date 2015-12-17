@@ -1,7 +1,20 @@
 var InteractiveVideoQuestionViewer = (function (scope) {
 	'use strict';
 	var pub = {},
-	    pro = {};
+		pro = {};
+
+	pub.QuestionObject = {};
+
+	pub.getQuestionPerAjax = function (comment_id, player) {
+		$.when(
+				$.ajax({
+					url:  scope.InteractiveVideo.question_get_url + '&comment_id=' + comment_id,
+					type: 'GET', dataType: 'json'
+				})
+		).then(function (array) {
+			pro.showQuestionInteractionForm(comment_id, array, player);
+		});
+	};
 
 	pro.buildQuestionForm = function() {
 		var modal = $('.modal-body');
@@ -65,7 +78,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.addSelfReflectionLayout = function() {
-		$('.modal-body').append('<div class="modal_feedback">' + pro.createButtonButtons('close_form', close_text) +'</div>');
+		$('.modal-body').append('<div class="modal_feedback">' + pro.createButtonButtons('close_form', scope.InteractiveVideo.lang.close_text) +'</div>');
 		pro.appendCloseButtonListener();
 		$.ajax({
 			type:    "POST",
@@ -162,19 +175,6 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		return '<input id="' + id + '" class="btn btn-default btn-sm" value="' + value + '" '+ 'type="submit">';
 	};
 
-	pub.QuestionObject = {};
-
-	pub.getQuestionPerAjax = function (comment_id, player) {
-		$.when(
-			$.ajax({
-				url:  scope.InteractiveVideo.question_get_url + '&comment_id=' + comment_id,
-				type: 'GET', dataType: 'json'
-			})
-		).then(function (array) {
-				pro.showQuestionInteractionForm(comment_id, array, player);
-			});
-	};
-	
 	pro.showQuestionInteractionForm = function(comment_id, array, player) {
 		pub.comment_id = comment_id;
 		pub.QuestionObject = array;
