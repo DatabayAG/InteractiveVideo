@@ -44,6 +44,7 @@ describe("InteractiveVideoPlayerAbstract Tests", function() {
 
 		it("play video should be called", function () {
 			expect(callHelper.play).not.toHaveBeenCalled();
+
 			il.InteractiveVideoPlayerAbstract.play();
 			expect(callHelper.play).toHaveBeenCalled();
 		});
@@ -56,6 +57,7 @@ describe("InteractiveVideoPlayerAbstract Tests", function() {
 
 		it("pause video should be called", function () {
 			expect(callHelper.pause).not.toHaveBeenCalled();
+			
 			il.InteractiveVideoPlayerAbstract.pause();
 			expect(callHelper.pause).toHaveBeenCalled();
 		});
@@ -68,6 +70,7 @@ describe("InteractiveVideoPlayerAbstract Tests", function() {
 
 		it("setCurrentTime should be called", function () {
 			expect(callHelper.setCurrentTime).not.toHaveBeenCalled();
+
 			il.InteractiveVideoPlayerAbstract.setCurrentTime(2);
 			expect(callHelper.setCurrentTime).toHaveBeenCalled();
 		});
@@ -99,6 +102,7 @@ describe("InteractiveVideoPlayerAbstract Tests", function() {
 		it("resume video should resume if auto_resume is true", function () {
 			il.InteractiveVideo.auto_resume = true;
 			expect(callHelper.play).not.toHaveBeenCalled();
+
 			il.InteractiveVideoPlayerAbstract.resumeVideo();
 			expect(callHelper.play).toHaveBeenCalled();
 		});
@@ -113,13 +117,17 @@ describe("InteractiveVideoPlayerAbstract Tests", function() {
 			il.InteractiveVideo.last_stopPoint = 0;
 			expect(callHelper.play).not.toHaveBeenCalled();
 			expect(callHelper.pause).not.toHaveBeenCalled();
+
 			il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(2);
 			expect(callHelper.play).toHaveBeenCalled();
 			expect(callHelper.pause).toHaveBeenCalled();
-
 			expect(il.InteractiveVideo.last_stopPoint).toEqual(2);
+
 			il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(null);
 			expect(il.InteractiveVideo.last_stopPoint).toEqual(2);
+
+			il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(5);
+			expect(il.InteractiveVideo.last_stopPoint).toEqual(5);
 		});
 	});
 	
