@@ -112,4 +112,5 @@ show_response_frequency#:#Show Response Frequency
 show_response_frequency_info#:#Show Response Frequency Info
 type#:#Type
 title_of_question#:#Questiontitle
+endtime_warning#:#The endtime you selected is smaller than the actual time
 screen_info#:#Use this screen to create and manage questions and comments. Caution: Interactive questions will NOT be shown on this screen. In order to see them during playback, go to the tab "Content".

@@ -127,6 +127,17 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				h = $('#comment_time_end\\[time\\]_h').val();
 				m = $('#comment_time_end\\[time\\]_m').val();
 				s = $('#comment_time_end\\[time\\]_s').val();
+
+				var actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
+				var h_end = parseInt(h, 10) * 3600;
+				var m_end = parseInt(m, 10) * 60;
+				var s_end = parseInt(s, 10);
+				var end_time = h_end + m_end + s_end;
+				if(end_time < parseInt(actual_time_in_video, 10))
+				{
+					$('#endtime_warning').removeClass('ilNoDisplay');
+					return;
+				}
 			}
 
 			tmp_obj =
@@ -179,6 +190,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		$('#is_private').prop( 'checked', false );
 		$('#comment_time_end').prop( 'checked', false );
 		$('.end_time_selector').hide( 'fast' );
+		$('.alert-warning').addClass('ilNoDisplay');
 	};
 
 	pro.addPausePlayerOnClick = function()

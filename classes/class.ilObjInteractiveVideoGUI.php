@@ -238,6 +238,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$video_tpl->setVariable('COMMENT_TIME_END', $this->plugin->txt('time_end'));
 		$video_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
+		$video_tpl->setVariable('TXT_ENDTIME_WARNING', $this->plugin->txt('endtime_warning'));
 		$video_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
 		$video_tpl->setVariable('TXT_COMMENTS', $this->plugin->txt('comments'));
 		$video_tpl->setVariable('SHOW_ALL_COMMENTS', $this->plugin->txt('show_all_comments'));
