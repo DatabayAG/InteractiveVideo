@@ -318,7 +318,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 			$table_data[$counter]['comment_id']			= $row['comment_id'];
 			$table_data[$counter]['comment_time']		= $row['comment_time'];
 			$table_data[$counter]['comment_time_end']	= $row['comment_time_end'];
-			$table_data[$counter]['user_id']			= $row['user_id'];
+		//	$table_data[$counter]['user_id']			= $row['user_id'];
 			$table_data[$counter]['comment_text']		= $row['comment_text'];
 			$table_data[$counter]['is_private']			= $row['is_private'];
 //			$table_data[$counter]['is_tutor']       = $row['is_tutor'];

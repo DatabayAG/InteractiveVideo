@@ -46,7 +46,10 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 
 		$this->addColumn($this->lng->txt('time'), 'comment_time');
 		$this->addColumn($a_parent_obj->plugin->txt('time_end'), 'comment_time_end');
-		$this->addColumn($this->lng->txt('user'), 'user_id');
+		if($a_parent_cmd == 'editComments')
+		{
+			$this->addColumn($this->lng->txt('user'), 'user_id');
+		}
 		$this->addColumn($this->lng->txt('title'), 'title');
 		$this->addColumn($this->lng->txt('comment'), 'comment_text');
 		if($ilAccess->checkAccess('write', '', $a_parent_obj->object->getRefId()) && $a_parent_cmd == 'editComments')
