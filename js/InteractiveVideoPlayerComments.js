@@ -130,7 +130,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pub.displayAllCommentsAndDeactivateCommentStream = function(on)
 	{
 		var i;
-		var j_object = $("#ul_scroll");
+		var j_object	= $("#ul_scroll");
+		var element		='';
 		j_object.html('');
 		pri.cssIterator = 0;
 
@@ -140,7 +141,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			{
 				if (scope.InteractiveVideo.comments[i].comment_text !== null)
 				{
-					j_object.prepend(pub.buildListElement(scope.InteractiveVideo.comments[i], scope.InteractiveVideo.comments[i].comment_time, scope.InteractiveVideo.comments[i].user_name));
+					element = pub.buildListElement(scope.InteractiveVideo.comments[i], scope.InteractiveVideo.comments[i].comment_time, scope.InteractiveVideo.comments[i].user_name);
+					j_object.append(element);
 					if(scope.InteractiveVideo.comments[i].comment_time_end > 0 && scope.InteractiveVideo.comments[i].comment_time <= scope.InteractiveVideo.last_time)
 					{
 						pub.fillCommentsTimeEndBlacklist(scope.InteractiveVideo.comments[i].comment_time_end, scope.InteractiveVideo.comments[i].comment_id);
