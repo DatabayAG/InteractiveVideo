@@ -12,7 +12,7 @@ xvid_edit_permission#:#Rechteeinstellungen ändern
 xvid_visible#:#Interaktives Video ist sichtbar
 reset#:#Zurücksetzen
 show_all_comments#:#Alle Kommentare anzeigen: 
-author_filter#:#Authorenfilter
+author_filter#:#Autorenfilter
 crs_create_xvid#:#Neues Interaktives Video anlegen
 grp_create_xvid#:#Neues Interaktives Video anlegen
 fold_create_xvid#:#Neues Interaktives Video anlegen
@@ -21,6 +21,7 @@ cat_create_xvid#:#Neues Interaktives Video anlegen
 interactive#:#Interaktive
 tutor#:#Tutor
 questions_comments#:#Fragen und Kommentare
+questions_comments_sub_tab#:#Verwalten
 sure_delete_comments#:#Sind Sie sicher, dass die selektierten Commentare gelöscht werden sollen?
 video_file#:#Video
 comment#:#Kommentar
@@ -103,7 +104,10 @@ is_repeat_info#:#Wenn diese Option aktiviert ist, werden bereits korrekt beantwo
 offline#:#Offline
 status#:#Status
 is_chronologic#:#Zeige Kommentare in chronologischer Reihenfolge
-is_chronologic_info#:#Wenn diese Option deaktiviert wird, wird die Option Alle Kommentare vorausgewählt.
-time_end#:#Endzeit
+is_chronologic_info#:#Wenn diese Option aktiviert wird, wird die Option Alle Kommentare vorausgewählt.
+time_end#:#Ende der Passage
 show_response_frequency#:#Zeige Antworthäufigkeit
 show_response_frequency_info#:#Zeige Antworthäufigkeit Info
+type#:#Typ
+title_of_question#:#Titel der Frage
+screen_info#:#Diese Ansicht dient zum Erstellen und Verwalten von Fragen und Kommentaren. Achtung: Interaktive Fragen werden hier NICHT beim Abspielen des Videos angezeigt, wechseln Sie zum Reiter "Inhalt" um die Fragen während des Abspielvorganges eingeblendet zu bekommen.

@@ -350,7 +350,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 		if(name !== '')
 		{
-			name = '[' + name + ']';
+			name = '' + name + '';
 		}
 
 		if(parseInt(is_interactive, 10) === 1)

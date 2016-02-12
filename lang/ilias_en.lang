@@ -17,6 +17,7 @@ fold_create_xvid#:#Create Interactive Video
 root_create_xvid#:#Create Interactive Video
 cat_create_xvid#:#Create Interactive Video
 interactive#:#Interactive
+questions_comments_sub_tab#:#Edit
 tutor#:#Tutor
 questions_comments#:#Questions and Comments
 sure_delete_comments#:#Are you sure you want to delete the selected comments?
@@ -105,7 +106,10 @@ is_repeat_info#:#If this option is activated, questions that have already been a
 offline#:#Offline
 status#:#Status
 is_chronologic#:#Show Comments in chronological order
-is_chronologic_info#:#If this option is turned off, all comments will be shown.
+is_chronologic_info#:#If this option is activated, all comments will be shown.
 time_end#:#End Time
 show_response_frequency#:#Show Response Frequency
 show_response_frequency_info#:#Show Response Frequency Info
+type#:#Type
+title_of_question#:#Questiontitle
+screen_info#:#Use this screen to create and manage questions and comments. Caution: Interactive questions will NOT be shown on this screen. In order to see them during playback, go to the tab "Content".

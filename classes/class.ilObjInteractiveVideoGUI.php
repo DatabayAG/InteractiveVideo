@@ -1118,6 +1118,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$video_tpl = new ilTemplate("tpl.edit_comment.html", true, true, $this->plugin->getDirectory());
 
+		$video_tpl->setVariable('SCREEN_INFO', $this->plugin->txt('screen_info'));
+
 		$mob_id = $this->object->getMobId();
 		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
@@ -1176,6 +1178,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('QUESTION_TEXT', $this->plugin->txt('question'));
 		$config_tpl->setVariable('PRIVATE_TEXT', $this->plugin->txt('is_private_comment'));
 		$config_tpl->setVariable('RESET_TEXT', $this->plugin->txt('reset'));
+		$config_tpl->setVariable('AUTHOR_FILTER', $this->plugin->txt('author_filter'));
 		$config_tpl->setVariable('SWITCH_ON', $this->plugin->txt('switch_on'));
 		$config_tpl->setVariable('SWITCH_OFF', $this->plugin->txt('switch_off'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
@@ -1678,7 +1681,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$chrono = new ilCheckboxInputGUI($this->plugin->txt('is_chronologic'), 'is_chronologic');
 		$chrono->setInfo($this->plugin->txt('is_chronologic_info'));
-		$chrono->setChecked(true);
+		$chrono->setChecked(false);
 		$form->addItem($chrono);
 
 		return $form;
@@ -1905,7 +1908,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			case 'editComments':
 				if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
 				{
-					$ilTabs->addSubTab('editComments', $this->plugin->txt('questions_comments'),$this->ctrl->getLinkTarget($this,'editComments'));
+					$ilTabs->addSubTab('editComments', $this->plugin->txt('questions_comments_sub_tab'),$this->ctrl->getLinkTarget($this,'editComments'));
 				}
 				$ilTabs->addSubTab('editMyComments', $this->plugin->txt('my_comments'),$this->ctrl->getLinkTarget($this,'editMyComments'));
 				$ilTabs->addSubTab('showMyResults', $this->plugin->txt('show_my_results'), $this->ctrl->getLinkTarget($this, 'showMyResults'));

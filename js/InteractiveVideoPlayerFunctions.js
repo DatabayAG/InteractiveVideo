@@ -227,7 +227,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	
 	pro.isChronologicViewDeactivatedShowAllComments = function()
 	{
-		if(scope.InteractiveVideo.is_chronologic === '0')
+		if(scope.InteractiveVideo.is_chronologic === '1')
 		{
 			$('#show_all_comments').click();
 		}
@@ -244,12 +244,12 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			if(value === scope.InteractiveVideo.lang.reset_text)
 			{
 				scope.InteractiveVideo.filter_by_user = false;
-				$('#dropdownMenuInteraktiveVideo').removeClass('btn-primary');
+				$('#dropdownMenuInteraktiveVideo').removeClass('btn-primary').html(il.InteractiveVideo.lang.author_filter);
 			}
 			else
 			{
 				scope.InteractiveVideo.filter_by_user = value;
-				$('#dropdownMenuInteraktiveVideo').addClass('btn-primary');
+				$('#dropdownMenuInteraktiveVideo').addClass('btn-primary').html(il.InteractiveVideo.lang.author_filter + ' ' + value);
 			}
 
 			if(scope.InteractiveVideoPlayerAbstract.currentTime() > 0 || scope.InteractiveVideo.is_show_all_active === true)

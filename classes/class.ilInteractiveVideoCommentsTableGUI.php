@@ -3,6 +3,7 @@
 
 require_once 'Services/Table/classes/class.ilTable2GUI.php';
 require_once 'Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvancedSelectionListGUI.php';
+require_once 'Services/User/classes/class.ilUserUtil.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
 
@@ -46,11 +47,12 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$this->addColumn($this->lng->txt('time'), 'comment_time');
 		$this->addColumn($a_parent_obj->plugin->txt('time_end'), 'comment_time_end');
 		$this->addColumn($this->lng->txt('user'), 'user_id');
+		$this->addColumn($this->lng->txt('title'), 'title');
 		$this->addColumn($this->lng->txt('comment'), 'comment_text');
 		if($ilAccess->checkAccess('write', '', $a_parent_obj->object->getRefId()) && $a_parent_cmd == 'editComments')
 		{
-			$this->addColumn($a_parent_obj->plugin->txt('interactive'), 'is_interactive');
-			$this->addColumn($a_parent_obj->plugin->txt('tutor'), 'is_tutor');
+			$this->addColumn($a_parent_obj->plugin->txt('type'), 'type');
+			//$this->addColumn($a_parent_obj->plugin->txt('tutor'), 'is_tutor');
 			
 //			$this->addCommandButton('showTutorInsertCommentForm', $this->lng->txt('insert'));
 		}
@@ -99,20 +101,16 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			{
 				$value = ilUtil::formCheckbox(0, 'comment_id[]', $value);
 			}
-
-			if($key == 'user_id')
+			else if($key == 'user_id')
 			{
-				/* @todo: It is not best practice to perform database queries in a loop if you can prevent this. Furthermore a correct sorting is not possible with this approach. */ 
-				$value = ilObjUser::_lookupLogin($value);
+				$value = ilUserUtil::getNamePresentation($value);
 			}
-
-			if($key == 'comment_time')
+			else if($key == 'comment_time')
 			{
 				$time = xvidUtils::timespanArray($value);
 				$value = $time['h'].':'.$time['m'].':'.$time['s'];
 			}
-
-			if($key == 'comment_time_end')
+			else if($key == 'comment_time_end')
 			{
 				if($value == 0)
 				{
@@ -124,12 +122,17 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 					$value = $time['h'].':'.$time['m'].':'.$time['s'];
 				}
 			}
-			
-			switch($key) 
+			else if($key == 'is_interactive')
 			{
-				case 'is_private': 
-				case 'is_tutor': 
-				case 'is_interactive': 
+				$txt_value = $value == 1 ? 'question' : 'comment';
+				$value = $this->lng->txt($txt_value);
+			}
+			else if($key == 'is_tutor')
+			{
+				continue;
+			}
+			else if($key == 'is_private')
+			{
 				$txt_value = $value == 1 ? 'yes' : 'no'; 
 				$value = $this->lng->txt($txt_value);
 			}

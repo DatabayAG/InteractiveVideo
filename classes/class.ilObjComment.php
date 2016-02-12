@@ -1,5 +1,6 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
+require_once 'Services/User/classes/class.ilUserUtil.php';
 
 /**
  * Class ilObjComment
@@ -265,11 +266,11 @@ class ilObjComment
 		return $comments;
 	}
 
+/*	To Be removed since no usage here
+
 	public function getAllComments()
 	{
-		/**
-		 * @var $ilDB ilDB
-		 */
+
 		global $ilDB, $ilUser;
 
 		$res = $ilDB->queryF(
@@ -298,7 +299,7 @@ class ilObjComment
 		}
 
 		return $comments;
-	}
+	}*/
 
 	public function cloneTutorComments($old_id, $new_id)
 	{
@@ -346,7 +347,7 @@ class ilObjComment
 	{
 		if(!array_key_exists($user_id, self::$user_name_cache))
 		{
-			self::$user_name_cache[$user_id] = ilObjUser::_lookupLogin($user_id);
+			self::$user_name_cache[$user_id] = ilUserUtil::getNamePresentation($user_id);
 		}
 
 		return self::$user_name_cache[$user_id];

@@ -1,5 +1,6 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
+require_once 'Services/User/classes/class.ilUserUtil.php';
 
 class SimpleChoiceQuestionStatistics {
 
@@ -30,7 +31,7 @@ class SimpleChoiceQuestionStatistics {
          * @var $ilDB   ilDB
          */
 
-        global $ilDB, $ilUser;
+        global $ilDB;
         $questions_for_object = $this->getQuestionCountForObject($oid);
 
         $res     = $ilDB->queryF('
@@ -48,7 +49,7 @@ class SimpleChoiceQuestionStatistics {
         $counter = 0;
         while($row = $ilDB->fetchAssoc($res))
         {
-            $results[$counter]['name']       = $ilUser->_lookupFullname($row['user_id']) . ' (' .$ilUser->getLoginByUserId($row['user_id']). ')';;
+            $results[$counter]['name']       = ilUserUtil::getNamePresentation($row['user_id']);
             $results[$counter]['user_id']    = $row['user_id'];
             $results[$counter]['answered']   = $this->getAnsweredQuestionsFromUser($oid, $row['user_id']);
             $results[$counter]['correct']    = $row['points'];
@@ -71,7 +72,7 @@ class SimpleChoiceQuestionStatistics {
          * @var $ilDB   ilDB
          */
 
-        global $ilDB, $ilUser;
+        global $ilDB;
         $res          = $ilDB->queryF('
 			SELECT score.user_id, points,questions.question_id  
 			FROM 	rep_robj_xvid_comments comments, 
@@ -86,7 +87,7 @@ class SimpleChoiceQuestionStatistics {
         $return_sums  = array();
         while($row = $ilDB->fetchAssoc($res))
         {
-            $name                               = $ilUser->_lookupFullname($row['user_id']) . ' (' .$ilUser->getLoginByUserId($row['user_id']). ')';
+            $name                               = ilUserUtil::getNamePresentation($row['user_id']);;
             $id                                 = $row['user_id'];
             $return_value['users'][$id]['name'] = $name;
             if(!isset($return_sums[$id]['answered']))
