@@ -105,12 +105,12 @@ is_repeat#:#Skip correctly answered questions
 is_repeat_info#:#If this option is activated, questions that have already been answered correctly will be skipped during playback.
 offline#:#Offline
 status#:#Status
-is_chronologic#:#Show Comments in chronological order
-is_chronologic_info#:#If this option is activated, all comments will be shown.
+is_chronologic#:#Show all comments at all times
+is_chronologic_info#:#If this option is activated, all comments for the video will be shown in chronological order at all times.
 time_end#:#End Time
 show_response_frequency#:#Show Response Frequency
 show_response_frequency_info#:#Show Response Frequency Info
 type#:#Type
 title_of_question#:#Questiontitle
 endtime_warning#:#The endtime you selected is smaller than the actual time
-screen_info#:#Use this screen to create and manage questions and comments. Caution: Interactive questions will NOT be shown on this screen. In order to see them during playback, go to the tab "Content".
++screen_info#:#Use this screen to create and manage questions and comments. Caution: Interactive questions will NOT be shown on this screen. In order to see them during playback, go to the tab "Content".
