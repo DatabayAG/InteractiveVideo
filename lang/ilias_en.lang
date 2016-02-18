@@ -118,3 +118,4 @@ show_correct_icon#:#Show Correct Icon
 show_correct_icon_info#:#Displays Icon for correct answer
 show_wrong_icon#:#Show Wrong Icon
 show_correct_icon_info#:#Displays Icon for wrong answer
+no_text_warning#:#You have to enter a text

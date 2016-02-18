@@ -117,3 +117,4 @@ show_correct_icon#:#Zeige Richtige Antwort Icon an
 show_correct_icon_info#:#Soll Häckchen für Richtige Antwort angezeigt werden.
 show_wrong_icon#:#Zeige Falsche Antwort Icon an
 show_correct_icon_info#:#Soll Kreuz für Falsche Antwort angezeigt werden.
+no_text_warning#:#Sie müssen einen Text eingeben

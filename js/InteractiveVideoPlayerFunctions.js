@@ -152,7 +152,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				'is_interactive': '0',
 				'is_private': $('#is_private').prop( "checked" )
 			};
-
+			if(!tmp_obj.comment_text)
+			{
+				$('#no_text_warning').removeClass('ilNoDisplay');
+				return;
+			}
 			pri.utils.sliceCommentAndStopPointsInCorrectPosition(tmp_obj, tmp_obj.comment_time);
 
 			$("#ul_scroll").prepend(pri.utils.buildListElement(tmp_obj, tmp_obj.comment_time, scope.InteractiveVideo.username));
