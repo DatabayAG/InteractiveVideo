@@ -113,3 +113,7 @@ type#:#Typ
 title_of_question#:#Titel der Frage
 endtime_warning#:#Das Ende der Passage darf nicht kleiner sein als die aktuelle Zeit im Video
 screen_info#:#Diese Ansicht dient zum Erstellen und Verwalten von Fragen und Kommentaren. Achtung: Interaktive Fragen werden hier NICHT beim Abspielen des Videos angezeigt, wechseln Sie zum Reiter "Inhalt" um die Fragen während des Abspielvorganges eingeblendet zu bekommen.
+show_correct_icon#:#Zeige Richtige Antwort Icon an
+show_correct_icon_info#:#Soll Häckchen für Richtige Antwort angezeigt werden.
+show_wrong_icon#:#Zeige Falsche Antwort Icon an
+show_correct_icon_info#:#Soll Kreuz für Falsche Antwort angezeigt werden.

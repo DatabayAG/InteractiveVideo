@@ -562,6 +562,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		// Feedback correct
 		$feedback_correct = new ilTextAreaInputGUI($this->plugin->txt('feedback_correct'), 'feedback_correct');
+		$show_correct_icon = new ilCheckboxInputGUI($this->plugin->txt('show_correct_icon'), 'show_correct_icon');
+		$show_correct_icon->setInfo($this->plugin->txt('show_correct_icon'));
+		$show_correct_icon->setChecked(true);
+		
+		
+		$feedback_correct->addSubItem($show_correct_icon);
 		$is_jump_correct = new ilCheckboxInputGUI($this->plugin->txt('is_jump_correct'), 'is_jump_correct');
 		$is_jump_correct->setInfo($this->plugin->txt('is_jump_correct_info'));
 
@@ -580,9 +586,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		// Feedback wrong
 		$feedback_one_wrong = new ilTextAreaInputGUI($this->plugin->txt('feedback_one_wrong'), 'feedback_one_wrong');
+		$show_wrong_icon = new ilCheckboxInputGUI($this->plugin->txt('show_wrong_icon'), 'show_wrong_icon');
+		$show_wrong_icon->setInfo($this->plugin->txt('show_wrong_icon'));
+		$show_wrong_icon->setChecked(true);
+		
+		$feedback_one_wrong->addSubItem($show_wrong_icon);
+
 		$is_jump_wrong = new ilCheckboxInputGUI($this->plugin->txt('is_jump_wrong'), 'is_jump_wrong');
 		$is_jump_wrong->setInfo($this->plugin->txt('is_jump_wrong_info'));
-
 		$jump_wrong_ts = new ilTimeInputGUI($this->lng->txt('time'), 'jump_wrong_ts');
 		$jump_wrong_ts->setShowTime(true);
 		$jump_wrong_ts->setShowSeconds(true);
@@ -735,10 +746,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['question_type']      = $question_data['question_data']['type'];
 		$values['feedback_correct']   = $question_data['question_data']['feedback_correct'];
 		$values['is_jump_correct']    = $question_data['question_data']['is_jump_correct'];
+		$values['show_correct_icon']  = $question_data['question_data']['show_correct_icon'];
 		$values['jump_correct_ts']    = $question_data['question_data']['jump_correct_ts'];
 		$values['feedback_one_wrong'] = $question_data['question_data']['feedback_one_wrong'];
 		$values['show_response_frequency'] = $question_data['question_data']['show_response_frequency'];
 		$values['is_jump_wrong']      = $question_data['question_data']['is_jump_wrong'];
+		$values['show_wrong_icon']    = $question_data['question_data']['show_wrong_icon'];
 		$values['jump_wrong_ts']      = $question_data['question_data']['jump_wrong_ts'];
 		$values['limit_attempts']     = $question_data['question_data']['limit_attempts'];
 		$values['repeat_question']    = $question_data['question_data']['repeat_question'];
@@ -844,6 +857,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		
 		$question->setLimitAttempts((int)$form->getInput('limit_attempts'));
 		$question->setIsJumpCorrect((int)$form->getInput('is_jump_correct'));
+		$question->setShowCorrectIcon((int)$form->getInput('show_correct_icon'));
 		
 		$jmp_correct_time = $form->getInput('jump_correct_ts');
 		$correct_seconds  = $jmp_correct_time['time']['h'] * 3600
@@ -852,7 +866,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question->setJumpCorrectTs($correct_seconds);
 		
 		$question->setIsJumpWrong((int)$form->getInput('is_jump_wrong'));
-		
+		$question->setShowWrongIcon((int)$form->getInput('show_wrong_icon'));
 		$jmp_wrong_time = $form->getInput('jump_wrong_ts');
 		$wrong_seconds  = $jmp_wrong_time['time']['h'] * 3600
 		+ $jmp_wrong_time['time']['m'] * 60

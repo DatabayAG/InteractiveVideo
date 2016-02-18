@@ -24,7 +24,15 @@ class SimpleChoiceQuestionAjaxHandler {
                 {
                     $feedback['wrong'] = '';
                 }
-                $json['html']     = '<div class="wrong">' . $feedback['feedback_one_wrong'] . '</div>';
+				if($feedback['show_wrong_icon'])
+				{
+					$start_div = '<div class="wrong">';
+				}
+				else
+				{
+					$start_div = '<div class="neutral">';
+				}
+                $json['html']     = $start_div . $feedback['feedback_one_wrong'] . '</div>';
                 $json['is_timed'] = $feedback['is_jump_wrong'];
                 $json['time']     = $feedback['jump_wrong_ts'];
             }
@@ -34,7 +42,15 @@ class SimpleChoiceQuestionAjaxHandler {
                 {
                     $feedback['correct'] = '';
                 }
-                $json['html']     = '<div class="correct">' . $feedback['feedback_correct'] . '</div>';
+				if($feedback['show_correct_icon'])
+				{
+					$start_div = '<div class="correct">';
+				}
+				else
+				{
+					$start_div = '<div class="neutral">';
+				}
+				$json['html']     = $start_div . $feedback['feedback_correct'] . '</div>';
                 $json['is_timed'] = $feedback['is_jump_correct'];
                 $json['time']     = $feedback['jump_correct_ts'];
             }
@@ -77,7 +93,9 @@ class SimpleChoiceQuestionAjaxHandler {
             $question_type                        = $row['type'];
             $question_id                          = $row['question_id'];
             $limit_attempts                       = $row['limit_attempts'];
+			$show_correct_icon                    = $row['show_correct_icon'];
             $is_jump_correct                      = $row['is_jump_correct'];
+			$show_wrong_icon                      = $row['show_wrong_icon'];
             $jump_correct_ts                      = $row['jump_correct_ts'];
             $is_jump_wrong                        = $row['is_jump_wrong'];
             $jump_wrong_ts                        = $row['jump_wrong_ts'];
@@ -110,7 +128,9 @@ class SimpleChoiceQuestionAjaxHandler {
         $build_json['question_title']  = $simple_choice->getCommentTitleByCommentId($cid);
         $build_json['limit_attempts']  = $limit_attempts;
         $build_json['is_jump_correct'] = $is_jump_correct;
+		$build_json['show_correct_icon'] = $show_correct_icon;
         $build_json['jump_correct_ts'] = $jump_correct_ts;
+		$build_json['show_wrong_icon'] = $show_wrong_icon;
         $build_json['is_jump_wrong']   = $is_jump_wrong;
         $build_json['jump_wrong_ts']   = $jump_wrong_ts;
 		$build_json['show_response_frequency']   = $show_response_frequency;

@@ -53,7 +53,13 @@
 .modal_feedback{
     margin: 10px 0px 10px 0px;
     padding: 5px;
+
 }
+
+.modal_feedback .neutral{
+    background-color: #E7FFE7;
+}
+
 .modal_feedback .wrong{
     background-color: #FFE7E7;
 }
