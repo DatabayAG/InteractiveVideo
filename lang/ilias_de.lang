@@ -107,14 +107,14 @@ is_chronologic#:#Alle Kommentare von Beginn an zeigen
 is_chronologic_info#:#Wenn diese Option aktiviert wird, wird die Option 'Alle Kommentare' vorausgewählt und es werden alle Kommentare des gesamten Videos von Beginn an in chronologischer Re
 ihenfolge angezeigt.
 time_end#:#Ende der Passage
-show_response_frequency#:#Zeige Antworthäufigkeit
-show_response_frequency_info#:#Zeige Antworthäufigkeit Info
+show_response_frequency#:#Zeige Antworthäufigkeiten nach dem Antworten an
+show_response_frequency_info#:#Nachdem die Frage beantwortet wurde, wird unter jeder Antwortoption die relative Häufigkeit in Prozent angezeigt
 type#:#Typ
 title_of_question#:#Titel der Frage
 endtime_warning#:#Das Ende der Passage darf nicht kleiner sein als die aktuelle Zeit im Video
 screen_info#:#Diese Ansicht dient zum Erstellen und Verwalten von Fragen und Kommentaren. Achtung: Interaktive Fragen werden hier NICHT beim Abspielen des Videos angezeigt, wechseln Sie zum Reiter "Inhalt" um die Fragen während des Abspielvorganges eingeblendet zu bekommen.
-show_correct_icon#:#Zeige Richtige Antwort Icon an
-show_correct_icon_info#:#Soll Häckchen für Richtige Antwort angezeigt werden.
-show_wrong_icon#:#Zeige Falsche Antwort Icon an
-show_correct_icon_info#:#Soll Kreuz für Falsche Antwort angezeigt werden.
+show_correct_icon#:#Feedback visuell als 'richtig' kennzeichnen
+show_correct_icon_info#:#Wenn aktiviert, wird das Feedback grün unterlegt dargestellt und mit einem Häkchen als 'richtig' markiert.
+show_wrong_icon#:#Feedback visuell als 'falsch' kennzeichnen
+show_wrong_icon_info#:#Wenn aktiviert, wird das Feedback rot unterlegt dargestellt und durch ein Kreuz als 'falsch' markiert.
 no_text_warning#:#Sie müssen einen Text eingeben

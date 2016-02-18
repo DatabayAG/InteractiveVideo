@@ -108,14 +108,14 @@ status#:#Status
 is_chronologic#:#Show all comments at all times
 is_chronologic_info#:#If this option is activated, all comments for the video will be shown in chronological order at all times.
 time_end#:#End Time
-show_response_frequency#:#Show Response Frequency
-show_response_frequency_info#:#Show Response Frequency Info
+show_response_frequency#:#Show response frequencies after question is answered
+show_response_frequency_info#:#The response frequencies of all answering options are shown as percentages beneath each answering option after the question has been answered.
 type#:#Type
 title_of_question#:#Questiontitle
 endtime_warning#:#The endtime you selected is smaller than the actual time
 screen_info#:#Use this screen to create and manage questions and comments. Caution: Interactive questions will NOT be shown on this screen. In order to see them during playback, go to the tab "Content".
-show_correct_icon#:#Show Correct Icon
-show_correct_icon_info#:#Displays Icon for correct answer
-show_wrong_icon#:#Show Wrong Icon
-show_correct_icon_info#:#Displays Icon for wrong answer
+show_correct_icon#:#Mark feedback visually as 'correct answer'
+show_correct_icon_info#:#If activated, the feedback will be displayed with a green background and an icon for 'correct answer'
+show_wrong_icon#:#Mark feedback visually as 'wrong answer'
+show_wrong_icon_info#:#If activated, the feedback will be displayed with a red background and an icon for 'wrong answer'
 no_text_warning#:#You have to enter a text

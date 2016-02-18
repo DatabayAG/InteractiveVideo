@@ -564,7 +564,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		// Feedback correct
 		$feedback_correct = new ilTextAreaInputGUI($this->plugin->txt('feedback_correct'), 'feedback_correct');
 		$show_correct_icon = new ilCheckboxInputGUI($this->plugin->txt('show_correct_icon'), 'show_correct_icon');
-		$show_correct_icon->setInfo($this->plugin->txt('show_correct_icon'));
+		$show_correct_icon->setInfo($this->plugin->txt('show_correct_icon_info'));
 		$show_correct_icon->setChecked(true);
 		
 		
@@ -588,7 +588,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		// Feedback wrong
 		$feedback_one_wrong = new ilTextAreaInputGUI($this->plugin->txt('feedback_one_wrong'), 'feedback_one_wrong');
 		$show_wrong_icon = new ilCheckboxInputGUI($this->plugin->txt('show_wrong_icon'), 'show_wrong_icon');
-		$show_wrong_icon->setInfo($this->plugin->txt('show_wrong_icon'));
+		$show_wrong_icon->setInfo($this->plugin->txt('show_wrong_icon_info'));
 		$show_wrong_icon->setChecked(true);
 		
 		$feedback_one_wrong->addSubItem($show_wrong_icon);
