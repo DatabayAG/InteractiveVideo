@@ -517,7 +517,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$form->addItem($time);
 
-		$time_end = new ilTimeInputGUI($this->plugin->txt('time_end'), 'comment_time_end');
+		/*$time_end = new ilTimeInputGUI($this->plugin->txt('time_end'), 'comment_time_end');
 		$time_end->setShowTime(true);
 		$time_end->setShowSeconds(true);
 
@@ -527,7 +527,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$time_end->setValueByArray(array('comment_time_end' => (int)$seconds));
 		}
 		$form->addItem($time_end);
-
+		*/
 		$repeat_question = new ilCheckboxInputGUI($this->plugin->txt('repeat_question'), 'repeat_question');
 		$repeat_question->setInfo($this->plugin->txt('repeat_question_info'));
 		$form->addItem($repeat_question);
