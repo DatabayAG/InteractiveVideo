@@ -1,8 +1,17 @@
-<nav class="ilToolbar navbar navbar-default" role="navigation">
-	<div class="collapse navbar-collapse" id="tb-collapse-2">
-		<ul class="ilToolbarItems nav navbar-nav ilFloatRight">
-			<li>
-				<div class="navbar-form">
+<nav class="ilToolbar navbar navbar-default yamm " role="navigation" id="2">
+	<div class="container-fluid interativeVideoNavHeader">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#tb-collapse-2">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+		<div class="collapse navbar-collapse ilFloatRight" id="tb-collapse-2">
+			<ul class="ilToolbarItems nav navbar-nav">
+				<li>
 					<div class="dropdown">
 						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuInteraktiveVideo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 							{AUTHOR_FILTER}
@@ -10,17 +19,15 @@
 						</button>
 						<ul id="dropdownMenuInteraktiveList" class="dropdown-menu" aria-labelledby="dropdownMenuInteraktiveVideo"></ul>
 					</div>
-				</div>
-			</li>
-			<li>
-				<div class="navbar-form">
+				</li>
+				<li>
 					<label>
 						{SHOW_ALL_COMMENTS}
 					</label>
-						<input id="show_all_comments" type="checkbox">
-				</div>
-			</li>
-		</ul>
+					<input id="show_all_comments" type="checkbox">
+				</li>
+			</ul>
+		</div>
 	</div>
 </nav>
 <div class="row">
