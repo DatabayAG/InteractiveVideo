@@ -272,7 +272,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.setCorrectAttributeForTimeInCommentAfterPosting = function (id, time)
 	{
-		var i ;
+		var i;
 		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 		{
 			if (scope.InteractiveVideo.comments[i].comment_id === id)

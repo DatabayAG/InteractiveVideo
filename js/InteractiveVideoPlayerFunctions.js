@@ -121,7 +121,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pro.addAjaxFunctionForCommentPosting = function()
 	{
 		$("#ilInteractiveVideoCommentSubmit").on("click", function(e) {
-			var tmp_obj, h, m, s;
+			var tmp_obj, h, m, s, fake_id;
 			if( $('#comment_time_end').prop( "checked" ))
 			{
 				h = $('#comment_time_end\\[time\\]_h').val();
@@ -140,9 +140,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				}
 			}
 
-			tmp_obj =
+			fake_id = parseInt(Math.random() * 10000000, 10);
+			tmp_obj = 
 			{
-				'comment_id' : '0',
+				'comment_id' : fake_id,
 				'comment_time': scope.InteractiveVideoPlayerAbstract.currentTime(),
 				'comment_text': $('#comment_text').val(),
 				'comment_time_end_h': h,
