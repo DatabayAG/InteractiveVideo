@@ -1022,7 +1022,21 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		else
 		{
-			$question->setVariable('JSON', json_encode(array()));
+			$answers = array();
+			if(array_key_exists('answer', $_POST) && sizeof($_POST['answer'] > 0))
+			{
+				$post_answers = ilUtil::stripSlashesRecursive($_POST['answer']);
+				foreach($post_answers as $key => $value)
+				{
+					$correct = 0;
+					if(array_key_exists($key, $_POST['correct']))
+					{
+						$correct = 1;
+					}
+					array_push($answers, array('answer' => $value, 'correct' => $correct));
+				}
+			}
+			$question->setVariable('JSON', json_encode($answers));
 			$question->setVariable('QUESTION_TYPE', 0);
 			$question->setVariable('QUESTION_TEXT', '');
 		}
