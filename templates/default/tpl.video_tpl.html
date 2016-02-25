@@ -1,3 +1,35 @@
+<nav class="ilToolbar navbar navbar-default yamm " role="navigation" id="2">
+	<div class="container-fluid interativeVideoNavHeader">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#tb-collapse-2">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+		<div class="collapse navbar-collapse ilFloatRight" id="tb-collapse-2">
+			<ul class="ilToolbarItems nav navbar-nav">
+				<li>
+					<div class="dropdown">
+						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuInteraktiveVideo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							{AUTHOR_FILTER}
+							<span class="caret"></span>
+						</button>
+						<ul id="dropdownMenuInteraktiveList" class="dropdown-menu" aria-labelledby="dropdownMenuInteraktiveVideo"></ul>
+					</div>
+				</li>
+				<li>
+					<label>
+						{SHOW_ALL_COMMENTS}
+					</label>
+					<input id="show_all_comments" type="checkbox">
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
 <div class="row">
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 		<div id="ilInteractiveVideoPlayerContainer">
@@ -11,9 +43,26 @@
 				<div class="col-sm-9">
 					<textarea id="comment_text" class="form-control noRTEditor" rows="" wrap="virtual" name="comment_text"></textarea>
 					<input type="hidden" name="comment_time" id="comment_time" value="">
+					<div class="ilNoDisplay alert alert-warning" id="no_text_warning">{TXT_NO_TEXT_WARNING}</div>
 				</div>
 				<div class="col-sm-9">
 					<input type="checkbox" name="is_private" value="1" id="is_private"/> {TXT_IS_PRIVATE}
+				</div>
+				<div class="col-sm-9">
+					<div class="ilNoDisplay alert alert-warning" id="endtime_warning">{TXT_ENDTIME_WARNING}</div>
+					<input type="checkbox" name="comment_time_end" value="1" id="comment_time_end"/> {COMMENT_TIME_END}
+						<div class="form-inline end_time_selector" style="display:none">
+							<select name="comment_time_end[time][h]" id="comment_time_end[time]_h" class="form-control">
+								<option value="00" selected="selected">00</option>
+							</select>
+							<select name="comment_time_end[time][m]" id="comment_time_end[time]_m" class="form-control">
+								<option value="00" selected="selected">00</option>
+							</select>
+							<select name="comment_time_end[time][s]" id="comment_time_end[time]_s" class="form-control">
+								<option value="00" selected="selected">00</option>
+							</select>
+							<div class="help-block">(HH:MM:SS)</div>
+					</div>
 				</div>
 			</div>
 			<div class="ilFormFooter clearfix">
@@ -35,43 +84,6 @@
 			</ul>
 		</div>
 	</div>
-	<script type="text/javascript">
-		var question_get_url 	= "{QUESTION_GET_URL}";
-		var question_post_url 	= "{QUESTION_POST_URL}";
-		var post_comment_url 	= "{POST_COMMENT_URL}";
-		var send_text			= "{SEND_BUTTON}";
-		var close_text			= "{CLOSE_BUTTON}";
-		var feedback_button_text= "{FEEDBACK_JUMP_TEXT}";
-		var learning_recommendation_text= "{LEARNING_RECOMMENDATION_TEXT}";
-		var answered_text	    = "{ALREADY_ANSWERED_TEXT}";
-		var question_text	    = "{QUESTION_TEXT}";
-		var private_text	   	= "{PRIVATE_TEXT}";
-		var comments 			= {COMMENTS};
-		var stopPoints 			= {STOP_POINTS};
-		var ignore_questions	= {IGNORE_QUESTIONS};
-		var username			= "{USERNAME}";
-		var seekTime			= 0;
-		var InteractiveVideo 	= 
-		{
-			auto_resume						: false,
-			pause_on_click_in_comment_field	: true,
-			iv_debug						: false,
-			last_stopPoint 					: -1,
-			last_time						: 0
-		};
-				
-		$.fn.debugPrinter = function (message, element)
-		{
-			if( InteractiveVideo.iv_debug )
-			{
-				console.log(message + ': ');
-				console.log(element);
-			}
-		};
-//		$().debugPrinter('Comments', comments);
-//		$().debugPrinter('stopPoints', stopPoints);
-		
-	</script>
 </div>
-</div>
+{CONFIG}
 {MODAL_OVERLAY}

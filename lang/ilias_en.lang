@@ -10,18 +10,22 @@ xvid_write#:#User can edit Interactive Video
 xvid_delete#:#User can move or delete Interactive Video
 xvid_edit_permission#:#User can change permission settings
 xvid_visible#:#Interactive Video is visible
+reset#:#Reset
 crs_create_xvid#:#Create Interactive Video
 grp_create_xvid#:#Create Interactive Video
 fold_create_xvid#:#Create Interactive Video
 root_create_xvid#:#Create Interactive Video
 cat_create_xvid#:#Create Interactive Video
 interactive#:#Interactive
+questions_comments_sub_tab#:#Edit
 tutor#:#Tutor
 questions_comments#:#Questions and Comments
 sure_delete_comments#:#Are you sure you want to delete the selected comments?
 video_file#:#Video
 comment#:#Comment
 comments#:#Comments
+switch_on#:#On
+switch_off#:#Off
 post#:#Post
 cancel#:#Cancel
 sure_delete_comment#:#Are you sure, you want to delete the selected comments?
@@ -29,7 +33,8 @@ missing_comment_text#:#Please enter a comment.
 missing_stopping_point#:#The stopping point was not trasnferred to the server. Please try again.
 invalid_comment_ids#:#Some comments could not be found.
 comments_successfully_deleted#:#The selected comments were deleted successfully.
-insert_comment#:#Insert new question / new comment
+show_all_comments#:#Show all Comments:
+author_filter#:#Filter by author
 edit_comment#:#Edit comment
 correct_solution#:#Correct
 add_question#:#Add Question
@@ -100,3 +105,17 @@ is_repeat#:#Skip correctly answered questions
 is_repeat_info#:#If this option is activated, questions that have already been answered correctly will be skipped during playback.
 offline#:#Offline
 status#:#Status
+is_chronologic#:#Show all comments at all times
+is_chronologic_info#:#If this option is activated, all comments for the video will be shown in chronological order at all times.
+time_end#:#End Time
+show_response_frequency#:#Show response frequencies after question is answered
+show_response_frequency_info#:#The response frequencies of all answering options are shown as percentages beneath each answering option after the question has been answered.
+type#:#Type
+title_of_question#:#Questiontitle
+endtime_warning#:#The endtime you selected is smaller than the actual time
+screen_info#:#Use this screen to create and manage questions and comments. Caution: Interactive questions will NOT be shown on this screen. In order to see them during playback, go to the tab "Content".
+show_correct_icon#:#Mark feedback visually as 'correct answer'
+show_correct_icon_info#:#If activated, the feedback will be displayed with a green background and an icon for 'correct answer'
+show_wrong_icon#:#Mark feedback visually as 'wrong answer'
+show_wrong_icon_info#:#If activated, the feedback will be displayed with a red background and an icon for 'wrong answer'
+no_text_warning#:#You have to enter a text

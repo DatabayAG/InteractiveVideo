@@ -1,5 +1,6 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
+require_once 'Services/User/classes/class.ilUserUtil.php';
 
 /**
  * Class ilObjComment
@@ -31,6 +32,11 @@ class ilObjComment
 	 * @var float $comment_time in seconds
 	 */
 	protected $comment_time = 0;
+
+	/**
+	 * @var float $comment_time in seconds
+	 */
+	protected $comment_time_end = 0;
 
 	/**
 	 * @var string
@@ -96,6 +102,7 @@ class ilObjComment
 
 		$this->setCommentText($row['comment_text']);
 		$this->setCommentTime($row['comment_time']);
+		$this->setCommentTimeEnd($row['comment_time_end']);
 		$this->setInteractive((bool)$row['is_interactive']);
 		$this->setIsTutor((bool)$row['is_tutor']);
 		$this->setUserId($row['user_id']);
@@ -116,17 +123,18 @@ class ilObjComment
 		$this->setCommentId($next_id);
 		$ilDB->insert('rep_robj_xvid_comments',
 			array(
-				'comment_id'     => array('integer', $next_id),
-				'obj_id'         => array('integer', $this->getObjId()),
-				'user_id'        => array('integer', $ilUser->getId()),
-				'is_tutor'       => array('integer', (int)$this->isTutor()),
-				'is_interactive' => array('integer', (int)$this->isInteractive()),
+				'comment_id'     	=> array('integer', $next_id),
+				'obj_id'         	=> array('integer', $this->getObjId()),
+				'user_id'        	=> array('integer', $ilUser->getId()),
+				'is_tutor'       	=> array('integer', (int)$this->isTutor()),
+				'is_interactive' 	=> array('integer', (int)$this->isInteractive()),
 				// @todo: Change rounding and database type in case we should store milli seconds
-				'comment_time'   => array('integer', round($this->getCommentTime(), 0)),
-				'comment_text'   => array('text', $this->getCommentText()),
-				'comment_title'	=> array('text', $this->getCommentTitle()),
-				'comment_tags'	=> array('text', $this->getCommentTags()),
-				'is_private'	=> array('integer', $this->getIsPrivate())
+				'comment_time'   	=> array('integer', round($this->getCommentTime(), 0)),
+				'comment_time_end'  => array('integer', round($this->getCommentTimeEnd(), 2)),
+				'comment_text'   	=> array('text', $this->getCommentText()),
+				'comment_title'		=> array('text', $this->getCommentTitle()),
+				'comment_tags'		=> array('text', $this->getCommentTags()),
+				'is_private'		=> array('integer', $this->getIsPrivate())
 			));
 		if($return_next_id)
 		{
@@ -144,14 +152,15 @@ class ilObjComment
 
 		$ilDB->update('rep_robj_xvid_comments',
 			array(
-				'is_interactive' => array('integer', (int)$this->isInteractive()),
-				'user_id'        => array('integer', $ilUser->getId()),
+				'is_interactive' 	=> array('integer', (int)$this->isInteractive()),
+				'user_id'        	=> array('integer', $ilUser->getId()),
 				// @todo: Change rounding and database type in case we should store milli seconds
-				'comment_time'   => array('integer', round($this->getCommentTime(), 2)),
-				'comment_text'   => array('text', $this->getCommentText()),
-				'comment_title'	=> array('text', $this->getCommentTitle()),
-				'comment_tags'	=> array('text', $this->getCommentTags()),
-				'is_private'	=> array('integer', $this->getIsPrivate())
+				'comment_time'   	=> array('integer', round($this->getCommentTime(), 2)),
+				'comment_time_end'  => array('integer', round($this->getCommentTimeEnd(), 2)),
+				'comment_text'   	=> array('text', $this->getCommentText()),
+				'comment_title'		=> array('text', $this->getCommentTitle()),
+				'comment_tags'		=> array('text', $this->getCommentTags()),
+				'is_private'		=> array('integer', $this->getIsPrivate())
 			),
 			array(
 				'comment_id' => array('integer', $this->getCommentId())
@@ -223,7 +232,7 @@ class ilObjComment
 		}
 		
 		$res = $ilDB->queryF(
-			'SELECT comment_id, user_id, comment_text, comment_time, is_interactive, comment_title, comment_tags, obj_id, is_private
+			'SELECT comment_id, user_id, comment_text, comment_time, comment_time_end, is_interactive, comment_title, comment_tags, obj_id, is_private
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s 
 			AND ( is_private = %s OR (is_private = %s AND user_id = %s))'.
@@ -243,12 +252,13 @@ class ilObjComment
 			{
 				$comments[$i]['user_name'] = self::lookupUsername($row['user_id']);
 			}
-			$comments[$i]['comment_title'] = $row['comment_title'];
-			$comments[$i]['comment_text'] = $row['comment_text'];
-			$comments[$i]['comment_time'] = $row['comment_time'];
-			$comments[$i]['comment_tags'] = $row['comment_tags'];
-			$comments[$i]['is_interactive'] = $row['is_interactive'];
-			$comments[$i]['is_private'] = $row['is_private'];
+			$comments[$i]['comment_title'] 		= $row['comment_title'];
+			$comments[$i]['comment_text'] 		= $row['comment_text'];
+			$comments[$i]['comment_time'] 		= $row['comment_time'];
+			$comments[$i]['comment_time_end'] 	= $row['comment_time_end'];
+			$comments[$i]['comment_tags'] 		= $row['comment_tags'];
+			$comments[$i]['is_interactive'] 	= $row['is_interactive'];
+			$comments[$i]['is_private'] 		= $row['is_private'];
 
 			$i++;
 		}
@@ -256,15 +266,15 @@ class ilObjComment
 		return $comments;
 	}
 
+/*	To Be removed since no usage here
+
 	public function getAllComments()
 	{
-		/**
-		 * @var $ilDB ilDB
-		 */
+
 		global $ilDB, $ilUser;
 
 		$res = $ilDB->queryF(
-			'SELECT comment_id, user_id, comment_text, comment_time, is_interactive, is_private
+			'SELECT comment_id, user_id, comment_text, comment_time, comment_time_end, is_interactive, is_private
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s
 			AND ( is_private = %s OR (is_private = %s AND user_id = %s))
@@ -277,18 +287,19 @@ class ilObjComment
 		$i = 0;
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$comments[$i]['comment_id'] = $row['comment_id'];
-			$comments[$i]['user_name'] = self::lookupUsername($row['user_id']);
-			$comments[$i]['comment_text'] = $row['comment_text'];
-			$comments[$i]['comment_time'] = $row['comment_time'];
-			$comments[$i]['is_interactive'] = $row['is_interactive'];
-			$comments[$i]['is_private'] = $row['is_private'];
+			$comments[$i]['comment_id'] 		= $row['comment_id'];
+			$comments[$i]['user_name'] 			= self::lookupUsername($row['user_id']);
+			$comments[$i]['comment_text'] 		= $row['comment_text'];
+			$comments[$i]['comment_time'] 		= $row['comment_time'];
+			$comments[$i]['comment_time_end'] 	= $row['comment_time_end'];
+			$comments[$i]['is_interactive'] 	= $row['is_interactive'];
+			$comments[$i]['is_private'] 		= $row['is_private'];
 			
 			$i++;
 		}
 
 		return $comments;
-	}
+	}*/
 
 	public function cloneTutorComments($old_id, $new_id)
 	{
@@ -308,6 +319,7 @@ class ilObjComment
 			$this->setObjId($new_id);
 			$this->setCommentText($row['comment_text']);
 			$this->setCommentTime($row['comment_time']);
+			$this->setCommentTimeEnd($row['comment_time_end']);
 			$this->setInteractive((bool)$row['is_interactive']);
 			$this->setIsTutor((bool)$row['is_tutor']);
 			$this->setUserId($row['user_id']);
@@ -335,7 +347,7 @@ class ilObjComment
 	{
 		if(!array_key_exists($user_id, self::$user_name_cache))
 		{
-			self::$user_name_cache[$user_id] = ilObjUser::_lookupLogin($user_id);
+			self::$user_name_cache[$user_id] = ilUserUtil::getNamePresentation($user_id);
 		}
 
 		return self::$user_name_cache[$user_id];
@@ -554,4 +566,19 @@ class ilObjComment
 		$this->is_repeat = $is_repeat;
 	}
 
+	/**
+	 * @return float
+	 */
+	public function getCommentTimeEnd()
+	{
+		return $this->comment_time_end;
+	}
+
+	/**
+	 * @param float $comment_time_end
+	 */
+	public function setCommentTimeEnd($comment_time_end)
+	{
+		$this->comment_time_end = $comment_time_end;
+	}
 }

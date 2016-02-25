@@ -65,6 +65,16 @@ class SimpleChoiceQuestion
 	/**
 	 * @var int
 	 */
+	protected $show_correct_icon = 1;
+
+	/**
+	 * @var int
+	 */
+	protected $show_wrong_icon = 1;
+
+	/**
+	 * @var int
+	 */
 	protected $jump_correct_ts = 0;
 
 	/**
@@ -81,7 +91,12 @@ class SimpleChoiceQuestion
 	 * @var int
 	 */
 	protected $repeat_question = 0;
-
+	
+	/**
+	 * @var int
+	 */
+	protected $show_response_frequency = 0;
+	
 	/**
 	 * @param int $comment_id
 	 */
@@ -118,9 +133,12 @@ class SimpleChoiceQuestion
 			$this->setFeedbackOneWrong($row['feedback_one_wrong']);
 			$this->setLimitAttempts($row['limit_attempts']);
 			$this->setIsJumpCorrect($row['is_jump_correct']);
+			$this->setShowCorrectIcon($row['show_correct_icon']);
 			$this->setJumpCorrectTs($row['jump_correct_ts']);
 			$this->setIsJumpWrong($row['is_jump_wrong']);
+			$this->setShowWrongIcon($row['show_wrong_icon']);
 			$this->setJumpWrongTs($row['jump_wrong_ts']);
+			$this->setShowResponseFrequency($row['show_response_frequency']);
 			$this->setRepeatQuestion($row['repeat_question']);
 		}
 
@@ -167,10 +185,13 @@ class SimpleChoiceQuestion
 				'feedback_correct'   => array('text', $this->getFeedbackCorrect()),
 				'feedback_one_wrong' => array('text', $this->getFeedbackOneWrong()),
 				'limit_attempts'     => array('integer', $this->getLimitAttempts()),
+				'show_correct_icon'  => array('integer', $this->getShowCorrectIcon()),
 				'is_jump_correct'    => array('integer', $this->getIsJumpCorrect()),
 				'jump_correct_ts'    => array('integer', $this->getJumpCorrectTs()),
+				'show_wrong_icon'    => array('integer', $this->getShowWrongIcon()),
 				'is_jump_wrong'      => array('integer', $this->getIsJumpWrong()),
 				'jump_wrong_ts'      => array('integer', $this->getJumpWrongTs()),
+				'show_response_frequency' => array('integer', $this->getShowResponseFrequency()),
 				'repeat_question'    => array('integer', $this->getRepeatQuestion())
 			));
 		if(count($_POST['answer']) > 0 && $_POST['question_type'] != self::REFLECTION)
@@ -244,8 +265,11 @@ class SimpleChoiceQuestion
 			$this->setLimitAttempts($row['limit_attempts']);
 			$this->setIsJumpCorrect($row['is_jump_correct']);
 			$this->setJumpCorrectTs($row['jump_correct_ts']);
+			$this->setShowCorrectIcon($row['show_correct_icon']);
 			$this->setIsJumpWrong($row['is_jump_wrong']);
+			$this->setShowWrongIcon($row['show_wrong_icon']);
 			$this->setJumpWrongTs($row['jump_wrong_ts']);
+			$this->setShowResponseFrequency($row['show_response_frequency']);
 			$this->setRepeatQuestion($row['repeat_question']);
 			$_POST['question_type'] = $row['type'];
 			$this->create();
@@ -893,6 +917,22 @@ class SimpleChoiceQuestion
 	}
 
 	/**
+	 * @return int
+	 */
+	public function getShowCorrectIcon()
+	{
+		return $this->show_correct_icon;
+	}
+
+	/**
+	 * @param int $show_correct_icon
+	 */
+	public function setShowCorrectIcon($show_correct_icon)
+	{
+		$this->show_correct_icon = $show_correct_icon;
+	}
+
+	/**
 	 * @param string $feedback_correct
 	 */
 	public function setFeedbackCorrect($feedback_correct)
@@ -919,6 +959,22 @@ class SimpleChoiceQuestion
 	/**
 	 * @return int
 	 */
+	public function getShowWrongIcon()
+	{
+		return $this->show_wrong_icon;
+	}
+
+	/**
+	 * @param int $show_wrong_icon
+	 */
+	public function setShowWrongIcon($show_wrong_icon)
+	{
+		$this->show_wrong_icon = $show_wrong_icon;
+	}
+
+	/**
+	 * @return int
+	 */
 	public function getRepeatQuestion()
 	{
 		return $this->repeat_question;
@@ -931,5 +987,22 @@ class SimpleChoiceQuestion
 	{
 		$this->repeat_question = $repeat_question;
 	}
+
+	/**
+	 * @return int
+	 */
+	public function getShowResponseFrequency()
+	{
+		return $this->show_response_frequency;
+	}
+
+	/**
+	 * @param int $show_response_frequency
+	 */
+	public function setShowResponseFrequency($show_response_frequency)
+	{
+		$this->show_response_frequency = $show_response_frequency;
+	}
+
 
 } 

@@ -10,6 +10,9 @@ xvid_write#:#Interaktives Video bearbeiten
 xvid_delete#:#Interaktives Video löschen
 xvid_edit_permission#:#Rechteeinstellungen ändern
 xvid_visible#:#Interaktives Video ist sichtbar
+reset#:#Zurücksetzen
+show_all_comments#:#Alle Kommentare anzeigen: 
+author_filter#:#Autorenfilter
 crs_create_xvid#:#Neues Interaktives Video anlegen
 grp_create_xvid#:#Neues Interaktives Video anlegen
 fold_create_xvid#:#Neues Interaktives Video anlegen
@@ -18,6 +21,7 @@ cat_create_xvid#:#Neues Interaktives Video anlegen
 interactive#:#Interaktive
 tutor#:#Tutor
 questions_comments#:#Fragen und Kommentare
+questions_comments_sub_tab#:#Verwalten
 sure_delete_comments#:#Sind Sie sicher, dass die selektierten Commentare gelöscht werden sollen?
 video_file#:#Video
 comment#:#Kommentar
@@ -32,6 +36,8 @@ comments_successfully_deleted#:#Die gewählten Kommentare wurden erfolgreich gel
 insert_comment#:#Neue Frage / Neuen Kommentar einfügen
 edit_comment#:#Kommentar bearbeiten
 user#:#Benutzer
+switch_on#:#An
+switch_off#:#Aus
 correct#:#Richtig
 correct_solution#:#Richtige Lösung
 add_question#:#Frage hinzufügen
@@ -97,3 +103,18 @@ is_repeat#:#Korrekt beantwortete Fragen überspringen
 is_repeat_info#:#Wenn diese Option aktiviert ist, werden bereits korrekt beantwortete Fragen beim Abspielen übersprungen.
 offline#:#Offline
 status#:#Status
+is_chronologic#:#Alle Kommentare von Beginn an zeigen
+is_chronologic_info#:#Wenn diese Option aktiviert wird, wird die Option 'Alle Kommentare' vorausgewählt und es werden alle Kommentare des gesamten Videos von Beginn an in chronologischer Re
+ihenfolge angezeigt.
+time_end#:#Ende der Passage
+show_response_frequency#:#Zeige Antworthäufigkeiten nach dem Antworten an
+show_response_frequency_info#:#Nachdem die Frage beantwortet wurde, wird unter jeder Antwortoption die relative Häufigkeit in Prozent angezeigt
+type#:#Typ
+title_of_question#:#Titel der Frage
+endtime_warning#:#Das Ende der Passage darf nicht kleiner sein als die aktuelle Zeit im Video
+screen_info#:#Diese Ansicht dient zum Erstellen und Verwalten von Fragen und Kommentaren. Achtung: Interaktive Fragen werden hier NICHT beim Abspielen des Videos angezeigt, wechseln Sie zum Reiter "Inhalt" um die Fragen während des Abspielvorganges eingeblendet zu bekommen.
+show_correct_icon#:#Feedback visuell als 'richtig' kennzeichnen
+show_correct_icon_info#:#Wenn aktiviert, wird das Feedback grün unterlegt dargestellt und mit einem Häkchen als 'richtig' markiert.
+show_wrong_icon#:#Feedback visuell als 'falsch' kennzeichnen
+show_wrong_icon_info#:#Wenn aktiviert, wird das Feedback rot unterlegt dargestellt und durch ein Kreuz als 'falsch' markiert.
+no_text_warning#:#Sie müssen einen Text eingeben

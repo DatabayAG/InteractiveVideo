@@ -37,7 +37,7 @@ class SimpleChoiceQuestionsOverviewTableGUI extends ilTable2GUI
 		$this->setRowTemplate('tpl.row_questions.html', $a_parent_obj->plugin->getDirectory());
 
 		$this->addColumn('', 'question_id');
-		$this->addColumn($a_parent_obj->plugin->txt('comment_title'), 'comment_title');
+		$this->addColumn($a_parent_obj->plugin->txt('title_of_question'), 'title_of_question');
 		$this->addColumn($a_parent_obj->plugin->txt('user_answered'), 'user_answered');
 		$this->addColumn($a_parent_obj->plugin->txt('user_correct'), 'user_correct');
 		$this->addColumn($a_parent_obj->plugin->txt('percentage'), 'percentage');

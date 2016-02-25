@@ -31,6 +31,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	 * @var int
 	 */
 	protected $is_repeat = 0;
+
+	/**
+	 * @var int
+	 */
+	protected $is_chronologic = 0;
 	/**
 	 * @var int
 	 */
@@ -58,6 +63,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$this->setIsRepeat($row['is_repeat']);
 		$this->setIsPublic($row['is_public']);
 		$this->setOnline((bool)$row['is_online']);
+		$this->setIsChronologic($row['is_chronologic']);
 
 		parent::doRead();
 	}
@@ -138,6 +144,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 			array(	'is_anonymized' => array('integer', $this->isAnonymized()), 
 				  	'is_repeat' =>array('integer', $this->isRepeat()),
 				  	'is_public' =>array('integer', $this->isPublic()),
+					'is_chronologic' =>array('integer', $this->isChronologic()),
 					'is_online' => array('integer', $this->isOnline())
 					),
 			array('obj_id' => array('integer', $this->getId())));
@@ -197,6 +204,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 				'mob_id'        => array('integer', $new_mob->getId()),
 				'is_anonymized' => array('integer', $this->isAnonymized()),
 				'is_repeat' => array('integer', $this->isRepeat()),
+				'is_chronologic' => array('integer', $this->isChronologic()),
 				'is_public'     => array('integer', $this->isPublic())
 			)
 		);
@@ -272,12 +280,14 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$table_data = array();
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$table_data[$counter]['comment_id']     = $row['comment_id'];
-			$table_data[$counter]['comment_time']   = $row['comment_time'];
-			$table_data[$counter]['user_id']        = $row['user_id'];
-			$table_data[$counter]['comment_text']   = $row['comment_text'];
-			$table_data[$counter]['is_tutor']       = $row['is_tutor'];
-			$table_data[$counter]['is_interactive'] = $row['is_interactive'];
+			$table_data[$counter]['comment_id']			= $row['comment_id'];
+			$table_data[$counter]['comment_time']		= $row['comment_time'];
+			$table_data[$counter]['comment_time_end']	= $row['comment_time_end'];
+			$table_data[$counter]['user_id']			= $row['user_id'];
+			$table_data[$counter]['title']				= $row['comment_title'];
+			$table_data[$counter]['comment_text']		= $row['comment_text'];
+			$table_data[$counter]['is_tutor']			= $row['is_tutor'];
+			$table_data[$counter]['is_interactive']		= $row['is_interactive'];
 			$counter++;
 		}
 
@@ -305,11 +315,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$table_data = array();
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$table_data[$counter]['comment_id']     = $row['comment_id'];
-			$table_data[$counter]['comment_time']   = $row['comment_time'];
-			$table_data[$counter]['user_id']        = $row['user_id'];
-			$table_data[$counter]['comment_text']   = $row['comment_text'];
-			$table_data[$counter]['is_private'] 	= $row['is_private'];
+			$table_data[$counter]['comment_id']			= $row['comment_id'];
+			$table_data[$counter]['comment_time']		= $row['comment_time'];
+			$table_data[$counter]['comment_time_end']	= $row['comment_time_end'];
+		//	$table_data[$counter]['user_id']			= $row['user_id'];
+			$table_data[$counter]['comment_text']		= $row['comment_text'];
+			$table_data[$counter]['is_private']			= $row['is_private'];
 //			$table_data[$counter]['is_tutor']       = $row['is_tutor'];
 //			$table_data[$counter]['is_interactive'] = $row['is_interactive'];
 			$counter++;
@@ -490,6 +501,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 				'mob_id'        => array('integer', $this->getMobId()),
 				'is_anonymized' => array('integer', (int) $_POST['is_anonymized']),
 				'is_repeat' 	=> array('integer', (int) $_POST['is_repeat']),
+				'is_chronologic'=> array('integer', (int) $_POST['is_chronologic']),
 				'is_public'     => array('integer', (int) $_POST['is_public'])
 			)
 		);
@@ -543,6 +555,22 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	public function setIsRepeat($is_repeat)
 	{
 		$this->is_repeat = $is_repeat;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function isChronologic()
+	{
+		return $this->is_chronologic;
+	}
+
+	/**
+	 * @param int $is_chronologic
+	 */
+	public function setIsChronologic($is_chronologic)
+	{
+		$this->is_chronologic = $is_chronologic;
 	}
 
 	/**

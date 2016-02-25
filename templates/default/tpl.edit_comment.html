@@ -1,4 +1,5 @@
 <div class="row">
+	<div class="col-xs-12 alert alert-info"><div>{SCREEN_INFO}</div></div>
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 		<div id="ilInteractiveVideoPlayerContainer">
 			<video controls="controls" id="ilInteractiveVideo">
@@ -24,33 +25,19 @@
 		</div>
 	</div>
 	
-	<!--<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">-->
-		<!--<div id="ilInteractiveVideoComments" class="scroll-text">-->
-			<!--<ul id="ul_scroll">-->
-			<!--</ul>-->
-		<!--</div>-->
-	<!--</div>-->
-
-	<script type="text/javascript">
-
-//		var question_get_url 	= "{QUESTION_GET_URL}";
-//		var question_post_url 	= "{QUESTION_POST_URL}";
-//		var post_comment_url 	= "{POST_COMMENT_URL}";
-		var comments 			= {COMMENTS};
-		var stopPoints 			= {STOP_POINTS};
-		var seekTime			= {CURRENT_TIME};
-		var InteractiveVideo 	=
-		{
-			auto_resume	: false,
-			pause_on_click_in_comment_field	: true,
-			iv_debug	: false
-		};
-		var IVQuestionCreator = { JSON : [], type : null};
-		
-		$.fn.debugPrinter = function (){};
-	</script>
 </div>
-</div>
+{CONFIG}
+
+<script type="text/javascript">
+	$("#ilInteractiveVideoTutorCommentSubmit").on("click", function(e) {
+		$('#comment_time').val(il.InteractiveVideoPlayerAbstract.currentTime());
+	});
+
+	$("#ilInteractiveVideoTutorQuestionSubmit").on("click", function(e) {
+		$('#comment_time').val(il.InteractiveVideoPlayerAbstract.currentTime());
+	});
+
+</script>
 {MODAL_OVERLAY}
 
 <div class="col-sm-12">&nbsp;</div>
