@@ -90,6 +90,17 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		pro.addDropDownEvent();
 	};
 
+	pro.addHighlightToCommentWithoutEndTime = function(comment)
+	{
+		var time_end = parseInt(comment.comment_time_end, 10);
+		if(time_end === 0 || time_end === null) 
+		{
+			$('.list_item_' + comment.comment_id).addClass('activeCommentWithoutEndTime');
+			setTimeout(function(){
+				$('.list_item_' + comment.comment_id).removeClass('activeCommentWithoutEndTime');}, il.InteractiveVideo.comment_hightlight_time);
+		}
+	};
+
 	pro.commentsObjectActions = function(i, current_time, player)
 	{
 		var is_interactive = parseInt(scope.InteractiveVideo.comments[i].is_interactive, 10);
@@ -99,7 +110,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		if (scope.InteractiveVideo.comments[i].comment_text != null) 
 		{
 			$("#ul_scroll").prepend(pri.utils.buildListElement(comment, current_time, comment.user_name));
-
+			pro.addHighlightToCommentWithoutEndTime(comment);
 			if (comment.comment_time_end > 0) 
 			{
 				pri.utils.fillCommentsTimeEndBlacklist(comment.comment_time_end, comment.comment_id);
