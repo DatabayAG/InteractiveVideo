@@ -118,3 +118,9 @@ show_correct_icon_info#:#Wenn aktiviert, wird das Feedback grün unterlegt darge
 show_wrong_icon#:#Feedback visuell als 'falsch' kennzeichnen
 show_wrong_icon_info#:#Wenn aktiviert, wird das Feedback rot unterlegt dargestellt und durch ein Kreuz als 'falsch' markiert.
 no_text_warning#:#Sie müssen einen Text eingeben
+grp_create_xvid#:#Interaktives Video anlegen
+crs_create_xvid#:#Interaktives Video anlegen
+cat_create_xvid#:#Interaktives Video anlegen
+root_create_xvid#:#Interaktives Video anlegen
+fold_create_xvid#:#Interaktives Video anlegen
+rbac_create_xvid#:#Interaktives Video anlegen 

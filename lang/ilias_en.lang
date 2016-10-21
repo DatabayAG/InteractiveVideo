@@ -119,3 +119,9 @@ show_correct_icon_info#:#If activated, the feedback will be displayed with a gre
 show_wrong_icon#:#Mark feedback visually as 'wrong answer'
 show_wrong_icon_info#:#If activated, the feedback will be displayed with a red background and an icon for 'wrong answer'
 no_text_warning#:#You have to enter a text
+grp_create_xvid#:#Create Interactive Video
+crs_create_xvid#:#Create Interactive Video
+cat_create_xvid#:#Create Interactive Video
+root_create_xvid#:#Create Interactive Video
+fold_create_xvid#:#Create Interactive Video
+rbac_create_xvid#:#Create Interactive Video 
