@@ -60,7 +60,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function getGUIClass()
 	{
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/class.ilInteractiveVideoMediaObjectGUI.php';
+		require_once dirname(__FILE__) . '/class.ilInteractiveVideoMediaObjectGUI.php';
 		return new ilInteractiveVideoMediaObjectGUI();
 	}
 }

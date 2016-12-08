@@ -6,10 +6,10 @@
 interface ilInteractiveVideoSourceGUI
 {
 	/**
-	 * @param ilPropertyFormGUI $form
-	 * @return ilPropertyFormGUI
+	 * @param ilRadioOption $option
+	 * @return ilRadioOption
 	 */
-	public function getForm($form);
+	public function getForm($option);
 
 	/**
 	 * @param ilPropertyFormGUI $form

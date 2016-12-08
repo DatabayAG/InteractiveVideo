@@ -44,7 +44,7 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 */
 	public function isActivated()
 	{
-		return false;
+		return true;
 	}
 
 	/**
@@ -60,6 +60,7 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 */
 	public function getGUIClass()
 	{
-		
+		require_once dirname(__FILE__) . '/class.ilInteractiveVideoYoutubeGUI.php';
+		return new ilInteractiveVideoYoutubeGUI();
 	}
 }

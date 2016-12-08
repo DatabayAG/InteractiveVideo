@@ -7,15 +7,15 @@ require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/In
 class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 {
 	/**
-	 * @param ilPropertyFormGUI $form
-	 * @return ilPropertyFormGUI
+	 * @param ilRadioOption $option
+	 * @return ilRadioOption
 	 */
-	public function getForm($form)
+	public function getForm($option)
 	{
 		$upload_field = new ilFileInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('video_file'), 'video_file');
 		$upload_field->setSuffixes(array('mp4', 'mov', 'mp3', 'flv', 'm4v', 'ogg', 'ogv', 'webm'));
-		$form->addItem($upload_field);
-		return $form;
+		$option->addSubItem($upload_field);
+		return $option;
 	}
 
 	/**

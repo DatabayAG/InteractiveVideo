@@ -1691,10 +1691,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$form = parent::initCreateForm($type);
 
-		$upload_field = new ilFileInputGUI($this->plugin->txt('video_file'), 'video_file');
-		$upload_field->setSuffixes(array('mp4', 'mov', 'mp3', 'flv', 'm4v', 'ogg', 'ogv', 'webm'));
-		$upload_field->setRequired(true);
-		$form->addItem($upload_field);
+		$form = $this->appendFormsFromFactory($form);
 
 		$anonymized = new ilCheckboxInputGUI($this->plugin->txt('is_anonymized'), 'is_anonymized');
 		$anonymized->setInfo($this->plugin->txt('is_anonymized_info'));
@@ -1729,16 +1726,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('editProperties');
 
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
-		$factory = new ilInteractiveVideoSourceFactory();
-		$sources = $factory->getVideoSources();
-		
-		foreach($sources as $source)
-		{
-			/** @var ilInteractiveVideoSourceGUI $gui */
-			$gui = $source->getGUIClass();
-			$a_form = $gui->getForm($a_form);
-		}
+		$a_form = $this->appendFormsFromFactory($a_form);
 
 		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
 		$a_form->addItem($online);
@@ -1826,6 +1814,32 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->ctrl->setParameterByClass('ilrepositorygui', 'ref_id', (int)$_GET['ref_id']);
 			$this->ctrl->redirectByClass('ilrepositorygui');
 		}
+	}
+
+	/**
+	 * @param ilPropertyFormGUI $a_form
+	 * @return ilPropertyFormGUI
+	 */
+	protected function appendFormsFromFactory(ilPropertyFormGUI $a_form)
+	{
+
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
+		$factory = new ilInteractiveVideoSourceFactory();
+		$sources = $factory->getVideoSources();
+		
+		$item_group = new ilRadioGroupInputGUI($this->plugin->txt('source'), 'source');
+		$a_form->addItem($item_group);
+		foreach($sources as $key => $source)
+		{
+			/** @var ilInteractiveVideoSourceGUI $gui */
+			$op = new ilRadioOption($source->getType(), $key);
+			$gui= $source->getGUIClass();
+			$gui->getForm($op);
+			$item_group->addOption($op);
+		}
+
+		$item_group->setValue($factory->getDefaultVideoSource());
+		return $a_form;
 	}
 
 	/**

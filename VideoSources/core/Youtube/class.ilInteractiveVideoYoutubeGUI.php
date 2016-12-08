@@ -7,12 +7,14 @@ require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/In
 class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 {
 	/**
-	 * @param ilPropertyFormGUI $form
-	 * @return ilPropertyFormGUI
+	 * @param ilRadioOption $option
+	 * @return ilRadioOption
 	 */
-	public function getForm($form)
+	public function getForm($option)
 	{
-		// TODO: Implement getForm() method.
+		$youtube_url = new ilTextInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('youtube_url'), 'youtube_url');
+		$option->addSubItem($youtube_url);
+		return $option;
 	}
 
 	/**

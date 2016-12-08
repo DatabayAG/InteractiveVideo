@@ -92,4 +92,12 @@ class ilInteractiveVideoSourceFactory
 		}
 		return $found_elements;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getDefaultVideoSource()
+	{
+		return 'ilInteractiveVideoMediaObject';
+	}
 }
