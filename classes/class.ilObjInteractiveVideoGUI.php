@@ -218,13 +218,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $this->plugin->getDirectory());
 
-		$mob_id = $this->object->getMobId();
-		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
-		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
-
-		$video_tpl->setVariable('VIDEO_SRC', $mob_dir . '/' . $media_item['location']);
-		$video_tpl->setVariable('VIDEO_TYPE', $media_item['format']);
 		
+
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/class.ilInteractiveVideoYoutubeGUI.php';
+		$object = new ilInteractiveVideoYoutubeGUI();
+		$object->addPlayerElements($tpl);
+
+		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer($this->object)->get());
+
 		$this->objComment = new ilObjComment();
 		$this->objComment->setObjId($this->object->getId());
 		$this->objComment->setIsPublic($this->object->isPublic());
@@ -1191,7 +1192,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->addCss($this->plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.css');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
-		$tpl->addJavaScript($this->plugin->getDirectory() . '/VideoSources/core/MediaObject/js/jquery.InteractiveVideoMediaElementPlayer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerComments.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerFunctions.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstract.js');

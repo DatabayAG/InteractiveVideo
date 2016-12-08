@@ -39,9 +39,15 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	 * @param ilTemplate $tpl
 	 * @return ilTemplate
 	 */
-	public function addPlayer($tpl)
+	public function addPlayerElements($tpl)
 	{
 		// TODO: Implement addPlayer() method.
+	}
+
+	public function getPlayer($obj)
+	{
+		$player = new ilTemplate('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/tpl/tpl.video.html', false, false);
+		return $player;
 	}
 
 }

@@ -40,9 +40,22 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 * @param ilTemplate $tpl
 	 * @return ilTemplate
 	 */
-	public function addPlayer($tpl)
+	public function addPlayerElements($tpl)
 	{
-		// TODO: Implement addPlayer() method.
+		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/js/jquery.InteractiveVideoMediaElementPlayer.js');
+		return $tpl;
+	}
+
+	public function getPlayer($obj)
+	{
+		$player = new ilTemplate('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/tpl/tpl.video.html', false, false);
+		$mob_id = $obj->getMobId();
+		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
+		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
+
+		$player->setVariable('VIDEO_SRC', $mob_dir . '/' . $media_item['location']);
+		$player->setVariable('VIDEO_TYPE', $media_item['format']);
+		return $player;
 	}
 
 }

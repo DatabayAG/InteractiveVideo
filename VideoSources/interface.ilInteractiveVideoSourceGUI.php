@@ -27,6 +27,11 @@ interface ilInteractiveVideoSourceGUI
 	 * @param ilTemplate $tpl
 	 * @return ilTemplate
 	 */
-	public function addPlayer($tpl);
+	public function addPlayerElements($tpl);
+
+	/**
+	 * @return ilTemplate
+	 */
+	public function getPlayer($obj);
 
 }
