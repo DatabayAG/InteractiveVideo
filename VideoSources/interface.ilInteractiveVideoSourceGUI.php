@@ -30,7 +30,8 @@ interface ilInteractiveVideoSourceGUI
 	public function addPlayerElements($tpl);
 
 	/**
-	 * @return ilTemplate
+	 * @param ilObjInteractiveVideo $obj
+	 * @return mixed
 	 */
 	public function getPlayer($obj);
 

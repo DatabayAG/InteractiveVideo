@@ -1,6 +1,7 @@
 <?php
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/interface.ilInteractiveVideoSourceGUI.php';
-
+require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
+require_once 'Services/MediaObjects/classes/class.ilObjMediaObjectGUI.php';
 /**
  * Class ilInteractiveVideoMediaObjectGUI
  */
@@ -46,10 +47,15 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 		return $tpl;
 	}
 
+	/**
+	 * @param ilObjInteractiveVideo $obj
+	 * @return ilTemplate
+	 */
 	public function getPlayer($obj)
 	{
 		$player = new ilTemplate('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/tpl/tpl.video.html', false, false);
-		$mob_id = $obj->getMobId();
+		ilObjMediaObjectGUI::includePresentationJS($player);
+		$mob_id     = $obj->getMobId();
 		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
 

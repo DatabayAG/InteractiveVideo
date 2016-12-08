@@ -3,8 +3,6 @@
 require_once 'Services/Repository/classes/class.ilObjectPluginGUI.php';
 require_once 'Services/PersonalDesktop/interfaces/interface.ilDesktopItemHandling.php';
 require_once 'Services/Form/classes/class.ilPropertyFormGUI.php';
-require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
-require_once 'Services/MediaObjects/classes/class.ilObjMediaObjectGUI.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php'; 
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
@@ -210,15 +208,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
 		 */
-		global $tpl, $ilTabs, $ilUser;
+		global $tpl, $ilTabs;
 
 		$ilTabs->activateTab('content');
 
-		ilObjMediaObjectGUI::includePresentationJS($tpl);
-
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $this->plugin->getDirectory());
-
-		
 
 		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/class.ilInteractiveVideoYoutubeGUI.php';
 		$object = new ilInteractiveVideoYoutubeGUI();
@@ -1145,19 +1139,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateSubTab('editComments');
 
 		
-		ilObjMediaObjectGUI::includePresentationJS($tpl);
+
 
 		$video_tpl = new ilTemplate("tpl.edit_comment.html", true, true, $this->plugin->getDirectory());
 
 		$video_tpl->setVariable('SCREEN_INFO', $this->plugin->txt('screen_info'));
 
-		$mob_id = $this->object->getMobId();
-		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
-		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
-		
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/class.ilInteractiveVideoMediaObjectGUI.php';
+		$object = new ilInteractiveVideoMediaObjectGUI();
+		$object->addPlayerElements($tpl);
+		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer($this->object)->get());
+
 		$video_tpl->setVariable('FORM_ACTION', $this->ctrl->getFormAction($this,'showTutorInsertForm'));
-		$video_tpl->setVariable('VIDEO_SRC', $mob_dir . '/' . $media_item['location']);
-		$video_tpl->setVariable('VIDEO_TYPE', $media_item['format']);
 
 		$this->objComment = new ilObjComment();
 		$this->objComment->setObjId($this->object->getId());
