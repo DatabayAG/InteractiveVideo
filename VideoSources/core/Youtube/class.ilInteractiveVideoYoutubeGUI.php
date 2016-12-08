@@ -52,6 +52,7 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	public function getPlayer($obj)
 	{
 		$player = new ilTemplate('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/tpl/tpl.video.html', false, false);
+		$player->setVariable('YOUTUBE_ID', '7ZxWg0sw_BI');
 		return $player;
 	}
 

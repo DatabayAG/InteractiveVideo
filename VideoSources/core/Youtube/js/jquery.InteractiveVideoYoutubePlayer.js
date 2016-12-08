@@ -13,7 +13,7 @@ var player = null,
 
 function onYouTubeIframeAPIReady() {
 	player = new YT.Player('ilInteractiveVideo', {
-		videoId: 'M7lc1UVf-VE',
+		videoId: interactiveVideoYoutubeId,
 		events: {
 			'onStateChange': onPlayerStateChange,
 			'onReady': function(media) {
