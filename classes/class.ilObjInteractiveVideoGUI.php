@@ -1191,7 +1191,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->addCss($this->plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.css');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
-		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoMediaElementPlayer.js');
+		$tpl->addJavaScript($this->plugin->getDirectory() . '/VideoSources/core/MediaObject/js/jquery.InteractiveVideoMediaElementPlayer.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerComments.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerFunctions.js');
 		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstract.js');
@@ -1726,13 +1726,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $ilTabs ilTabsGUI
 		 */
 		global $ilTabs;
-
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('editProperties');
 
-		$upload_field = new ilFileInputGUI($this->plugin->txt('video_file'), 'video_file');
-		$upload_field->setSuffixes(array('mp4', 'mov', 'mp3', 'flv', 'm4v', 'ogg', 'ogv', 'webm'));
-		$a_form->addItem($upload_field);
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
+		$factory = new ilInteractiveVideoSourceFactory();
+		$sources = $factory->getVideoSources();
+		
+		foreach($sources as $source)
+		{
+			/** @var ilInteractiveVideoSourceGUI $gui */
+			$gui = $source->getGUIClass();
+			$a_form = $gui->getForm($a_form);
+		}
 
 		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
 		$a_form->addItem($online);
