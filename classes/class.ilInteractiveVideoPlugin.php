@@ -106,7 +106,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 	}
 
 	/**
-	 * Update plugin and sub plugin languages
+	 * Update plugin and sub plugins
 	 */
 	public function updateLanguages()
 	{
