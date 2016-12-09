@@ -22,7 +22,7 @@ function onYouTubeIframeAPIReady() {
 						playCallback            : (function (){player.playVideo();}),
 						durationCallback        : (function (){return player.getDuration();}),
 						currentTimeCallback     : (function (){return player.getCurrentTime();}),
-						setCurrentTimeCallback  : (function (time){player.setCurrentTime(time);})
+						setCurrentTimeCallback  : (function (time){player.seekTo(time);})
 					};
 
 				il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());

@@ -546,3 +546,35 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'show_wrong_icon'))
 			'default' => 1));
 }
 ?>
+<#27>
+<?php
+if(!$ilDB->tableExists('rep_robj_xvid_plugins'))
+{
+	$fields = array(
+		'plugin_name'     => array(
+			'type'    => 'text',
+			'length'  => '500',
+			'notnull' => true
+		),
+		'is_activated'         => array(
+			'type'    => 'integer',
+			'length'  => '1',
+			'notnull' => true
+		),
+		'db_update'        => array(
+			'type'    => 'integer',
+			'length'  => '4',
+			'notnull' => true
+		),
+		'version'       => array(
+			'type'    => 'integer',
+			'length'  => '4',
+			'notnull' => true,
+			'default' => 0
+		)
+	);
+
+	$ilDB->createTable('rep_robj_xvid_plugins', $fields);
+	$ilDB->addPrimaryKey('rep_robj_xvid_plugins', array('plugin_name'));
+}
+?>

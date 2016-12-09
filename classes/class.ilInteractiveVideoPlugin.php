@@ -83,4 +83,66 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 			$ilDB->dropSequence('rep_robj_xvid_qus_text');
 		}
 	}
+
+	/**
+	 * @param RecursiveIteratorIterator $rii
+	 * @return array
+	 */
+	protected function exploreDirectory($rii)
+	{
+		$found_elements = array(dirname(__FILE__) . '/../lang');
+		/** @var SplFileInfo $file */
+		foreach($rii as $file)
+		{
+			if($file->isDir())
+			{
+				if(basename($file->getPath()) === 'lang')
+				{
+					$found_elements[] = $file;
+				}
+			}
+		}
+		return $found_elements;
+	}
+
+	/**
+	 * Update plugin and sub plugin languages
+	 */
+	public function updateLanguages()
+	{
+		ilGlobalCache::flushAll();
+		include_once("./Services/Language/classes/class.ilObjLanguage.php");
+
+		$rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(dirname(__FILE__) . '/../VideoSources'));
+		$directories = $this->exploreDirectory($rii, 'ilInteractiveVideoSource');
+		$lang_array = array();
+		$prefix = $this->getPrefix();
+		foreach($directories as $dir)
+		{
+			$languages = $this->getAvailableLangFiles($dir);
+
+			foreach($languages as $lang)
+			{
+				$txt = file($dir."/".$lang["file"]);
+				if (is_array($txt))
+				{
+					foreach ($txt as $row)
+					{
+						if ($row[0] != "#" && strpos($row, "#:#") > 0)
+						{
+							$a = explode("#:#",trim($row));
+							$lang_array[$lang["key"]][$prefix."_".trim($a[0])] = trim($a[1]);
+							ilObjLanguage::replaceLangEntry($prefix, $prefix."_".trim($a[0]), $lang["key"], trim($a[1]));
+						}
+					}
+				}
+			}
+		}
+		
+		foreach($lang_array as $lang => $elements)
+		{
+			ilObjLanguage::replaceLangModule($lang, $prefix, $elements);
+		}
+		
+	}
 }
