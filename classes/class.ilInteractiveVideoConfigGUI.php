@@ -28,6 +28,11 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	protected $toolbar;
 
 	/**
+	 * @var ilTabsGUI
+	 */
+	protected $tabs;
+
+	/**
 	 * @var ilDB
 	 */
 	protected $db;
@@ -51,12 +56,14 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		 * @var ilTemplate   $tpl
 		 * @var ilLanguage   $lng
 		 * @var ilCtrl       $ilCtrl
+		 * @var ilTabsGUI	$ilTabs
 		 */
-		global $lng, $tpl, $ilCtrl;
+		global $lng, $tpl, $ilCtrl, $ilTabs;
 
-		$this->lng     = $lng;
-		$this->tpl     = $tpl;
-		$this->ctrl    = $ilCtrl;
+		$this->lng		= $lng;
+		$this->tpl		= $tpl;
+		$this->ctrl		= $ilCtrl;
+		$this->tabs		= $ilTabs;
 		$this->video_source_factory = new ilInteractiveVideoSourceFactory();
 		$this->active_tab = 'settings';
 	}
@@ -88,10 +95,9 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		if(!$form instanceof ilPropertyFormGUI)
 		{
 			$form = $this->getConfigurationForm();
-			$form->setValuesByArray(array());
 		}
-		global $ilTabs;
-		$this->addTabs($ilTabs);
+
+		$this->addTabs();
 		$this->tpl->setContent($form->getHTML());
 	}
 
@@ -104,40 +110,45 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 
 		$form = new ilPropertyFormGUI();
 
-
-		$transformer = ilUtil::stripSlashes($_GET['video_source']);
-		if($transformer == '')
+		$source = ilUtil::stripSlashes($_GET['video_source']);
+		$form->setFormAction($this->ctrl->getFormAction($this, 'showConfigurationForm'));
+		if($source == '')
 		{
 			$form->setTitle($this->lng->txt('settings'));
+			foreach($this->video_source_factory->getVideoSources() as $class => $engine)
+			{
+				$activation = new ilCheckboxInputGUI(ilInteractiveVideoPlugin::getInstance()->txt($engine->getID()), $class);
+				$activation->setValue(1);
+				if($this->video_source_factory->isActive($class))
+				{
+					$activation->setChecked(true);
+				}
+				$form->addItem($activation);
+			}
 		}
 		else
 		{
-
-			$this->active_tab = $transformer;
-			$form->setTitle(ilInteractiveVideoPlugin::getInstance()->txt($transformer));
+			$this->active_tab = $source;
+			$form->setTitle(ilInteractiveVideoPlugin::getInstance()->txt($source));
 		}
 		$form->addCommandButton('saveConfigurationForm', $this->lng->txt('save'));
 
 		return $form;
 	}
 
-	/**
-	 * @param ilTabsGUI $tabs_gui
-	 */
-	public function addTabs($tabs_gui)
+	protected function addTabs()
 	{
-		$tabs_gui->addSubTab('settings', $this->lng->txt('settings'),
+		$this->tabs->addSubTab('settings', $this->lng->txt('settings'),
 			$this->ctrl->getLinkTargetByClass('ilInteractiveVideoConfigGUI', 'view'));
 		foreach($this->video_source_factory->getVideoSources() as $class =>  $engine)
 		{
-			if($engine->isActivated())
+			if($this->video_source_factory->isActive($class))
 			{
-				$tabs_gui->addSubTab( $engine->getID(), ilInteractiveVideoPlugin::getInstance()->txt($engine->getID()),
+				$this->tabs->addSubTab( $engine->getID(), ilInteractiveVideoPlugin::getInstance()->txt($engine->getID()),
 					$this->ctrl->getLinkTargetByClass('ilInteractiveVideoConfigGUI', 'view') . '&video_source=' . $engine->getID() );
-
 			}
 		}
-		$tabs_gui->setSubTabActive($this->active_tab);
+		$this->tabs->setSubTabActive($this->active_tab);
 	}
 
 	/**
@@ -150,6 +161,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		{
 			try
 			{
+				$this->saveForm($form);
 				$this->ctrl->redirect($this, 'configure');
 			}
 			catch(ilException $e)
@@ -160,6 +172,17 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 
 		$form->setValuesByPost();
 		$this->showConfigurationForm($form);
+	}
+	
+	protected function saveForm($form)
+	{
+		$settings = array();
+		foreach($form->getItems() as $key => $value)
+		{
+			$class = ilUtil::stripSlashes($value->getPostVar());
+			$settings[$class] = ilUtil::stripSlashes((int) $_POST[$class]);
+		}
+		$this->video_source_factory->saveSourceSettings($settings);
 	}
 }
 ?>

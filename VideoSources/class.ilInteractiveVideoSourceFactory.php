@@ -16,15 +16,21 @@ class ilInteractiveVideoSourceFactory
 	protected static $plugin_type;
 
 	/**
+	 * @var array
+	 */
+	protected $sources_settings = array();
+
+	/**
 	 * @return ilInteractiveVideoSource[]
 	 */
 	public function getVideoSources()
 	{
+		$this->readSourceSettings();
 		$this->getNativeVideoSources();
 		$this->getPluginVideoSources();
 		return array_merge(self::$native_type, self::$plugin_type);
 	}
-	
+
 	/**
 	 * @return ilInteractiveVideoSource[]
 	 */
@@ -83,14 +89,20 @@ class ilInteractiveVideoSourceFactory
 				{
 					/** @var $instance ilInteractiveVideoSource */
 					$instance = new $class();
-					if($instance->isActivated())
-					{
-						$found_elements[$class] = $instance;
-					}
+					$found_elements[$class] = $instance;
 				}
 			}
 		}
 		return $found_elements;
+	}
+
+	/**
+	 * @param $class
+	 * @return bool
+	 */
+	public function isActive($class)
+	{
+		return (bool) $this->sources_settings[$class]['active'];
 	}
 
 	/**
@@ -99,5 +111,42 @@ class ilInteractiveVideoSourceFactory
 	public function getDefaultVideoSource()
 	{
 		return 'ilInteractiveVideoMediaObject';
+	}
+
+	protected function readSourceSettings()
+	{
+		/**
+		 * @var ilDB		$ilDb;
+		 */
+		global $ilDB;
+		$res = $ilDB->query('SELECT * FROM rep_robj_xvid_sources');
+
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$this->sources_settings[$row['plugin_name']] = array('active'		=> $row['is_activated'],
+																 'db_update'	=> $row['db_update'],
+																 'version'		=> $row['version']);
+		}
+	}
+
+	/**
+	 * @param $settings
+	 */
+	public function saveSourceSettings($settings)
+	{
+		/**
+		 * @var $ilDB   ilDB
+		 */
+		global $ilDB;
+
+		$flip = array_keys($settings);
+		$ilDB->manipulate('
+		DELETE FROM rep_robj_xvid_sources 
+		WHERE 	' . $ilDB->in('plugin_name', $flip, false, 'text'));
+
+		foreach($settings as $key => $value)
+		{
+			$ilDB->insert('rep_robj_xvid_sources', array('plugin_name' => array('text', $key), 'is_activated' => array('integer', $value)));
+		}
 	}
 }

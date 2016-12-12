@@ -561,20 +561,27 @@ if(!$ilDB->tableExists('rep_robj_xvid_plugins'))
 			'length'  => '1',
 			'notnull' => true
 		),
-		'db_update'        => array(
+		'db_update'   => array(
 			'type'    => 'integer',
 			'length'  => '4',
-			'notnull' => true
+			'notnull' => false
 		),
-		'version'       => array(
+		'version'     => array(
 			'type'    => 'integer',
 			'length'  => '4',
-			'notnull' => true,
+			'notnull' => false,
 			'default' => 0
 		)
 	);
 
 	$ilDB->createTable('rep_robj_xvid_plugins', $fields);
 	$ilDB->addPrimaryKey('rep_robj_xvid_plugins', array('plugin_name'));
+}
+?>
+<#28>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_plugins'))
+{
+	$ilDB->renameTable('rep_robj_xvid_plugins', 'rep_robj_xvid_sources');
 }
 ?>
