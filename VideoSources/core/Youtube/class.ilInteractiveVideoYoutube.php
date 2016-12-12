@@ -63,4 +63,12 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 		require_once dirname(__FILE__) . '/class.ilInteractiveVideoYoutubeGUI.php';
 		return new ilInteractiveVideoYoutubeGUI();
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getId()
+	{
+		return 'youtube';
+	}
 }

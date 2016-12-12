@@ -63,4 +63,12 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		require_once dirname(__FILE__) . '/class.ilInteractiveVideoMediaObjectGUI.php';
 		return new ilInteractiveVideoMediaObjectGUI();
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getId()
+	{
+		return 'media_object';
+	}
 }

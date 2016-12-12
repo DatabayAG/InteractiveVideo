@@ -28,6 +28,11 @@ interface ilInteractiveVideoSource
 	public function getType();
 
 	/**
+	 * @return string
+	 */
+	public function getId();
+
+	/**
 	 * @return bool
 	 */
 	public function isActivated();

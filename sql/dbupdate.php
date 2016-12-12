@@ -553,7 +553,7 @@ if(!$ilDB->tableExists('rep_robj_xvid_plugins'))
 	$fields = array(
 		'plugin_name'     => array(
 			'type'    => 'text',
-			'length'  => '500',
+			'length'  => '200',
 			'notnull' => true
 		),
 		'is_activated'         => array(
