@@ -35,15 +35,20 @@ interface ilInteractiveVideoSource
 	/**
 	 * @return bool
 	 */
-	public function isActivated();
-
-	/**
-	 * @return bool
-	 */
 	public function isFileBased();
 
 	/**
 	 * @return string
 	 */
 	public function getGUIClass();
+
+	/**
+	 * @return string
+	 */
+	public function getClassPath();
+
+	/**
+	 * @return string
+	 */
+	public function getVersion();
 }

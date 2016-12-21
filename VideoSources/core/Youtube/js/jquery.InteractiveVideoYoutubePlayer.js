@@ -28,7 +28,6 @@ function onYouTubeIframeAPIReady() {
 				il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
 
 				player.addEventListener('onStateChange', function(e){
-					console.log(e)
 					if(e.data === -1)
 					{
 						if (seekTime > 0) {
@@ -64,7 +63,6 @@ var done = false;
 function onPlayerStateChange(event)
 {
 	if (event.data == YT.PlayerState.PLAYING && !done) {
-		setTimeout(stopVideo, 6000);
 		done = true;
 	}
 }

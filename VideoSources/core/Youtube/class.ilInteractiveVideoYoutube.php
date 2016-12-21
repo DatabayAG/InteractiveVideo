@@ -7,6 +7,29 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 {
 
 	/**
+	 * @var string
+	 */
+	protected $id;
+
+	/**
+	 * @var string
+	 */
+	protected $version;
+
+	/**
+	 * ilInteractiveVideoYoutube constructor.
+	 */
+	public function __construct()
+	{
+		if (is_file(dirname(__FILE__) . '/plugin.php'))
+		{
+			include_once(dirname(__FILE__) . '/plugin.php');
+			$this->version = $version;
+			$this->id = $id;
+		}
+	}
+
+	/**
 	 * @param $obj_id
 	 */
 	public function getVideoSource($obj_id)
@@ -42,14 +65,6 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	/**
 	 * @return bool
 	 */
-	public function isActivated()
-	{
-		return true;
-	}
-
-	/**
-	 * @return bool
-	 */
 	public function isFileBased()
 	{
 		return true;
@@ -69,6 +84,22 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 */
 	public function getId()
 	{
-		return 'youtube';
+		return $this->id;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getClassPath()
+	{
+		return 'VideoSources/core/Youtube/class.ilInteractiveVideoYoutube.php';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getVersion()
+	{
+		return $this->version;
 	}
 }

@@ -143,6 +143,5 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 		{
 			ilObjLanguage::replaceLangModule($lang, $prefix, $elements);
 		}
-		
 	}
 }

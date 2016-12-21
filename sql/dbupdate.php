@@ -585,3 +585,39 @@ if($ilDB->tableExists('rep_robj_xvid_plugins'))
 	$ilDB->renameTable('rep_robj_xvid_plugins', 'rep_robj_xvid_sources');
 }
 ?>
+<#29>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_sources', 'class_path'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_sources', 'class_path',
+		array(
+			'type'    => 'text',
+			'length'  => '4000',
+			'notnull' => true)
+	);
+}
+?>
+<#30>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_sources', 'plugin_id'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_sources', 'plugin_id',
+		array(
+			'type'    => 'text',
+			'length'  => '255',
+			'notnull' => true)
+	);
+}
+?>
+<#31>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'plugin_id'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'plugin_id',
+		array(
+			'type'    => 'text',
+			'length'  => '255',
+			'notnull' => true)
+	);
+}
+?>

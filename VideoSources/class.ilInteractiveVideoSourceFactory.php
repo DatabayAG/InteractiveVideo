@@ -77,7 +77,7 @@ class ilInteractiveVideoSourceFactory
 			{
 				continue;
 			}
-			if($file->getExtension() === 'php')
+			if($file->getExtension() === 'php' && $file->getFilename() !== 'plugin.php')
 			{
 				require_once $file;
 				$class      = str_replace(array('class.', '.php'), '', $file->getBasename());
@@ -125,6 +125,8 @@ class ilInteractiveVideoSourceFactory
 		{
 			$this->sources_settings[$row['plugin_name']] = array('active'		=> $row['is_activated'],
 																 'db_update'	=> $row['db_update'],
+																 'plugin_id'	=> $row['plugin_id'],
+																 'class_path'	=> $row['class_path'],
 																 'version'		=> $row['version']);
 		}
 	}
@@ -139,14 +141,19 @@ class ilInteractiveVideoSourceFactory
 		 */
 		global $ilDB;
 
-		$flip = array_keys($settings);
+		$flip = array_keys($settings['settings']);
+		$mapping = $settings['mappings'];
 		$ilDB->manipulate('
 		DELETE FROM rep_robj_xvid_sources 
 		WHERE 	' . $ilDB->in('plugin_name', $flip, false, 'text'));
 
-		foreach($settings as $key => $value)
+		foreach($settings['settings'] as $key => $value)
 		{
-			$ilDB->insert('rep_robj_xvid_sources', array('plugin_name' => array('text', $key), 'is_activated' => array('integer', $value)));
+			$ilDB->insert('rep_robj_xvid_sources', array('plugin_name' => array('text', $key), 
+														 'is_activated' => array('integer', $value), 
+														 'plugin_id' => array('text', $mapping[$key]['id']),
+														 'class_path' => array('text', $mapping[$key]['path'])
+			));
 		}
 	}
 }

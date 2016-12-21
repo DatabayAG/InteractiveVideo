@@ -112,6 +112,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 
 		$source = ilUtil::stripSlashes($_GET['video_source']);
 		$form->setFormAction($this->ctrl->getFormAction($this, 'showConfigurationForm'));
+		$mapping = array();
 		if($source == '')
 		{
 			$form->setTitle($this->lng->txt('settings'));
@@ -123,7 +124,9 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 				{
 					$activation->setChecked(true);
 				}
+				$activation->setInfo(sprintf($this->plugin_object->txt('installed_version'), $engine->getVersion()));
 				$form->addItem($activation);
+				$mapping[$class] = array('path' => $engine->getClassPath(), 'id' => $engine->getId());
 			}
 		}
 		else
@@ -131,6 +134,9 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 			$this->active_tab = $source;
 			$form->setTitle(ilInteractiveVideoPlugin::getInstance()->txt($source));
 		}
+		$hidden = new ilHiddenInputGUI('path_mapping');
+		$hidden->setValue(json_encode($mapping));
+		$form->addItem($hidden);
 		$form->addCommandButton('saveConfigurationForm', $this->lng->txt('save'));
 
 		return $form;
@@ -173,16 +179,26 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		$form->setValuesByPost();
 		$this->showConfigurationForm($form);
 	}
-	
+
+	/**
+	 * @param ilPropertyFormGUI $form
+	 */
 	protected function saveForm($form)
 	{
 		$settings = array();
 		foreach($form->getItems() as $key => $value)
 		{
-			$class = ilUtil::stripSlashes($value->getPostVar());
-			$settings[$class] = ilUtil::stripSlashes((int) $_POST[$class]);
+			if($value->getPostVar() != 'path_mapping')
+			{
+				$class = ilUtil::stripSlashes($value->getPostVar());
+				$settings[$class] = ilUtil::stripSlashes((int) $_POST[$class]);
+			}
+			else
+			{
+				$mapping = json_decode($value->getValue(), true);
+			}
 		}
-		$this->video_source_factory->saveSourceSettings($settings);
+		$this->video_source_factory->saveSourceSettings(array('settings' => $settings, 'mappings' => $mapping));
 	}
 }
 ?>
