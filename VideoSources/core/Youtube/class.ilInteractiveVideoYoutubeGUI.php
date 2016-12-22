@@ -26,7 +26,13 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function checkForm($form)
 	{
-		// TODO: Implement checkForm() method.
+		$value = ilUtil::stripSlashes($form->getInput('youtube_url'));
+		$youtube_id = $this->getYoutubeIdentifier($value);
+		if($youtube_id)
+		{
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -59,4 +65,19 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 		return $player;
 	}
 
+	/**
+	 * @param $value
+	 * @return mixed
+	 */
+	protected function getYoutubeIdentifier($value)
+	{
+		$re  = '/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/';
+		#$str = 'https://www.youtube.com/watch?v=7ZxWg0sw_BI';
+		preg_match_all($re, $value, $matches);
+		if(sizeof($matches) == 2)
+		{
+			return $matches[1];
+		}
+		return false;
+	}
 }

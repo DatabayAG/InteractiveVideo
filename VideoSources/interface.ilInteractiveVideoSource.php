@@ -25,7 +25,7 @@ interface ilInteractiveVideoSource
 	/**
 	 * @return string
 	 */
-	public function getType();
+	public function getClass();
 
 	/**
 	 * @return string

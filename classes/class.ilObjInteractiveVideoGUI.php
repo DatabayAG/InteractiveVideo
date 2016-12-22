@@ -1641,6 +1641,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function updateCustom(ilPropertyFormGUI $a_form)
 	{
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactoryGUI.php';
+		$factory = new ilInteractiveVideoSourceFactoryGUI($this->object);
+		$factory->checkForm($a_form);
+
 		$is_anonymized = $a_form->getInput('is_anonymized');
 		$this->object->setIsAnonymized((int)$is_anonymized);
 
@@ -1829,10 +1833,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		foreach($sources as $key => $source)
 		{
 			/** @var ilInteractiveVideoSourceGUI $gui */
-			$op = new ilRadioOption($this->plugin->txt($source->getId()), $source->getId());
-			$gui= $source->getGUIClass();
-			$gui->getForm($op);
-			$item_group->addOption($op);
+			if($factory->isActive($source->getClass()))
+			{
+				$op = new ilRadioOption($this->plugin->txt($source->getId()), $source->getId());
+				$gui= $source->getGUIClass();
+				$gui->getForm($op);
+				$item_group->addOption($op);
+			}
 		}
 
 		$item_group->setValue($factory->getDefaultVideoSource());

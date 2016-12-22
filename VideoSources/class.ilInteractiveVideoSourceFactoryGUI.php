@@ -16,8 +16,13 @@ class ilInteractiveVideoSourceFactoryGUI
 	/**
 	 * @var ilInteractiveVideoSourceGUI
 	 */
-	protected $source;
+	protected $gui_source;
 
+	/**
+	 * @var ilInteractiveVideoSourceGUI[]
+	 */
+	protected $sources;
+	
 	/**
 	 * ilInteractiveVideoSourceFactoryGUI constructor.
 	 * @param ilObjInteractiveVideo $obj
@@ -26,9 +31,10 @@ class ilInteractiveVideoSourceFactoryGUI
 	{
 		$this->obj		= $obj;
 		$factory		= new ilInteractiveVideoSourceFactory();
-		if($factory->isActive($factory->getVideoSource($obj->getSourceId())->getType()) !== false)
+		$this->sources	= $factory->getVideoSources();
+		if($factory->isActive($factory->getVideoSource($obj->getSourceId())->getClass()) !== false)
 		{
-			$this->source	= $factory->getVideoSource($obj->getSourceId())->getGUIClass();
+			$this->gui_source = $factory->getVideoSource($obj->getSourceId())->getGUIClass();
 		}
 		else
 		{
@@ -42,7 +48,7 @@ class ilInteractiveVideoSourceFactoryGUI
 	 */
 	public function addPlayerElements($tpl)
 	{
-		return $this->source->addPlayerElements($tpl);
+		return $this->gui_source->addPlayerElements($tpl);
 	}
 
 	/**
@@ -50,12 +56,25 @@ class ilInteractiveVideoSourceFactoryGUI
 	 */
 	public function getPlayer()
 	{
-		return $this->source->getPlayer($this->obj);
+		return $this->gui_source->getPlayer($this->obj);
 	}
 
 	protected function sourceDoesNotExistsAnymore()
 	{
 		ilUtil::sendFailure(ilInteractiveVideoPlugin::getInstance()->txt('source_does_not_exist'), true);
 		ilUtil::redirect('ilias.php?baseClass=ilPersonalDesktopGUI');
+	}
+
+	/**
+	 * @param ilPropertyFormGUI $form
+	 * @return ilPropertyFormGUI
+	 */
+	public function checkForm($form)
+	{
+		foreach($this->sources as $class => $obj)
+		{
+			$form = $obj->getGUIClass()->checkForm($form);
+		}
+		return $form;
 	}
 }

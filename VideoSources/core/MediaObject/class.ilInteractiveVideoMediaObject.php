@@ -57,7 +57,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	/**
 	 * @return string
 	 */
-	public function getType()
+	public function getClass()
 	{
 		return __CLASS__;
 	}
