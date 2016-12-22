@@ -6,6 +6,9 @@ require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/In
  */
 class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 {
+
+	const PATH = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/';
+
 	/**
 	 * @param ilRadioOption $option
 	 * @return ilRadioOption
@@ -32,7 +35,7 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function saveForm($form)
 	{
-		// TODO: Implement saveForm() method.
+		return $form;
 	}
 
 	/**
@@ -41,7 +44,7 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function addPlayerElements($tpl)
 	{
-		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/js/jquery.InteractiveVideoYoutubePlayer.js');
+		$tpl->addJavaScript(self::PATH . 'js/jquery.InteractiveVideoYoutubePlayer.js');
 		return $tpl;
 	}
 
@@ -51,7 +54,7 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function getPlayer($obj)
 	{
-		$player = new ilTemplate('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/tpl/tpl.video.html', false, false);
+		$player = new ilTemplate(self::PATH . 'tpl/tpl.video.html', false, false);
 		$player->setVariable('YOUTUBE_ID', '7ZxWg0sw_BI');
 		return $player;
 	}

@@ -216,8 +216,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/class.ilInteractiveVideoYoutubeGUI.php';
 		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/class.ilInteractiveVideoMediaObjectGUI.php';
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/FauVideoPortal/class.ilInteractiveVideoFauVideoPortalGUI.php';
-		$object = new ilInteractiveVideoYoutubeGUI();
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactoryGUI.php';
+		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
 		$object->addPlayerElements($tpl);
 
 		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer($this->object)->get());

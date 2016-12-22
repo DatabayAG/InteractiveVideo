@@ -42,6 +42,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	protected $is_public = 0;
 
 	/**
+	 * @var string
+	 */
+	protected $source_id;
+
+	/**
 	 * 
 	 */
 	protected function doRead()
@@ -64,6 +69,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$this->setIsPublic($row['is_public']);
 		$this->setOnline((bool)$row['is_online']);
 		$this->setIsChronologic($row['is_chronologic']);
+		$this->setSourceId($row['source_id']);
 
 		parent::doRead();
 	}
@@ -145,7 +151,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 				  	'is_repeat' =>array('integer', $this->isRepeat()),
 				  	'is_public' =>array('integer', $this->isPublic()),
 					'is_chronologic' =>array('integer', $this->isChronologic()),
-					'is_online' => array('integer', $this->isOnline())
+					'is_online' => array('integer', $this->isOnline()),
+					'source_id' => array('text', $this->getSourceId())
 					),
 			array('obj_id' => array('integer', $this->getId())));
 	}
@@ -205,7 +212,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 				'is_anonymized' => array('integer', $this->isAnonymized()),
 				'is_repeat' => array('integer', $this->isRepeat()),
 				'is_chronologic' => array('integer', $this->isChronologic()),
-				'is_public'     => array('integer', $this->isPublic())
+				'is_public'     => array('integer', $this->isPublic()),
+				'source_id'     => array('text', $this->getSourceId())
 			)
 		);
 
@@ -502,7 +510,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 				'is_anonymized' => array('integer', (int) $_POST['is_anonymized']),
 				'is_repeat' 	=> array('integer', (int) $_POST['is_repeat']),
 				'is_chronologic'=> array('integer', (int) $_POST['is_chronologic']),
-				'is_public'     => array('integer', (int) $_POST['is_public'])
+				'is_public'     => array('integer', (int) $_POST['is_public']),
+				'source_id'     => array('text', ilUtil::stripSlashes($_POST['source_id']))
 			)
 		);
 	}
@@ -588,4 +597,22 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	{
 		$this->is_public = $is_public;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getSourceId()
+	{
+		return $this->source_id;
+	}
+
+	/**
+	 * @param string $source_id
+	 */
+	public function setSourceId($source_id)
+	{
+		$this->source_id = $source_id;
+	}
+	
+	
 }

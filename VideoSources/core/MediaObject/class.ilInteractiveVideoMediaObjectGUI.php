@@ -7,6 +7,8 @@ require_once 'Services/MediaObjects/classes/class.ilObjMediaObjectGUI.php';
  */
 class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 {
+	const PATH = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/';
+
 	/**
 	 * @param ilRadioOption $option
 	 * @return ilRadioOption
@@ -34,7 +36,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function saveForm($form)
 	{
-		// TODO: Implement saveForm() method.
+		return $form;
 	}
 
 	/**
@@ -43,7 +45,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function addPlayerElements($tpl)
 	{
-		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/js/jquery.InteractiveVideoMediaElementPlayer.js');
+		$tpl->addJavaScript(self::PATH . 'js/jquery.InteractiveVideoMediaElementPlayer.js');
 		return $tpl;
 	}
 
@@ -53,7 +55,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function getPlayer($obj)
 	{
-		$player = new ilTemplate('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/tpl/tpl.video.html', false, false);
+		$player = new ilTemplate(self::PATH . 'tpl/tpl.video.html', false, false);
 		ilObjMediaObjectGUI::includePresentationJS($player);
 		$mob_id     = $obj->getMobId();
 		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);

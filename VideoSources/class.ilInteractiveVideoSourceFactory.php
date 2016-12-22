@@ -32,6 +32,23 @@ class ilInteractiveVideoSourceFactory
 	}
 
 	/**
+	 * @param $source_id
+	 * @return ilInteractiveVideoSource
+	 */
+	public function getVideoSource($source_id)
+	{
+		$sources = $this->getVideoSources();
+		foreach($sources as $class => $object)
+		{
+			if($source_id === $object->getId())
+			{
+				return $object;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * @return ilInteractiveVideoSource[]
 	 */
 	protected function getNativeVideoSources()

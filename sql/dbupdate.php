@@ -621,3 +621,10 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'plugin_id'))
 	);
 }
 ?>
+<#32>
+<?php
+if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'plugin_id'))
+{
+	$ilDB->renameTableColumn('rep_robj_xvid_objects', 'plugin_id', 'source_id');
+}
+?>
