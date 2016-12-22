@@ -166,10 +166,10 @@ class ilInteractiveVideoSourceFactory
 
 		foreach($settings['settings'] as $key => $value)
 		{
-			$ilDB->insert('rep_robj_xvid_sources', array('plugin_name' => array('text', $key), 
-														 'is_activated' => array('integer', $value), 
-														 'plugin_id' => array('text', $mapping[$key]['id']),
-														 'class_path' => array('text', $mapping[$key]['path'])
+			$ilDB->insert('rep_robj_xvid_sources', array('plugin_name'	=> array('text', $key), 
+														 'is_activated'	=> array('integer', $value), 
+														 'plugin_id'	=> array('text', $mapping[$key]['id']),
+														 'class_path'	=> array('text', $mapping[$key]['path'])
 			));
 		}
 	}

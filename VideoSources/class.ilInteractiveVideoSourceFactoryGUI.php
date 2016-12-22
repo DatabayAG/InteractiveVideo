@@ -26,7 +26,14 @@ class ilInteractiveVideoSourceFactoryGUI
 	{
 		$this->obj		= $obj;
 		$factory		= new ilInteractiveVideoSourceFactory();
-		$this->source	= $factory->getVideoSource($obj->getSourceId())->getGUIClass();
+		if($factory->isActive($factory->getVideoSource($obj->getSourceId())->getType()) !== false)
+		{
+			$this->source	= $factory->getVideoSource($obj->getSourceId())->getGUIClass();
+		}
+		else
+		{
+			$this->sourceDoesNotExistsAnymore();
+		}
 	}
 
 	/**
@@ -44,5 +51,11 @@ class ilInteractiveVideoSourceFactoryGUI
 	public function getPlayer()
 	{
 		return $this->source->getPlayer($this->obj);
+	}
+
+	protected function sourceDoesNotExistsAnymore()
+	{
+		ilUtil::sendFailure(ilInteractiveVideoPlugin::getInstance()->txt('source_does_not_exist'), true);
+		ilUtil::redirect('ilias.php?baseClass=ilPersonalDesktopGUI');
 	}
 }
