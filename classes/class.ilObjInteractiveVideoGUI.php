@@ -713,6 +713,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	/**
 	 * @param int $comment_id
+	 * @return array
 	 */
 	private function getQuestionFormValues($comment_id = 0)
 	{
@@ -1755,6 +1756,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values['is_public']     	= $this->object->isPublic();
 		$a_values["is_online"]		= $this->object->isOnline();
 		$a_values["is_chronologic"]	= $this->object->isChronologic();
+		$a_values['source_id']		= $this->object->getSourceId();
 	}
 
 	/**
@@ -1822,12 +1824,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$factory = new ilInteractiveVideoSourceFactory();
 		$sources = $factory->getVideoSources();
 		
-		$item_group = new ilRadioGroupInputGUI($this->plugin->txt('source'), 'source');
+		$item_group = new ilRadioGroupInputGUI($this->plugin->txt('source'), 'source_id');
 		$a_form->addItem($item_group);
 		foreach($sources as $key => $source)
 		{
 			/** @var ilInteractiveVideoSourceGUI $gui */
-			$op = new ilRadioOption($source->getType(), $key);
+			$op = new ilRadioOption($this->plugin->txt($source->getId()), $source->getId());
 			$gui= $source->getGUIClass();
 			$gui->getForm($op);
 			$item_group->addOption($op);

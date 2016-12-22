@@ -15,7 +15,7 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function getForm($option)
 	{
-		$youtube_url = new ilTextInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('youtube_url'), 'youtube_url');
+		$youtube_url = new ilTextInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('ytb_youtube_url'), 'youtube_url');
 		$option->addSubItem($youtube_url);
 		return $option;
 	}

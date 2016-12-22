@@ -127,7 +127,7 @@ class ilInteractiveVideoSourceFactory
 	 */
 	public function getDefaultVideoSource()
 	{
-		return 'ilInteractiveVideoMediaObject';
+		return 'imo';
 	}
 
 	protected function readSourceSettings()
