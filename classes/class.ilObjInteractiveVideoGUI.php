@@ -1659,15 +1659,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$is_chronologic = $a_form->getInput('is_chronologic');
 		$this->object->setIsChronologic((int)$is_chronologic);
-		
+
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
+		$factory = new ilInteractiveVideoSourceFactory();
+		$source = $factory->getVideoSourceObject($a_form->getInput('source_id'));
+		$source->doUpdateVideoSource($this->obj_id);
+
+		$source_id = $a_form->getInput('source_id');
+		$this->object->setSourceId(ilUtil::stripSlashes($source_id));
+
 		$this->object->update();
-		
-		// @todo: Store the new file (delegate to application class)
-		$file = $a_form->getInput('video_file');
-		if($file['error'] == 0 )
-		{
-			$this->object->uploadVideoFile();
-		}
 
 		parent::updateCustom($a_form);
 	}
@@ -1687,7 +1688,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @param string $type
 	 * @return ilPropertyFormGUI
 	 */
-	public function  initCreateForm($type)
+	public function initCreateForm($type)
 	{
 		$form = parent::initCreateForm($type);
 

@@ -31,15 +31,6 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	}
 
 	/**
-	 * @param ilPropertyFormGUI $form
-	 * @return ilPropertyFormGUI
-	 */
-	public function saveForm($form)
-	{
-		return $form;
-	}
-
-	/**
 	 * @param ilTemplate $tpl
 	 * @return ilTemplate
 	 */

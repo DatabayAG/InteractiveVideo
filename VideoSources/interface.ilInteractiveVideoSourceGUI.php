@@ -18,12 +18,6 @@ interface ilInteractiveVideoSourceGUI
 	public function checkForm($form);
 
 	/**
-	 * @param ilPropertyFormGUI $form
-	 * @return ilPropertyFormGUI
-	 */
-	public function saveForm($form);
-
-	/**
 	 * @param ilTemplate $tpl
 	 * @return ilTemplate
 	 */

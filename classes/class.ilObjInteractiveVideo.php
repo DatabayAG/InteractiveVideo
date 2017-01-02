@@ -91,8 +91,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 
 		try
 		{
-			#$this->uploadVideoFile();
-
 			$factory = new ilInteractiveVideoSourceFactory();
 			$this->video_source_object = $factory->getVideoSourceObject(ilUtil::stripSlashes($_POST['source_id']));
 			$this->video_source_object->doCreateVideoSource($this->getId());
@@ -125,6 +123,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		parent::doUpdate();
 
 		$this->updateMetaData();
+		$factory = new ilInteractiveVideoSourceFactory();
+		$this->video_source_object = $factory->getVideoSourceObject(ilUtil::stripSlashes($_POST['source_id']));
+		$this->video_source_object->doUpdateVideoSource($this->getId());
 
 		$ilDB->update('rep_robj_xvid_objects',
 			array(	'is_anonymized' => array('integer', $this->isAnonymized()),

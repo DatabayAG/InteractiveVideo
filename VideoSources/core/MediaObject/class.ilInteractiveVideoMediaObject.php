@@ -39,7 +39,11 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function doCreateVideoSource($obj_id)
 	{
-		$this->uploadVideoFile($obj_id);
+		$file = $_FILES['video_file'];
+		if($file['error'] == 0 )
+		{
+			$this->uploadVideoFile($obj_id);
+		}
 	}
 
 	/**
@@ -72,7 +76,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function doUpdateVideoSource($obj_id)
 	{
-		// TODO: Implement cloneVideoSource() method.
+		$this->uploadVideoFile($obj_id);
 	}
 
 	/**
@@ -122,7 +126,10 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 
 		$file_name = ilObjMediaObject::fixFilename($new_file['name']);
 		$file      = $mob_dir . '/' . $file_name;
-		ilUtil::moveUploadedFile($new_file['tmp_name'], $file_name, $file);
+		if(file_exists($new_file['tmp_name']))
+		{
+			ilUtil::moveUploadedFile($new_file['tmp_name'], $file_name, $file);
+		}
 
 		// get mime type
 		$format   = ilObjMediaObject::getMimeType($file);

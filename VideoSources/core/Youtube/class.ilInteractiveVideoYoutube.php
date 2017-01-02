@@ -6,6 +6,8 @@ require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/In
 class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 {
 
+	const FORM_FIELD = 'youtube_url';
+
 	/**
 	 * @var string
 	 */
@@ -15,6 +17,11 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 * @var string
 	 */
 	protected $version;
+
+	/**
+	 * @var string
+	 */
+	protected $youtube_id;
 
 	/**
 	 * ilInteractiveVideoYoutube constructor.
@@ -67,7 +74,11 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 */
 	public function doUpdateVideoSource($obj_id)
 	{
-		// TODO: Implement cloneVideoSource() method.
+		$youtube_id = self::getYoutubeIdentifier(ilUtil::stripSlashes($_POST[self::FORM_FIELD]));
+		if($youtube_id)
+		{
+			$this->setYoutubeId($youtube_id);
+		}
 	}
 
 	/**
@@ -125,5 +136,37 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	public function getVersion()
 	{
 		return $this->version;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getYoutubeId()
+	{
+		return $this->youtube_id;
+	}
+
+	/**
+	 * @param string $youtube_id
+	 */
+	public function setYoutubeId($youtube_id)
+	{
+		$this->youtube_id = $youtube_id;
+	}
+
+	/**
+	 * @param $value
+	 * @return mixed
+	 */
+	public static function getYoutubeIdentifier($value)
+	{
+		$re  = '/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/';
+		#$str = 'https://www.youtube.com/watch?v=7ZxWg0sw_BI';
+		preg_match_all($re, $value, $matches);
+		if(sizeof($matches) == 2)
+		{
+			return $matches[1][0];
+		}
+		return false;
 	}
 }
