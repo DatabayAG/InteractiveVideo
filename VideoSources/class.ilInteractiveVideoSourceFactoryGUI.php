@@ -32,9 +32,9 @@ class ilInteractiveVideoSourceFactoryGUI
 		$this->obj		= $obj;
 		$factory		= new ilInteractiveVideoSourceFactory();
 		$this->sources	= $factory->getVideoSources();
-		if($factory->isActive($factory->getVideoSource($obj->getSourceId())->getClass()) !== false)
+		if($factory->isActive($factory->getVideoSourceObject($obj->getSourceId())->getClass()) !== false)
 		{
-			$this->gui_source = $factory->getVideoSource($obj->getSourceId())->getGUIClass();
+			$this->gui_source = $factory->getVideoSourceObject($obj->getSourceId())->getGUIClass();
 		}
 		else
 		{

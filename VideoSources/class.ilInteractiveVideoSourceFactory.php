@@ -35,7 +35,7 @@ class ilInteractiveVideoSourceFactory
 	 * @param $source_id
 	 * @return ilInteractiveVideoSource
 	 */
-	public function getVideoSource($source_id)
+	public function getVideoSourceObject($source_id)
 	{
 		$sources = $this->getVideoSources();
 		foreach($sources as $class => $object)
@@ -94,7 +94,7 @@ class ilInteractiveVideoSourceFactory
 			{
 				continue;
 			}
-			if($file->getExtension() === 'php' && $file->getFilename() !== 'plugin.php')
+			if($file->getExtension() === 'php' && $file->getFilename() !== 'version.php')
 			{
 				require_once $file;
 				$class      = str_replace(array('class.', '.php'), '', $file->getBasename());

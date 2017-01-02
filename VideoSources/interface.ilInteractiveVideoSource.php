@@ -5,22 +5,36 @@
  */
 interface ilInteractiveVideoSource
 {
+	/**
+	 * @param $obj_id
+	 */
+	public function doCreateVideoSource($obj_id);
 
 	/**
 	 * @param $obj_id
 	 */
-	public function getVideoSource($obj_id);
+	public function doReadVideoSource($obj_id);
 
 	/**
 	 * @param $obj_id
 	 */
-	public function deleteVideoSource($obj_id);
+	public function doDeleteVideoSource($obj_id);
 
 	/**
 	 * @param $original_obj_id
 	 * @param $new_obj_id
 	 */
-	public function cloneVideoSource($original_obj_id, $new_obj_id);
+	public function doCloneVideoSource($original_obj_id, $new_obj_id);
+
+	/**
+	 * @param $obj_id
+	 */
+	public function doUpdateVideoSource($obj_id);
+
+	/**
+	 * @param $obj_id
+	 */
+	public function beforeDeleteVideoSource($obj_id);
 
 	/**
 	 * @return string

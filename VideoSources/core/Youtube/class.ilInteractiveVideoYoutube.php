@@ -21,9 +21,9 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 */
 	public function __construct()
 	{
-		if (is_file(dirname(__FILE__) . '/plugin.php'))
+		if (is_file(dirname(__FILE__) . '/version.php'))
 		{
-			include_once(dirname(__FILE__) . '/plugin.php');
+			include_once(dirname(__FILE__) . '/version.php');
 			$this->version = $version;
 			$this->id = $id;
 		}
@@ -32,7 +32,15 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	/**
 	 * @param $obj_id
 	 */
-	public function getVideoSource($obj_id)
+	public function doCreateVideoSource($obj_id)
+	{
+
+	}
+
+	/**
+	 * @param $obj_id
+	 */
+	public function doReadVideoSource($obj_id)
 	{
 		// TODO: Implement getVideoSource() method.
 	}
@@ -40,7 +48,7 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	/**
 	 * @param $obj_id
 	 */
-	public function deleteVideoSource($obj_id)
+	public function doDeleteVideoSource($obj_id)
 	{
 		// TODO: Implement deleteVideoSource() method.
 	}
@@ -49,7 +57,23 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 * @param $original_obj_id
 	 * @param $new_obj_id
 	 */
-	public function cloneVideoSource($original_obj_id, $new_obj_id)
+	public function doCloneVideoSource($original_obj_id, $new_obj_id)
+	{
+		// TODO: Implement cloneVideoSource() method.
+	}
+
+	/**
+	 * @param $obj_id
+	 */
+	public function doUpdateVideoSource($obj_id)
+	{
+		// TODO: Implement cloneVideoSource() method.
+	}
+
+	/**
+	 * @param $obj_id
+	 */
+	public function beforeDeleteVideoSource($obj_id)
 	{
 		// TODO: Implement cloneVideoSource() method.
 	}
