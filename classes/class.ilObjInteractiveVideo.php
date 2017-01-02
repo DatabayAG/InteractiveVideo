@@ -165,6 +165,14 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$this->getVideoSourceObject($this->getSourceId());
 		$this->video_source_object->beforeDeleteVideoSource($this->getId());
 		self::deleteComments(self::getCommentIdsByObjId($this->getId(), false));
+
+		//TODO: WHY is doDelete not called?
+		/**
+		 * @var $ilDB ilDB
+		 */
+		global $ilDB;
+		$ilDB->manipulate('DELETE FROM rep_robj_xvid_objects WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
+		$this->deleteMetaData();
 	}
 
 	/**
@@ -172,18 +180,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	 */
 	protected function doDelete()
 	{
-		/**
-		 * @var $ilDB ilDB
-		 */
-		global $ilDB;
-
-		$this->beforeDelete();
-
-		$ilDB->manipulate('DELETE FROM rep_robj_xvid_objects WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
-
 		parent::doDelete();
-
-		$this->deleteMetaData();
 	}
 
 	/**

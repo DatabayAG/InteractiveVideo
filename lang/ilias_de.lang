@@ -127,3 +127,4 @@ rbac_create_xvid#:#Interaktives Video anlegen
 source#:#Quelle
 installed_version#:#Installierte Version: %s
 source_does_not_exist#:#Quelle existiert nicht mehr oder wurde in der Administration deaktiviert
+update_db#:#Datenbank Updates einspielen

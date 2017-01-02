@@ -128,3 +128,4 @@ rbac_create_xvid#:#Create Interactive Video
 source#:#Source
 installed_version#:#Installed version: %s
 source_does_not_exist#:#Source does not exist anymore or was disabled in the administration
+update_db#:#Update Database

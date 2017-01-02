@@ -2,6 +2,8 @@
 
 require_once './Services/Component/classes/class.ilPluginConfigGUI.php';
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
+require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilInteractiveVideoDbUpdater.php';
+
 /**
  * Class ilInteractiveVideoConfigGUI
  */
@@ -78,7 +80,9 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 			case 'saveConfigurationForm':
 				$this->saveConfigurationForm();
 				break;
-
+			case 'loadDbUpdates':
+				$this->loadDbUpdates();
+				break;
 			case 'showConfigurationForm':
 			default:
 				$this->showConfigurationForm();
@@ -113,6 +117,9 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		$source = ilUtil::stripSlashes($_GET['video_source']);
 		$form->setFormAction($this->ctrl->getFormAction($this, 'showConfigurationForm'));
 		$mapping = array();
+		//TODO: remove
+		$db_updater = new ilInteractiveVideoDbUpdater();
+		//TODO: remove
 		if($source == '')
 		{
 			$form->setTitle($this->lng->txt('settings'));
@@ -137,6 +144,11 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		$hidden = new ilHiddenInputGUI('path_mapping');
 		$hidden->setValue(json_encode($mapping));
 		$form->addItem($hidden);
+
+		if($db_updater->isNewerVersionFound())
+		{
+			$form->addCommandButton('loadDbUpdates', $this->plugin_object->txt('update_db'));
+		}
 		$form->addCommandButton('saveConfigurationForm', $this->lng->txt('save'));
 
 		return $form;
@@ -178,6 +190,16 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 
 		$form->setValuesByPost();
 		$this->showConfigurationForm($form);
+	}
+
+	/**
+	 *
+	 */
+	protected function loadDbUpdates()
+	{
+		$db_updater = new ilInteractiveVideoDbUpdater();
+		$db_updater->applyPluginUpdates();
+		$this->showConfigurationForm();
 	}
 
 	/**

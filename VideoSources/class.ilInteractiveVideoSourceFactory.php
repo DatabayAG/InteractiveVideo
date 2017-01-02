@@ -94,7 +94,7 @@ class ilInteractiveVideoSourceFactory
 			{
 				continue;
 			}
-			if($file->getExtension() === 'php' && $file->getFilename() !== 'version.php')
+			if($file->getExtension() === 'php' && $file->getFilename() !== 'version.php'  && $file->getFilename() !== 'dbupdate.php')
 			{
 				require_once $file;
 				$class      = str_replace(array('class.', '.php'), '', $file->getBasename());
