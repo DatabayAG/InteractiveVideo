@@ -123,6 +123,15 @@ class ilInteractiveVideoSourceFactory
 	}
 
 	/**
+	 * @param $class
+	 * @return bool
+	 */
+	public function getVersion($class)
+	{
+		return $this->sources_settings[$class]['version'];
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getDefaultVideoSource()

@@ -53,6 +53,28 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	 */
 	protected $video_source_object;
 
+	/**
+	 * @param $src_id
+	 * @return ilInteractiveVideoSource
+	 */
+	protected function getVideoSourceObject($src_id)
+	{
+		$factory = new ilInteractiveVideoSourceFactory();
+		if($this->video_source_object === null)
+		{
+			$this->video_source_object = $factory->getVideoSourceObject($src_id);
+		}
+		else
+		{
+			if($this->video_source_object->getId() !== $src_id)
+			{
+				$this->video_source_object = $factory->getVideoSourceObject($src_id);
+			}
+		}
+
+		return $this->video_source_object;
+	}
+
 	protected function doRead()
 	{
 		/**
@@ -75,8 +97,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$this->setIsChronologic($row['is_chronologic']);
 		$this->setSourceId($row['source_id']);
 
-		$factory = new ilInteractiveVideoSourceFactory();
-		$this->video_source_object = $factory->getVideoSourceObject($row['source_id']);
+		$this->getVideoSourceObject($row['source_id']);
 
 		parent::doRead();
 	}
@@ -91,8 +112,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 
 		try
 		{
-			$factory = new ilInteractiveVideoSourceFactory();
-			$this->video_source_object = $factory->getVideoSourceObject(ilUtil::stripSlashes($_POST['source_id']));
+			$this->getVideoSourceObject(ilUtil::stripSlashes($_POST['source_id']));
 			$this->video_source_object->doCreateVideoSource($this->getId());
 
 			parent::doCreate();
@@ -123,17 +143,16 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		parent::doUpdate();
 
 		$this->updateMetaData();
-		$factory = new ilInteractiveVideoSourceFactory();
-		$this->video_source_object = $factory->getVideoSourceObject(ilUtil::stripSlashes($_POST['source_id']));
+		$this->getVideoSourceObject(ilUtil::stripSlashes($_POST['source_id']));
 		$this->video_source_object->doUpdateVideoSource($this->getId());
 
 		$ilDB->update('rep_robj_xvid_objects',
-			array(	'is_anonymized' => array('integer', $this->isAnonymized()),
-					  'is_repeat' =>array('integer', $this->isRepeat()),
-					  'is_public' =>array('integer', $this->isPublic()),
-					  'is_chronologic' =>array('integer', $this->isChronologic()),
-					  'is_online' => array('integer', $this->isOnline()),
-					  'source_id' => array('text', $this->getSourceId())
+			array(	'is_anonymized'		=>array('integer',	$this->isAnonymized()),
+					'is_repeat'			=>array('integer',	$this->isRepeat()),
+					'is_public'			=>array('integer',	$this->isPublic()),
+					'is_chronologic'	=>array('integer',	$this->isChronologic()),
+					'is_online'			=>array('integer',	$this->isOnline()),
+					'source_id'			=>array('text',		$this->getSourceId())
 			),
 			array('obj_id' => array('integer', $this->getId())));
 	}
@@ -143,9 +162,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	 */
 	public function beforeDelete()
 	{
-		$mob = new ilObjMediaObject($this->getMobId());
-		ilObjMediaObject::_removeUsage($this->getMobId(), $this->getType(), $this->getId());
-		$mob->delete();
+		$this->getVideoSourceObject($this->getSourceId());
+		$this->video_source_object->beforeDeleteVideoSource($this->getId());
 		self::deleteComments(self::getCommentIdsByObjId($this->getId(), false));
 	}
 
@@ -159,6 +177,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		 */
 		global $ilDB;
 
+		$this->beforeDelete();
+
 		$ilDB->manipulate('DELETE FROM rep_robj_xvid_objects WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
 
 		parent::doDelete();
@@ -167,11 +187,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	}
 
 	/**
-	 * @param self    $new_obj
+	 * @param ilObjInteractiveVideo $new_obj
 	 * @param integer $a_target_id
 	 * @param integer $a_copy_id
 	 */
-	protected function doCloneObject(ilObjInteractiveVideo $new_obj, $a_target_id, $a_copy_id = null)
+	protected function doCloneObject($new_obj, $a_target_id, $a_copy_id = null)
 	{
 		parent::doCloneObject($new_obj, $a_target_id, $a_copy_id);
 

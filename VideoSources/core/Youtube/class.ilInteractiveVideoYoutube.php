@@ -156,14 +156,13 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 
 	/**
 	 * @param $value
-	 * @return mixed
+	 * @return string | boolean
 	 */
 	public static function getYoutubeIdentifier($value)
 	{
-		$re  = '/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/';
-		#$str = 'https://www.youtube.com/watch?v=7ZxWg0sw_BI';
-		preg_match_all($re, $value, $matches);
-		if(sizeof($matches) == 2)
+		$regex = '/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/';
+		preg_match_all($regex, $value, $matches);
+		if(sizeof($matches) == 2 && array_key_exists(0, $matches[1]))
 		{
 			return $matches[1][0];
 		}

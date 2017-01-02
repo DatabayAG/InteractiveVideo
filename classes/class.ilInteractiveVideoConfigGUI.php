@@ -60,12 +60,12 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		 */
 		global $lng, $tpl, $ilCtrl, $ilTabs;
 
-		$this->lng		= $lng;
-		$this->tpl		= $tpl;
-		$this->ctrl		= $ilCtrl;
-		$this->tabs		= $ilTabs;
-		$this->video_source_factory = new ilInteractiveVideoSourceFactory();
-		$this->active_tab = 'settings';
+		$this->lng					= $lng;
+		$this->tpl					= $tpl;
+		$this->ctrl					= $ilCtrl;
+		$this->tabs					= $ilTabs;
+		$this->video_source_factory	= new ilInteractiveVideoSourceFactory();
+		$this->active_tab			= 'settings';
 	}
 
 	/**
@@ -124,7 +124,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 				{
 					$activation->setChecked(true);
 				}
-				$activation->setInfo(sprintf($this->plugin_object->txt('installed_version'), $engine->getVersion()));
+				$activation->setInfo(sprintf($this->plugin_object->txt('installed_version'), $this->video_source_factory->getVersion($class)));
 				$form->addItem($activation);
 				$mapping[$class] = array('path' => $engine->getClassPath(), 'id' => $engine->getId());
 			}

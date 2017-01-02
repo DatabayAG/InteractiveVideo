@@ -39,11 +39,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function doCreateVideoSource($obj_id)
 	{
-		$file = $_FILES['video_file'];
-		if($file['error'] == 0 )
-		{
-			$this->uploadVideoFile($obj_id);
-		}
+		$this->doUpdateVideoSource($obj_id);
 	}
 
 	/**
@@ -59,7 +55,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function doDeleteVideoSource($obj_id)
 	{
-		// TODO: Implement deleteVideoSource() method.
+		$a = 0;
 	}
 
 	/**
@@ -76,7 +72,11 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function doUpdateVideoSource($obj_id)
 	{
-		$this->uploadVideoFile($obj_id);
+		$file = $_FILES['video_file'];
+		if($file['error'] == 0 )
+		{
+			$this->uploadVideoFile($obj_id);
+		}
 	}
 
 	/**
@@ -84,7 +84,10 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function beforeDeleteVideoSource($obj_id)
 	{
-		// TODO: Implement cloneVideoSource() method.
+		$obj = ilObjectFactory::getInstanceByObjId($obj_id);
+		$mob = new ilObjMediaObject($obj->getMobId());
+		ilObjMediaObject::_removeUsage($mob->getId(), 'xvid', $obj_id);
+		$mob->delete();
 	}
 
 	/**
@@ -94,7 +97,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function uploadVideoFile($obj_id)
 	{
-		global $ilDB, $ilCtrl;
+		global $ilCtrl;
 
 		if(!isset($_FILES) || !is_array($_FILES)|| !isset($_FILES['video_file']))
 		{
@@ -126,6 +129,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 
 		$file_name = ilObjMediaObject::fixFilename($new_file['name']);
 		$file      = $mob_dir . '/' . $file_name;
+
 		if(file_exists($new_file['tmp_name']))
 		{
 			ilUtil::moveUploadedFile($new_file['tmp_name'], $file_name, $file);
@@ -144,6 +148,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		$media_item->setHAlign("Left");
 
 		ilUtil::renameExecutables($mob_dir);
+
 		$mob->update();
 
 		$this->setMobId($mob->getId());
@@ -160,10 +165,22 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 			throw new ilException(sprintf("%s: No audio/video file given", __METHOD__));
 		}
 
-		//delete old mob-data 
-		$res = $ilDB->queryF('SELECT mob_id FROM rep_robj_xvid_objects WHERE obj_id = %s',
-			array('integer'), array($this->getId()));
+		$this->removeOldUnusedMobFiles($obj_id, $mob);
+
+		$this->saveDataToDb($obj_id);
+	}
+
+	/**
+	 * @param $obj_id
+	 * @param $mob
+	 */
+	protected function removeOldUnusedMobFiles($obj_id, $mob)
+	{
+		global $ilDB;
+		$res = $ilDB->queryF('SELECT mob_id FROM rep_robj_xvid_objects WHERE obj_id = %s',array('integer'), array($this->getId()));
+
 		$old_mob_ids = array();
+
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$old_mob_ids[] = $row['mob_id'];
@@ -173,8 +190,16 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		{
 			$old_mob = new ilObjMediaObject($mob_id);
 			$old_mob->delete();
-			ilObjMediaObject::_removeUsage( $mob->getId(), 'xvid', $obj_id);
+			ilObjMediaObject::_removeUsage($mob->getId(), 'xvid', $obj_id);
 		}
+	}
+
+	/**
+	 * @param $obj_id
+	 */
+	protected function saveDataToDb($obj_id)
+	{
+		global $ilDB;
 
 		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_objects WHERE obj_id = %s',
 			array('integer'), array($obj_id));
@@ -182,13 +207,13 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		$ilDB->insert(
 			'rep_robj_xvid_objects',
 			array(
-				'obj_id'        => array('integer', $obj_id),
-				'mob_id'        => array('integer', $this->getMobId()),
-				'is_anonymized' => array('integer', (int) $_POST['is_anonymized']),
-				'is_repeat' 	=> array('integer', (int) $_POST['is_repeat']),
-				'is_chronologic'=> array('integer', (int) $_POST['is_chronologic']),
-				'is_public'     => array('integer', (int) $_POST['is_public']),
-				'source_id'     => array('text', ilUtil::stripSlashes($_POST['source_id']))
+				'obj_id'         => array('integer', $obj_id),
+				'mob_id'         => array('integer', $this->getMobId()),
+				'is_anonymized'  => array('integer', (int)$_POST['is_anonymized']),
+				'is_repeat'      => array('integer', (int)$_POST['is_repeat']),
+				'is_chronologic' => array('integer', (int)$_POST['is_chronologic']),
+				'is_public'      => array('integer', (int)$_POST['is_public']),
+				'source_id'      => array('text', ilUtil::stripSlashes($_POST['source_id']))
 			)
 		);
 	}
