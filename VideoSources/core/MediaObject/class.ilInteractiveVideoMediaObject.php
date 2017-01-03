@@ -65,7 +65,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function doDeleteVideoSource($obj_id)
 	{
-		$a = 0;
+		$this->beforeDeleteVideoSource($obj_id);
 	}
 
 	/**
@@ -74,7 +74,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function doCloneVideoSource($original_obj_id, $new_obj_id)
 	{
-		$mob = new ilObjMediaObject($this->mob_id);
+		$mob = new ilObjMediaObject($this->doReadVideoSource($original_obj_id));
 		$new_mob = $mob->duplicate();
 		ilObjMediaObject::_saveUsage($new_mob->getId(), $this->getType(), $new_obj_id);
 	}
@@ -96,9 +96,9 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function beforeDeleteVideoSource($obj_id)
 	{
-		$obj = ilObjectFactory::getInstanceByObjId($obj_id);
-		$mob = new ilObjMediaObject($obj->getMobId());
+		$mob = new ilObjMediaObject($this->doReadVideoSource($obj_id));
 		ilObjMediaObject::_removeUsage($mob->getId(), 'xvid', $obj_id);
+		$this->removeMobFromPluginTable($obj_id, $mob->getId());
 		$mob->delete();
 	}
 
@@ -177,7 +177,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 			throw new ilException(sprintf("%s: No audio/video file given", __METHOD__));
 		}
 
-		$this->removeOldUnusedMobFiles($obj_id, $mob);
+		$this->removeOldMobFiles($obj_id, $mob);
 
 		$this->saveDataToDb($obj_id);
 	}
@@ -186,10 +186,10 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 * @param $obj_id
 	 * @param $mob
 	 */
-	protected function removeOldUnusedMobFiles($obj_id, $mob)
+	protected function removeOldMobFiles($obj_id, $mob)
 	{
 		global $ilDB;
-		$res = $ilDB->queryF('SELECT mob_id FROM rep_robj_xvid_mobs WHERE obj_id = %s',array('integer'), array($this->getId()));
+		$res = $ilDB->queryF('SELECT mob_id FROM rep_robj_xvid_mobs WHERE obj_id = %s',array('integer'), array($obj_id));
 
 		$old_mob_ids = array();
 
@@ -200,9 +200,14 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 
 		foreach($old_mob_ids as $mob_id)
 		{
-			$old_mob = new ilObjMediaObject($mob_id);
-			$old_mob->delete();
-			ilObjMediaObject::_removeUsage($mob->getId(), 'xvid', $obj_id);
+			if($mob_id != $mob->getId())
+			{
+				$a = $mob->getId();
+				$old_mob = new ilObjMediaObject($mob_id);
+				ilObjMediaObject::_removeUsage($old_mob->getId(), 'xvid', $obj_id);
+				$this->removeMobFromPluginTable($obj_id, $mob_id);
+				$old_mob->delete();
+			}
 		}
 	}
 
@@ -220,6 +225,17 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 				'mob_id'         => array('integer', $this->getMobId())
 			)
 		);
+	}
+
+	/**
+	 * @param $obj_id
+	 * @param $mob_id
+	 */
+	protected function removeMobFromPluginTable($obj_id, $mob_id)
+	{
+		global $ilDB;
+		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_mobs WHERE obj_id = %s AND mob_id = %s',
+			array('integer', 'integer'), array($obj_id, $mob_id));
 	}
 
 	/**
@@ -274,7 +290,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	/**
 	 * @return string
 	 */
-	public function getMobId()
+	protected function getMobId()
 	{
 		return $this->mob_id;
 	}

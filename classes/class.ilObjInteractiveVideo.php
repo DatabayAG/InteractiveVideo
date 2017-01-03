@@ -151,10 +151,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 
 		parent::doUpdate();
 
-		$this->updateMetaData();
-		$this->getVideoSourceObject(ilUtil::stripSlashes($_POST['source_id']));
-		$this->video_source_object->doUpdateVideoSource($this->getId());
-
 		$ilDB->update('rep_robj_xvid_objects',
 			array(	'is_anonymized'		=>array('integer',	$this->isAnonymized()),
 					'is_repeat'			=>array('integer',	$this->isRepeat()),
