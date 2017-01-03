@@ -167,6 +167,7 @@ class ilInteractiveVideoSourceFactory
 		 */
 		global $ilDB;
 
+		$this->readSourceSettings();
 		$flip = array_keys($settings['settings']);
 		$mapping = $settings['mappings'];
 		$ilDB->manipulate('
@@ -178,6 +179,7 @@ class ilInteractiveVideoSourceFactory
 			$ilDB->insert('rep_robj_xvid_sources', array('plugin_name'	=> array('text', $key), 
 														 'is_activated'	=> array('integer', $value), 
 														 'plugin_id'	=> array('text', $mapping[$key]['id']),
+														 'db_update'	=> array('text', $this->sources_settings[$key]['db_update']),
 														 'class_path'	=> array('text', $mapping[$key]['path'])
 			));
 		}

@@ -22,11 +22,6 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	protected $mob_id;
 
 	/**
-	 * @var string
-	 */
-	protected $core_folder;
-
-	/**
 	 * ilInteractiveVideoMediaObject constructor.
 	 */
 	public function __construct()
@@ -36,7 +31,6 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 			include(dirname(__FILE__) . '/version.php');
 			$this->version = $version;
 			$this->id = $id;
-			$this->core_folder = basename(dirname(dirname(__FILE__))) . '/' .basename(dirname(__FILE__));
 		}
 	}
 

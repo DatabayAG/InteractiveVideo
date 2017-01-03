@@ -1147,9 +1147,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$video_tpl->setVariable('SCREEN_INFO', $this->plugin->txt('screen_info'));
 
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/class.ilInteractiveVideoMediaObjectGUI.php';
-		$object = new ilInteractiveVideoMediaObjectGUI();
+		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
 		$object->addPlayerElements($tpl);
+
 		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer($this->object)->get());
 
 		$video_tpl->setVariable('FORM_ACTION', $this->ctrl->getFormAction($this,'showTutorInsertForm'));

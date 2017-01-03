@@ -24,11 +24,6 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	protected $youtube_id;
 
 	/**
-	 * @var string
-	 */
-	protected $core_folder;
-
-	/**
 	 * ilInteractiveVideoYoutube constructor.
 	 */
 	public function __construct()
@@ -38,7 +33,6 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 			include(dirname(__FILE__) . '/version.php');
 			$this->version		= $version;
 			$this->id			= $id;
-			$this->core_folder	= basename(dirname(dirname(__FILE__))) . '/' .basename(dirname(__FILE__));
 		}
 	}
 
@@ -67,7 +61,7 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 */
 	public function doDeleteVideoSource($obj_id)
 	{
-		// TODO: Implement deleteVideoSource() method.
+		$this->beforeDeleteVideoSource($obj_id);
 	}
 
 	/**
@@ -90,7 +84,7 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 
 		if($youtube_id)
 		{
-			$ilDB->manipulate('DELETE FROM rep_robj_xvid_youtube WHERE obj_id = ' . $ilDB->quote($obj_id, 'integer'));
+			$this->removeEntryFromTable($obj_id);
 			$this->setYoutubeId($youtube_id);
 			$ilDB->insert(
 				'rep_robj_xvid_youtube',
@@ -107,7 +101,17 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 */
 	public function beforeDeleteVideoSource($obj_id)
 	{
-		// TODO: Implement cloneVideoSource() method.
+		$this->removeEntryFromTable($obj_id);
+	}
+
+	/**
+	 * @param $obj_id
+	 */
+	public function removeEntryFromTable($obj_id)
+	{
+		global $ilDB;
+		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_youtube WHERE obj_id = %s',
+			array('integer'), array($obj_id));
 	}
 
 	/**
