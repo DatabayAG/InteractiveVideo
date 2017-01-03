@@ -20,6 +20,16 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	protected $newer_version_found = false;
 
 	/**
+	 * @var array
+	 */
+	protected $update_map = array();
+
+	/**
+	 * @var string
+	 */
+	protected $plugin_id;
+
+	/**
 	 * ilInteractiveVideoDbUpdater constructor.
 	 * @param int  $a_db_handler
 	 * @param bool $tmp_flag
@@ -35,16 +45,20 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	
 	protected function iterateThroughUpdateFiles()
 	{
-		$this->LAST_UPDATE_FILE = $this->update_files[0];
-
-		if($this->readLastUpdateFile())
+		foreach($this->update_files as $file)
 		{
-			$actual_version = $this->readFileVersion();
-			if($actual_version > $this->getCurrentVersion())
+			$this->LAST_UPDATE_FILE = $file;
+			if($this->readLastUpdateFile())
 			{
-				$this->newer_version_found = true;
+				$actual_version = $this->readFileVersion();
+				$this->plugin_id = $this->replaceFolderNameWithDbVersion($file, $actual_version);
+				if($actual_version > $this->getCurrentVersion())
+				{
+					$this->newer_version_found = true;
+				}
 			}
 		}
+
 	}
 
 	protected function collectUpdateFiles()
@@ -60,16 +74,40 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 			}
 			if($file->getFilename() === 'dbupdate.php')
 			{
-				$this->update_files[] = './Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/' . basename(dirname(dirname(dirname($file->getPathName())))) . '/' . basename(dirname(dirname($file->getPathName()))) . '/' . basename(dirname($file->getPathName())) . '/' . $file->getBasename();
+				$folder = './Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/' . basename(dirname(dirname(dirname($file->getPathName())))) . '/' . basename(dirname(dirname($file->getPathName()))) . '/' ;
+				$this->getPluginFolder($folder);
+				$this->update_files[] = $folder . basename(dirname($file->getPathName())) . '/' . $file->getBasename();
 			}
 		}
 	}
 
 	public function getCurrentVersion()
 	{
-		return 0;
+		$res = $this->db->queryF(
+			'SELECT db_update FROM rep_robj_xvid_sources WHERE plugin_id = %s',
+			array('text'),
+			array($this->plugin_id)
+		);
+		$row = $this->db->fetchAssoc($res);
+		return $row['db_update'];
 	}
 
+	/**
+	 * @param $a_version
+	 * @return bool
+	 */
+	function setCurrentVersion($a_version)
+	{
+		$this->db->update('rep_robj_xvid_sources',
+			array(
+				'db_update' 	=> array('integer', (int)$a_version)
+			),
+			array(
+				'plugin_id' => array('text', $this->plugin_id)
+			)
+		);
+		return true;
+	}
 	/**
 	 * @return bool
 	 */
@@ -88,22 +126,82 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	
 	public function applyPluginUpdates()
 	{
-		$this->getCurrentVersion();
+		foreach($this->update_files as $file)
+		{
+			$this->getCurrentVersion();
 
-		$this->getFileForStep($this->currentVersion + 1);
-		$this->LAST_UPDATE_FILE = $this->update_files[0];
-		$this->DB_UPDATE_FILE = $this->update_files[0];
-		$this->current_file = $this->update_files[0];
+			$this->plugin_id = $this->getPluginId(dirname(dirname($file)). '/');
+			$this->getFileForStep($this->currentVersion + 1);
+			$this->LAST_UPDATE_FILE	= $file;
+			$this->DB_UPDATE_FILE	= $file;
+			$this->current_file		=$file;
 
-		$this->readDBUpdateFile();
-		$this->readLastUpdateFile();
-		$this->readFileVersion();
-		$this->applyUpdate();
+			$this->readDBUpdateFile();
+			$this->readLastUpdateFile();
+			$version = $this->readFileVersion();
+			$success = $this->applyUpdate();
+			if($success)
+			{
+				$this->setCurrentVersion($version);
+			}
+
+		}
 	}
 
 	function loadXMLInfo()
 	{
-		// to do: reload control structure information for plugin
 		return true;
+	}
+
+	/**
+	 * @param $folder
+	 */
+	protected function getPluginFolder($folder)
+	{
+		$plugin_id = $this->getPluginId($folder);
+		if(file_exists($folder . 'sql/dbupdate.php'))
+		{
+			$this->update_map[$plugin_id] = $folder . 'sql/dbupdate.php'; 
+		}
+	}
+
+	/**
+	 * @param $file
+	 * @param $file_version
+	 * @return int|string
+	 */
+	protected function replaceFolderNameWithDbVersion($file, $file_version)
+	{
+		foreach($this->update_map as $key => $value)
+		{
+			if($file == $value)
+			{
+				$this->plugin_id = $key;
+				$this->update_map[$key]= array('file' => $file_version, 'installed'	=> $this->getCurrentVersion());
+				return $key;
+			}
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getMap()
+	{
+		return $this->update_map;
+	}
+
+	/**
+	 * @param $folder
+	 * @return string
+	 */
+	protected function getPluginId($folder)
+	{
+		$file = $folder . 'version.php';
+		if(file_exists($file))
+		{
+			include($file);
+			return $id;
+		}
 	}
 }

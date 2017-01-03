@@ -113,13 +113,13 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		require_once 'Services/Form/classes/class.ilPropertyFormGUI.php';
 
 		$form = new ilPropertyFormGUI();
+		$db_updater = new ilInteractiveVideoDbUpdater();
 
 		$source = ilUtil::stripSlashes($_GET['video_source']);
 		$form->setFormAction($this->ctrl->getFormAction($this, 'showConfigurationForm'));
 		$mapping = array();
-		//TODO: remove
-		$db_updater = new ilInteractiveVideoDbUpdater();
-		//TODO: remove
+
+		$update_map = $db_updater->getMap();
 		if($source == '')
 		{
 			$form->setTitle($this->lng->txt('settings'));
@@ -131,7 +131,8 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 				{
 					$activation->setChecked(true);
 				}
-				$activation->setInfo(sprintf($this->plugin_object->txt('installed_version'), $this->video_source_factory->getVersion($class)));
+				$info = sprintf($this->plugin_object->txt('installed_version'), $update_map[$engine->getId()]['installed'], $update_map[$engine->getId()]['file']);
+				$activation->setInfo($info);
 				$form->addItem($activation);
 				$mapping[$class] = array('path' => $engine->getClassPath(), 'id' => $engine->getId());
 			}

@@ -88,8 +88,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 			array($this->getId())
 		);
 		$row = $ilDB->fetchAssoc($res);
-
-		$this->setMobId($row['mob_id']);
+		
 		$this->setIsAnonymized($row['is_anonymized']);
 		$this->setIsRepeat($row['is_repeat']);
 		$this->setIsPublic($row['is_public']);
@@ -114,6 +113,22 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		{
 			$this->getVideoSourceObject(ilUtil::stripSlashes($_POST['source_id']));
 			$this->video_source_object->doCreateVideoSource($this->getId());
+			global $ilDB;
+
+			$ilDB->manipulateF('DELETE FROM rep_robj_xvid_objects WHERE obj_id = %s',
+				array('integer'), array($this->getId()));
+
+			$ilDB->insert(
+				'rep_robj_xvid_objects',
+				array(
+					'obj_id'         => array('integer', $this->getId()),
+					'is_anonymized'  => array('integer', (int)$_POST['is_anonymized']),
+					'is_repeat'      => array('integer', (int)$_POST['is_repeat']),
+					'is_chronologic' => array('integer', (int)$_POST['is_chronologic']),
+					'is_public'      => array('integer', (int)$_POST['is_public']),
+					'source_id'      => array('text', ilUtil::stripSlashes($_POST['source_id']))
+				)
+			);
 
 			parent::doCreate();
 
@@ -196,8 +211,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 
 		global $ilDB;
 
-		$mob = new ilObjMediaObject($this->mob_id);
-		$new_mob = $mob->duplicate();
+		#$mob = new ilObjMediaObject($this->mob_id);
+	#	$new_mob = $mob->duplicate();
 
 		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_objects WHERE obj_id = %s',
 			array('integer'), array($new_obj->getId()));
@@ -206,7 +221,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 			'rep_robj_xvid_objects',
 			array(
 				'obj_id'        => array('integer', $new_obj->getId()),
-				'mob_id'        => array('integer', $new_mob->getId()),
 				'is_anonymized' => array('integer', $this->isAnonymized()),
 				'is_repeat' => array('integer', $this->isRepeat()),
 				'is_chronologic' => array('integer', $this->isChronologic()),
@@ -215,7 +229,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 			)
 		);
 
-		ilObjMediaObject::_saveUsage( $new_mob->getId(), $this->getType(), $new_obj->getId());
+		#ilObjMediaObject::_saveUsage( $new_mob->getId(), $this->getType(), $new_obj->getId());
 		$comment = new ilObjComment();
 		$comment->cloneTutorComments($this->getId(), $new_obj->getId());
 	}

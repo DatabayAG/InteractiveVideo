@@ -65,4 +65,9 @@ interface ilInteractiveVideoSource
 	 * @return string
 	 */
 	public function getVersion();
+
+	/**
+	 * @return string
+	 */
+	public function getCoreFolder();
 }

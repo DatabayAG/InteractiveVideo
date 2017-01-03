@@ -17,6 +17,8 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	public function getForm($option)
 	{
 		$youtube_url = new ilTextInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('ytb_youtube_url'), ilInteractiveVideoYoutube::FORM_FIELD);
+		#$object = new ilInteractiveVideoYoutube();
+		#$youtube_url->setValue($object->doReadVideoSource());
 		$option->addSubItem($youtube_url);
 		return $option;
 	}
@@ -53,7 +55,8 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	public function getPlayer($obj)
 	{
 		$player = new ilTemplate(self::PATH . 'tpl/tpl.video.html', false, false);
-		$player->setVariable('YOUTUBE_ID', 'd_oLOHM64J0');
+		$object = new ilInteractiveVideoYoutube();
+		$player->setVariable('YOUTUBE_ID', $object->doReadVideoSource($obj->getId()));
 		return $player;
 	}
 }

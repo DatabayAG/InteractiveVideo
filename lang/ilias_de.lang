@@ -125,6 +125,6 @@ root_create_xvid#:#Interaktives Video anlegen
 fold_create_xvid#:#Interaktives Video anlegen
 rbac_create_xvid#:#Interaktives Video anlegen 
 source#:#Quelle
-installed_version#:#Installierte Version: %s
+installed_version#:#Installierte Databank Version: %s, Datei Datenbank Version %s
 source_does_not_exist#:#Quelle existiert nicht mehr oder wurde in der Administration deaktiviert
 update_db#:#Datenbank Updates einspielen

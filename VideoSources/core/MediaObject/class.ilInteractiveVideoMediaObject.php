@@ -22,15 +22,21 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	protected $mob_id;
 
 	/**
+	 * @var string
+	 */
+	protected $core_folder;
+
+	/**
 	 * ilInteractiveVideoMediaObject constructor.
 	 */
 	public function __construct()
 	{
 		if (is_file(dirname(__FILE__) . '/version.php'))
 		{
-			include_once(dirname(__FILE__) . '/version.php');
+			include(dirname(__FILE__) . '/version.php');
 			$this->version = $version;
 			$this->id = $id;
+			$this->core_folder = basename(dirname(dirname(__FILE__))) . '/' .basename(dirname(__FILE__));
 		}
 	}
 
@@ -44,10 +50,14 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 
 	/**
 	 * @param $obj_id
+	 * @return int
 	 */
 	public function doReadVideoSource($obj_id)
 	{
-		// TODO: Implement getVideoSource() method.
+		global $ilDB;
+		$result = $ilDB->query('SELECT mob_id FROM rep_robj_xvid_mobs WHERE obj_id = '.$ilDB->quote($obj_id, 'integer'));
+		$row = $ilDB->fetchAssoc($result);
+		return (int) $row['mob_id'];
 	}
 
 	/**
@@ -152,7 +162,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		$mob->update();
 
 		$this->setMobId($mob->getId());
-		ilObjMediaObject::_saveUsage( $mob->getId(), 'xvid', $obj_id);
+		ilObjMediaObject::_saveUsage($mob->getId(), 'xvid', $obj_id);
 
 		if(!$mob->getMediaItem('Standard'))
 		{
@@ -177,7 +187,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	protected function removeOldUnusedMobFiles($obj_id, $mob)
 	{
 		global $ilDB;
-		$res = $ilDB->queryF('SELECT mob_id FROM rep_robj_xvid_objects WHERE obj_id = %s',array('integer'), array($this->getId()));
+		$res = $ilDB->queryF('SELECT mob_id FROM rep_robj_xvid_mobs WHERE obj_id = %s',array('integer'), array($this->getId()));
 
 		$old_mob_ids = array();
 
@@ -201,19 +211,11 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	{
 		global $ilDB;
 
-		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_objects WHERE obj_id = %s',
-			array('integer'), array($obj_id));
-
 		$ilDB->insert(
-			'rep_robj_xvid_objects',
+			'rep_robj_xvid_mobs',
 			array(
 				'obj_id'         => array('integer', $obj_id),
-				'mob_id'         => array('integer', $this->getMobId()),
-				'is_anonymized'  => array('integer', (int)$_POST['is_anonymized']),
-				'is_repeat'      => array('integer', (int)$_POST['is_repeat']),
-				'is_chronologic' => array('integer', (int)$_POST['is_chronologic']),
-				'is_public'      => array('integer', (int)$_POST['is_public']),
-				'source_id'      => array('text', ilUtil::stripSlashes($_POST['source_id']))
+				'mob_id'         => array('integer', $this->getMobId())
 			)
 		);
 	}
@@ -283,4 +285,11 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		$this->mob_id = $mob_id;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getCoreFolder()
+	{
+		return $this->core_folder;
+	}
 }

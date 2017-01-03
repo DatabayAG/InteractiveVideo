@@ -1,5 +1,6 @@
 <?php
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/interface.ilInteractiveVideoSourceGUI.php';
+require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/class.ilInteractiveVideoMediaObject.php';
 require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
 require_once 'Services/MediaObjects/classes/class.ilObjMediaObjectGUI.php';
 /**
@@ -48,7 +49,8 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	{
 		$player = new ilTemplate(self::PATH . 'tpl/tpl.video.html', false, false);
 		ilObjMediaObjectGUI::includePresentationJS($player);
-		$mob_id     = $obj->getMobId();
+		$media_object = new ilInteractiveVideoMediaObject();
+		$mob_id     = $media_object->doReadVideoSource($obj->getId());
 		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
 
