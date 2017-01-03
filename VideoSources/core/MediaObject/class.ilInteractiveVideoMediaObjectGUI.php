@@ -12,9 +12,10 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 
 	/**
 	 * @param ilRadioOption $option
+	 * @param               $obj_id
 	 * @return ilRadioOption
 	 */
-	public function getForm($option)
+	public function getForm($option, $obj_id)
 	{
 		$upload_field = new ilFileInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('video_file'), 'video_file');
 		$upload_field->setSuffixes(array('mp4', 'mov', 'mp3', 'flv', 'm4v', 'ogg', 'ogv', 'webm'));
@@ -57,6 +58,16 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 		$player->setVariable('VIDEO_SRC', $mob_dir . '/' . $media_item['location']);
 		$player->setVariable('VIDEO_TYPE', $media_item['format']);
 		return $player;
+	}
+
+	/**
+	 * @param array $a_values
+	 * @param       $obj
+	 */
+	public function getEditFormCustomValues(array &$a_values, $obj)
+	{
+		$object = new ilInteractiveVideoMediaObject();
+		$a_values['video_file'] = ilObject::_lookupTitle($object->doReadVideoSource($obj->getId()));
 	}
 
 }

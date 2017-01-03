@@ -3,7 +3,9 @@
 require_once 'Services/Repository/classes/class.ilObjectPluginGUI.php';
 require_once 'Services/PersonalDesktop/interfaces/interface.ilDesktopItemHandling.php';
 require_once 'Services/Form/classes/class.ilPropertyFormGUI.php';
-require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php'; 
+require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
+require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
+require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactoryGUI.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
@@ -214,9 +216,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $this->plugin->getDirectory());
 
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/class.ilInteractiveVideoYoutubeGUI.php';
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/class.ilInteractiveVideoMediaObjectGUI.php';
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactoryGUI.php';
 		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
 		$object->addPlayerElements($tpl);
 
@@ -1641,7 +1640,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function updateCustom(ilPropertyFormGUI $a_form)
 	{
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactoryGUI.php';
 		$factory = new ilInteractiveVideoSourceFactoryGUI($this->object);
 		$factory->checkForm($a_form);
 
@@ -1660,7 +1658,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_chronologic = $a_form->getInput('is_chronologic');
 		$this->object->setIsChronologic((int)$is_chronologic);
 
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
 		$factory = new ilInteractiveVideoSourceFactory();
 		$source = $factory->getVideoSourceObject($a_form->getInput('source_id'));
 		$source->doUpdateVideoSource($this->obj_id);
@@ -1755,7 +1752,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function getEditFormCustomValues(array &$a_values)
 	{
-		$a_values['video_file'] 	= ilObject::_lookupTitle($this->object->getMobId());
+		$factory = new ilInteractiveVideoSourceFactory();
+		$sources = $factory->getVideoSources();
+		foreach($sources as $key => $source)
+		{
+			/** @var ilInteractiveVideoSourceGUI $gui */
+			if($factory->isActive($source->getClass()))
+			{
+				$gui= $source->getGUIClass();
+				$gui->getEditFormCustomValues($a_values, $this->object);
+			}
+		}
 		$a_values['is_anonymized'] 	= $this->object->isAnonymized();
 		$a_values['is_repeat'] 		= $this->object->isRepeat();
 		$a_values['is_public']     	= $this->object->isPublic();
@@ -1825,7 +1832,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	protected function appendFormsFromFactory(ilPropertyFormGUI $a_form)
 	{
 
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
 		$factory = new ilInteractiveVideoSourceFactory();
 		$sources = $factory->getVideoSources();
 		
@@ -1838,7 +1844,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			{
 				$op = new ilRadioOption($this->plugin->txt($source->getId()), $source->getId());
 				$gui= $source->getGUIClass();
-				$gui->getForm($op);
+				$gui->getForm($op, $this->obj_id);
 				$item_group->addOption($op);
 			}
 		}

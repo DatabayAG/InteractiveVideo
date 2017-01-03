@@ -7,9 +7,16 @@ interface ilInteractiveVideoSourceGUI
 {
 	/**
 	 * @param ilRadioOption $option
+	 * @param               $obj_id
 	 * @return ilRadioOption
 	 */
-	public function getForm($option);
+	public function getForm($option, $obj_id);
+
+	/**
+	 * @param array $a_values
+	 * @param       $obj
+	 */
+	public function getEditFormCustomValues(array &$a_values, $obj);
 
 	/**
 	 * @param ilPropertyFormGUI $form

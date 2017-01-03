@@ -2,7 +2,6 @@
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 require_once 'Services/Repository/classes/class.ilObjectPlugin.php';
-require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
@@ -18,11 +17,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	 * @var bool
 	 */
 	protected $is_online = false;
-	
-	/**
-	 * @var integer
-	 */
-	protected $mob_id = 0;
 
 	/**
 	 * @var int
@@ -211,9 +205,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 
 		global $ilDB;
 
-		#$mob = new ilObjMediaObject($this->mob_id);
-	#	$new_mob = $mob->duplicate();
-
 		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_objects WHERE obj_id = %s',
 			array('integer'), array($new_obj->getId()));
 
@@ -229,7 +220,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 			)
 		);
 
-		#ilObjMediaObject::_saveUsage( $new_mob->getId(), $this->getType(), $new_obj->getId());
 		$comment = new ilObjComment();
 		$comment->cloneTutorComments($this->getId(), $new_obj->getId());
 	}
@@ -444,22 +434,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	}
 
 	################## SETTER & GETTER ##################
-
-	/**
-	 * @return int
-	 */
-	public function getMobId()
-	{
-		return $this->mob_id;
-	}
-
-	/**
-	 * @param int $mob_id
-	 */
-	public function setMobId($mob_id)
-	{
-		$this->mob_id = $mob_id;
-	}
 
 	/**
 	 * @return int

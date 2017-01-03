@@ -123,7 +123,7 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 */
 	public function isFileBased()
 	{
-		return true;
+		return false;
 	}
 
 	/**
@@ -188,13 +188,5 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 			return $matches[1][0];
 		}
 		return false;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getCoreFolder()
-	{
-		return $this->core_folder;
 	}
 }

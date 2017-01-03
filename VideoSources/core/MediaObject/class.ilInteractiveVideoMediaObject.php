@@ -74,7 +74,9 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function doCloneVideoSource($original_obj_id, $new_obj_id)
 	{
-		// TODO: Implement cloneVideoSource() method.
+		$mob = new ilObjMediaObject($this->mob_id);
+		$new_mob = $mob->duplicate();
+		ilObjMediaObject::_saveUsage($new_mob->getId(), $this->getType(), $new_obj_id);
 	}
 
 	/**
@@ -283,13 +285,5 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	protected function setMobId($mob_id)
 	{
 		$this->mob_id = $mob_id;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getCoreFolder()
-	{
-		return $this->core_folder;
 	}
 }
