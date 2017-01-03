@@ -21,14 +21,24 @@ class ilInteractiveVideoSourceFactory
 	protected $sources_settings = array();
 
 	/**
+	 * @var null | array
+	 */
+	protected static $video_sources;
+
+	/**
 	 * @return ilInteractiveVideoSource[]
 	 */
 	public function getVideoSources()
 	{
 		$this->readSourceSettings();
-		$this->getNativeVideoSources();
-		$this->getPluginVideoSources();
-		return array_merge(self::$native_type, self::$plugin_type);
+		if(self::$video_sources == null)
+		{
+			$this->getNativeVideoSources();
+			$this->getPluginVideoSources();
+			self::$video_sources = array_merge(self::$native_type, self::$plugin_type);
+		}
+		
+		return self::$video_sources;
 	}
 
 	/**
@@ -170,6 +180,7 @@ class ilInteractiveVideoSourceFactory
 		$this->readSourceSettings();
 		$flip = array_keys($settings['settings']);
 		$mapping = $settings['mappings'];
+
 		$ilDB->manipulate('
 		DELETE FROM rep_robj_xvid_sources 
 		WHERE 	' . $ilDB->in('plugin_name', $flip, false, 'text'));

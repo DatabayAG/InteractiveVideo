@@ -49,15 +49,15 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 		if(pro.isBuildListElementAllowed(username))
 		{
-			css_class = pro.getCSSClassForListelement();
+			css_class = pro.getCSSClassForListElement();
 			value =	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class +'">'            +
-							pro.builCommentTimeHtml(time, comment.is_interactive)                           +
-							pro.builCommentTimeEndHtml(comment)                                             +
-							pro.builCommentUsernameHtml(username, comment.is_interactive)                   +
-							pro.builCommentTitleHtml(comment.comment_title)                                 +
-							pro.builCommentTextHtml(comment.comment_text )                                  +
+							pro.buildCommentTimeHtml(time, comment.is_interactive)                           +
+							pro.buildCommentTimeEndHtml(comment)                                             +
+							pro.buildCommentUsernameHtml(username, comment.is_interactive)                   +
+							pro.buildCommentTitleHtml(comment.comment_title)                                 +
+							pro.buildCommentTextHtml(comment.comment_text )                                  +
 							pro.appendPrivateHtml(comment.is_private)                                       +
-							pro.builCommentTagsHtml(comment.comment_tags)                                   +
+							pro.buildCommentTagsHtml(comment.comment_tags)                                   +
 					'</li>';
 		}
 		else
@@ -287,7 +287,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		$('.list_item_' + id).removeClass('activeComment');
 	};
 
-	pro.getCSSClassForListelement = function()
+	pro.getCSSClassForListElement = function()
 	{
 		var css_class;
 
@@ -302,7 +302,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return css_class;
 	};
 
-	pro.builCommentTimeHtml = function (time, is_interactive)
+	pro.buildCommentTimeHtml = function (time, is_interactive)
 	{
 		var display_time 	= time;
 		if(parseInt(is_interactive, 10) === 1)
@@ -316,7 +316,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				'</time>' ;
 	};
 
-	pro.builCommentTimeEndHtml = function (comment)
+	pro.buildCommentTimeEndHtml = function (comment)
 	{
 		var h, m, s,display_time;
 		if(comment.comment_time_end === undefined)
@@ -346,7 +346,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		}
 	};
 
-	pro.builCommentUsernameHtml = function (username, is_interactive)
+	pro.buildCommentUsernameHtml = function (username, is_interactive)
 	{
 		var name = username;
 
@@ -362,7 +362,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return 	'<span class="comment_username"> ' + name + '</span> ';
 	};
 
-	pro.builCommentTitleHtml = function (title)
+	pro.buildCommentTitleHtml = function (title)
 	{
 		var t = title;
 
@@ -373,7 +373,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return 	'<span class="comment_title">' + t + '</span> ';
 	};
 
-	pro.builCommentTextHtml = function (text)
+	pro.buildCommentTextHtml = function (text)
 	{
 		return '<span class="comment_text">' + text + '</span> ';
 	};
@@ -393,7 +393,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return '<span class="private_text">'+ private_comment + '</span> ';
 	};
 
-	pro.builCommentTagsHtml = function (tags)
+	pro.buildCommentTagsHtml = function (tags)
 	{
 		var comment_tags    = '';
 		if(tags == null)
