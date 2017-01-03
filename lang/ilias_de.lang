@@ -128,3 +128,4 @@ source#:#Quelle
 installed_version#:#Installierte Databank Version: %s, Datei Datenbank Version %s
 source_does_not_exist#:#Quelle existiert nicht mehr oder wurde in der Administration deaktiviert
 update_db#:#Datenbank Updates einspielen
+db_up_to_date#:#Datenbank aktuell

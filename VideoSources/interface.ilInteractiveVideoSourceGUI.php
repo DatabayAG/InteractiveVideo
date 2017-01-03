@@ -13,6 +13,17 @@ interface ilInteractiveVideoSourceGUI
 	public function getForm($option, $obj_id);
 
 	/**
+	 * @param $form
+	 * @return 
+	 */
+	public function getConfigForm($form);
+
+	/**
+	 * @return boolean
+	 */
+	public function hasOwnConfigForm();
+
+	/**
 	 * @param array $a_values
 	 * @param       $obj
 	 */

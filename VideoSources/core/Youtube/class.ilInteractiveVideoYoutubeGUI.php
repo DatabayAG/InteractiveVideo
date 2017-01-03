@@ -71,4 +71,20 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 		$instance = new ilInteractiveVideoYoutube();
 		$a_values[ilInteractiveVideoYoutube::FORM_FIELD] = $instance->doReadVideoSource($obj->getId());
 	}
+
+	/**
+	 * @param $form
+	 */
+	public function getConfigForm($form)
+	{
+		// TODO: Implement getConfigForm() method.
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function hasOwnConfigForm()
+	{
+		return false;
+	}
 }

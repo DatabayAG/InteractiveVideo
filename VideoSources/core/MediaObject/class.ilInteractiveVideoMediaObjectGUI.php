@@ -70,4 +70,17 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 		$a_values['video_file'] = ilObject::_lookupTitle($object->doReadVideoSource($obj->getId()));
 	}
 
+	public function getConfigForm($form)
+	{
+		// TODO: Implement getConfigForm() method.
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function hasOwnConfigForm()
+	{
+		return false;
+	}
+
 }

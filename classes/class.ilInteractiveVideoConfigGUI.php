@@ -131,7 +131,14 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 				{
 					$activation->setChecked(true);
 				}
-				$info = sprintf($this->plugin_object->txt('installed_version'), $update_map[$engine->getId()]['installed'], $update_map[$engine->getId()]['file']);
+				if($update_map[$engine->getId()]['installed'] == $update_map[$engine->getId()]['file'])
+				{
+					$info = $this->plugin_object->txt('db_up_to_date');
+				}
+				else
+				{
+					$info = sprintf($this->plugin_object->txt('installed_version'), $update_map[$engine->getId()]['installed'], $update_map[$engine->getId()]['file']);
+				}
 				$activation->setInfo($info);
 				$form->addItem($activation);
 				$mapping[$class] = array('path' => $engine->getClassPath(), 'id' => $engine->getId());
@@ -139,8 +146,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		}
 		else
 		{
-			$this->active_tab = $source;
-			$form->setTitle(ilInteractiveVideoPlugin::getInstance()->txt($source));
+			$form = $this->addPluginConfigForm($form, $source);
 		}
 		$hidden = new ilHiddenInputGUI('path_mapping');
 		$hidden->setValue(json_encode($mapping));
@@ -155,13 +161,27 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		return $form;
 	}
 
+	/**
+	 * @param $form
+	 * @param $source
+	 */
+	protected function addPluginConfigForm($form, $source)
+	{
+		$this->active_tab = $source;
+		$form->setTitle(ilInteractiveVideoPlugin::getInstance()->txt($source));
+		#$factory = new ilInteractiveVideoSourceFactory();
+		#$instance = $factory->getVideoSourceObject($source);
+		#$settings = $factory->getSourceSettings($source);
+		return $form;
+	}
+
 	protected function addTabs()
 	{
 		$this->tabs->addSubTab('settings', $this->lng->txt('settings'),
 			$this->ctrl->getLinkTargetByClass('ilInteractiveVideoConfigGUI', 'view'));
 		foreach($this->video_source_factory->getVideoSources() as $class =>  $engine)
 		{
-			if($this->video_source_factory->isActive($class))
+			if($this->video_source_factory->isActive($class) && $engine->getGUIClass()->hasOwnConfigForm())
 			{
 				$this->tabs->addSubTab( $engine->getID(), ilInteractiveVideoPlugin::getInstance()->txt($engine->getID()),
 					$this->ctrl->getLinkTargetByClass('ilInteractiveVideoConfigGUI', 'view') . '&video_source=' . $engine->getID() );

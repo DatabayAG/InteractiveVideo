@@ -37,7 +37,7 @@ class ilInteractiveVideoSourceFactory
 			$this->getPluginVideoSources();
 			self::$video_sources = array_merge(self::$native_type, self::$plugin_type);
 		}
-		
+
 		return self::$video_sources;
 	}
 
@@ -109,10 +109,7 @@ class ilInteractiveVideoSourceFactory
 				require_once $file;
 				$class      = str_replace(array('class.', '.php'), '', $file->getBasename());
 				$reflection = new ReflectionClass($class);
-				if(
-					!$reflection->isAbstract() &&
-					$reflection->implementsInterface($interface)
-				)
+				if( !$reflection->isAbstract() && $reflection->implementsInterface($interface))
 				{
 					/** @var $instance ilInteractiveVideoSource */
 					$instance = new $class();
@@ -149,6 +146,19 @@ class ilInteractiveVideoSourceFactory
 		return 'imo';
 	}
 
+	public function getSourceSettings($source_id)
+	{
+		$sources = $this->sources_settings;
+		foreach($sources as $class => $settings)
+		{
+			if($source_id === $settings['plugin_id'])
+			{
+				return $settings;
+			}
+		}
+		return null;
+	}
+	
 	protected function readSourceSettings()
 	{
 		/**
