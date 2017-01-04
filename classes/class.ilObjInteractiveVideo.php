@@ -249,7 +249,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 
 	/**
 	 * @param $comment_ids
-	 * @return array
+	 * @return array | bool
 	 */
 	public static function getQuestionIdsByCommentIds($comment_ids)
 	{

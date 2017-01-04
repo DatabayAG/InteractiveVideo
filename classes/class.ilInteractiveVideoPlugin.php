@@ -114,7 +114,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 		include_once("./Services/Language/classes/class.ilObjLanguage.php");
 
 		$rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(dirname(__FILE__) . '/../VideoSources'));
-		$directories = $this->exploreDirectory($rii, 'ilInteractiveVideoSource');
+		$directories = $this->exploreDirectory($rii);
 		$lang_array = array();
 		$prefix = $this->getPrefix();
 		foreach($directories as $dir)

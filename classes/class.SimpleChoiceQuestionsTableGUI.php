@@ -54,20 +54,20 @@ class SimpleChoiceQuestionsTableGUI extends ilTable2GUI
 	}
 
 	/**
-	 * @param array $row
+	 * @param array $a_set
 	 */
-	protected function fillRow(array $row)
+	protected function fillRow($a_set)
 	{
 
 		$current_selection_list = new ilAdvancedSelectionListGUI();
 		$current_selection_list->setListTitle($this->lng->txt('actions'));
-		$current_selection_list->setId('act_' . $row['user_id']);
+		$current_selection_list->setId('act_' . $a_set['user_id']);
 
-		$this->tpl->setVariable('USER_ID', ilUtil::formCheckbox(0, 'user_id[]', $row['user_id']));
-		$this->tpl->setVariable('USER_NAME', $row['name']);
-		$this->tpl->setVariable('USER_ANSWERED', $row['answered']);
-		$this->tpl->setVariable('USER_SCORE', $row['correct']);
-		$this->tpl->setVariable('PERCENTAGE', $row['percentage']);
-		$this->ctrl->setParameter($this->parent_obj, 'user_id', $row['user_id']);
+		$this->tpl->setVariable('USER_ID', ilUtil::formCheckbox(0, 'user_id[]', $a_set['user_id']));
+		$this->tpl->setVariable('USER_NAME', $a_set['name']);
+		$this->tpl->setVariable('USER_ANSWERED', $a_set['answered']);
+		$this->tpl->setVariable('USER_SCORE', $a_set['correct']);
+		$this->tpl->setVariable('PERCENTAGE', $a_set['percentage']);
+		$this->ctrl->setParameter($this->parent_obj, 'user_id', $a_set['user_id']);
 	}
 }

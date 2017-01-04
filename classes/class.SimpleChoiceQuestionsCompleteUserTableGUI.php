@@ -6,6 +6,9 @@ require_once 'Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvance
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
 
+/**
+ * Class SimpleChoiceQuestionsCompleteUserTableGUI
+ */
 class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI{
 	/**
 	 * @var ilCtrl
@@ -13,8 +16,10 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI{
 	protected $ctrl;
 
 	/**
-	 * @param ilObjectGUI $a_parent_obj
-	 * @param string      $a_parent_cmd
+	 * SimpleChoiceQuestionsCompleteUserTableGUI constructor.
+	 * @param        $a_parent_obj
+	 * @param string $a_parent_cmd
+	 * @param array $colum_head
 	 */
 	public function __construct($a_parent_obj, $a_parent_cmd, $colum_head)
 	{
@@ -57,17 +62,18 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI{
 	}
 
 	/**
-	 * @param array $row
+	 * @param array $a_set
+	 * @internal param array $row
 	 */
-	protected function fillRow(array $row)
+	protected function fillRow($a_set)
 	{
 		global $lng;
 		$current_selection_list = new ilAdvancedSelectionListGUI();
 		$current_selection_list->setListTitle($this->lng->txt('actions'));
-		$current_selection_list->setId('act_' . $row['user_id']);
-		$max_columns = count($row);
+		$current_selection_list->setId('act_' . $a_set['user_id']);
+		$max_columns = count($a_set);
 		$counter = 0;
-        foreach($row as $key => $value)
+        foreach($a_set as $key => $value)
         {
             $this->tpl->setCurrentBlock('dynamic_table_column');
 	        if($counter != 0 && $counter != $max_columns - 2 && $counter != $max_columns -1 )
@@ -85,6 +91,6 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI{
             $this->tpl->parseCurrentBlock();
 	        $counter ++;
         }
-		$this->ctrl->setParameter($this->parent_obj, 'user_id', $row['user_id']);
+		$this->ctrl->setParameter($this->parent_obj, 'user_id', $a_set['user_id']);
 	}
 }

@@ -34,7 +34,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	 * @param int  $a_db_handler
 	 * @param bool $tmp_flag
 	 */
-	public function __construct($a_db_handler = 0,$tmp_flag = false)
+	public function __construct($a_db_handler = 0, $tmp_flag = false)
 	{
 		global $ilDB;
 		$this->db = $ilDB;
@@ -81,6 +81,9 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 		}
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getCurrentVersion()
 	{
 		$res = $this->db->queryF(
@@ -89,7 +92,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 			array($this->plugin_id)
 		);
 		$row = $this->db->fetchAssoc($res);
-		return $row['db_update'];
+		return (int) $row['db_update'];
 	}
 
 	/**

@@ -53,6 +53,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return 'editProperties';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getStandardCmd()
 	{
 		return 'showContent';
@@ -192,6 +195,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		exit();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function showFeedbackPerAjax()
 	{
 		$tpl_json = $this->plugin->getTemplate('default/tpl.show_question.html', false, false);
@@ -219,7 +225,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
 		$object->addPlayerElements($tpl);
 
-		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer($this->object)->get());
+		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());
 
 		$this->objComment = new ilObjComment();
 		$this->objComment->setObjId($this->object->getId());
@@ -408,8 +414,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($section_header);
 
 		$title = new ilTextInputGUI($this->lng->txt('title'), 'comment_title');
-		//Todo: why is the title on comments forced again?
-		//$title->setRequired(true);
 		$form->addItem($title);
 		
 		$this->plugin->includeClass('class.ilTimeInputGUI.php');
@@ -486,7 +490,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$this->ctrl->redirect($this, 'editComments');
 	}
-	
+
+	/**
+	 * @return ilPropertyFormGUI
+	 */
 	public function initQuestionForm()
 	{
 		$form = new ilPropertyFormGUI();
@@ -845,7 +852,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	private function performQuestionRefresh($comment_id, $form)
 	{
 		$question    = new SimpleChoiceQuestion($comment_id);
-		$question_id = $question->existQuestionForCommentId($comment_id);
+		#$question_id = $question->existQuestionForCommentId($comment_id);
 		
 		$question->setCommentId($comment_id);
 		$question->setType((int)$form->getInput('question_type'));
@@ -1021,8 +1028,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['is_private']		= $comment_data['is_private'];
 		
 		return $values;
-	}	
-		
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getAnswerDefinitionsJSON()
 	{
 		$simple_choice = new SimpleChoiceQuestion();
@@ -1041,7 +1051,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		return $question->get();
 	}
-	
+
+	/**
+	 * @return string
+	 */
 	public function getInteractiveForm()
 	{
 		global $tpl;
@@ -1124,7 +1137,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	/**
-	 *
+	 * @param int $current_time
 	 */
 	public function editComments($current_time = 0)
 	{
@@ -1150,7 +1163,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
 		$object->addPlayerElements($tpl);
 
-		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer($this->object)->get());
+		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());
 
 		$video_tpl->setVariable('FORM_ACTION', $this->ctrl->getFormAction($this,'showTutorInsertForm'));
 
@@ -1179,6 +1192,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($video_tpl->get());
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function initPlayerConfig()
 	{
 		global $ilUser, $tpl;

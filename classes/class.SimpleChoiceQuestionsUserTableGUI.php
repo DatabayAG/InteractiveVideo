@@ -47,15 +47,15 @@ class SimpleChoiceQuestionsUserTableGUI extends ilTable2GUI
 	}
 
 	/**
-	 * @param array $row
+	 * @param array $a_set
 	 */
-	protected function fillRow(array $row)
+	protected function fillRow($a_set)
 	{
 		$current_selection_list = new ilAdvancedSelectionListGUI();
 		$current_selection_list->setListTitle($this->lng->txt('actions'));
-		$current_selection_list->setId('act_' . $row['user_id']);
-		$this->tpl->setVariable('QUESTION_TITLE', $row['title']);
-		$this->tpl->setVariable('USER_ANSWERED', $row['answered']);
-		$this->tpl->setVariable('USER_SCORE', $row['points'] . '%');
+		$current_selection_list->setId('act_' . $a_set['user_id']);
+		$this->tpl->setVariable('QUESTION_TITLE', $a_set['title']);
+		$this->tpl->setVariable('USER_ANSWERED', $a_set['answered']);
+		$this->tpl->setVariable('USER_SCORE', $a_set['points'] . '%');
 	}
 }

@@ -52,9 +52,10 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 	}
 
 	/**
+	 * @param string $a_item
 	 * @return array
 	 */
-	public function getProperties()
+	public function getProperties($a_item = '')
 	{
 		$props = array();
 

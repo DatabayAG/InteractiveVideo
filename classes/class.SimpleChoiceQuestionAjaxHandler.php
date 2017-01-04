@@ -4,6 +4,10 @@ require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionScoring.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionStatistics.php');
+
+/**
+ * Class SimpleChoiceQuestionAjaxHandler
+ */
 class SimpleChoiceQuestionAjaxHandler {
 
     /**

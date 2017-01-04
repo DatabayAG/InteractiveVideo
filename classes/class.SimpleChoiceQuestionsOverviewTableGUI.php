@@ -6,6 +6,9 @@ require_once 'Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvance
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
 
+/**
+ * Class SimpleChoiceQuestionsOverviewTableGUI
+ */
 class SimpleChoiceQuestionsOverviewTableGUI extends ilTable2GUI
 {
 	/**
@@ -62,20 +65,20 @@ class SimpleChoiceQuestionsOverviewTableGUI extends ilTable2GUI
 	}
 
 	/**
-	 * @param array $row
+	 * @param array $a_set
 	 */
-	protected function fillRow(array $row)
+	protected function fillRow($a_set)
 	{
 
 		$current_selection_list = new ilAdvancedSelectionListGUI();
 		$current_selection_list->setListTitle($this->lng->txt('actions'));
-		$current_selection_list->setId('act_' . $row['user_id']);
+		$current_selection_list->setId('act_' . $a_set['user_id']);
 		
-		$this->tpl->setVariable('QUESTION_ID', ilUtil::formCheckbox(0, 'question_id[]', $row['question_id']));
-		$this->tpl->setVariable('COMMENT_TITLE', $row['comment_title']);
-		$this->tpl->setVariable('USER_ANSWERED', $row['answered']);
-		$this->tpl->setVariable('USER_ANSWERED_CORRECT', $row['correct']);
-		$this->tpl->setVariable('PERCENTAGE', $row['percentage']);
-		$this->ctrl->setParameter($this->parent_obj, 'user_id', $row['user_id']);
+		$this->tpl->setVariable('QUESTION_ID', ilUtil::formCheckbox(0, 'question_id[]', $a_set['question_id']));
+		$this->tpl->setVariable('COMMENT_TITLE', $a_set['comment_title']);
+		$this->tpl->setVariable('USER_ANSWERED', $a_set['answered']);
+		$this->tpl->setVariable('USER_ANSWERED_CORRECT', $a_set['correct']);
+		$this->tpl->setVariable('PERCENTAGE', $a_set['percentage']);
+		$this->ctrl->setParameter($this->parent_obj, 'user_id', $a_set['user_id']);
 	}
 }

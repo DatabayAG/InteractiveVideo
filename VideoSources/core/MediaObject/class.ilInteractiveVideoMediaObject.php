@@ -6,6 +6,8 @@ require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/In
 class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 {
 
+	const TABLE_NAME = 'rep_robj_xvid_mobs';
+
 	/**
 	 * @var string
 	 */
@@ -49,7 +51,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	public function doReadVideoSource($obj_id)
 	{
 		global $ilDB;
-		$result = $ilDB->query('SELECT mob_id FROM rep_robj_xvid_mobs WHERE obj_id = '.$ilDB->quote($obj_id, 'integer'));
+		$result = $ilDB->query('SELECT mob_id FROM '. self::TABLE_NAME .' WHERE obj_id = '.$ilDB->quote($obj_id, 'integer'));
 		$row = $ilDB->fetchAssoc($result);
 		return (int) $row['mob_id'];
 	}
@@ -183,7 +185,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	protected function removeOldMobFiles($obj_id, $mob)
 	{
 		global $ilDB;
-		$res = $ilDB->queryF('SELECT mob_id FROM rep_robj_xvid_mobs WHERE obj_id = %s',array('integer'), array($obj_id));
+		$res = $ilDB->queryF('SELECT mob_id FROM '. self::TABLE_NAME .' WHERE obj_id = %s',array('integer'), array($obj_id));
 
 		$old_mob_ids = array();
 
@@ -228,7 +230,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	protected function removeMobFromPluginTable($obj_id, $mob_id)
 	{
 		global $ilDB;
-		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_mobs WHERE obj_id = %s AND mob_id = %s',
+		$ilDB->manipulateF('DELETE FROM '. self::TABLE_NAME .' WHERE obj_id = %s AND mob_id = %s',
 			array('integer', 'integer'), array($obj_id, $mob_id));
 	}
 

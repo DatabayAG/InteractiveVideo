@@ -244,4 +244,3 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		$this->video_source_factory->saveSourceSettings(array('settings' => $settings, 'mappings' => $mapping));
 	}
 }
-?>

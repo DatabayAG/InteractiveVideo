@@ -230,6 +230,10 @@ class SimpleChoiceQuestion
 		}
 	}
 
+	/**
+	 * @param $old_comment_id
+	 * @param $new_comment_id
+	 */
 	public function cloneQuestionObject($old_comment_id, $new_comment_id)
 	{
 		global $ilDB;
@@ -535,6 +539,10 @@ class SimpleChoiceQuestion
 
 	}
 
+	/**
+	 * @param $comment_id
+	 * @return int
+	 */
 	public function getQuestionIdByCommentId($comment_id)
 	{
 		global $ilDB;

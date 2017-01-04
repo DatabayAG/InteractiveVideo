@@ -7,6 +7,9 @@ require_once 'Services/User/classes/class.ilUserUtil.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
 
+/**
+ * Class ilInteractiveVideoCommentsTableGUI
+ */
 class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 {
 	/**
@@ -94,11 +97,11 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	}
 
 	/**
-	 * @param array $row
+	 * @param array $a_set
 	 */
-	protected function fillRow(array $row)
+	protected function fillRow($a_set)
 	{
-		foreach ($row as $key => $value)
+		foreach ($a_set as $key => $value)
 		{
 			if($key == 'comment_id')
 			{
@@ -145,11 +148,11 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 
 		$current_selection_list = new ilAdvancedSelectionListGUI();
 		$current_selection_list->setListTitle($this->lng->txt('actions'));
-		$current_selection_list->setId('act_' . $row['comment_id']);
+		$current_selection_list->setId('act_' . $a_set['comment_id']);
 
-		$this->ctrl->setParameter($this->parent_obj, 'comment_id', $row['comment_id']);
+		$this->ctrl->setParameter($this->parent_obj, 'comment_id', $a_set['comment_id']);
 		
-		if($row['is_interactive'] == 1)
+		if($a_set['is_interactive'] == 1)
 		{
 			$link_target =  $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editQuestion' : 'editComment');
 		}	

@@ -47,6 +47,10 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess
 		return true;
 	}
 
+	/**
+	 * @param $a_id
+	 * @return bool
+	 */
 	public static function checkOnline($a_id)
 	{
 		/**

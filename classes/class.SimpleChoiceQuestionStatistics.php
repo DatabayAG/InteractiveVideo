@@ -2,6 +2,9 @@
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 require_once 'Services/User/classes/class.ilUserUtil.php';
 
+/**
+ * Class SimpleChoiceQuestionStatistics
+ */
 class SimpleChoiceQuestionStatistics {
 
     /**
@@ -252,7 +255,11 @@ class SimpleChoiceQuestionStatistics {
         $row = $ilDB->fetchAssoc($res);
         return (int)$row['count'];
     }
-    
+
+	/**
+	 * @param $question_id
+	 * @return array
+	 */
     public function getResponseFrequency($question_id)
     {
         global $ilDB;
