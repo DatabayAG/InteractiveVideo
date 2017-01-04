@@ -125,6 +125,10 @@ class ilObjComment
 		$this->setIsPrivate($row['is_private']);
 	}
 
+	/**
+	 * @param bool $return_next_id
+	 * @return null | int
+	 */
 	public function create($return_next_id = false)
 	{
 		/**
@@ -226,6 +230,9 @@ class ilObjComment
 		return $stop_points;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getContentComments()
 	{
 		/**
@@ -280,6 +287,10 @@ class ilObjComment
 		return $comments;
 	}
 
+	/**
+	 * @param int $old_id
+	 * @param int $new_id
+	 */
 	public function cloneTutorComments($old_id, $new_id)
 	{
 		global $ilDB;

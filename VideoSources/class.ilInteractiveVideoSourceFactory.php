@@ -146,6 +146,10 @@ class ilInteractiveVideoSourceFactory
 		return 'imo';
 	}
 
+	/**
+	 * @param $source_id
+	 * @return array|null
+	 */
 	public function getSourceSettings($source_id)
 	{
 		$sources = $this->sources_settings;
@@ -158,7 +162,7 @@ class ilInteractiveVideoSourceFactory
 		}
 		return null;
 	}
-	
+
 	protected function readSourceSettings()
 	{
 		/**

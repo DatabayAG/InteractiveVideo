@@ -117,13 +117,14 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	}
 
 	/**
-	 * Get db update file name for db step
+	 * @param $a_version
+	 * @return string
 	 */
 	function getFileForStep($a_version)
 	{
 		return $this->LAST_UPDATE_FILE;
 	}
-	
+
 	public function applyPluginUpdates()
 	{
 		$overall_success = true;
@@ -165,6 +166,9 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	function loadXMLInfo()
 	{
 		return true;
