@@ -7,6 +7,12 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestio
  */
 class SimpleChoiceQuestion
 {
+	const TABLE_NAME_QUESTION_TEXT	= 'rep_robj_xvid_qus_text';
+	const TABLE_NAME_QUESTION		= 'rep_robj_xvid_question';
+	const TABLE_NAME_COMMENTS		= 'rep_robj_xvid_comments';
+	const TABLE_NAME_SCORE			= 'rep_robj_xvid_score';
+	const TABLE_NAME_ANSWERS		= 'rep_robj_xvid_answers';
+	
 	/**
 	 *
 	 */
@@ -120,7 +126,7 @@ class SimpleChoiceQuestion
 		global $ilDB;
 		$res = $ilDB->queryF('
 				SELECT * 
-				FROM rep_robj_xvid_question 
+				FROM ' . self::TABLE_NAME_QUESTION . ' 
 				WHERE comment_id = %s',
 			array('integer'), array($this->getCommentId())
 		);
@@ -154,7 +160,7 @@ class SimpleChoiceQuestion
 
 		$res = $ilDB->queryF('
 				SELECT * 
-				FROM rep_robj_xvid_qus_text  
+				FROM ' . self::TABLE_NAME_QUESTION_TEXT . '  
 				WHERE question_id = %s',
 			array('integer'), array($this->getQuestionId())
 		);
@@ -175,8 +181,8 @@ class SimpleChoiceQuestion
 		 * @var $ilUser ilObjUser
 		 */
 		global $ilDB;
-		$question_id = $ilDB->nextId('rep_robj_xvid_question');
-		$ilDB->insert('rep_robj_xvid_question',
+		$question_id = $ilDB->nextId(self::TABLE_NAME_QUESTION);
+		$ilDB->insert(self::TABLE_NAME_QUESTION,
 			array(
 				'question_id'        => array('integer', $question_id),
 				'comment_id'         => array('integer', $this->getCommentId()),
@@ -198,7 +204,7 @@ class SimpleChoiceQuestion
 		{
 			foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
 			{
-				$answer_id = $ilDB->nextId('rep_robj_xvid_qus_text');
+				$answer_id = $ilDB->nextId(self::TABLE_NAME_QUESTION_TEXT);
 				if($value == null){$value = ' ';}
 				if(is_array($_POST['correct']) && array_key_exists($key, ilUtil::stripSlashesRecursive($_POST['correct'])))
 				{
@@ -208,7 +214,7 @@ class SimpleChoiceQuestion
 				{
 					$correct = 0;
 				}
-				$ilDB->insert('rep_robj_xvid_qus_text',
+				$ilDB->insert(self::TABLE_NAME_QUESTION_TEXT,
 					array(
 						'answer_id'   => array('integer', $answer_id),
 						'question_id' => array('integer', $question_id),
@@ -219,8 +225,8 @@ class SimpleChoiceQuestion
 		}
 		else
 		{
-			$answer_id = $ilDB->nextId('rep_robj_xvid_qus_text');
-			$ilDB->insert('rep_robj_xvid_qus_text',
+			$answer_id = $ilDB->nextId(self::TABLE_NAME_QUESTION_TEXT);
+			$ilDB->insert(self::TABLE_NAME_QUESTION_TEXT,
 				array(
 					'answer_id'   => array('integer', $answer_id),
 					'question_id' => array('integer', $question_id),
@@ -239,7 +245,7 @@ class SimpleChoiceQuestion
 		global $ilDB;
 		$res = $ilDB->queryF('
 				SELECT * 
-				FROM rep_robj_xvid_qus_text  
+				FROM ' . self::TABLE_NAME_QUESTION_TEXT . '  
 				WHERE question_id = %s',
 			array('integer'), array($this->getQuestionIdByCommentId($old_comment_id))
 		);
@@ -255,7 +261,7 @@ class SimpleChoiceQuestion
 		}
 		$res = $ilDB->queryF('
 				SELECT * 
-				FROM rep_robj_xvid_question 
+				FROM ' . self::TABLE_NAME_QUESTION . ' 
 				WHERE comment_id = %s',
 			array('integer'), array($old_comment_id)
 		);
@@ -337,7 +343,7 @@ class SimpleChoiceQuestion
 		 */
 
 		global $ilDB;
-		$res = $ilDB->queryF('SELECT * FROM rep_robj_xvid_question WHERE comment_id = %s',
+		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
 			array('integer'), array($comment_id));
 
 		$row = $ilDB->fetchAssoc($res);
@@ -358,7 +364,7 @@ class SimpleChoiceQuestion
 		 */
 		global $ilDB;
 		$res   = $ilDB->queryF(
-			'SELECT comment_title FROM rep_robj_xvid_comments WHERE comment_id = %s',
+			'SELECT comment_title FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE comment_id = %s',
 			array('integer'),
 			array((int)$cid)
 		);
@@ -386,7 +392,7 @@ class SimpleChoiceQuestion
 
 		global $ilDB;
 		$res = $ilDB->queryF(
-			'SELECT * FROM rep_robj_xvid_question WHERE question_id = %s',
+			'SELECT * FROM ' . self::TABLE_NAME_QUESTION . ' WHERE question_id = %s',
 			array('integer'),
 			array((int)$qid)
 		);
@@ -404,9 +410,9 @@ class SimpleChoiceQuestion
 		global $ilDB;
 		$res     = $ilDB->queryF('
 			SELECT comments.comment_id  comment 
-			FROM rep_robj_xvid_comments comments, 
-				rep_robj_xvid_question  questions, 
-				rep_robj_xvid_score  score  
+			FROM ' . self::TABLE_NAME_COMMENTS . ' comments, 
+				' . self::TABLE_NAME_QUESTION . '  questions, 
+				' . self::TABLE_NAME_SCORE . '  score  
 			WHERE comments.comment_id = questions.comment_id 
 			AND questions.question_id = score.question_id 
 			AND questions.repeat_question = %s
@@ -431,9 +437,9 @@ class SimpleChoiceQuestion
 		global $ilDB;
 		$res     = $ilDB->queryF('
 			SELECT comments.comment_id  comment 
-			FROM rep_robj_xvid_comments comments, 
-				rep_robj_xvid_question  questions, 
-				rep_robj_xvid_score  score  
+			FROM ' . self::TABLE_NAME_COMMENTS . ' comments, 
+				' . self::TABLE_NAME_QUESTION . '  questions, 
+				' . self::TABLE_NAME_SCORE . '  score  
 			WHERE comments.comment_id = questions.comment_id 
 			AND questions.question_id = score.question_id 
 			AND score.points = %s
@@ -464,12 +470,12 @@ class SimpleChoiceQuestion
 		$question_ids = $this->getInteractiveQuestionIdsByObjId($obj_id);
 
 		$ilDB->manipulate('
-		DELETE FROM rep_robj_xvid_score 
+		DELETE FROM ' . self::TABLE_NAME_SCORE . '  
 		WHERE 	' . $ilDB->in('question_id', $question_ids, false, 'integer') . ' 
 		AND 	' . $ilDB->in('user_id', $user_ids, false, 'integer'));
 
 		$ilDB->manipulate('
-		DELETE FROM rep_robj_xvid_answers 
+		DELETE FROM ' . self::TABLE_NAME_ANSWERS . ' 
 		WHERE 	' . $ilDB->in('question_id', $question_ids, false, 'integer') . ' 
 		AND 	' . $ilDB->in('user_id', $user_ids, false, 'integer'));
 	}
@@ -484,8 +490,8 @@ class SimpleChoiceQuestion
 
 		$res = $ilDB->queryF('
 			SELECT 		question_id 
-			FROM 		rep_robj_xvid_question qst
-			INNER JOIN 	rep_robj_xvid_comments  cmt on qst.comment_id = cmt.comment_id
+			FROM 		' . self::TABLE_NAME_QUESTION . ' qst
+			INNER JOIN 	' . self::TABLE_NAME_COMMENTS . '  cmt on qst.comment_id = cmt.comment_id
 			WHERE		obj_id = %s AND is_interactive = %s',
 			array('integer', 'integer'), array($obj_id, 1));
 
@@ -510,11 +516,11 @@ class SimpleChoiceQuestion
 			return;
 
 		$ilDB->manipulate('
-		DELETE FROM rep_robj_xvid_score 
+		DELETE FROM ' . self::TABLE_NAME_SCORE . ' 
 		WHERE 	' . $ilDB->in('question_id', $question_ids, false, 'integer'));
 
 		$ilDB->manipulate('
-		DELETE FROM rep_robj_xvid_answers 
+		DELETE FROM ' . self::TABLE_NAME_ANSWERS . ' 
 		WHERE 	' . $ilDB->in('question_id', $question_ids, false, 'integer'));
 	}
 
@@ -530,7 +536,7 @@ class SimpleChoiceQuestion
 
 		global $ilDB;
 		$res = $ilDB->queryF(
-			'SELECT question_text FROM rep_robj_xvid_question WHERE question_id = %s',
+			'SELECT question_text FROM ' . self::TABLE_NAME_QUESTION . ' WHERE question_id = %s',
 			array('integer'),
 			array((int)$qid)
 		);
@@ -547,7 +553,7 @@ class SimpleChoiceQuestion
 	{
 		global $ilDB;
 
-		$res = $ilDB->queryF('SELECT question_id FROM rep_robj_xvid_question WHERE comment_id = %s',
+		$res = $ilDB->queryF('SELECT question_id FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
 			array('integer'), array($comment_id));
 
 		$row = $ilDB->fetchAssoc($res);
@@ -576,7 +582,7 @@ class SimpleChoiceQuestion
 			{
 				$points = 1;
 			}
-			$ilDB->insert('rep_robj_xvid_answers',
+			$ilDB->insert(self::TABLE_NAME_ANSWERS,
 				array(
 					'question_id' => array('integer', $qid),
 					'user_id'     => array('integer', $usr_id),
@@ -588,7 +594,7 @@ class SimpleChoiceQuestion
 			$points = 1;
 			foreach($answers as $key => $value)
 			{
-				$ilDB->insert('rep_robj_xvid_answers',
+				$ilDB->insert(self::TABLE_NAME_ANSWERS,
 					array(
 						'question_id' => array('integer', $qid),
 						'user_id'     => array('integer', $usr_id),
@@ -606,7 +612,7 @@ class SimpleChoiceQuestion
 			$points = 1;
 		}
 		
-		$ilDB->insert('rep_robj_xvid_score',
+		$ilDB->insert(self::TABLE_NAME_SCORE,
 			array(
 				'question_id' => array('integer', $qid),
 				'user_id'     => array('integer', $usr_id),
@@ -621,7 +627,7 @@ class SimpleChoiceQuestion
 	{
 		global $ilDB, $ilUser;
 		$usr_id = $ilUser->getId();
-		$res    = $ilDB->queryF('DELETE FROM rep_robj_xvid_answers WHERE question_id = %s AND user_id = %s',
+		$res    = $ilDB->queryF('DELETE FROM ' . self::TABLE_NAME_ANSWERS . ' WHERE question_id = %s AND user_id = %s',
 			array('integer', 'integer'), array($qid, $usr_id));
 		$ilDB->fetchAssoc($res);
 		$this->removeScore($qid);
@@ -634,7 +640,7 @@ class SimpleChoiceQuestion
 	{
 		global $ilDB, $ilUser;
 		$usr_id = $ilUser->getId();
-		$res    = $ilDB->queryF('DELETE FROM rep_robj_xvid_score WHERE question_id = %s AND user_id = %s',
+		$res    = $ilDB->queryF('DELETE FROM ' . self::TABLE_NAME_SCORE . ' WHERE question_id = %s AND user_id = %s',
 			array('integer', 'integer'), array($qid, $usr_id));
 		$ilDB->fetchAssoc($res);
 	}
@@ -646,7 +652,7 @@ class SimpleChoiceQuestion
 	{
 		global $ilDB;
 
-		$res = $ilDB->queryF('SELECT question_id FROM rep_robj_xvid_question WHERE comment_id = %s',
+		$res = $ilDB->queryF('SELECT question_id FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
 			array('integer'), array($comment_id));
 
 		$question_ids = array();
@@ -671,13 +677,13 @@ class SimpleChoiceQuestion
 
 		global $ilDB;
 
-		$ilDB->manipulate('DELETE FROM rep_robj_xvid_question WHERE ' . $ilDB->in('question_id', $question_ids, false, 'integer'));
+		$ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_QUESTION . ' WHERE ' . $ilDB->in('question_id', $question_ids, false, 'integer'));
 
-		$ilDB->manipulate('DELETE FROM rep_robj_xvid_qus_text WHERE ' . $ilDB->in('question_id', $question_ids, false, 'integer'));
+		$ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_QUESTION_TEXT . ' WHERE ' . $ilDB->in('question_id', $question_ids, false, 'integer'));
 
-		$ilDB->manipulate('DELETE FROM rep_robj_xvid_answers WHERE ' . $ilDB->in('question_id', $question_ids, false, 'integer'));
+		$ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_ANSWERS . ' WHERE ' . $ilDB->in('question_id', $question_ids, false, 'integer'));
 
-		$ilDB->manipulate('DELETE FROM rep_robj_xvid_score WHERE ' . $ilDB->in('question_id', $question_ids, false, 'integer'));
+		$ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_SCORE . ' WHERE ' . $ilDB->in('question_id', $question_ids, false, 'integer'));
 	}
 
 	/**
@@ -688,7 +694,7 @@ class SimpleChoiceQuestion
 	{
 		global $ilDB;
 
-		$res = $ilDB->queryF('SELECT limit_attempts FROM rep_robj_xvid_question WHERE question_id = %s',
+		$res = $ilDB->queryF('SELECT limit_attempts FROM ' . self::TABLE_NAME_QUESTION . ' WHERE question_id = %s',
 			array('integer'), array($question_id));
 
 		$row = $ilDB->fetchAssoc($res);
@@ -703,7 +709,7 @@ class SimpleChoiceQuestion
 	public static function isRepeatQuestionEnabled($comment_id)
 	{
 		global $ilDB;
-		$res = $ilDB->queryF('SELECT repeat_question FROM rep_robj_xvid_question WHERE comment_id = %s',
+		$res = $ilDB->queryF('SELECT repeat_question FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
 			array('integer'), array($comment_id));
 
 		$row = $ilDB->fetchAssoc($res);
@@ -720,8 +726,8 @@ class SimpleChoiceQuestion
 		global $ilUser, $ilDB;
 
 		$res = $ilDB->queryF('
-			SELECT * FROM rep_robj_xvid_answers ans
-			INNER JOIN rep_robj_xvid_question qst on ans.question_id = qst.question_id 
+			SELECT * FROM ' . self::TABLE_NAME_ANSWERS . ' ans
+			INNER JOIN ' . self::TABLE_NAME_QUESTION . ' qst on ans.question_id = qst.question_id 
 			WHERE comment_id = %s 
 			AND user_id = %s
 			',
@@ -743,7 +749,7 @@ class SimpleChoiceQuestion
 		global $ilUser, $ilDB;
 
 		$res = $ilDB->queryF('
-			SELECT * FROM rep_robj_xvid_answers 			
+			SELECT * FROM ' . self::TABLE_NAME_ANSWERS . ' 			
 			WHERE question_id = %s 
 			AND user_id = %s
 			',

@@ -215,7 +215,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		global $ilDB;
 
 		$ilDB->insert(
-			'rep_robj_xvid_mobs',
+			self::TABLE_NAME,
 			array(
 				'obj_id'         => array('integer', $obj_id),
 				'mob_id'         => array('integer', $this->getMobId())

@@ -673,9 +673,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return $lg;
 	}
 
-	/**
-	 *
-	 */
 	protected function setTabs()
 	{
 		/**

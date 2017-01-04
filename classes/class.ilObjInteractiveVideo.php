@@ -14,6 +14,10 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('../VideoSources/class.ilI
  */
 class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginInterface
 {
+	const TABLE_NAME_OBJECTS = 'rep_robj_xvid_objects';
+	const TABLE_NAME_COMMENTS = 'rep_robj_xvid_comments';
+	const TABLE_NAME_QUESTIONS = 'rep_robj_xvid_question';
+	
 	/**
 	 * @var int
 	 */
@@ -103,7 +107,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		global $ilDB;
 
 		$res = $ilDB->queryF(
-			'SELECT * FROM rep_robj_xvid_objects WHERE obj_id = %s',
+			'SELECT * FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = %s',
 			array('integer'),
 			array($this->getId())
 		);
@@ -135,7 +139,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		global $ilDB;
 
 		$res = $ilDB->queryF(
-			'SELECT source_id FROM rep_robj_xvid_objects WHERE obj_id = %s',
+			'SELECT source_id FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = %s',
 			array('integer'),
 			array($this->getId())
 		);
@@ -158,11 +162,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			$this->video_source_object->doCreateVideoSource($this->getId());
 			global $ilDB;
 
-			$ilDB->manipulateF('DELETE FROM rep_robj_xvid_objects WHERE obj_id = %s',
+			$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = %s',
 				array('integer'), array($this->getId()));
 
 			$ilDB->insert(
-				'rep_robj_xvid_objects',
+				self::TABLE_NAME_OBJECTS,
 				array(
 					'obj_id'         => array('integer', $this->getId()),
 					'is_anonymized'  => array('integer', (int)$_POST['is_anonymized']),
@@ -209,7 +213,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			$this->video_source_object->doDeleteVideoSource($this->getId());
 		}
 
-		$ilDB->update('rep_robj_xvid_objects',
+		$ilDB->update(self::TABLE_NAME_OBJECTS ,
 			array(	'is_anonymized'		=>array('integer',	$this->isAnonymized()),
 					'is_repeat'			=>array('integer',	$this->isRepeat()),
 					'is_public'			=>array('integer',	$this->isPublic()),
@@ -237,7 +241,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		 * @var $ilDB ilDB
 		 */
 		global $ilDB;
-		$ilDB->manipulate('DELETE FROM rep_robj_xvid_objects WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
+		$ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
 		$this->deleteMetaData();
 	}
 
@@ -262,11 +266,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 		global $ilDB;
 
-		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_objects WHERE obj_id = %s',
+		$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = %s',
 			array('integer'), array($new_obj->getId()));
 
 		$ilDB->insert(
-			'rep_robj_xvid_objects',
+			self::TABLE_NAME_OBJECTS ,
 			array(
 				'obj_id'        => array('integer', $new_obj->getId()),
 				'is_anonymized' => array('integer', $this->isAnonymized()),
@@ -324,7 +328,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 		$question_ids = array();
 
-		$res = $ilDB->query('SELECT question_id FROM rep_robj_xvid_question WHERE ' . $ilDB->in('comment_id', $comment_ids, false, 'integer'));
+		$res = $ilDB->query('SELECT question_id FROM ' . self::TABLE_NAME_QUESTIONS. ' WHERE ' . $ilDB->in('comment_id', $comment_ids, false, 'integer'));
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$question_ids[] = $row['question_id'];
@@ -340,7 +344,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		global $ilDB;
 
 		$res = $ilDB->queryF('
-			SELECT * FROM rep_robj_xvid_comments 
+			SELECT * FROM ' . self::TABLE_NAME_COMMENTS . ' 
 			WHERE obj_id = %s
 			AND is_private = %s
 			ORDER BY comment_time ASC',
@@ -373,7 +377,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		global $ilDB, $ilUser;
 
 		$res = $ilDB->queryF('
-			SELECT * FROM rep_robj_xvid_comments 
+			SELECT * FROM ' . self::TABLE_NAME_COMMENTS . ' 
 			WHERE obj_id = %s
 			AND user_id = %s
 			AND is_interactive = %s
@@ -407,7 +411,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	{
 		global $ilDB;
 
-		$res = $ilDB->queryF('SELECT * FROM rep_robj_xvid_comments WHERE comment_id = %s',
+		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE comment_id = %s',
 			array('integer'), array($comment_id));
 
 		$row = $ilDB->fetchAssoc($res);
@@ -423,7 +427,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	{
 		global $ilDB;
 
-		$res = 	$ilDB->queryF('SELECT * FROM rep_robj_xvid_question WHERE comment_id = %s',
+		$res = 	$ilDB->queryF('SELECT * FROM  ' . self::TABLE_NAME_QUESTIONS. ' WHERE comment_id = %s',
 			array('integer'), array($comment_id));
 
 		$row = $ilDB->fetchAssoc($res);
@@ -440,7 +444,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	{
 		global $ilDB;
 
-		$res = $ilDB->queryF('SELECT comment_text FROM rep_robj_xvid_comments WHERE comment_id = %s',
+		$res = $ilDB->queryF('SELECT comment_text FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE comment_id = %s',
 			array('integer'), array($comment_id));
 
 		$row = $ilDB->fetchAssoc($res);
@@ -458,7 +462,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		global $ilDB;
 
 		$comment_ids = array();
-		$res = $ilDB->queryF('SELECT comment_id, user_id FROM rep_robj_xvid_comments WHERE obj_id = %s',
+		$res = $ilDB->queryF('SELECT comment_id, user_id FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE obj_id = %s',
 			array('integer'), array($obj_id));
 
 		while($row = $ilDB->fetchAssoc($res))
@@ -490,7 +494,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$question_ids = self::getQuestionIdsByCommentIds($comment_ids);
 		SimpleChoiceQuestion::deleteQuestions($question_ids);
 
-		$ilDB->manipulate('DELETE FROM rep_robj_xvid_comments WHERE ' . $ilDB->in('comment_id', $comment_ids, false, 'integer'));
+		$ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE ' . $ilDB->in('comment_id', $comment_ids, false, 'integer'));
 	}
 
 	################## SETTER & GETTER ##################
