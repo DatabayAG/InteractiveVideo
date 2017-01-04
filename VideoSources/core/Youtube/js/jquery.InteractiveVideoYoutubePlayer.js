@@ -35,6 +35,10 @@ function onYouTubeIframeAPIReady() {
 							seekTime = 0;
 						}
 					}
+					else if(e.data === 0)
+					{
+							il.InteractiveVideoPlayerAbstract.videoFinished();
+					}
 					else if(e.data === 1)
 					{
 						interval = setInterval(function () {

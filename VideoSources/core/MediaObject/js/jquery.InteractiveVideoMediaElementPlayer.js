@@ -47,6 +47,7 @@ $( document ).ready(function() {
 				}, false);
 
 				media.addEventListener('ended', function(e) {
+					il.InteractiveVideoPlayerAbstract.videoFinished();
 				}, false);
 
 				media.addEventListener('playing', function(e) {

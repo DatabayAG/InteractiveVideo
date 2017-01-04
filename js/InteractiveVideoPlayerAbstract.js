@@ -70,6 +70,11 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		}
 	};
 
+	pub.videoFinished = function()
+	{
+		console.log('video done')
+	};
+	
 	pub.protect = pro;
 	return pub;
 
