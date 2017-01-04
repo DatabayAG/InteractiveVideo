@@ -206,7 +206,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl_json->setVariable('JSON', $feedback);	
 		return $tpl_json->show("DEFAULT", false, true );
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -228,12 +228,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($this->object->getTaskActive())
 		{
 			$video_tpl->setCurrentBlock('task_description');
-			$video_tpl->setVariable('TASK_DESCRIPTION', $this->object->getTask());
+			$video_tpl->setVariable('TASK_DESCRIPTION', $this->replaceLatexWithImage($this->object->getTask()));
 			$video_tpl->parseCurrentBlock();
 		}
 
 		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());
-
 		$this->objComment = new ilObjComment();
 		$this->objComment->setObjId($this->object->getId());
 		$this->objComment->setIsPublic($this->object->isPublic());
@@ -1670,7 +1669,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->object->setTaskActive((int)$is_task);		
 		
 		$task = $a_form->getInput('task');
-		$this->object->setTask(ilUtil::stripSlashes($task));
+		$this->object->setTask(ilUtil::stripSlashes($task, false));
 		
 		$is_anonymized = $a_form->getInput('is_anonymized');
 		$this->object->setIsAnonymized((int)$is_anonymized);
@@ -1755,7 +1754,27 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$description_switch->setInfo($this->plugin->txt('task_switch_info'));
 		$description = new ilTextAreaInputGUI($this->plugin->txt('task'),'task');
 		$description->setUseRte(true);
-		$description->setRteTagSet('mini');
+		#$description->setRteTagSet('mini');
+		$description->addPlugin('latex');
+		$description->addButton('latex');
+		$description->addButton('pastelatex');
+		$description->usePurifier(true);
+		$description->disableButtons(array(
+			'charmap',
+			'undo',
+			'redo',
+			'justifyleft',
+			'justifycenter',
+			'justifyright',
+			'justifyfull',
+			'anchor',
+			'fullscreen',
+			'cut',
+			'copy',
+			'paste',
+			'pastetext',
+			'formatselect'
+		));
 		$description_switch->addSubItem($description);
 		$a_form->addItem($description_switch);
 
@@ -1882,6 +1901,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$item_group->setValue($factory->getDefaultVideoSource());
 		return $a_form;
+	}
+
+	/**
+	 * @param string $txt
+	 * @return string
+	 */
+	protected function replaceLatexWithImage($txt)
+	{
+		$txt = ilUtil::prepareTextareaOutput($txt, true, true);
+		return $txt;
 	}
 
 	/**
