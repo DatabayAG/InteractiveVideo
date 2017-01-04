@@ -74,7 +74,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 	{
 		console.log('video done')
 	};
-	
+
 	pub.protect = pro;
 	return pub;
 
