@@ -652,3 +652,15 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'task'))
 	);
 }
 ?>
+<#35>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'lp_mode'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'lp_mode',
+		array(
+			'type'    => 'integer',
+			'length'  => '1',
+			'notnull' => true,
+			'default' => 0));
+}
+?>

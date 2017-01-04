@@ -135,3 +135,9 @@ db_update_failed#:#Database update went wrong: %s
 task_switch#:#Activate Task
 task_switch_info#:#Activate Task
 task#:#Task
+lp_mode_title_by_questions#:#Questions Answered 
+lp_mode_desc_by_questions#:#The object is 'completed' if the users submitted the 'correct' answer for each question. If there is no question defined, the object is 'completed' if the user reaches the end of the video.
+lp_matrix#:#Matrix View
+lp_users#:#Users
+lp_summary#:#Summary
+lp_settings#:#Settings

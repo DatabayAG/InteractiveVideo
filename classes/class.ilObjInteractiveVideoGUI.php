@@ -12,11 +12,13 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestio
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionAjaxHandler.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionScoring.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionStatistics.php');
+
 /**
  * Class ilObjInteractiveVideoGUI
  * @author               Nadia Ahmad <nahmad@databay.de>
  * @ilCtrl_isCalledBy    ilObjInteractiveVideoGUI: ilRepositoryGUI, ilAdministrationGUI, ilObjPluginDispatchGUI
  * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilPermissionGUI, ilInfoScreenGUI, ilObjectCopyGUI, ilRepositorySearchGUI, ilPublicUserProfileGUI, ilCommonActionDispatcherGUI, ilMDEditorGUI
+ * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilInteractiveVideoLearningProgressGUI
  */
 class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopItemHandling
 {
@@ -74,6 +76,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $ilTabs;
 		$this->setTitleAndDescription();
 
+		$this->lng->loadLanguageModule('trac');
+
 		$next_class = $this->ctrl->getNextClass($this);
 		switch($next_class)
 		{
@@ -84,6 +88,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$md_gui->addObserver($this->object, 'MDUpdateListener', 'General');
 				$ilTabs->setTabActive('meta_data');
 				$this->ctrl->forwardCommand($md_gui);
+				break;
+
+			case 'ilinteractivevideolearningprogressgui':
+				$ilTabs->setTabActive('learning_progress');
+				$this->plugin->includeClass('class.ilInteractiveVideoLearningProgressGUI.php');
+				$lp_gui = new ilInteractiveVideoLearningProgressGUI($this, $this->object);
+				$this->ctrl->forwardCommand($lp_gui);
 				break;
 
 			case 'ilpublicuserprofilegui':
@@ -102,6 +113,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			default:
 				switch($cmd)
 				{
+					case 'showLPUserDetails':
+					case 'showLPSummary':
+					case 'showLPUsers':
+					case 'saveLearningProgressSettings':
+					case 'showLPSettings':
+					case 'editUser':
+					case 'updateLPUsers':
+						$ilTabs->setTabActive('learning_progress');
+						$this->$cmd();
+						break;
+
 					case 'showTutorInsertForm':
 						$this->checkPermission('write');
 						$cmd = $_POST['cmd'];
@@ -221,6 +243,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('content');
 
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $this->plugin->getDirectory());
+
+		$this->object->trackProgress();
 
 		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
 		$object->addPlayerElements($tpl);
@@ -2009,7 +2033,27 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		else if($ilAccess->checkAccess('read', '', $this->object->getRefId()))
 		{
 			$ilTabs->addTab('editComments', $this->plugin->txt('questions_comments'), $this->ctrl->getLinkTarget($this, 'editMyComments'));
-		}	
+		}
+
+		require_once 'Services/Tracking/classes/class.ilLearningProgressAccess.php';
+		if(ilLearningProgressAccess::checkAccess($this->object->getRefId(), true))
+		{
+			if($this->checkPermissionBool('write'))
+			{
+				if($this->object->getLearningProgressMode() != ilObjInteractiveVideo::LP_MODE_DEACTIVATED)
+				{
+					$ilTabs->addTab('learning_progress', $this->lng->txt('learning_progress'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoLearningProgressGUI', 'showLpUsers'));
+				}
+				else
+				{
+					$ilTabs->addTab('learning_progress', $this->lng->txt('learning_progress'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoLearningProgressGUI', 'showLPSettings'));
+				}
+			}
+			else if($this->checkPermissionBool('read') && $this->object->getLearningProgressMode() != ilObjInteractiveVideo::LP_MODE_DEACTIVATED)
+			{
+				$ilTabs->addTab('learning_progress', $this->lng->txt('learning_progress'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoLearningProgressGUI', 'showLPUserDetails'));
+			}
+		}
 
 		$this->addPermissionTab();
 	}
@@ -2089,4 +2133,32 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         }
         ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
     }
+	/**
+	 * Public wrapper for permission checks
+	 * @param string $permission
+	 * @return bool
+	 */
+	public function hasPermission($permission)
+	{
+		return $this->checkPermissionBool($permission);
+	}
+
+	/**
+	 * Public wrapper for permission assumption
+	 * @param string $permission
+	 * @return bool
+	 */
+	public function ensurePermission($permission)
+	{
+		return $this->checkPermission($permission);
+	}
+
+	/**
+	 * @return ilInteractiveVideoPlugin
+	 */
+	public function getPluginInstance()
+	{
+		return $this->plugin;
+
+	}
 }
