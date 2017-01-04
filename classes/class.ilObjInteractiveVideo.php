@@ -3,6 +3,7 @@
 
 require_once 'Services/Repository/classes/class.ilObjectPlugin.php';
 require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
+require_once 'Services/Tracking/interfaces/interface.ilLPStatusPlugin.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
@@ -11,8 +12,23 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
  * Class ilObjInteractiveVideo
  * @author Nadia Ahmad <nahmad@databay.de>
  */
-class ilObjInteractiveVideo extends ilObjectPlugin
+class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginInterface
 {
+	/**
+	 * @var int
+	 */
+	const LP_MODE_DEACTIVATED = 0;
+
+	/**
+	 * @var int
+	 */
+	const LP_MODE_BY_QUESTIONS = 99;
+
+	/**
+	 * @var int
+	 */
+	protected $learning_progress_mode = self::LP_MODE_DEACTIVATED;
+
 	/**
 	 * @var bool
 	 */
@@ -64,6 +80,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$this->setIsPublic($row['is_public']);
 		$this->setOnline((bool)$row['is_online']);
 		$this->setIsChronologic($row['is_chronologic']);
+		$this->setLearningProgressMode($row['lp_mode']);
 
 		parent::doRead();
 	}
@@ -145,7 +162,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 				  	'is_repeat' =>array('integer', $this->isRepeat()),
 				  	'is_public' =>array('integer', $this->isPublic()),
 					'is_chronologic' =>array('integer', $this->isChronologic()),
-					'is_online' => array('integer', $this->isOnline())
+					'is_online' => array('integer', $this->isOnline()),
+					'lp_mode' => array('integer', $this->getLearningProgressMode())
 					),
 			array('obj_id' => array('integer', $this->getId())));
 	}
@@ -205,7 +223,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 				'is_anonymized' => array('integer', $this->isAnonymized()),
 				'is_repeat' => array('integer', $this->isRepeat()),
 				'is_chronologic' => array('integer', $this->isChronologic()),
-				'is_public'     => array('integer', $this->isPublic())
+				'is_public'     => array('integer', $this->isPublic()),
+				'lp_mode' => array('integer', $this->getLearningProgressMode())
 			)
 		);
 
@@ -587,5 +606,186 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	public function setIsPublic($is_public)
 	{
 		$this->is_public = $is_public;
+	}
+
+	/**
+	 * Get all user ids with LP status completed
+	 * @return array
+	 */
+	public function getLPCompleted()
+	{
+		if(in_array($this->getLearningProgressMode(), array(self::LP_MODE_DEACTIVATED)))
+		{
+			return array();
+		}
+
+		$user_ids = array();
+
+		// TODO: Determine all completed users
+
+		return $user_ids;
+	}
+
+	/**
+	 * Get all user ids with LP status not attempted
+	 * @return array
+	 */
+	public function getLPNotAttempted()
+	{
+		return array();
+	}
+
+	/**
+	 * Get all user ids with LP status failed
+	 * @return array
+	 */
+	public function getLPFailed()
+	{
+		if(in_array($this->getLearningProgressMode(), array(self::LP_MODE_DEACTIVATED)))
+		{
+			return array();
+		}
+
+		$user_ids = array();
+
+		// TODO: Determine all failed users
+
+		return $user_ids;
+	}
+
+	/**
+	 * Get all user ids with LP status in progress
+	 * @return array
+	 */
+	public function getLPInProgress()
+	{
+		if(in_array($this->getLearningProgressMode(), array(self::LP_MODE_DEACTIVATED)))
+		{
+			return array();
+		}
+
+		$user_ids = array();
+
+		$users = array_diff((array)$user_ids, $this->getLPCompleted());
+		$users = array_diff((array)$users, $this->getLPFailed());
+		return $users ? $users : array();
+	}
+
+	/**
+	 * Get current status for given user
+	 * @param int $a_user_id
+	 * @return int
+	 */
+	public function getLPStatusForUser($a_user_id)
+	{
+		$status = ilLPStatus::LP_STATUS_NOT_ATTEMPTED_NUM;
+
+		require_once 'Services/Tracking/classes/class.ilChangeEvent.php';
+		if (ilChangeEvent::hasAccessed($this->getId(), $a_user_id))
+		{
+			$status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
+		}
+
+		// TODO: Determine status by questions
+
+		return $status;
+	}
+
+	/**
+	 * @param int $learning_progress_mode
+	 */
+	public function setLearningProgressMode($learning_progress_mode)
+	{
+		$this->learning_progress_mode = $learning_progress_mode;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLearningProgressMode()
+	{
+		return $this->learning_progress_mode;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getLPValidModes()
+	{
+		return array(
+			self::LP_MODE_DEACTIVATED,
+			self::LP_MODE_BY_QUESTIONS
+		);
+	}
+
+	/**
+	 * @params integer $lp_mode
+	 * @return bool
+	 */
+	public function isCoreLPMode($lp_mode)
+	{
+		return in_array($lp_mode, array_keys(ilLPObjSettings::getClassMap()));
+	}
+
+	/**
+	 * @params integer $lp_mode
+	 * @return string
+	 * @throws ilException
+	 */
+	public function getInternalLabelForLPMode($lp_mode)
+	{
+		switch($lp_mode)
+		{
+			case self::LP_MODE_BY_QUESTIONS:
+				return 'by_questions';
+				break;
+		}
+
+		throw new ilException(sprintf('The LP mode "%s" is unknown!', $lp_mode));
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDefaultMode()
+	{
+		return self::LP_MODE_DEACTIVATED;
+	}
+
+	public function updateLP()
+	{
+		/**
+		 * @var $ilUser ilObjUser
+		 */
+		global $ilUser;
+
+		require_once "./Services/Tracking/classes/status/class.ilLPStatusEvent.php";
+		require_once "./Services/Tracking/classes/class.ilLPStatusWrapper.php";
+		require_once "./Services/Tracking/classes/class.ilLearningProgress.php";
+
+		ilLPStatusWrapper::_updateStatus(
+			$this->getId(),
+			$ilUser->getId()
+		);
+	}
+
+	public function trackProgress()
+	{
+		/**
+		 * @var $ilUser ilObjUser
+		 */
+		global $ilUser;
+
+		require_once "./Services/Tracking/classes/class.ilChangeEvent.php";
+		require_once "./Services/Tracking/classes/status/class.ilLPStatusEvent.php";
+		require_once "./Services/Tracking/classes/class.ilLPStatusWrapper.php";
+		require_once "./Services/Tracking/classes/class.ilLearningProgress.php";
+
+		ilLearningProgress::_tracProgress(
+			$ilUser->getId(),
+			$this->getId(),
+			$this->getRefId(),
+			$this->getType()
+		);
 	}
 }

@@ -124,3 +124,9 @@ cat_create_xvid#:#Interaktives Video anlegen
 root_create_xvid#:#Interaktives Video anlegen
 fold_create_xvid#:#Interaktives Video anlegen
 rbac_create_xvid#:#Interaktives Video anlegen 
+lp_mode_title_by_questions#:#Fragen beantwortet 
+lp_mode_desc_by_questions#:#Das Objekt gilt als 'Bearbeitet', wenn für alle definierten Fragen eine 'richtige' Antwort gewählt wurde. Falls keine Fragen konfiguriert wurden, gilt das Objekt beim Erreichen der Endposition des Videos als 'Bearbeitet'.
+lp_users#:#Benutzer
+lp_matrix#:#Matrixansicht
+lp_summary#:#Zusammenfassung
+lp_settings#:#Einstellungen

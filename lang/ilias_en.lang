@@ -125,3 +125,9 @@ cat_create_xvid#:#Create Interactive Video
 root_create_xvid#:#Create Interactive Video
 fold_create_xvid#:#Create Interactive Video
 rbac_create_xvid#:#Create Interactive Video 
+lp_mode_title_by_questions#:#Questions Answered 
+lp_mode_desc_by_questions#:#The object is 'completed' if the users submitted the 'correct' answer for each question. If there is no question defined, the object is 'completed' if the user reaches the end of the video.
+lp_matrix#:#Matrix View
+lp_users#:#Users
+lp_summary#:#Summary
+lp_settings#:#Settings
