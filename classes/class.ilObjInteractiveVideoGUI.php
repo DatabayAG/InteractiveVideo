@@ -225,6 +225,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
 		$object->addPlayerElements($tpl);
 
+		if($this->object->getTaskActive())
+		{
+			$video_tpl->setCurrentBlock('task_description');
+			$video_tpl->setVariable('TASK_DESCRIPTION', $this->object->getTask());
+			$video_tpl->parseCurrentBlock();
+		}
+
 		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());
 
 		$this->objComment = new ilObjComment();
@@ -1659,6 +1666,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$factory = new ilInteractiveVideoSourceFactoryGUI($this->object);
 		$factory->checkForm($a_form);
 
+		$is_task = $a_form->getInput('is_task');
+		$this->object->setTaskActive((int)$is_task);		
+		
+		$task = $a_form->getInput('task');
+		$this->object->setTask(ilUtil::stripSlashes($task));
+		
 		$is_anonymized = $a_form->getInput('is_anonymized');
 		$this->object->setIsAnonymized((int)$is_anonymized);
 
@@ -1707,23 +1720,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$form = $this->appendFormsFromFactory($form);
 
-		$anonymized = new ilCheckboxInputGUI($this->plugin->txt('is_anonymized'), 'is_anonymized');
-		$anonymized->setInfo($this->plugin->txt('is_anonymized_info'));
-		$form->addItem($anonymized);
-
-		$is_public = new ilCheckboxInputGUI($this->plugin->txt('is_public'), 'is_public');
-		$is_public->setInfo($this->plugin->txt('is_public_info'));
-		$is_public->setChecked(true);
-		$form->addItem($is_public);
-
-		$repeat = new ilCheckboxInputGUI($this->plugin->txt('is_repeat'), 'is_repeat');
-		$repeat->setInfo($this->plugin->txt('is_repeat_info'));
-		$form->addItem($repeat);
-
-		$chrono = new ilCheckboxInputGUI($this->plugin->txt('is_chronologic'), 'is_chronologic');
-		$chrono->setInfo($this->plugin->txt('is_chronologic_info'));
-		$chrono->setChecked(false);
-		$form->addItem($chrono);
+		$this->appendDefaultFormOptions($form);
 
 		return $form;
 	}
@@ -1744,23 +1741,39 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
 		$a_form->addItem($online);
-		
+
+		$this->appendDefaultFormOptions($a_form);
+
+	}
+
+	/**
+	 * @param ilPropertyFormGUI $a_form
+	 */
+	protected function appendDefaultFormOptions(ilPropertyFormGUI $a_form)
+	{
+		$description_switch = new ilCheckboxInputGUI($this->plugin->txt('task_switch'),'is_task');
+		$description_switch->setInfo($this->plugin->txt('task_switch_info'));
+		$description = new ilTextAreaInputGUI($this->plugin->txt('task'),'task');
+		$description->setUseRte(true);
+		$description->setRteTagSet('mini');
+		$description_switch->addSubItem($description);
+		$a_form->addItem($description_switch);
+
 		$anonymized = new ilCheckboxInputGUI($this->plugin->txt('is_anonymized'), 'is_anonymized');
 		$anonymized->setInfo($this->plugin->txt('is_anonymized_info'));
 		$a_form->addItem($anonymized);
-		
+
 		$is_public = new ilCheckboxInputGUI($this->plugin->txt('is_public'), 'is_public');
 		$is_public->setInfo($this->plugin->txt('is_public_info'));
 		$a_form->addItem($is_public);
-		
+
 		$repeat = new ilCheckboxInputGUI($this->plugin->txt('is_repeat'), 'is_repeat');
 		$repeat->setInfo($this->plugin->txt('is_repeat_info'));
 		$a_form->addItem($repeat);
 
 		$chrono = new ilCheckboxInputGUI($this->plugin->txt('is_chronologic'), 'is_chronologic');
 		$chrono->setInfo($this->plugin->txt('is_chronologic_info'));
-		$a_form->addItem($chrono);		
-
+		$a_form->addItem($chrono);
 	}
 
 	/**
@@ -1785,6 +1798,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values["is_online"]		= $this->object->isOnline();
 		$a_values["is_chronologic"]	= $this->object->isChronologic();
 		$a_values['source_id']		= $this->object->getSourceId();
+		$a_values['is_task']		= $this->object->getTaskActive();
+		$a_values['task']			= $this->object->getTask();
 	}
 
 	/**

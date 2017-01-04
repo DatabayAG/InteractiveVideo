@@ -181,3 +181,8 @@
 .interativeVideoNavHeader{
     padding-top:6px;
 }
+.task_description{
+    background-color: white;
+    padding: 1em;
+    margin-bottom: 0.5em;
+}

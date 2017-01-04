@@ -48,6 +48,16 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	protected $video_source_object;
 
 	/**
+	 * @var int
+	 */
+	protected $task_active = 0;
+
+	/**
+	 * @var string
+	 */
+	protected $task;
+
+	/**
 	 * @param $src_id
 	 * @return ilInteractiveVideoSource
 	 */
@@ -89,6 +99,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 		$this->setOnline((bool)$row['is_online']);
 		$this->setIsChronologic($row['is_chronologic']);
 		$this->setSourceId($row['source_id']);
+		$this->setTaskActive($row['is_task']);
+		$this->setTask($row['task']);
 
 		$this->getVideoSourceObject($row['source_id']);
 
@@ -120,7 +132,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 					'is_repeat'      => array('integer', (int)$_POST['is_repeat']),
 					'is_chronologic' => array('integer', (int)$_POST['is_chronologic']),
 					'is_public'      => array('integer', (int)$_POST['is_public']),
-					'source_id'      => array('text', ilUtil::stripSlashes($_POST['source_id']))
+					'source_id'      => array('text', ilUtil::stripSlashes($_POST['source_id'])),
+					'is_task'        => array('integer', (int)$_POST['is_task']),
+					'task'           => array('text', ilUtil::stripSlashes($_POST['task']))
 				)
 			);
 
@@ -157,7 +171,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 					'is_public'			=>array('integer',	$this->isPublic()),
 					'is_chronologic'	=>array('integer',	$this->isChronologic()),
 					'is_online'			=>array('integer',	$this->isOnline()),
-					'source_id'			=>array('text',		$this->getSourceId())
+					'source_id'			=>array('text',		$this->getSourceId()),
+					'is_task'			=> array('integer', $this->getTaskActive()),
+					'task'				=> array('text', $this->getTask())
 			),
 			array('obj_id' => array('integer', $this->getId())));
 	}
@@ -212,7 +228,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 				'is_repeat' => array('integer', $this->isRepeat()),
 				'is_chronologic' => array('integer', $this->isChronologic()),
 				'is_public'     => array('integer', $this->isPublic()),
-				'source_id'     => array('text', $this->getSourceId())
+				'source_id'     => array('text', $this->getSourceId()),
+				'is_task'     => array('integer', $this->getTaskActive()),
+				'task'     => array('text', $this->getTask())
 			)
 		);
 
@@ -524,5 +542,37 @@ class ilObjInteractiveVideo extends ilObjectPlugin
 	public function isOnline()
 	{
 		return (bool)$this->is_online;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getTaskActive()
+	{
+		return $this->task_active;
+	}
+
+	/**
+	 * @param int $task_active
+	 */
+	public function setTaskActive($task_active)
+	{
+		$this->task_active = $task_active;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTask()
+	{
+		return $this->task;
+	}
+
+	/**
+	 * @param string $task
+	 */
+	public function setTask($task)
+	{
+		$this->task = $task;
 	}
 }

@@ -131,3 +131,6 @@ update_db#:#Datenbank Updates einspielen
 db_up_to_date#:#Datenbank aktuell
 db_update_worked#:#Datenbank erfolgreich aktualisiert
 db_update_failed#:#Datenbank Update schlug fehl: %s
+task_switch#:#Aufgabenstellung aktivieren
+task_switch_info#:#Aufgabenstellung aktivieren
+task#:#Aufgabenstellung

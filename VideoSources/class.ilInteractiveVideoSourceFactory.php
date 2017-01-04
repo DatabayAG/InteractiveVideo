@@ -5,6 +5,8 @@ require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/In
  */
 class ilInteractiveVideoSourceFactory
 {
+	const TABLE_NAME = 'rep_robj_xvid_sources';
+
 	/**
 	 * @var ilInteractiveVideoSource[]
 	 */
@@ -169,7 +171,7 @@ class ilInteractiveVideoSourceFactory
 		 * @var ilDB		$ilDb;
 		 */
 		global $ilDB;
-		$res = $ilDB->query('SELECT * FROM rep_robj_xvid_sources');
+		$res = $ilDB->query('SELECT * FROM ' . self::TABLE_NAME);
 
 		while($row = $ilDB->fetchAssoc($res))
 		{
@@ -196,16 +198,16 @@ class ilInteractiveVideoSourceFactory
 		$mapping = $settings['mappings'];
 
 		$ilDB->manipulate('
-		DELETE FROM rep_robj_xvid_sources 
+		DELETE FROM ' . self::TABLE_NAME  . ' 
 		WHERE 	' . $ilDB->in('plugin_name', $flip, false, 'text'));
 
 		foreach($settings['settings'] as $key => $value)
 		{
-			$ilDB->insert('rep_robj_xvid_sources', array('plugin_name'	=> array('text', $key), 
-														 'is_activated'	=> array('integer', $value), 
-														 'plugin_id'	=> array('text', $mapping[$key]['id']),
-														 'db_update'	=> array('text', $this->sources_settings[$key]['db_update']),
-														 'class_path'	=> array('text', $mapping[$key]['path'])
+			$ilDB->insert(self::TABLE_NAME, array('plugin_name'		=> array('text', $key), 
+													'is_activated'	=> array('integer', $value), 
+													'plugin_id'		=> array('text', $mapping[$key]['id']),
+													'db_update'		=> array('text', $this->sources_settings[$key]['db_update']),
+													'class_path'	=> array('text', $mapping[$key]['path'])
 			));
 		}
 	}

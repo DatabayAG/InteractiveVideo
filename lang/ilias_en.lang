@@ -132,3 +132,6 @@ update_db#:#Update Database
 db_up_to_date#:#Database up-to-date
 db_update_worked#:#Database successfully updated
 db_update_failed#:#Database update went wrong: %s
+task_switch#:#Activate Task
+task_switch_info#:#Activate Task
+task#:#Task
