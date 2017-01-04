@@ -129,3 +129,5 @@ installed_version#:#Installierte Databank Version: %s, Datei Datenbank Version %
 source_does_not_exist#:#Quelle existiert nicht mehr oder wurde in der Administration deaktiviert
 update_db#:#Datenbank Updates einspielen
 db_up_to_date#:#Datenbank aktuell
+db_update_worked#:#Datenbank erfolgreich aktualisiert
+db_update_failed#:#Datenbank Update schlug fehl: %s

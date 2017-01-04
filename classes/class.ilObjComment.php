@@ -53,7 +53,6 @@ class ilObjComment
 	 */
 	protected $comment_title = '';
 
-
 	/**
 	 * @var string
 	 */
@@ -68,12 +67,27 @@ class ilObjComment
 	 * @var int
 	 */
 	protected $is_private = 0;
-	
+
+	/**
+	 * @var int
+	 */
 	protected $is_public = 0;
+
+	/**
+	 * @var int
+	 */
 	protected $is_anonymized = 0;
 
+	/**
+	 * @var int
+	 */
+	protected $is_repeat = 0;
+
+	/**
+	 * @var array
+	 */
 	protected static $user_name_cache = array();
-	
+
 	/**
 	 * @param int $comment_id
 	 */
@@ -265,41 +279,6 @@ class ilObjComment
 
 		return $comments;
 	}
-
-/*	To Be removed since no usage here
-
-	public function getAllComments()
-	{
-
-		global $ilDB, $ilUser;
-
-		$res = $ilDB->queryF(
-			'SELECT comment_id, user_id, comment_text, comment_time, comment_time_end, is_interactive, is_private
-			FROM rep_robj_xvid_comments
-			WHERE obj_id = %s
-			AND ( is_private = %s OR (is_private = %s AND user_id = %s))
-			ORDER BY comment_time, comment_id ASC',
-			array('integer', 'integer', 'integer', 'integer'),
-			array($this->getObjId(), 0, 1, $ilUser->getId())
-		);
-
-		$comments = array();
-		$i = 0;
-		while($row = $ilDB->fetchAssoc($res))
-		{
-			$comments[$i]['comment_id'] 		= $row['comment_id'];
-			$comments[$i]['user_name'] 			= self::lookupUsername($row['user_id']);
-			$comments[$i]['comment_text'] 		= $row['comment_text'];
-			$comments[$i]['comment_time'] 		= $row['comment_time'];
-			$comments[$i]['comment_time_end'] 	= $row['comment_time_end'];
-			$comments[$i]['is_interactive'] 	= $row['is_interactive'];
-			$comments[$i]['is_private'] 		= $row['is_private'];
-			
-			$i++;
-		}
-
-		return $comments;
-	}*/
 
 	public function cloneTutorComments($old_id, $new_id)
 	{

@@ -126,6 +126,8 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	
 	public function applyPluginUpdates()
 	{
+		$overall_success = true;
+		$error = '';
 		foreach($this->update_files as $file)
 		{
 			$this->getCurrentVersion();
@@ -139,12 +141,27 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 			$this->readDBUpdateFile();
 			$this->readLastUpdateFile();
 			$version = $this->readFileVersion();
-			$success = $this->applyUpdate();
-			if($success)
+			$return_value = $this->applyUpdate();
+			if($return_value)
 			{
 				$this->setCurrentVersion($version);
 			}
-
+			else
+			{
+				$error .= $return_value;
+				if($overall_success)
+				{
+					$overall_success = false;
+				}
+			}
+		}
+		if($overall_success)
+		{
+			ilUtil::sendSuccess(ilInteractiveVideoPlugin::getInstance()->txt('db_update_worked'));
+		}
+		else
+		{
+			ilUtil::sendFailure(sprintf(ilInteractiveVideoPlugin::getInstance()->txt('db_update_failed'), $error));
 		}
 	}
 
