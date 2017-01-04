@@ -152,6 +152,98 @@ class SimpleChoiceQuestion
 	}
 
 	/**
+	 * @return int
+	 */
+	public function getCommentId()
+	{
+		return $this->comment_id;
+	}
+
+	/**
+	 * @param int $comment_id
+	 */
+	public function setCommentId($comment_id)
+	{
+		$this->comment_id = $comment_id;
+	}
+
+	/**
+	 * @param $question_id
+	 * @return bool
+	 */
+	public static function isLimitAttemptsEnabled($question_id)
+	{
+		global $ilDB;
+
+		$res = $ilDB->queryF('SELECT limit_attempts FROM ' . self::TABLE_NAME_QUESTION . ' WHERE question_id = %s',
+			array('integer'), array($question_id));
+
+		$row = $ilDB->fetchAssoc($res);
+		return (bool)$row['limit_attempts'];
+
+	}
+
+	/**
+	 * @param $comment_id
+	 * @return bool
+	 */
+	public static function isRepeatQuestionEnabled($comment_id)
+	{
+		global $ilDB;
+		$res = $ilDB->queryF('SELECT repeat_question FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
+			array('integer'), array($comment_id));
+
+		$row = $ilDB->fetchAssoc($res);
+
+		return (bool)$row['repeat_question'];
+	}
+
+	/**
+	 * @param $comment_id
+	 * @return bool
+	 */
+	public static function existUserAnswer($comment_id)
+	{
+		global $ilUser, $ilDB;
+
+		$res = $ilDB->queryF('
+			SELECT * FROM ' . self::TABLE_NAME_ANSWERS . ' ans
+			INNER JOIN ' . self::TABLE_NAME_QUESTION . ' qst on ans.question_id = qst.question_id 
+			WHERE comment_id = %s 
+			AND user_id = %s
+			',
+			array('integer', 'integer'), array($comment_id, $ilUser->getId()));
+
+		if($ilDB->numRows($res) > 0)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @param $question_id
+	 * @return bool
+	 */
+	public static function existUserAnswerForQuestionId($question_id)
+	{
+		global $ilUser, $ilDB;
+
+		$res = $ilDB->queryF('
+			SELECT * FROM ' . self::TABLE_NAME_ANSWERS . ' 			
+			WHERE question_id = %s 
+			AND user_id = %s
+			',
+			array('integer', 'integer'), array($question_id, $ilUser->getId()));
+
+		if($ilDB->numRows($res) > 0)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 *
 	 */
 	private function readAnswerDefinitions()
@@ -169,6 +261,87 @@ class SimpleChoiceQuestion
 		{
 			$this->answer_defs[] = $row;
 		}
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getQuestionId()
+	{
+		return $this->question_id;
+	}
+
+	/**
+	 * @param int $question_id
+	 */
+	public function setQuestionId($question_id)
+	{
+		$this->question_id = $question_id;
+	}
+
+	/**
+	 * @param $old_comment_id
+	 * @param $new_comment_id
+	 */
+	public function cloneQuestionObject($old_comment_id, $new_comment_id)
+	{
+		global $ilDB;
+		$res = $ilDB->queryF('
+				SELECT * 
+				FROM ' . self::TABLE_NAME_QUESTION_TEXT . '  
+				WHERE question_id = %s',
+			array('integer'), array($this->getQuestionIdByCommentId($old_comment_id))
+		);
+		$counter = 0;
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$_POST['answer'][] = $row['answer'];
+			if($row['correct'] == 1)
+			{
+				$_POST['correct'][$counter] = 1;
+			}
+			$counter++;
+		}
+		$res = $ilDB->queryF('
+				SELECT * 
+				FROM ' . self::TABLE_NAME_QUESTION . ' 
+				WHERE comment_id = %s',
+			array('integer'), array($old_comment_id)
+		);
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$this->setCommentId($new_comment_id);
+			$this->setQuestionText($row['question_text']);
+			$this->setType($row['type']);
+			$this->setFeedbackCorrect($row['feedback_correct']);
+			$this->setFeedbackOneWrong($row['feedback_one_wrong']);
+			$this->setLimitAttempts($row['limit_attempts']);
+			$this->setIsJumpCorrect($row['is_jump_correct']);
+			$this->setJumpCorrectTs($row['jump_correct_ts']);
+			$this->setShowCorrectIcon($row['show_correct_icon']);
+			$this->setIsJumpWrong($row['is_jump_wrong']);
+			$this->setShowWrongIcon($row['show_wrong_icon']);
+			$this->setJumpWrongTs($row['jump_wrong_ts']);
+			$this->setShowResponseFrequency($row['show_response_frequency']);
+			$this->setRepeatQuestion($row['repeat_question']);
+			$_POST['question_type'] = $row['type'];
+			$this->create();
+		}
+	}
+
+	/**
+	 * @param $comment_id
+	 * @return int
+	 */
+	public function getQuestionIdByCommentId($comment_id)
+	{
+		global $ilDB;
+
+		$res = $ilDB->queryF('SELECT question_id FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
+			array('integer'), array($comment_id));
+
+		$row = $ilDB->fetchAssoc($res);
+		return $row['question_id'];
 	}
 
 	/**
@@ -237,54 +410,213 @@ class SimpleChoiceQuestion
 	}
 
 	/**
-	 * @param $old_comment_id
-	 * @param $new_comment_id
+	 * @return int
 	 */
-	public function cloneQuestionObject($old_comment_id, $new_comment_id)
+	public function getType()
 	{
-		global $ilDB;
-		$res = $ilDB->queryF('
-				SELECT * 
-				FROM ' . self::TABLE_NAME_QUESTION_TEXT . '  
-				WHERE question_id = %s',
-			array('integer'), array($this->getQuestionIdByCommentId($old_comment_id))
-		);
-		$counter = 0;
-		while($row = $ilDB->fetchAssoc($res))
-		{
-			$_POST['answer'][] = $row['answer'];
-			if($row['correct'] == 1)
-			{
-				$_POST['correct'][$counter] = 1;
-			}
-			$counter++;
-		}
-		$res = $ilDB->queryF('
-				SELECT * 
-				FROM ' . self::TABLE_NAME_QUESTION . ' 
-				WHERE comment_id = %s',
-			array('integer'), array($old_comment_id)
-		);
-		while($row = $ilDB->fetchAssoc($res))
-		{
-			$this->setCommentId($new_comment_id);
-			$this->setQuestionText($row['question_text']);
-			$this->setType($row['type']);
-			$this->setFeedbackCorrect($row['feedback_correct']);
-			$this->setFeedbackOneWrong($row['feedback_one_wrong']);
-			$this->setLimitAttempts($row['limit_attempts']);
-			$this->setIsJumpCorrect($row['is_jump_correct']);
-			$this->setJumpCorrectTs($row['jump_correct_ts']);
-			$this->setShowCorrectIcon($row['show_correct_icon']);
-			$this->setIsJumpWrong($row['is_jump_wrong']);
-			$this->setShowWrongIcon($row['show_wrong_icon']);
-			$this->setJumpWrongTs($row['jump_wrong_ts']);
-			$this->setShowResponseFrequency($row['show_response_frequency']);
-			$this->setRepeatQuestion($row['repeat_question']);
-			$_POST['question_type'] = $row['type'];
-			$this->create();
-		}
+		return $this->type;
 	}
+
+	/**
+	 * @param int $type
+	 */
+	public function setType($type)
+	{
+		$this->type = $type;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getQuestionText()
+	{
+		return $this->question_text;
+	}
+
+	/**
+	 * @param string $question_text
+	 */
+	public function setQuestionText($question_text)
+	{
+		$this->question_text = $question_text;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getFeedbackCorrect()
+	{
+		return $this->feedback_correct;
+	}
+
+	/**
+	 * @param string $feedback_correct
+	 */
+	public function setFeedbackCorrect($feedback_correct)
+	{
+		$this->feedback_correct = $feedback_correct;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getFeedbackOneWrong()
+	{
+		return $this->feedback_one_wrong;
+	}
+
+	/**
+	 * @param string $feedback_one_wrong
+	 */
+	public function setFeedbackOneWrong($feedback_one_wrong)
+	{
+		$this->feedback_one_wrong = $feedback_one_wrong;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLimitAttempts()
+	{
+		return $this->limit_attempts;
+	}
+
+	/**
+	 * @param int $limit_attempts
+	 */
+	public function setLimitAttempts($limit_attempts)
+	{
+		$this->limit_attempts = $limit_attempts;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getShowCorrectIcon()
+	{
+		return $this->show_correct_icon;
+	}
+
+	/**
+	 * @param int $show_correct_icon
+	 */
+	public function setShowCorrectIcon($show_correct_icon)
+	{
+		$this->show_correct_icon = $show_correct_icon;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getIsJumpCorrect()
+	{
+		return $this->is_jump_correct;
+	}
+
+	/**
+	 * @param int $is_jump_correct
+	 */
+	public function setIsJumpCorrect($is_jump_correct)
+	{
+		$this->is_jump_correct = $is_jump_correct;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getJumpCorrectTs()
+	{
+		return $this->jump_correct_ts;
+	}
+
+	/**
+	 * @param int $jump_correct_ts
+	 */
+	public function setJumpCorrectTs($jump_correct_ts)
+	{
+		$this->jump_correct_ts = $jump_correct_ts;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getShowWrongIcon()
+	{
+		return $this->show_wrong_icon;
+	}
+
+	/**
+	 * @param int $show_wrong_icon
+	 */
+	public function setShowWrongIcon($show_wrong_icon)
+	{
+		$this->show_wrong_icon = $show_wrong_icon;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getIsJumpWrong()
+	{
+		return $this->is_jump_wrong;
+	}
+
+	/**
+	 * @param int $is_jump_wrong
+	 */
+	public function setIsJumpWrong($is_jump_wrong)
+	{
+		$this->is_jump_wrong = $is_jump_wrong;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getJumpWrongTs()
+	{
+		return $this->jump_wrong_ts;
+	}
+
+	/**
+	 * @param int $jump_wrong_ts
+	 */
+	public function setJumpWrongTs($jump_wrong_ts)
+	{
+		$this->jump_wrong_ts = $jump_wrong_ts;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getShowResponseFrequency()
+	{
+		return $this->show_response_frequency;
+	}
+
+	/**
+	 * @param int $show_response_frequency
+	 */
+	public function setShowResponseFrequency($show_response_frequency)
+	{
+		$this->show_response_frequency = $show_response_frequency;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getRepeatQuestion()
+	{
+		return $this->repeat_question;
+	}
+
+	/**
+	 * @param int $repeat_question
+	 */
+	public function setRepeatQuestion($repeat_question)
+	{
+		$this->repeat_question = $repeat_question;
+	}
+
 	/**
 	 * @return bool
 	 */
@@ -378,27 +710,6 @@ class SimpleChoiceQuestion
 			$title = '';
 		}
 		return $title;
-	}
-
-	/**
-	 * @param $qid
-	 * @return int
-	 */
-	public function getTypeByQuestionId($qid)
-	{
-		/**
-		 * @var $ilDB   ilDB
-		 */
-
-		global $ilDB;
-		$res = $ilDB->queryF(
-			'SELECT * FROM ' . self::TABLE_NAME_QUESTION . ' WHERE question_id = %s',
-			array('integer'),
-			array((int)$qid)
-		);
-		$row = $ilDB->fetchAssoc($res);
-		return (int)$row['type'];
-
 	}
 
 	/**
@@ -546,21 +857,6 @@ class SimpleChoiceQuestion
 	}
 
 	/**
-	 * @param $comment_id
-	 * @return int
-	 */
-	public function getQuestionIdByCommentId($comment_id)
-	{
-		global $ilDB;
-
-		$res = $ilDB->queryF('SELECT question_id FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
-			array('integer'), array($comment_id));
-
-		$row = $ilDB->fetchAssoc($res);
-		return $row['question_id'];
-	}
-	
-	/**
 	 * @param $qid
 	 * @param $answers
 	 */
@@ -618,6 +914,27 @@ class SimpleChoiceQuestion
 				'user_id'     => array('integer', $usr_id),
 				'points'      => array('integer', $points)
 			));
+	}
+
+	/**
+	 * @param $qid
+	 * @return int
+	 */
+	public function getTypeByQuestionId($qid)
+	{
+		/**
+		 * @var $ilDB   ilDB
+		 */
+
+		global $ilDB;
+		$res = $ilDB->queryF(
+			'SELECT * FROM ' . self::TABLE_NAME_QUESTION . ' WHERE question_id = %s',
+			array('integer'),
+			array((int)$qid)
+		);
+		$row = $ilDB->fetchAssoc($res);
+		return (int)$row['type'];
+
 	}
 
 	/**
@@ -687,82 +1004,6 @@ class SimpleChoiceQuestion
 	}
 
 	/**
-	 * @param $question_id
-	 * @return bool
-	 */
-	public static function isLimitAttemptsEnabled($question_id)
-	{
-		global $ilDB;
-
-		$res = $ilDB->queryF('SELECT limit_attempts FROM ' . self::TABLE_NAME_QUESTION . ' WHERE question_id = %s',
-			array('integer'), array($question_id));
-
-		$row = $ilDB->fetchAssoc($res);
-		return (bool)$row['limit_attempts'];
-
-	}
-
-	/**
-	 * @param $comment_id
-	 * @return bool
-	 */
-	public static function isRepeatQuestionEnabled($comment_id)
-	{
-		global $ilDB;
-		$res = $ilDB->queryF('SELECT repeat_question FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
-			array('integer'), array($comment_id));
-
-		$row = $ilDB->fetchAssoc($res);
-
-		return (bool)$row['repeat_question'];
-	}
-
-	/**
-	 * @param $comment_id
-	 * @return bool
-	 */
-	public static function existUserAnswer($comment_id)
-	{
-		global $ilUser, $ilDB;
-
-		$res = $ilDB->queryF('
-			SELECT * FROM ' . self::TABLE_NAME_ANSWERS . ' ans
-			INNER JOIN ' . self::TABLE_NAME_QUESTION . ' qst on ans.question_id = qst.question_id 
-			WHERE comment_id = %s 
-			AND user_id = %s
-			',
-			array('integer', 'integer'), array($comment_id, $ilUser->getId()));
-
-		if($ilDB->numRows($res) > 0)
-		{
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @param $question_id
-	 * @return bool
-	 */
-	public static function existUserAnswerForQuestionId($question_id)
-	{
-		global $ilUser, $ilDB;
-
-		$res = $ilDB->queryF('
-			SELECT * FROM ' . self::TABLE_NAME_ANSWERS . ' 			
-			WHERE question_id = %s 
-			AND user_id = %s
-			',
-			array('integer', 'integer'), array($question_id, $ilUser->getId()));
-
-		if($ilDB->numRows($res) > 0)
-		{
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * @return int
 	 */
 	public function getObjId()
@@ -776,246 +1017,6 @@ class SimpleChoiceQuestion
 	public function setObjId($obj_id)
 	{
 		$this->obj_id = $obj_id;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getCommentId()
-	{
-		return $this->comment_id;
-	}
-
-	/**
-	 * @param int $comment_id
-	 */
-	public function setCommentId($comment_id)
-	{
-		$this->comment_id = $comment_id;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getType()
-	{
-		return $this->type;
-	}
-
-	/**
-	 * @param int $type
-	 */
-	public function setType($type)
-	{
-		$this->type = $type;
-	}
-
-	/**
-	 * @param int $question_id
-	 */
-	public function setQuestionId($question_id)
-	{
-		$this->question_id = $question_id;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getQuestionId()
-	{
-		return $this->question_id;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getLimitAttempts()
-	{
-		return $this->limit_attempts;
-	}
-
-	/**
-	 * @param int $limit_attempts
-	 */
-	public function setLimitAttempts($limit_attempts)
-	{
-		$this->limit_attempts = $limit_attempts;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getIsJumpCorrect()
-	{
-		return $this->is_jump_correct;
-	}
-
-	/**
-	 * @param int $is_jump_correct
-	 */
-	public function setIsJumpCorrect($is_jump_correct)
-	{
-		$this->is_jump_correct = $is_jump_correct;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getJumpCorrectTs()
-	{
-		return $this->jump_correct_ts;
-	}
-
-	/**
-	 * @param int $jump_correct_ts
-	 */
-	public function setJumpCorrectTs($jump_correct_ts)
-	{
-		$this->jump_correct_ts = $jump_correct_ts;
-	}
-
-	/**
-	 * @param int $is_jump_wrong
-	 */
-	public function setIsJumpWrong($is_jump_wrong)
-	{
-		$this->is_jump_wrong = $is_jump_wrong;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getIsJumpWrong()
-	{
-		return $this->is_jump_wrong;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getJumpWrongTs()
-	{
-		return $this->jump_wrong_ts;
-	}
-
-	/**
-	 * @param int $jump_wrong_ts
-	 */
-	public function setJumpWrongTs($jump_wrong_ts)
-	{
-		$this->jump_wrong_ts = $jump_wrong_ts;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getQuestionText()
-	{
-		return $this->question_text;
-	}
-
-	/**
-	 * @param string $question_text
-	 */
-	public function setQuestionText($question_text)
-	{
-		$this->question_text = $question_text;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getFeedbackCorrect()
-	{
-		return $this->feedback_correct;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getShowCorrectIcon()
-	{
-		return $this->show_correct_icon;
-	}
-
-	/**
-	 * @param int $show_correct_icon
-	 */
-	public function setShowCorrectIcon($show_correct_icon)
-	{
-		$this->show_correct_icon = $show_correct_icon;
-	}
-
-	/**
-	 * @param string $feedback_correct
-	 */
-	public function setFeedbackCorrect($feedback_correct)
-	{
-		$this->feedback_correct = $feedback_correct;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getFeedbackOneWrong()
-	{
-		return $this->feedback_one_wrong;
-	}
-
-	/**
-	 * @param string $feedback_one_wrong
-	 */
-	public function setFeedbackOneWrong($feedback_one_wrong)
-	{
-		$this->feedback_one_wrong = $feedback_one_wrong;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getShowWrongIcon()
-	{
-		return $this->show_wrong_icon;
-	}
-
-	/**
-	 * @param int $show_wrong_icon
-	 */
-	public function setShowWrongIcon($show_wrong_icon)
-	{
-		$this->show_wrong_icon = $show_wrong_icon;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getRepeatQuestion()
-	{
-		return $this->repeat_question;
-	}
-
-	/**
-	 * @param int $repeat_question
-	 */
-	public function setRepeatQuestion($repeat_question)
-	{
-		$this->repeat_question = $repeat_question;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getShowResponseFrequency()
-	{
-		return $this->show_response_frequency;
-	}
-
-	/**
-	 * @param int $show_response_frequency
-	 */
-	public function setShowResponseFrequency($show_response_frequency)
-	{
-		$this->show_response_frequency = $show_response_frequency;
 	}
 
 
