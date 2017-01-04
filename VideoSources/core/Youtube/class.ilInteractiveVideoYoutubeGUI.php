@@ -10,6 +10,8 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 
 	const PATH = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/';
 
+	const YOUTUBE_URL = 'https://www.youtube.com/watch?v=';
+	
 	/**
 	 * @param ilRadioOption $option
 	 * @param               $obj_id
@@ -69,7 +71,12 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	public function getEditFormCustomValues(array &$a_values, $obj)
 	{
 		$instance = new ilInteractiveVideoYoutube();
-		$a_values[ilInteractiveVideoYoutube::FORM_FIELD] = $instance->doReadVideoSource($obj->getId());
+		$value = $instance->doReadVideoSource($obj->getId());
+		if($value != '')
+		{
+			$value = self::YOUTUBE_URL . $value;
+		}
+		$a_values[ilInteractiveVideoYoutube::FORM_FIELD] = $value;
 	}
 
 	/**
@@ -77,7 +84,6 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function getConfigForm($form)
 	{
-		// TODO: Implement getConfigForm() method.
 	}
 
 	/**

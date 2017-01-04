@@ -75,7 +75,6 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function getConfigForm($form)
 	{
-		// TODO: Implement getConfigForm() method.
 	}
 
 	/**

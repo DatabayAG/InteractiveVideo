@@ -1776,29 +1776,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$description_switch = new ilCheckboxInputGUI($this->plugin->txt('task_switch'),'is_task');
 		$description_switch->setInfo($this->plugin->txt('task_switch_info'));
-		$description = new ilTextAreaInputGUI($this->plugin->txt('task'),'task');
-		$description->setUseRte(true);
-		#$description->setRteTagSet('mini');
-		$description->addPlugin('latex');
-		$description->addButton('latex');
-		$description->addButton('pastelatex');
-		$description->usePurifier(true);
-		$description->disableButtons(array(
-			'charmap',
-			'undo',
-			'redo',
-			'justifyleft',
-			'justifycenter',
-			'justifyright',
-			'justifyfull',
-			'anchor',
-			'fullscreen',
-			'cut',
-			'copy',
-			'paste',
-			'pastetext',
-			'formatselect'
-		));
+		$description = $this->constructTextAreaFormElement('task', 'task');
 		$description_switch->addSubItem($description);
 		$a_form->addItem($description_switch);
 
@@ -1817,6 +1795,40 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$chrono = new ilCheckboxInputGUI($this->plugin->txt('is_chronologic'), 'is_chronologic');
 		$chrono->setInfo($this->plugin->txt('is_chronologic_info'));
 		$a_form->addItem($chrono);
+	}
+
+	/**
+	 * @param $txt
+	 * @param $name
+	 * @return ilTextAreaInputGUI
+	 */
+	protected function constructTextAreaFormElement($txt, $name)
+	{
+		$text_area = new ilTextAreaInputGUI($this->plugin->txt($txt), $name);
+		$text_area->setUseRte(true);
+		$text_area->addPlugin('latex');
+		$text_area->addButton('latex');
+		$text_area->addButton('pastelatex');
+		$text_area->usePurifier(true);
+		$text_area->disableButtons(array(
+			'charmap',
+			'undo',
+			'redo',
+			'justifyleft',
+			'justifycenter',
+			'justifyright',
+			'justifyfull',
+			'fullscreen',
+			'cut',
+			'copy',
+			'paste',
+			'pastetext',
+			'formatselect',
+			'bullist',
+			'numlist',
+			'removeformat'
+		));
+		return $text_area;
 	}
 
 	/**

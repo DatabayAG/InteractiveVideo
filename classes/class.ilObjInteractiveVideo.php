@@ -124,6 +124,26 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		parent::doRead();
 	}
 
+	/**
+	 * @return string
+	 */
+	protected function getOldVideoSource()
+	{
+		/**
+		 * @var $ilDB ilDB
+		 */
+		global $ilDB;
+
+		$res = $ilDB->queryF(
+			'SELECT source_id FROM rep_robj_xvid_objects WHERE obj_id = %s',
+			array('integer'),
+			array($this->getId())
+		);
+		$row = $ilDB->fetchAssoc($res);
+
+		return $row['source_id'];
+	}
+
 
 	protected function doCreate()
 	{
@@ -181,6 +201,13 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		global $ilDB;
 
 		parent::doUpdate();
+		
+		$old_source_id = $this->getOldVideoSource();
+		if($old_source_id != $this->getSourceId())
+		{
+			$this->getVideoSourceObject($old_source_id);
+			$this->video_source_object->doDeleteVideoSource($this->getId());
+		}
 
 		$ilDB->update('rep_robj_xvid_objects',
 			array(	'is_anonymized'		=>array('integer',	$this->isAnonymized()),
