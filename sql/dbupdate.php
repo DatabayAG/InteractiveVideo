@@ -546,3 +546,15 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'show_wrong_icon'))
 			'default' => 1));
 }
 ?>
+<#27>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'lp_mode'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'lp_mode',
+		array(
+			'type'    => 'integer',
+			'length'  => '1',
+			'notnull' => true,
+			'default' => 0));
+}
+?>
