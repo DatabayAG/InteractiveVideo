@@ -7,6 +7,8 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 {
 
 	const FORM_FIELD = 'youtube_url';
+	
+	const TABLE_NAME = 'rep_robj_xvid_youtube';
 
 	/**
 	 * @var string
@@ -51,7 +53,7 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	public function doReadVideoSource($obj_id)
 	{
 		global $ilDB;
-		$result = $ilDB->query('SELECT youtube_id FROM rep_robj_xvid_youtube WHERE obj_id = '.$ilDB->quote($obj_id, 'integer'));
+		$result = $ilDB->query('SELECT youtube_id FROM '.self::TABLE_NAME.' WHERE obj_id = '.$ilDB->quote($obj_id, 'integer'));
 		$row = $ilDB->fetchAssoc($result);
 		return $row['youtube_id'];
 	}
@@ -70,7 +72,8 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 */
 	public function doCloneVideoSource($original_obj_id, $new_obj_id)
 	{
-		// TODO: Implement cloneVideoSource() method.
+		$youtube_id = $this->doReadVideoSource($original_obj_id);
+		$this->saveData($new_obj_id, $youtube_id);
 	}
 
 	/**
@@ -78,22 +81,30 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 */
 	public function doUpdateVideoSource($obj_id)
 	{
-		global $ilDB;
-		
 		$youtube_id = self::getYoutubeIdentifier(ilUtil::stripSlashes($_POST[self::FORM_FIELD]));
 
 		if($youtube_id)
 		{
 			$this->removeEntryFromTable($obj_id);
 			$this->setYoutubeId($youtube_id);
-			$ilDB->insert(
-				'rep_robj_xvid_youtube',
-				array(
-					'obj_id'     => array('integer', $obj_id),
-					'youtube_id' => array('text', $youtube_id)
-				)
-			);
+			$this->saveData($obj_id, $youtube_id);
 		}
+	}
+
+	/**
+	 * @param $obj_id
+	 * @param $youtube_id
+	 */
+	protected function saveData($obj_id, $youtube_id)
+	{
+		global $ilDB;
+		$ilDB->insert(
+			self::TABLE_NAME,
+			array(
+				'obj_id'     => array('integer', $obj_id),
+				'youtube_id' => array('text', $youtube_id)
+			)
+		);
 	}
 
 	/**
@@ -110,7 +121,7 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	public function removeEntryFromTable($obj_id)
 	{
 		global $ilDB;
-		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_youtube WHERE obj_id = %s',
+		$ilDB->manipulateF('DELETE FROM '.self::TABLE_NAME.' WHERE obj_id = %s',
 			array('integer'), array($obj_id));
 	}
 
