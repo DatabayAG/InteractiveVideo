@@ -142,7 +142,7 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	}
 
 	/**
-	 * @return string
+	 * @return ilInteractiveVideoYoutubeGUI
 	 */
 	public function getGUIClass()
 	{

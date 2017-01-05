@@ -52,7 +52,7 @@ interface ilInteractiveVideoSource
 	public function isFileBased();
 
 	/**
-	 * @return string
+	 * @return ilInteractiveVideoSourceGUI
 	 */
 	public function getGUIClass();
 

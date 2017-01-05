@@ -251,7 +251,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	}
 
 	/**
-	 * @return string
+	 * @return ilInteractiveVideoMediaObjectGUI
 	 */
 	public function getGUIClass()
 	{
