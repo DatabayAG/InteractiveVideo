@@ -73,7 +73,7 @@ class ilInteractiveVideoSourceFactoryGUI
 	{
 		foreach($this->sources as $class => $obj)
 		{
-			$form = $obj->getGUIClass()->checkForm($form);
+			$obj->getGUIClass()->checkForm($form);
 		}
 		return $form;
 	}

@@ -33,7 +33,7 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function checkForm($form)
 	{
-		$value = ilUtil::stripSlashes($form->getInput('youtube_url'));
+		$value = ilUtil::stripSlashes($form->getInput(ilInteractiveVideoYoutube::FORM_FIELD));
 		$youtube_id = ilInteractiveVideoYoutube::getYoutubeIdentifier($value);
 		if($youtube_id)
 		{
