@@ -162,8 +162,9 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	}
 
 	/**
-	 * @param $form
+	 * @param ilPropertyFormGUI $form
 	 * @param $source
+	 * @return ilPropertyFormGUI
 	 */
 	protected function addPluginConfigForm($form, $source)
 	{
@@ -229,18 +230,31 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	protected function saveForm($form)
 	{
 		$settings = array();
+		$min_selected = false;
 		foreach($form->getItems() as $key => $value)
 		{
 			if($value->getPostVar() != 'path_mapping')
 			{
 				$class = ilUtil::stripSlashes($value->getPostVar());
-				$settings[$class] = ilUtil::stripSlashes((int) $_POST[$class]);
+				$setting = ilUtil::stripSlashes((int) $_POST[$class]);
+				$settings[$class] = $setting;
+				if($setting == 1)
+				{
+					$min_selected = true;
+				}
 			}
 			else
 			{
 				$mapping = json_decode($value->getValue(), true);
 			}
 		}
-		$this->video_source_factory->saveSourceSettings(array('settings' => $settings, 'mappings' => $mapping));
+		if($min_selected)
+		{
+			$this->video_source_factory->saveSourceSettings(array('settings' => $settings, 'mappings' => $mapping));
+		}
+		else
+		{
+			ilUtil::sendFailure(ilInteractiveVideoPlugin::getInstance()->txt('select_at_least_one'), true);
+		}
 	}
 }
