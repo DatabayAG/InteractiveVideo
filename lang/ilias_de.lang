@@ -142,4 +142,4 @@ lp_summary#:#Zusammenfassung
 lp_settings#:#Einstellungen
 select_at_least_one#:#Bitte wählen sie mindestens eine Quelle aus.
 back_to#:#zurück zu
-back_to_title#:#Wollen Sie zum Urprungsobjekt %s zurückkehren?
+back_to_title#:#Wollen Sie zum Urprungsobjekt %s (%s) zurückkehren?

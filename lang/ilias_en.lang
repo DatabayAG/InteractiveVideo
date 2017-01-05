@@ -143,4 +143,4 @@ lp_summary#:#Summary
 lp_settings#:#Settings
 select_at_least_one#:#Please select at least one source
 back_to#:#back to
-back_to_title#:#Do you want to go back to %s?
+back_to_title#:#Do you want to go back to %s (%s)?

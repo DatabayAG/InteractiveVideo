@@ -252,11 +252,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$link = $url['scheme'] . '://' . $url['host'] . (isset($url['port']) ?  ':' . $url['port'] : '') . $link;
 		if($ref_id !== 0)
 		{
-			$obj_id = $ilObjDataCache->lookupObjId($ref_id);
-			$title = $ilObjDataCache->lookupTitle($obj_id);
-			$type =  $ilObjDataCache->lookupType($obj_id);
-			$txt = ilInteractiveVideoPlugin::getInstance()->txt('back_to') . ' ' . $title;
-			$back_to_text = sprintf(ilInteractiveVideoPlugin::getInstance()->txt('back_to_title'), $title);
+			$obj_id		= $ilObjDataCache->lookupObjId($ref_id);
+			$title		= $ilObjDataCache->lookupTitle($obj_id);
+			$type		=  $ilObjDataCache->lookupType($obj_id);
+			$txt		= ilInteractiveVideoPlugin::getInstance()->txt('back_to') . ' ' . $title;
+			$back_to_text = sprintf(ilInteractiveVideoPlugin::getInstance()->txt('back_to_title'), $title, $lng->txt($type));
 
 			$link_button = ilLinkButton::getInstance();
 			$link_button->setCaption($txt, false);
