@@ -1,5 +1,21 @@
 <nav class="ilToolbar navbar navbar-default yamm " role="navigation" id="2">
 	<div class="container-fluid interativeVideoNavHeader">
+		<!-- BEGIN return_link -->
+		<ul class="ilToolbarItems nav navbar-nav">
+			<li>
+				<div class="back_link_to">
+					{RETURN_LINK}
+				</div>
+				<div style="display:none;" class="back_to_title">
+					<p>{BACK_TO_TITLE}</p>
+					<div class="text-center">
+						<a id="back_link_active" href="{RETURN_HREF}" class="btn btn-default btn-sm" type="button" value="">{BACK_TO_TEXT}</a>
+						<a class="btn btn-default btn-sm back_link_cancel" type="button" value="">{BACK_CANCEL}</a>
+					</div>
+				</div>
+			</li>
+		</ul>
+		<!-- END return_link -->
 		<!-- Brand and toggle get grouped for better mobile display -->
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#tb-collapse-2">

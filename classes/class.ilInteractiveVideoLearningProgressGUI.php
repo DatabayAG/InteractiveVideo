@@ -101,7 +101,7 @@ class ilInteractiveVideoLearningProgressGUI
 	}
 
 	/**
-	 *
+	 * @param ilPropertyFormGUI|null $form
 	 */
 	public function showLPSettings(ilPropertyFormGUI $form = null)
 	{

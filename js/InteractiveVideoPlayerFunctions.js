@@ -88,6 +88,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		pro.addBootStrapToggle();
 
 		pro.addDropDownEvent();
+
+		pro.addModalInteractionToBackLinkButton();
 	};
 
 	pro.addHighlightToCommentWithoutEndTime = function(comment)
@@ -286,6 +288,48 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				scope.InteractiveVideoPlayerComments.displayAllCommentsAndDeactivateCommentStream(show_all_active_temp);
 				scope.InteractiveVideo.is_show_all_active = show_all_active_temp;
 			}
+		});
+	};
+
+	pro.addModalInteractionToBackLinkButton = function()
+	{
+		if(pub.doesReferencePointExists())
+		{
+			$('.back_link_to').on('click', function(event)
+			{
+				event.preventDefault();
+				pub.finishAndReturnToReferencePoint();
+			});
+		}
+	};
+	
+	pub.doesReferencePointExists = function()
+	{
+		var object = $('.back_link_to');
+		if(object.size() > 0)
+		{
+			return true;
+		}
+		return false;
+	};
+
+	pub.finishAndReturnToReferencePoint = function()
+	{
+		var modal = $('.modal-body');
+		modal.html('');
+		$('.modal-title').html();
+		modal.append($('.back_to_title').html());
+		modal.show();
+		$('#ilQuestionModal').modal('show')
+		pro.addCancelAction();
+	};
+	
+	pro.addCancelAction = function()
+	{
+		$('#ilQuestionModal').find('.back_link_cancel').on('click', function(event){
+			console.log('click')
+			event.preventDefault();
+			$('#ilQuestionModal').modal('hide');
 		});
 	};
 

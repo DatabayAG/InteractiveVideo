@@ -72,7 +72,10 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.videoFinished = function()
 	{
-		console.log('video done')
+		if(il.InteractiveVideoPlayerFunction.doesReferencePointExists())
+		{
+			il.InteractiveVideoPlayerFunction.finishAndReturnToReferencePoint();
+		}
 	};
 
 	pub.protect = pro;

@@ -205,6 +205,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$video_tpl->parseCurrentBlock();
 		}
 
+		$this->addBackButtonIfParameterExists($video_tpl);
+
 		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());
 		$this->objComment = new ilObjComment();
 		$this->objComment->setObjId($this->object->getId());
@@ -231,6 +233,43 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig());
 		
 		$tpl->setContent($video_tpl->get());
+	}
+
+	/**
+	 * @param $video_tpl ilTemplate
+	 */
+	protected function addBackButtonIfParameterExists($video_tpl)
+	{
+		/**
+		 * @var $ilObjDataCache ilObjectDataCache
+		 * @var $lng ilLanguage
+		 */
+		global $lng, $ilObjDataCache;
+
+		$ref_id = (int) $_GET['xvid_referrer_ref_id'];
+		$link = urldecode($_GET['xvid_referrer']);
+		$url = parse_url(ILIAS_HTTP_PATH);
+		$link = $url['scheme'] . '://' . $url['host'] . (isset($url['port']) ?  ':' . $url['port'] : '') . $link;
+		if($ref_id !== 0)
+		{
+			$obj_id = $ilObjDataCache->lookupObjId($ref_id);
+			$title = $ilObjDataCache->lookupTitle($obj_id);
+			$type =  $ilObjDataCache->lookupType($obj_id);
+			$txt = ilInteractiveVideoPlugin::getInstance()->txt('back_to') . ' ' . $title;
+			$back_to_text = sprintf(ilInteractiveVideoPlugin::getInstance()->txt('back_to_title'), $title);
+
+			$link_button = ilLinkButton::getInstance();
+			$link_button->setCaption($txt, false);
+			$link_button->setUrl($link);
+
+			$video_tpl->setCurrentBlock('return_link');
+			$video_tpl->setVariable('RETURN_LINK', $link_button->render());
+			$video_tpl->setVariable('BACK_TO_TITLE', $back_to_text);
+			$video_tpl->setVariable('BACK_TO_TEXT', $txt);
+			$video_tpl->setVariable('RETURN_HREF', $link);
+			$video_tpl->setVariable('BACK_CANCEL', $lng->txt('cancel'));
+			$video_tpl->parseCurrentBlock();
+		}
 	}
 
 	/**
@@ -2213,4 +2252,40 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
 	}
 #endregion
+	public static function _goto($a_target)
+	{
+		global $ilCtrl, $ilAccess, $lng;
+
+		$t = explode("_", $a_target[0]);
+		$ref_id = (int) $t[0];
+		$class_name = $a_target[1];
+
+		if ($ilAccess->checkAccess("read", "", $ref_id))
+		{
+			$ilCtrl->initBaseClass("ilObjPluginDispatchGUI");
+			$ilCtrl->setTargetScript("ilias.php");
+			$ilCtrl->getCallStructure(strtolower("ilObjPluginDispatchGUI"));
+			$ilCtrl->setParameterByClass($class_name, "ref_id", $ref_id);
+			$ilCtrl->saveParameterByClass($class_name, 'xvid_referrer_ref_id');
+			$ilCtrl->setParameterByClass($class_name, 'xvid_referrer', urlencode($_GET['xvid_referrer']));
+			$ilCtrl->redirectByClass(array("ilobjplugindispatchgui", $class_name), "");
+		}
+		else if($ilAccess->checkAccess("visible", "", $ref_id))
+		{
+			$ilCtrl->initBaseClass("ilObjPluginDispatchGUI");
+			$ilCtrl->setTargetScript("ilias.php");
+			$ilCtrl->getCallStructure(strtolower("ilObjPluginDispatchGUI"));
+			$ilCtrl->setParameterByClass($class_name, "ref_id", $ref_id);
+			$ilCtrl->saveParameterByClass($class_name, 'xvid_referrer_ref_id');
+			$ilCtrl->setParameterByClass($class_name, 'xvid_referrer', urlencode($_GET['xvid_referrer']));
+			$ilCtrl->redirectByClass(array("ilobjplugindispatchgui", $class_name), "infoScreen");
+		}
+		else if ($ilAccess->checkAccess("read", "", ROOT_FOLDER_ID))
+		{
+			ilUtil::sendFailure(sprintf($lng->txt("msg_no_perm_read_item"),
+				ilObject::_lookupTitle(ilObject::_lookupObjId($ref_id))));
+			include_once("./Services/Object/classes/class.ilObjectGUI.php");
+			ilObjectGUI::_gotoRepositoryRoot();
+		}
+	}
 }
