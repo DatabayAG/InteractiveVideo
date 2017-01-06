@@ -5,6 +5,7 @@ require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
 require_once 'Services/MediaObjects/classes/class.ilObjMediaObjectGUI.php';
 /**
  * Class ilInteractiveVideoMediaObjectGUI
+ * @author Guido Vollbach <gvollbach@databay.de>
  */
 class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 {

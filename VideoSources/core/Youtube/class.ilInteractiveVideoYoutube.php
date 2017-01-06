@@ -2,6 +2,7 @@
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/interface.ilInteractiveVideoSource.php';
 /**
  * Class ilInteractiveVideoYoutube
+ * @author Guido Vollbach <gvollbach@databay.de>
  */
 class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 {

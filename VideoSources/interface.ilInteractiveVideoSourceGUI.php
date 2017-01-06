@@ -2,6 +2,7 @@
 
 /**
  * Interface ilInteractiveVideoSourceGUI
+ * @author Guido Vollbach <gvollbach@databay.de>
  */
 interface ilInteractiveVideoSourceGUI
 {

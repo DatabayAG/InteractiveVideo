@@ -277,6 +277,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	public function getInteractiveForm()
 	{
+		/**
+		 * $tpl ilTemplate
+		 */
 		global $tpl;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
@@ -326,6 +329,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function initPlayerConfig()
 	{
+		/**
+		 * $ilUser ilObjUser
+		 * $tpl ilTemplate
+		 */
 		global $ilUser, $tpl;
 
 		$plugin = ilInteractiveVideoPlugin::getInstance();
@@ -556,6 +563,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$factory = new ilInteractiveVideoSourceFactory();
 		$sources = $factory->getVideoSources();
+		/** $source ilInteractiveVideoSource */
 		foreach($sources as $key => $source)
 		{
 			/** @var ilInteractiveVideoSourceGUI $gui */
@@ -972,9 +980,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
-	/**
-	 *
-	 */
 	public function deleteComment()
 	{
 		if(!isset($_POST['comment_id']) || !is_array($_POST['comment_id']) || !count($_POST['comment_id']))
@@ -1005,6 +1010,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	private function initCommentForm()
 	{
+		/**
+		 * $ilUser ilObjUser
+		 */
 		global $ilUser;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
@@ -1094,9 +1102,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->ctrl->redirect($this, 'editComments');
 	}
 
-	/**
-	 *
-	 */
 	public function editMyComments()
 	{
 		/**
@@ -1117,9 +1122,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tbl->setData($tbl_data);
 		$tpl->setContent($tbl->getHTML());
 	}
-	/**
-	 *
-	 */
+
 	public function updateMyComment()
 	{
 		$form = $this->initCommentForm();
@@ -1156,9 +1159,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
-	/**
-	 *
-	 */
 	public function confirmDeleteMyComment()
 	{
 		/**
@@ -1205,9 +1205,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
-	/**
-	 *
-	 */
 	public function deleteMyComment()
 	{
 		$plugin = ilInteractiveVideoPlugin::getInstance();
@@ -1243,9 +1240,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->ctrl->redirect($this, 'editMyComment');
 	}
 
-	/**
-	 *
-	 */
 	public function postTutorComment()
 	{
 		/**
@@ -1283,9 +1277,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$current_time = $comment->getCommentTime();
 		$this->editComments($current_time);
 	}
-	/**
-	 *
-	 */
+
 	public function updateComment()
 	{
 		$form = $this->initCommentForm();
@@ -1809,6 +1801,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editComments');
 
 		$comment_id = (int)$_POST['comment_id'];
+		$form_values = array();
 
 		if(!$chk =  SimpleChoiceQuestion::existUserAnswer($comment_id))
 		{
@@ -2190,9 +2183,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		exit();
 	}
 
-	/**
-	 * @return string
-	 */
 	public function showFeedbackPerAjax()
 	{
 		$tpl_json = ilInteractiveVideoPlugin::getInstance()->getTemplate('default/tpl.show_question.html', false, false);
@@ -2257,11 +2247,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	public static function _goto($a_target)
 	{
+		/**
+		 * @var $ilCtrl ilCtrl
+		 * @var $ilAccess ilAccessHandler 
+		 */
 		global $ilCtrl, $ilAccess, $lng;
 
-		$t = explode("_", $a_target[0]);
-		$ref_id = (int) $t[0];
-		$class_name = $a_target[1];
+		$t			= explode("_", $a_target[0]);
+		$ref_id		= (int) $t[0];
+		$class_name	= $a_target[1];
 
 		if ($ilAccess->checkAccess("read", "", $ref_id))
 		{

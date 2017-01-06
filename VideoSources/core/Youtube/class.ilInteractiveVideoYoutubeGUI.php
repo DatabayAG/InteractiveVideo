@@ -4,6 +4,7 @@ require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/In
 
 /**
  * Class ilInteractiveVideoYoutubeGUI
+ * @author Guido Vollbach <gvollbach@databay.de>
  */
 class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 {
@@ -11,7 +12,7 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	const PATH = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/';
 
 	const YOUTUBE_URL = 'https://www.youtube.com/watch?v=';
-	
+
 	/**
 	 * @param ilRadioOption $option
 	 * @param               $obj_id

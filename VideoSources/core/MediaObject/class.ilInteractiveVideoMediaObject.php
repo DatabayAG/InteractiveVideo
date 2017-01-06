@@ -2,6 +2,7 @@
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/interface.ilInteractiveVideoSource.php';
 /**
  * Class ilInteractiveVideoMediaObject
+ * @author Guido Vollbach <gvollbach@databay.de>
  */
 class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 {
@@ -105,6 +106,9 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function uploadVideoFile($obj_id)
 	{
+		/**
+		 * @var $ilCtrl ilCtrl
+		 */
 		global $ilCtrl;
 
 		if(!isset($_FILES) || !is_array($_FILES)|| !isset($_FILES['video_file']))

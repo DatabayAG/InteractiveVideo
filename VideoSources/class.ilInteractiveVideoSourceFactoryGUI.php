@@ -4,6 +4,7 @@ require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/In
 
 /**
  * Class ilInteractiveVideoSourceFactoryGUI
+ * @author Guido Vollbach <gvollbach@databay.de>
  */
 class ilInteractiveVideoSourceFactoryGUI
 {
