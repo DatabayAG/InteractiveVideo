@@ -74,7 +74,11 @@ class ilInteractiveVideoSourceFactoryGUI
 	{
 		foreach($this->sources as $class => $obj)
 		{
-			$obj->getGUIClass()->checkForm($form);
+			$source_id = ilUtil::stripSlashes($form->getInput('source_id'));
+			if($obj->getId() == $source_id)
+			{
+				$obj->getGUIClass()->checkForm($form);
+			}
 		}
 		return $form;
 	}

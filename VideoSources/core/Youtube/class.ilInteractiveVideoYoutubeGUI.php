@@ -66,8 +66,8 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	}
 
 	/**
-	 * @param array $a_values
-	 * @param       $obj
+	 * @param array                 $a_values
+	 * @param ilObjInteractiveVideo $obj
 	 */
 	public function getEditFormCustomValues(array &$a_values, $obj)
 	{

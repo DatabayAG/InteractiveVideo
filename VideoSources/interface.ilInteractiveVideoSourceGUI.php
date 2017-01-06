@@ -26,7 +26,7 @@ interface ilInteractiveVideoSourceGUI
 
 	/**
 	 * @param array $a_values
-	 * @param       $obj
+	 * @param ilObjInteractiveVideo $obj
 	 */
 	public function getEditFormCustomValues(array &$a_values, $obj);
 

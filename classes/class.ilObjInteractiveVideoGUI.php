@@ -410,17 +410,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$factory->checkForm($a_form);
 
 		$is_task = $a_form->getInput('is_task');
-		$this->object->setTaskActive((int)$is_task);		
-		
+		$this->object->setTaskActive((int)$is_task);
+
 		$task = $a_form->getInput('task');
 		$this->object->setTask(ilUtil::stripSlashes($task, false));
-		
+
 		$is_anonymized = $a_form->getInput('is_anonymized');
 		$this->object->setIsAnonymized((int)$is_anonymized);
 
 		$is_repeat = $a_form->getInput('is_repeat');
 		$this->object->setIsRepeat((int)$is_repeat);
-		
+
 		$is_public = $a_form->getInput('is_public');
 		$this->object->setIsPublic((int)$is_public);
 
