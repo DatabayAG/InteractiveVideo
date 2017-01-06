@@ -9,6 +9,14 @@ require_once 'Services/Tracking/classes/status/class.ilLPStatusEvent.php';
  */
 class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 {
+	/**
+	 * ilInteractiveVideoLPUsersTableGUI constructor.
+	 * @param        $a_parent_obj
+	 * @param string $a_parent_cmd
+	 * @param string $a_obj_id
+	 * @param        $a_ref_id
+	 * @param bool   $a_print_view
+	 */
 	function __construct($a_parent_obj, $a_parent_cmd, $a_obj_id, $a_ref_id, $a_print_view = false)
 	{
 		parent::__construct($a_parent_obj, $a_parent_cmd, $a_obj_id, $a_ref_id, true); 
@@ -125,7 +133,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	/**
 	 * {@inheritdoc}
 	 */
-	function initFilter()
+	public function initFilter($a_split_learning_resources = false, $a_include_no_status_filter = true)
 	{
 		$this->filter = array();
 	}
@@ -136,10 +144,9 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	protected function fillRow($data)
 	{
 		/**
-		 * @var $ilCtrl ilCtrl
 		 * @var $lng    ilLanguage
 		 */
-		global $ilCtrl, $lng;
+		global $lng;
 
 		foreach ($this->getSelectedColumns() as $c)
 		{

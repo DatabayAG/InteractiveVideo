@@ -35,7 +35,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 	private static $instance = null;
 
 	/**
-	 * @return ilInteractiveVideoPlugin
+	 * @return ilPlugin
 	 */
 	public static function getInstance()
 	{

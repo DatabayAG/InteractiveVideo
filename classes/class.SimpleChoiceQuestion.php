@@ -204,6 +204,10 @@ class SimpleChoiceQuestion
 	 */
 	public static function existUserAnswer($comment_id)
 	{
+		/**
+		 * $ilUser ilUser
+		 * $ilDB ilDB
+		 */
 		global $ilUser, $ilDB;
 
 		$res = $ilDB->queryF('
@@ -227,6 +231,10 @@ class SimpleChoiceQuestion
 	 */
 	public static function existUserAnswerForQuestionId($question_id)
 	{
+		/**
+		 * $ilUser ilUser
+		 * $ilDB ilDB
+		 */
 		global $ilUser, $ilDB;
 
 		$res = $ilDB->queryF('
@@ -248,6 +256,9 @@ class SimpleChoiceQuestion
 	 */
 	private function readAnswerDefinitions()
 	{
+		/**
+		 * $ilDB ilDB
+		 */
 		global $ilDB;
 
 		$res = $ilDB->queryF('

@@ -180,7 +180,7 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 	/**
 	 * {@inheritdoc}
 	 */
-	function initFilter()
+	public function initFilter($a_split_learning_resources = false, $a_include_no_status_filter = true)
 	{
 		$this->filter = array();
 	}

@@ -425,6 +425,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function getQuestionDataById($comment_id)
 	{
+		/**
+		 * $ilDB ilDB
+		 */
 		global $ilDB;
 
 		$res = 	$ilDB->queryF('SELECT * FROM  ' . self::TABLE_NAME_QUESTIONS. ' WHERE comment_id = %s',
@@ -442,6 +445,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function getCommentTextById($comment_id)
 	{
+		/**
+		 * $ilDB ilDB
+		 */
 		global $ilDB;
 
 		$res = $ilDB->queryF('SELECT comment_text FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE comment_id = %s',
@@ -459,6 +465,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function getCommentIdsByObjId($obj_id, $with_user_id = true)
 	{
+		/**
+		 * $ilDB ilDB
+		 */
 		global $ilDB;
 
 		$comment_ids = array();
@@ -486,6 +495,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function deleteComments($comment_ids)
 	{
+		/**
+		 * $ilDB ilDB
+		 */
 		global $ilDB;
 
 		if(!is_array($comment_ids))

@@ -29,6 +29,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	 */
 	protected $plugin_id;
 
+	/** @noinspection PhpMissingParentConstructorInspection */
 	/**
 	 * ilInteractiveVideoDbUpdater constructor.
 	 * @param int  $a_db_handler
