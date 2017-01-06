@@ -16,6 +16,7 @@ class xvidUtils
 	 */
 	public static function timespanArray( $seconds )
 	{
+		$time = array();
 		if(!is_array($seconds))
 		{
 			$td['s'] = $seconds % 60;

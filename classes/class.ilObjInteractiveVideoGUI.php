@@ -139,7 +139,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					case 'deleteComment': 
 					case 'editComments':  
 				    case 'editQuestion': 
-					case 'confirmUpdateQuestion': 	
+					case 'confirmUpdateQuestion':
 				    case 'insertQuestion':
                     case 'completeCsvExport':
                     $this->checkPermission('write');
