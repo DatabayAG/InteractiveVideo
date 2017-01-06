@@ -41,4 +41,51 @@ class xvidUtils
 			return $time;
 		}
 	}
+
+	/**
+	 * @param $txt
+	 * @param $name
+	 * @return ilTextAreaInputGUI
+	 */
+	public static function constructTextAreaFormElement($txt, $name)
+	{
+		$text_area = new ilTextAreaInputGUI(ilInteractiveVideoPlugin::getInstance()->txt($txt), $name);
+		$text_area->setUseRte(true);
+
+		$text_area->addPlugin('latex');
+		$text_area->addButton('latex');
+		$text_area->addButton('pastelatex');
+		#$text_area->addPlugin('ilimgupload');
+		#$text_area->addButton('ilimgupload');
+		$text_area->usePurifier(true);
+		$text_area->disableButtons(array(
+			'charmap',
+			'undo',
+			'redo',
+			'justifyleft',
+			'justifycenter',
+			'justifyright',
+			'justifyfull',
+			'fullscreen',
+			'cut',
+			'copy',
+			'paste',
+			'pastetext',
+			'formatselect',
+			'bullist',
+			'numlist',
+			'removeformat'
+		));
+		return $text_area;
+	}
+
+	/**
+	 * @param string $txt
+	 * @return string
+	 */
+	public static function replaceLatexWithImage($txt)
+	{
+		$txt = ilUtil::prepareTextareaOutput($txt, true, true);
+		return $txt;
+	}
 }

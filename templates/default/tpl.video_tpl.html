@@ -57,8 +57,11 @@
 		<div id="ilInteractiveVideoCommentsForm">
 			<div id="il_prop_cont_comment_text" class="form-group">
 				<label class="col-sm-9 control-label" for="comment_text">{TXT_COMMENT}</label>
-				<div class="col-sm-9">
-					<textarea id="comment_text" class="form-control noRTEditor" rows="" wrap="virtual" name="comment_text"></textarea>
+				<div class="col-sm-12">
+					<textarea id="comment_text" class="form-control" rows="" wrap="virtual" name="comment_text"></textarea>
+					<script>
+						CKEDITOR.replace('comment_text');
+					</script>
 					<input type="hidden" name="comment_time" id="comment_time" value="">
 					<div class="ilNoDisplay alert alert-warning" id="no_text_warning">{TXT_NO_TEXT_WARNING}</div>
 				</div>
