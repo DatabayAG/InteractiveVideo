@@ -839,7 +839,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	/**
-	 * @return ilInteractiveVideoPlugin
+	 * @return ilPlugin
 	 */
 	public function getPluginInstance()
 	{
@@ -2252,6 +2252,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
 	}
 #endregion
+	/**
+	 * @param $a_target
+	 */
 	public static function _goto($a_target)
 	{
 		global $ilCtrl, $ilAccess, $lng;

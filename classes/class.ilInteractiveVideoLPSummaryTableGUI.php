@@ -115,7 +115,10 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 	 */
 	protected function fillRow($a_set)
 	{
-		global $lng, $ilCtrl;
+		/**
+		 * $lng ilLanguage
+		 */
+		global $lng;
 
 		$this->tpl->setVariable("ICON", ilObject::_getIcon("", "tiny", $a_set["type"]));
 		$this->tpl->setVariable("ICON_ALT", $lng->txt($a_set["type"]));
@@ -147,9 +150,8 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 					if((int)$a_set[$c] === 0 || !$this->isPercentageAvailable($a_set["obj_id"]))
 					{
 						$this->tpl->setVariable(strtoupper($c), "");
-						break;
 					}
-
+					break;
 				default:
 					$value = $this->parseValue($c, $a_set[$c], $a_set["type"]);
 					$this->tpl->setVariable(strtoupper($c), $value);
@@ -159,7 +161,7 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 
 		if($this->is_root)
 		{
-			$path = $this->buildPath($a_set["ref_ids"], false, true);
+			$path = $this->buildPath($a_set["ref_ids"]);
 			if($path)
 			{
 				$this->tpl->setCurrentBlock("item_path");

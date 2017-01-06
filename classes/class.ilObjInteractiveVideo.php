@@ -749,7 +749,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	}
 
 	/**
-	 * @params integer $lp_mode
+	 * @param $lp_mode
 	 * @return bool
 	 */
 	public function isCoreLPMode($lp_mode)
@@ -758,7 +758,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	}
 
 	/**
-	 * @params integer $lp_mode
+	 * @param $lp_mode
 	 * @return string
 	 * @throws ilException
 	 */
