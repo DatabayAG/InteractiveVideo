@@ -236,7 +236,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 			if($value->getPostVar() != 'path_mapping')
 			{
 				$class = ilUtil::stripSlashes($value->getPostVar());
-				$setting = ilUtil::stripSlashes((int) $_POST[$class]);
+				$setting = (int) $_POST[$class];
 				$settings[$class] = $setting;
 				if($setting == 1)
 				{
