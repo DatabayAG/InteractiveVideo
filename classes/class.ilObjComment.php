@@ -149,7 +149,7 @@ class ilObjComment
 				// @todo: Change rounding and database type in case we should store milli seconds
 				'comment_time'   	=> array('integer', round($this->getCommentTime(), 0)),
 				'comment_time_end'  => array('integer', round($this->getCommentTimeEnd(), 2)),
-				'comment_text'   	=> array('text', $this->getCommentText()),
+				'comment_text'   	=> array('text',  strip_tags($this->getCommentText(), '<span><b><u><i><a>')),
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),
 				'is_private'		=> array('integer', $this->getIsPrivate())
@@ -274,7 +274,7 @@ class ilObjComment
 				$comments[$i]['user_name'] = self::lookupUsername($row['user_id']);
 			}
 			$comments[$i]['comment_title'] 		= $row['comment_title'];
-			$comments[$i]['comment_text'] 		= $row['comment_text'];
+			$comments[$i]['comment_text'] 		= xvidUtils::replaceLatexWithImage($row['comment_text']);
 			$comments[$i]['comment_time'] 		= $row['comment_time'];
 			$comments[$i]['comment_time_end'] 	= $row['comment_time_end'];
 			$comments[$i]['comment_tags'] 		= $row['comment_tags'];

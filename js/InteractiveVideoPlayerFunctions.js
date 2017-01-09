@@ -158,7 +158,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			{
 				'comment_id' : fake_id,
 				'comment_time': scope.InteractiveVideoPlayerAbstract.currentTime(),
-				'comment_text': $('#comment_text').val(),
+				'comment_text':  CKEDITOR.instances.comment_text.getData(),
 				'comment_time_end_h': h,
 				'comment_time_end_m': m,
 				'comment_time_end_s': s,
@@ -184,7 +184,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 					'comment_time_end_h': h,
 					'comment_time_end_m': m,
 					'comment_time_end_s': s,
-					'comment_text': $('#comment_text').val(),
+					'comment_text': CKEDITOR.instances.comment_text.getData(),
 					'is_private': $('#is_private').prop( "checked" )
 				},
 				success  : function(data) {
@@ -204,7 +204,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.resetCommentForm = function()
 	{
-		$('#comment_text').val('');
+		CKEDITOR.instances.comment_text.setData('');
 		$('#is_private').prop( 'checked', false );
 		$('#comment_time_end').prop( 'checked', false );
 		$('.end_time_selector').hide( 'fast' );
@@ -213,10 +213,15 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.addPausePlayerOnClick = function()
 	{
-		$('#comment_text').on('click', function(){
-			if(scope.InteractiveVideo.pause_on_click_in_comment_field)
+		CKEDITOR.on('instanceReady', function(evt) {
+			var editor = evt.editor;
+			if(editor.name === 'comment_text')
 			{
-				scope.InteractiveVideoPlayerAbstract.pause();
+				editor.on('focus', function(e) {
+					if (scope.InteractiveVideo.pause_on_click_in_comment_field) {
+						scope.InteractiveVideoPlayerAbstract.pause();
+					}
+				});
 			}
 		});
 	};
@@ -293,14 +298,14 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.addModalInteractionToBackLinkButton = function()
 	{
-		if(pub.doesReferencePointExists())
+	 /*if(pub.doesReferencePointExists())
 		{
 			$('.back_link_to').on('click', function(event)
 			{
 				event.preventDefault();
 				pub.finishAndReturnToReferencePoint();
 			});
-		}
+		}*/
 	};
 	
 	pub.doesReferencePointExists = function()

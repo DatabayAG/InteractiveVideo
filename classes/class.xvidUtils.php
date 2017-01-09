@@ -41,4 +41,25 @@ class xvidUtils
 			return $time;
 		}
 	}
+
+	/**
+	 * @param $txt
+	 * @param $name
+	 * @return ilTextAreaInputGUI
+	 */
+	public static function constructTextAreaFormElement($txt, $name)
+	{
+		$text_area = new ilTextAreaInputCkeditorGUI(ilInteractiveVideoPlugin::getInstance()->txt($txt), $name);
+		return $text_area;
+	}
+
+	/**
+	 * @param string $txt
+	 * @return string
+	 */
+	public static function replaceLatexWithImage($txt)
+	{
+		$txt = ilUtil::prepareTextareaOutput($txt, true, true);
+		return $txt;
+	}
 }
