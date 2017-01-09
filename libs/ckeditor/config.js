@@ -40,5 +40,5 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeDialogTabs = 'link:advanced';
 	config.width = '100%';
 	config.height = '50px';
-	config.mathJaxLib = 'http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML';
+	config.enterMode = CKEDITOR.ENTER_BR;
 };

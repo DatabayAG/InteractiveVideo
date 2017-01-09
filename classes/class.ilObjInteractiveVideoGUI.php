@@ -367,6 +367,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('SWITCH_ON', $plugin->txt('switch_on'));
 		$config_tpl->setVariable('SWITCH_OFF', $plugin->txt('switch_off'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
+		$mathJaxSetting = new ilSetting('MathJax');
+		if($mathJaxSetting->get('enable'))
+		{
+			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
+			$config_tpl->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
+		}
 
 		$simple_choice = new SimpleChoiceQuestion();
 		$ignore = $simple_choice->getAllNonRepeatAnsweredQuestion($ilUser->getId());
@@ -867,7 +873,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment = new ilObjComment();
 		$comment->setObjId($this->object->getId());
 		$comment->setUserId($ilUser->getId());
-		$comment->setCommentText(trim(ilUtil::stripSlashes($_POST['comment_text'])));
+		$comment->setCommentText(trim($_POST['comment_text']));
 		$comment->setCommentTime((float)$_POST['comment_time']);
 		$comment->setCommentTimeEnd($seconds_end);
 

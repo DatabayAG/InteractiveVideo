@@ -149,7 +149,7 @@ class ilObjComment
 				// @todo: Change rounding and database type in case we should store milli seconds
 				'comment_time'   	=> array('integer', round($this->getCommentTime(), 0)),
 				'comment_time_end'  => array('integer', round($this->getCommentTimeEnd(), 2)),
-				'comment_text'   	=> array('text',  strip_tags($this->getCommentText(), '<span><b><u><i><a>')),
+				'comment_text'   	=> array('text',  strip_tags($this->getCommentText(), '<span><strong><u><s><a><em>')),
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),
 				'is_private'		=> array('integer', $this->getIsPrivate())
@@ -175,7 +175,7 @@ class ilObjComment
 				// @todo: Change rounding and database type in case we should store milli seconds
 				'comment_time'   	=> array('integer', round($this->getCommentTime(), 2)),
 				'comment_time_end'  => array('integer', round($this->getCommentTimeEnd(), 2)),
-				'comment_text'   	=> array('text', $this->getCommentText()),
+				'comment_text'   	=> array('text', strip_tags($this->getCommentText(), '<span><strong><u><s><a><em>')),
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),
 				'is_private'		=> array('integer', $this->getIsPrivate())
