@@ -293,7 +293,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $ajax_object   = new SimpleChoiceQuestionAjaxHandler();
 		$question_id = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
 		$question = new ilTemplate("tpl.simple_questions.html", true, true, $plugin->getDirectory());
-		
+
+		$mathJaxSetting = new ilSetting('MathJax');
+		if($mathJaxSetting->get('enable'))
+		{
+			$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
+			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
+			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
+			$question->setVariable('CK_CONFIG', $ck_editor->get());
+		}
+
 		$question->setVariable('ANSWER_TEXT',		$plugin->txt('answer_text'));
 		$question->setVariable('CORRECT_SOLUTION', 	$plugin->txt('correct_solution'));
 		if($question_id > 0)
