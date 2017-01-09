@@ -194,8 +194,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $plugin->getDirectory());
 
-		$this->object->trackProgress();
-
 		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
 		$object->addPlayerElements($tpl);
 

@@ -1,6 +1,6 @@
 <?php
 require_once 'Services/Form/classes/class.ilTextAreaInputGUI.php';
-
+require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilHtmlInteractiveVideoPostPurifier.php';
 /**
  * Class ilTextAreaInputCkeditorGUI
  */
@@ -14,6 +14,8 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 	{
 		parent::__construct($a_title, $a_postvar);
 		$this->setType("textarea");
+		$this->setPurifier(new ilHtmlInteractiveVideoPostPurifier());
+		$this->usePurifier(true);
 	}
 
 	/**
