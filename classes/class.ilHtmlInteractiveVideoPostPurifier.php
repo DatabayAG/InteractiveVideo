@@ -44,6 +44,7 @@ class ilHtmlInteractiveVideoPostPurifier extends ilHtmlPurifierAbstractLibWrappe
 		$config = HTMLPurifier_Config::createDefault();
 		$config->set('HTML.DefinitionID', 'ilias interactivevideo post');
 		$config->set('HTML.DefinitionRev', 1);
+		$config->set('HTML.TargetBlank', true);
 		$config->set('Cache.SerializerPath', ilHtmlPurifierAbstractLibWrapper::_getCacheDirectory());
 		$config->set('HTML.Doctype', 'XHTML 1.0 Strict');		
 		

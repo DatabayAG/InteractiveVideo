@@ -1,6 +1,7 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 require_once 'Services/User/classes/class.ilUserUtil.php';
+require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilHtmlInteractiveVideoPostPurifier.php';
 
 /**
  * Class ilObjComment
@@ -8,8 +9,6 @@ require_once 'Services/User/classes/class.ilUserUtil.php';
  */
 class ilObjComment
 {
-	const ALLOWED_TAGS = '<span><strong><u><s><a><em><br>';
-
 	/**
 	 * @var integer
 	 */
@@ -138,6 +137,8 @@ class ilObjComment
 		 * @var $ilUser ilObjUser
 		 */
 		global $ilDB, $ilUser;
+		$purify = new ilHtmlInteractiveVideoPostPurifier();
+		$text = $purify->purify($this->getCommentText());
 
 		$next_id = $ilDB->nextId('rep_robj_xvid_comments');
 		$this->setCommentId($next_id);
@@ -151,7 +152,7 @@ class ilObjComment
 				// @todo: Change rounding and database type in case we should store milli seconds
 				'comment_time'   	=> array('integer', round($this->getCommentTime(), 0)),
 				'comment_time_end'  => array('integer', round($this->getCommentTimeEnd(), 2)),
-				'comment_text'   	=> array('text',  strip_tags($this->getCommentText(), self::ALLOWED_TAGS)),
+				'comment_text'   	=> array('text',  $text),
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),
 				'is_private'		=> array('integer', $this->getIsPrivate())
@@ -169,6 +170,8 @@ class ilObjComment
 		 * @var $ilUser ilObjUser
 		 */
 		global $ilDB, $ilUser;
+		$purify = new ilHtmlInteractiveVideoPostPurifier();
+		$text = $purify->purify($this->getCommentText());
 
 		$ilDB->update('rep_robj_xvid_comments',
 			array(
@@ -177,7 +180,7 @@ class ilObjComment
 				// @todo: Change rounding and database type in case we should store milli seconds
 				'comment_time'   	=> array('integer', round($this->getCommentTime(), 2)),
 				'comment_time_end'  => array('integer', round($this->getCommentTimeEnd(), 2)),
-				'comment_text'   	=> array('text', strip_tags($this->getCommentText(), self::ALLOWED_TAGS)),
+				'comment_text'   	=> array('text', $text),
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),
 				'is_private'		=> array('integer', $this->getIsPrivate())

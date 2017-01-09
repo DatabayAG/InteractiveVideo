@@ -33,7 +33,6 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 		$a_tpl->setCurrentBlock("prop_generic");
 		$a_tpl->setVariable("PROP_GENERIC", $ttpl->get());
 		$a_tpl->parseCurrentBlock();
-
 	}
 	
 	public static function appendJavascriptFile()
