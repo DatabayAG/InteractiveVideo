@@ -370,8 +370,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
 		{
+			$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
-			$config_tpl->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
+			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
+			$ck_editor->touchBlock('small_editor');
+			$config_tpl->setVariable('CK_CONFIG', $ck_editor->get());
 		}
 
 		$simple_choice = new SimpleChoiceQuestion();
@@ -493,13 +496,34 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateSubTab('editProperties');
 
 		$a_form = $this->appendFormsFromFactory($a_form);
-
+		$this->appendCkEditorMathJaxSupportToForm($a_form);
 		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
 		$a_form->addItem($online);
-
 		$this->appendDefaultFormOptions($a_form);
 
 	}
+
+	/**
+	 * @param ilPropertyFormGUI $a_form
+	 */
+	protected function appendCkEditorMathJaxSupportToForm(ilPropertyFormGUI $a_form)
+	{
+		/**
+		 * @var $tpl ilTemplate
+		 */
+		global $tpl;
+		$mathJaxSetting = new ilSetting('MathJax');
+		if($mathJaxSetting->get('enable'))
+		{
+			$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $this->plugin->getDirectory());
+			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
+			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
+			$custom = new ilCustomInputGUI();
+			$custom->setHtml($ck_editor->get());
+			$a_form->addItem($custom);
+		}
+	}
+
 
 	/**
 	 * @param ilPropertyFormGUI $a_form
@@ -984,7 +1008,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form = new ilPropertyFormGUI();
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
 		$form->setTitle($plugin->txt('insert_comment'));
-
+		$this->appendCkEditorMathJaxSupportToForm($form);
 		$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($plugin->txt('general'));
 		$form->addItem($section_header);
@@ -1080,6 +1104,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('editMyComments');
 
+		$mathJaxSetting = new ilSetting('MathJax');
+		if($mathJaxSetting->get('enable'))
+		{
+			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
+		}
 		$tbl_data = $this->object->getCommentsTableDataByUserId();
 		ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilInteractiveVideoCommentsTableGUI.php');
 		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editMyComments');
@@ -1635,6 +1664,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if(!($form instanceof ilPropertyFormGUI))
 		{
 			$form = $this->initQuestionForm();
+			$this->appendCkEditorMathJaxSupportToForm($form);
 		}
 
 		$form->addCommandButton('insertQuestion', $this->lng->txt('insert'));

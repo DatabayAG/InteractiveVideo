@@ -51,6 +51,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 				pro.showFeedback(pub.QuestionObject.feedback);
 			}
 		}
+		il.InteractiveVideoPlayerFunction.refreshMathJaxView();
 	};
 
 	pro.addAnswerPossibilities = function(input_type) {

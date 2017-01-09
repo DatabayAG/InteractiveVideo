@@ -174,7 +174,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			pri.utils.sliceCommentAndStopPointsInCorrectPosition(tmp_obj, tmp_obj.comment_time);
 
 			$("#ul_scroll").prepend(pri.utils.buildListElement(tmp_obj, tmp_obj.comment_time, scope.InteractiveVideo.username));
-
+			pub.refreshMathJaxView();
 			$.ajax({
 				type     : "POST",
 				dataType : "JSON",
@@ -357,6 +357,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			success  : function(data) {
 			}
 		});
+	};
+
+	pub.refreshMathJaxView = function()
+	{
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 	};
 
 	pub.protect = pro;

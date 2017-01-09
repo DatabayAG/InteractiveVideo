@@ -96,7 +96,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				delete scope.InteractiveVideo.blacklist_time_end[timestamp];
 			}
 		}
-		pro.refreshMathJaxView();
+		il.InteractiveVideoPlayerFunction.refreshMathJaxView();
 	};
 
 	pub.clearAndRemarkCommentsAfterSeeking = function (time)
@@ -450,11 +450,6 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			t = '0' + t;
 		}
 		element.val(t);
-	};
-
-	pro.refreshMathJaxView = function()
-	{
-		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 	};
 	
 	pub.protect = pro;
