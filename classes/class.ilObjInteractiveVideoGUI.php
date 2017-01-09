@@ -347,6 +347,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstract.js');
 
 		$config_tpl = new ilTemplate("tpl.video_config.html", true, true, $plugin->getDirectory());
+		$config_tpl->setVariable('VIDEO_FINISHED_POST_URL', $this->ctrl->getLinkTarget($this, 'postVideoFinishedPerAjax', '', true, false));
+		$config_tpl->setVariable('VIDEO_STARTED_POST_URL', $this->ctrl->getLinkTarget($this, 'postVideoStartedPerAjax', '', true, false));
 		$config_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTarget($this, 'getQuestionPerAjax', '', true, false));
 		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTarget($this, 'postAnswerPerAjax', '', true, false));
 		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postComment', '', true, false));
@@ -2144,6 +2146,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$feedback      = $ajax_object->getFeedbackForQuestion($_POST['qid']);
 		$tpl_json->setVariable('JSON', $feedback);
 		$tpl_json->show("DEFAULT", false, true );
+	}
+
+	public function postVideoStartedPerAjax()
+	{
+		$this->object->trackProgress();
+		exit();
+	}
+
+	public function postVideoFinishedPerAjax()
+	{
+		// TODO: Store finished event for user/obj_id
+		exit();
 	}
 #endregion
 

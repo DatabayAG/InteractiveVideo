@@ -41,6 +41,8 @@ function onYouTubeIframeAPIReady() {
 					}
 					else if(e.data === 1)
 					{
+						il.InteractiveVideoPlayerAbstract.play();
+
 						interval = setInterval(function () {
 							il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
 						}, 500);

@@ -332,9 +332,30 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pro.addCancelAction = function()
 	{
 		$('#ilQuestionModal').find('.back_link_cancel').on('click', function(event){
-			console.log('click')
 			event.preventDefault();
 			$('#ilQuestionModal').modal('hide');
+		});
+	};
+
+	pub.triggerVideoStarted = function () {
+		$.ajax({
+			type     : "POST",
+			dataType : "JSON",
+			url      : il.InteractiveVideo.video_started_post_url,
+			data     : {},
+			success  : function(data) {
+			}
+		});
+	};
+
+	pub.triggerVideoFinished = function () {
+		$.ajax({
+			type     : "POST",
+			dataType : "JSON",
+			url      : il.InteractiveVideo.video_finished_post_url,
+			data     : {},
+			success  : function(data) {
+			}
 		});
 	};
 

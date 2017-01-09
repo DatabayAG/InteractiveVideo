@@ -11,6 +11,8 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		setCurrentTimeCallback  : null
 	}; 
 
+	pro.first_play_action = true;
+
 	pub.pause = function()
 	{
 		if (typeof pub.config.pauseCallback === 'function') {
@@ -20,6 +22,14 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.play = function()
 	{
+		if (pro.first_play_action) {
+			pro.first_play_action = false;
+			il.InteractiveVideoPlayerFunction.triggerVideoStarted();
+			console.log("Played, and server event triggered");
+		} else {
+			console.log("Played, but not server event triggered");
+		}
+
 		if (typeof pub.config.playCallback === 'function') {
 			pub.config.playCallback();
 		}
@@ -72,6 +82,8 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.videoFinished = function()
 	{
+		il.InteractiveVideoPlayerFunction.triggerVideoFinished();
+
 		if(il.InteractiveVideoPlayerFunction.doesReferencePointExists())
 		{
 			il.InteractiveVideoPlayerFunction.finishAndReturnToReferencePoint();

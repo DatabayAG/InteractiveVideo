@@ -36,6 +36,10 @@ $( document ).ready(function() {
 					}
 				}, false);
 
+				media.addEventListener('play', function(e) {
+					il.InteractiveVideoPlayerAbstract.play();
+				}, false);
+
 				media.addEventListener('seeked', function(e) {
 					clearInterval(interval);
 					il.InteractiveVideoPlayerFunction.seekingEventHandler();
