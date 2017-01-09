@@ -90,6 +90,26 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		pro.addDropDownEvent();
 
 		pro.addModalInteractionToBackLinkButton();
+		
+		pro.addTaskInteraction();
+	};
+	
+	pro.addTaskInteraction = function()
+	{
+		$('.task_interaction').on('click', function() {
+			if(! $('.task_description').hasClass('closed'))
+			{
+				$('.task_description').addClass('closed');
+				$('.task_icon').addClass('glyphicon-arrow-down');
+				$('.task_icon').removeClass('glyphicon-arrow-up');
+			}
+			else
+			{
+				$('.task_description').removeClass('closed');
+				$('.task_icon').addClass('glyphicon-arrow-up');
+				$('.task_icon').removeClass('glyphicon-arrow-down');
+			}
+		});
 	};
 
 	pro.addHighlightToCommentWithoutEndTime = function(comment)
