@@ -25,9 +25,6 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		if (pro.first_play_action) {
 			pro.first_play_action = false;
 			il.InteractiveVideoPlayerFunction.triggerVideoStarted();
-			console.log("Played, and server event triggered");
-		} else {
-			console.log("Played, but not server event triggered");
 		}
 
 		if (typeof pub.config.playCallback === 'function') {
