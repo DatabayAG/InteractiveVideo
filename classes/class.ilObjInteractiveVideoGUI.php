@@ -12,6 +12,7 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestio
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionAjaxHandler.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionScoring.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionStatistics.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilTextAreaInputCkeditorGUI.php');
 
 /**
  * Class ilObjInteractiveVideoGUI
@@ -208,6 +209,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->addBackButtonIfParameterExists($video_tpl);
 
 		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());
+		$form = new ilPropertyFormGUI();
+		$ckeditor = new ilTextAreaInputCkeditorGUI('comment_text', 'comment_text');
+		$form->addItem($ckeditor);
+		$video_tpl->setVariable('COMMENT_TEXT', $form->getHTML());
 		$this->objComment = new ilObjComment();
 		$this->objComment->setObjId($this->object->getId());
 		$this->objComment->setIsPublic($this->object->isPublic());
@@ -340,11 +345,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
 		$tpl->addCss($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.css');
 		$tpl->addJavaScript($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.js');
-		$tpl->addJavaScript($plugin->getDirectory() . '/libs/ckeditor/ckeditor.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerComments.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerFunctions.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstract.js');
+		ilTextAreaInputCkeditorGUI::appendJavascriptFile();
 
 		$config_tpl = new ilTemplate("tpl.video_config.html", true, true, $plugin->getDirectory());
 		$config_tpl->setVariable('VIDEO_FINISHED_POST_URL', $this->ctrl->getLinkTarget($this, 'postVideoFinishedPerAjax', '', true, false));
