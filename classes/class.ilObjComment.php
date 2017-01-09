@@ -178,7 +178,7 @@ class ilObjComment
 				'is_interactive' 	=> array('integer', (int)$this->isInteractive()),
 				'user_id'        	=> array('integer', $ilUser->getId()),
 				// @todo: Change rounding and database type in case we should store milli seconds
-				'comment_time'   	=> array('integer', round($this->getCommentTime(), 2)),
+				'comment_time'   	=> array('integer', round($this->getCommentTime(), 0)),
 				'comment_time_end'  => array('integer', round($this->getCommentTimeEnd(), 2)),
 				'comment_text'   	=> array('text', $text),
 				'comment_title'		=> array('text', $this->getCommentTitle()),
