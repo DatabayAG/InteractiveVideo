@@ -90,6 +90,26 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		pro.addDropDownEvent();
 
 		pro.addModalInteractionToBackLinkButton();
+		
+		pro.addTaskInteraction();
+	};
+	
+	pro.addTaskInteraction = function()
+	{
+		$('.task_interaction').on('click', function() {
+			if(! $('.task_description').hasClass('closed'))
+			{
+				$('.task_description').addClass('closed');
+				$('.task_icon').addClass('glyphicon-arrow-down');
+				$('.task_icon').removeClass('glyphicon-arrow-up');
+			}
+			else
+			{
+				$('.task_description').removeClass('closed');
+				$('.task_icon').addClass('glyphicon-arrow-up');
+				$('.task_icon').removeClass('glyphicon-arrow-down');
+			}
+		});
 	};
 
 	pro.addHighlightToCommentWithoutEndTime = function(comment)
@@ -158,7 +178,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			{
 				'comment_id' : fake_id,
 				'comment_time': scope.InteractiveVideoPlayerAbstract.currentTime(),
-				'comment_text': $('#comment_text').val(),
+				'comment_text':  CKEDITOR.instances.comment_text.getData(),
 				'comment_time_end_h': h,
 				'comment_time_end_m': m,
 				'comment_time_end_s': s,
@@ -174,7 +194,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			pri.utils.sliceCommentAndStopPointsInCorrectPosition(tmp_obj, tmp_obj.comment_time);
 
 			$("#ul_scroll").prepend(pri.utils.buildListElement(tmp_obj, tmp_obj.comment_time, scope.InteractiveVideo.username));
-
+			pub.refreshMathJaxView();
 			$.ajax({
 				type     : "POST",
 				dataType : "JSON",
@@ -184,7 +204,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 					'comment_time_end_h': h,
 					'comment_time_end_m': m,
 					'comment_time_end_s': s,
-					'comment_text': $('#comment_text').val(),
+					'comment_text': CKEDITOR.instances.comment_text.getData(),
 					'is_private': $('#is_private').prop( "checked" )
 				},
 				success  : function(data) {
@@ -204,7 +224,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.resetCommentForm = function()
 	{
-		$('#comment_text').val('');
+		CKEDITOR.instances.comment_text.setData('');
 		$('#is_private').prop( 'checked', false );
 		$('#comment_time_end').prop( 'checked', false );
 		$('.end_time_selector').hide( 'fast' );
@@ -213,10 +233,15 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.addPausePlayerOnClick = function()
 	{
-		$('#comment_text').on('click', function(){
-			if(scope.InteractiveVideo.pause_on_click_in_comment_field)
+		CKEDITOR.on('instanceReady', function(evt) {
+			var editor = evt.editor;
+			if(editor.name === 'comment_text')
 			{
-				scope.InteractiveVideoPlayerAbstract.pause();
+				editor.on('focus', function(e) {
+					if (scope.InteractiveVideo.pause_on_click_in_comment_field) {
+						scope.InteractiveVideoPlayerAbstract.pause();
+					}
+				});
 			}
 		});
 	};
@@ -293,14 +318,14 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.addModalInteractionToBackLinkButton = function()
 	{
-		if(pub.doesReferencePointExists())
+	 /*if(pub.doesReferencePointExists())
 		{
 			$('.back_link_to').on('click', function(event)
 			{
 				event.preventDefault();
 				pub.finishAndReturnToReferencePoint();
 			});
-		}
+		}*/
 	};
 	
 	pub.doesReferencePointExists = function()
@@ -352,6 +377,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			success  : function(data) {
 			}
 		});
+	};
+
+	pub.refreshMathJaxView = function()
+	{
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 	};
 
 	pub.protect = pro;

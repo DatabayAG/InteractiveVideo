@@ -54,8 +54,13 @@ function onYouTubeIframeAPIReady() {
 					}
 					else if(e.data === 3)
 					{
-						clearInterval(interval);
-						il.InteractiveVideoPlayerFunction.seekingEventHandler();
+						if( il.InteractiveVideo.last_time > 0 &&
+							(il.InteractiveVideo.last_time < il.InteractiveVideoPlayerAbstract.currentTime() + 1 ||
+							il.InteractiveVideoPlayerAbstract.currentTime() > il.InteractiveVideo.last_time + 1))
+						{
+							clearInterval(interval);
+							il.InteractiveVideoPlayerFunction.seekingEventHandler();
+						}
 					}
 				});
 			}

@@ -8,13 +8,13 @@ interface ilInteractiveVideoSourceGUI
 {
 	/**
 	 * @param ilRadioOption $option
-	 * @param               $obj_id
+	 * @param integer $obj_id
 	 * @return ilRadioOption
 	 */
 	public function getForm($option, $obj_id);
 
 	/**
-	 * @param $form
+	 * @param ilPropertyFormGUI $form
 	 * @return 
 	 */
 	public function getConfigForm($form);
@@ -44,7 +44,7 @@ interface ilInteractiveVideoSourceGUI
 
 	/**
 	 * @param ilObjInteractiveVideo $obj
-	 * @return mixed
+	 * @return string
 	 */
 	public function getPlayer($obj);
 

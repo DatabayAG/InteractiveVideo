@@ -96,6 +96,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				delete scope.InteractiveVideo.blacklist_time_end[timestamp];
 			}
 		}
+		il.InteractiveVideoPlayerFunction.refreshMathJaxView();
 	};
 
 	pub.clearAndRemarkCommentsAfterSeeking = function (time)
@@ -450,7 +451,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		}
 		element.val(t);
 	};
-
+	
 	pub.protect = pro;
 	return pub;
 

@@ -12,6 +12,7 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestio
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionAjaxHandler.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionScoring.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionStatistics.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilTextAreaInputCkeditorGUI.php');
 
 /**
  * Class ilObjInteractiveVideoGUI
@@ -199,13 +200,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($this->object->getTaskActive())
 		{
 			$video_tpl->setCurrentBlock('task_description');
-			$video_tpl->setVariable('TASK_DESCRIPTION', $this->replaceLatexWithImage($this->object->getTask()));
+			$video_tpl->setVariable('TASK_TEXT',$plugin->txt('task'));
+			$video_tpl->setVariable('TASK_DESCRIPTION', $this->object->getTask());
 			$video_tpl->parseCurrentBlock();
 		}
 
 		$this->addBackButtonIfParameterExists($video_tpl);
 
 		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());
+		$form = new ilPropertyFormGUI();
+		$ckeditor = new ilTextAreaInputCkeditorGUI('comment_text', 'comment_text');
+		$form->addItem($ckeditor);
+		$video_tpl->setVariable('COMMENT_TEXT', $form->getHTML());
 		$this->objComment = new ilObjComment();
 		$this->objComment->setObjId($this->object->getId());
 		$this->objComment->setIsPublic($this->object->isPublic());
@@ -225,7 +231,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
 		$video_tpl->setVariable('SHOW_ALL_COMMENTS', $plugin->txt('show_all_comments'));
 		$video_tpl->setVariable('AUTHOR_FILTER', $plugin->txt('author_filter'));
-
+		
 		$video_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
 		$video_tpl->setVariable('TXT_CANCEL', $plugin->txt('cancel'));
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig());
@@ -287,7 +293,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $ajax_object   = new SimpleChoiceQuestionAjaxHandler();
 		$question_id = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
 		$question = new ilTemplate("tpl.simple_questions.html", true, true, $plugin->getDirectory());
-		
+
+		$mathJaxSetting = new ilSetting('MathJax');
+		if($mathJaxSetting->get('enable'))
+		{
+			$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
+			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
+			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
+			$question->setVariable('CK_CONFIG', $ck_editor->get());
+		}
+
 		$question->setVariable('ANSWER_TEXT',		$plugin->txt('answer_text'));
 		$question->setVariable('CORRECT_SOLUTION', 	$plugin->txt('correct_solution'));
 		if($question_id > 0)
@@ -342,6 +357,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerComments.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerFunctions.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstract.js');
+		ilTextAreaInputCkeditorGUI::appendJavascriptFile();
 
 		$config_tpl = new ilTemplate("tpl.video_config.html", true, true, $plugin->getDirectory());
 		$config_tpl->setVariable('VIDEO_FINISHED_POST_URL', $this->ctrl->getLinkTarget($this, 'postVideoFinishedPerAjax', '', true, false));
@@ -361,6 +377,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('SWITCH_ON', $plugin->txt('switch_on'));
 		$config_tpl->setVariable('SWITCH_OFF', $plugin->txt('switch_off'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
+		$mathJaxSetting = new ilSetting('MathJax');
+		if($mathJaxSetting->get('enable'))
+		{
+			$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
+			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
+			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
+			$ck_editor->touchBlock('small_editor');
+			$config_tpl->setVariable('CK_CONFIG', $ck_editor->get());
+		}
 
 		$simple_choice = new SimpleChoiceQuestion();
 		$ignore = $simple_choice->getAllNonRepeatAnsweredQuestion($ilUser->getId());
@@ -481,13 +506,34 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateSubTab('editProperties');
 
 		$a_form = $this->appendFormsFromFactory($a_form);
-
+		$this->appendCkEditorMathJaxSupportToForm($a_form);
 		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
 		$a_form->addItem($online);
-
 		$this->appendDefaultFormOptions($a_form);
 
 	}
+
+	/**
+	 * @param ilPropertyFormGUI $a_form
+	 */
+	protected function appendCkEditorMathJaxSupportToForm(ilPropertyFormGUI $a_form)
+	{
+		/**
+		 * @var $tpl ilTemplate
+		 */
+		global $tpl;
+		$mathJaxSetting = new ilSetting('MathJax');
+		if($mathJaxSetting->get('enable'))
+		{
+			$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $this->plugin->getDirectory());
+			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
+			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
+			$custom = new ilCustomInputGUI();
+			$custom->setHtml($ck_editor->get());
+			$a_form->addItem($custom);
+		}
+	}
+
 
 	/**
 	 * @param ilPropertyFormGUI $a_form
@@ -498,7 +544,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$description_switch = new ilCheckboxInputGUI($plugin->txt('task_switch'),'is_task');
 		$description_switch->setInfo($plugin->txt('task_switch_info'));
-		$description = $this->constructTextAreaFormElement('task', 'task');
+		$description = xvidUtils::constructTextAreaFormElement('task', 'task');
 		$description_switch->addSubItem($description);
 		$a_form->addItem($description_switch);
 
@@ -517,43 +563,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$chrono = new ilCheckboxInputGUI($plugin->txt('is_chronologic'), 'is_chronologic');
 		$chrono->setInfo($plugin->txt('is_chronologic_info'));
 		$a_form->addItem($chrono);
-	}
-
-	/**
-	 * @param $txt
-	 * @param $name
-	 * @return ilTextAreaInputGUI
-	 */
-	protected function constructTextAreaFormElement($txt, $name)
-	{
-		$text_area = new ilTextAreaInputGUI(ilInteractiveVideoPlugin::getInstance()->txt($txt), $name);
-		$text_area->setUseRte(true);
-
-		$text_area->addPlugin('latex');
-		$text_area->addButton('latex');
-		$text_area->addButton('pastelatex');
-		#$text_area->addPlugin('ilimgupload');
-		#$text_area->addButton('ilimgupload');
-		$text_area->usePurifier(true);
-		$text_area->disableButtons(array(
-			'charmap',
-			'undo',
-			'redo',
-			'justifyleft',
-			'justifycenter',
-			'justifyright',
-			'justifyfull',
-			'fullscreen',
-			'cut',
-			'copy',
-			'paste',
-			'pastetext',
-			'formatselect',
-			'bullist',
-			'numlist',
-			'removeformat'
-		));
-		return $text_area;
 	}
 
 	/**
@@ -662,16 +671,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$item_group->setValue($factory->getDefaultVideoSource());
 		return $a_form;
-	}
-
-	/**
-	 * @param string $txt
-	 * @return string
-	 */
-	protected function replaceLatexWithImage($txt)
-	{
-		$txt = ilUtil::prepareTextareaOutput($txt, true, true);
-		return $txt;
 	}
 
 	/**
@@ -908,7 +907,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment = new ilObjComment();
 		$comment->setObjId($this->object->getId());
 		$comment->setUserId($ilUser->getId());
-		$comment->setCommentText(trim(ilUtil::stripSlashes($_POST['comment_text'])));
+		$comment->setCommentText(trim($_POST['comment_text']));
 		$comment->setCommentTime((float)$_POST['comment_time']);
 		$comment->setCommentTimeEnd($seconds_end);
 
@@ -1019,7 +1018,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form = new ilPropertyFormGUI();
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
 		$form->setTitle($plugin->txt('insert_comment'));
-
+		$this->appendCkEditorMathJaxSupportToForm($form);
 		$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($plugin->txt('general'));
 		$form->addItem($section_header);
@@ -1060,7 +1059,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$section_header->setTitle($plugin->txt('comment'));
 		$form->addItem($section_header);
 
-		$comment = new ilTextAreaInputGUI($this->lng->txt('comment'), 'comment_text');
+		$comment = xvidUtils::constructTextAreaFormElement('comment', 'comment_text');
 		$comment->setRequired(true);
 		$form->addItem($comment);
 		/** tags are deactivated for the moment
@@ -1115,6 +1114,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('editMyComments');
 
+		$mathJaxSetting = new ilSetting('MathJax');
+		if($mathJaxSetting->get('enable'))
+		{
+			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
+		}
 		$tbl_data = $this->object->getCommentsTableDataByUserId();
 		ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilInteractiveVideoCommentsTableGUI.php');
 		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editMyComments');
@@ -1575,7 +1579,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question_type->setInfo($plugin->txt('question_type_info'));
 		$form->addItem($question_type);
 
-		$question_text = new ilTextAreaInputGUI($plugin->txt('question_text'), 'question_text');
+		$question_text = xvidUtils::constructTextAreaFormElement('question_text', 'question_text');
 		$question_text->setRequired(true);
 		$form->addItem($question_text);
 
@@ -1590,7 +1594,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($section_header);
 
 		// Feedback correct
-		$feedback_correct = new ilTextAreaInputGUI($plugin->txt('feedback_correct'), 'feedback_correct');
+		$feedback_correct = xvidUtils::constructTextAreaFormElement('feedback_correct', 'feedback_correct');
 		$show_correct_icon = new ilCheckboxInputGUI($plugin->txt('show_correct_icon'), 'show_correct_icon');
 		$show_correct_icon->setInfo($plugin->txt('show_correct_icon_info'));
 		$show_correct_icon->setChecked(true);
@@ -1614,7 +1618,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($feedback_correct);
 
 		// Feedback wrong
-		$feedback_one_wrong = new ilTextAreaInputGUI($plugin->txt('feedback_one_wrong'), 'feedback_one_wrong');
+		$feedback_one_wrong = xvidUtils::constructTextAreaFormElement('feedback_one_wrong', 'feedback_one_wrong');
 		$show_wrong_icon = new ilCheckboxInputGUI($plugin->txt('show_wrong_icon'), 'show_wrong_icon');
 		$show_wrong_icon->setInfo($plugin->txt('show_wrong_icon_info'));
 		$show_wrong_icon->setChecked(true);
@@ -1670,6 +1674,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if(!($form instanceof ilPropertyFormGUI))
 		{
 			$form = $this->initQuestionForm();
+			$this->appendCkEditorMathJaxSupportToForm($form);
 		}
 
 		$form->addCommandButton('insertQuestion', $this->lng->txt('insert'));
@@ -1882,9 +1887,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$question->setCommentId($comment_id);
 		$question->setType((int)$form->getInput('question_type'));
-		$question->setQuestionText(ilUtil::stripSlashes($form->getInput('question_text')));
-		$question->setFeedbackCorrect(ilUtil::stripSlashes($form->getInput('feedback_correct')));
-		$question->setFeedbackOneWrong(ilUtil::stripSlashes($form->getInput('feedback_one_wrong')));
+		$question->setQuestionText(ilUtil::stripSlashes($form->getInput('question_text'), false));
+		$question->setFeedbackCorrect(ilUtil::stripSlashes($form->getInput('feedback_correct'), false));
+		$question->setFeedbackOneWrong(ilUtil::stripSlashes($form->getInput('feedback_one_wrong'), false));
 
 		$question->setLimitAttempts((int)$form->getInput('limit_attempts'));
 		$question->setIsJumpCorrect((int)$form->getInput('is_jump_correct'));

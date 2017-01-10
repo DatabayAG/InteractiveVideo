@@ -49,6 +49,9 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 		<!-- BEGIN task_description -->
+		<div class=ilFormHeader">
+			<h3 class="ilHeader task_interaction">{TASK_TEXT}<span class="task_icon glyphicon glyphicon-arrow-up"></span></h3>
+		</div>
 		<div class="task_description">{TASK_DESCRIPTION}</div>
 		<!-- END task_description -->
 		<div id="ilInteractiveVideoPlayerContainer">
@@ -57,8 +60,11 @@
 		<div id="ilInteractiveVideoCommentsForm">
 			<div id="il_prop_cont_comment_text" class="form-group">
 				<label class="col-sm-9 control-label" for="comment_text">{TXT_COMMENT}</label>
-				<div class="col-sm-9">
-					<textarea id="comment_text" class="form-control noRTEditor" rows="" wrap="virtual" name="comment_text"></textarea>
+				<div class="col-sm-12">
+					<textarea id="comment_text" class="form-control" rows="" wrap="virtual" name="comment_text"></textarea>
+					<script>
+						CKEDITOR.replace('comment_text');
+					</script>
 					<input type="hidden" name="comment_time" id="comment_time" value="">
 					<div class="ilNoDisplay alert alert-warning" id="no_text_warning">{TXT_NO_TEXT_WARNING}</div>
 				</div>
