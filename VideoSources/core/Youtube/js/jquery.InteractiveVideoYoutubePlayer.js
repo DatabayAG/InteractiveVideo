@@ -55,8 +55,8 @@ function onYouTubeIframeAPIReady() {
 					else if(e.data === 3)
 					{
 						if( il.InteractiveVideo.last_time > 0 &&
-							(il.InteractiveVideo.last_time < il.InteractiveVideoPlayerAbstract.currentTime() + 1000 ||
-							il.InteractiveVideoPlayerAbstract.currentTime() > il.InteractiveVideo.last_time + 1000))
+							(il.InteractiveVideo.last_time < il.InteractiveVideoPlayerAbstract.currentTime() + 1 ||
+							il.InteractiveVideoPlayerAbstract.currentTime() > il.InteractiveVideo.last_time + 1))
 						{
 							clearInterval(interval);
 							il.InteractiveVideoPlayerFunction.seekingEventHandler();

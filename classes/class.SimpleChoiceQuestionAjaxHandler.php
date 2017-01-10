@@ -37,7 +37,7 @@ class SimpleChoiceQuestionAjaxHandler
 				{
 					$start_div = '<div class="neutral">';
 				}
-				$json['html']     = $start_div . xvidUtils::replaceLatexWithImage($feedback['feedback_one_wrong']) . '</div>';
+				$json['html']     = $start_div . $feedback['feedback_one_wrong'] . '</div>';
 				$json['is_timed'] = $feedback['is_jump_wrong'];
 				$json['time']     = $feedback['jump_wrong_ts'];
 			}
@@ -55,7 +55,7 @@ class SimpleChoiceQuestionAjaxHandler
 				{
 					$start_div = '<div class="neutral">';
 				}
-				$json['html']     = $start_div . xvidUtils::replaceLatexWithImage($feedback['feedback_correct']) . '</div>';
+				$json['html']     = $start_div . $feedback['feedback_correct'] . '</div>';
 				$json['is_timed'] = $feedback['is_jump_correct'];
 				$json['time']     = $feedback['jump_correct_ts'];
 			}
@@ -94,7 +94,7 @@ class SimpleChoiceQuestionAjaxHandler
 			$question_data[$counter]['answer']    = $row['answer'];
 			$question_data[$counter]['answer_id'] = $row['answer_id'];
 			//$question_data[$counter]['correct']   = $row['correct'];
-			$question_text           = xvidUtils::replaceLatexWithImage($row['question_text']);
+			$question_text           = $row['question_text'];
 			$question_type           = $row['type'];
 			$question_id             = $row['question_id'];
 			$limit_attempts          = $row['limit_attempts'];

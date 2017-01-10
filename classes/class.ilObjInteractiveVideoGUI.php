@@ -201,7 +201,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$video_tpl->setCurrentBlock('task_description');
 			$video_tpl->setVariable('TASK_TEXT',$plugin->txt('task'));
-			$video_tpl->setVariable('TASK_DESCRIPTION', xvidUtils::replaceLatexWithImage($this->object->getTask()));
+			$video_tpl->setVariable('TASK_DESCRIPTION', $this->object->getTask());
 			$video_tpl->parseCurrentBlock();
 		}
 

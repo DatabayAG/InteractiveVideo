@@ -52,14 +52,4 @@ class xvidUtils
 		$text_area = new ilTextAreaInputCkeditorGUI(ilInteractiveVideoPlugin::getInstance()->txt($txt), $name);
 		return $text_area;
 	}
-
-	/**
-	 * @param string $txt
-	 * @return string
-	 */
-	public static function replaceLatexWithImage($txt)
-	{
-		$txt = ilUtil::prepareTextareaOutput($txt, true, true);
-		return $txt;
-	}
 }
