@@ -2,12 +2,13 @@
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 require_once 'Services/Repository/classes/class.ilObjectPluginAccess.php';
+require_once 'Services/AccessControl/interfaces/interface.ilConditionHandling.php';
 
 /**
  * Class ilObjInteractiveVideoAccess
  * @author Nadia Ahmad <nahmad@databay.de>
  */
-class ilObjInteractiveVideoAccess extends ilObjectPluginAccess
+class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilConditionHandling
 {
 	/**
 	 * @param string $a_cmd
@@ -63,5 +64,35 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess
 		);
 		$rec = $ilDB->fetchAssoc($set);
 		return (bool)$rec['is_online'];
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public static function getConditionOperators()
+	{
+		require_once 'Services/AccessControl/classes/class.ilConditionHandler.php';
+
+		return array(
+			ilConditionHandler::OPERATOR_LP
+		);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public static function checkCondition($a_trigger_obj_id, $a_operator, $a_value, $a_usr_id)
+	{
+		require_once 'Services/AccessControl/classes/class.ilConditionHandler.php';
+
+		switch($a_operator)
+		{
+			case ilConditionHandler::OPERATOR_LP:
+				// @todo: Read learning progress
+				return true;
+				break;
+		}
+
+		return false;
 	}
 }
