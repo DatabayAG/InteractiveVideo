@@ -205,3 +205,6 @@
     max-height: 0;
     padding:0;
 }
+.prototype{
+    display:none;
+}
