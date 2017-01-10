@@ -88,8 +88,9 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 		switch($a_operator)
 		{
 			case ilConditionHandler::OPERATOR_LP:
-				// @todo: Read learning progress
-				return true;
+				// Not necessary, handled in \ilConditionHandler::_checkCondition
+				require_once './Services/Tracking/classes/class.ilLPStatus.php';
+				return ilLPStatus::_hasUserCompleted($a_trigger_obj_id, $a_usr_id);
 				break;
 		}
 
