@@ -2206,6 +2206,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function postVideoFinishedPerAjax()
 	{
 		// TODO: Store finished event for user/obj_id
+		$this->object->updateLP();
+
 		exit();
 	}
 #endregion
