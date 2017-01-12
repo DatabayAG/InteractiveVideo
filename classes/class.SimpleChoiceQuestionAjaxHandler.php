@@ -147,6 +147,26 @@ class SimpleChoiceQuestionAjaxHandler
 			$build_json['feedback']        = json_decode(self::getFeedbackForQuestion($question_id));
 		}
 
+		$build_json['reply_to_txt'] = '';
+		$build_json['reply_to_private'] = '';
+		$build_json['reply_original_id'] = 0;
+		if($question_type == SimpleChoiceQuestion::REFLECTION)
+		{
+			$res      = $ilDB->queryF('
+			SELECT * 
+			FROM  rep_robj_xvid_comments
+			WHERE is_reply_to = %s 
+			AND   user_id = %s',
+				array('integer', 'integer'), array($cid, $ilUser->getId())
+			);
+			while($row = $ilDB->fetchAssoc($res))
+			{
+				$build_json['reply_to_txt'] = $row['comment_text'];
+				$build_json['reply_to_private'] = $row['is_private'];
+				$build_json['reply_original_id'] = $row['comment_id'];
+			}
+		}
+
 		return json_encode($build_json);
 	}
 

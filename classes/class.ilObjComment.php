@@ -85,6 +85,11 @@ class ilObjComment
 	protected $is_repeat = 0;
 
 	/**
+	 * @var int
+	 */
+	protected $is_reply_to = 0;
+
+	/**
 	 * @var array
 	 */
 	protected static $user_name_cache = array();
@@ -124,6 +129,7 @@ class ilObjComment
 		$this->setCommentTitle($row['comment_title']);
 		$this->setCommentTags($row['comment_tags']);
 		$this->setIsPrivate($row['is_private']);
+		$this->setIsReplyTo($row['is_reply_to']);
 	}
 
 	/**
@@ -140,6 +146,10 @@ class ilObjComment
 		$purify = new ilHtmlInteractiveVideoPostPurifier();
 		$text = $purify->purify($this->getCommentText());
 
+		if($this->getIsReplyTo() != 0)
+		{
+			$this->removeOldReplyTo($this->getIsReplyTo());
+		}
 		$next_id = $ilDB->nextId('rep_robj_xvid_comments');
 		$this->setCommentId($next_id);
 		$ilDB->insert('rep_robj_xvid_comments',
@@ -155,12 +165,24 @@ class ilObjComment
 				'comment_text'   	=> array('text',  $text),
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),
-				'is_private'		=> array('integer', $this->getIsPrivate())
+				'is_private'		=> array('integer', $this->getIsPrivate()),
+				'is_reply_to'		=> array('integer', $this->getIsReplyTo())
 			));
 		if($return_next_id)
 		{
 			return $next_id;
 		}
+	}
+
+	/**
+	 * delete
+	 * @param int $reply_to
+	 */
+	public function removeOldReplyTo($reply_to)
+	{
+		global $ilDB, $ilUser;
+		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_comments WHERE is_reply_to = %s AND user_id = %s',
+			array('integer', 'integer'), array($reply_to, $ilUser->getId()));
 	}
 
 	public function update()
@@ -183,7 +205,8 @@ class ilObjComment
 				'comment_text'   	=> array('text', $text),
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),
-				'is_private'		=> array('integer', $this->getIsPrivate())
+				'is_private'		=> array('integer', $this->getIsPrivate()),
+				'is_reply_to'		=> array('integer', $this->getIsReplyTo())
 			),
 			array(
 				'comment_id' => array('integer', $this->getCommentId())
@@ -258,7 +281,7 @@ class ilObjComment
 		}
 		
 		$res = $ilDB->queryF(
-			'SELECT comment_id, user_id, comment_text, comment_time, comment_time_end, is_interactive, comment_title, comment_tags, obj_id, is_private
+			'SELECT *
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s 
 			AND ( is_private = %s OR (is_private = %s AND user_id = %s))'.
@@ -269,29 +292,65 @@ class ilObjComment
 		);
 
 		$comments = array();
+		$is_reply_to = array();
 		$i = 0;
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$comments[$i]['comment_id'] = $row['comment_id'];
-			$comments[$i]['user_name'] = '';
+			$temp = array();
+			$temp['comment_id'] = $row['comment_id'];
+			$temp['user_name'] = '';
 			if(!$this->isAnonymized())
 			{
-				$comments[$i]['user_name'] = self::lookupUsername($row['user_id']);
+				$temp['user_name'] = self::lookupUsername($row['user_id']);
 			}
-			$comments[$i]['comment_title'] 		= $row['comment_title'];
-			$comments[$i]['comment_text'] 		= $row['comment_text'];
-			$comments[$i]['comment_time'] 		= $row['comment_time'];
-			$comments[$i]['comment_time_end'] 	= $row['comment_time_end'];
-			$comments[$i]['comment_tags'] 		= $row['comment_tags'];
-			$comments[$i]['is_interactive'] 	= $row['is_interactive'];
-			$comments[$i]['is_private'] 		= $row['is_private'];
+			$temp['comment_title'] 		= $row['comment_title'];
+			$temp['comment_text'] 		= $row['comment_text'];
+			$temp['comment_time'] 		= $row['comment_time'];
+			$temp['comment_time_end'] 	= $row['comment_time_end'];
+			$temp['comment_tags'] 		= $row['comment_tags'];
+			$temp['is_interactive'] 	= $row['is_interactive'];
+			$temp['is_private'] 		= $row['is_private'];
+			$temp['is_reply_to'] 		= $row['is_reply_to'];
+			$temp['replies']			= array();
 
-			$i++;
+			if($row['is_reply_to'] != 0)
+			{
+				$is_reply_to[] = $temp;
+			}
+			else
+			{
+				$comments[$i] = $temp;
+				$i++;
+			}
+		}
+		
+		if(sizeof($is_reply_to) > 0)
+		{
+			$comments = $this->sortInReplies($is_reply_to, $comments);
 		}
 
 		return $comments;
 	}
 
+	/**
+	 * @param $is_reply_to
+	 * @param $comments
+	 * @return array
+	 */
+	protected function sortInReplies($is_reply_to, $comments)
+	{
+		foreach($is_reply_to as $value)
+		{
+			foreach($comments as $key => $comment)
+			{
+				if($value['is_reply_to'] == $comment['comment_id'])
+				{
+					$comments[$key]['replies'][] = $value;
+				}
+			}
+		}
+		return $comments;
+	}
 	/**
 	 * @param int $old_id
 	 * @param int $new_id
@@ -321,6 +380,7 @@ class ilObjComment
 			$this->setCommentTitle($row['comment_title']);
 			$this->setCommentTags($row['comment_tags']);
 			$this->setIsPrivate($row['is_private']);
+			$this->setIsReplyTo($row['is_reply_to']);
 			$new_comment_id = $this->create(true);
 			if((bool)$row['is_interactive'])
 			{
@@ -576,4 +636,21 @@ class ilObjComment
 	{
 		$this->comment_time_end = $comment_time_end;
 	}
+
+	/**
+	 * @return int
+	 */
+	public function getIsReplyTo()
+	{
+		return $this->is_reply_to;
+	}
+
+	/**
+	 * @param int $is_reply_to
+	 */
+	public function setIsReplyTo($is_reply_to)
+	{
+		$this->is_reply_to = $is_reply_to;
+	}
+
 }

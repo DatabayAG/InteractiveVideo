@@ -50,13 +50,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		if(pro.isBuildListElementAllowed(username))
 		{
 			css_class = pro.getCSSClassForListElement();
-			value =	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class +'">'            +
+			value =	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class +'">'             +
 							pro.buildCommentTimeHtml(time, comment.is_interactive)                           +
 							pro.buildCommentTimeEndHtml(comment)                                             +
-							pro.buildCommentUsernameHtml(username, comment.is_interactive)                   +
+							pub.buildCommentUsernameHtml(username, comment.is_interactive)                   +
 							pro.buildCommentTitleHtml(comment.comment_title)                                 +
 							pro.buildCommentTextHtml(comment.comment_text )                                  +
-							pro.appendPrivateHtml(comment.is_private)                                       +
+							pro.buildCommentReplies(comment.replies )                                        +
+							pro.appendPrivateHtml(comment.is_private)                                        +
 							pro.buildCommentTagsHtml(comment.comment_tags)                                   +
 					'</li>';
 		}
@@ -347,7 +348,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		}
 	};
 
-	pro.buildCommentUsernameHtml = function (username, is_interactive)
+	pub.buildCommentUsernameHtml = function (username, is_interactive)
 	{
 		var name = username;
 
@@ -377,6 +378,24 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.buildCommentTextHtml = function (text)
 	{
 		return '<span class="comment_text">' + text + '</span> ';
+	};
+
+	pro.buildCommentReplies = function (replies)
+	{
+		var value = '<span class="comment_replies">';
+		if(replies !== undefined && replies.length > 0)
+		{
+			for (var i  = 0; i < replies.length; i++)
+			{
+				value += pub.getCommentRepliesHtml(replies[i]);
+			}
+		}
+		return value + '</span>';
+	};
+	
+	pub.getCommentRepliesHtml = function(reply)
+	{
+		return '<div class="reply_comment reply_comment_' + reply.comment_id + '">' + pub.buildCommentUsernameHtml(reply.user_name, reply.is_interactive) + reply.comment_text + ' ' + pro.appendPrivateHtml(reply.is_private) + '</div>';
 	};
 
 	pro.appendPrivateHtml = function (is_private)

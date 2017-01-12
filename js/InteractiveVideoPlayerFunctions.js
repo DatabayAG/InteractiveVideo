@@ -150,18 +150,64 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		return stop_video;
 	};
-	
+
+	 pub.postAndAppendFakeCommentToStream = function(actual_time_in_video, comment_text, is_private, h, m, s) {
+		var fake_id = parseInt(Math.random() * 10000000, 10);
+		var tmp_obj =
+			{
+				'comment_id':         fake_id,
+				'comment_time':       actual_time_in_video,
+				'comment_text':       comment_text,
+				'comment_time_end_h': h,
+				'comment_time_end_m': m,
+				'comment_time_end_s': s,
+				'user_name':          scope.InteractiveVideo.username,
+				'is_interactive':     '0',
+				'is_private':         is_private
+			};
+		if (!tmp_obj.comment_text) 
+		{
+			$('#no_text_warning').removeClass('ilNoDisplay');
+			return;
+		}
+		pri.utils.sliceCommentAndStopPointsInCorrectPosition(tmp_obj, tmp_obj.comment_time);
+
+		$("#ul_scroll").prepend(pri.utils.buildListElement(tmp_obj, tmp_obj.comment_time, scope.InteractiveVideo.username));
+		pub.refreshMathJaxView();
+
+		$.ajax({
+			type:     "POST",
+			dataType: "JSON",
+			url:      il.InteractiveVideo.post_comment_url,
+			data:     {
+				'comment_time':       actual_time_in_video,
+				'comment_time_end_h': h,
+				'comment_time_end_m': m,
+				'comment_time_end_s': s,
+				'comment_text':      comment_text,
+				'is_private':        is_private
+			},
+			success:  function (data) {
+				pro.resetCommentForm();
+				pri.utils.rebuildCommentsViewIfShowAllIsActive();
+			}
+		});
+	};
+
 	pro.addAjaxFunctionForCommentPosting = function()
 	{
 		$("#ilInteractiveVideoCommentSubmit").on("click", function(e) {
-			var tmp_obj, h, m, s, fake_id;
+			var h, m, s;
+			var actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
+			var comment_text = CKEDITOR.instances.comment_text.getData();
+			var is_private = $('#is_private').prop("checked");
+
 			if( $('#comment_time_end').prop( "checked" ))
 			{
 				h = $('#comment_time_end\\[time\\]_h').val();
 				m = $('#comment_time_end\\[time\\]_m').val();
 				s = $('#comment_time_end\\[time\\]_s').val();
 
-				var actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
 				var h_end = parseInt(h, 10) * 3600;
 				var m_end = parseInt(m, 10) * 60;
 				var s_end = parseInt(s, 10);
@@ -173,43 +219,35 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				}
 			}
 
-			fake_id = parseInt(Math.random() * 10000000, 10);
-			tmp_obj = 
-			{
-				'comment_id' : fake_id,
-				'comment_time': scope.InteractiveVideoPlayerAbstract.currentTime(),
-				'comment_text':  CKEDITOR.instances.comment_text.getData(),
-				'comment_time_end_h': h,
-				'comment_time_end_m': m,
-				'comment_time_end_s': s,
-				'user_name': scope.InteractiveVideo.username,
-				'is_interactive': '0',
-				'is_private': $('#is_private').prop( "checked" )
-			};
-			if(!tmp_obj.comment_text)
-			{
-				$('#no_text_warning').removeClass('ilNoDisplay');
-				return;
-			}
-			pri.utils.sliceCommentAndStopPointsInCorrectPosition(tmp_obj, tmp_obj.comment_time);
+			pub.postAndAppendFakeCommentToStream(actual_time_in_video, comment_text, is_private, h, m, s);
+		});
+	};
 
-			$("#ul_scroll").prepend(pri.utils.buildListElement(tmp_obj, tmp_obj.comment_time, scope.InteractiveVideo.username));
-			pub.refreshMathJaxView();
+	pub.addAjaxFunctionForReflectionCommentPosting = function(comment_id, org_id)
+	{
+		$("#submit_comment_form").on("click", function(e) {
+			var actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
+			var comment_text = CKEDITOR.instances['text_reflection_comment_' + comment_id].getData();
+			var is_private = $('#is_private_modal').prop("checked");
+
 			$.ajax({
-				type     : "POST",
-				dataType : "JSON",
-				url      : il.InteractiveVideo.post_comment_url,
-				data     : {
-					'comment_time': scope.InteractiveVideoPlayerAbstract.currentTime(),
-					'comment_time_end_h': h,
-					'comment_time_end_m': m,
-					'comment_time_end_s': s,
-					'comment_text': CKEDITOR.instances.comment_text.getData(),
-					'is_private': $('#is_private').prop( "checked" )
+				type:     "POST",
+				dataType: "JSON",
+				url:      il.InteractiveVideo.post_comment_url,
+				data:     {
+					'comment_time':      actual_time_in_video,
+					'comment_text':      comment_text,
+					'is_private':        is_private,
+					'is_reply_to':       comment_id
 				},
-				success  : function(data) {
-					pro.resetCommentForm();
-					pri.utils.rebuildCommentsViewIfShowAllIsActive();
+				success:  function (data) {
+					$('.reply_comment_' + org_id).remove();
+					$('.reply_comment_non_existent').remove();
+					var reply = {'comment_text' : comment_text, 'is_interactive' : 0, 'is_private' : is_private, 'user_name' :scope.InteractiveVideo.username, 'comment_id' : 'non_existent'};
+					var html = scope.InteractiveVideoPlayerComments.getCommentRepliesHtml(reply);
+					$('.list_item_' + comment_id).find('.comment_replies').append(html);
+					$('#ilQuestionModal').modal('hide');
+					pub.refreshMathJaxView();
 				}
 			});
 		});

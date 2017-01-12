@@ -38,6 +38,10 @@
 	list-style: none;
 }
 
+.scroll-text .comment_replies{
+    height: inherit;
+}
+
 .simple_question_editor{
     margin: 1em;
 }
@@ -99,7 +103,9 @@
     opacity: 0.4;
 }
 #close_form{
-    float: right;
+    right: 5px;
+    bottom: 5px;
+    position: absolute;
 }
 .align_button{
     width: 100%;
@@ -207,4 +213,18 @@
 }
 .prototype{
     display:none;
+}
+.modal_reflection_footer{
+    height:25px;
+}
+
+#submit_comment_form{
+    right: 85px;
+    bottom: 5px;
+    position: absolute;
+}
+.reply_comment{
+    padding:0;
+    margin:0;
+    margin-left:3em;
 }

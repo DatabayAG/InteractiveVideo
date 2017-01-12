@@ -1,6 +1,6 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
-
+require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/Form/class.ilTextAreaInputCkeditorGUI.php';
 
 /**
  * Class xvidUtils

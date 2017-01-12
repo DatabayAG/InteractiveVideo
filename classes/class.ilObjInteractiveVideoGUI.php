@@ -376,6 +376,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('AUTHOR_FILTER', $plugin->txt('author_filter'));
 		$config_tpl->setVariable('SWITCH_ON', $plugin->txt('switch_on'));
 		$config_tpl->setVariable('SWITCH_OFF', $plugin->txt('switch_off'));
+		$config_tpl->setVariable('SAVE', $plugin->txt('save'));
+		$config_tpl->setVariable('ADD_COMMENT', $plugin->txt('insert_comment'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
@@ -910,6 +912,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment->setCommentText(trim($_POST['comment_text']));
 		$comment->setCommentTime((float)$_POST['comment_time']);
 		$comment->setCommentTimeEnd($seconds_end);
+		
+		if(array_key_exists('is_reply_to', $_POST))
+		{
+			$comment->setIsReplyTo((int) $_POST['is_reply_to']);
+		}
 
 		if($ilUser->getId() == ANONYMOUS_USER_ID)
 		{
