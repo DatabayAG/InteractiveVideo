@@ -144,3 +144,4 @@ select_at_least_one#:#Bitte wählen sie mindestens eine Quelle aus.
 back_to#:#zurück zu
 back_to_title#:#Wollen Sie zum Urprungsobjekt %s (%s) zurückkehren?
 save#:#Speichern
+at_least_one_source#:#Es wird mindestens eine Video Quelle benötigt, stellen sie bitte sicher das sie in der Konfiguration des Interaktive Video Plugins mindestens eine Quelle ausgewählt haben.

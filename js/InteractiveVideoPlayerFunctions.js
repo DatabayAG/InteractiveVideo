@@ -97,17 +97,19 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pro.addTaskInteraction = function()
 	{
 		$('.task_interaction').on('click', function() {
-			if(! $('.task_description').hasClass('closed'))
+			var description = $('.task_description');
+			var icon = $('.task_icon');
+			if(! description.hasClass('closed'))
 			{
-				$('.task_description').addClass('closed');
-				$('.task_icon').addClass('glyphicon-arrow-down');
-				$('.task_icon').removeClass('glyphicon-arrow-up');
+				description.addClass('closed');
+				icon.addClass('glyphicon-arrow-down');
+				icon.removeClass('glyphicon-arrow-up');
 			}
 			else
 			{
-				$('.task_description').removeClass('closed');
-				$('.task_icon').addClass('glyphicon-arrow-up');
-				$('.task_icon').removeClass('glyphicon-arrow-down');
+				description.removeClass('closed');
+				icon.addClass('glyphicon-arrow-up');
+				icon.removeClass('glyphicon-arrow-down');
 			}
 		});
 	};

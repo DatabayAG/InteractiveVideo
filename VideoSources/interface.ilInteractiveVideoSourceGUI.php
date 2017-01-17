@@ -44,7 +44,7 @@ interface ilInteractiveVideoSourceGUI
 
 	/**
 	 * @param ilObjInteractiveVideo $obj
-	 * @return string
+	 * @return 
 	 */
 	public function getPlayer($obj);
 

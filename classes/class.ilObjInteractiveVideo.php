@@ -156,41 +156,51 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		 */
 		global $ilLog;
 
-		try
+		$src_id = ilUtil::stripSlashes($_POST['source_id']);
+		if($src_id != '')
 		{
-			$this->getVideoSourceObject(ilUtil::stripSlashes($_POST['source_id']));
-			$this->video_source_object->doCreateVideoSource($this->getId());
-			global $ilDB;
 
-			$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = %s',
-				array('integer'), array($this->getId()));
+			try
+			{
+				$this->getVideoSourceObject($src_id);
+				$this->video_source_object->doCreateVideoSource($this->getId());
+				global $ilDB;
 
-			$ilDB->insert(
-				self::TABLE_NAME_OBJECTS,
-				array(
-					'obj_id'         => array('integer', $this->getId()),
-					'is_anonymized'  => array('integer', (int)$_POST['is_anonymized']),
-					'is_repeat'      => array('integer', (int)$_POST['is_repeat']),
-					'is_chronologic' => array('integer', (int)$_POST['is_chronologic']),
-					'is_public'      => array('integer', (int)$_POST['is_public']),
-					'source_id'      => array('text', ilUtil::stripSlashes($_POST['source_id'])),
-					'is_task'        => array('integer', (int)$_POST['is_task']),
-					'task'           => array('text', ilUtil::stripSlashes($_POST['task']))
-				)
-			);
+				$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = %s',
+					array('integer'), array($this->getId()));
 
-			parent::doCreate();
+				$ilDB->insert(
+					self::TABLE_NAME_OBJECTS,
+					array(
+						'obj_id'         => array('integer', $this->getId()),
+						'is_anonymized'  => array('integer', (int)$_POST['is_anonymized']),
+						'is_repeat'      => array('integer', (int)$_POST['is_repeat']),
+						'is_chronologic' => array('integer', (int)$_POST['is_chronologic']),
+						'is_public'      => array('integer', (int)$_POST['is_public']),
+						'source_id'      => array('text', ilUtil::stripSlashes($_POST['source_id'])),
+						'is_task'        => array('integer', (int)$_POST['is_task']),
+						'task'           => array('text', ilUtil::stripSlashes($_POST['task']))
+					)
+				);
 
-			$this->createMetaData();
+				parent::doCreate();
+
+				$this->createMetaData();
+			}
+			catch(Exception $e)
+			{
+				$ilLog->write($e->getMessage());
+				$ilLog->logStack();
+
+				$this->delete();
+
+				throw new ilException(sprintf("%s: Creation incomplete", __METHOD__));
+			}
 		}
-		catch(Exception $e)
+		else
 		{
-			$ilLog->write($e->getMessage());
-			$ilLog->logStack();
-
 			$this->delete();
-
-			throw new ilException(sprintf("%s: Creation incomplete", __METHOD__));
+			throw new ilException(ilInteractiveVideoPlugin::getInstance()->txt('at_least_one_source'));
 		}
 	}
 

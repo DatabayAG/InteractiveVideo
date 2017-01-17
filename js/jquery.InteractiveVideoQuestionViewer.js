@@ -193,7 +193,6 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.showQuestionInteractionForm = function(comment_id, array, player) {
-		console.log(array)
 		pub.comment_id = comment_id;
 		pub.QuestionObject = array;
 		pub.QuestionObject.player = player;

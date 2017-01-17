@@ -145,3 +145,4 @@ select_at_least_one#:#Please select at least one source
 back_to#:#back to
 back_to_title#:#Do you want to go back to %s (%s)?
 save#:#Save
+at_least_one_source#:#You need to select at least one source, make sure there is at least one active source in the configuration of the Interactive Video Plugin.

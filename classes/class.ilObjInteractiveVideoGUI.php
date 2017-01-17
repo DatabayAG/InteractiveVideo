@@ -659,6 +659,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		
 		$item_group = new ilRadioGroupInputGUI($plugin->txt('source'), 'source_id');
 		$a_form->addItem($item_group);
+		$non_active = true;
 		foreach($sources as $key => $source)
 		{
 			/** @var ilInteractiveVideoSourceGUI $gui */
@@ -668,10 +669,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$gui= $source->getGUIClass();
 				$gui->getForm($op, $this->obj_id);
 				$item_group->addOption($op);
+				$non_active = false;
 			}
 		}
 
 		$item_group->setValue($factory->getDefaultVideoSource());
+
+		if($non_active)
+		{
+			ilUtil::sendFailure(ilInteractiveVideoPlugin::getInstance()->txt('at_least_one_source'));
+		}
 		return $a_form;
 	}
 
@@ -934,7 +941,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$comment->setIsPrivate($is_private );
 		}
 		$comment->create();
-		exit();
+		$this->callExit();
 	}
 
 	/**
@@ -2172,7 +2179,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$tpl_json->setVariable('JSON', $ajax_object->getJsonForCommentId((int)$_GET['comment_id']));
 			$tpl_json->show("DEFAULT", false, true);
-			exit();
+			$this->callExit();
 		}
 		return;
 	}
@@ -2192,7 +2199,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
 		}
 		$this->showFeedbackPerAjax();
-		exit();
+		$this->callExit();
 	}
 
 	public function showFeedbackPerAjax()
@@ -2207,7 +2214,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function postVideoStartedPerAjax()
 	{
 		$this->object->trackProgress();
-		exit();
+		$this->callExit();
 	}
 
 	public function postVideoFinishedPerAjax()
@@ -2215,6 +2222,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		// TODO: Store finished event for user/obj_id
 		$this->object->updateLP();
 
+		$this->callExit();
+	}
+	
+	protected function callExit()
+	{
 		exit();
 	}
 #endregion
