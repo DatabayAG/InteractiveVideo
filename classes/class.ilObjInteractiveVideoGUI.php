@@ -20,6 +20,7 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilTextAreaInpu
  * @ilCtrl_isCalledBy    ilObjInteractiveVideoGUI: ilRepositoryGUI, ilAdministrationGUI, ilObjPluginDispatchGUI
  * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilPermissionGUI, ilInfoScreenGUI, ilObjectCopyGUI, ilRepositorySearchGUI, ilPublicUserProfileGUI, ilCommonActionDispatcherGUI, ilMDEditorGUI
  * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilInteractiveVideoLearningProgressGUI
+ * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilPropertyFormGUI
  */
 class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopItemHandling
 {
@@ -160,6 +161,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 						break;
 					case 'getQuestionPerAjax':
 					case 'postAnswerPerAjax':
+					case 'handleExplorerCommand':
 						$this->checkPermission('read');
 						$this->$cmd();
 						break;
@@ -1613,7 +1615,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$show_correct_icon->setInfo($plugin->txt('show_correct_icon_info'));
 		$show_correct_icon->setChecked(true);
 
-
 		$feedback_correct->addSubItem($show_correct_icon);
 		$is_jump_correct = new ilCheckboxInputGUI($plugin->txt('is_jump_correct'), 'is_jump_correct');
 		$is_jump_correct->setInfo($plugin->txt('is_jump_correct_info'));
@@ -1629,7 +1630,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$is_jump_correct->addSubItem($jump_correct_ts);
 		$feedback_correct->addSubItem($is_jump_correct);
+
 		$form->addItem($feedback_correct);
+		$this->appendRepositorySelector($form, 'feedback_correct_obj');
 
 		// Feedback wrong
 		$feedback_one_wrong = xvidUtils::constructTextAreaFormElement('feedback_one_wrong', 'feedback_one_wrong');
@@ -1653,6 +1656,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_jump_wrong->addSubItem($jump_wrong_ts);
 		$feedback_one_wrong->addSubItem($is_jump_wrong);
 		$form->addItem($feedback_one_wrong);
+		$this->appendRepositorySelector($form, 'feedback_wrong_obj');
 
 		$show_response_frequency = new ilCheckboxInputGUI($plugin->txt('show_response_frequency'), 'show_response_frequency');
 		$show_response_frequency->setInfo($plugin->txt('show_response_frequency_info'));
@@ -1670,6 +1674,32 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($comment_id);
 
 		return $form;
+	}
+
+	/**
+	 * @param ilPropertyFormGUI $form
+	 * @param $post_var
+	 */
+	protected function appendRepositorySelector($form, $post_var)
+	{
+		$plugin = ilInteractiveVideoPlugin::getInstance();
+		require_once 'Services/Form/classes/class.ilPropertyFormGUI.php';
+		$plugin->includeClass('Form/class.ilInteractiveVideoSelectionExplorerGUI.php');
+		$this->ctrl->setParameterByClass('ilformpropertydispatchgui', 'postvar', $post_var);
+		$explorer_gui = new ilInteractiveVideoSelectionExplorerGUI(
+			array('ilpropertyformgui', 'ilformpropertydispatchgui', 'ilInteractiveVideoRepositorySelectorInputGUI'),
+			'handleExplorerCommand'
+		);
+		$explorer_gui->setId($post_var);
+
+		$plugin->includeClass('Form/class.ilInteractiveVideoRepositorySelectorInputGUI.php');
+		$root_ref_id = new ilInteractiveVideoRepositorySelectorInputGUI(
+			$plugin->txt($post_var),
+			$post_var, $explorer_gui, false
+		);
+
+		$root_ref_id->setInfo($plugin->txt($post_var . '_info'));
+		$form->addItem($root_ref_id);
 	}
 
 	/**
@@ -1791,20 +1821,22 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$question_data = $this->object->getQuestionDataById((int)$comment_id);
 
-		$values['question_text']      = $question_data['question_data']['question_text'];
-		$values['question_type']      = $question_data['question_data']['type'];
-		$values['feedback_correct']   = $question_data['question_data']['feedback_correct'];
-		$values['is_jump_correct']    = $question_data['question_data']['is_jump_correct'];
-		$values['show_correct_icon']  = $question_data['question_data']['show_correct_icon'];
-		$values['jump_correct_ts']    = $question_data['question_data']['jump_correct_ts'];
-		$values['feedback_one_wrong'] = $question_data['question_data']['feedback_one_wrong'];
-		$values['show_response_frequency'] = $question_data['question_data']['show_response_frequency'];
-		$values['is_jump_wrong']      = $question_data['question_data']['is_jump_wrong'];
-		$values['show_wrong_icon']    = $question_data['question_data']['show_wrong_icon'];
-		$values['jump_wrong_ts']      = $question_data['question_data']['jump_wrong_ts'];
-		$values['limit_attempts']     = $question_data['question_data']['limit_attempts'];
-		$values['repeat_question']    = $question_data['question_data']['repeat_question'];
-//		$values['question_correct']   = $question_data['question_data']['question_correct']; //marko
+		$values['question_text']			= $question_data['question_data']['question_text'];
+		$values['question_type']			= $question_data['question_data']['type'];
+		$values['feedback_correct']			= $question_data['question_data']['feedback_correct'];
+		$values['is_jump_correct']			= $question_data['question_data']['is_jump_correct'];
+		$values['show_correct_icon']		= $question_data['question_data']['show_correct_icon'];
+		$values['jump_correct_ts']			= $question_data['question_data']['jump_correct_ts'];
+		$values['feedback_one_wrong']		= $question_data['question_data']['feedback_one_wrong'];
+		$values['show_response_frequency']	= $question_data['question_data']['show_response_frequency'];
+		$values['is_jump_wrong']			= $question_data['question_data']['is_jump_wrong'];
+		$values['show_wrong_icon']			= $question_data['question_data']['show_wrong_icon'];
+		$values['jump_wrong_ts']			= $question_data['question_data']['jump_wrong_ts'];
+		$values['limit_attempts']			= $question_data['question_data']['limit_attempts'];
+		$values['repeat_question']			= $question_data['question_data']['repeat_question'];
+		$values['feedback_correct_obj']		= $question_data['question_data']['feedback_correct_ref_id'];
+		$values['feedback_wrong_obj']		= $question_data['question_data']['feedback_wrong_ref_id'];
+//		$values['question_correct']			= $question_data['question_data']['question_correct']; //marko
 
 		return $values;
 	}
@@ -1908,6 +1940,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question->setLimitAttempts((int)$form->getInput('limit_attempts'));
 		$question->setIsJumpCorrect((int)$form->getInput('is_jump_correct'));
 		$question->setShowCorrectIcon((int)$form->getInput('show_correct_icon'));
+		$question->setFeedbackCorrectId((int)$form->getInput('feedback_correct_obj'));
+		$question->setFeedbackWrongId((int)$form->getInput('feedback_wrong_obj'));
 
 		$jmp_correct_time = $form->getInput('jump_correct_ts');
 		$correct_seconds  = $jmp_correct_time['time']['h'] * 3600

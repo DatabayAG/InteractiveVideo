@@ -146,3 +146,7 @@ back_to#:#back to
 back_to_title#:#Do you want to go back to %s (%s)?
 save#:#Save
 at_least_one_source#:#You need to select at least one source, make sure there is at least one active source in the configuration of the Interactive Video Plugin.
+feedback_correct_obj#:#Feedback Link for Repository Object for correct answer
+feedback_correct_obj_info#:#Feedback Link for Repository Object for correct answer
+feedback_wrong_obj#:#Feedback Link for Repository Object for at least one wrong answer
+feedback_wrong_obj_info#:#Feedback Link for Repository Object for at least one wrong answer

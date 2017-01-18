@@ -145,3 +145,7 @@ back_to#:#zurück zu
 back_to_title#:#Wollen Sie zum Urprungsobjekt %s (%s) zurückkehren?
 save#:#Speichern
 at_least_one_source#:#Es wird mindestens eine Video Quelle benötigt, stellen sie bitte sicher das sie in der Konfiguration des Interaktive Video Plugins mindestens eine Quelle ausgewählt haben.
+feedback_correct_obj#:#Feedback Link auf Magazin Objekt bei korrekter Antwort
+feedback_correct_obj_info#:#Feedback Link auf Magazin Objekt bei korrekter Antwort
+feedback_wrong_obj#:#Feedback Link auf Magazin Objekt bei mindestens einer falschen Antwort
+feedback_wrong_obj_info#:#Feedback Link auf Magazin Objekt bei mindestens einer falschen Antwort

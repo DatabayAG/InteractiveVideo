@@ -37,9 +37,10 @@ class SimpleChoiceQuestionAjaxHandler
 				{
 					$start_div = '<div class="neutral">';
 				}
-				$json['html']     = $start_div . $feedback['feedback_one_wrong'] . '</div>';
-				$json['is_timed'] = $feedback['is_jump_wrong'];
-				$json['time']     = $feedback['jump_wrong_ts'];
+				$link             = $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_wrong_ref_id']);
+				$json['html']        = $start_div . $feedback['feedback_one_wrong']  . $link . '</div>';
+				$json['is_timed']    = $feedback['is_jump_wrong'];
+				$json['time']        = $feedback['jump_wrong_ts'];
 			}
 			else
 			{
@@ -55,7 +56,9 @@ class SimpleChoiceQuestionAjaxHandler
 				{
 					$start_div = '<div class="neutral">';
 				}
-				$json['html']     = $start_div . $feedback['feedback_correct'] . '</div>';
+
+				$link             = $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_correct_ref_id']);
+				$json['html']     = $start_div . $feedback['feedback_correct'] . $link . '</div>';
 				$json['is_timed'] = $feedback['is_jump_correct'];
 				$json['time']     = $feedback['jump_correct_ts'];
 			}
@@ -65,6 +68,37 @@ class SimpleChoiceQuestionAjaxHandler
 		return json_encode($json);
 	}
 
+	/**
+	 * @param $ref_id
+	 * @return string
+	 */
+	protected function getLinkIfReadAccessForObjectByRefId($ref_id)
+	{
+		if($ref_id != null && $ref_id != 0)
+		{
+			/**
+			 * @var $ilAccess ilAccessHandler
+			 */
+			global $ilAccess;
+			$video_tpl = new ilTemplate("tpl.elements.html", true, true, ilInteractiveVideoPlugin::getInstance()->getDirectory());
+			$obj = ilObjectFactory::getInstanceByRefId($ref_id);
+			
+			if($ilAccess->checkAccess('read', '', $ref_id))
+			{
+				$video_tpl->setCurrentBlock('feedback_linked_element');
+				$video_tpl->setVariable('URL', ilLink::_getLink($ref_id));
+			}
+			else
+			{
+				$video_tpl->setCurrentBlock('feedback_not_linked_element');
+
+			}
+			$video_tpl->setVariable('TITLE', $obj->getTitle());
+			$video_tpl->parseCurrentBlock();
+			return $video_tpl->get();
+		}
+		return '';
+	}
 	/**
 	 * @param int $cid comment_id
 	 * @return string

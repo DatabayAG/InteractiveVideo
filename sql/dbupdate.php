@@ -676,4 +676,60 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_comments', 'is_reply_to'))
 			'default' => 0));
 }
 ?>
+<#37>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_question'))
+{
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'feedback_correct_obj_id'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_question', 'feedback_correct_obj_id',
+			array(
+				'type'    => 'integer',
+				'length'  => '4',
+				'notnull' => false,
+				'default' => null
+			));
+	}
 
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'feedback_correct_obj_id'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_question', 'feedback_correct_obj_id',
+			array(
+				'type'    => 'integer',
+				'length'  => '4',
+				'notnull' => false,
+				'default' => null
+			));
+	}
+}
+?>
+<#38>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_question'))
+{
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'feedback_wrong_obj_id'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_question', 'feedback_wrong_obj_id',
+			array(
+				'type'    => 'integer',
+				'length'  => '4',
+				'notnull' => false,
+				'default' => null
+			));
+	}
+}
+?>
+<#39>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_question'))
+{
+	if($ilDB->tableColumnExists('rep_robj_xvid_question', 'feedback_wrong_obj_id'))
+	{
+		$ilDB->renameTableColumn('rep_robj_xvid_question', 'feedback_wrong_obj_id', 'feedback_wrong_ref_id');
+	}
+	if($ilDB->tableColumnExists('rep_robj_xvid_question', 'feedback_correct_obj_id'))
+	{
+		$ilDB->renameTableColumn('rep_robj_xvid_question', 'feedback_correct_obj_id', 'feedback_correct_ref_id');
+	}
+}
+?>

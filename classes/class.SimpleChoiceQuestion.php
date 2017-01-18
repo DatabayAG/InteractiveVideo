@@ -102,6 +102,16 @@ class SimpleChoiceQuestion
 	 * @var int
 	 */
 	protected $show_response_frequency = 0;
+
+	/**
+	 * @var int
+	 */
+	protected $feedback_correct_id;
+
+	/**
+	 * @var int
+	 */
+	protected $feedback_wrong_id;
 	
 	/**
 	 * @param int $comment_id
@@ -145,6 +155,8 @@ class SimpleChoiceQuestion
 			$this->setShowWrongIcon($row['show_wrong_icon']);
 			$this->setJumpWrongTs($row['jump_wrong_ts']);
 			$this->setShowResponseFrequency($row['show_response_frequency']);
+			$this->setFeedbackCorrectId($row['feedback_correct_ref_id']);
+			$this->setFeedbackWrongId($row['feedback_wrong_ref_id']);
 			$this->setRepeatQuestion($row['repeat_question']);
 		}
 
@@ -334,6 +346,8 @@ class SimpleChoiceQuestion
 			$this->setShowWrongIcon($row['show_wrong_icon']);
 			$this->setJumpWrongTs($row['jump_wrong_ts']);
 			$this->setShowResponseFrequency($row['show_response_frequency']);
+			$this->setFeedbackCorrectId($row['feedback_correct_ref_id']);
+			$this->setFeedbackWrongId($row['feedback_wrong_ref_id']);
 			$this->setRepeatQuestion($row['repeat_question']);
 			$_POST['question_type'] = $row['type'];
 			$this->create();
@@ -382,6 +396,8 @@ class SimpleChoiceQuestion
 				'is_jump_wrong'      => array('integer', $this->getIsJumpWrong()),
 				'jump_wrong_ts'      => array('integer', $this->getJumpWrongTs()),
 				'show_response_frequency' => array('integer', $this->getShowResponseFrequency()),
+				'feedback_correct_ref_id' => array('integer', $this->getFeedbackCorrectId()),
+				'feedback_wrong_ref_id' => array('integer', $this->getFeedbackWrongId()),
 				'repeat_question'    => array('integer', $this->getRepeatQuestion())
 			));
 		if(count($_POST['answer']) > 0 && $_POST['question_type'] != self::REFLECTION)
@@ -1028,6 +1044,38 @@ class SimpleChoiceQuestion
 	public function setObjId($obj_id)
 	{
 		$this->obj_id = $obj_id;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getFeedbackCorrectId()
+	{
+		return $this->feedback_correct_id;
+	}
+
+	/**
+	 * @param int $feedback_correct_id
+	 */
+	public function setFeedbackCorrectId($feedback_correct_id)
+	{
+		$this->feedback_correct_id = $feedback_correct_id;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getFeedbackWrongId()
+	{
+		return $this->feedback_wrong_id;
+	}
+
+	/**
+	 * @param int $feedback_wrong_id
+	 */
+	public function setFeedbackWrongId($feedback_wrong_id)
+	{
+		$this->feedback_wrong_id = $feedback_wrong_id;
 	}
 
 
