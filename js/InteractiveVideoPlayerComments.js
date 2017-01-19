@@ -390,11 +390,32 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.secondsToTimeCode = function(time) 
 	{
 		var obj = pro.convertSecondsToTimeObject(time);
-		return ( (obj.hours > 0) ? (obj.hours < 10 ? '0' + obj.hours : obj.hours) + ':' : '') + 
-				(obj.minutes < 10 ? '0' + obj.minutes : obj.minutes) + 
-				':' + (obj.seconds < 10 ? '0' + obj.seconds : obj.seconds);
+		var h = pro.fillWithZeros(obj.hours);
+		var m = pro.fillWithZeros(obj.minutes);
+		var s = pro.fillWithZeros(obj.seconds);
+		return h + ':' + m + ':' + s;
 	};
 
+	pro.fillWithZeros = function(number)
+	{
+		number = parseInt(number, 10);
+		if(number == 0)
+		{
+			return '00';
+		}
+		else
+		{
+			if(number > 0 && number < 10)
+			{
+				return '0' + number;
+			}
+			else
+			{
+				return number;
+			}
+		}
+	};
+	
 	pro.convertSecondsToTimeObject = function(time)
 	{
 		var obj = {};
@@ -409,6 +430,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.preselectValueOfEndTimeSelection = function(time, element)
 	{
 		element.val(time);
+		$('#comment_time_end').timepicker('setTime', time);
 	};
 	
 	pub.protect = pro;
