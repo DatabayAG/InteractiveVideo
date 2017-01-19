@@ -90,6 +90,7 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 		global $tpl;
 
 		$tpl->addCss('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/libs/bootstrap-timepicker/css/bootstrap-timepicker.css');
+		$tpl->addCss('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/templates/default/bootstrap_timepicker.css');
 		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js');
 	}
 
