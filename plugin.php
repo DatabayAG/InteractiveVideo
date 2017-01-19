@@ -3,7 +3,7 @@
 $id = 'xvid';
 
 // code version; must be changed for all code changes
-$version = '2.0.5';
+$version = '2.0.6';
 
 // ilias min and max version; must always reflect the versions that should
 // run with the plugin
@@ -15,3 +15,4 @@ $responsible      = 'Nadia Ahmad / Michael Jansen / Max Becker / Guido Vollbach'
 $responsible_mail = 'nahmad@databay.de / mjansen@databay.de / mbecker@databay.de / gvollbach@databay.de';
 
 $learning_progress = true;
+$supports_export = true;

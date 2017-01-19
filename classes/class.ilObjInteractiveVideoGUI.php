@@ -21,6 +21,7 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilTextAreaInpu
  * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilPermissionGUI, ilInfoScreenGUI, ilObjectCopyGUI, ilRepositorySearchGUI, ilPublicUserProfileGUI, ilCommonActionDispatcherGUI, ilMDEditorGUI
  * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilInteractiveVideoLearningProgressGUI
  * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilPropertyFormGUI
+ * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilInteractiveVideoExportGUI
  */
 class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopItemHandling
 {
@@ -110,7 +111,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$gui = ilCommonActionDispatcherGUI::getInstanceFromAjaxCall();
 				$this->ctrl->forwardCommand($gui);
 				break;
-
+			case "ilinteractivevideoexportgui":
+				$this->checkPermission('write');
+				$ilTabs->setTabActive('export');
+				$plugin->includeClass('class.ilInteractiveVideoExportGUI.php');
+				$exp_gui = new ilInteractiveVideoExportGUI($this);
+				$exp_gui->addFormat('xml', $this->lng->txt('export'));
+				$this->ctrl->forwardCommand($exp_gui);
+				break;
 			default:
 				switch($cmd)
 				{
@@ -477,9 +485,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function initCreationForms($type)
 	{
-		return array(
-			self::CFORM_NEW => $this->initCreateForm($type)
-		);
+		if(ilInteractiveVideoPlugin::getInstance()->isCoreMin52())
+		{
+			$form_array =  array(
+				self::CFORM_NEW => $this->initCreateForm($type),
+				self::CFORM_IMPORT => $this->initImportForm($type)
+			);
+		}
+		else
+		{
+			$form_array =  array(
+				self::CFORM_NEW => $this->initCreateForm($type)
+			);
+		}
+		return $form_array;
 	}
 
 	/**
@@ -799,6 +818,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			else if($this->checkPermissionBool('read') && $this->object->getLearningProgressMode() != ilObjInteractiveVideo::LP_MODE_DEACTIVATED)
 			{
 				$ilTabs->addTab('learning_progress', $this->lng->txt('learning_progress'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoLearningProgressGUI', 'showLPUserDetails'));
+			}
+		}
+		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
+		{
+			if(ilInteractiveVideoPlugin::getInstance()->isCoreMin52())
+			{
+				$ilTabs->addTab('export', $this->lng->txt('export'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoExportGUI', ''));
 			}
 		}
 

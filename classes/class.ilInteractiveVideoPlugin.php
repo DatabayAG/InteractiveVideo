@@ -35,7 +35,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 	private static $instance = null;
 
 	/**
-	 * @return ilPlugin
+	 * @return ilInteractiveVideoPlugin | ilPlugin
 	 */
 	public static function getInstance()
 	{
@@ -143,5 +143,13 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 		{
 			ilObjLanguage::replaceLangModule($lang, $prefix, $elements);
 		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isCoreMin52()
+	{
+		return version_compare(ILIAS_VERSION_NUMERIC, '5.2.0', '>=');
 	}
 }
