@@ -13,6 +13,7 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestio
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionScoring.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionStatistics.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilTextAreaInputCkeditorGUI.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilInteractiveVideoTimePicker.php');
 
 /**
  * Class ilObjInteractiveVideoGUI
@@ -39,6 +40,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @var $objComment ilObjComment
 	 */
 	public $objComment;
+
+	/**
+	 * @var
+	 */
+	public $plugin;
 
 	/**
 	 * Functions that must be overwritten
@@ -234,6 +240,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
 
 		$video_tpl->setVariable('COMMENT_TIME_END', $plugin->txt('time_end'));
+		$picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end');
+		$video_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
 		$video_tpl->setVariable('TXT_COMMENT', $plugin->txt('insert_comment'));
 		$video_tpl->setVariable('TXT_ENDTIME_WARNING', $plugin->txt('endtime_warning'));
 		$video_tpl->setVariable('TXT_NO_TEXT_WARNING', $plugin->txt('no_text_warning'));
@@ -891,17 +899,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 #region COMMENTS
-	/**
-	 * @param $comment_time
-	 * @return mixed
-	 */
-	protected function getSecondsFromCommentTimeArray($comment_time)
-	{
-		$seconds = $comment_time['time']['h'] * 3600
-			+ $comment_time['time']['m'] * 60
-			+ $comment_time['time']['s'];
-		return $seconds;
-	}
+
 
 	public function postComment()
 	{
@@ -928,13 +926,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			return;
 		}
 
-		if(isset($_POST['comment_time_end_h']))
+		if(isset($_POST['comment_time_end']))
 		{
-			$seconds_end = $this->getSecondsFromCommentTimeArray(array('time' => array(
-				'h' => (int) $_POST['comment_time_end_h'],
-				'm' => (int) $_POST['comment_time_end_m'],
-				's' => (int) $_POST['comment_time_end_s']
-			)));
+			$seconds_end = ilInteractiveVideoTimePicker::getSecondsFromString($_POST['comment_time_end']);
 		}
 		else
 		{
@@ -1067,11 +1061,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$title = new ilTextInputGUI($this->lng->txt('title'), 'comment_title');
 		$form->addItem($title);
-
-		$plugin->includeClass('class.ilTimeInputGUI.php');
-		$time = new ilTimeInputGUI($this->lng->txt('time'), 'comment_time');
-		$time->setShowTime(true);
-		$time->setShowSeconds(true);
+		
+		$time = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'comment_time');
+		#$time->setShowTime(true);
+		#$time->setShowSeconds(true);
 
 		if(isset($_POST['comment_time']))
 		{
@@ -1080,9 +1073,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$form->addItem($time);
 
-		$time_end = new ilTimeInputGUI($plugin->txt('time_end'), 'comment_time_end');
-		$time_end->setShowTime(true);
-		$time_end->setShowSeconds(true);
+		$time_end = new ilInteractiveVideoTimePicker($plugin->txt('time_end'), 'comment_time_end');
+		#$time_end->setShowTime(true);
+		#$time_end->setShowSeconds(true);
 
 		if(isset($_POST['comment_time_end']))
 		{
@@ -1188,12 +1181,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
-			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time);
-			$this->objComment->setCommentTime($seconds);
+			$this->objComment->setCommentTime($comment_time);
 
 			$comment_time_end = $form->getInput('comment_time_end');
-			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time_end);
-			$this->objComment->setCommentTimeEnd($seconds);
+			$this->objComment->setCommentTimeEnd($comment_time_end);
 			$this->objComment->update();
 
 			$this->editMyComments();
@@ -1344,11 +1335,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
-			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time);
-			$this->objComment->setCommentTime($seconds);
+			$this->objComment->setCommentTime($comment_time);
 			$comment_time_end = $form->getInput('comment_time_end');
-			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time_end);
-			$this->objComment->setCommentTimeEnd($seconds);
+			$this->objComment->setCommentTimeEnd($comment_time_end);
 			$this->objComment->update();
 
 			$this->editComments();
@@ -1442,11 +1431,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			// calculate seconds
 			$comment_time		= $form->getInput('comment_time');
-			$seconds			= $this->getSecondsFromCommentTimeArray($comment_time);
-			$this->objComment->setCommentTime($seconds);
+			$this->objComment->setCommentTime($comment_time);
 			$comment_time_end	= $form->getInput('comment_time_end');
-			$seconds			= $this->getSecondsFromCommentTimeArray($comment_time_end);
-			$this->objComment->setCommentTimeEnd($seconds);
+			$this->objComment->setCommentTimeEnd($comment_time_end);
 			$this->objComment->setIsTutor($is_tutor);
 
 			$this->objComment->create();
@@ -1578,11 +1565,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$title = new ilTextInputGUI($this->lng->txt('title'), 'comment_title');
 		$title->setRequired(true);
 		$form->addItem($title);
-
-		$plugin->includeClass('class.ilTimeInputGUI.php');
-		$time = new ilTimeInputGUI($this->lng->txt('time'), 'comment_time');
-		$time->setShowTime(true);
-		$time->setShowSeconds(true);
+		
+		$time = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'comment_time');
 
 		if(isset($_POST['comment_time']))
 		{
@@ -1591,9 +1575,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$form->addItem($time);
 
-		/*$time_end = new ilTimeInputGUI($plugin->txt('time_end'), 'comment_time_end');
-		$time_end->setShowTime(true);
-		$time_end->setShowSeconds(true);
+		/*$time_end = new ilInteractiveVideoTimePicker($plugin->txt('time_end'), 'comment_time_end');
 
 		if(isset($_POST['comment_time_end']))
 		{
@@ -1645,9 +1627,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_jump_correct = new ilCheckboxInputGUI($plugin->txt('is_jump_correct'), 'is_jump_correct');
 		$is_jump_correct->setInfo($plugin->txt('is_jump_correct_info'));
 
-		$jump_correct_ts = new ilTimeInputGUI($this->lng->txt('time'), 'jump_correct_ts');
-		$jump_correct_ts->setShowTime(true);
-		$jump_correct_ts->setShowSeconds(true);
+		$jump_correct_ts = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'jump_correct_ts');
 
 		if(isset($_POST['jump_correct_ts']))
 		{
@@ -1670,9 +1650,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$is_jump_wrong = new ilCheckboxInputGUI($plugin->txt('is_jump_wrong'), 'is_jump_wrong');
 		$is_jump_wrong->setInfo($plugin->txt('is_jump_wrong_info'));
-		$jump_wrong_ts = new ilTimeInputGUI($this->lng->txt('time'), 'jump_wrong_ts');
-		$jump_wrong_ts->setShowTime(true);
-		$jump_wrong_ts->setShowSeconds(true);
+		$jump_wrong_ts = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'jump_wrong_ts');
 
 		if(isset($_POST['jump_wrong_ts']))
 		{
@@ -1770,11 +1748,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
-			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time);
-			$this->objComment->setCommentTime($seconds);
+			$this->objComment->setCommentTime($comment_time);
 			$comment_time_end = $form->getInput('comment_time_end');
-			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time_end);
-			$this->objComment->setCommentTimeEnd($seconds);
+			$this->objComment->setCommentTimeEnd($comment_time_end);
 			$this->objComment->setIsTutor(1);
 			$this->objComment->create();
 
@@ -1929,11 +1905,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
-			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time);
-			$this->objComment->setCommentTime($seconds);
+			$this->objComment->setCommentTime($comment_time);
 			$comment_time_end = $form->getInput('comment_time_end');
-			$seconds      = $this->getSecondsFromCommentTimeArray($comment_time_end);
-			$this->objComment->setCommentTimeEnd($seconds);
+			$this->objComment->setCommentTimeEnd($comment_time_end);
 			$this->objComment->update();
 
 			$this->performQuestionRefresh($comment_id, $form);

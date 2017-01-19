@@ -10,7 +10,7 @@ require_once 'Services/Tracking/classes/class.ilLearningProgressBaseGUI.php';
  * @author Michael Jansen <mjansen@databay.de>
  * @ilCtrl_Calls ilInteractiveVideoLearningProgressGUI: ilLearningProgressGUI, ilInteractiveVideoLPSummaryTableGUI, ilInteractiveVideoLPUsersTableGUI
  */
-class ilInteractiveVideoLearningProgressGUI
+class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 {
 	//TODO: PRECONDITON HANDLING
 	/**
@@ -217,7 +217,7 @@ class ilInteractiveVideoLearningProgressGUI
 
 		$this->gui->getPluginInstance()->includeClass('class.ilInteractiveVideoLPUsersTableGUI.php');
 		$table = new ilInteractiveVideoLPUsersTableGUI($this, 'showLPUsers', $this->object->getId(), $this->object->getRefId(), false);
-		$this->tpl->setContent(implode('<br />', array($table->getHTML(), ilLearningProgressBaseGUI::__getLegendHTML())));
+		$this->tpl->setContent(implode('<br />', array($table->getHTML(), $this->__getLegendHTML())));
 	}
 
 	/**
@@ -237,7 +237,7 @@ class ilInteractiveVideoLearningProgressGUI
 
 		$this->gui->getPluginInstance()->includeClass('class.ilInteractiveVideoLPSummaryTableGUI.php');
 		$table = new ilInteractiveVideoLPSummaryTableGUI($this, 'showLPSummary', $this->object->getRefId(), $this->gui->getPluginInstance());
-		$this->tpl->setContent(implode('<br />', array($table->getHTML(), ilLearningProgressBaseGUI::__getLegendHTML())));
+		$this->tpl->setContent(implode('<br />', array($table->getHTML(), $this->__getLegendHTML())));
 	}
 
 	public function showLPUserDetails()
@@ -279,7 +279,7 @@ class ilInteractiveVideoLearningProgressGUI
 			$info->addProperty($this->lng->txt('trac_comment'),$comment);
 		}
 
-		$this->tpl->setContent(implode('<br />', array($info->getHTML(), ilLearningProgressBaseGUI::__getLegendHTML())));
+		$this->tpl->setContent(implode('<br />', array($info->getHTML(), $this->__getLegendHTML())));
 	}
 
 	/**

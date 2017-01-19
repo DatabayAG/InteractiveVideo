@@ -153,16 +153,14 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		return stop_video;
 	};
 
-	 pub.postAndAppendFakeCommentToStream = function(actual_time_in_video, comment_text, is_private, h, m, s) {
+	 pub.postAndAppendFakeCommentToStream = function(actual_time_in_video, comment_text, is_private, end_time) {
 		var fake_id = parseInt(Math.random() * 10000000, 10);
 		var tmp_obj =
 			{
 				'comment_id':         fake_id,
 				'comment_time':       actual_time_in_video,
 				'comment_text':       comment_text,
-				'comment_time_end_h': h,
-				'comment_time_end_m': m,
-				'comment_time_end_s': s,
+				'comment_time_end':   end_time,
 				'user_name':          scope.InteractiveVideo.username,
 				'is_interactive':     '0',
 				'is_private':         is_private
@@ -183,9 +181,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			url:      il.InteractiveVideo.post_comment_url,
 			data:     {
 				'comment_time':       actual_time_in_video,
-				'comment_time_end_h': h,
-				'comment_time_end_m': m,
-				'comment_time_end_s': s,
+				'comment_time_end'  : end_time,
 				'comment_text':      comment_text,
 				'is_private':        is_private
 			},
@@ -199,21 +195,18 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pro.addAjaxFunctionForCommentPosting = function()
 	{
 		$("#ilInteractiveVideoCommentSubmit").on("click", function(e) {
-			var h, m, s;
+			var time;
 			var actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
 			var comment_text = CKEDITOR.instances.comment_text.getData();
 			var is_private = $('#is_private').prop("checked");
 
-			if( $('#comment_time_end').prop( "checked" ))
+			if( $('#comment_time_end_chk').prop( "checked" ))
 			{
-				h = $('#comment_time_end\\[time\\]_h').val();
-				m = $('#comment_time_end\\[time\\]_m').val();
-				s = $('#comment_time_end\\[time\\]_s').val();
+				time = $('#comment_time_end').val();
+				time = time.split(':'); // split it at the colons
+				
+				var end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
 
-				var h_end = parseInt(h, 10) * 3600;
-				var m_end = parseInt(m, 10) * 60;
-				var s_end = parseInt(s, 10);
-				var end_time = h_end + m_end + s_end;
 				if(end_time < parseInt(actual_time_in_video, 10))
 				{
 					$('#endtime_warning').removeClass('ilNoDisplay');
@@ -221,7 +214,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				}
 			}
 
-			pub.postAndAppendFakeCommentToStream(actual_time_in_video, comment_text, is_private, h, m, s);
+			pub.postAndAppendFakeCommentToStream(actual_time_in_video, comment_text, is_private, end_time);
 		});
 	};
 
@@ -266,7 +259,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	{
 		CKEDITOR.instances.comment_text.setData('');
 		$('#is_private').prop( 'checked', false );
-		$('#comment_time_end').prop( 'checked', false );
+		$('#comment_time_end_chk').prop( 'checked', false );
 		$('.end_time_selector').hide( 'fast' );
 		$('.alert-warning').addClass('ilNoDisplay');
 	};
@@ -295,7 +288,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.addCommentTimeChanged = function()
 	{
-		$('#comment_time_end').change(function() {
+		$('#comment_time_end_chk').change(function() {
 			if($(this).is(':checked'))
 			{
 				$('.end_time_selector').show( 'fast' );

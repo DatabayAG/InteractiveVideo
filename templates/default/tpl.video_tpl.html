@@ -71,26 +71,17 @@
 				<div class="col-sm-9">
 					<input type="checkbox" name="is_private" value="1" id="is_private"/> {TXT_IS_PRIVATE}
 				</div>
-				<div class="col-sm-9">
+				<div class="col-sm-12">
 					<div class="ilNoDisplay alert alert-warning" id="endtime_warning">{TXT_ENDTIME_WARNING}</div>
-					<input type="checkbox" name="comment_time_end" value="1" id="comment_time_end"/> {COMMENT_TIME_END}
+					<input type="checkbox" name="comment_time_end_chk" value="1" id="comment_time_end_chk"/> {COMMENT_TIME_END}
 						<div class="form-inline end_time_selector" style="display:none">
-							<select name="comment_time_end[time][h]" id="comment_time_end[time]_h" class="form-control">
-								<option value="00" selected="selected">00</option>
-							</select>
-							<select name="comment_time_end[time][m]" id="comment_time_end[time]_m" class="form-control">
-								<option value="00" selected="selected">00</option>
-							</select>
-							<select name="comment_time_end[time][s]" id="comment_time_end[time]_s" class="form-control">
-								<option value="00" selected="selected">00</option>
-							</select>
-							<div class="help-block">(HH:MM:SS)</div>
+							<div>{COMMENT_TIME_END_PICKER}</div>
 					</div>
 				</div>
 			</div>
 			<div class="ilFormFooter clearfix">
-				<div class="col-sm-9 ilFormRequired"></div>
-				<div class="col-sm-9 ilFormCmds">
+				<div class="col-sm-12 ilFormRequired"></div>
+				<div class="col-sm-12 ilFormCmds ilInteractiveVideoFormCommands">
 					<input id="ilInteractiveVideoCommentSubmit" class="btn btn-default btn-sm" type="submit" value="{TXT_POST}">
 					<button id="ilInteractiveVideoCommentCancel" class="btn btn-default btn-sm" type="button" value="">{TXT_CANCEL}</button>
 				</div>

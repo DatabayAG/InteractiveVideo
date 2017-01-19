@@ -1,0 +1,13 @@
+<div class="input-group bootstrap-timepicker timepicker col-xs-12">
+	<input id="{ID}" name="{ID}" type="text" class="form-control input-small" value="{VALUE}">
+	<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+</div>
+
+<script type="text/javascript">
+	$('#' + "{ID}").timepicker({
+		'showSeconds' : true,
+		'secondStep' : 1,
+		'minuteStep' : 1,
+		'showMeridian' : false
+	});
+</script>

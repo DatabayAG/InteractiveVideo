@@ -21,7 +21,7 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 	/**
 	 * Insert property html
 	 */
-	function insert(&$a_tpl)
+	public function insert($a_tpl)
 	{
 		$this->appendJavascriptFile();
 		$ttpl = new ilTemplate("tpl.textarea_ckeditor.html", true, true, "Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/");

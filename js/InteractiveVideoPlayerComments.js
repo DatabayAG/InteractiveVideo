@@ -194,65 +194,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.fillEndTimeSelector = function(seconds)
 	{
-		var h, m, s, i, options;
-		var h_exists = false;
-		var m_exists = false;
-		var obj = pro.convertSecondsToTimeObject(seconds);
 
-		h = obj.hours; 
-		m = obj.minutes;
-		s = obj.seconds;
-		options = '';
-		for(i=1; i <= h; i++)
-		{
-			if(i<10)
-			{
-				i = '0' + i;
-			}
-			options += '<option value="' + i + '">' + i + '</option>';
-			h_exists = true;
-		}
-		$('#comment_time_end\\[time\\]_h').append(options);
-		options = '';
-		if(h_exists === true)
-		{
-			m = 59;
-		}
-		for(i=1; i <= m; i++)
-		{
-			if(i<10)
-			{
-				i = '0' + i;
-			}
-			options += '<option value="' + i + '">' + i + '</option>';
-			m_exists = true;
-		}
-		$('#comment_time_end\\[time\\]_m').append(options);
-		options = '';
-		if(m_exists === true)
-		{
-			s = 59;
-		}
-		for(i=1; i <= s; i++)
-		{
-			if(i<10)
-			{
-				i = '0' + i;
-			}
-			options += '<option value="' + i + '">' + i + '</option>';
-		}
-		$('#comment_time_end\\[time\\]_s').append(options);
 	};
 
 	pub.preselectActualTimeInVideo = function(seconds)
 	{
-		var obj = pro.convertSecondsToTimeObject(seconds);
+		var obj = pro.secondsToTimeCode(seconds);
 
-		pro.preselectValueOfEndTimeSelection(obj.hours, $('#comment_time_end\\[time\\]_h'));
-
-		pro.preselectValueOfEndTimeSelection(obj.minutes, $('#comment_time_end\\[time\\]_m'));
-
-		pro.preselectValueOfEndTimeSelection(obj.seconds, $('#comment_time_end\\[time\\]_s'));
+		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));
 	};
 
 	pro.isBuildListElementAllowed = function(username)
@@ -320,13 +269,10 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.buildCommentTimeEndHtml = function (comment)
 	{
-		var h, m, s,display_time;
+		var display_time;
 		if(comment.comment_time_end === undefined)
 		{
-			h = parseInt(comment.comment_time_end_h, 10) * 3600;
-			m = parseInt(comment.comment_time_end_m, 10) * 60;
-			s = parseInt(comment.comment_time_end_s, 10);
-			display_time 	= h + m + s;
+			display_time 	= comment.comment_time_end;
 			pro.setCorrectAttributeForTimeInCommentAfterPosting(comment.comment_id, display_time);
 		}
 		else
@@ -416,7 +362,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.buildCommentTagsHtml = function (tags)
 	{
 		var comment_tags    = '';
-		if(tags == null)
+		if(tags == null || tags == '')
 		{
 			comment_tags = '';
 		}
@@ -462,13 +408,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.preselectValueOfEndTimeSelection = function(time, element)
 	{
-		var t = time;
-
-		if(t < 10)
-		{
-			t = '0' + t;
-		}
-		element.val(t);
+		element.val(time);
 	};
 	
 	pub.protect = pro;
