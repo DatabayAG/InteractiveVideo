@@ -104,8 +104,7 @@ is_repeat_info#:#Wenn diese Option aktiviert ist, werden bereits korrekt beantwo
 offline#:#Offline
 status#:#Status
 is_chronologic#:#Alle Kommentare von Beginn an zeigen
-is_chronologic_info#:#Wenn diese Option aktiviert wird, wird die Option 'Alle Kommentare' vorausgewählt und es werden alle Kommentare des gesamten Videos von Beginn an in chronologischer Re
-ihenfolge angezeigt.
+is_chronologic_info#:#Wenn diese Option aktiviert wird, wird die Option 'Alle Kommentare' vorausgewählt und es werden alle Kommentare des gesamten Videos von Beginn an in chronologischer Reihenfolge angezeigt.
 time_end#:#Ende der Passage
 show_response_frequency#:#Zeige Antworthäufigkeiten nach dem Antworten an
 show_response_frequency_info#:#Nachdem die Frage beantwortet wurde, wird unter jeder Antwortoption die relative Häufigkeit in Prozent angezeigt

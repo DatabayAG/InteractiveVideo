@@ -66,4 +66,11 @@ interface ilInteractiveVideoSource
 	 * @return string
 	 */
 	public function getVersion();
+
+	/**
+	 * @param int $obj_id
+	 * @param ilXmlWriter $xml_writer
+	 * @param string $export_path
+	 */
+	public function doExportVideoSource($obj_id, $xml_writer, $export_path);
 }

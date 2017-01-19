@@ -81,7 +81,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 * @param $src_id
 	 * @return ilInteractiveVideoSource
 	 */
-	protected function getVideoSourceObject($src_id)
+	public function getVideoSourceObject($src_id)
 	{
 		$factory = new ilInteractiveVideoSourceFactory();
 		if($this->video_source_object === null)
@@ -148,6 +148,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return $row['source_id'];
 	}
 
+	public function createFromImport()
+	{
+		$a = 0;
+	}
 
 	protected function doCreate()
 	{
@@ -217,7 +221,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		parent::doUpdate();
 		
 		$old_source_id = $this->getOldVideoSource();
-		if($old_source_id != $this->getSourceId())
+		if($old_source_id != null && $old_source_id != $this->getSourceId())
 		{
 			$this->getVideoSourceObject($old_source_id);
 			$this->video_source_object->doDeleteVideoSource($this->getId());

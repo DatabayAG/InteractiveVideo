@@ -205,4 +205,15 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 		}
 		return false;
 	}
+
+	/**
+	 * @param int $obj_id
+	 * @param ilXmlWriter $xml_writer
+	 * @param string $export_path
+	 */
+	public function doExportVideoSource($obj_id, $xml_writer, $export_path)
+	{
+		$youtube_id = $this->doReadVideoSource($obj_id);
+		$xml_writer->xmlElement('YoutubeId', null, (string)$youtube_id);
+	}
 }

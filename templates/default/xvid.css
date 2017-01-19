@@ -203,14 +203,28 @@
     transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }
 .task_icon{
-    color: #909090;
-    padding-left: 3px;
-    font-size: 15px;
+    width: 15px;
+    height: 20px;
+    text-align: left;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+    position: absolute;
 }
 .task_description.closed {
     max-height: 0;
     padding:0;
 }
+.arrow_left{
+     background-image: url(../../../../../../../../../templates/default/images/tree_col.svg);
+ }
+.arrow_down{
+    background-image: url(../../../../../../../../../templates/default/images/tree_exp.svg);
+}
+.task_text{
+    padding-left:20px;
+}
+
 .prototype{
     display:none;
 }

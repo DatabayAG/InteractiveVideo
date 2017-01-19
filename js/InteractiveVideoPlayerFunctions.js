@@ -102,14 +102,14 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			if(! description.hasClass('closed'))
 			{
 				description.addClass('closed');
-				icon.addClass('glyphicon-arrow-down');
-				icon.removeClass('glyphicon-arrow-up');
+				icon.addClass('arrow_left');
+				icon.removeClass('arrow_down');
 			}
 			else
 			{
 				description.removeClass('closed');
-				icon.addClass('glyphicon-arrow-up');
-				icon.removeClass('glyphicon-arrow-down');
+				icon.addClass('arrow_down');
+				icon.removeClass('arrow_left');
 			}
 		});
 	};
