@@ -95,6 +95,11 @@ class ilObjComment
 	protected static $user_name_cache = array();
 
 	/**
+	 * @var array
+	 */
+	protected static $user_image_cache = array();
+
+	/**
 	 * @param int $comment_id
 	 */
 	public function __construct($comment_id = 0)
@@ -302,6 +307,7 @@ class ilObjComment
 			if(!$this->isAnonymized())
 			{
 				$temp['user_name'] = self::lookupUsername($row['user_id']);
+				$temp['user_image'] = self::getUserImageInBase64($row['user_id']);
 			}
 			$temp['comment_title'] 		= $row['comment_title'];
 			$temp['comment_text'] 		= $row['comment_text'];
@@ -393,10 +399,31 @@ class ilObjComment
 			$simple->cloneQuestionObject($key, $value);	
 		}
 	}
+
+	/**
+	 * @param $user_id
+	 * @return string
+	 */
+	public static function getUserImageInBase64($user_id)
+	{
+		if(!array_key_exists($user_id, self::$user_image_cache))
+		{
+			$img_file = ilObjUser::_getPersonalPicturePath($user_id, 'xxsmall');
+			$img_file = preg_split('/\?/', $img_file);
+			$img_file = $img_file[0];
+			if(file_exists($img_file))
+			{
+				$binary = fread(fopen($img_file, "r"), filesize($img_file));
+				self::$user_image_cache[$user_id] = $base64 = 'data:image/jpeg;base64,' . base64_encode($binary);
+			}
+		}
+
+		return self::$user_image_cache[$user_id];
+	}
 	
 	/**
 	 * @param $user_id
-	 * @return mixed
+	 * @return string
 	 */
 	public static function lookupUsername($user_id)
 	{

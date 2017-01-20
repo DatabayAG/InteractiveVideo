@@ -50,9 +50,10 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		if(pro.isBuildListElementAllowed(username))
 		{
 			css_class = pro.getCSSClassForListElement();
-			value =	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class +'">'             +
-							'<div class="message-inner">' + 
-							pub.buildCommentUsernameHtml(username, comment.is_interactive)                   +
+			value =	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class + '">' +
+				'<div class="message-inner">' +
+							pro.buildCommentUserImage(comment)                   +
+							pub.buildCommentUsernameHtml(username, comment.is_interactive) +
 							pro.appendPrivateHtml(comment.is_private) +
 							'<div class="comment_time">' +
 							pro.buildCommentTimeHtml(time, comment.is_interactive)                           +
@@ -391,6 +392,16 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return author_list;
 	};
 
+	pro.buildCommentUserImage = function(comment) 
+	{
+		var image = '';
+		if(comment.user_image !== undefined)
+		{
+			image = '<img src="' + comment.user_image + '"/>';
+		}
+		return '<div class="comment_user_image">' + image + '</div>';
+	};
+	
 	pro.secondsToTimeCode = function(time) 
 	{
 		var obj = pro.convertSecondsToTimeObject(time);

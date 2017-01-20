@@ -330,3 +330,7 @@ body.cke_editable{
 #il_prop_cont_comment_text > div:nth-child(4) > div.form-inline.end_time_selector > div > div > span{
     width: 33px;
 }
+.comment_user_image{
+    float: left;
+    padding-right: 15px;
+}
