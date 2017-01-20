@@ -334,3 +334,9 @@ body.cke_editable{
     float: left;
     padding-right: 15px;
 }
+.comment_user_data{
+    margin-top: -5px;
+}
+.comment_inner_text{
+    padding-top: 5px;
+}

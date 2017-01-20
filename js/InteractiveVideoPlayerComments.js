@@ -53,12 +53,12 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			value =	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class + '">' +
 				'<div class="message-inner">' +
 							pro.buildCommentUserImage(comment)                   +
-							pub.buildCommentUsernameHtml(username, comment.is_interactive) +
+							'<div class="comment_user_data">' + pub.buildCommentUsernameHtml(username, comment.is_interactive) +
 							pro.appendPrivateHtml(comment.is_private) +
 							'<div class="comment_time">' +
 							pro.buildCommentTimeHtml(time, comment.is_interactive)                           +
 							pro.buildCommentTimeEndHtml(comment)                                             +
-							'</div><div class="comment_inner_text">' +
+							'</div></div><div class="comment_inner_text">' +
 							pro.buildCommentTitleHtml(comment.comment_title)                                 +
 							pro.buildCommentTextHtml(comment.comment_text )                                  +
 							pro.buildCommentReplies(comment.replies )                                        + 

@@ -424,8 +424,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		else
 		{
 			$config_tpl->setVariable('USERNAME', ilObjComment::lookupUsername($ilUser->getId()));
+			$config_tpl->setVariable('USER_IMAGE', ilObjComment::getUserImageInBase64($ilUser->getId()));
 		}
-		
 
 		$stop_points = $this->objComment->getStopPoints();
 		$comments = $this->objComment->getContentComments();

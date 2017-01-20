@@ -162,6 +162,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				'comment_text':       comment_text,
 				'comment_time_end':   end_time,
 				'user_name':          scope.InteractiveVideo.username,
+				'user_image':          scope.InteractiveVideo.user_image,
 				'is_interactive':     '0',
 				'is_private':         is_private
 			};
@@ -177,7 +178,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		$.ajax({
 			type:     "POST",
-			dataType: "JSON",
 			url:      il.InteractiveVideo.post_comment_url,
 			data:     {
 				'comment_time':       actual_time_in_video,
