@@ -23,7 +23,7 @@
 .scroll-text {
 	width: 100%!important;
 	background-color:white;
-	height: 35em;
+    height: 40em;
     overflow-y: auto;
 }
 .scroll-text ul {
@@ -31,11 +31,84 @@
 	width: 100%!important;
 	height: 100px;
 	margin: 0;
-	padding-left: 5px;	
+	padding-left: 5px;
+    padding-top: 15px;
 }
 .scroll-text ul li {
 	/*height: 1.5em;*/
 	list-style: none;
+}
+.scroll-text ul li {
+    margin-bottom: 5px;
+    margin-left: 40px;
+    position: relative;
+    margin-right: 40px;
+}
+.scroll-text ul li .message-inner {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 10px;
+    position: relative;
+}
+.scroll-text ul li .message-inner:before {
+    border-right: 10px solid #ddd;
+    border-style: solid;
+    border-width: 10px;
+    color: rgba(0,0,0,0);
+    content: "";
+    display: block;
+    height: 0;
+    position: absolute;
+    left: -20px;
+    top: 6px;
+    width: 0;
+}
+.scroll-text ul li .message-inner:after {
+    border-right: 10px solid #fff;
+    border-style: solid;
+    border-width: 10px;
+    color: rgba(0,0,0,0);
+    content: "";
+    display: block;
+    height: 0;
+    position: absolute;
+    left: -18px;
+    top: 6px;
+    width: 0;
+}
+.scroll-text ul li:before {
+    background: #fff;
+    border-radius: 2px;
+    bottom: -35px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.2);
+    content: "";
+    height: 120%;
+    left: -30px;
+    position: absolute;
+    width: 3px;
+}
+.scroll-text ul li:after {
+    background: #fff;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    content: "";
+    height: 15px;
+    left: -36px;
+    position: absolute;
+    top: 10px;
+    width: 15px;
+}
+.comment_time{
+    font-size:smaller;
+    
+}
+.comment_inner_text{
+
+}
+.private_text{
+    font-size:smaller;
 }
 
 .scroll-text .comment_replies{
@@ -173,11 +246,8 @@
 .crow4{
     background-color: rgba(0, 144, 185, 0.13);
 }
-.activeComment{
-    background-color: rgba(255, 255, 0, 0.38);
-}
-.activeCommentWithoutEndTime{
-    background-color: rgba(255, 255, 0, 0.38);
+.activeCommentWithoutEndTime:after, .activeComment:after{
+    background-color: #b5eab2!important;
 }
 .rf_listener{
     width: 100%;

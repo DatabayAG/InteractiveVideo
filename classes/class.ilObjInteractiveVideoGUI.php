@@ -423,7 +423,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		else
 		{
-			$config_tpl->setVariable('USERNAME', ilUserUtil::getNamePresentation($ilUser->getId()));
+			$config_tpl->setVariable('USERNAME', ilObjComment::lookupUsername($ilUser->getId()));
 		}
 		
 

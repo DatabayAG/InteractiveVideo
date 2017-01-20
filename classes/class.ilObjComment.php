@@ -405,7 +405,7 @@ class ilObjComment
 			$user = new ilObjUser($user_id);
 			if($user->hasPublicProfile())
 			{
-				self::$user_name_cache[$user_id] = $user->getFirstname() . ' ' . $user->getLastname() .':';
+				self::$user_name_cache[$user_id] = $user->getFirstname() . ' ' . $user->getLastname();
 			}
 			else
 			{

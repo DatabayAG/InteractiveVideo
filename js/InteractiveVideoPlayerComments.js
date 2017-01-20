@@ -51,13 +51,17 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			css_class = pro.getCSSClassForListElement();
 			value =	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class +'">'             +
+							'<div class="message-inner">' + 
+							pub.buildCommentUsernameHtml(username, comment.is_interactive)                   +
+							pro.appendPrivateHtml(comment.is_private) +
+							'<div class="comment_time">' +
 							pro.buildCommentTimeHtml(time, comment.is_interactive)                           +
 							pro.buildCommentTimeEndHtml(comment)                                             +
-							pub.buildCommentUsernameHtml(username, comment.is_interactive)                   +
+							'</div><div class="comment_inner_text">' +
 							pro.buildCommentTitleHtml(comment.comment_title)                                 +
 							pro.buildCommentTextHtml(comment.comment_text )                                  +
-							pro.buildCommentReplies(comment.replies )                                        +
-							pro.appendPrivateHtml(comment.is_private)                                        +
+							pro.buildCommentReplies(comment.replies )                                        + 
+							'</div></div>' +
 							pro.buildCommentTagsHtml(comment.comment_tags)                                   +
 					'</li>';
 		}
@@ -370,7 +374,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			comment_tags = '<span class="tag">' + tags.split(',').join('</span> <span class="tag">') + '</span> ';
 		}
-		return '<br/><div class="comment_tags">' + comment_tags + '</div>';
+		return '<div class="comment_tags">' + comment_tags + '</div>';
 	};
 
 	pro.getAllUserWithComment = function()
