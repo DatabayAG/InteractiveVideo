@@ -519,7 +519,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$form = $this->appendFormsFromFactory($form);
 
-		$this->appendDefaultFormOptions($form);
+		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
+		$form->addItem($online);
 
 		return $form;
 	}
@@ -1636,9 +1637,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$is_jump_correct->addSubItem($jump_correct_ts);
 		$feedback_correct->addSubItem($is_jump_correct);
-
+		$this->appendRepositorySelector($feedback_correct, 'feedback_correct_obj');
 		$form->addItem($feedback_correct);
-		$this->appendRepositorySelector($form, 'feedback_correct_obj');
 
 		// Feedback wrong
 		$feedback_one_wrong = xvidUtils::constructTextAreaFormElement('feedback_one_wrong', 'feedback_one_wrong');
@@ -1659,8 +1659,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$is_jump_wrong->addSubItem($jump_wrong_ts);
 		$feedback_one_wrong->addSubItem($is_jump_wrong);
+		$this->appendRepositorySelector($feedback_one_wrong, 'feedback_wrong_obj');
 		$form->addItem($feedback_one_wrong);
-		$this->appendRepositorySelector($form, 'feedback_wrong_obj');
 
 		$show_response_frequency = new ilCheckboxInputGUI($plugin->txt('show_response_frequency'), 'show_response_frequency');
 		$show_response_frequency->setInfo($plugin->txt('show_response_frequency_info'));
@@ -1703,7 +1703,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		);
 
 		$root_ref_id->setInfo($plugin->txt($post_var . '_info'));
-		$form->addItem($root_ref_id);
+		$form->addSubItem($root_ref_id);
 	}
 
 	/**

@@ -402,7 +402,15 @@ class ilObjComment
 	{
 		if(!array_key_exists($user_id, self::$user_name_cache))
 		{
-			self::$user_name_cache[$user_id] = ilUserUtil::getNamePresentation($user_id);
+			$user = new ilObjUser($user_id);
+			if($user->hasPublicProfile())
+			{
+				self::$user_name_cache[$user_id] = $user->getFirstname() . ' ' . $user->getLastname() .':';
+			}
+			else
+			{
+				self::$user_name_cache[$user_id] = '[' . $user->getLogin() . ']';
+			}
 		}
 
 		return self::$user_name_cache[$user_id];

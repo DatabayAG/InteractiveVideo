@@ -181,6 +181,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						'is_repeat'      => array('integer', (int)$_POST['is_repeat']),
 						'is_chronologic' => array('integer', (int)$_POST['is_chronologic']),
 						'is_public'      => array('integer', (int)$_POST['is_public']),
+						'is_online'      => array('integer', (int)$_POST['is_online']),
 						'source_id'      => array('text', ilUtil::stripSlashes($_POST['source_id'])),
 						'is_task'        => array('integer', (int)$_POST['is_task']),
 						'task'           => array('text', ilUtil::stripSlashes($_POST['task']))
