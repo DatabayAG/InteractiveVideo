@@ -248,3 +248,6 @@
 .ilInteractiveVideoFormCommands{
     padding-top: 1em !important;
 }
+#il_prop_cont_show_comment_field{
+    display:none;
+}

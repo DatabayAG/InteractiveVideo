@@ -148,3 +148,5 @@ feedback_correct_obj#:#Feedback Link auf Magazin Objekt bei korrekter Antwort
 feedback_correct_obj_info#:#Feedback Link auf Magazin Objekt bei korrekter Antwort
 feedback_wrong_obj#:#Feedback Link auf Magazin Objekt bei mindestens einer falschen Antwort
 feedback_wrong_obj_info#:#Feedback Link auf Magazin Objekt bei mindestens einer falschen Antwort
+show_comment_field#:#Zeige ein Kommtarfeld an
+show_comment_field_info#:#Zeige ein Kommtarfeld unter der Reflektionsfrage an

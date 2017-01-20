@@ -80,7 +80,11 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.addSelfReflectionLayout = function() {
 		$('.modal-body').append('<div class="modal_feedback"><div class="modal_reflection_footer">' + pro.createButtonButtons('close_form', scope.InteractiveVideo.lang.close_text) +'</div></div>');
-		pro.appendSelfReflectionCommentForm();
+		if(parseInt(pub.QuestionObject.reflection_question_comment, 10) === 1)
+		{
+			pro.appendSelfReflectionCommentForm();
+		}
+
 		pro.appendCloseButtonListener();
 		$.ajax({
 			type:    "POST",

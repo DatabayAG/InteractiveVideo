@@ -112,6 +112,16 @@ class SimpleChoiceQuestion
 	 * @var int
 	 */
 	protected $feedback_wrong_id;
+
+	/**
+	 * @var int
+	 */
+	protected $reflection_question_comment = 0;
+
+	/**
+	 * @var int
+	 */
+	protected $neutral_answer = 0;
 	
 	/**
 	 * @param int $comment_id
@@ -158,6 +168,8 @@ class SimpleChoiceQuestion
 			$this->setFeedbackCorrectId($row['feedback_correct_ref_id']);
 			$this->setFeedbackWrongId($row['feedback_wrong_ref_id']);
 			$this->setRepeatQuestion($row['repeat_question']);
+			$this->setReflectionQuestionComment($row['reflection_question_comment']);
+			#$this->setNeutralAnswer($row['neutral_answer']);
 		}
 
 //		$this->readAnswerDefinitions();
@@ -349,6 +361,8 @@ class SimpleChoiceQuestion
 			$this->setFeedbackCorrectId($row['feedback_correct_ref_id']);
 			$this->setFeedbackWrongId($row['feedback_wrong_ref_id']);
 			$this->setRepeatQuestion($row['repeat_question']);
+			$this->setReflectionQuestionComment($row['reflection_question_comment']);
+			#$this->setNeutralAnswer($row['neutral_answer']);
 			$_POST['question_type'] = $row['type'];
 			$this->create();
 		}
@@ -398,7 +412,9 @@ class SimpleChoiceQuestion
 				'show_response_frequency' => array('integer', $this->getShowResponseFrequency()),
 				'feedback_correct_ref_id' => array('integer', $this->getFeedbackCorrectId()),
 				'feedback_wrong_ref_id' => array('integer', $this->getFeedbackWrongId()),
-				'repeat_question'    => array('integer', $this->getRepeatQuestion())
+				'repeat_question'    => array('integer', $this->getRepeatQuestion()),
+				'reflection_question_comment' => array('integer', $this->getReflectionQuestionComment()),
+				#'neutral_answer' => array('integer', $this->getNeutralAnswer()),
 			));
 		if(count($_POST['answer']) > 0 && $_POST['question_type'] != self::REFLECTION)
 		{
@@ -971,9 +987,8 @@ class SimpleChoiceQuestion
 	{
 		global $ilDB, $ilUser;
 		$usr_id = $ilUser->getId();
-		$res    = $ilDB->queryF('DELETE FROM ' . self::TABLE_NAME_ANSWERS . ' WHERE question_id = %s AND user_id = %s',
+		$ilDB->queryF('DELETE FROM ' . self::TABLE_NAME_ANSWERS . ' WHERE question_id = %s AND user_id = %s',
 			array('integer', 'integer'), array($qid, $usr_id));
-		$ilDB->fetchAssoc($res);
 		$this->removeScore($qid);
 	}
 
@@ -984,9 +999,8 @@ class SimpleChoiceQuestion
 	{
 		global $ilDB, $ilUser;
 		$usr_id = $ilUser->getId();
-		$res    = $ilDB->queryF('DELETE FROM ' . self::TABLE_NAME_SCORE . ' WHERE question_id = %s AND user_id = %s',
+		$ilDB->queryF('DELETE FROM ' . self::TABLE_NAME_SCORE . ' WHERE question_id = %s AND user_id = %s',
 			array('integer', 'integer'), array($qid, $usr_id));
-		$ilDB->fetchAssoc($res);
 	}
 
 	/**
@@ -1078,5 +1092,36 @@ class SimpleChoiceQuestion
 		$this->feedback_wrong_id = $feedback_wrong_id;
 	}
 
+	/**
+	 * @return int
+	 */
+	public function getReflectionQuestionComment()
+	{
+		return $this->reflection_question_comment;
+	}
+
+	/**
+	 * @param int $reflection_question_comment
+	 */
+	public function setReflectionQuestionComment($reflection_question_comment)
+	{
+		$this->reflection_question_comment = $reflection_question_comment;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getNeutralAnswer()
+	{
+		return $this->neutral_answer;
+	}
+
+	/**
+	 * @param int $neutral_answer
+	 */
+	public function setNeutralAnswer($neutral_answer)
+	{
+		$this->neutral_answer = $neutral_answer;
+	}
 
 } 

@@ -733,3 +733,29 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 	}
 }
 ?>
+<#40>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_question'))
+{
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'reflection_question_comment'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_question', 'reflection_question_comment',
+			array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => false,
+				'default' => null
+			));
+	}
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'neutral_answer'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_question', 'neutral_answer',
+			array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => false,
+				'default' => null
+			));
+	}
+}
+?>

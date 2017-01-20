@@ -150,3 +150,5 @@ feedback_correct_obj#:#Feedback Link for Repository Object for correct answer
 feedback_correct_obj_info#:#Feedback Link for Repository Object for correct answer
 feedback_wrong_obj#:#Feedback Link for Repository Object for at least one wrong answer
 feedback_wrong_obj_info#:#Feedback Link for Repository Object for at least one wrong answer
+show_comment_field#:#Show comment field
+show_comment_field_info#:#Show comment field below this reflection question

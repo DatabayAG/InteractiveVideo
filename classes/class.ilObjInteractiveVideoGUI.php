@@ -1666,6 +1666,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$show_response_frequency->setInfo($plugin->txt('show_response_frequency_info'));
 		$form->addItem($show_response_frequency);
 
+		$show_comment_field = new ilCheckboxInputGUI($plugin->txt('show_comment_field'), 'show_comment_field');
+		$show_comment_field->setInfo($plugin->txt('show_comment_field_info'));
+		$form->addItem($show_comment_field);
+
 		$is_interactive = new ilHiddenInputGUI('is_interactive');
 		$is_interactive->setValue(1);
 		$form->addItem($is_interactive);
@@ -1838,6 +1842,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['repeat_question']			= $question_data['question_data']['repeat_question'];
 		$values['feedback_correct_obj']		= $question_data['question_data']['feedback_correct_ref_id'];
 		$values['feedback_wrong_obj']		= $question_data['question_data']['feedback_wrong_ref_id'];
+		$values['show_comment_field']		= $question_data['question_data']['reflection_question_comment'];
+		#$values['neutral_answer']			= $question_data['question_data']['neutral_answer'];
 //		$values['question_correct']			= $question_data['question_data']['question_correct']; //marko
 
 		return $values;
@@ -1959,6 +1965,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$question->setShowResponseFrequency((int)$form->getInput('show_response_frequency'));
 		$question->setRepeatQuestion((int)$form->getInput('repeat_question'));
+		$question->setReflectionQuestionComment((int)$form->getInput('show_comment_field'));
+		#$question->setNeutralAnswer((int)$form->getInput('neutral_answer'));
 		$question->deleteQuestionsIdByCommentId($comment_id);
 		$question->create();
 

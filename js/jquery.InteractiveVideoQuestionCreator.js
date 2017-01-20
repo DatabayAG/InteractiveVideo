@@ -91,12 +91,16 @@ var InteractiveVideoQuestionCreator = (function () {
 			$('#il_prop_cont_answer_text').hide();
 			$('#il_prop_cont_feedback_correct').hide().prev('.ilFormHeader').hide();
 			$('#il_prop_cont_feedback_one_wrong').hide();
+			$('#il_prop_cont_show_response_frequency').hide();
+			$('#il_prop_cont_show_comment_field').show();
 		}
 		else
 		{
 			$('#il_prop_cont_answer_text').show();
 			$('#il_prop_cont_feedback_correct').show().prev('.ilFormHeader').show();
 			$('#il_prop_cont_feedback_one_wrong').show();
+			$('#il_prop_cont_show_response_frequency').show();
+			$('#il_prop_cont_show_comment_field').hide();
 		}
 	};
 

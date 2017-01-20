@@ -140,6 +140,8 @@ class SimpleChoiceQuestionAjaxHandler
 			$jump_wrong_ts           = $row['jump_wrong_ts'];
 			$show_response_frequency = $row['show_response_frequency'];
 			$repeat_question         = $row['repeat_question'];
+			$show_reflection_question_comment = $row['reflection_question_comment'];
+			#$neutral_answer         = $row['neutral_answer'];
 			$counter++;
 		}
 
@@ -173,7 +175,9 @@ class SimpleChoiceQuestionAjaxHandler
 		$build_json['is_jump_wrong']           = $is_jump_wrong;
 		$build_json['jump_wrong_ts']           = $jump_wrong_ts;
 		$build_json['show_response_frequency'] = $show_response_frequency;
+		$build_json['reflection_question_comment'] = $show_reflection_question_comment;
 		$build_json['repeat_question']         = $repeat_question;
+		#$build_json['neutral_answer']         = $neutral_answer;
 
 		if(sizeof($answered) > 0)
 		{
