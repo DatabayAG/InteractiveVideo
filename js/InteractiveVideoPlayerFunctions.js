@@ -224,10 +224,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			var actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
 			var comment_text = CKEDITOR.instances['text_reflection_comment_' + comment_id].getData();
 			var is_private = $('#is_private_modal').prop("checked");
-
 			$.ajax({
 				type:     "POST",
-				dataType: "JSON",
 				url:      il.InteractiveVideo.post_comment_url,
 				data:     {
 					'comment_time':      actual_time_in_video,
