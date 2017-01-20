@@ -251,3 +251,9 @@
 #il_prop_cont_show_comment_field{
     display:none;
 }
+.cke_chrome, .cke_button, .cke_toolgroup{
+    border-radius: 0px !important;
+}
+body.cke_editable{
+    margin:0 !important;
+}
