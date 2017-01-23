@@ -401,6 +401,10 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			image = '<img src="' + decode[user_id] + '"/>';
 		}
+		else if('user_image' in comment)
+		{
+			image = '<img src="' + comment.user_image + '"/>';
+		}
 		return '<div class="comment_user_image">' + image + '</div>';
 	};
 	
