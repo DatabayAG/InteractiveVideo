@@ -343,3 +343,6 @@ body.cke_editable{
 .question_mark_comment{
     height: 25px;
 }
+.feedback_link_more{
+    text-align:center;
+}
