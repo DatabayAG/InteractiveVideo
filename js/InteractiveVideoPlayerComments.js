@@ -312,7 +312,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			name  = '[' + scope.InteractiveVideo.lang.question_text + ']';
 		}
-		return 	'<span class="comment_username"> ' + name + '</span> ';
+		return 	'<span class="comment_username"> ' + name + '</span>';
 	};
 
 	pro.buildCommentTitleHtml = function (title)
@@ -346,7 +346,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	
 	pub.getCommentRepliesHtml = function(reply)
 	{
-		return '<div class="reply_comment reply_comment_' + reply.comment_id + '">' + pub.buildCommentUsernameHtml(reply.user_name, reply.is_interactive) + reply.comment_text + ' ' + pro.appendPrivateHtml(reply.is_private) + '</div>';
+		return '<div class="reply_comment reply_comment_' + reply.comment_id + '">' + pub.buildCommentUsernameHtml(reply.user_name, reply.is_interactive) + ': ' + reply.comment_text + ' ' + pro.appendPrivateHtml(reply.is_private) + '</div>';
 	};
 
 	pro.appendPrivateHtml = function (is_private)
@@ -405,6 +405,12 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			image = '<img src="' + comment.user_image + '"/>';
 		}
+		
+		if(parseInt(comment.is_interactive, 10) === 1)
+		{
+			image = '<img class="question_mark_comment" src="Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/templates/images/question_mark.svg"/>'
+		}
+		
 		return '<div class="comment_user_image">' + image + '</div>';
 	};
 	

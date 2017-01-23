@@ -340,3 +340,6 @@ body.cke_editable{
 .comment_inner_text{
     padding-top: 5px;
 }
+.question_mark_comment{
+    height: 25px;
+}
