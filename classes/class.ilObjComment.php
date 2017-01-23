@@ -306,8 +306,9 @@ class ilObjComment
 			$temp['user_name'] = '';
 			if(!$this->isAnonymized())
 			{
-				$temp['user_name'] = self::lookupUsername($row['user_id']);
-				$temp['user_image'] = self::getUserImageInBase64($row['user_id']);
+				$temp['user_name']	= self::lookupUsername($row['user_id']);
+				self::getUserImageInBase64($row['user_id']);
+				$temp['user_id']	= $row['user_id'];
 			}
 			$temp['comment_title'] 		= $row['comment_title'];
 			$temp['comment_text'] 		= $row['comment_text'];
@@ -688,4 +689,11 @@ class ilObjComment
 		$this->is_reply_to = $is_reply_to;
 	}
 
+	/**
+	 * @return array
+	 */
+	public static function getUserImageCache()
+	{
+		return self::$user_image_cache;
+	}
 }

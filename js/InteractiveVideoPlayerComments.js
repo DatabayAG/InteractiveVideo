@@ -395,9 +395,11 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.buildCommentUserImage = function(comment) 
 	{
 		var image = '';
-		if(comment.user_image !== undefined)
+		var user_id = comment.user_id;
+		var decode = JSON.parse(il.InteractiveVideo.user_image_cache);
+		if(comment.user_id !== undefined && user_id in decode)
 		{
-			image = '<img src="' + comment.user_image + '"/>';
+			image = '<img src="' + decode[user_id] + '"/>';
 		}
 		return '<div class="comment_user_image">' + image + '</div>';
 	};
