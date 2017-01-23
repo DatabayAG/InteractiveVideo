@@ -98,6 +98,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$this->ctrl->forwardCommand($md_gui);
 				break;
 
+			case 'ilpropertyformgui':
+				$form = $this->initQuestionForm();
+				$this->ctrl->forwardCommand($form);
+				break;
+
 			case 'ilinteractivevideolearningprogressgui':
 				$ilTabs->setTabActive('learning_progress');
 				$plugin->includeClass('class.ilInteractiveVideoLearningProgressGUI.php');
@@ -175,7 +180,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 						break;
 					case 'getQuestionPerAjax':
 					case 'postAnswerPerAjax':
-					case 'handleExplorerCommand':
 						$this->checkPermission('read');
 						$this->$cmd();
 						break;
