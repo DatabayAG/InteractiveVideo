@@ -412,7 +412,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.refreshMathJaxView = function()
 	{
-		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+		if (typeof MathJax != 'undefined') 
+		{
+			MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+		}
 	};
 
 	pub.protect = pro;
