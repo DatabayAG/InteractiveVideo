@@ -142,7 +142,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 				$('#ilQuestionModal').modal('hide');
 				scope.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(feedback.time);
 			});
-			if(feedback.feedback_link !== '')
+			if(feedback.feedback_link !== undefined && feedback.feedback_link !== '')
 			{
 				modal.append('<div class="learning_recommendation">' + scope.InteractiveVideo.lang.more_information + ': <br/><div class="feedback_link_more">' + '<img src="' + feedback.feedback_icon + '"/>' + feedback.feedback_link + '</div></div>');
 			}

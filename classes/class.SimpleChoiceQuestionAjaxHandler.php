@@ -10,6 +10,21 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestio
  */
 class SimpleChoiceQuestionAjaxHandler
 {
+	/**
+	 * @param $feedback_ref_id
+	 * @param $json
+	 * @return mixed
+	 */
+	private function appendFeedback($feedback_ref_id, $json)
+	{
+		if($feedback_ref_id > 0)
+		{
+			$json['feedback_link'] = $this->getLinkIfReadAccessForObjectByRefId($feedback_ref_id);
+			$obj                   = ilObjectFactory::getInstanceByRefId($feedback_ref_id);
+			$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
+		}
+		return $json;
+	}
 
 	/**
 	 * @param int $qid question_id
@@ -37,9 +52,8 @@ class SimpleChoiceQuestionAjaxHandler
 				{
 					$start_div = '<div class="neutral">';
 				}
-				$json['feedback_link'] = $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_wrong_ref_id']);
-				$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_wrong_ref_id']);
-				$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
+
+				$json                  = $this->appendFeedback($feedback['feedback_wrong_ref_id'], $json);
 				$json['html']          = $start_div . $feedback['feedback_one_wrong']  . '</div>';
 				$json['is_timed']      = $feedback['is_jump_wrong'];
 				$json['time']          = $feedback['jump_wrong_ts'];
@@ -59,9 +73,7 @@ class SimpleChoiceQuestionAjaxHandler
 					$start_div = '<div class="neutral">';
 				}
 
-				$json['feedback_link'] =  $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_correct_ref_id']);
-				$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_correct_ref_id']);
-				$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
+				$json                  = $this->appendFeedback($feedback['feedback_correct_ref_id'], $json);
 				$json['html']          = $start_div . $feedback['feedback_correct'] .'</div>';
 				$json['is_timed']      = $feedback['is_jump_correct'];
 				$json['time']          = $feedback['jump_correct_ts'];
