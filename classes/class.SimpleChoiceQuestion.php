@@ -905,6 +905,10 @@ class SimpleChoiceQuestion
 	 */
 	public function saveAnswer($qid, $answers)
 	{
+		/**
+		 * $ilDB ilDB
+		 * 
+		 */
 		global $ilDB, $ilUser;
 
 		$usr_id = $ilUser->getId();
@@ -943,7 +947,10 @@ class SimpleChoiceQuestion
 				{
 					$points = 0;
 				}
-
+			}
+			if(sizeof($answers) == 0)
+			{
+				$points = 0;
 			}
 		}
 		else if($type === self::REFLECTION)
