@@ -353,6 +353,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$question->setVariable('QUESTION_TYPE', 0);
 			$question->setVariable('QUESTION_TEXT', '');
 		}
+		$lng = ilInteractiveVideoPlugin::getInstance();
+		$question->setVariable('LABEL_FEEDBACK_NEUTRAL',		$lng->txt('feedback_neutral'));
+		$question->setVariable('LABEL_JUMP_NEUTRAL',			$lng->txt('feedback_jump_neutral'));
+		$question->setVariable('LABEL_JUMP_NEUTRAL_INFO',		$lng->txt('feedback_jump_neutral_info'));
+		$question->setVariable('LABEL_REPOSITORY_NEUTRAL',		$lng->txt('feedback_repository_neutral'));
+		$question->setVariable('LABEL_REPOSITORY_NEUTRAL_INFO',	$lng->txt('feedback_repository_neutral_info'));
+		$question->setVariable('LABEL_FEEDBACK_CORRECT',		$lng->txt('feedback_correct'));
+		$question->setVariable('LABEL_JUMP_CORRECT',			$lng->txt('is_jump_correct'));
+		$question->setVariable('LABEL_JUMP_CORRECT_INFO',		$lng->txt('is_jump_correct_info'));
+		$question->setVariable('LABEL_REPOSITORY_CORRECT',		$lng->txt('feedback_correct_obj'));
+		$question->setVariable('LABEL_REPOSITORY_CORRECT_INFO',	$lng->txt('feedback_correct_obj_info'));
 		$question->setVariable('QUESTION_ID', $question_id);
 		return $question->get();
 	}
@@ -1582,15 +1593,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$form->addItem($time);
 
-		/*$time_end = new ilInteractiveVideoTimePicker($plugin->txt('time_end'), 'comment_time_end');
-
-		if(isset($_POST['comment_time_end']))
-		{
-			$seconds = $_POST['comment_time_end'];
-			$time_end->setValueByArray(array('comment_time_end' => (int)$seconds));
-		}
-		$form->addItem($time_end);
-		*/
 		$repeat_question = new ilCheckboxInputGUI($plugin->txt('repeat_question'), 'repeat_question');
 		$repeat_question->setInfo($plugin->txt('repeat_question_info'));
 		$form->addItem($repeat_question);
@@ -1603,6 +1605,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$section_header->setTitle($plugin->txt('question'));
 		$form->addItem($section_header);
 
+		$neutral_type = new ilSelectInputGUI($plugin->txt('neutral_type'), 'neutral_type');
+		$neutral_type_options = array(0 => $plugin->txt('with_correct'), 1 => $plugin->txt('neutral'));
+
+		$neutral_type->setOptions($neutral_type_options);
+		$neutral_type->setInfo($plugin->txt('neutral_type_info'));
+		$form->addItem($neutral_type);
+		
 		$question_type = new ilSelectInputGUI($plugin->txt('question_type'), 'question_type');
 		$type_options = array(0 => $plugin->txt('single_choice'), 1 => $plugin->txt('multiple_choice'), 2 => $plugin->txt('reflection'));
 
@@ -1849,7 +1858,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['feedback_correct_obj']		= $question_data['question_data']['feedback_correct_ref_id'];
 		$values['feedback_wrong_obj']		= $question_data['question_data']['feedback_wrong_ref_id'];
 		$values['show_comment_field']		= $question_data['question_data']['reflection_question_comment'];
-		#$values['neutral_answer']			= $question_data['question_data']['neutral_answer'];
+		$values['neutral_type']				= $question_data['question_data']['neutral_answer'];
 //		$values['question_correct']			= $question_data['question_data']['question_correct']; //marko
 
 		return $values;
@@ -1916,10 +1925,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
 
 			// calculate seconds
-			$comment_time = $form->getInput('comment_time');
-			$this->objComment->setCommentTime($comment_time);
-			$comment_time_end = $form->getInput('comment_time_end');
-			$this->objComment->setCommentTimeEnd($comment_time_end);
+			$this->objComment->setCommentTime($form->getInput('comment_time'));
+			$this->objComment->setCommentTimeEnd($form->getInput('comment_time_end'));
 			$this->objComment->update();
 
 			$this->performQuestionRefresh($comment_id, $form);
@@ -1954,25 +1961,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question->setShowCorrectIcon((int)$form->getInput('show_correct_icon'));
 		$question->setFeedbackCorrectId((int)$form->getInput('feedback_correct_obj'));
 		$question->setFeedbackWrongId((int)$form->getInput('feedback_wrong_obj'));
-
-		$jmp_correct_time = $form->getInput('jump_correct_ts');
-		$correct_seconds  = $jmp_correct_time['time']['h'] * 3600
-			+ $jmp_correct_time['time']['m'] * 60
-			+ $jmp_correct_time['time']['s'];
-		$question->setJumpCorrectTs($correct_seconds);
+		
+		$question->setJumpCorrectTs((int) $form->getInput('jump_correct_ts'));
 
 		$question->setIsJumpWrong((int)$form->getInput('is_jump_wrong'));
 		$question->setShowWrongIcon((int)$form->getInput('show_wrong_icon'));
-		$jmp_wrong_time = $form->getInput('jump_wrong_ts');
-		$wrong_seconds  = $jmp_wrong_time['time']['h'] * 3600
-			+ $jmp_wrong_time['time']['m'] * 60
-			+ $jmp_wrong_time['time']['s'];
-		$question->setJumpWrongTs($wrong_seconds);
+		$question->setJumpWrongTs((int)$form->getInput('jump_wrong_ts'));
 
 		$question->setShowResponseFrequency((int)$form->getInput('show_response_frequency'));
 		$question->setRepeatQuestion((int)$form->getInput('repeat_question'));
 		$question->setReflectionQuestionComment((int)$form->getInput('show_comment_field'));
-		#$question->setNeutralAnswer((int)$form->getInput('neutral_answer'));
+		$question->setNeutralAnswer((int)$form->getInput('neutral_type'));
 		$question->deleteQuestionsIdByCommentId($comment_id);
 		$question->create();
 
@@ -1997,6 +1996,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$question->setVariable('JSON', json_encode(array()));
 			$question->setVariable('QUESTION_TYPE', 0);
 		}
+
 		return $question->get();
 	}
 

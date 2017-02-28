@@ -12,19 +12,14 @@ class SimpleChoiceQuestion
 	const TABLE_NAME_COMMENTS		= 'rep_robj_xvid_comments';
 	const TABLE_NAME_SCORE			= 'rep_robj_xvid_score';
 	const TABLE_NAME_ANSWERS		= 'rep_robj_xvid_answers';
-	
-	/**
-	 *
-	 */
+
 	const SINGLE_CHOICE = 0;
-	/**
-	 *
-	 */
 	const MULTIPLE_CHOICE = 1;
-	/**
-	 *
-	 */
 	const REFLECTION = 2;
+
+	const CORRECT_ANSWERS = 0;
+	const NEUTRAL_ANSWERS = 1;
+
 	/**
 	 * @var integer
 	 */
@@ -169,7 +164,7 @@ class SimpleChoiceQuestion
 			$this->setFeedbackWrongId($row['feedback_wrong_ref_id']);
 			$this->setRepeatQuestion($row['repeat_question']);
 			$this->setReflectionQuestionComment($row['reflection_question_comment']);
-			#$this->setNeutralAnswer($row['neutral_answer']);
+			$this->setNeutralAnswer($row['neutral_answer']);
 		}
 
 //		$this->readAnswerDefinitions();
@@ -362,7 +357,7 @@ class SimpleChoiceQuestion
 			$this->setFeedbackWrongId($row['feedback_wrong_ref_id']);
 			$this->setRepeatQuestion($row['repeat_question']);
 			$this->setReflectionQuestionComment($row['reflection_question_comment']);
-			#$this->setNeutralAnswer($row['neutral_answer']);
+			$this->setNeutralAnswer($row['neutral_answer']);
 			$_POST['question_type'] = $row['type'];
 			$this->create();
 		}
@@ -414,7 +409,7 @@ class SimpleChoiceQuestion
 				'feedback_wrong_ref_id' => array('integer', $this->getFeedbackWrongId()),
 				'repeat_question'    => array('integer', $this->getRepeatQuestion()),
 				'reflection_question_comment' => array('integer', $this->getReflectionQuestionComment()),
-				#'neutral_answer' => array('integer', $this->getNeutralAnswer()),
+				'neutral_answer' => array('integer', $this->getNeutralAnswer()),
 			));
 		if(count($_POST['answer']) > 0 && $_POST['question_type'] != self::REFLECTION)
 		{
@@ -699,7 +694,7 @@ class SimpleChoiceQuestion
 					$status = false;
 				}
 			}
-			if($correct === 0)
+			if($correct === 0 && ! ($this->getNeutralAnswer() == 1))
 			{
 				$status = false;
 			}
@@ -951,6 +946,10 @@ class SimpleChoiceQuestion
 			$points = 1;
 		}
 		
+		if($this->getNeutralAnswer() === self::NEUTRAL_ANSWERS)
+		{
+			$points = 0;
+		}
 		$ilDB->insert(self::TABLE_NAME_SCORE,
 			array(
 				'question_id' => array('integer', $qid),

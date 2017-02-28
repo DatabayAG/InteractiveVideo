@@ -23,50 +23,69 @@ class SimpleChoiceQuestionAjaxHandler
 		$json     = array();
 		if(is_array($feedback))
 		{
-			if($score === 0)
+			if($feedback['neutral_answer'] != 1)
 			{
-				if($feedback['wrong'] === null)
-				{
-					$feedback['wrong'] = '';
-				}
-				if($feedback['show_wrong_icon'])
-				{
-					$start_div = '<div class="wrong">';
+					if($score === 0)
+					{
+						if($feedback['wrong'] === null)
+						{
+							$feedback['wrong'] = '';
+						}
+						if($feedback['show_wrong_icon'])
+						{
+							$start_div = '<div class="wrong">';
+						}
+						else
+						{
+							$start_div = '<div class="neutral">';
+						}
+						$json['feedback_link'] = $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_wrong_ref_id']);
+						$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_wrong_ref_id']);
+						$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
+						$json['html']          = $start_div . $feedback['feedback_one_wrong']  . '</div>';
+						$json['is_timed']      = $feedback['is_jump_wrong'];
+						$json['time']          = $feedback['jump_wrong_ts'];
+					}
+					else
+					{
+						if($feedback['correct'] === null)
+						{
+							$feedback['correct'] = '';
+						}
+						if($feedback['show_correct_icon'])
+						{
+							$start_div = '<div class="correct">';
+						}
+						else
+						{
+							$start_div = '<div class="neutral">';
+						}
+	
+						$json['feedback_link'] =  $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_correct_ref_id']);
+						$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_correct_ref_id']);
+						$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
+						$json['html']          = $start_div . $feedback['feedback_correct'] .'</div>';
+						$json['is_timed']      = $feedback['is_jump_correct'];
+						$json['time']          = $feedback['jump_correct_ts'];
+					}
 				}
 				else
 				{
+					if($feedback['correct'] === null)
+					{
+						$feedback['correct'] = '';
+					}
 					$start_div = '<div class="neutral">';
-				}
-				$json['feedback_link'] = $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_wrong_ref_id']);
-				$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_wrong_ref_id']);
-				$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
-				$json['html']          = $start_div . $feedback['feedback_one_wrong']  . '</div>';
-				$json['is_timed']      = $feedback['is_jump_wrong'];
-				$json['time']          = $feedback['jump_wrong_ts'];
-			}
-			else
-			{
-				if($feedback['correct'] === null)
-				{
-					$feedback['correct'] = '';
-				}
-				if($feedback['show_correct_icon'])
-				{
-					$start_div = '<div class="correct">';
-				}
-				else
-				{
-					$start_div = '<div class="neutral">';
-				}
 
-				$json['feedback_link'] =  $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_correct_ref_id']);
-				$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_correct_ref_id']);
-				$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
-				$json['html']          = $start_div . $feedback['feedback_correct'] .'</div>';
-				$json['is_timed']      = $feedback['is_jump_correct'];
-				$json['time']          = $feedback['jump_correct_ts'];
+					$json['feedback_link'] =  $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_correct_ref_id']);
+					$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_correct_ref_id']);
+					$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
+					$json['html']          = $start_div . $feedback['feedback_correct'] .'</div>';
+					$json['is_timed']      = $feedback['is_jump_correct'];
+					$json['time']          = $feedback['jump_correct_ts'];
+				}
 			}
-		}
+			
 		$simple                     = new SimpleChoiceQuestionStatistics();
 		$json['response_frequency'] = $simple->getResponseFrequency((int)$qid);
 		return json_encode($json);

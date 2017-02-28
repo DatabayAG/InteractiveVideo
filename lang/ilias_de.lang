@@ -151,3 +151,14 @@ feedback_wrong_obj_info#:#Feedback Link auf Magazin Objekt bei mindestens einer 
 show_comment_field#:#Zeige ein Kommtarfeld an
 show_comment_field_info#:#Zeige ein Kommtarfeld unter der Reflektionsfrage an
 more_informations#:#Weiterführende Informationen
+neutral_type#:#Bewertung
+with_correct#:#Mit korrekter Antwort
+neutral#:#Neutrale Antworten
+neutral_type_info#:#Wenn die Option Neutrale Anworten ausgewählt ist, gibt es keine richtige Lösung für diese Aufgabe
+feedback_neutral#:#'Feedback
+feedback_jump_neutral_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblended.
+feedback_jump_neutral#:#Sprungmarke
+feedback_repository_neutral#:#Feedback Link zu einem Repository Object
+feedback_repository_neutral_info#:#Feedback Link zu einem Repository Object
+neutral_questions#:#Neutrale Fragen
+neutral_questions#:#Neutrale Frage

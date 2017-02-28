@@ -51,6 +51,7 @@ var InteractiveVideoQuestionCreator = (function () {
 			return false;
 		});
 		pro.showHideFormElementsForReflectionType();
+		pro.showHideFormElementsPointsForNeutralAnswers();
 	};
 
 	pro.createQuestionForm = function() {
@@ -104,10 +105,46 @@ var InteractiveVideoQuestionCreator = (function () {
 		}
 	};
 
+	pro.showHideFormElementsPointsForNeutralAnswers = function()
+	{
+		var value = parseInt($('#neutral_type').val(), 10);
+		if( value === 0)
+		{
+
+			$('label[for="feedback_correct"]').html(IVQuestionCreator.lang.correct.label_feedback);
+			$('label[for="is_jump_correct"]').html(IVQuestionCreator.lang.correct.label_jump);
+			$('#il_prop_cont_is_jump_correct .help-block').html(IVQuestionCreator.lang.correct.label_jump_info);
+			$('label[for="feedback_correct_obj"]').html(IVQuestionCreator.lang.correct.label_repository);
+			$('#il_prop_cont_feedback_correct_obj .help-block').html(IVQuestionCreator.lang.correct.label_repository_info);
+			$('.correct_solution').show();
+			$('#il_prop_cont_show_correct_icon').show();
+			$('#il_prop_cont_feedback_one_wrong').show();
+			$('#answer_table').find('th').eq(1).show();
+		}
+		else
+		{
+			$('label[for="feedback_correct"]').html(IVQuestionCreator.lang.neutral.label_feedback);
+			$('label[for="is_jump_correct"]').html(IVQuestionCreator.lang.neutral.label_jump);
+			$('#il_prop_cont_is_jump_correct .help-block').html(IVQuestionCreator.lang.neutral.label_jump_info);
+			$('label[for="feedback_correct_obj"]').html(IVQuestionCreator.lang.neutral.label_repository);
+			$('#il_prop_cont_feedback_correct_obj .help-block').html(IVQuestionCreator.lang.neutral.label_repository_info);
+
+			$('.correct_solution').hide();
+			$('#il_prop_cont_feedback_one_wrong').hide();
+			$('#il_prop_cont_show_correct_icon').hide();
+			$('#answer_table').find('th').eq(1).hide();
+		}
+	};
+
 	pro.appendSingleListener = function() {
 		$('#question_type').on('change', function (){
 			IVQuestionCreator.type = parseInt($(this).val(),10);
 			pro.showHideFormElementsForReflectionType();
+		});
+
+		$('#neutral_type').on('change', function ()
+		{
+			pro.showHideFormElementsPointsForNeutralAnswers();
 		});
 	};
 

@@ -68,6 +68,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	protected $video_source_object;
 
 	/**
+	 * @var 
+	 */
+	protected $video_source_import_object;
+	
+	/**
 	 * @var int
 	 */
 	protected $task_active = 0;
@@ -146,11 +151,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$row = $ilDB->fetchAssoc($res);
 
 		return $row['source_id'];
-	}
-
-	public function createFromImport()
-	{
-		$a = 0;
 	}
 
 	protected function doCreate()
@@ -651,6 +651,22 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	public function setTask($task)
 	{
 		$this->task = $task;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getVideoSourceImportObject()
+	{
+		return $this->video_source_import_object;
+	}
+
+	/**
+	 * @param mixed $video_source_import_object
+	 */
+	public function setVideoSourceImportObject($video_source_import_object)
+	{
+		$this->video_source_import_object = $video_source_import_object;
 	}
 
 	/**

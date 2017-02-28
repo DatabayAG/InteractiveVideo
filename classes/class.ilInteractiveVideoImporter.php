@@ -2,6 +2,7 @@
 require_once './Services/Export/classes/class.ilXmlImporter.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjInteractiveVideo.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilInteractiveVideoXMLParser.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('../VideoSources/class.ilInteractiveVideoSourceFactory.php');
 /**
  * Class ilInteractiveVideoImporter
  */
@@ -27,11 +28,16 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 	{
 		$this->init();
 		$this->xvid_object = new ilObjInteractiveVideo();
+
 		$parser = new ilInteractiveVideoXMLParser($this->xvid_object, $this->getXmlFile());
 		$parser->setImportDirectory($this->getImportDirectory());
 		$parser->startParsing();
 		$this->xvid_object = $parser->getObjInteractiveVideo();
-		$this->xvid_object->createFromImport();
+		$factory = new ilInteractiveVideoSourceFactory();
+		$source_object = $factory->getVideoSourceObject($this->xvid_object->getSourceId());
+		$source_object->doImportVideoSource($a_id, $this->xvid_object->getVideoSourceImportObject(), '');
+		$a = 0;
+		#$this->xvid_object->create(true);
 	}
 
 	/**

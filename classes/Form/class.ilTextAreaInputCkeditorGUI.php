@@ -23,6 +23,7 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 	 */
 	public function insert($a_tpl)
 	{
+		//todo check if mathjax is enabled
 		$this->appendJavascriptFile();
 		$ttpl = new ilTemplate("tpl.textarea_ckeditor.html", true, true, "Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/");
 

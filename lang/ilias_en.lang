@@ -153,3 +153,14 @@ feedback_wrong_obj_info#:#Feedback Link for Repository Object for at least one w
 show_comment_field#:#Show comment field
 show_comment_field_info#:#Show comment field below this reflection question
 more_informations#:#More Information
+neutral_type#:#Evaluation
+with_correct#:#With corrects answers
+neutral#:#Neutral answers
+neutral_type_info#:#If the option neutral answers is selected, there is no correct solution
+feedback_neutral#:#Feedback
+feedback_jump_neutral_info#:#In case the question was answered, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
+feedback_jump_neutral#:#Use Jump Label
+feedback_repository_neutral#:#Feedback Link for Repository Object
+feedback_repository_neutral_info#:#Feedback Link for Repository Object
+neutral_questions#:#Neutral Questions
+neutral_question#:#Neutral Question

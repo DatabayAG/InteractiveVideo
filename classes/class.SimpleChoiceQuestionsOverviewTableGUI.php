@@ -42,6 +42,7 @@ class SimpleChoiceQuestionsOverviewTableGUI extends ilTable2GUI
 		$this->addColumn('', 'question_id');
 		$this->addColumn($a_parent_obj->plugin->txt('title_of_question'), 'title_of_question');
 		$this->addColumn($a_parent_obj->plugin->txt('user_answered'), 'user_answered');
+		$this->addColumn($a_parent_obj->plugin->txt('neutral_question'), 'neutral_question');
 		$this->addColumn($a_parent_obj->plugin->txt('user_correct'), 'user_correct');
 		$this->addColumn($a_parent_obj->plugin->txt('percentage'), 'percentage');
 		$this->setSelectAllCheckbox('question_id');
@@ -77,6 +78,9 @@ class SimpleChoiceQuestionsOverviewTableGUI extends ilTable2GUI
 		$this->tpl->setVariable('QUESTION_ID', ilUtil::formCheckbox(0, 'question_id[]', $a_set['question_id']));
 		$this->tpl->setVariable('COMMENT_TITLE', $a_set['comment_title']);
 		$this->tpl->setVariable('USER_ANSWERED', $a_set['answered']);
+		$txt_value =  $a_set['neutral_question'] == 1 ? 'yes' : 'no';
+		$value = $this->lng->txt($txt_value);
+		$this->tpl->setVariable('NEUTRAL_QUESTION', $value);
 		$this->tpl->setVariable('USER_ANSWERED_CORRECT', $a_set['correct']);
 		$this->tpl->setVariable('PERCENTAGE', $a_set['percentage']);
 		$this->ctrl->setParameter($this->parent_obj, 'user_id', $a_set['user_id']);

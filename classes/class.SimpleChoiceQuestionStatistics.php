@@ -42,7 +42,7 @@ class SimpleChoiceQuestionStatistics
 		$questions_for_object = $this->getQuestionCountForObject($oid);
 
 		$res     = $ilDB->queryF('
-			SELECT score.user_id, sum(points) points  
+			SELECT score.user_id, sum(points) points, count(neutral_answer) as neutral 
 			FROM 	rep_robj_xvid_comments comments, 
 				 	rep_robj_xvid_question questions, 
 				 	rep_robj_xvid_score score  
@@ -52,6 +52,7 @@ class SimpleChoiceQuestionStatistics
 			GROUP BY user_id',
 			array('integer'), array((int)$oid)
 		);
+
 		$results = array();
 		$counter = 0;
 		while($row = $ilDB->fetchAssoc($res))
@@ -60,7 +61,17 @@ class SimpleChoiceQuestionStatistics
 			$results[$counter]['user_id']    = $row['user_id'];
 			$results[$counter]['answered']   = $this->getAnsweredQuestionsFromUser($oid, $row['user_id']);
 			$results[$counter]['correct']    = $row['points'];
-			$results[$counter]['percentage'] = round(($row['points'] / $questions_for_object) * 100, 2);
+			$results[$counter]['neutral_questions']    = $row['neutral'];
+			$answer_with_point               = $questions_for_object - $row['neutral'];
+			if($answer_with_point == 0)
+			{
+				$percentage = 100;
+			}
+			else
+			{
+				$percentage = round(($row['points'] / ($answer_with_point)) * 100, 2);
+			}
+			$results[$counter]['percentage'] = $percentage;
 			$counter++;
 		}
 
@@ -195,7 +206,7 @@ class SimpleChoiceQuestionStatistics
 		 */
 		global $ilDB;
 		$res       = $ilDB->queryF(
-			'SELECT questions.question_id, score.user_id, score.points, comments.comment_id, comments.comment_title
+			'SELECT questions.question_id, questions.neutral_answer, score.user_id, score.points, comments.comment_id, comments.comment_title
 			FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
 			LEFT JOIN rep_robj_xvid_score score ON questions.question_id = score.question_id
 			WHERE comments.comment_id = questions.comment_id
@@ -219,6 +230,7 @@ class SimpleChoiceQuestionStatistics
 			}
 			$questions[$row['question_id']]['comment_id']    = $row['comment_id'];
 			$questions[$row['question_id']]['comment_title'] = $row['comment_title'];
+			$questions[$row['question_id']]['neutral_answer'] = $row['neutral_answer'];
 
 		}
 		$results = array();
@@ -230,14 +242,25 @@ class SimpleChoiceQuestionStatistics
 			$results[$counter]['comment_title'] = $value['comment_title'];
 			$results[$counter]['answered']      = $value['answered'];
 			$results[$counter]['correct']       = $value['correct'];
-			if($value['answered'] > 0)
+			$results[$counter]['neutral_question'] = $value['neutral_answer'];
+			if($value['neutral_answer'] == 1)
 			{
-				$results[$counter]['percentage'] = round(($value['correct'] / $value['answered']) * 100, 2);
+				$results[$counter]['percentage'] = 100;
 			}
 			else
 			{
-				$results[$counter]['percentage'] = 0;
+				$percentage = round(($value['correct'] / $value['answered']) * 100, 2);
+				if($value['answered'] > 0)
+				{
+					$results[$counter]['percentage'] = $percentage;
+				}
+				else
+				{
+					$results[$counter]['percentage'] = 0;
+				}
 			}
+
+			
 			$counter++;
 		}
 		return $results;

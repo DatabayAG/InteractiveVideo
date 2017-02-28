@@ -108,7 +108,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 	/**
 	 * Update plugin and sub plugins
 	 */
-	public function updateLanguages()
+	public function updateLanguages($a_lang_keys = NULL)
 	{
 		ilGlobalCache::flushAll();
 		include_once("./Services/Language/classes/class.ilObjLanguage.php");

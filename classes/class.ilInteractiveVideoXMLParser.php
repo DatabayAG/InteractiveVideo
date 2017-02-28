@@ -183,6 +183,10 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 				$this->xvid_obj->setSourceId(trim($this->cdata));
 				$this->cdata = '';
 				break;
+			case 'VideoSource':
+				$this->xvid_obj->setVideoSourceImportObject(trim($this->cdata));
+				$this->cdata = '';
+				break;
 		}
 	}
 
