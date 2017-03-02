@@ -7,6 +7,7 @@ require_once 'Services/Tracking/classes/class.ilLPStatus.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('../VideoSources/class.ilInteractiveVideoSourceFactory.php');
 
 /**
@@ -1010,4 +1011,30 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			$this->getType()
 		);
 	}
+
+
+	public function uploadImage($comment_id, $question, array $a_upload)
+	{
+		if(!$this->id)
+		{
+			return false;
+		}
+
+		$file_extension = pathinfo($a_upload['name'], PATHINFO_EXTENSION);
+		$clean_name = $comment_id .'.' . $file_extension;
+
+		$part = 'xvid_' . $this->getId() . '/' . $comment_id . '/';
+		$path = xvidUtils::ensureFileSavePathExists($part);
+		$original = "org_".$this->id."_".$clean_name;
+
+		if(@move_uploaded_file($a_upload["tmp_name"], $path.$original))
+		{
+			chmod($path.$original, 0770);
+			$question->setQuestionImage($path.$original);
+
+			return true;
+		}
+		return false;
+	}
+
 }

@@ -3,8 +3,8 @@
 2. Standbild aus Video extrahieren
 
 #Partly
-1. Export/Import
-2. Lernfortschritt
+1. Export/Import <= Import noch nicht komplett
+2. Lernfortschritt <= Preconditions fehlen noch
 
 #Done
 1. Aufgabenstellung oberhalb des Videos anzeigen 

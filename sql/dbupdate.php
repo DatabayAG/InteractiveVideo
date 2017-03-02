@@ -795,3 +795,19 @@ if(!$ilDB->tableExists('rep_robj_xvid_lp'))
 	}
 }
 ?>
+<#42>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_question'))
+{
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'question_image'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_question', 'question_image',
+			array(
+				'type'    => 'text',
+				'length'  => '4000',
+				'notnull' => false,
+				'default' => null
+			));
+	}
+}
+?>

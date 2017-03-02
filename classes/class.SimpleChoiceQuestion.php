@@ -117,6 +117,11 @@ class SimpleChoiceQuestion
 	 * @var int
 	 */
 	protected $neutral_answer = 0;
+
+	/**
+	 * @var string
+	 */
+	protected $question_image = '';
 	
 	/**
 	 * @param int $comment_id
@@ -165,6 +170,7 @@ class SimpleChoiceQuestion
 			$this->setRepeatQuestion($row['repeat_question']);
 			$this->setReflectionQuestionComment($row['reflection_question_comment']);
 			$this->setNeutralAnswer($row['neutral_answer']);
+			$this->setQuestionImage($row['question_image']);
 		}
 
 //		$this->readAnswerDefinitions();
@@ -358,6 +364,7 @@ class SimpleChoiceQuestion
 			$this->setRepeatQuestion($row['repeat_question']);
 			$this->setReflectionQuestionComment($row['reflection_question_comment']);
 			$this->setNeutralAnswer($row['neutral_answer']);
+			$this->setQuestionImage($row['question_image']);
 			$_POST['question_type'] = $row['type'];
 			$this->create();
 		}
@@ -410,6 +417,7 @@ class SimpleChoiceQuestion
 				'repeat_question'    => array('integer', $this->getRepeatQuestion()),
 				'reflection_question_comment' => array('integer', $this->getReflectionQuestionComment()),
 				'neutral_answer' => array('integer', $this->getNeutralAnswer()),
+				'question_image' => array('text', $this->getQuestionImage()),
 			));
 		if(count($_POST['answer']) > 0 && $_POST['question_type'] != self::REFLECTION)
 		{
@@ -487,7 +495,7 @@ class SimpleChoiceQuestion
 		{
 			return $user_ids[$a_user_id];
 		}
-		else
+		else if($a_user_id != null)
 		{
 			return 0;
 		}
@@ -1196,4 +1204,19 @@ class SimpleChoiceQuestion
 		$this->neutral_answer = $neutral_answer;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getQuestionImage()
+	{
+		return $this->question_image;
+	}
+
+	/**
+	 * @param string $question_image
+	 */
+	public function setQuestionImage($question_image)
+	{
+		$this->question_image = $question_image;
+	}
 } 

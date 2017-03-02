@@ -9,6 +9,8 @@ require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/In
  */
 class xvidUtils 
 {
+	
+	const INTERACTIVE_VIDEO = '/xvid/';
 
 	/**
 	 * @param $seconds
@@ -51,5 +53,15 @@ class xvidUtils
 	{
 		$text_area = new ilTextAreaInputCkeditorGUI(ilInteractiveVideoPlugin::getInstance()->txt($txt), $name);
 		return $text_area;
+	}
+	
+	public static function ensureFileSavePathExists($path)
+	{
+		$path = ilUtil::getWebspaceDir() . self::INTERACTIVE_VIDEO . $path;
+		if( ! is_dir($path))
+		{
+			ilUtil::makeDirParents($path);
+		}
+		return $path .'/';
 	}
 }

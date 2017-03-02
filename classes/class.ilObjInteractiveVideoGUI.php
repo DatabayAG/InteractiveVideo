@@ -47,6 +47,26 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public $plugin;
 
 	/**
+	 * @param $plugin
+	 * @param ilPropertyFormGUI $form
+	 */
+	protected function appendImageUploadForm($plugin, $form)
+	{
+		$image_upload  = new ilImageFileInputGUI($plugin->txt('question_image'), 'question_image');
+		if(isset($_GET['comment_id']) || isset($_POST['comment_id']))
+		{
+			$comment_id = (int)$_GET['comment_id'] ? (int)$_GET['comment_id'] : (int)$_POST['comment_id'];
+			$question_data = $this->object->getQuestionDataById((int)$comment_id);
+			if(array_key_exists('question_data', $question_data) && array_key_exists('question_image', $question_data['question_data']) )
+			{
+				$image_upload->setValue($question_data['question_data']['question_image']);
+				$image_upload->setImage($question_data['question_data']['question_image']);
+			}
+		}
+		$form->addItem($image_upload);
+	}
+
+	/**
 	 * Functions that must be overwritten
 	 */
 	public function getType()
@@ -210,10 +230,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $ilTabs;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
-		// TODO REMOVE
+		// TODO REMOVE START
 		require_once "./Services/Tracking/classes/class.ilLPStatusWrapper.php";
 		ilLPStatusWrapper::_refreshStatus($this->object->getId());
-
+		// TODO REMOVE END
 		$ilTabs->activateTab('content');
 
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $plugin->getDirectory());
@@ -1624,6 +1644,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question_type->setInfo($plugin->txt('question_type_info'));
 		$form->addItem($question_type);
 
+		$this->appendImageUploadForm($plugin, $form);
+
 		$question_text = xvidUtils::constructTextAreaFormElement('question_text', 'question_text');
 		$question_text->setRequired(true);
 		$form->addItem($question_text);
@@ -1904,7 +1926,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				}
 			}
 			$confirm->addHiddenItem('form_values', serialize($form_values));
-
+			$confirm->addHiddenItem('form_files', serialize($_FILES));
 			$tpl->setContent($confirm->getHTML());
 		}
 	}
@@ -1916,6 +1938,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			//@todo .... very quick ... very wtf .... 
 			$_POST = unserialize($_POST['form_values']);
+			$_FILES = unserialize($_REQUEST['form_files']);
 		}
 
 		if($form->checkInput())
@@ -1954,9 +1977,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$question    = new SimpleChoiceQuestion($comment_id);
 		#$question_id = $question->existQuestionForCommentId($comment_id);
-
 		$question->setCommentId($comment_id);
 		$question->setType((int)$form->getInput('question_type'));
+		if(count($_FILES) > 0 && array_key_exists('question_image', $_FILES))
+		{
+			$this->object->uploadImage($comment_id, $question, $_FILES['question_image']);
+		}
 		$question->setQuestionText(ilUtil::stripSlashes($form->getInput('question_text'), false));
 		$question->setFeedbackCorrect(ilUtil::stripSlashes($form->getInput('feedback_correct'), false));
 		$question->setFeedbackOneWrong(ilUtil::stripSlashes($form->getInput('feedback_one_wrong'), false));

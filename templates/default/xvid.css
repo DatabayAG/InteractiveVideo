@@ -346,3 +346,12 @@ body.cke_editable{
 .feedback_link_more{
     text-align:center;
 }
+.question_image_container{
+    width: 100%;
+    text-align: center;
+    padding-bottom: 5px;
+    border-bottom: 1px solid grey;
+}
+.question_image{
+    max-width: 100%;
+}
