@@ -86,10 +86,12 @@ class SimpleChoiceQuestionScoring
 		$counter            = 0;
 		$correct            = 0;
 		$answered_questions = 0;
+		$neutral            = 0;
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$results[$counter]['question_id'] = $row['question_id'];
 			$results[$counter]['title']       = $row['comment_title'];
+			$results[$counter]['neutral_answer'] = $row['neutral_answer'];
 			if($answered[$row['question_id']] !== null)
 			{
 				$results[$counter]['answered'] = 1;
@@ -113,15 +115,21 @@ class SimpleChoiceQuestionScoring
 				$results[$counter]['answered'] = 0;
 				$results[$counter]['points']   = 0;
 			}
+			if($results[$counter]['neutral_answer'] == 1)
+			{
+				$results[$counter]['points']   = '';
+				$neutral++;
+
+			}
 			$counter++;
 		}
 		if($counter > 0)
 		{
 			$results[$counter]['title']    = $lng->txt('summary');
 			$results[$counter]['answered'] = round(($answered_questions / $counter) * 100, 2) . '%';
-			$results[$counter]['points']   = round(($correct / $counter) * 100, 2);
+			$results[$counter]['points']   = round(($correct / ($counter - $neutral)) * 100, 2);
 		}
-
+		$results[$counter]['neutral_answer'] = '';
 		return $results;
 	}
 

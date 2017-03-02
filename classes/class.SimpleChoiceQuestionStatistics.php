@@ -42,7 +42,7 @@ class SimpleChoiceQuestionStatistics
 		$questions_for_object = $this->getQuestionCountForObject($oid);
 
 		$res     = $ilDB->queryF('
-			SELECT score.user_id, sum(points) points, count(neutral_answer) as neutral 
+			SELECT score.user_id, sum(points) points, sum(neutral_answer) as neutral 
 			FROM 	rep_robj_xvid_comments comments, 
 				 	rep_robj_xvid_question questions, 
 				 	rep_robj_xvid_score score  
@@ -92,7 +92,7 @@ class SimpleChoiceQuestionStatistics
 
 		global $ilDB;
 		$res          = $ilDB->queryF('
-			SELECT score.user_id, points,questions.question_id  
+			SELECT score.user_id, points,questions.question_id, neutral_answer
 			FROM 	rep_robj_xvid_comments comments, 
 				 	rep_robj_xvid_question questions, 
 				 	rep_robj_xvid_score score  
@@ -103,9 +103,10 @@ class SimpleChoiceQuestionStatistics
 		);
 		$return_value = array('users' => array(), 'question' => array(), 'answers' => array());
 		$return_sums  = array();
+		$neutral = 0;
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$name = ilUserUtil::getNamePresentation($row['user_id']);;
+			$name = ilUserUtil::getNamePresentation($row['user_id']);
 			$id                                 = $row['user_id'];
 			$return_value['users'][$id]['name'] = $name;
 			if(!isset($return_sums[$id]['answered']))
@@ -117,10 +118,20 @@ class SimpleChoiceQuestionStatistics
 			{
 				if($key == $row['question_id'])
 				{
-					$points = $row['points'];
+					if($row['neutral_answer'] == 1)
+					{
+						$points = 0;
+						$return_value['users'][$id][$key] = 1;
+						$neutral++;
+					}
+					else
+					{
+						$points = $row['points'];
+						$return_value['users'][$id][$key] = $points;
+					}
+
 					$return_sums[$id]['answered']++;
 					$return_sums[$id]['sum'] += $points;
-					$return_value['users'][$id][$key] = $points;
 					$return_value['question'][$key]   = $value;
 
 				}
@@ -141,9 +152,10 @@ class SimpleChoiceQuestionStatistics
 			{
 				$return_value['users'][$key]['answerd'] = '0%';
 			}
-			if($value['answered'] > 0)
+
+			if($value['answered'] > 0 && ($questions_count - $neutral) > 0)
 			{
-				$return_value['users'][$key]['sum'] = round(($value['sum'] / $questions_count) * 100, 2) . '%';
+				$return_value['users'][$key]['sum'] = round(($value['sum'] / ($questions_count - $neutral)) * 100, 2) . '%';
 			}
 			else
 			{
@@ -245,7 +257,8 @@ class SimpleChoiceQuestionStatistics
 			$results[$counter]['neutral_question'] = $value['neutral_answer'];
 			if($value['neutral_answer'] == 1)
 			{
-				$results[$counter]['percentage'] = 100;
+				$results[$counter]['percentage'] = '';
+				$results[$counter]['correct'] = '';
 			}
 			else
 			{

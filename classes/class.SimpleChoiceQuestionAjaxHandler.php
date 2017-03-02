@@ -39,9 +39,12 @@ class SimpleChoiceQuestionAjaxHandler
 						{
 							$start_div = '<div class="neutral">';
 						}
-						$json['feedback_link'] = $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_wrong_ref_id']);
-						$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_wrong_ref_id']);
-						$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
+						if($feedback['feedback_wrong_ref_id'] > 0)
+						{
+							$json['feedback_link'] =  $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_wrong_ref_id']);
+							$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_wrong_ref_id']);
+							$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
+						}
 						$json['html']          = $start_div . $feedback['feedback_one_wrong']  . '</div>';
 						$json['is_timed']      = $feedback['is_jump_wrong'];
 						$json['time']          = $feedback['jump_wrong_ts'];
@@ -61,9 +64,12 @@ class SimpleChoiceQuestionAjaxHandler
 							$start_div = '<div class="neutral">';
 						}
 	
-						$json['feedback_link'] =  $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_correct_ref_id']);
-						$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_correct_ref_id']);
-						$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
+						if($feedback['feedback_correct_ref_id'] > 0)
+						{
+							$json['feedback_link'] =  $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_correct_ref_id']);
+							$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_correct_ref_id']);
+							$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
+						}
 						$json['html']          = $start_div . $feedback['feedback_correct'] .'</div>';
 						$json['is_timed']      = $feedback['is_jump_correct'];
 						$json['time']          = $feedback['jump_correct_ts'];
@@ -77,9 +83,13 @@ class SimpleChoiceQuestionAjaxHandler
 					}
 					$start_div = '<div class="neutral">';
 
-					$json['feedback_link'] =  $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_correct_ref_id']);
-					$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_correct_ref_id']);
-					$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
+
+					if($feedback['feedback_correct_ref_id'] > 0)
+					{
+						$json['feedback_link'] =  $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_correct_ref_id']);
+						$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_correct_ref_id']);
+						$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
+					}
 					$json['html']          = $start_div . $feedback['feedback_correct'] .'</div>';
 					$json['is_timed']      = $feedback['is_jump_correct'];
 					$json['time']          = $feedback['jump_correct_ts'];
