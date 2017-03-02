@@ -448,6 +448,54 @@ class SimpleChoiceQuestion
 	}
 
 	/**
+	 * @param      $oid
+	 * @param null $a_user_id
+	 * @return int|array
+	 */
+	public function getAllUsersWithCompletelyCorrectAnswers($oid, $a_user_id = null)
+	{
+		$user_ids = array();
+		/**
+		 * $ilDB ilDB
+		 */
+		global $ilDB;
+		$res = $ilDB->queryF(
+			'SELECT usr_id, sum(points) as points FROM rep_robj_xvid_objects 
+			INNER JOIN rep_robj_xvid_lp 
+			INNER JOIN rep_robj_xvid_comments 
+			INNER JOIN rep_robj_xvid_question
+			INNER JOIN rep_robj_xvid_score
+			WHERE rep_robj_xvid_objects.obj_id = rep_robj_xvid_lp.obj_id 
+			AND rep_robj_xvid_comments.obj_id = rep_robj_xvid_objects.obj_id 
+			AND rep_robj_xvid_question.comment_id = rep_robj_xvid_comments.comment_id  
+			AND rep_robj_xvid_question.question_id = rep_robj_xvid_score.question_id
+			AND rep_robj_xvid_objects.obj_id = %s 
+			AND started = 1 
+			AND ended = 1 
+			AND neutral_answer = 0 
+			AND points = 1 
+			GROUP BY usr_id;',
+			array('integer'),
+			array(($oid))
+		);
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$user_ids[$row['usr_id']] = $row['points'];
+		}
+		
+		if($a_user_id != null && array_key_exists($a_user_id, $user_ids))
+		{
+			return $user_ids[$a_user_id];
+		}
+		else
+		{
+			return 0;
+		}
+		return $user_ids;
+
+	}
+	
+	/**
 	 * @return int
 	 */
 	public function getType()
@@ -843,6 +891,31 @@ class SimpleChoiceQuestion
 			INNER JOIN 	' . self::TABLE_NAME_COMMENTS . '  cmt on qst.comment_id = cmt.comment_id
 			WHERE		obj_id = %s AND is_interactive = %s',
 			array('integer', 'integer'), array($obj_id, 1));
+
+		$question_ids = array();
+
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$question_ids[] = $row['question_id'];
+		}
+
+		return $question_ids;
+	}
+
+	/**
+	 * @param $obj_id
+	 * @return array
+	 */
+	public function getInteractiveNotNeutralQuestionIdsByObjId($obj_id)
+	{
+		global $ilDB;
+
+		$res = $ilDB->queryF('
+			SELECT 		question_id 
+			FROM 		' . self::TABLE_NAME_QUESTION . ' qst
+			INNER JOIN 	' . self::TABLE_NAME_COMMENTS . '  cmt on qst.comment_id = cmt.comment_id
+			WHERE		obj_id = %s AND is_interactive = %s AND neutral_answer = %s AND "type" != 2',
+			array('integer', 'integer', 'integer'), array($obj_id, 1, 0));
 
 		$question_ids = array();
 

@@ -3,6 +3,7 @@
 
 require_once 'Services/Repository/classes/class.ilObjectPlugin.php';
 require_once 'Services/Tracking/interfaces/interface.ilLPStatusPlugin.php';
+require_once 'Services/Tracking/classes/class.ilLPStatus.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
@@ -17,6 +18,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	const TABLE_NAME_OBJECTS = 'rep_robj_xvid_objects';
 	const TABLE_NAME_COMMENTS = 'rep_robj_xvid_comments';
 	const TABLE_NAME_QUESTIONS = 'rep_robj_xvid_question';
+	const TABLE_NAME_LP = 'rep_robj_xvid_lp';
 	
 	/**
 	 * @var int
@@ -407,6 +409,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			$table_data[$counter]['comment_id']			= $row['comment_id'];
 			$table_data[$counter]['comment_time']		= $row['comment_time'];
 			$table_data[$counter]['comment_time_end']	= $row['comment_time_end'];
+			$table_data[$counter]['comment_title']		= $row['comment_title'];
 			//	$table_data[$counter]['user_id']			= $row['user_id'];
 			$table_data[$counter]['comment_text']		= $row['comment_text'];
 			$table_data[$counter]['is_private']			= $row['is_private'];
@@ -522,6 +525,123 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		SimpleChoiceQuestion::deleteQuestions($question_ids);
 
 		$ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE ' . $ilDB->in('comment_id', $comment_ids, false, 'integer'));
+	}
+
+	/**
+	 * @param $obj_id
+	 * @param $usr_id
+	 */
+	public function saveVideoStarted($obj_id, $usr_id)
+	{
+		/**
+		 * $ilDB ilDB
+		 */
+		global $ilDB;
+		if(!$this->doesLearningProgressEntryExists($obj_id, $usr_id))
+		{
+			$ilDB->insert(
+				self::TABLE_NAME_LP ,
+				array(
+					'obj_id'        => array('integer', $obj_id),
+					'usr_id'        => array('integer', $usr_id),
+					'started'       => array('integer', 1),
+				)
+			);
+		}
+	}
+
+	/**
+	 * @param $obj_id
+	 * @param $usr_id
+	 */
+	public function saveVideoFinished($obj_id, $usr_id)
+	{
+		/**
+		 * $ilDB ilDB
+		 */
+		global $ilDB;
+		if(!$this->doesLearningProgressEntryExists($obj_id, $usr_id))
+		{
+			$ilDB->insert(
+				self::TABLE_NAME_LP ,
+				array(
+					'obj_id'        => array('integer', $obj_id),
+					'usr_id'        => array('integer', $usr_id),
+					'started'       => array('integer', 0),
+					'ended'         => array('integer', 1),
+				)
+			);
+		}
+		else
+		{
+			$ilDB->update(self::TABLE_NAME_LP ,
+				array(
+					  'started'       => array('integer', 1),
+					  'ended'         => array('integer', 1),
+
+				),
+				array('obj_id' => array('integer', $obj_id),
+					  'usr_id' => array('integer', $usr_id)));
+		}
+	}
+
+	/**
+	 * @param $obj_id
+	 * @param $usr_id
+	 * @return bool
+	 */
+	public function doesLearningProgressEntryExists($obj_id, $usr_id)
+	{
+		global $ilDB;
+
+		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_LP . ' WHERE obj_id = %s AND usr_id = %s',
+			array('integer', 'integer'), array($obj_id, $usr_id));
+
+		$row = $ilDB->fetchAssoc($res);
+		if($row == null)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * @param $obj_id
+	 * @return array()
+	 */
+	public function getAllStartedAndFinishedUsers($obj_id)
+	{
+		global $ilDB;
+
+		$usr_ids = array();
+		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_LP . ' WHERE obj_id = %s AND started = 1 AND ended = 1',
+			array('integer'), array($obj_id));
+
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$usr_ids[] = $row['usr_id'];
+		}
+		return $usr_ids;
+	}
+
+	/**
+	 * @param $obj_id
+	 * @param $usr_id
+	 * @return bool
+	 */
+	public function isLearningProgressCompletedForUser($obj_id, $usr_id)
+	{
+		global $ilDB;
+
+		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_LP . ' WHERE obj_id = %s AND usr_id = %s AND started = 1 AND ended = 1',
+			array('integer', 'integer'), array($obj_id, $usr_id));
+
+		$row = $ilDB->fetchAssoc($res);
+		if($row == null)
+		{
+			return false;
+		}
+		return true;
 	}
 
 	################## SETTER & GETTER ##################
@@ -682,9 +802,30 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 		$user_ids = array();
 
-		// TODO: Determine all completed users
+		$simple = new SimpleChoiceQuestion();
+		$qst = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
+		if(is_array($qst) && count($qst) > 0)
+		{
+			$simple = new SimpleChoiceQuestion();
+			$qst = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
+			if(is_array($qst) && count($qst) > 0)
+			{
+				$usrs_points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId());
+				foreach($usrs_points as $usr_id => $points)
+				{
+					if($points == count($qst))
+					{
+						$user_ids[$usr_id] = $usr_id;
+					}
+				}
+			}
+		}
+		else
+		{
+			$user_ids = $this->getAllStartedAndFinishedUsers($this->getId());
+		}
 
-		return $user_ids;
+		return array_values($user_ids);
 	}
 
 	/**
@@ -709,7 +850,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 		$user_ids = array();
 
-		// TODO: Determine all failed users
+		// NOT IMPLEMENTED
 
 		return $user_ids;
 	}
@@ -747,7 +888,27 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			$status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
 		}
 
-		// TODO: Determine status by questions
+		$simple = new SimpleChoiceQuestion();
+		$qst = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
+		if(is_array($qst) && count($qst) > 0)
+		{
+			$usr_points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId(), $a_user_id);
+			if($usr_points == count($qst))
+			{
+				$status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
+			}
+			else
+			{
+				$status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
+			}
+		}
+		else
+		{
+			if($this->isLearningProgressCompletedForUser($this->getId(), $a_user_id))
+			{
+				$status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
+			}
+		}
 
 		return $status;
 	}

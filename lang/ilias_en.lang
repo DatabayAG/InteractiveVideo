@@ -164,3 +164,5 @@ feedback_repository_neutral#:#Feedback Link for Repository Object
 feedback_repository_neutral_info#:#Feedback Link for Repository Object
 neutral_questions#:#Neutral Questions
 neutral_question#:#Neutral Question
+export_comments#:#Export Comments
+export_all_comments#:#Export All Comments

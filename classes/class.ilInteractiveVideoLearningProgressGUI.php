@@ -4,6 +4,7 @@
 require_once 'Services/Tracking/classes/class.ilLPStatusFactory.php';
 require_once 'Services/Tracking/classes/class.ilLPObjSettings.php';
 require_once 'Services/Tracking/classes/class.ilLearningProgressBaseGUI.php';
+require_once 'Services/Tracking/classes/class.ilOnlineTracking.php';
 
 /**
  * Class ilObjComment
@@ -315,7 +316,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 		$info->setFormAction($this->ctrl->getFormAction($this, 'editUser'));
 		$info->addSection($this->lng->txt('trac_user_data'));
 		$info->addProperty($this->lng->txt('last_login'), ilDatePresentation::formatDate(new ilDateTime($user->getLastLogin(), IL_CAL_DATETIME)));
-		$info->addProperty($this->lng->txt('trac_total_online'), ilFormat::_secondsToString(ilOnlineTracking::getOnlineTime($user->getId())));
+		$info->addProperty($this->lng->txt('trac_total_online'), ilDatePresentation::secondsToString(ilOnlineTracking::getOnlineTime($user->getId())));
 
 		if(!$form instanceof ilPropertyFormGUI)
 		{

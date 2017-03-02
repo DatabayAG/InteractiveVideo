@@ -210,6 +210,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $ilTabs;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
+		// TODO REMOVE
+		require_once "./Services/Tracking/classes/class.ilLPStatusWrapper.php";
+		ilLPStatusWrapper::_refreshStatus($this->object->getId());
+
 		$ilTabs->activateTab('content');
 
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $plugin->getDirectory());
@@ -1412,7 +1416,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postTutorComment', '', false, false));
 
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig());
-
+		global $ilUser;
+		$this->object->getLPStatusForUser($ilUser->getId());
 		$tbl_data = $this->object->getCommentsTableData();
 		$plugin->includeClass('class.ilInteractiveVideoCommentsTableGUI.php');
 		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editComments');
@@ -2261,13 +2266,25 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	public function postVideoStartedPerAjax()
 	{
+		global $ilUser;
+		$this->object->saveVideoStarted($this->obj_id, $ilUser->getId());
 		$this->object->trackProgress();
 		$this->callExit();
 	}
 
 	public function postVideoFinishedPerAjax()
 	{
-		// TODO: Store finished event for user/obj_id
+		global $ilUser;
+		$simple = new SimpleChoiceQuestion();
+		$qst = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->object->getId());
+		if(is_array($qst) && count($qst) > 0)
+		{
+			//Todo check answers and points
+		}
+		else
+		{
+			$this->object->saveVideoFinished($this->obj_id, $ilUser->getId());
+		}
 		$this->object->updateLP();
 
 		$this->callExit();
@@ -2317,6 +2334,80 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				{
 					array_push($csvrow, '');
 				}
+			}
+			array_push($csv, ilUtil::processCSVRow($csvrow, TRUE, $separator));
+		}
+		$csvoutput = "";
+		foreach ($csv as $row)
+		{
+			$csvoutput .= join($row, $separator) . "\n";
+		}
+		ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
+	}
+	
+	public function exportMyComments()
+	{
+		global $lng;
+		$plugin = ilInteractiveVideoPlugin::getInstance();
+
+		$data = $this->object->getCommentsTableDataByUserId();
+
+		$csv = array();
+		$separator = ";";
+
+		$head_row = array();
+		array_push($head_row, $lng->txt('id'));
+		array_push($head_row, $lng->txt('time'));
+		array_push($head_row, $plugin->txt('time_end') );
+		array_push($head_row, $plugin->txt('comment_title'));
+		array_push($head_row, $plugin->txt('comment'));
+		array_push($head_row, $plugin->txt('is_private_comment'));
+		array_push($csv, ilUtil::processCSVRow($head_row, TRUE, $separator) );
+		foreach ($data as $key => $row)
+		{
+			$csvrow = array();
+			foreach ( $row as $type => $value)
+			{
+				array_push($csvrow, trim($value, '"'));
+			}
+			array_push($csv, ilUtil::processCSVRow($csvrow, TRUE, $separator));
+		}
+		$csvoutput = "";
+		foreach ($csv as $row)
+		{
+			$csvoutput .= join($row, $separator) . "\n";
+		}
+		ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
+	}
+
+	public function exportAllComments()
+	{
+		global $lng;
+		$plugin = ilInteractiveVideoPlugin::getInstance();
+
+		$data = $this->object->getCommentsTableData();
+
+		$csv = array();
+		$separator = ";";
+
+		$head_row = array();
+
+		array_push($head_row, $lng->txt('id'));
+		array_push($head_row, $lng->txt('time'));
+		array_push($head_row, $plugin->txt('time_end') );
+		array_push($head_row, $plugin->txt('user_id') );
+		array_push($head_row, $plugin->txt('comment_title'));
+		array_push($head_row, $plugin->txt('comment'));
+		array_push($head_row, $plugin->txt('tutor'));
+		array_push($head_row, $plugin->txt('interactive'));
+
+		array_push($csv, ilUtil::processCSVRow($head_row, TRUE, $separator) );
+		foreach ($data as $key => $row)
+		{
+			$csvrow = array();
+			foreach ( $row as $type => $value)
+			{
+				array_push($csvrow, trim($value, '"'));
 			}
 			array_push($csv, ilUtil::processCSVRow($csvrow, TRUE, $separator));
 		}

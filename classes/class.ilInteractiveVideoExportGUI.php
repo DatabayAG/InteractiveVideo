@@ -10,6 +10,15 @@ class ilInteractiveVideoExportGUI extends ilExportGUI
 	 */
 	protected function buildExportTableGUI()
 	{
+		/**
+		 * @var $ilCtrl ilCtrl
+		 * @var ilToolbarGUI $ilToolbar
+		 */
+		global $ilCtrl, $ilToolbar;
+		$ilToolbar->addButton(
+			ilInteractiveVideoPlugin::getInstance()->txt('export_all_comments'),
+			$ilCtrl->getLinkTarget(new ilObjInteractiveVideoGUI(), 'exportAllComments')
+		);
 		require_once 'class.ilInteractiveVideoExportTableGUI.php';
 		$table = new ilInteractiveVideoExportTableGUI($this, 'listExportFiles', $this->obj);
 		return $table;

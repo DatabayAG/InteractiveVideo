@@ -759,3 +759,39 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 	}
 }
 ?>
+<#41>
+<?php
+if(!$ilDB->tableExists('rep_robj_xvid_lp'))
+{
+	if(!$ilDB->tableExists('rep_robj_xvid_lp'))
+	{
+		$fields = array(
+			'obj_id'     => array(
+				'type'    => 'integer',
+				'length'  => '4',
+				'notnull' => true
+			),
+			'usr_id'         => array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => true
+			),
+			'started'   => array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => false,
+				'default' => 0
+			),
+			'ended'     => array(
+				'type'    => 'integer',
+				'length'  => '1',
+				'notnull' => false,
+				'default' => 0
+			)
+		);
+
+		$ilDB->createTable('rep_robj_xvid_lp', $fields);
+		$ilDB->addPrimaryKey('rep_robj_xvid_lp', array('obj_id', 'usr_id'));
+	}
+}
+?>
