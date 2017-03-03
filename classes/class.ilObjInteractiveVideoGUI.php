@@ -56,11 +56,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if(isset($_GET['comment_id']) || isset($_POST['comment_id']))
 		{
 			$comment_id = (int)$_GET['comment_id'] ? (int)$_GET['comment_id'] : (int)$_POST['comment_id'];
-			$question_data = $this->object->getQuestionDataById((int)$comment_id);
-			if(array_key_exists('question_data', $question_data) && array_key_exists('question_image', $question_data['question_data']) )
+			if($comment_id != 0)
 			{
-				$image_upload->setValue($question_data['question_data']['question_image']);
-				$image_upload->setImage($question_data['question_data']['question_image']);
+				$question_data = $this->object->getQuestionDataById((int)$comment_id);
+				if(array_key_exists('question_data', $question_data) && array_key_exists('question_image', $question_data['question_data']) )
+				{
+					$image_upload->setValue($question_data['question_data']['question_image']);
+					$image_upload->setImage($question_data['question_data']['question_image']);
+				}
 			}
 		}
 		$form->addItem($image_upload);
