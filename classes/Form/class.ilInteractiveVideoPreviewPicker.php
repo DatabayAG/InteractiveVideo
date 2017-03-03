@@ -20,7 +20,9 @@ class ilInteractiveVideoPreviewPicker extends ilImageFileInputGUI
 	{
 		parent::insert($a_tpl);
 
-		if($this->isCanExtractImages() && $this->getPathToVideo() != '' && file_exists($this->getPathToVideo()))
+		if($this->isCanExtractImages() && $this->getPathToVideo() != '' && file_exists($this->getPathToVideo())
+			&& defined("PATH_TO_FFMPEG") && PATH_TO_FFMPEG != ''
+		)
 		{
 			$this->supportImageExtractionFromVideo($a_tpl);
 		}

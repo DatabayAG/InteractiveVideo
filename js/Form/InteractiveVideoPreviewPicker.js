@@ -100,5 +100,4 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 }(il));
 $( document ).ready(function() {
 	il.InteractiveVideoPreviewPicker.initialize();
-	console.log($('#extract_file_path').val())
 });

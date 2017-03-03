@@ -54,9 +54,9 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 
 		if($seconds_split = preg_split('/\./', $sec))
 		{
-			for($i = 0; $i <= 9; $i = $i+2)
+			for($i = 0; $i <= 9; $i = $i+3)
 			{
-				$sec = $seconds_split[0] . '.0' .$i;
+				$sec = $seconds_split[0] . '.' .$i;
 				$file = self::extractImage($a_file, $i . '.jpg', $a_target_dir, $sec);
 				$json_container[] = ilWACSignedPath::signFile($file);
 			}
