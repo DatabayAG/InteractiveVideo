@@ -811,3 +811,12 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 	}
 }
 ?>
+<#43>
+<?php
+require_once 'Services/WebAccessChecker/classes/class.ilWACSecurePath.php';
+$ilWACSecurePath = new ilWACSecurePath();
+$ilWACSecurePath->setPath('xvid');
+$ilWACSecurePath->setCheckingClass('ilObjInteractiveVideoAccess');
+$ilWACSecurePath->setComponentDirectory('/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo');
+$ilWACSecurePath->create();
+?>

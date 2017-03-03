@@ -3,12 +3,14 @@
 
 require_once 'Services/Repository/classes/class.ilObjectPluginAccess.php';
 require_once 'Services/AccessControl/interfaces/interface.ilConditionHandling.php';
+require_once 'Services/AccessControl/interfaces/interface.ilConditionHandling.php';
+require_once 'Services/WebAccessChecker/interfaces/interface.ilWACCheckingClass.php';
 
 /**
  * Class ilObjInteractiveVideoAccess
  * @author Nadia Ahmad <nahmad@databay.de>
  */
-class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilConditionHandling
+class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilConditionHandling, ilWACCheckingClass
 {
 	/**
 	 * @param string $a_cmd
@@ -96,4 +98,24 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 
 		return false;
 	}
+
+	/**
+	 * @param ilWACPath $ilWACPath
+	 *
+	 * @return bool
+	 */
+	public function canBeDelivered(ilWACPath $ilWACPath) {
+		global $ilAccess;
+		preg_match("/\\/xvid_([\\d]*)\\//uism", $ilWACPath->getPath(), $results);
+
+		foreach (ilObject2::_getAllReferences($results[1]) as $ref_id) {
+			if ($ilAccess->checkAccess('read', '', $ref_id)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
+	
 }

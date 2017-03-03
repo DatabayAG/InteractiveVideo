@@ -1023,7 +1023,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$file_extension = pathinfo($a_upload['name'], PATHINFO_EXTENSION);
 		$clean_name = $comment_id .'.' . $file_extension;
 
-		$part = 'xvid_' . $this->getId() . '/' . $comment_id . '/';
+		$part = 'xvid_' . $this->getId() . '/' . $comment_id . '/images/';
 		$path = xvidUtils::ensureFileSavePathExists($part);
 		$original = "org_".$this->id."_".$clean_name;
 

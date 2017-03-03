@@ -1,6 +1,7 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
+require_once 'Services/WebAccessChecker/classes/class.ilWACSignedPath.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionScoring.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionStatistics.php');
@@ -213,7 +214,7 @@ class SimpleChoiceQuestionAjaxHandler
 		$build_json['repeat_question']         = $repeat_question;
 		if($question_image != null)
 		{
-			$build_json['question_image']          = $question_image;
+			$build_json['question_image']          = ilWACSignedPath::signFile($question_image);
 		}
 
 		#$build_json['neutral_answer']         = $neutral_answer;
