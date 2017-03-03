@@ -68,6 +68,12 @@ interface ilInteractiveVideoSource
 	public function getVersion();
 
 	/**
+	 * @param $obj_id
+	 * @return string
+	 */
+	public function getPath($obj_id);
+
+	/**
 	 * @param int $obj_id
 	 * @param ilXmlWriter $xml_writer
 	 * @param string $export_path

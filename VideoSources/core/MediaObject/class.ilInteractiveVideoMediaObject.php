@@ -304,6 +304,20 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	}
 
 	/**
+	 * @param $obj_id
+	 * @return string
+	 */
+	public function getPath($obj_id)
+	{
+		$mob        = new ilObjMediaObject($this->doReadVideoSource($obj_id));
+		$mob_id     = $mob->getId();
+		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
+		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
+
+		return $mob_dir . '/' . $media_item['location'];
+	}
+
+	/**
 	 * @param int $obj_id
 	 * @param ilXmlWriter $xml_writer
 	 * @param string $export_path
