@@ -49,6 +49,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function getPlayer($obj)
 	{
+		require_once 'Services/WebAccessChecker/classes/class.ilWACSignedPath.php';
 		$player = new ilTemplate(self::PATH . 'tpl/tpl.video.html', false, false);
 		ilObjMediaObjectGUI::includePresentationJS($player);
 		$media_object = new ilInteractiveVideoMediaObject();
@@ -56,7 +57,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
 
-		$player->setVariable('VIDEO_SRC', $mob_dir . '/' . $media_item['location']);
+		$player->setVariable('VIDEO_SRC', ilWACSignedPath::signFile($mob_dir . '/' . $media_item['location']));
 		$player->setVariable('VIDEO_TYPE', $media_item['format']);
 		return $player;
 	}

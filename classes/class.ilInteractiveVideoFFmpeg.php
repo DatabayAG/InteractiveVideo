@@ -1,5 +1,6 @@
 <?php
 require_once 'Services/MediaObjects/classes/class.ilFFmpeg.php';
+require_once 'Services/WebAccessChecker/classes/class.ilWACSignedPath.php';
 
 /**
  * Class ilInteractiveVideoFFmpeg
@@ -19,11 +20,10 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		$spi = pathinfo($a_file);
 		$target_dir = ($a_target_dir != '') ? $a_target_dir : $spi['dirname'];
 
+		ilUtil::makeDirParents($target_dir);
 		$target_file = $target_dir.'/'.$a_target_filename;
 
-		$sec =  self::parseTimeString($a_sec);
-
-		$cmd = '-y -i '.ilUtil::escapeShellArg($a_file).' -r 1 -f image2 -vframes 1 -ss '.$sec.' '.ilUtil::escapeShellArg($target_file);
+		$cmd = '-y -i '.ilUtil::escapeShellArg($a_file).' -r 1 -f image2 -vframes 1 -ss '.$a_sec.' '.ilUtil::escapeShellArg($target_file);
 		$ret = self::exec($cmd. ' 2>&1');
 		self::$last_return = $ret;
 
@@ -35,6 +35,36 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		{
 			require_once './Services/MediaObjects/exceptions/class.ilFFmpegException.php';
 			throw new ilFFmpegException('It was not possible to extract an image from '.basename($a_file).'.');
+		}
+	}
+
+	/**
+	 * @param        $a_file
+	 * @param        $a_target_filename
+	 * @param string $a_target_dir
+	 * @param int    $a_sec
+	 * @param bool   $return_json
+	 * @return string
+	 */
+	static function extractImageWrapper($a_file, $a_target_filename = '', $a_target_dir = '', $a_sec = 1, $return_json = false)
+	{
+		$json_container = array();
+
+		$sec =  self::parseTimeString($a_sec);
+
+		if($seconds_split = preg_split('/\./', $sec))
+		{
+			for($i = 0; $i <= 9; $i = $i+2)
+			{
+				$sec = $seconds_split[0] . '.0' .$i;
+				$file = self::extractImage($a_file, $i . '.jpg', $a_target_dir, $sec);
+				$json_container[] = ilWACSignedPath::signFile($file);
+			}
+		}
+		
+		if($return_json)
+		{
+			return json_encode($json_container);
 		}
 	}
 
@@ -99,5 +129,21 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 			$seconds = (int) $seconds;
 		}
 		return $seconds . '.' . $milliseconds;
+	}
+	
+	public static function moveSelectedImage($comment_id, $id, $path_org)
+	{
+		$file_extension	= pathinfo($path_org, PATHINFO_EXTENSION);
+		$clean_name		= $comment_id .'.' . $file_extension;
+		$part			= 'xvid_' . $id . '/' . $comment_id . '/images';
+		$path			= xvidUtils::ensureFileSavePathExists($part);
+		$original		= "org_".$id."_".$clean_name;
+		$new_file		= $path.$original;
+		if(@copy($path_org, $new_file))
+		{
+			chmod($new_file, 0770);
+			ilUtil::delDir(dirname($path_org));
+			return $new_file;
+		}
 	}
 }

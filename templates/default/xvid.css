@@ -355,3 +355,23 @@ body.cke_editable{
 .question_image{
     max-width: 100%;
 }
+.ffmpeg_spinner, .preview_image_container{
+    text-align:center;
+}
+.ffmpeg_spinner img{
+    width: 100px;
+}
+.preview_image_container{
+    margin-bottom: 10px;
+}
+.tools{
+    margin-bottom: 10px;
+}
+.question_image_select{
+    margin-left: 10px;
+}
+.fake_media_image{
+    margin: 5px 0; 
+    max-width: 25%; 
+    height: auto;
+}

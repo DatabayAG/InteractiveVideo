@@ -15,6 +15,7 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestio
 ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilTextAreaInputCkeditorGUI.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilInteractiveVideoTimePicker.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilInteractiveVideoPreviewPicker.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilInteractiveVideoFFmpeg.php');
 
 /**
  * Class ilObjInteractiveVideoGUI
@@ -1994,6 +1995,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$this->object->uploadImage($comment_id, $question, $_FILES['question_image']);
 		}
+		if(array_key_exists('ffmpeg_thumb', $_POST))
+		{
+			$file = ilInteractiveVideoFFmpeg::moveSelectedImage($comment_id, $this->object->getId(), $_POST['ffmpeg_thumb']);
+			$question->setQuestionImage($file);
+		}
 		$question->setQuestionText(ilUtil::stripSlashes($form->getInput('question_text'), false));
 		$question->setFeedbackCorrect(ilUtil::stripSlashes($form->getInput('feedback_correct'), false));
 		$question->setFeedbackOneWrong(ilUtil::stripSlashes($form->getInput('feedback_one_wrong'), false));
@@ -2289,6 +2295,29 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
 		}
 		$this->showFeedbackPerAjax();
+		$this->callExit();
+	}
+
+	/**
+	 * 
+	 */
+	public function generateThumbnailsFromSourcePerAjax()
+	{
+		$tpl_json = ilInteractiveVideoPlugin::getInstance()->getTemplate('default/tpl.show_question.html', false, false);
+
+		if(array_key_exists('time', $_POST))
+		{
+			$time = ilUtil::stripSlashes($_POST['time']);
+		}
+		else
+		{
+			$time = '00:00:00.0';
+		}
+		$path = 'data/default/xvid/xvid_'.$this->object->getId().'/images';
+		ilUtil::makeDirParents($path);
+		$json = ilInteractiveVideoFFmpeg::extractImageWrapper('data/default/mobs/mm_287/BigBuckBunny_320x180_cut.mp4', '', $path , $time, true);
+		$tpl_json->setVariable('JSON', $json);
+		$tpl_json->show("DEFAULT", false, true);
 		$this->callExit();
 	}
 
