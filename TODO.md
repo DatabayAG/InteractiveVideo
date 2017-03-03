@@ -1,5 +1,4 @@
 #Todo
-1. Bilder für Fragentext in Fragenerstellung
 2. Standbild aus Video extrahieren
 
 #Partly
@@ -17,6 +16,7 @@
 8. Youtube als Medienquelle
 9. Videoportal der FAU als Medienquelle
 10. Export von Kommentarliste durch Benutzer
+11. Bilder für Fragentext in Fragenerstellung
 
 #Free
 1. Videoportal der Vimeo als Medienquelle

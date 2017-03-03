@@ -47,11 +47,28 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public $plugin;
 
 	/**
-	 * @param $plugin
+	 * @param ilInteractiveVideoPlugin $plugin
 	 * @param ilPropertyFormGUI $form
 	 */
 	protected function appendImageUploadForm($plugin, $form)
 	{
+		/*$image_upload  = new ilImageFileInputGUI($plugin->txt('question_image'), 'question_image');
+		if(isset($_GET['comment_id']) || isset($_POST['comment_id']))
+		{
+			$comment_id = (int)$_GET['comment_id'] ? (int)$_GET['comment_id'] : (int)$_POST['comment_id'];
+			if($comment_id != 0)
+			{
+				$question_data = $this->object->getQuestionDataById((int)$comment_id);
+				if(array_key_exists('question_data', $question_data) && array_key_exists('question_image', $question_data['question_data']) )
+				{
+					$image_upload->setValue($question_data['question_data']['question_image']);
+					$image_upload->setImage($question_data['question_data']['question_image']);
+				}
+			}
+		}*/
+		$images_group = new ilRadioGroupInputGUI($plugin->txt('images'), 'images_group');
+
+		$op1 = new ilRadioOption($plugin->txt('image_upload'), 'image_upload');
 		$image_upload  = new ilImageFileInputGUI($plugin->txt('question_image'), 'question_image');
 		if(isset($_GET['comment_id']) || isset($_POST['comment_id']))
 		{
@@ -66,7 +83,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				}
 			}
 		}
-		$form->addItem($image_upload);
+		$op1->addSubItem($image_upload);
+		$images_group->addOption($op1);
+		$op2 = new ilRadioOption($plugin->txt('image_ffmpeg'), 'image_ffmpeg');
+		$option = new ilTextInputGUI('Demo', 'demo');
+		
+		$op2->addSubItem($option);
+		$images_group->addOption($op2);
+
+		$images_group->setValue('image_upload');
+		$form->addItem($images_group);
 	}
 
 	/**
