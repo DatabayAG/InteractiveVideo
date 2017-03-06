@@ -177,9 +177,16 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 					$this->xml_writer->xmlElement('QuestionRepeatQuestion', null, (int) $row['repeat_question']);
 					$this->xml_writer->xmlElement('QuestionReflectionComment', null, (int) $row['reflection_question_comment']);
 					$this->xml_writer->xmlElement('QuestionNeutralAnswer', null, (int) $row['neutral_answer']);
-					if($simple_questions->getQuestionImage())
+					if($row['question_image'])
 					{
-						$this->xml_writer->xmlElement('QuestionImage', null, (string) $row['question_image']);
+						$path = $row['question_image'];
+						if(file_exists($path))
+						{
+							$export_path = $this->export_dir . '/' . $qid . '/';
+							ilUtil::makeDirParents($export_path);
+							copy($path, $export_path . basename($path));
+						}
+						$this->xml_writer->xmlElement('QuestionImage', array('qid' => $qid, 'file' => '/Plugins/xvid/set_1/expDir_1/' . $qid . '/' . basename($path)));
 					}
 
 					$this->xml_writer->xmlStartTag('Answers');

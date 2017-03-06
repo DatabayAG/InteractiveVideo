@@ -71,7 +71,6 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 			case 'QuestionRepeatQuestion':
 			case 'QuestionReflectionComment':
 			case 'QuestionNeutralAnswer':
-			case 'QuestionImage':
 			case 'CommentIsTutor':
 			case 'CommentIsInteractive':
 			case 'CommentTime':
@@ -85,6 +84,10 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 			case 'AnswerText':
 			case 'AnswerCorrect':
 				$this->cdata = '';
+				break;
+			case 'QuestionImage':
+				$file = $this->fetchAttribute($tagAttributes, 'file');
+				$this->xvid_obj->import_simple_choice[$this->comments]->import_question_image = $file;
 				break;
 			case 'Answer':
 				$this->inAnswerTag = true;

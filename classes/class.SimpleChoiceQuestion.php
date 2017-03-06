@@ -122,6 +122,11 @@ class SimpleChoiceQuestion
 	 * @var string
 	 */
 	protected $question_image = '';
+
+	/**
+	 * @var string
+	 */
+	public $import_question_image = '';
 	
 	
 	public $import_answers = array();

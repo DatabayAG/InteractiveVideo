@@ -60,6 +60,12 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 				if(array_key_exists($key, $comment_map))
 				{
 					$question->setCommentId($comment_map[$key]);
+					if($question->import_question_image != null)
+					{
+						$file = ilInteractiveVideoFFmpeg::moveSelectedImage($question->getCommentId(), $this->xvid_object->getId(), $this->import_directory . $question->import_question_image);
+						$question->setQuestionImage($file);
+					}
+
 					$question_id = $question->create();
 					foreach($question->import_answers as $answer_key => $answer)
 					{
