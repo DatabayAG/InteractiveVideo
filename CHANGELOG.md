@@ -1,6 +1,5 @@
 #Partly
-1. Export/Import <= Import still need images and Mediaobject Import/Export
-2. Learning Progress <= Preconditions still to do
+1. Learning Progress <= Preconditions still to do
 
 #Done
 1. Display task above videos
@@ -18,3 +17,4 @@
 13. Video platform FAU as media source via plugin
 14. Video platform Vimeo as media source via plugin
 15. Compatibility with PHP 7 and Ilias 5.2.x
+16. Export/Import
