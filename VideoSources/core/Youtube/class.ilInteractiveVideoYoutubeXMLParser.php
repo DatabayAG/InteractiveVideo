@@ -52,6 +52,10 @@ class ilInteractiveVideoYoutubeXMLParser extends ilInteractiveVideoXMLParser
 			case 'VideoSourceObject':
 				$tmp = trim($this->cdata);
 				break;
+			case 'VideoSource':
+				$this->inVideoSourceTag = false;
+				parent::setHandlers($xmlParser);
+				break;
 		}
 	}
 
