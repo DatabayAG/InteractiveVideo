@@ -85,6 +85,18 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	protected $task;
 
+
+	/**
+	 * @var SimpleChoiceQuestion[]
+	 */
+	public $import_simple_choice = array();
+
+	/**
+	 * @var ilObjComment[]
+	 */
+	public $import_comment = array();
+
+
 	/**
 	 * @param $src_id
 	 * @return ilInteractiveVideoSource

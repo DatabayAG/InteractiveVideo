@@ -114,8 +114,8 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		$this->xml_writer->xmlElement('getTask', null, (string)$this->object->getTask());
 		$this->xml_writer->xmlElement('getLearningProgressMode', null, (int)$this->object->getLearningProgressMode());
 
+		$this->exportQuestions();
 		$this->exportVideoSourceObject();
-
 		$this->xml_writer->xmlEndTag('Settings');
 	}
 
@@ -127,6 +127,74 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		$obj = $this->object->getVideoSourceObject($src_id);
 		$obj->doExportVideoSource($this->obj_id, $this->xml_writer, $this->export_dir);
 		$this->xml_writer->xmlEndTag('VideoSource');
+	}
+
+	private function exportQuestions()
+	{
+		/**
+		 * @var $ilDB   ilDB
+		 */
+		global $ilDB;
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.SimpleChoiceQuestion.php';
+		$this->xml_writer->xmlStartTag('Questions');
+		$simple_questions = new SimpleChoiceQuestion();
+		$question_ids = $simple_questions->getInteractiveQuestionIdsByObjId($this->obj_id);
+		if(count($question_ids) > 0)
+		{
+			foreach($question_ids as $key => $qid)
+			{
+				$this->xml_writer->xmlStartTag('Question');
+				$row = $simple_questions->readQuestionById($qid);
+				if(is_array($row) && count($row) > 0)
+				{
+					$this->xml_writer->xmlElement('CommentId', null, (int) $row['comment_id']);
+					$this->xml_writer->xmlElement('CommentIsTutor', null, (int) $row['is_tutor']);
+					$this->xml_writer->xmlElement('CommentIsInteractive', null, (int) $row['is_interactive']);
+					$this->xml_writer->xmlElement('CommentTime', null, (int) $row['comment_time']);
+					$this->xml_writer->xmlElement('CommentText', null, (string) $row['comment_text']);
+					$this->xml_writer->xmlElement('CommentTitle', null, (string) $row['comment_title']);
+					$this->xml_writer->xmlElement('CommentTags', null, (string) $row['comment_tags']);
+					$this->xml_writer->xmlElement('CommentIsPrivate', null, (int) $row['is_private']);
+					$this->xml_writer->xmlElement('CommentTimeEnd', null, (int) $row['comment_time_end']);
+					$this->xml_writer->xmlElement('CommentIsReplyTo', null, (int) $row['is_reply_to']);
+
+					$this->xml_writer->xmlElement('QuestionId', null, (int) $qid);
+					$this->xml_writer->xmlElement('QuestionText', null, (string) $row['question_text']);
+					$this->xml_writer->xmlElement('QuestionType', null, (int) $row['type']);
+					$this->xml_writer->xmlElement('QuestionFeedbackCorrect', null, (string) $row['feedback_correct']);
+					$this->xml_writer->xmlElement('QuestionFeedbackOneWrong', null, (string) $row['feedback_one_wrong']);
+					$this->xml_writer->xmlElement('QuestionLimitAttempts', null, (int) $row['limit_attempts']);
+					$this->xml_writer->xmlElement('QuestionIsJumpCorrect', null, (int) $row['is_jump_correct']);
+					$this->xml_writer->xmlElement('QuestionIsJumpWrong', null, (int) $row['is_jump_wrong']);
+					$this->xml_writer->xmlElement('QuestionJumpCorrectTs', null, (int) $row['jump_correct_ts']);
+					$this->xml_writer->xmlElement('QuestionJumpWrongTs', null, (int) $row['jump_wrong_ts']);
+					$this->xml_writer->xmlElement('QuestionShowCorrectIcon', null, (int) $row['show_correct_icon']);
+					$this->xml_writer->xmlElement('QuestionShowWrongIcon', null, (int) $row['show_wrong_icon']);
+					$this->xml_writer->xmlElement('QuestionShowResponseFrequency', null, (int) $row['show_response_frequency']);
+					$this->xml_writer->xmlElement('QuestionCorrectRefId', null, (int) $row['feedback_correct_ref_id']);
+					$this->xml_writer->xmlElement('QuestionWrongRefId', null, (int) $row['feedback_wrong_ref_id']);
+					$this->xml_writer->xmlElement('QuestionRepeatQuestion', null, (int) $row['repeat_question']);
+					$this->xml_writer->xmlElement('QuestionReflectionComment', null, (int) $row['reflection_question_comment']);
+					$this->xml_writer->xmlElement('QuestionNeutralAnswer', null, (int) $row['neutral_answer']);
+					if($simple_questions->getQuestionImage())
+					{
+						$this->xml_writer->xmlElement('QuestionImage', null, (string) $row['question_image']);
+					}
+
+					$this->xml_writer->xmlStartTag('Answers');
+					$res = $ilDB->queryF('SELECT * FROM rep_robj_xvid_qus_text WHERE question_id = %s',
+						array('integer'), array((int)$qid));
+					while($row = $ilDB->fetchAssoc($res))
+					{
+						$this->xml_writer->xmlElement('Answer', array('text' => $row['answer'], 'correct' => $row['correct']));
+					}
+					$this->xml_writer->xmlEndTag('Answers');
+				}
+				
+				$this->xml_writer->xmlEndTag('Question');
+			}
+		}
+		$this->xml_writer->xmlEndTag('Questions');
 	}
 
 }

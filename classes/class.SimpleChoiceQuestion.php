@@ -123,6 +123,9 @@ class SimpleChoiceQuestion
 	 */
 	protected $question_image = '';
 	
+	
+	public $import_answers = array();
+	
 	/**
 	 * @param int $comment_id
 	 */
@@ -171,6 +174,30 @@ class SimpleChoiceQuestion
 			$this->setReflectionQuestionComment($row['reflection_question_comment']);
 			$this->setNeutralAnswer($row['neutral_answer']);
 			$this->setQuestionImage($row['question_image']);
+		}
+
+//		$this->readAnswerDefinitions();
+	}
+
+	/**
+	 *
+	 */
+	public function readQuestionById($qid)
+	{
+		/**
+		 * @var $ilDB ilDB
+		 */
+		global $ilDB;
+		$res = $ilDB->queryF('
+				SELECT * 
+				FROM ' . self::TABLE_NAME_QUESTION . ' 
+				INNER JOIN '. self::TABLE_NAME_COMMENTS .'
+				WHERE question_id = %s AND '.self::TABLE_NAME_QUESTION . '.comment_id = '.self::TABLE_NAME_COMMENTS.'.comment_id',
+			array('integer'), array($qid)
+		);
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			return $row;
 		}
 
 //		$this->readAnswerDefinitions();
@@ -442,7 +469,7 @@ class SimpleChoiceQuestion
 					));
 			}
 		}
-		else
+		else if($_POST['question_type'] == self::REFLECTION)
 		{
 			$answer_id = $ilDB->nextId(self::TABLE_NAME_QUESTION_TEXT);
 			$ilDB->insert(self::TABLE_NAME_QUESTION_TEXT,
@@ -453,6 +480,7 @@ class SimpleChoiceQuestion
 					'correct'     => array('integer', 1)
 				));
 		}
+		return $question_id;
 	}
 
 	/**

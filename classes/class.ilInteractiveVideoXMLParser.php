@@ -1,5 +1,6 @@
 <?php
 require_once 'Services/Xml/classes/class.ilSaxParser.php';
+require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilInteractiveVideoSimpleChoiceQuestionsXMLParser.php';
 
 /**
  * Class ilInteractiveVideoXMLParser
@@ -32,6 +33,11 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 	protected $inVideoSourceTag;
 
 	/**
+	 * @var bool
+	 */
+	protected $inQuestionsTag;
+
+	/**
 	 * @var string
 	 */
 	protected $video_src_id;
@@ -42,11 +48,12 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 	 */
 	public function __construct($xvid_obj, $xmlFile)
 	{
-		$this->xvid_obj = $xvid_obj;
-		$this->inSettingsTag  = false;
-		$this->inMetaDataTag  = false;
-		$this->inMdGeneralTag  = false;
-		$this->inVideoSourceTag  = false;
+		$this->xvid_obj			= $xvid_obj;
+		$this->inSettingsTag	= false;
+		$this->inMetaDataTag	= false;
+		$this->inMdGeneralTag	= false;
+		$this->inVideoSourceTag	= false;
+		$this->inQuestionsTag	= false;
 		parent::__construct($xmlFile);
 	}
 
@@ -83,16 +90,11 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 			case 'Settings':
 				$this->inSettingsTag = true;
 				break;
-
-			case 'VideoSource':
-				$this->video_src_id = $this->fetchAttribute($tagAttributes, 'source_id');
+			case 'Questions':
 				$this->xvid_obj->setSourceId($this->video_src_id);
-				$importer = $this->xvid_obj->getVideoSourceObject(trim($this->video_src_id));
-				$object = $importer->getVideoSourceImportParser();
-				$tmp = new $object($importer, $xmlParser);
-				$this->inVideoSourceTag = true;
-				break;	
-
+				$tmp = new ilInteractiveVideoSimpleChoiceQuestionsXMLParser($this->xvid_obj, $xmlParser);
+				$this->inQuestionsTag = true;
+				break;
 			case 'Online':
 			case 'SkillService':
 			case 'isAnonymized':
@@ -122,7 +124,6 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 	 */
 	public function handlerEndTag($xmlParser, $tagName)
 	{
-		$a = 0;
 		switch($tagName)
 		{
 			case 'MetaData':
@@ -153,7 +154,17 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 				break;
 
 			case 'Settings':
-				$this->inSettingsTag = false;
+				if($this->inSettingsTag)
+				{
+					$this->inSettingsTag = false;
+				}
+				break;
+
+			case 'Questions':
+				if($this->inQuestionsTag)
+				{
+					$this->inQuestionsTag = false;
+				}
 				break;
 
 			case 'Online':
