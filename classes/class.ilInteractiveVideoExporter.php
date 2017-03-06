@@ -100,7 +100,8 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 
 	private function exportXMLSettings()
 	{
-		$this->xml_writer->xmlStartTag('Settings');
+		$src_id = (string)$this->object->getSourceId();
+		$this->xml_writer->xmlStartTag('Settings', array('video_source_id' => $src_id));
 
 		$this->xml_writer->xmlElement('Title', null, (string)$this->object->getTitle());
 		$this->xml_writer->xmlElement('Description', null, (string)$this->object->getDescription());

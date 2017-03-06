@@ -1,6 +1,7 @@
 <?php
 require_once 'Services/Xml/classes/class.ilSaxParser.php';
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilInteractiveVideoSimpleChoiceQuestionsXMLParser.php';
+require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
 
 /**
  * Class ilInteractiveVideoXMLParser
@@ -89,6 +90,14 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 
 			case 'Settings':
 				$this->inSettingsTag = true;
+				$video_src_id = $this->fetchAttribute($tagAttributes, 'video_source_id');
+				$factory = new ilInteractiveVideoSourceFactory();
+				$obj = $factory->getVideoSourceObject($video_src_id);
+				if($obj == null)
+				{
+					global $ilErr;
+					$ilErr->raiseError(sprintf('Video source with the id "%s" does not exist in this installation.', $video_src_id));
+				}
 				break;
 			case 'Questions':
 				$this->xvid_obj->setSourceId($this->video_src_id);

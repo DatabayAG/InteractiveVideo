@@ -1,5 +1,5 @@
 #Partly
-1. Export/Import <= Import not complete yet
+1. Export/Import <= Import still need images and Mediaobject Import/Export
 2. Learning Progress <= Preconditions still to do
 
 #Done
