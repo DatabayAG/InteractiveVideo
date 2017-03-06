@@ -82,7 +82,14 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 */
 	public function doUpdateVideoSource($obj_id)
 	{
-		$youtube_id = self::getYoutubeIdentifier(ilUtil::stripSlashes($_POST[self::FORM_FIELD]));
+		if(ilUtil::stripSlashes($_POST[self::FORM_FIELD]))
+		{
+			$youtube_id = self::getYoutubeIdentifier(ilUtil::stripSlashes($_POST[self::FORM_FIELD]));
+		}
+		else
+		{
+			$youtube_id = $this->getYoutubeId();
+		}
 
 		if($youtube_id)
 		{
@@ -227,14 +234,11 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	}
 
 	/**
-	 * @param $obj_id
-	 * @param $xml_parser
-	 * @param $import_path
+	 *
 	 */
-	public function doImportVideoSource($obj_id, $xml_parser, $import_path)
+	public function getVideoSourceImportParser()
 	{
-		#$youtube_id = $this->doReadVideoSource($obj_id);
-		#$xml_writer->xmlElement('YoutubeId', null, (string)$youtube_id);
-		$a = 0;
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/class.ilInteractiveVideoYoutubeXMLParser.php';
+		return 'ilInteractiveVideoYoutubeXMLParser';
 	}
 }

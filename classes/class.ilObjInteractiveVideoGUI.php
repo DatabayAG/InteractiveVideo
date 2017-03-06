@@ -242,10 +242,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $ilTabs;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
-		// TODO REMOVE START
-		require_once "./Services/Tracking/classes/class.ilLPStatusWrapper.php";
-		ilLPStatusWrapper::_refreshStatus($this->object->getId());
-		// TODO REMOVE END
 		$ilTabs->activateTab('content');
 
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $plugin->getDirectory());

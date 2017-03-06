@@ -329,4 +329,13 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		ilUtil::makeDirParents($export_path . '/objects');
 		$mob->exportFiles($export_path);
 	}
+
+	/**
+	 *
+	 */
+	public function getVideoSourceImportParser()
+	{
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/class.ilInteractiveVideoMediaObjectXMLParser.php';
+		return 'ilInteractiveVideoYoutubeXMLParser';
+	}
 }

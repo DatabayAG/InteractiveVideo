@@ -162,8 +162,19 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		 * @var $ilLog ilLog
 		 */
 		global $ilLog;
-
-		$src_id = ilUtil::stripSlashes($_POST['source_id']);
+		
+		$post_src_id = ilUtil::stripSlashes($_POST['source_id']);
+		$from_post = false;
+		if(($post_src_id == null || $post_src_id == '') && $this->source_id != null)
+		{
+			$src_id = $this->source_id;
+		}
+		else
+		{
+			$src_id = $post_src_id;
+			$from_post = true;
+		}
+		
 		if($src_id != '')
 		{
 
@@ -176,18 +187,39 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = %s',
 					array('integer'), array($this->getId()));
 
+				if(!$from_post)
+				{
+					$anonymized		= $this->is_anonymized;
+					$repeat			= $this->is_repeat;
+					$chronologic	= $this->is_chronologic;
+					$online			= $this->is_online;
+					$source_id		= $this->source_id;
+					$is_task		= $this->task_active;
+					$task			= $this->task;
+				}
+				else
+				{
+					$anonymized		= (int)$_POST['is_anonymized'];
+					$repeat			= (int)$_POST['is_repeat'];
+					$chronologic	= (int)$_POST['is_chronologic'];
+					$online			= (int)$_POST['is_online'];
+					$source_id		= ilUtil::stripSlashes($_POST['source_id']);
+					$is_task		= (int)$_POST['is_task'];
+					$task			= ilUtil::stripSlashes($_POST['task']);
+				}
+				
 				$ilDB->insert(
 					self::TABLE_NAME_OBJECTS,
 					array(
 						'obj_id'         => array('integer', $this->getId()),
-						'is_anonymized'  => array('integer', (int)$_POST['is_anonymized']),
-						'is_repeat'      => array('integer', (int)$_POST['is_repeat']),
-						'is_chronologic' => array('integer', (int)$_POST['is_chronologic']),
+						'is_anonymized'  => array('integer', $anonymized),
+						'is_repeat'      => array('integer', $repeat),
+						'is_chronologic' => array('integer', $chronologic),
 						'is_public'      => array('integer', 1),
-						'is_online'      => array('integer', (int)$_POST['is_online']),
-						'source_id'      => array('text', ilUtil::stripSlashes($_POST['source_id'])),
-						'is_task'        => array('integer', (int)$_POST['is_task']),
-						'task'           => array('text', ilUtil::stripSlashes($_POST['task']))
+						'is_online'      => array('integer', $online),
+						'source_id'      => array('text', $source_id),
+						'is_task'        => array('integer',$is_task ),
+						'task'           => array('text', $task)
 					)
 				);
 

@@ -32,6 +32,11 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 	protected $inVideoSourceTag;
 
 	/**
+	 * @var string
+	 */
+	protected $video_src_id;
+
+	/**
 	 * @param ilObjInteractiveVideo $xvid_obj
 	 * @param                      $xmlFile
 	 */
@@ -80,6 +85,11 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 				break;
 
 			case 'VideoSource':
+				$this->video_src_id = $this->fetchAttribute($tagAttributes, 'source_id');
+				$this->xvid_obj->setSourceId($this->video_src_id);
+				$importer = $this->xvid_obj->getVideoSourceObject(trim($this->video_src_id));
+				$object = $importer->getVideoSourceImportParser();
+				$tmp = new $object($importer, $xmlParser);
 				$this->inVideoSourceTag = true;
 				break;	
 
@@ -184,10 +194,19 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 				$this->cdata = '';
 				break;
 			case 'VideoSource':
-				$this->xvid_obj->setVideoSourceImportObject(trim($this->cdata));
-				$this->cdata = '';
+				$this->inVideoSourceTag = false;
+				#$this->cdata = '';
 				break;
 		}
+	}
+
+	private function fetchAttribute($attributes, $name)
+	{
+		if( isset($attributes[$name]) )
+		{
+			return $attributes[$name];
+		}
+		return null;
 	}
 
 	/**

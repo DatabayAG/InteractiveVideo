@@ -122,8 +122,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 	private function exportVideoSourceObject()
 	{
 		$src_id = (string)$this->object->getSourceId();
-		$this->xml_writer->xmlStartTag('VideoSource');
-		$this->xml_writer->xmlElement('SourceId', null, $src_id);
+		$this->xml_writer->xmlStartTag('VideoSource', array('source_id' => $src_id));
 		$this->xml_writer->xmlElement('VideoSourceObject', null, $src_id);
 		$obj = $this->object->getVideoSourceObject($src_id);
 		$obj->doExportVideoSource($this->obj_id, $this->xml_writer, $this->export_dir);

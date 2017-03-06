@@ -26,18 +26,30 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 	
 	public function importXmlRepresentation($a_entity, $a_id, $a_xml, $a_mapping)
 	{
-		$this->init();
-		$this->xvid_object = new ilObjInteractiveVideo();
+		global $tree;
 
-		$parser = new ilInteractiveVideoXMLParser($this->xvid_object, $this->getXmlFile());
-		$parser->setImportDirectory($this->getImportDirectory());
-		$parser->startParsing();
-		$this->xvid_object = $parser->getObjInteractiveVideo();
-		$factory = new ilInteractiveVideoSourceFactory();
-		$source_object = $factory->getVideoSourceObject($this->xvid_object->getSourceId());
-		$source_object->doImportVideoSource($a_id, $this->xvid_object->getVideoSourceImportObject(), '');
-		$a = 0;
-		#$this->xvid_object->create(true);
+		$this->init();
+
+		if($new_id = $a_mapping->getMapping('Services/Container', 'objs', $a_id))
+		{
+			$ref_ids = ilObject::_getAllReferences($new_id);
+			$ref_id  = current($ref_ids);
+
+			$parent_ref_id = $tree->getParentId($ref_id);
+
+			$this->xvid_object = ilObjectFactory::getInstanceByObjId($new_id, false);
+			$this->xvid_object->setRefId($ref_id);
+		}
+		else
+		{
+			$this->xvid_object = new ilObjInteractiveVideo();
+			$parser = new ilInteractiveVideoXMLParser($this->xvid_object, $this->getXmlFile());
+			$parser->setImportDirectory($this->getImportDirectory());
+			$parser->startParsing();
+			$this->xvid_object = $parser->getObjInteractiveVideo();
+			$this->xvid_object->create(true);
+		}
+		$a_mapping->addMapping('Plugins/xvid', 'xvid', $a_id, $this->xvid_object->getId());
 	}
 
 	/**
