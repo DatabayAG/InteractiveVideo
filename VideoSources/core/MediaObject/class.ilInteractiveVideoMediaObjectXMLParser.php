@@ -13,12 +13,12 @@ class ilInteractiveVideoMediaObjectXMLParser extends ilInteractiveVideoXMLParser
 	
 
 	/**
-	 * @param ilInteractiveVideoYoutube $youtube_obj
+	 * @param ilInteractiveVideoMediaObject $media_obj
 	 * @param                      $xmlFile
 	 */
-	public function __construct($youtube_obj, $xmlFile)
+	public function __construct($media_obj, $xmlFile)
 	{
-		$this->mob_obj = $youtube_obj;
+		$this->mob_obj = $media_obj;
 		$this->setHandlers($xmlFile);
 	}
 
@@ -34,6 +34,17 @@ class ilInteractiveVideoMediaObjectXMLParser extends ilInteractiveVideoXMLParser
 			case 'VideoSourceObject':
 				$this->cdata = '';
 				break;
+			case 'Identifier':
+				$path_part = $this->fetchAttribute($tagAttributes, 'Entry');
+				$this->mob_obj->import_part_path = $path_part;
+				$this->cdata = '';
+				break;
+			case 'Title':
+				$this->cdata = '';
+				break;
+			case 'Location':
+				$this->cdata = '';
+				break;
 		}
 	}
 
@@ -47,6 +58,16 @@ class ilInteractiveVideoMediaObjectXMLParser extends ilInteractiveVideoXMLParser
 		{
 			case 'VideoSourceObject':
 				$tmp = trim($this->cdata);
+				break;
+			case 'Identifier':
+				$tmp = trim($this->cdata);
+				break;
+			case 'Title':
+				$tmp = trim($this->cdata);
+				break;
+			case 'Location':
+				$this->mob_obj->import_file_name = trim($this->cdata);
+				
 				break;
 		}
 	}

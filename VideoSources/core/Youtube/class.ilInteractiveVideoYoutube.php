@@ -241,4 +241,13 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/class.ilInteractiveVideoYoutubeXMLParser.php';
 		return 'ilInteractiveVideoYoutubeXMLParser';
 	}
+
+	/**
+	 * @param $obj_id
+	 * @param $import_dir
+	 */
+	public function afterImportParsing($obj_id, $import_dir)
+	{
+
+	}
 }

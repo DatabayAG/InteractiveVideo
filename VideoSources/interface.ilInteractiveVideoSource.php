@@ -84,4 +84,11 @@ interface ilInteractiveVideoSource
 	 * @return string
 	 */
 	public function getVideoSourceImportParser();
+
+	/**
+	 * @param $obj_id
+	 * @param $import_dir
+	 * @return
+	 */
+	public function afterImportParsing($obj_id, $import_dir);
 }
