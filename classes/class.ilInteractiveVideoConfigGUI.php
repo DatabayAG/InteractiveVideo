@@ -219,6 +219,18 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	 */
 	protected function loadDbUpdates()
 	{
+		$form = $this->getConfigurationForm();
+		if($form->checkInput())
+		{
+			try
+			{
+				$this->saveForm($form);
+			}
+			catch(ilException $e)
+			{
+				ilUtil::sendFailure($this->lng->txt('form_input_not_valid'));
+			}
+		}
 		$db_updater = new ilInteractiveVideoDbUpdater();
 		$db_updater->applyPluginUpdates();
 		$this->showConfigurationForm();
