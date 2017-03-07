@@ -27,13 +27,16 @@ That's it.
 The InteractiveVideo Plugin for ILIAS gives you the possibility to create a video object, where your students can communicate in a asynchronous way. Please note that this is *NOT* a chat. They can leave notes on different timestamps in the video for other students to read, or only for themselves. Further a tutor can insert questions on various positions in the video for the students to answer. At the moment three questions types are supported single and multiple choice and a reflective type. 
 
 #Interactive Video Main View
-![Main View](http://gvollbach.github.io/InteractiveVideo/images/main_view.png)
+![Main View](http://gvollbach.github.io/InteractiveVideo/images/main_view_2017.png)
 
 #Interactive Video Question View
-![Question View](http://gvollbach.github.io/InteractiveVideo/images/view_question.png)
+![Question View](http://gvollbach.github.io/InteractiveVideo/images/question_images_2017.png)
 
-#Interactive Video Create Comment Tutor View
-![Create Comment Tutor View](http://gvollbach.github.io/InteractiveVideo/images/create_comment.png)
+#Interactive Video Create Images from Media Object Source
+![Create Images from Media Object Source](http://gvollbach.github.io/InteractiveVideo/images/ffmpeg_images_2017.png)
 
 #Interactive Video Create Question
-![Create Question](http://gvollbach.github.io/InteractiveVideo/images/create_question.png)
+![Create Question](http://gvollbach.github.io/InteractiveVideo/images/create_question_2017.png)
+
+#Interactive Video Sources & Plugin Slots
+![Main View](http://gvollbach.github.io/InteractiveVideo/images/sources_2017.png)
