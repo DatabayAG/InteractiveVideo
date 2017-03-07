@@ -29,7 +29,7 @@ The InteractiveVideo Plugin for ILIAS gives you the possibility to create a vide
 # Repositories connected to the InteractiveVideo Plugin
 * [COPage Plugin for InteractiveVideo References in LearningModules](https://github.com/DatabayAG/InteractiveVideoReference)
 * [Video Source Plugin for Vimeo](https://github.com/DatabayAG/InteractiveVideoVimeo)
-* [Video Source Plugin for FAU Video Plattform](https://github.com/ilifau/InteractiveVideoFauVideoPortal)
+* [Video Source Plugin for FAU Video Platform](https://github.com/ilifau/InteractiveVideoFauVideoPortal)
 
 #Interactive Video Main View
 ![Main View](http://gvollbach.github.io/InteractiveVideo/images/main_view_2017.png)
