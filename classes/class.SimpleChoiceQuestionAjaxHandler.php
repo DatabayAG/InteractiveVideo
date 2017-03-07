@@ -11,6 +11,21 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestio
  */
 class SimpleChoiceQuestionAjaxHandler
 {
+	/**
+	 * @param $feedback_ref_id
+	 * @param $json
+	 * @return mixed
+	 */
+	private function appendFeedback($feedback_ref_id, $json)
+	{
+		if($feedback_ref_id > 0)
+		{
+			$json['feedback_link'] = $this->getLinkIfReadAccessForObjectByRefId($feedback_ref_id);
+			$obj                   = ilObjectFactory::getInstanceByRefId($feedback_ref_id);
+			$json['feedback_icon'] = ilObject::_getIcon($obj->getid());
+		}
+		return $json;
+	}
 
 	/**
 	 * @param int $qid question_id

@@ -1014,6 +1014,10 @@ class SimpleChoiceQuestion
 	 */
 	public function saveAnswer($qid, $answers)
 	{
+		/**
+		 * $ilDB ilDB
+		 * 
+		 */
 		global $ilDB, $ilUser;
 
 		$usr_id = $ilUser->getId();
@@ -1039,14 +1043,6 @@ class SimpleChoiceQuestion
 		}
 		else if($type === self::MULTIPLE_CHOICE)
 		{
-			if(count($answers) > 0)
-			{
-				$points = 1;
-			}
-			else
-			{
-				$points = 0;
-			}
 			foreach($answers as $key => $value)
 			{
 				$ilDB->insert(self::TABLE_NAME_ANSWERS,
@@ -1059,6 +1055,10 @@ class SimpleChoiceQuestion
 				{
 					$points = 0;
 				}
+			}
+			if(sizeof($answers) == 0)
+			{
+				$points = 0;
 			}
 		}
 		else if($type === self::REFLECTION)
