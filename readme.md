@@ -26,6 +26,11 @@ That's it.
 # What is it for?
 The InteractiveVideo Plugin for ILIAS gives you the possibility to create a video object, where your students can communicate in a asynchronous way. Please note that this is *NOT* a chat. They can leave notes on different timestamps in the video for other students to read, or only for themselves. Further a tutor can insert questions on various positions in the video for the students to answer. At the moment three questions types are supported single and multiple choice and a reflective type. 
 
+# Repositories connected to the InteractiveVideo Plugin
+* [COPage Plugin for InteractiveVideo References in LearningModules](https://github.com/DatabayAG/InteractiveVideoReference)
+* [Video Source Plugin for Vimeo](https://github.com/DatabayAG/InteractiveVideoVimeo)
+* [Video Source Plugin for FAU Video Plattform](https://github.com/ilifau/InteractiveVideoFauVideoPortal)
+
 #Interactive Video Main View
 ![Main View](http://gvollbach.github.io/InteractiveVideo/images/main_view_2017.png)
 
