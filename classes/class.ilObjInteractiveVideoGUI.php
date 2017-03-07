@@ -348,15 +348,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question_id = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
 		$question = new ilTemplate("tpl.simple_questions.html", true, true, $plugin->getDirectory());
 
+		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
 		{
-			$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
 			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
-			$question->setVariable('CK_CONFIG', $ck_editor->get());
 		}
-
+		$question->setVariable('CK_CONFIG', $ck_editor->get());
 		$question->setVariable('ANSWER_TEXT',		$plugin->txt('answer_text'));
 		$question->setVariable('CORRECT_SOLUTION', 	$plugin->txt('correct_solution'));
 		if($question_id > 0)
@@ -445,15 +444,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('SAVE', $plugin->txt('save'));
 		$config_tpl->setVariable('ADD_COMMENT', $plugin->txt('insert_comment'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
+		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
 		{
-			$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
+			
 			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
 			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
-			$ck_editor->touchBlock('small_editor');
-			$config_tpl->setVariable('CK_CONFIG', $ck_editor->get());
 		}
+		$ck_editor->touchBlock('small_editor');
+		$config_tpl->setVariable('CK_CONFIG', $ck_editor->get());
 
 		$simple_choice = new SimpleChoiceQuestion();
 		$ignore = $simple_choice->getAllNonRepeatAnsweredQuestion($ilUser->getId());
@@ -603,16 +603,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $tpl ilTemplate
 		 */
 		global $tpl;
+		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $this->plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
 		{
-			$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $this->plugin->getDirectory());
 			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
 			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
-			$custom = new ilCustomInputGUI();
-			$custom->setHtml($ck_editor->get());
-			$a_form->addItem($custom);
 		}
+		$custom = new ilCustomInputGUI();
+		$custom->setHtml($ck_editor->get());
+		$a_form->addItem($custom);
 	}
 
 
