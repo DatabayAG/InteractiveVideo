@@ -1,6 +1,3 @@
-#Partly
-1. Learning Progress <= Preconditions still to do
-
 #Done
 1. Display task above videos
 2. Possibility to create a comment (private/public) on reflection question
@@ -18,3 +15,4 @@
 14. Video platform Vimeo as media source via plugin
 15. Compatibility with PHP 7 and Ilias 5.2.x
 16. Export/Import
+17. Learning Progress

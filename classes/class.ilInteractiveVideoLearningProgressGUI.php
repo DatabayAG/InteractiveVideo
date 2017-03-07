@@ -13,7 +13,7 @@ require_once 'Services/Tracking/classes/class.ilOnlineTracking.php';
  */
 class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 {
-	//TODO: PRECONDITON HANDLING
+
 	/**
 	 * @var ilObjInteractiveVideoGUI
 	 */
