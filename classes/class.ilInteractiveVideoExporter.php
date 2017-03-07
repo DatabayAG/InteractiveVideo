@@ -48,7 +48,6 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		$date				= time();
 		$this->sub_dir		= $date . '_' . IL_INST_ID . '_' . "xvid" . '_' . $a_id;
 		$this->filename		= $this->sub_dir . ".xml";
-		ilUtil::makeDirParents($this->sub_dir);
 
 		$this->exportPagesXML();
 
