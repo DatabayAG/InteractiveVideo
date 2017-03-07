@@ -74,6 +74,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$image_upload->setPathToVideo($source->getPath($this->object->getId()));
 		}
+		else
+		{
+			$image_upload->setCanExtractImages(false);
+		}
 
 		$form->addItem($image_upload);
 	}
@@ -404,7 +408,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 * @return string
 	 */
-	protected function initPlayerConfig()
+	protected function initPlayerConfig($edit_screen = false)
 	{
 		/**
 		 * $ilUser ilObjUser
@@ -478,9 +482,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$stop_points = $this->objComment->getStopPoints();
 		$comments = $this->objComment->getContentComments();
 
-		$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
-		$config_tpl->setVariable('COMMENTS', json_encode($comments));
-		$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode(ilObjComment::getUserImageCache()));
+		if(!$edit_screen)
+		{
+			$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
+			$config_tpl->setVariable('COMMENTS', json_encode($comments));
+			$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode(ilObjComment::getUserImageCache()));
+		}
+		else
+		{
+			$config_tpl->setVariable('STOP_POINTS', json_encode(array()));
+			$config_tpl->setVariable('COMMENTS', json_encode(array()));
+			$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode(array()));
+		}
 
 		return $config_tpl->get();
 	}
@@ -491,7 +504,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function validateCustom(ilPropertyFormGUI $a_form)
 	{
-		// @todo: Validate custom values (e.g. a new video file) on update and return false if the property form is invalid
 		return parent::validateCustom($a_form);
 	}
 
@@ -1443,7 +1455,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postTutorComment', '', false, false));
 
-		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig());
+		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig(true));
 		global $ilUser;
 		$this->object->getLPStatusForUser($ilUser->getId());
 		$tbl_data = $this->object->getCommentsTableData();
