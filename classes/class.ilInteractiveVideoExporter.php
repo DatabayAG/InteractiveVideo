@@ -65,7 +65,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 
 	public function init()
 	{
-		// TODO: Implement init() method.
+
 	}
 
 	public function getValidSchemaVersions($a_entity)

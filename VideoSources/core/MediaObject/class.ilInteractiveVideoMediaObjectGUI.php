@@ -30,7 +30,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function checkForm($form)
 	{
-		// TODO: Implement checkForm() method.
+
 	}
 
 	/**

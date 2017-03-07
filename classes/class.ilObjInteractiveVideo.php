@@ -298,7 +298,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->video_source_object->beforeDeleteVideoSource($this->getId());
 		self::deleteComments(self::getCommentIdsByObjId($this->getId(), false));
 
-		//TODO: WHY is doDelete not called?
 		/**
 		 * @var $ilDB ilDB
 		 */
