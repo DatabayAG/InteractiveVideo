@@ -29,8 +29,8 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function checkForm($form)
 	{
-		$fau_url = ilUtil::stripSlashes($_POST['simple_url']);
-		if($fau_url != '' )
+		$simple_url = ilUtil::stripSlashes($_POST['simple_url']);
+		if($simple_url != '' )
 		{
 			return true;
 		}
