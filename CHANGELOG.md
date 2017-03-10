@@ -1,4 +1,4 @@
-#Done
+#2.0.12
 1. Display task above videos
 2. Possibility to create a comment (private/public) on reflection question
 3. Repository object as feedback for a question
@@ -11,8 +11,9 @@
 10. Images for the question text
 11. Extract images for the question text from a file based video source
 12. Youtube as video source
-13. Video platform FAU as media source via plugin
-14. Video platform Vimeo as media source via plugin
-15. Compatibility with PHP 7 and Ilias 5.2.x
-16. Export/Import
-17. Learning Progress
+13. Video URL as source
+14. Video platform FAU as media source via plugin
+15. Video platform Vimeo as media source via plugin
+16. Compatibility with PHP 7 and Ilias 5.2.x
+17. Export/Import
+18. Learning Progress
