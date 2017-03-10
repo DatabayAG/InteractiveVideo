@@ -130,7 +130,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		}
 		return $seconds . '.' . $milliseconds;
 	}
-	
+
 	public static function moveSelectedImage($comment_id, $id, $path_org)
 	{
 		$file_extension	= pathinfo($path_org, PATHINFO_EXTENSION);

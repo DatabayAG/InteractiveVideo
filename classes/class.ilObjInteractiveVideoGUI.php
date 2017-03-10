@@ -482,17 +482,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$stop_points = $this->objComment->getStopPoints();
 		$comments = $this->objComment->getContentComments();
 
-		if(!$edit_screen)
-		{
-			$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
-			$config_tpl->setVariable('COMMENTS', json_encode($comments));
-			$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode(ilObjComment::getUserImageCache()));
-		}
-		else
+		if($edit_screen)
 		{
 			$config_tpl->setVariable('STOP_POINTS', json_encode(array()));
 			$config_tpl->setVariable('COMMENTS', json_encode(array()));
 			$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode(array()));
+		}
+		else
+		{
+			$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
+			$config_tpl->setVariable('COMMENTS', json_encode($comments));
+			$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode(ilObjComment::getUserImageCache()));
 		}
 
 		return $config_tpl->get();
