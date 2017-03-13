@@ -19,7 +19,7 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 	{
 		$('#' + pub.config.button_id).on('click', function()
 		{
-			$('#' + pub.config.modal_id).modal('show');
+			$('#' + pub.config.modal_id).modal({backdrop: 'static'}, 'show');
 			$('#ffmpeg_time_picker').timepicker('setTime', $('#comment_time').val());
 		});
 
