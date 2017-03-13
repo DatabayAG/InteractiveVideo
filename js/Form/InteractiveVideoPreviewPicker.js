@@ -44,14 +44,22 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 					var images = JSON.parse(json);
 					var html = '';
 					var button = $('.use_as_question_image').html();
-					 $.each(images, function (key, value) 
-					 {
-						html += '<div class="col-xs-12 preview_image_container"><img class="preview_image" src="'+value+'"/>' +
+					if(images.error === undefined)
+					{
+						$.each(images, function (key, value)
+						{
+							html += '<div class="col-xs-12 preview_image_container"><img class="preview_image" src="'+value+'"/>' +
 								button +
 								'</div>';
-					 });
-					$('#' + pub.config.modal_id).find('.preview').html(html);
-					pro.registerSelectListener();
+						});
+						$('#' + pub.config.modal_id).find('.preview').html(html);
+						pro.registerSelectListener();
+					}
+					else
+					{
+						$('#' + pub.config.modal_id).find('.preview').html(images.error);
+					}
+
 					pro.hideWaitBox();
 				}
 		 });

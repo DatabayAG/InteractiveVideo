@@ -2327,9 +2327,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($source->isFileBased())
 		{
 			$file_path = $source->getPath($this->object->getId());
-			$json = ilInteractiveVideoFFmpeg::extractImageWrapper($file_path, '', $path , $time, true);
-			$tpl_json->setVariable('JSON', $json);
-			$tpl_json->show("DEFAULT", false, true);
+			try{
+				$json = ilInteractiveVideoFFmpeg::extractImageWrapper($file_path, '', $path , $time, true);
+				$tpl_json->setVariable('JSON', $json);
+				$tpl_json->show("DEFAULT", false, true);
+			}catch(ilFFmpegException $e)
+			{
+				$tpl_json->setVariable('JSON', json_encode(array('error' => $e->getMessage())));
+				$tpl_json->show("DEFAULT", false, true);
+			}
+		
+
 		}
 		$this->callExit();
 	}
