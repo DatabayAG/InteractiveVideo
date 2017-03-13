@@ -1423,7 +1423,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $ilTabs;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
-		//Todo: fix double tabs after question editing
 		$this->setSubTabs('editComments');
 
 		$ilTabs->activateTab('editComments');
@@ -2323,9 +2322,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$path = 'data/default/xvid/xvid_'.$this->object->getId().'/images';
 		ilUtil::makeDirParents($path);
-		$json = ilInteractiveVideoFFmpeg::extractImageWrapper('data/default/mobs/mm_287/BigBuckBunny_320x180_cut.mp4', '', $path , $time, true);
-		$tpl_json->setVariable('JSON', $json);
-		$tpl_json->show("DEFAULT", false, true);
+		$factory = new ilInteractiveVideoSourceFactory();
+		$source = $factory->getVideoSourceObject($this->object->getSourceId());
+		if($source->isFileBased())
+		{
+			$file_path = $source->getPath($this->object->getId());
+			$json = ilInteractiveVideoFFmpeg::extractImageWrapper($file_path, '', $path , $time, true);
+			$tpl_json->setVariable('JSON', $json);
+			$tpl_json->show("DEFAULT", false, true);
+		}
 		$this->callExit();
 	}
 

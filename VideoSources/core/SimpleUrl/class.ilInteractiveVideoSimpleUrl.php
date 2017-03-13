@@ -52,7 +52,6 @@ class ilInteractiveVideoSimpleUrl implements ilInteractiveVideoSource
 
 	/**
 	 * @param int $obj_id
-	 * @return array
 	 */
 	public function doReadVideoSource($obj_id)
 	{
