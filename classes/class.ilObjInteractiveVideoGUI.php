@@ -389,16 +389,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$question->setVariable('QUESTION_TEXT', '');
 		}
 		$lng = ilInteractiveVideoPlugin::getInstance();
-		$question->setVariable('LABEL_FEEDBACK_NEUTRAL',		$lng->txt('feedback_neutral'));
-		$question->setVariable('LABEL_JUMP_NEUTRAL',			$lng->txt('feedback_jump_neutral'));
-		$question->setVariable('LABEL_JUMP_NEUTRAL_INFO',		$lng->txt('feedback_jump_neutral_info'));
-		$question->setVariable('LABEL_REPOSITORY_NEUTRAL',		$lng->txt('feedback_repository_neutral'));
-		$question->setVariable('LABEL_REPOSITORY_NEUTRAL_INFO',	$lng->txt('feedback_repository_neutral_info'));
-		$question->setVariable('LABEL_FEEDBACK_CORRECT',		$lng->txt('feedback_correct'));
-		$question->setVariable('LABEL_JUMP_CORRECT',			$lng->txt('is_jump_correct'));
-		$question->setVariable('LABEL_JUMP_CORRECT_INFO',		$lng->txt('is_jump_correct_info'));
-		$question->setVariable('LABEL_REPOSITORY_CORRECT',		$lng->txt('feedback_correct_obj'));
-		$question->setVariable('LABEL_REPOSITORY_CORRECT_INFO',	$lng->txt('feedback_correct_obj_info'));
+		$question->setVariable('LABEL_FEEDBACK_NEUTRAL',		json_encode($lng->txt('feedback_neutral')));
+		$question->setVariable('LABEL_JUMP_NEUTRAL',			json_encode($lng->txt('feedback_jump_neutral')));
+		$question->setVariable('LABEL_JUMP_NEUTRAL_INFO',		json_encode($lng->txt('feedback_jump_neutral_info')));
+		$question->setVariable('LABEL_REPOSITORY_NEUTRAL',		json_encode($lng->txt('feedback_repository_neutral')));
+		$question->setVariable('LABEL_REPOSITORY_NEUTRAL_INFO',	json_encode($lng->txt('feedback_repository_neutral_info')));
+		$question->setVariable('LABEL_FEEDBACK_CORRECT',		json_encode($lng->txt('feedback_correct')));
+		$question->setVariable('LABEL_JUMP_CORRECT',			json_encode($lng->txt('is_jump_correct')));
+		$question->setVariable('LABEL_JUMP_CORRECT_INFO',		json_encode($lng->txt('is_jump_correct_info')));
+		$question->setVariable('LABEL_REPOSITORY_CORRECT',		json_encode($lng->txt('feedback_correct_obj')));
+		$question->setVariable('LABEL_REPOSITORY_CORRECT_INFO',	json_encode($lng->txt('feedback_correct_obj_info')));
 		$question->setVariable('QUESTION_ID', $question_id);
 		return $question->get();
 	}
