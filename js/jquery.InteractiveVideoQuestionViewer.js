@@ -143,7 +143,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		modal.html(feedback.html);
 		if (parseInt(feedback.is_timed, 10) === 1) {
 			modal.append('<div class="learning_recommendation"><br/>' + scope.InteractiveVideo.lang.learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', scope.InteractiveVideo.lang.feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>');
-			$('#jumpToTimeInVideo').on('click', function (e) {
+			$('#jumpToTimeInVideo').on('click', function () {
 				$('#ilQuestionModal').modal('hide');
 				scope.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(feedback.time);
 			});
@@ -196,7 +196,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.appendCloseButtonListener = function()
 	{
-		$('#close_form').on('click', function (e) {
+		$('#close_form').on('click', function () {
 			$('#ilQuestionModal').modal('hide');
 			scope.InteractiveVideoPlayerAbstract.resumeVideo();
 		});

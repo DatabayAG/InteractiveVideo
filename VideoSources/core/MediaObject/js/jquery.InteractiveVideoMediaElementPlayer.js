@@ -5,7 +5,7 @@ $( document ).ready(function() {
 (function ($) {
 	il.Util.addOnLoad(function () {
 		var player = null,
-		    seekTime= 0,
+		 	seekTime= 0,
 			interval = null;
 		il.InteractiveVideo.last_stopPoint = -1;
 		player = new MediaElementPlayer("#ilInteractiveVideo", {
@@ -15,7 +15,7 @@ $( document ).ready(function() {
 
 			success: function(media) {
 
-				media.addEventListener('loadeddata', function (e) {
+				media.addEventListener('loadeddata', function () {
 					var player = $("video#ilInteractiveVideo")[0];
 
 					il.InteractiveVideoPlayerAbstract.config = {
@@ -29,32 +29,32 @@ $( document ).ready(function() {
 					il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
 				}, false);
 
-				media.addEventListener('loadedmetadata', function (e) {
+				media.addEventListener('loadedmetadata', function () {
 					if (seekTime > 0) {
 						media.currentTime = seekTime;
 						seekTime = 0;
 					}
 				}, false);
 
-				media.addEventListener('play', function(e) {
+				media.addEventListener('play', function() {
 					il.InteractiveVideoPlayerAbstract.play();
 				}, false);
 
-				media.addEventListener('seeked', function(e) {
+				media.addEventListener('seeked', function() {
 					clearInterval(interval);
 					il.InteractiveVideoPlayerFunction.seekingEventHandler();
 				}, false);
 
-				media.addEventListener('pause', function(e) {
+				media.addEventListener('pause', function() {
 					clearInterval(interval);
 					il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime();
 				}, false);
 
-				media.addEventListener('ended', function(e) {
+				media.addEventListener('ended', function() {
 					il.InteractiveVideoPlayerAbstract.videoFinished();
 				}, false);
 
-				media.addEventListener('playing', function(e) {
+				media.addEventListener('playing', function() {
 					interval = setInterval(function () {
 						il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
 					}, 500);

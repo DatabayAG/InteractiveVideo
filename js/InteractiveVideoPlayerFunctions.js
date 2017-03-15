@@ -394,7 +394,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			dataType : "JSON",
 			url      : il.InteractiveVideo.video_started_post_url,
 			data     : {},
-			success  : function(data) {
+			success  : function() {
 			}
 		});
 	};
@@ -405,7 +405,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			dataType : "JSON",
 			url      : il.InteractiveVideo.video_finished_post_url,
 			data     : {},
-			success  : function(data) {
+			success  : function() {
 			}
 		});
 	};
