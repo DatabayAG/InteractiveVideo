@@ -5,7 +5,7 @@ $( document ).ready(function() {
 (function ($) {
 	il.Util.addOnLoad(function () {
 		var player = null,
-		 	seekTime= 0,
+			seekTime = 0,
 			interval = null;
 		il.InteractiveVideo.last_stopPoint = -1;
 		player = new MediaElementPlayer("#ilInteractiveVideo", {
