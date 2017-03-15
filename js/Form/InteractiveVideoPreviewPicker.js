@@ -35,12 +35,12 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 		pro.displayWaitBox();
 
 		$.ajax({
-		 type:    "POST",
-		 cache:   false,
-		 url:     il.InteractiveVideoFFMPEGAjaxURL,
-		 data:    {time : $('#ffmpeg_time_picker').val()},
-		 success: function (json) 
-				  {
+			type:	"POST", 
+			cache:	false, 
+			url:	il.InteractiveVideoFFMPEGAjaxURL, 
+			data:	{time : $('#ffmpeg_time_picker').val()}, 
+			success: function (json) 
+				{
 					var images = JSON.parse(json);
 					var html = '';
 					var button = $('.use_as_question_image').html();
@@ -62,7 +62,7 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 
 					pro.hideWaitBox();
 				}
-		 });
+		});
 	};
 
 	pro.registerSelectListener = function()
