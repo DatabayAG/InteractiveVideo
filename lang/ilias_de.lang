@@ -161,7 +161,7 @@ feedback_jump_neutral#:#Sprungmarke
 feedback_repository_neutral#:#Feedback Link zu einem Repository Object
 feedback_repository_neutral_info#:#Feedback Link zu einem Repository Object
 neutral_questions#:#Neutrale Fragen
-neutral_questions#:#Neutrale Frage
+neutral_question#:#Neutrale Frage
 export_comments#:#Kommentare Exportieren
 export_all_comments#:#Alle Kommentare Exportieren
 question_image#:#Bild für Frage

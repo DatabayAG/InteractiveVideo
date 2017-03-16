@@ -1649,6 +1649,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$section_header->setTitle($plugin->txt('question'));
 		$form->addItem($section_header);
 
+		$question_type = new ilSelectInputGUI($plugin->txt('question_type'), 'question_type');
+		$type_options = array(0 => $plugin->txt('single_choice'), 1 => $plugin->txt('multiple_choice'), 2 => $plugin->txt('reflection'));
+		$question_type->setOptions($type_options);
+		$question_type->setInfo($plugin->txt('question_type_info'));
+		$form->addItem($question_type);
+
+		$question_text = xvidUtils::constructTextAreaFormElement('question_text', 'question_text');
+		$question_text->setRequired(true);
+		$form->addItem($question_text);
+
+		$this->appendImageUploadForm($plugin, $form);
+
 		$neutral_type = new ilSelectInputGUI($plugin->txt('neutral_type'), 'neutral_type');
 		$neutral_type_options = array(0 => $plugin->txt('with_correct'), 1 => $plugin->txt('neutral'));
 
@@ -1656,18 +1668,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$neutral_type->setInfo($plugin->txt('neutral_type_info'));
 		$form->addItem($neutral_type);
 		
-		$question_type = new ilSelectInputGUI($plugin->txt('question_type'), 'question_type');
-		$type_options = array(0 => $plugin->txt('single_choice'), 1 => $plugin->txt('multiple_choice'), 2 => $plugin->txt('reflection'));
-
-		$question_type->setOptions($type_options);
-		$question_type->setInfo($plugin->txt('question_type_info'));
-		$form->addItem($question_type);
-
-		$this->appendImageUploadForm($plugin, $form);
-
-		$question_text = xvidUtils::constructTextAreaFormElement('question_text', 'question_text');
-		$question_text->setRequired(true);
-		$form->addItem($question_text);
 
 		$answer = new ilCustomInputGUI($this->lng->txt('answers'), 'answer_text');
 		$answer->setHtml($this->getInteractiveForm());

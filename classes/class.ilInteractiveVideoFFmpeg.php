@@ -85,7 +85,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 				return self::escapeHourMinutesSeconds('00', $matches[0], $matches[1]);
 			}
 		}
-		return (int) $time;
+		return $time;
 	}
 
 	/**
@@ -98,7 +98,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 	{
 		$hours			= (int) $hours;
 		$minutes		= (int) $minutes;
-		return $hours . ':' . self::escapeMinutesSeconds($minutes, $seconds);
+		return self::fillZeroIfSmallerTen($hours) . ':' . self::escapeMinutesSeconds($minutes, $seconds);
 	}
 
 	/**
@@ -109,7 +109,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 	protected static function escapeMinutesSeconds($minutes, $seconds)
 	{
 		$minutes		= (int) $minutes;
-		return $minutes . ':' . self::escapeSeconds($seconds);
+		return self::fillZeroIfSmallerTen($minutes) . ':' . self::escapeSeconds($seconds);
 	}
 
 	/**
@@ -128,7 +128,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		{
 			$seconds = (int) $seconds;
 		}
-		return $seconds . '.' . $milliseconds;
+		return self::fillZeroIfSmallerTen($seconds) . '.' . $milliseconds;
 	}
 
 	public static function moveSelectedImage($comment_id, $id, $path_org)
@@ -145,5 +145,15 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 			ilUtil::delDir(dirname($path_org));
 			return $new_file;
 		}
+	}
+	
+	protected static function fillZeroIfSmallerTen($number)
+	{
+		if($number < 10)
+		{
+			return '0' . $number;
+		}
+		
+		return $number;
 	}
 }
