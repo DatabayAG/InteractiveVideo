@@ -14,7 +14,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		var i;
 		for (i = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 		{
-			if (scope.InteractiveVideo.comments[i].comment_time <= time)
+			if (parseFloat(scope.InteractiveVideo.comments[i].comment_time) <= time)
 			{
 				pos = i;
 			}
