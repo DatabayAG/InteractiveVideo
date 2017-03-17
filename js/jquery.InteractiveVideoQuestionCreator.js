@@ -37,7 +37,7 @@ var InteractiveVideoQuestionCreator = (function () {
 				answer  : '',
 				correct: 0
 			});
-			IVQuestionCreator.JSON.splice(parseInt($(this).parent().attr('meta'), 10), 0, insert);
+			IVQuestionCreator.JSON.splice(parseInt($(this).parent().attr('meta'), 10) + 1, 0, insert);
 			pro.createQuestionForm();
 			return false;
 		});
