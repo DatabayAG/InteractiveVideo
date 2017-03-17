@@ -375,3 +375,6 @@ body.cke_editable{
     max-width: 25%; 
     height: auto;
 }
+.preview_image{
+    max-width:100%;
+}

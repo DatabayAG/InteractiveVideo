@@ -23,7 +23,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		ilUtil::makeDirParents($target_dir);
 		$target_file = $target_dir.'/'.$a_target_filename;
 
-		$cmd = '-y -i '.ilUtil::escapeShellArg($a_file).' -r 1 -f image2 -vframes 1 -ss '.$a_sec.' '.ilUtil::escapeShellArg($target_file);
+		$cmd = ' -ss '.$a_sec.' -y -i '.ilUtil::escapeShellArg($a_file).' -r 1 -f image2 -vframes 1 '.ilUtil::escapeShellArg($target_file);
 		$ret = self::exec($cmd. ' 2>&1');
 		self::$last_return = $ret;
 
