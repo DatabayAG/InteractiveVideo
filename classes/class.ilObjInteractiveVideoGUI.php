@@ -991,7 +991,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		if(isset($_POST['comment_time_end']))
 		{
-			$seconds_end = ilInteractiveVideoTimePicker::getSecondsFromString($_POST['comment_time_end']);
+			$seconds_end = (int) $_POST['comment_time_end'];
 		}
 		else
 		{
