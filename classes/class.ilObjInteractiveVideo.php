@@ -416,13 +416,13 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$table_data[$counter]['comment_id']			= $row['comment_id'];
-			$table_data[$counter]['comment_time']		= $row['comment_time'];
-			$table_data[$counter]['comment_time_end']	= $row['comment_time_end'];
+			$table_data[$counter]['comment_time']		= xvidUtils::timeSpanString($row['comment_time']);
+			$table_data[$counter]['comment_time_end']	= xvidUtils::timeSpanString($row['comment_time_end'], true);
 			$table_data[$counter]['user_id']			= $row['user_id'];
 			$table_data[$counter]['title']				= $row['comment_title'];
 			$table_data[$counter]['comment_text']		= $row['comment_text'];
-			$table_data[$counter]['is_tutor']			= $row['is_tutor'];
-			$table_data[$counter]['is_interactive']		= $row['is_interactive'];
+			$table_data[$counter]['is_tutor']			= xvidUtils::yesNoString($row['is_tutor']);
+			$table_data[$counter]['is_interactive']		= xvidUtils::yesNoString($row['is_interactive']);
 			$counter++;
 		}
 
@@ -451,12 +451,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$table_data[$counter]['comment_id']			= $row['comment_id'];
-			$table_data[$counter]['comment_time']		= $row['comment_time'];
-			$table_data[$counter]['comment_time_end']	= $row['comment_time_end'];
+			$table_data[$counter]['comment_time']		= xvidUtils::timeSpanString($row['comment_time']);
+			$table_data[$counter]['comment_time_end']	= xvidUtils::timeSpanString($row['comment_time_end'], true);
 			$table_data[$counter]['comment_title']		= $row['comment_title'];
 			//	$table_data[$counter]['user_id']			= $row['user_id'];
 			$table_data[$counter]['comment_text']		= $row['comment_text'];
-			$table_data[$counter]['is_private']			= $row['is_private'];
+			$table_data[$counter]['is_private']			= xvidUtils::yesNoString($row['is_private']);
 //			$table_data[$counter]['is_tutor']       = $row['is_tutor'];
 //			$table_data[$counter]['is_interactive'] = $row['is_interactive'];
 			$counter++;

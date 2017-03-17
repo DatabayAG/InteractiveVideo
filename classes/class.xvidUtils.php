@@ -45,6 +45,50 @@ class xvidUtils
 	}
 
 	/**
+	 * @param      $seconds
+	 * @param bool $text_instead_of_null_string
+	 * @return string
+	 */
+	public static function timeSpanString( $seconds, $text_instead_of_null_string = false)
+	{
+
+			$s = $seconds % 60;
+			$m = (($seconds - $s) / 60) % 60;
+			$h = (((($seconds - $s) / 60) - $m) / 60) % 24;
+
+			if($seconds == 0 && $text_instead_of_null_string)
+			{
+				return 'n.n.';
+			}
+			else
+			{
+				if($h > 10)
+				{
+					$h = '0' . $h;
+				}
+				return $h . ':' . $m . ':' . $s ;
+			}
+	}
+
+	/**
+	 * @param $value
+	 * @return string
+	 */
+	public static function yesNoString( $value)
+	{
+
+		global $lng;
+		if($value == 1)
+		{
+			return $lng->txt('yes');
+		}
+		else
+		{
+			return $lng->txt('no');
+		}
+	}
+	
+	/**
 	 * @param $txt
 	 * @param $name
 	 * @return ilTextAreaInputGUI
