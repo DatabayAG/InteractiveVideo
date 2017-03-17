@@ -222,6 +222,11 @@
 #question_form label input{
 	margin-right: 5px;
 }
+#question_form{
+    margin: auto;
+    width: 50%;
+}
+
 
 .fadeOut{
     -webkit-transition: background 0.5s linear;
@@ -377,4 +382,13 @@ body.cke_editable{
 }
 .preview_image{
     max-width:100%;
+}
+.question_center{
+    text-align:center;
+}
+
+#sendForm{
+    left: 5px;
+    bottom: 5px;
+    position: absolute;
 }

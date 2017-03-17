@@ -26,7 +26,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		{
 			img = '<div class="question_image_container"><img class="question_image" src="' + pub.QuestionObject.question_image+ '"/></div>';
 		}
-		modal.append(img + '<p>' + pub.QuestionObject.question_text + '</p>');
+		modal.append(img + '<div class="question_center"><p>' + pub.QuestionObject.question_text + '</p></div>');
 		if (type === 0) {
 			pro.addAnswerPossibilities('radio');
 			pro.addFeedbackDiv();
@@ -66,6 +66,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 			html += pro.buildAnswerInputElement(input_type, value);
 		});
 		html += '<input name="qid" value ="' + pub.QuestionObject.question_id + '" type="hidden"/>';
+		html += '<div id="question_buttons_bellow_form"></div>';
 		html += '</form>';
 		$('.modal-body').append(html);
 	};
@@ -130,7 +131,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.addButtons = function() {
-		var question_form = $('#question_form');
+		var question_form = $('#question_buttons_bellow_form');
 		question_form.append(pro.createButtonButtons('sendForm', scope.InteractiveVideo.lang.send_text));
 		question_form.append(pro.createButtonButtons('close_form', scope.InteractiveVideo.lang.close_text));
 		pro.appendButtonListener();
