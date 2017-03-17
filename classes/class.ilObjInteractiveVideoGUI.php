@@ -2321,7 +2321,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$time = '00:00:00.0';
 		}
-		$path = 'data/default/xvid/xvid_'.$this->object->getId().'/images';
+		$path = CLIENT_WEB_DIR . '/xvid/xvid_'.$this->object->getId().'/images';
 		ilUtil::makeDirParents($path);
 		$factory = new ilInteractiveVideoSourceFactory();
 		$source = $factory->getVideoSourceObject($this->object->getSourceId());

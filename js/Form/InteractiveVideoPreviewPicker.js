@@ -41,7 +41,6 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 			data:	{time : $('#ffmpeg_time_picker').val()}, 
 			success: function (json) 
 				{
-					console.log(json)
 					var images = JSON.parse(json);
 					var html = '';
 					var button = $('.use_as_question_image').html();
