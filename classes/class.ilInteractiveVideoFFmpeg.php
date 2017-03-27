@@ -58,7 +58,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 			{
 				$sec = $seconds_split[0] . '.' .$i;
 				$file = self::extractImage($a_file, $i . '.jpg', $a_target_dir, $sec);
-				$json_container[] = ilWACSignedPath::signFile($file . '?' . rand());
+				$json_container[] = array('time' => $sec, 'img' => ilWACSignedPath::signFile($file . '?' . rand()));
 			}
 		}
 		
@@ -134,6 +134,19 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 	public static function moveSelectedImage($comment_id, $id, $path_org)
 	{
 		$file_extension	= pathinfo($path_org, PATHINFO_EXTENSION);
+		if($file_extension != '' && preg_split('/\?/', $file_extension))
+		{
+			$clean_extension = preg_split('/\?/', $file_extension);
+			if(is_array($clean_extension) && count($clean_extension) > 1)
+			{
+				$file_extension = $clean_extension[0];
+			}
+			$path_org = preg_split('/\?/', $path_org);
+			if(is_array($path_org) && count($path_org) > 1)
+			{
+				$path_org = $path_org[0];
+			}
+		}
 		$clean_name		= $comment_id .'.' . $file_extension;
 		$part			= 'xvid_' . $id . '/' . $comment_id . '/images';
 		$path			= xvidUtils::ensureFileSavePathExists($part);

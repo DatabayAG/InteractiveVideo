@@ -400,6 +400,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question->setVariable('LABEL_JUMP_CORRECT_INFO',		json_encode($lng->txt('is_jump_correct_info')));
 		$question->setVariable('LABEL_REPOSITORY_CORRECT',		json_encode($lng->txt('feedback_correct_obj')));
 		$question->setVariable('LABEL_REPOSITORY_CORRECT_INFO',	json_encode($lng->txt('feedback_correct_obj_info')));
+		$question->setVariable('LABEL_TIME',	json_encode($lng->txt('time_for_preview')));
 		$question->setVariable('QUESTION_ID', $question_id);
 		return $question->get();
 	}

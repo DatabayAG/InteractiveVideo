@@ -48,7 +48,7 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 					{
 						$.each(images, function (key, value)
 						{
-							html += '<div class="col-xs-12 preview_image_container"><img class="preview_image" src="'+value+'"/>' +
+							html += '<div class="col-xs-12 preview_image_container"><div class="ffmpeg_time col-xs-12">' + IVQuestionCreator.lang.label_time + ' ' + value.time + '</div><img class="col-xs-12  preview_image" src="'+value.img+'"/>' +
 								button +
 								'</div>';
 						});
