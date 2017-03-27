@@ -175,3 +175,7 @@ correct_answer#:#Correct
 wrong_answer#:#Wrong
 neutral_answer#:#-
 not_answered#:#Not answered
+save_anyway#:#Save Anyway
+private#:#private
+public#:#public
+visibility#:#Visibility

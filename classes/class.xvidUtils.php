@@ -47,27 +47,37 @@ class xvidUtils
 	/**
 	 * @param      $seconds
 	 * @param bool $text_instead_of_null_string
+	 * @param bool $empty_string_instead_of_null
 	 * @return string
 	 */
-	public static function timeSpanString( $seconds, $text_instead_of_null_string = false)
+	public static function getTimeStringFromSeconds($seconds, $text_instead_of_null_string = false, $empty_string_instead_of_null = false)
 	{
+		$s = $seconds % 60;
+		$m = (($seconds - $s) / 60) % 60;
+		$h = (((($seconds - $s) / 60) - $m) / 60) % 24;
 
-			$s = $seconds % 60;
-			$m = (($seconds - $s) / 60) % 60;
-			$h = (((($seconds - $s) / 60) - $m) / 60) % 24;
+		if($seconds == 0 && $text_instead_of_null_string && !$empty_string_instead_of_null)
+		{
+			return 'n.n.';
+		}
+		else if($seconds == 0 && $empty_string_instead_of_null)
+		{
+			return '';
+		}
+		else
+		{
+			return self::fillZeroIfSmallerTen($h) . ':' . self::fillZeroIfSmallerTen($m) . ':' . self::fillZeroIfSmallerTen($s);
+		}
+	}
 
-			if($seconds == 0 && $text_instead_of_null_string)
-			{
-				return 'n.n.';
-			}
-			else
-			{
-				if($h > 10)
-				{
-					$h = '0' . $h;
-				}
-				return $h . ':' . $m . ':' . $s ;
-			}
+	protected static function fillZeroIfSmallerTen($number)
+	{
+		if($number < 10)
+		{
+			return '0' . $number;
+		}
+
+		return $number;
 	}
 
 	/**

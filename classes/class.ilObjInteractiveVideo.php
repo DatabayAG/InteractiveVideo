@@ -400,7 +400,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	/**
 	 * @return array
 	 */
-	public function getCommentsTableData($replace_with_text = false)
+	public function getCommentsTableData($replace_with_text = false, $empty_string_if_null = false, $replace_settings_with_text = false)
 	{
 		global $ilDB;
 
@@ -419,8 +419,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 			if($replace_with_text)
 			{
-				$table_data[$counter]['comment_time']		= xvidUtils::timeSpanString($row['comment_time']);
-				$table_data[$counter]['comment_time_end']	= xvidUtils::timeSpanString($row['comment_time_end'], true);
+				$table_data[$counter]['comment_time']		= xvidUtils::getTimeStringFromSeconds($row['comment_time'], false);
+				$table_data[$counter]['comment_time_end']	= xvidUtils::getTimeStringFromSeconds($row['comment_time_end'], $replace_with_text, $empty_string_if_null);
 			}
 			else
 			{
@@ -430,7 +430,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			$table_data[$counter]['user_id']			= $row['user_id'];
 			$table_data[$counter]['title']				= $row['comment_title'];
 			$table_data[$counter]['comment_text']		= $row['comment_text'];
-			if($replace_with_text)
+			if($replace_settings_with_text)
 			{
 				$table_data[$counter]['is_tutor']			= xvidUtils::yesNoString($row['is_tutor']);
 				$table_data[$counter]['is_interactive']		= xvidUtils::yesNoString($row['is_interactive']);
@@ -469,12 +469,20 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$table_data[$counter]['comment_id']			= $row['comment_id'];
-			$table_data[$counter]['comment_time']		= xvidUtils::timeSpanString($row['comment_time']);
-			$table_data[$counter]['comment_time_end']	= xvidUtils::timeSpanString($row['comment_time_end'], true);
+			$table_data[$counter]['comment_time']		= xvidUtils::getTimeStringFromSeconds($row['comment_time']);
+			$table_data[$counter]['comment_time_end']	= xvidUtils::getTimeStringFromSeconds($row['comment_time_end']);
 			$table_data[$counter]['comment_title']		= $row['comment_title'];
 			//	$table_data[$counter]['user_id']			= $row['user_id'];
 			$table_data[$counter]['comment_text']		= $row['comment_text'];
-			$table_data[$counter]['is_private']			= xvidUtils::yesNoString($row['is_private']);
+
+			if($row['is_private'] == 1)
+			{
+				$table_data[$counter]['is_private'] = ilInteractiveVideoPlugin::getInstance()->txt('private');
+			}
+			else
+				{
+				$table_data[$counter]['is_private'] = ilInteractiveVideoPlugin::getInstance()->txt('public');
+			}
 //			$table_data[$counter]['is_tutor']       = $row['is_tutor'];
 //			$table_data[$counter]['is_interactive'] = $row['is_interactive'];
 			$counter++;

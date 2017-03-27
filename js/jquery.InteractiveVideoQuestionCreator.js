@@ -155,6 +155,25 @@ var InteractiveVideoQuestionCreator = (function () {
 		$('#is_interactive').parent().parent().parent().parent().append(question_form);
 		pro.createQuestionForm();
 		pro.appendSingleListener();
+		$('input[name="cmd[insertQuestion]"]').on('click', function (evt)
+		{
+			if($('#question_type').val() != 2 && $('#neutral_type').val() != 1 && $('.correct_solution:checked').length == 0)
+			{
+				evt.preventDefault();
+				$('#simple_question_warning').modal('show');
+				$('.question_save_anyway').on('click', function (evt)
+				{
+					pro.submitAnyway();
+				});
+			}
+		});
+	};
+
+	pro.submitAnyway = function () 
+	{
+		$('#simple_question_warning').modal('hide');
+		$( 'input[name="cmd[insertQuestion]"]' ).off('click');
+		$( 'input[name="cmd[insertQuestion]"]' ).click();
 	};
 
 	pub.appendEmptyJSON = function () {

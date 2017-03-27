@@ -73,7 +73,7 @@ comment_title#:#Kommentar-Titel
 send#:#Abschicken
 close#:#Schließen
 question#:#Frage
-is_anonymized#:#Kommentare anonymisieren
+is_anonymized#:#Kommentare ohne Namen anzeigen
 is_anonymized_info#:#Wenn aktiviert, werden alle Kommentare ohne Benutzernamen angezeigt.
 is_public#:#Alle Kommentare veröffentlichen
 is_public_info#:#Wenn aktiviert, können alle Benutzer alle Kommentare lesen. Im anderen Fall sehen sie nur ihre eigenen Kommentare
@@ -173,3 +173,9 @@ correct_answer#:#Richtig
 wrong_answer#:#Falsch
 neutral_answer#:#-
 not_answered#:#Nicht beantwortet
+private#:#privat
+public#:#öffentlich
+visibility#:#Sichtbarkeit
+save_anyway#:#Trotzdem speichern
+save_without_correct#:#Sind haben keine korrekte Antwort ausgewählt
+save_without_correct_detail#:#Sie haben weder eine Reflektionfrage, noch neutrale Antworten aktiviert, sind sie sicher, das sie die Frage ohne korrekte Antwort speichern wollen?

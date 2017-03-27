@@ -68,7 +68,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		}
 		else
 		{
-			$this->addColumn($a_parent_obj->plugin->txt('is_private_comment'), 'is_private');
+			$this->addColumn($a_parent_obj->plugin->txt('visibility'), 'is_private');
 		}
 		$this->addColumn($this->lng->txt('actions'), 'actions', '10%');
 
@@ -117,19 +117,14 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			}
 			else if($key == 'comment_time')
 			{
-				$time = xvidUtils::timespanArray($value);
-				$value = $time['h'].':'.$time['m'].':'.$time['s'];
+				#$time = xvidUtils::timespanArray($value);
+				#$value = $time['h'].':'.$time['m'].':'.$time['s'];
 			}
 			else if($key == 'comment_time_end')
 			{
-				if($value == 0)
+				if($value == '00:00:00')
 				{
 					$value = '';
-				}
-				else
-				{
-					$time = xvidUtils::timespanArray($value);
-					$value = $time['h'].':'.$time['m'].':'.$time['s'];
 				}
 			}
 			else if($key == 'is_interactive')
@@ -140,11 +135,6 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			else if($key == 'is_tutor')
 			{
 				continue;
-			}
-			else if($key == 'is_private')
-			{
-				$txt_value = $value == 1 ? 'yes' : 'no'; 
-				$value = $this->lng->txt($txt_value);
 			}
 
 			$this->tpl->setVariable('VAL_'.strtoupper($key), $value);

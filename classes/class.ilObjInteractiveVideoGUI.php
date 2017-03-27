@@ -1459,7 +1459,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig(true));
 		global $ilUser;
 		$this->object->getLPStatusForUser($ilUser->getId());
-		$tbl_data = $this->object->getCommentsTableData();
+		$tbl_data = $this->object->getCommentsTableData(true, true);
 		$plugin->includeClass('class.ilInteractiveVideoCommentsTableGUI.php');
 		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editComments');
 		$tbl->setData($tbl_data);
@@ -1744,6 +1744,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$comment_id = new ilHiddenInputGUI('comment_id');
 		$form->addItem($comment_id);
+
+		$modal = ilModalGUI::getInstance();
+		$modal->setId('simple_question_warning');
+		$modal->setType(ilModalGUI::TYPE_MEDIUM);
+		$modal->setHeading($plugin->txt('save_without_correct'));
+		$warning_dialog = new ilTemplate("tpl.question_edit_modal.html", true, true, ilInteractiveVideoPlugin::getInstance()->getDirectory());
+		$warning_dialog->setVariable('INFO_TEXT', $plugin->txt('save_without_correct_detail') );
+		$warning_dialog->setVariable('SAVE_ANYWAY', $plugin->txt('save_anyway') );
+		$warning_dialog->setVariable('CANCEL', $plugin->txt('CANCEL') );
+		$modal->setBody($warning_dialog->get());
+		$mod = new ilCustomInputGUI('', '');
+		$mod->setHtml($modal->getHTML());
+		$form->addItem($mod);
+
 
 		return $form;
 	}
@@ -2462,7 +2476,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($head_row, $plugin->txt('time_end') );
 		array_push($head_row, $plugin->txt('comment_title'));
 		array_push($head_row, $plugin->txt('comment'));
-		array_push($head_row, $plugin->txt('is_private_comment'));
+		array_push($head_row, $plugin->txt('visibility'));
 		array_push($csv, ilUtil::processCSVRow($head_row, TRUE, $separator) );
 		foreach ($data as $key => $row)
 		{

@@ -146,7 +146,7 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 				$this->xvid_obj->import_comment[$this->comments]->setCommentTitle(trim($this->cdata));
 				break;
 			case 'CommentTags':
-				$this->xvid_obj->import_comment[$this->comments]->setCommentText(trim($this->cdata));
+				$this->xvid_obj->import_comment[$this->comments]->setCommentTags(trim($this->cdata));
 				break;
 			case 'CommentIsPrivate':
 				$this->xvid_obj->import_comment[$this->comments]->setIsPrivate(trim($this->cdata));

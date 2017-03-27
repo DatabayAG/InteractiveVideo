@@ -403,3 +403,6 @@ body.cke_editable{
     bottom: 5px;
     position: absolute;
 }
+.question_warning_buttons{
+    text-align:center;
+}
