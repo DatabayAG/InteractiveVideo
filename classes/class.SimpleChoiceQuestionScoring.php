@@ -127,7 +127,15 @@ class SimpleChoiceQuestionScoring
 		{
 			$results[$counter]['title']    = $lng->txt('summary');
 			$results[$counter]['answered'] = round(($answered_questions / $counter) * 100, 2) . '%';
-			$results[$counter]['points']   = round(($correct / ($counter - $neutral)) * 100, 2);
+			if($counter - $neutral > 0)
+			{
+				$results[$counter]['points']   = round(($correct / ($counter - $neutral)) * 100, 2);
+			}
+			else
+			{
+				$results[$counter]['points']   = 0;
+			}
+
 		}
 		$results[$counter]['neutral_answer'] = '';
 		return $results;

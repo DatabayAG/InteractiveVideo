@@ -159,6 +159,14 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 			return $new_file;
 		}
 	}
+
+	public static function removeSelectedImage($path_to_file)
+	{
+		if(file_exists($path_to_file))
+		{
+			unlink($path_to_file);
+		}
+	}
 	
 	protected static function fillZeroIfSmallerTen($number)
 	{

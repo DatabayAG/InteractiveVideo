@@ -168,3 +168,8 @@ question_image#:#Bild für Frage
 extract#:#Thumbnail aus Video erzeugen
 use_this_image#:#Dieses Bild verwenden
 time_for_preview#:#Zeitpunkt: 
+comment_title_info#:#Der Titel wird im Kommentarstream angezeigt und ist für die Kursteilnehmer damit immer sichtbar.
+correct_answer#:#Richtig
+wrong_answer#:#Falsch
+neutral_answer#:#-
+not_answered#:#Nicht beantwortet

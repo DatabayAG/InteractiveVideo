@@ -170,3 +170,8 @@ question_image#:#Question Image
 extract#:#Generate Thumbnail from Video
 use_this_image#:#Use this image
 time_for_preview#:#Time: 
+comment_title_info#:#The title is always visible in the comment screen.
+correct_answer#:#Correct
+wrong_answer#:#Wrong
+neutral_answer#:#-
+not_answered#:#Not answered

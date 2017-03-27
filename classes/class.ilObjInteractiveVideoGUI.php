@@ -1627,6 +1627,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($section_header);
 
 		$title = new ilTextInputGUI($this->lng->txt('title'), 'comment_title');
+		$title->setInfo($plugin->txt('comment_title_info'));
 		$title->setRequired(true);
 		$form->addItem($title);
 		
@@ -2009,6 +2010,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$file = ilInteractiveVideoFFmpeg::moveSelectedImage($comment_id, $this->object->getId(), $_POST['ffmpeg_thumb']);
 			$question->setQuestionImage($file);
 		}
+		if(array_key_exists('question_image_delete', $_POST))
+		{
+			ilInteractiveVideoFFmpeg::removeSelectedImage($question->getQuestionImage());
+			$question->setQuestionImage(null);
+		}
+		
 		$question->setQuestionText(ilUtil::stripSlashes($form->getInput('question_text'), false));
 		$question->setFeedbackCorrect(ilUtil::stripSlashes($form->getInput('feedback_correct'), false));
 		$question->setFeedbackOneWrong(ilUtil::stripSlashes($form->getInput('feedback_one_wrong'), false));
