@@ -136,16 +136,19 @@
 .modal_feedback .neutral{
     background-color: #D9EDF7;
     border-color: #BCE8F1;
+    padding:15px;
 }
 
 .modal_feedback .wrong{
     background-color: #FFE7E7;
     border-color: #EBCCD1;
+    padding:15px;
 }
 
 .modal_feedback .correct{
     background-color: #E7FFE7;
     border-color: #D6E9C6;
+    padding:15px;
 }
 .modal_feedback .correct:before {
     color: #008000;
@@ -188,7 +191,7 @@
     text-align:center;
 }
 .learning_recommendation, .learning_recommendation_link{
-    text-align:left;
+    text-align:center;
 }
 .learning_recommendation_link{
     padding-top: 10px;

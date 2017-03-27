@@ -127,7 +127,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.addFeedbackDiv = function() {
-		$('#question_form').append('<div class="modal_feedback"></div>');
+		$('#question_form').after('<div class="modal_feedback"></div>');
 	};
 
 	pro.addButtons = function() {
@@ -171,8 +171,8 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 				$(this).html('<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>');
 			});
 			$.each(response_frequency, function (l, value) {
-				percentage = (value / answers_count) * 100;
-				$('.response_frequency_' + l).html('<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="' + percentage + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + percentage + '%;">' + percentage + '%</div>');
+				percentage = ((value / answers_count) * 100).toFixed(2);
+				$('.response_frequency_' + l).html('<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="' + percentage + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + percentage + '%;">' + percentage + '% ('+ value +')</div>');
 			});
 		}
 	};

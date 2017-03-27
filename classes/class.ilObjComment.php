@@ -309,7 +309,15 @@ class ilObjComment
 				$temp['user_id']	= $row['user_id'];
 			}
 			$temp['comment_title'] 		= $row['comment_title'];
-			$temp['comment_text'] 		= $row['comment_text'];
+			if($row['is_interactive'] == 1)
+			{
+				$temp['comment_text'] = '';
+			}
+			else
+			{
+				$temp['comment_text'] 		= $row['comment_text'];
+			}
+
 			$temp['comment_time'] 		= $row['comment_time'];
 			$temp['comment_time_end'] 	= $row['comment_time_end'];
 			$temp['comment_tags'] 		= $row['comment_tags'];
