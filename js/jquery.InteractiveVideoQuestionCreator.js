@@ -164,9 +164,15 @@ var InteractiveVideoQuestionCreator = (function () {
 				$('.question_save_anyway').on('click', function (evt)
 				{
 					pro.submitAnyway();
+				});				
+				$('.question_cancel_saving').on('click', function (evt)
+				{
+					$('#simple_question_warning').modal('hide');
 				});
 			}
 		});
+
+		pro.showHideFormElementsForReflectionType();
 	};
 
 	pro.submitAnyway = function () 
