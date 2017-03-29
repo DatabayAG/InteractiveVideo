@@ -11,7 +11,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 	 * @param string $a_file
 	 * @param string $a_target_filename
 	 * @param string $a_target_dir
-	 * @param int    $a_sec
+	 * @param $a_sec
 	 * @return string
 	 * @throws ilFFmpegException
 	 */
