@@ -7,7 +7,7 @@ ILIAS Interactive Video Plugin
 3. Select **Plugins** from the **Administration** main menu drop down.
 4. Search the **InteractiveVideo** plugin in the list of plugin and choose **Activate** from the **Actions** drop down.
 
-###Workaround patch for making the Interactive Videos work with the Web Access Checker
+### Workaround patch for making the Interactive Videos work with the Web Access Checker
 Simply insert the following line into the file 'Services/MediaObjects/classes/class.ilObjMediaObject.php' at round about line number 1397, which should read like this in the original:
 
 	case "mep":
@@ -31,17 +31,17 @@ The InteractiveVideo Plugin for ILIAS gives you the possibility to create a vide
 * [Video Source Plugin for Vimeo](https://github.com/DatabayAG/InteractiveVideoVimeo)
 * [Video Source Plugin for FAU Video Platform](https://github.com/ilifau/InteractiveVideoFauVideoPortal)
 
-#Interactive Video Main View
+# Interactive Video Main View
 ![Main View](http://gvollbach.github.io/InteractiveVideo/images/main_view_2017.png)
 
-#Interactive Video Question View
+# Interactive Video Question View
 ![Question View](http://gvollbach.github.io/InteractiveVideo/images/question_images_2017.png)
 
-#Interactive Video Create Images from Media Object Source
+# Interactive Video Create Images from Media Object Source
 ![Create Images from Media Object Source](http://gvollbach.github.io/InteractiveVideo/images/ffmpeg_images_2017.png)
 
-#Interactive Video Create Question
+# Interactive Video Create Question
 ![Create Question](http://gvollbach.github.io/InteractiveVideo/images/create_question_2017.png)
 
-#Interactive Video Sources & Plugin Slots
+# Interactive Video Sources & Plugin Slots
 ![Main View](http://gvollbach.github.io/InteractiveVideo/images/sources_2017.png)
