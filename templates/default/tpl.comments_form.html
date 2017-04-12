@@ -1,0 +1,30 @@
+<div id="ilInteractiveVideoCommentsForm">
+	<div id="il_prop_cont_comment_text" class="form-group">
+		<label class="col-sm-9 control-label" for="comment_text">{TXT_COMMENT}</label>
+		<div class="col-sm-12">
+			<textarea id="comment_text" class="form-control" rows="" wrap="virtual" name="comment_text"></textarea>
+			<script>
+				CKEDITOR.replace('comment_text');
+			</script>
+			<input type="hidden" name="comment_time" id="comment_time" value="">
+			<div class="ilNoDisplay alert alert-warning" id="no_text_warning">{TXT_NO_TEXT_WARNING}</div>
+		</div>
+		<div class="col-sm-9">
+			<input type="checkbox" name="is_private" value="1" id="is_private"/> {TXT_IS_PRIVATE}
+		</div>
+		<div class="col-sm-12">
+			<div class="ilNoDisplay alert alert-warning" id="endtime_warning">{TXT_ENDTIME_WARNING}</div>
+			<input type="checkbox" name="comment_time_end_chk" value="1" id="comment_time_end_chk"/> {COMMENT_TIME_END}
+			<div class="form-inline end_time_selector" style="display:none">
+				<div>{COMMENT_TIME_END_PICKER}</div>
+			</div>
+		</div>
+	</div>
+	<div class="ilFormFooter clearfix">
+		<div class="col-sm-12 ilFormRequired"></div>
+		<div class="col-sm-12 ilFormCmds ilInteractiveVideoFormCommands">
+			<input id="ilInteractiveVideoCommentSubmit" class="btn btn-default btn-sm" type="submit" value="{TXT_POST}">
+			<button id="ilInteractiveVideoCommentCancel" class="btn btn-default btn-sm" type="button" value="">{TXT_CANCEL}</button>
+		</div>
+	</div>
+</div>

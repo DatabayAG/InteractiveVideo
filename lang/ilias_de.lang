@@ -179,3 +179,5 @@ visibility#:#Sichtbarkeit
 save_anyway#:#Trotzdem speichern
 save_without_correct#:#Sind haben keine korrekte Antwort ausgewählt
 save_without_correct_detail#:#Sie haben weder eine Reflektionfrage, noch neutrale Antworten aktiviert, sind sie sicher, das sie die Frage ohne korrekte Antwort speichern wollen?
+no_comment#:#Kein Kommentarfeld
+no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt

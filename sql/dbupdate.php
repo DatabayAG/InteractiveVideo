@@ -854,3 +854,15 @@ if($ilDB->tableExists('rep_robj_xvid_lp'))
 		$ilDB->addPrimaryKey('rep_robj_xvid_lp', array('obj_id', 'usr_id'));
 }
 ?>
+<#45>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_comment'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'no_comment',
+		array(
+			'type'    => 'integer',
+			'length'  => '1',
+			'notnull' => true,
+			'default' => 0));
+}
+?>

@@ -279,21 +279,25 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$modal->setType(ilModalGUI::TYPE_LARGE);
 		$modal->setBody('');
 		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
-
-		$video_tpl->setVariable('COMMENT_TIME_END', $plugin->txt('time_end'));
-		$picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end');
-		$video_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
-		$video_tpl->setVariable('TXT_COMMENT', $plugin->txt('insert_comment'));
-		$video_tpl->setVariable('TXT_ENDTIME_WARNING', $plugin->txt('endtime_warning'));
-		$video_tpl->setVariable('TXT_NO_TEXT_WARNING', $plugin->txt('no_text_warning'));
-		$video_tpl->setVariable('TXT_IS_PRIVATE', $plugin->txt('is_private_comment'));
 		$video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
 		$video_tpl->setVariable('SHOW_ALL_COMMENTS', $plugin->txt('show_all_comments'));
 		$video_tpl->setVariable('AUTHOR_FILTER', $plugin->txt('author_filter'));
-		
-		$video_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
-		$video_tpl->setVariable('TXT_CANCEL', $plugin->txt('cancel'));
-		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig());
+
+		$comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $plugin->getDirectory());
+		$comments_tpl->setVariable('COMMENT_TIME_END', $plugin->txt('time_end'));
+		$picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end');
+		$comments_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
+		$comments_tpl->setVariable('TXT_COMMENT', $plugin->txt('insert_comment'));
+		$comments_tpl->setVariable('TXT_ENDTIME_WARNING', $plugin->txt('endtime_warning'));
+		$comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $plugin->txt('no_text_warning'));
+		$comments_tpl->setVariable('TXT_IS_PRIVATE', $plugin->txt('is_private_comment'));
+
+
+		$comments_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
+		$comments_tpl->setVariable('TXT_CANCEL', $plugin->txt('cancel'));
+		$comments_tpl->setVariable('CONFIG', $this->initPlayerConfig());
+
+		$video_tpl->setVariable("COMMENTS_FORM", $comments_tpl->get());
 		
 		$tpl->setContent($video_tpl->get());
 	}
@@ -538,6 +542,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_chronologic = $a_form->getInput('is_chronologic');
 		$this->object->setIsChronologic((int)$is_chronologic);
 
+		$no_comment = $a_form->getInput('no_comment');
+		$this->object->setDisableComment((int)$no_comment);
+
 		$factory = new ilInteractiveVideoSourceFactory();
 		$source = $factory->getVideoSourceObject($a_form->getInput('source_id'));
 		$source->doUpdateVideoSource($this->obj_id);
@@ -658,6 +665,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$chrono = new ilCheckboxInputGUI($plugin->txt('is_chronologic'), 'is_chronologic');
 		$chrono->setInfo($plugin->txt('is_chronologic_info'));
 		$a_form->addItem($chrono);
+
+		$no_comment = new ilCheckboxInputGUI($plugin->txt('no_comment'), 'no_comment');
+		$no_comment->setInfo($plugin->txt('no_comment_info'));
+		$a_form->addItem($no_comment);
 	}
 
 	/**
@@ -677,14 +688,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$gui->getEditFormCustomValues($a_values, $this->object);
 			}
 		}
-		$a_values['is_anonymized'] 	= $this->object->isAnonymized();
-		$a_values['is_repeat'] 		= $this->object->isRepeat();
-		$a_values['is_public']     	= $this->object->isPublic();
-		$a_values["is_online"]		= $this->object->isOnline();
-		$a_values["is_chronologic"]	= $this->object->isChronologic();
-		$a_values['source_id']		= $this->object->getSourceId();
-		$a_values['is_task']		= $this->object->getTaskActive();
-		$a_values['task']			= $this->object->getTask();
+		$a_values['is_anonymized']		= $this->object->isAnonymized();
+		$a_values['is_repeat'] 			= $this->object->isRepeat();
+		$a_values['is_public']			= $this->object->isPublic();
+		$a_values["is_online"]			= $this->object->isOnline();
+		$a_values["is_chronologic"]		= $this->object->isChronologic();
+		$a_values["no_comment"]			= $this->object->getDisableComment();
+		$a_values['source_id']			= $this->object->getSourceId();
+		$a_values['is_task']			= $this->object->getTaskActive();
+		$a_values['task']				= $this->object->getTask();
 	}
 
 	public function editProperties()
