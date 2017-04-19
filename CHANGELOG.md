@@ -17,3 +17,4 @@
 16. Compatibility with PHP 7 and Ilias 5.2.x
 17. Export/Import
 18. Learning Progress
+19. Setting to deactivate user comments
