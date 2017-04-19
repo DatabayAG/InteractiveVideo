@@ -113,6 +113,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		$this->xml_writer->xmlElement('getTaskActive', null, (int)$this->object->getTaskActive());
 		$this->xml_writer->xmlElement('getTask', null, (string)$this->object->getTask());
 		$this->xml_writer->xmlElement('getLearningProgressMode', null, (int)$this->object->getLearningProgressMode());
+		$this->xml_writer->xmlElement('noComment', null, (int)$this->object->getDisableComment());
 
 		$this->exportQuestions();
 		$this->exportVideoSourceObject();
