@@ -111,7 +111,8 @@ class SimpleChoiceQuestionAjaxHandler
 					$json['time']          = $feedback['jump_correct_ts'];
 				}
 			}
-			
+
+		$json['html'] .= '<div style="padding-top:10px;"></div>';
 		$simple                     = new SimpleChoiceQuestionStatistics();
 		$json['response_frequency'] = $simple->getResponseFrequency((int)$qid);
 		return json_encode($json);

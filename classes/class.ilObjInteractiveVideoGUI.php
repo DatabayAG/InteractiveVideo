@@ -282,23 +282,25 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
 		$video_tpl->setVariable('SHOW_ALL_COMMENTS', $plugin->txt('show_all_comments'));
 		$video_tpl->setVariable('AUTHOR_FILTER', $plugin->txt('author_filter'));
+		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig());
 
-		$comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $plugin->getDirectory());
-		$comments_tpl->setVariable('COMMENT_TIME_END', $plugin->txt('time_end'));
-		$picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end');
-		$comments_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
-		$comments_tpl->setVariable('TXT_COMMENT', $plugin->txt('insert_comment'));
-		$comments_tpl->setVariable('TXT_ENDTIME_WARNING', $plugin->txt('endtime_warning'));
-		$comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $plugin->txt('no_text_warning'));
-		$comments_tpl->setVariable('TXT_IS_PRIVATE', $plugin->txt('is_private_comment'));
+		if($this->object->getDisableComment() != 1)
+		{
+			$comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $plugin->getDirectory());
+			$comments_tpl->setVariable('COMMENT_TIME_END', $plugin->txt('time_end'));
+			$picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end');
+			$comments_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
+			$comments_tpl->setVariable('TXT_COMMENT', $plugin->txt('insert_comment'));
+			$comments_tpl->setVariable('TXT_ENDTIME_WARNING', $plugin->txt('endtime_warning'));
+			$comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $plugin->txt('no_text_warning'));
+			$comments_tpl->setVariable('TXT_IS_PRIVATE', $plugin->txt('is_private_comment'));
 
 
-		$comments_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
-		$comments_tpl->setVariable('TXT_CANCEL', $plugin->txt('cancel'));
-		$comments_tpl->setVariable('CONFIG', $this->initPlayerConfig());
+			$comments_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
+			$comments_tpl->setVariable('TXT_CANCEL', $plugin->txt('cancel'));
+			$video_tpl->setVariable("COMMENTS_FORM", $comments_tpl->get());
+		}
 
-		$video_tpl->setVariable("COMMENTS_FORM", $comments_tpl->get());
-		
 		$tpl->setContent($video_tpl->get());
 	}
 
