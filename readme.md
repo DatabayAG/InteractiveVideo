@@ -1,6 +1,12 @@
 # InteractiveVideo
 ILIAS Interactive Video Plugin
 
+## ILIAS compatibility
+The 2.x version of the InteractiveVideo Plugin is only compatible with ILIAS versions 5.1.x and higher. If you looking for an version compatible with ILIAS 5.0.x please use the release_1 branch. 
+
+## Important notice
+If you upgrade to the 2.x version of the InteractiveVideo you can not go back to version 1.x, because there are migration steps which alter the database schema.
+
 ## Installation Instructions
 1. Clone this repository to <ILIAS_DIRECTORY>/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo
 2. Login to ILIAS with an administrator account (e.g. root)
