@@ -77,7 +77,9 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	{
 		$mob = new ilObjMediaObject($this->doReadVideoSource($original_obj_id));
 		$new_mob = $mob->duplicate();
-		ilObjMediaObject::_saveUsage($new_mob->getId(), $this->getType(), $new_obj_id);
+		ilObjMediaObject::_saveUsage($new_mob->getId(), 'xvid', $new_obj_id);
+		$this->setMobId($new_mob->getId());
+		$this->saveDataToDb($new_obj_id);
 	}
 
 	/**
@@ -89,10 +91,6 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		if($file['error'] == 0 && $this->import_file_name == '')
 		{
 			$this->uploadVideoFile($obj_id);
-		}
-		else
-		{
-			
 		}
 	}
 

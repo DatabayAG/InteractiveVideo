@@ -174,94 +174,96 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return $row['source_id'];
 	}
 
-	protected function doCreate()
+	protected function doCreate($a_clone_mode = false)
 	{
 		/**
 		 * @var $ilLog ilLog
 		 */
 		global $ilLog;
-		
-		$post_src_id = ilUtil::stripSlashes($_POST['source_id']);
-		$from_post = false;
-		if(($post_src_id == null || $post_src_id == '') && $this->source_id != null)
+		if(! $a_clone_mode)
 		{
-			$src_id = $this->source_id;
-		}
-		else
-		{
-			$src_id = $post_src_id;
-			$from_post = true;
-		}
-		
-		if($src_id != '')
-		{
-
-			try
+			$post_src_id = ilUtil::stripSlashes($_POST['source_id']);
+			$from_post = false;
+			if(($post_src_id == null || $post_src_id == '') && $this->source_id != null)
 			{
-				$this->getVideoSourceObject($src_id);
-				$this->video_source_object->doCreateVideoSource($this->getId());
-				global $ilDB;
-
-				$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = %s',
-					array('integer'), array($this->getId()));
-
-				if(!$from_post)
-				{
-					$anonymized		= $this->is_anonymized;
-					$repeat			= $this->is_repeat;
-					$chronologic	= $this->is_chronologic;
-					$online			= $this->is_online;
-					$source_id		= $this->source_id;
-					$is_task		= $this->task_active;
-					$task			= $this->task;
-					$no_comment		= $this->disable_comment;
-				}
-				else
-				{
-					$anonymized		= (int)$_POST['is_anonymized'];
-					$repeat			= (int)$_POST['is_repeat'];
-					$chronologic	= (int)$_POST['is_chronologic'];
-					$online			= (int)$_POST['is_online'];
-					$source_id		= ilUtil::stripSlashes($_POST['source_id']);
-					$is_task		= (int)$_POST['is_task'];
-					$task			= ilUtil::stripSlashes($_POST['task']);
-					$no_comment		= (int)$_POST['no_comment'];
-				}
-				
-				$ilDB->insert(
-					self::TABLE_NAME_OBJECTS,
-					array(
-						'obj_id'         => array('integer', $this->getId()),
-						'is_anonymized'  => array('integer', $anonymized),
-						'is_repeat'      => array('integer', $repeat),
-						'is_chronologic' => array('integer', $chronologic),
-						'is_public'      => array('integer', 1),
-						'is_online'      => array('integer', $online),
-						'source_id'      => array('text', $source_id),
-						'is_task'        => array('integer',$is_task ),
-						'task'           => array('text', $task),
-						'no_comment'     => array('integer', $no_comment)
-					)
-				);
-
-				parent::doCreate();
-
-				$this->createMetaData();
+				$src_id = $this->source_id;
 			}
-			catch(Exception $e)
+			else
 			{
-				$ilLog->write($e->getMessage());
-				$ilLog->logStack();
+				$src_id = $post_src_id;
+				$from_post = true;
+			}
 
+			if($src_id != '')
+			{
+
+				try
+				{
+					$this->getVideoSourceObject($src_id);
+					$this->video_source_object->doCreateVideoSource($this->getId());
+					global $ilDB;
+
+					$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = %s',
+						array('integer'), array($this->getId()));
+
+					if(!$from_post)
+					{
+						$anonymized		= $this->is_anonymized;
+						$repeat			= $this->is_repeat;
+						$chronologic	= $this->is_chronologic;
+						$online			= $this->is_online;
+						$source_id		= $this->source_id;
+						$is_task		= $this->task_active;
+						$task			= $this->task;
+						$no_comment		= $this->disable_comment;
+					}
+					else
+					{
+						$anonymized		= (int)$_POST['is_anonymized'];
+						$repeat			= (int)$_POST['is_repeat'];
+						$chronologic	= (int)$_POST['is_chronologic'];
+						$online			= (int)$_POST['is_online'];
+						$source_id		= ilUtil::stripSlashes($_POST['source_id']);
+						$is_task		= (int)$_POST['is_task'];
+						$task			= ilUtil::stripSlashes($_POST['task']);
+						$no_comment		= (int)$_POST['no_comment'];
+					}
+
+					$ilDB->insert(
+						self::TABLE_NAME_OBJECTS,
+						array(
+							'obj_id'         => array('integer', $this->getId()),
+							'is_anonymized'  => array('integer', $anonymized),
+							'is_repeat'      => array('integer', $repeat),
+							'is_chronologic' => array('integer', $chronologic),
+							'is_public'      => array('integer', 1),
+							'is_online'      => array('integer', $online),
+							'source_id'      => array('text', $source_id),
+							'is_task'        => array('integer',$is_task ),
+							'task'           => array('text', $task),
+							'no_comment'     => array('integer', $no_comment)
+						)
+					);
+
+					parent::doCreate();
+
+					$this->createMetaData();
+				}
+				catch(Exception $e)
+				{
+					$ilLog->write($e->getMessage());
+					$ilLog->logStack();
+
+					$this->delete();
+
+					throw new ilException(sprintf("%s: Creation incomplete", __METHOD__));
+				}
+			}
+			else
+			{
 				$this->delete();
-
-				throw new ilException(sprintf("%s: Creation incomplete", __METHOD__));
+				throw new ilException(ilInteractiveVideoPlugin::getInstance()->txt('at_least_one_source'));
 			}
-		}
-		else
-		{
-			$this->delete();
-			throw new ilException(ilInteractiveVideoPlugin::getInstance()->txt('at_least_one_source'));
 		}
 	}
 
@@ -355,6 +357,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				'lp_mode' => array('integer', $this->getLearningProgressMode())
 			)
 		);
+
+		$this->video_source_object->doCloneVideoSource($this->getId(), $new_obj->getId());
 
 		$comment = new ilObjComment();
 		$comment->cloneTutorComments($this->getId(), $new_obj->getId());

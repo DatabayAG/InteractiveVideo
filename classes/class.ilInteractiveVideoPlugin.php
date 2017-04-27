@@ -152,4 +152,9 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 	{
 		return version_compare(ILIAS_VERSION_NUMERIC, '5.2.0', '>=');
 	}
+
+	public function allowCopy()
+	{
+		return true;
+	}
 }
