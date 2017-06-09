@@ -38,15 +38,15 @@ The InteractiveVideo Plugin for ILIAS gives you the possibility to create a vide
 * [Video Source Plugin for FAU Video Platform](https://github.com/ilifau/InteractiveVideoFauVideoPortal)
 
 ## Interactive Video Main View
-![Main View](http://gvollbach.github.io/InteractiveVideo/images/main_view_2017.png)
+![Main View](https://databayag.github.io/InteractiveVideo/2.0.x/1.png)
 
 ## Interactive Video Question View
-![Question View](http://gvollbach.github.io/InteractiveVideo/images/question_images_2017.png)
+![Question View](https://databayag.github.io/InteractiveVideo/2.0.x/2.png)
 ## Interactive Video Create Images from Media Object Source
-![Create Images from Media Object Source](http://gvollbach.github.io/InteractiveVideo/images/ffmpeg_images_2017.png)
+![Create Images from Media Object Source](https://databayag.github.io/InteractiveVideo/2.0.x/3.png)
 
 ## Interactive Video Create Question
-![Create Question](http://gvollbach.github.io/InteractiveVideo/images/create_question_2017.png)
+![Create Question](https://databayag.github.io/InteractiveVideo/2.0.x/4.png)
 
 ## Interactive Video Sources & Plugin Slots
-![Main View](http://gvollbach.github.io/InteractiveVideo/images/sources_2017.png)
+![Main View](https://databayag.github.io/InteractiveVideo/2.0.x/5.png)
