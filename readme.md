@@ -7,6 +7,19 @@ The 2.x version of the InteractiveVideo Plugin is only compatible with ILIAS ver
 ## Important notice
 If you upgrade to the 2.x version of the InteractiveVideo you can not go back to version 1.x, because there are migration steps which alter the database schema.
 
+## Changes in Version 2.x
+* Youtube Videos
+* Source URL to videos
+* Possibility to create plugins for more video sources
+* Learning Progress
+* HTML editor for comments, questions and usage of Latex possible
+* [Complete Changelog](https://github.com/DatabayAG/InteractiveVideo/blob/master/CHANGELOG.md)
+
+## Repositories connected to the InteractiveVideo Plugin
+* [COPage Plugin for InteractiveVideo References in LearningModules](https://github.com/DatabayAG/InteractiveVideoReference)
+* [Video Source Plugin for Vimeo](https://github.com/DatabayAG/InteractiveVideoVimeo)
+* [Video Source Plugin for FAU Video Platform](https://github.com/ilifau/InteractiveVideoFauVideoPortal)
+
 ## Installation Instructions
 1. Clone this repository to <ILIAS_DIRECTORY>/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo
 2. Login to ILIAS with an administrator account (e.g. root)
@@ -31,11 +44,6 @@ That's it.
 
 # What is it for?
 The InteractiveVideo Plugin for ILIAS gives you the possibility to create a video object, where your students can communicate in a asynchronous way. Please note that this is *NOT* a chat. They can leave notes on different timestamps in the video for other students to read, or only for themselves. Further a tutor can insert questions on various positions in the video for the students to answer. At the moment three questions types are supported single and multiple choice and a reflective type. 
-
-## Repositories connected to the InteractiveVideo Plugin
-* [COPage Plugin for InteractiveVideo References in LearningModules](https://github.com/DatabayAG/InteractiveVideoReference)
-* [Video Source Plugin for Vimeo](https://github.com/DatabayAG/InteractiveVideoVimeo)
-* [Video Source Plugin for FAU Video Platform](https://github.com/ilifau/InteractiveVideoFauVideoPortal)
 
 ## Interactive Video Main View
 ![Main View](https://databayag.github.io/InteractiveVideo/2.0.x/1.png)
