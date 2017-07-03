@@ -1,4 +1,4 @@
-#2.0.12
+# 2.0.12
 1. Display task above videos
 2. Possibility to create a comment (private/public) on reflection question
 3. Repository object as feedback for a question
