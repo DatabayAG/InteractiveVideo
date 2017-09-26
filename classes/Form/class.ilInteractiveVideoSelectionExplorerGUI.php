@@ -34,6 +34,7 @@ class ilInteractiveVideoSelectionExplorerGUI extends ilRepositoryExplorerGUI
 	{
 		parent::__construct($a_parent_obj, $a_parent_cmd);
 		$this->setTypeWhiteList(array());
+		$this->setTypeBlackList(array('prg'));
 	}
 
 	/**
