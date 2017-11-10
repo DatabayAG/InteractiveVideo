@@ -235,7 +235,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				},
 				success:  function () {
 					$('.reply_comment_' + org_id).remove();
-					$('.reply_comment_non_existent').remove();
+					$('.list_item_' + comment_id + ' .reply_comment_non_existent').remove();
 					var reply = {'comment_text' : comment_text, 'is_interactive' : 0, 'is_private' : is_private, 'user_name' :scope.InteractiveVideo.username, 'comment_id' : 'non_existent'};
 					var html = scope.InteractiveVideoPlayerComments.getCommentRepliesHtml(reply);
 					$('.list_item_' + comment_id).find('.comment_replies').append(html);
