@@ -11,8 +11,8 @@ $( document ).ready(function() {
 
 		var player = videojs('ilInteractiveVideo', options, function onPlayerReady() {
 
-			var interval = null;
-	
+		var interval = null;
+
 			il.InteractiveVideoPlayerAbstract.config = {
 				pauseCallback           : (function (){player.pause();}),
 				playCallback            : (function (){player.play();}),
@@ -20,28 +20,31 @@ $( document ).ready(function() {
 				currentTimeCallback     : (function (){return player.currentTime();}),
 				setCurrentTimeCallback  : (function (time){player.setCurrentTime(time);})
 			};
-	
+
 			il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
 
 			this.on('seeked', function() {
 				clearInterval(interval);
 				il.InteractiveVideoPlayerFunction.seekingEventHandler();
 			});
-		
+
 			this.on('pause', function() {
 				clearInterval(interval);
 				il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime();
 			});
-		
+
 			this.on('ended', function() {
 				il.InteractiveVideoPlayerAbstract.videoFinished();
 			});
-		
+
 			this.on('playing', function() {
 				interval = setInterval(function () {
 					il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
 				}, 500);
-		
+			});
+
+			this.on('contextmenu', function(e) {
+				e.preventDefault();
 			});
 		});
 	});

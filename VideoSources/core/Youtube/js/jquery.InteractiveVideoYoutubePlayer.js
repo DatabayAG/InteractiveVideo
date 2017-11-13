@@ -44,7 +44,10 @@
 					interval = setInterval(function () {
 						il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
 					}, 500);
+				});
 
+				this.on('contextmenu', function(e) {
+					e.preventDefault();
 				});
 			});
 		});
