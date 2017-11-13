@@ -429,6 +429,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
 		$tpl->addCss($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.css');
 		$tpl->addJavaScript($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.js');
+		$tpl->addJavaScript($plugin->getDirectory() . '/libs/video.js/video.min.js');
+		$tpl->addCss($plugin->getDirectory() . '/libs/video.js/video-js.min.css');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerComments.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerFunctions.js');
