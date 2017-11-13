@@ -7,7 +7,7 @@ $( document ).ready(function() {
 	il.Util.addOnLoad(function () {
 		il.InteractiveVideo.last_stopPoint = -1;
 
-		var options = {};
+		var options = {fluid : true};
 
 		var player = videojs('ilInteractiveVideo', options, function onPlayerReady() {
 
