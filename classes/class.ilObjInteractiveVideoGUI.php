@@ -49,6 +49,23 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public $plugin;
 
 	/**
+	 * @param $tpl
+	 */
+	protected function addJavascriptAndCSSToTemplate($tpl)
+	{
+		$plugin = ilInteractiveVideoPlugin::getInstance();
+		$tpl->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
+		$tpl->addCss($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.css');
+		$tpl->addJavaScript($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.js');
+		$tpl->addJavaScript($plugin->getDirectory() . '/libs/video.js/video.min.js');
+		$tpl->addCss($plugin->getDirectory() . '/libs/video.js/video-js.min.css');
+		$tpl->addJavaScript($plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
+		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerComments.js');
+		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerFunctions.js');
+		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstract.js');
+	}
+
+	/**
 	 * @param ilInteractiveVideoPlugin $plugin
 	 * @param ilPropertyFormGUI $form
 	 */
@@ -251,6 +268,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $plugin->getDirectory());
 
 		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
+		$this->addJavascriptAndCSSToTemplate($tpl);
 		$object->addPlayerElements($tpl);
 
 		if($this->object->getTaskActive())
@@ -425,16 +443,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $ilUser, $tpl;
 
 		$plugin = ilInteractiveVideoPlugin::getInstance();
-
-		$tpl->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
-		$tpl->addCss($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.css');
-		$tpl->addJavaScript($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.js');
-		$tpl->addJavaScript($plugin->getDirectory() . '/libs/video.js/video.min.js');
-		$tpl->addCss($plugin->getDirectory() . '/libs/video.js/video-js.min.css');
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerComments.js');
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerFunctions.js');
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstract.js');
 		ilTextAreaInputCkeditorGUI::appendJavascriptFile();
 
 		$config_tpl = new ilTemplate("tpl.video_config.html", true, true, $plugin->getDirectory());
@@ -1451,6 +1459,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('SCREEN_INFO', $plugin->txt('screen_info'));
 
 		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
+		$this->addJavascriptAndCSSToTemplate($tpl);
 		$object->addPlayerElements($tpl);
 
 		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());

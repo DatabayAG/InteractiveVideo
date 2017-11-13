@@ -50,6 +50,7 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	public function addPlayerElements($tpl)
 	{
 		$tpl->addJavaScript(self::PATH . 'js/jquery.InteractiveVideoYoutubePlayer.js');
+		$tpl->addJavaScript(self::PATH . 'libs/Youtube.js');
 		return $tpl;
 	}
 
