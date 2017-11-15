@@ -1649,6 +1649,36 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$form = new ilPropertyFormGUI();
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertQuestion'));
+		$this->appendGeneralSettingsToQuestionForm($form);
+
+		$this->appendQuestionSettingsToQuestionForm($form);
+
+		$section_header = new ilFormSectionHeaderGUI();
+		$section_header->setTitle($this->plugin->txt('feedback'));
+		$form->addItem($section_header);
+		$this->appendCorrectFeedbackToQuestionForm($form);
+		$this->appendFeedbackWrongToQuestionForm($form);
+
+		$show_response_frequency = new ilCheckboxInputGUI($this->plugin->txt('show_response_frequency'), 'show_response_frequency');
+		$show_response_frequency->setInfo($this->plugin->txt('show_response_frequency_info'));
+		$form->addItem($show_response_frequency);
+
+		$show_comment_field = new ilCheckboxInputGUI($this->plugin->txt('show_comment_field'), 'show_comment_field');
+		$show_comment_field->setInfo($this->plugin->txt('show_comment_field_info'));
+		$form->addItem($show_comment_field);
+
+		$this->appendHiddenQuestionFormValues($form);
+
+		$this->appendWarningModalToQuestionForm($form);
+
+		return $form;
+	}
+
+	/**
+	 * @param ilPropertyFormGUI $form
+	 */
+	protected function appendGeneralSettingsToQuestionForm($form)
+	{
 		$form->setTitle($this->plugin->txt('insert_question'));
 
 		$section_header = new ilFormSectionHeaderGUI();
@@ -1659,7 +1689,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$title->setInfo($this->plugin->txt('comment_title_info'));
 		$title->setRequired(true);
 		$form->addItem($title);
-		
+
 		$time = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'comment_time');
 
 		if(isset($_POST['comment_time']))
@@ -1680,11 +1710,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($this->plugin->txt('question'));
 		$form->addItem($section_header);
+	}
 
+	/**
+	 * @param ilPropertyFormGUI $form
+	 */
+	protected function appendQuestionSettingsToQuestionForm($form)
+	{
 		$question_type = new ilSelectInputGUI($this->plugin->txt('question_type'), 'question_type');
-		$type_options = array(0 => $this->plugin->txt('single_choice'), 
-							  1 => $this->plugin->txt('multiple_choice'), 
-							  2 => $this->plugin->txt('reflection'));
+		$type_options  = array(
+			0 => $this->plugin->txt('single_choice'),
+			1 => $this->plugin->txt('multiple_choice'),
+			2 => $this->plugin->txt('reflection')
+		);
 		$question_type->setOptions($type_options);
 		$question_type->setInfo($this->plugin->txt('question_type_info'));
 		$form->addItem($question_type);
@@ -1695,27 +1733,28 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$this->appendImageUploadForm($this->plugin, $form);
 
-		$neutral_type = new ilSelectInputGUI($this->plugin->txt('neutral_type'), 'neutral_type');
-		$neutral_type_options = array(0 => $this->plugin->txt('with_correct'),
-									  1 => $this->plugin->txt('neutral'));
+		$neutral_type         = new ilSelectInputGUI($this->plugin->txt('neutral_type'), 'neutral_type');
+		$neutral_type_options = array(
+			0 => $this->plugin->txt('with_correct'),
+			1 => $this->plugin->txt('neutral')
+		);
 
 		$neutral_type->setOptions($neutral_type_options);
 		$neutral_type->setInfo($this->plugin->txt('neutral_type_info'));
 		$form->addItem($neutral_type);
-		
 
 		$answer = new ilCustomInputGUI($this->lng->txt('answers'), 'answer_text');
 		$answer->setHtml($this->getInteractiveForm());
 		$form->addItem($answer);
+	}
 
-		//New Section: Feedback
 
-		$section_header = new ilFormSectionHeaderGUI();
-		$section_header->setTitle($this->plugin->txt('feedback'));
-		$form->addItem($section_header);
-
-		// Feedback correct
-		$feedback_correct = xvidUtils::constructTextAreaFormElement('feedback_correct', 'feedback_correct');
+	/**
+	 * @param ilPropertyFormGUI $form
+	 */
+	protected function appendCorrectFeedbackToQuestionForm($form)
+	{
+		$feedback_correct  = xvidUtils::constructTextAreaFormElement('feedback_correct', 'feedback_correct');
 		$show_correct_icon = new ilCheckboxInputGUI($this->plugin->txt('show_correct_icon'), 'show_correct_icon');
 		$show_correct_icon->setInfo($this->plugin->txt('show_correct_icon_info'));
 		$show_correct_icon->setChecked(true);
@@ -1729,16 +1768,21 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if(isset($_POST['jump_correct_ts']))
 		{
 			$seconds = $_POST['jump_correct_ts'];
-			$time->setValueByArray(array('jump_correct_ts' => (int)$seconds));
+			$jump_correct_ts->setValueByArray(array('jump_correct_ts' => (int)$seconds));
 		}
 		$is_jump_correct->addSubItem($jump_correct_ts);
 		$feedback_correct->addSubItem($is_jump_correct);
 		$this->appendRepositorySelector($feedback_correct, 'feedback_correct_obj');
 		$form->addItem($feedback_correct);
+	}
 
-		// Feedback wrong
+	/**
+	 * @param ilPropertyFormGUI $form
+	 */
+	protected function appendFeedbackWrongToQuestionForm($form)
+	{
 		$feedback_one_wrong = xvidUtils::constructTextAreaFormElement('feedback_one_wrong', 'feedback_one_wrong');
-		$show_wrong_icon = new ilCheckboxInputGUI($this->plugin->txt('show_wrong_icon'), 'show_wrong_icon');
+		$show_wrong_icon    = new ilCheckboxInputGUI($this->plugin->txt('show_wrong_icon'), 'show_wrong_icon');
 		$show_wrong_icon->setInfo($this->plugin->txt('show_wrong_icon_info'));
 		$show_wrong_icon->setChecked(true);
 
@@ -1751,21 +1795,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if(isset($_POST['jump_wrong_ts']))
 		{
 			$seconds = $_POST['jump_wrong_ts'];
-			$time->setValueByArray(array('jump_correct_ts' => (int)$seconds));
+			$jump_wrong_ts->setValueByArray(array('jump_correct_ts' => (int)$seconds));
 		}
 		$is_jump_wrong->addSubItem($jump_wrong_ts);
 		$feedback_one_wrong->addSubItem($is_jump_wrong);
 		$this->appendRepositorySelector($feedback_one_wrong, 'feedback_wrong_obj');
 		$form->addItem($feedback_one_wrong);
+	}
 
-		$show_response_frequency = new ilCheckboxInputGUI($this->plugin->txt('show_response_frequency'), 'show_response_frequency');
-		$show_response_frequency->setInfo($this->plugin->txt('show_response_frequency_info'));
-		$form->addItem($show_response_frequency);
-
-		$show_comment_field = new ilCheckboxInputGUI($this->plugin->txt('show_comment_field'), 'show_comment_field');
-		$show_comment_field->setInfo($this->plugin->txt('show_comment_field_info'));
-		$form->addItem($show_comment_field);
-
+	/**
+	 * @param ilPropertyFormGUI $form
+	 */
+	protected function appendHiddenQuestionFormValues($form)
+	{
 		$is_interactive = new ilHiddenInputGUI('is_interactive');
 		$is_interactive->setValue(1);
 		$form->addItem($is_interactive);
@@ -1776,24 +1818,27 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$comment_id = new ilHiddenInputGUI('comment_id');
 		$form->addItem($comment_id);
+	}
 
+	/**
+	 * @param ilPropertyFormGUI $form
+	 */
+	protected function appendWarningModalToQuestionForm($form)
+	{
 		$modal = ilModalGUI::getInstance();
 		$modal->setId('simple_question_warning');
 		$modal->setType(ilModalGUI::TYPE_MEDIUM);
 		$modal->setHeading($this->plugin->txt('save_without_correct'));
 		$warning_dialog = new ilTemplate("tpl.question_edit_modal.html", true, true, $this->plugin->getDirectory());
-		$warning_dialog->setVariable('INFO_TEXT', $this->plugin->txt('save_without_correct_detail') );
-		$warning_dialog->setVariable('SAVE_ANYWAY', $this->plugin->txt('save_anyway') );
-		$warning_dialog->setVariable('CANCEL', $this->plugin->txt('CANCEL') );
+		$warning_dialog->setVariable('INFO_TEXT', $this->plugin->txt('save_without_correct_detail'));
+		$warning_dialog->setVariable('SAVE_ANYWAY', $this->plugin->txt('save_anyway'));
+		$warning_dialog->setVariable('CANCEL', $this->plugin->txt('CANCEL'));
 		$modal->setBody($warning_dialog->get());
 		$mod = new ilCustomInputGUI('', '');
 		$mod->setHtml($modal->getHTML());
 		$form->addItem($mod);
-
-
-		return $form;
 	}
-
+	
 	/**
 	 * @param ilPropertyFormGUI|ilSubEnabledFormPropertyGUI $form
 	 * @param $post_var
