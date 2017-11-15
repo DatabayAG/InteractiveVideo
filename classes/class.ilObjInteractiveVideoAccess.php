@@ -81,7 +81,11 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 	}
 
 	/**
-	 * @inheritdoc
+	 * @param int $a_trigger_obj_id
+	 * @param type $a_operator
+	 * @param type $a_value
+	 * @param int $a_usr_id
+	 * @return bool
 	 */
 	public static function checkCondition($a_trigger_obj_id, $a_operator, $a_value, $a_usr_id)
 	{
@@ -105,6 +109,9 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 	 * @return bool
 	 */
 	public function canBeDelivered(ilWACPath $ilWACPath) {
+		/**
+		 * @var $ilAccess ilAccess
+		 */
 		global $ilAccess;
 		preg_match("/\\/xvid_([\\d]*)\\//uism", $ilWACPath->getPath(), $results);
 
