@@ -51,46 +51,42 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public $plugin;
 
 	/**
+	 * @var array
+	 */
+	protected $custom_css = array(
+								  '/templates/default/xvid.css',
+								  '/libs/Bootstraptoggle/bootstrap2-toggle.min.css',
+								  '/libs/video.js/video-js.min.css'
+								);
+
+	/**
+	 * @var array
+	 */
+	protected $custom_javascript = array(
+										 '/libs/Bootstraptoggle/bootstrap2-toggle.min.js', 
+										 '/libs/video.js/video.min.js',
+										 '/js/jquery.InteractiveVideoQuestionViewer.js',
+										 '/js/InteractiveVideoPlayerComments.js',
+										 '/js/InteractiveVideoPlayerFunctions.js',
+										 '/js/InteractiveVideoPlayerAbstract.js'
+										);
+
+	/**
 	 * @param ilTemplate $tpl
 	 */
 	protected function addJavascriptAndCSSToTemplate($tpl)
 	{
-
-		$custom_css = array('/templates/default/xvid.css', 
-							'/libs/Bootstraptoggle/bootstrap2-toggle.min.css', 
-							'/libs/video.js/video-js.min.css'
-		);
-
-		$custom_javascript = array('/libs/Bootstraptoggle/bootstrap2-toggle.min.js',
-								   '/libs/video.js/video.min.js',
-								   '/js/jquery.InteractiveVideoQuestionViewer.js',
-								   '/js/InteractiveVideoPlayerComments.js',
-								   '/js/InteractiveVideoPlayerFunctions.js',
-								   '/js/InteractiveVideoPlayerAbstract.js'
-			
-		);
-
-		$this->addCustomCssAndJavascript($tpl, $custom_css, $custom_javascript);
-	}
-
-	/**
-	 * @param ilTemplate $tpl
-	 * @param $css
-	 * @param $javascript
-	 */
-	protected function addCustomCssAndJavascript($tpl, $css, $javascript)
-	{
-		foreach($css as $file)
+		foreach($this->custom_css as $file)
 		{
 			$tpl->addCss($this->plugin->getDirectory() . $file);
 		}
-		
-		foreach($javascript as $file)
+
+		foreach($this->custom_javascript as $file)
 		{
 			$tpl->addJavaScript($this->plugin->getDirectory() . $file);
 		}
 	}
-	
+
 	/**
 	 * @param ilInteractiveVideoPlugin $plugin
 	 * @param ilPropertyFormGUI $form
@@ -299,7 +295,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($this->object->getTaskActive())
 		{
 			$video_tpl->setCurrentBlock('task_description');
-			$video_tpl->setVariable('TASK_TEXT',$plugin->txt('task'));
+			$video_tpl->setVariable('TASK_TEXT',$this->plugin->txt('task'));
 			$video_tpl->setVariable('TASK_DESCRIPTION', $this->object->getTask());
 			$video_tpl->parseCurrentBlock();
 		}
@@ -491,7 +487,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
 		{
-			
 			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
 			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
 		}
@@ -989,7 +984,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @param string $permission
 	 * @return bool
 	 */
-	public function ensurePermission($permission)
+	public function ensurePermission($permission)	
 	{
 		return $this->checkPermission($permission);
 	}
@@ -1615,6 +1610,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	/**
 	 * @param int $comment_id
+	 * @return array
 	 */
 	private function getCommentFormValues($comment_id = 0)
 	{		
@@ -1686,7 +1682,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($section_header);
 
 		$question_type = new ilSelectInputGUI($this->plugin->txt('question_type'), 'question_type');
-		$type_options = array(0 => $this->plugin->txt('single_choice'), 1 => $this->plugin->txt('multiple_choice'), 2 => $this->plugin->txt('reflection'));
+		$type_options = array(0 => $this->plugin->txt('single_choice'), 
+							  1 => $this->plugin->txt('multiple_choice'), 
+							  2 => $this->plugin->txt('reflection'));
 		$question_type->setOptions($type_options);
 		$question_type->setInfo($this->plugin->txt('question_type_info'));
 		$form->addItem($question_type);
@@ -1698,7 +1696,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->appendImageUploadForm($this->plugin, $form);
 
 		$neutral_type = new ilSelectInputGUI($this->plugin->txt('neutral_type'), 'neutral_type');
-		$neutral_type_options = array(0 => $this->plugin->txt('with_correct'), 1 => $this->plugin->txt('neutral'));
+		$neutral_type_options = array(0 => $this->plugin->txt('with_correct'),
+									  1 => $this->plugin->txt('neutral'));
 
 		$neutral_type->setOptions($neutral_type_options);
 		$neutral_type->setInfo($this->plugin->txt('neutral_type_info'));
@@ -1796,7 +1795,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	/**
-	 * @param ilPropertyFormGUI $form
+	 * @param ilPropertyFormGUI|ilSubEnabledFormPropertyGUI $form
 	 * @param $post_var
 	 */
 	protected function appendRepositorySelector($form, $post_var)
@@ -2537,7 +2536,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($head_row, $lng->txt('time'));
 		array_push($head_row, $this->plugin->txt('time_end') );
 		array_push($head_row, $this->plugin->txt('user_id') );
-		array_push($head_row, $plugin->txt('comment_title'));
+		array_push($head_row, $this->plugin->txt('comment_title'));
 		array_push($head_row, $this->plugin->txt('comment'));
 		array_push($head_row, $this->plugin->txt('tutor'));
 		array_push($head_row, $this->plugin->txt('interactive'));
