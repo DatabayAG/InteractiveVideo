@@ -36,7 +36,7 @@ class ilInteractiveVideoPreviewPicker extends ilImageFileInputGUI
 	public function supportImageExtractionFromVideo($a_tpl)
 	{
 		global $tpl, $ilCtrl;
-		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/Form/InteractiveVideoPreviewPicker.js');
+		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/form/InteractiveVideoPreviewPicker.js');
 
 		$link = ilLinkButton::getInstance();
 		$link->setCaption(ilInteractiveVideoPlugin::getInstance()->txt('extract'), false);
