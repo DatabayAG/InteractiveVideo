@@ -2,6 +2,7 @@
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 require_once 'Services/Repository/classes/class.ilRepositoryObjectPlugin.php';
+require_once 'Services/Component/classes/class.ilPluginAdmin.php';
 
 /**
  * Class ilInteractiveVideoPlugin
@@ -41,7 +42,6 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 	{
 		if(null === self::$instance)
 		{
-			require_once 'Services/Component/classes/class.ilPluginAdmin.php';
 			return self::$instance = ilPluginAdmin::getPluginObject(
 				self::CTYPE,
 				self::CNAME,
@@ -106,7 +106,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 	}
 
 	/**
-	 * Update plugin and sub plugins
+	 * @param null $a_lang_keys
 	 */
 	public function updateLanguages($a_lang_keys = NULL)
 	{

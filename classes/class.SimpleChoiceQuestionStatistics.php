@@ -15,9 +15,10 @@ class SimpleChoiceQuestionStatistics
 	public function getQuestionCountForObject($oid)
 	{
 		/**
-		 * $ilDB ilDB
+		 * @var $ilDB ilDB
 		 */
 		global $ilDB;
+
 		$res = $ilDB->queryF(
 			'SELECT count(question_id) count FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
 					 WHERE comments.comment_id = questions.comment_id AND  is_interactive = 1 AND obj_id = %s',
@@ -37,8 +38,8 @@ class SimpleChoiceQuestionStatistics
 		/**
 		 * @var $ilDB   ilDB
 		 */
-
 		global $ilDB;
+
 		$questions_for_object = $this->getQuestionCountForObject($oid);
 
 		$res     = $ilDB->queryF('
@@ -91,6 +92,7 @@ class SimpleChoiceQuestionStatistics
 		 */
 
 		global $ilDB;
+
 		$res          = $ilDB->queryF('
 			SELECT score.user_id, points,questions.question_id, neutral_answer
 			FROM 	rep_robj_xvid_comments comments, 
@@ -187,7 +189,11 @@ class SimpleChoiceQuestionStatistics
 	 */
 	public function getQuestionIdsForObject($oid)
 	{
+		/**
+		 * @var $ilDB ilDB
+		 */
 		global $ilDB;
+
 		$result_set = array();
 		$res        = $ilDB->queryF(
 			'SELECT question_id, comment_title FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
@@ -214,9 +220,10 @@ class SimpleChoiceQuestionStatistics
 	public function getQuestionsOverview($oid)
 	{
 		/**
-		 * $ilDB ilDB
+		 * @var $ilDB ilDB
 		 */
 		global $ilDB;
+
 		$res       = $ilDB->queryF(
 			'SELECT questions.question_id, questions.neutral_answer, score.user_id, score.points, comments.comment_id, comments.comment_title
 			FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
@@ -286,9 +293,10 @@ class SimpleChoiceQuestionStatistics
 	public function getAnsweredQuestionsFromUser($oid, $uid)
 	{
 		/**
-		 * $ilDB ilDB
+		 * @var $ilDB ilDB
 		 */
 		global $ilDB;
+
 		$res = $ilDB->queryF(
 			'SELECT count(score.question_id)  count FROM rep_robj_xvid_comments  comments, 
 							rep_robj_xvid_question questions, rep_robj_xvid_score  score
@@ -308,9 +316,10 @@ class SimpleChoiceQuestionStatistics
 	public function getResponseFrequency($question_id)
 	{
 		/**
-		 * $ilDB ilDB
+		 * @var $ilDB ilDB
 		 */
 		global $ilDB;
+
 		$res          = $ilDB->queryF(
 			'SELECT count(rep_robj_xvid_answers.answer_id) AS counter FROM rep_robj_xvid_question
 				LEFT JOIN rep_robj_xvid_qus_text ON rep_robj_xvid_qus_text.question_id = rep_robj_xvid_question.question_id 

@@ -148,6 +148,7 @@ class ilObjComment
 		 * @var $ilUser ilObjUser
 		 */
 		global $ilDB, $ilUser;
+
 		$purify = new ilHtmlInteractiveVideoPostPurifier();
 		$text = $purify->purify($this->getCommentText());
 
@@ -184,7 +185,12 @@ class ilObjComment
 	 */
 	public function removeOldReplyTo($reply_to)
 	{
+		/**
+		 * @var $ilUser ilObjUser
+		 * @var $ilDB ilDB
+		 */
 		global $ilDB, $ilUser;
+
 		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_comments WHERE is_reply_to = %s AND user_id = %s',
 			array('integer', 'integer'), array($reply_to, $ilUser->getId()));
 	}
@@ -196,6 +202,7 @@ class ilObjComment
 		 * @var $ilUser ilObjUser
 		 */
 		global $ilDB, $ilUser;
+
 		$purify = new ilHtmlInteractiveVideoPostPurifier();
 		$text = $purify->purify($this->getCommentText());
 
@@ -224,6 +231,9 @@ class ilObjComment
 	 */
 	public function deleteComments($comment_ids)
 	{
+		/**
+		 * @var ilDb $ilDB
+		 */
 		global $ilDB;
 
 		if(!is_array($comment_ids))
@@ -239,7 +249,7 @@ class ilObjComment
 	public function getStopPoints()
 	{
 		/**
-		 * @vas $ilDB ilDB
+		 * @var ilDb $ilDB
 		 */
 		global $ilDB;
 
@@ -370,7 +380,11 @@ class ilObjComment
 	 */
 	public function cloneTutorComments($old_id, $new_id)
 	{
+		/**
+		 * @var $ilDB ilDB
+		 */
 		global $ilDB;
+
 		$questions_array = array();
 		$res = $ilDB->queryF(
 			'SELECT *

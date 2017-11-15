@@ -156,9 +156,11 @@ class SimpleChoiceQuestionAjaxHandler
 	public function getJsonForCommentId($cid)
 	{
 		/**
-		 * @var $ilDB   ilDB
+		 * @var $ilUser ilObjUser
+		 * @var $ilDB ilDB
 		 */
 		global $ilDB, $ilUser;
+
 		$res = $ilDB->queryF('
 			SELECT * 
 			FROM  rep_robj_xvid_question question, 
@@ -168,11 +170,13 @@ class SimpleChoiceQuestionAjaxHandler
 			array('integer'), array((int)$cid)
 		);
 
-		$counter       = 0;
-		$question_data = array();
-		$question_text = '';
-		$question_type = 0;
-		$question_id   = 0;
+		$counter        = 0;
+		$question_data  = array();
+		$question_text  = '';
+		$question_type  = 0;
+		$question_id    = 0;
+		$question_image = null;
+
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$question_data[$counter]['answer']    = $row['answer'];
