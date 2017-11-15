@@ -10,10 +10,10 @@ require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/In
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactoryGUI.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionAjaxHandler.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionScoring.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionStatistics.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestion.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestionAjaxHandler.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestionScoring.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestionStatistics.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilTextAreaInputCkeditorGUI.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilInteractiveVideoTimePicker.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilInteractiveVideoPreviewPicker.php');

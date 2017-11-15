@@ -136,7 +136,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		 * @var $ilDB   ilDB
 		 */
 		global $ilDB;
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.SimpleChoiceQuestion.php';
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/questions/class.SimpleChoiceQuestion.php';
 		$this->xml_writer->xmlStartTag('Questions');
 		$simple_questions = new SimpleChoiceQuestion();
 		$question_ids = $simple_questions->getInteractiveQuestionIdsByObjId($this->obj_id);

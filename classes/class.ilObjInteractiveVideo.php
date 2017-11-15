@@ -5,7 +5,7 @@ require_once 'Services/Repository/classes/class.ilObjectPlugin.php';
 require_once 'Services/Tracking/interfaces/interface.ilLPStatusPlugin.php';
 require_once 'Services/Tracking/classes/class.ilLPStatus.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestion.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('../VideoSources/class.ilInteractiveVideoSourceFactory.php');

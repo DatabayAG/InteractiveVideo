@@ -9,6 +9,8 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 
 	/**
 	 * ilTextAreaInputCkeditorGUI constructor.
+	 * @param string $a_title
+	 * @param string $a_postvar
 	 */
 	public function __construct($a_title = "", $a_postvar = "")
 	{
@@ -19,7 +21,7 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 	}
 
 	/**
-	 * Insert property html
+	 * @param ilTemplate $a_tpl
 	 */
 	public function insert($a_tpl)
 	{

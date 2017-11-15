@@ -1,6 +1,6 @@
 <?php
-require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionScoring.php');
+require_once dirname(__FILE__) . '/../class.ilInteractiveVideoPlugin.php';
+ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestionScoring.php');
 
 /**
  * Class SimpleChoiceQuestion
