@@ -787,7 +787,7 @@ body.vjs-full-window {
 	display: -ms-flexbox;
 	display: flex;
 	visibility: visible;
-	opacity: 1;
+	opacity: 0.8;
 	-webkit-transition: visibility 0.1s, opacity 0.1s;
 	-moz-transition: visibility 0.1s, opacity 0.1s;
 	-ms-transition: visibility 0.1s, opacity 0.1s;
