@@ -22,7 +22,7 @@
 					playCallback            : (function (){player.play();}),
 					durationCallback        : (function (){return player.duration();}),
 					currentTimeCallback     : (function (){return player.currentTime();}),
-					setCurrentTimeCallback  : (function (time){player.setCurrentTime(time);})
+					setCurrentTimeCallback  : (function (time){player.currentTime(time);})
 				};
 
 				il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
