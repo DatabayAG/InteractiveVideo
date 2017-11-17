@@ -84,9 +84,12 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 		var height = pro.calculateHeightForInlineStyle(pro.adventureData[cueTime]);
 		
 		$.each(pro.adventureData[cueTime], function (index, value) {
-			console.log(value);
+
 			$('.interactiveVideoAdventureText').append(
-				'<div class="interactiveVideoAdventureTextCell" data-time="' + value.jumpTo + '" style="height:'+height+';">' + value.html + '</div>'
+				'<div class="interactiveVideoAdventureTextCell" ' +
+					'data-time="' + value.jumpTo + '" ' +
+					'style="height:'+height+';">' +
+					 value.html + '</div>'
 			);
 		});
 		
@@ -96,6 +99,7 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 	pro.registerEventForOverlays = function()
 	{
 		$('.interactiveVideoAdventureTextCell').off('click');
+		
 		$('.interactiveVideoAdventureTextCell').on('click', function(){
 			$('.interactiveVideoAdventureText').remove();
 			$('.interactiveVideoAdventureDisableClickThrough').remove();
@@ -107,17 +111,17 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 	pro.calculateHeightForInlineStyle = function(data)
 	{
 		var count = data.length;
-		var calculated_height = 98;
+		var calculated_height = 100;
 		if(count > 0)
 		{
-			calculated_height = Math.round(98 / count);
+			calculated_height = Math.round(100 / count);
 		}
 		return calculated_height + '%';
 	};
 
 	pub.Init = function()
 	{
-		il.InteractiveVideoPlayerAbstract.config.removeSeekBar();
+		il.InteractiveVideoPlayerAbstract.config.removeNonAdventureElements();
 	};
 
 	pub.protect = pro;

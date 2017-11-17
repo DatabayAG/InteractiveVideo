@@ -14,12 +14,16 @@ $( document ).ready(function() {
 			var interval = null;
 
 			il.InteractiveVideoPlayerAbstract.config = {
-				pauseCallback           : (function (){player.pause();}),
-				playCallback            : (function (){player.play();}),
-				durationCallback        : (function (){return player.duration();}),
-				currentTimeCallback     : (function (){return player.currentTime();}),
-				setCurrentTimeCallback  : (function (time){player.currentTime(time);}),
-				removeSeekBar           : (function (){player.controlBar.progressControl.seekBar.hide();})
+				pauseCallback              : (function (){player.pause();}),
+				playCallback               : (function (){player.play();}),
+				durationCallback           : (function (){return player.duration();}),
+				currentTimeCallback        : (function (){return player.currentTime();}),
+				setCurrentTimeCallback     : (function (time){player.currentTime(time);}),
+				removeNonAdventureElements : (function (){
+					player.controlBar.progressControl.seekBar.hide();
+					player.controlBar.removeChild("currentTimeDisplay");
+					player.controlBar.removeChild("remainingTimeDisplay");
+				})
 			};
 
 			il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
@@ -40,7 +44,7 @@ $( document ).ready(function() {
 
 			this.on('playing', function() {
 				interval = setInterval(function () {
-					if(true)
+					if(false)
 					{
 						il.InteractiveVideoPlayerAbstract.playingEventHandler(interval, player);
 					}

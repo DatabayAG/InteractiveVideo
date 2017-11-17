@@ -4,12 +4,12 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 	var pub = {}, pro = {};
 	
 	pub.config = {
-		pauseCallback           : null,
-		playCallback            : null,
-		durationCallback        : null,
-		currentTimeCallback     : null,
-		setCurrentTimeCallback  : null,
-		removeSeekBar           : null
+		pauseCallback              : null,
+		playCallback               : null,
+		durationCallback           : null,
+		currentTimeCallback        : null,
+		setCurrentTimeCallback     : null,
+		removeNonAdventureElements : null
 	}; 
 
 	pro.first_play_action = true;
