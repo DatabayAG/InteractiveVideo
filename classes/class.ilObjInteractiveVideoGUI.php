@@ -68,7 +68,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 										 '/js/jquery.InteractiveVideoQuestionViewer.js',
 										 '/js/InteractiveVideoPlayerComments.js',
 										 '/js/InteractiveVideoPlayerFunctions.js',
-										 '/js/InteractiveVideoPlayerAbstract.js'
+										 '/js/InteractiveVideoPlayerAbstract.js',
+										 '/js/InteractiveVideoPlayerAdventure.js'
 										);
 
 	/**

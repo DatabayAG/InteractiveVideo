@@ -18,7 +18,8 @@ $( document ).ready(function() {
 				playCallback            : (function (){player.play();}),
 				durationCallback        : (function (){return player.duration();}),
 				currentTimeCallback     : (function (){return player.currentTime();}),
-				setCurrentTimeCallback  : (function (time){player.currentTime(time);})
+				setCurrentTimeCallback  : (function (time){player.currentTime(time);}),
+				playerInstance          : player 
 			};
 
 			il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());

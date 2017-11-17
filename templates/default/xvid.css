@@ -406,3 +406,34 @@ body.cke_editable{
 .question_warning_buttons{
     text-align:center;
 }
+.interactiveVideoAdventureText{
+    position: absolute !important;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width:100%;
+    color: black;
+    z-index: 18;
+}
+.interactiveVideoAdventureTextCell{
+    text-align: center;
+    vertical-align: middle;
+    margin: 0.2em;
+    padding-top: 0.5em;
+    background-color: white;
+    opacity: 0.7;
+}
+
+.interactiveVideoAdventureDisableClickThrough{
+    position: absolute !important;
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width:100%;
+    z-index: 10;
+}

@@ -8,7 +8,8 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		playCallback            : null,
 		durationCallback        : null,
 		currentTimeCallback     : null,
-		setCurrentTimeCallback  : null
+		setCurrentTimeCallback  : null,
+		removeSeekBar           : null
 	}; 
 
 	pro.first_play_action = true;

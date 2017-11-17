@@ -18,7 +18,8 @@ $( document ).ready(function() {
 				playCallback            : (function (){player.play();}),
 				durationCallback        : (function (){return player.duration();}),
 				currentTimeCallback     : (function (){return player.currentTime();}),
-				setCurrentTimeCallback  : (function (time){player.currentTime(time);})
+				setCurrentTimeCallback  : (function (time){player.currentTime(time);}),
+				removeSeekBar           : (function (){player.controlBar.progressControl.seekBar.hide();})
 			};
 
 			il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
@@ -39,7 +40,14 @@ $( document ).ready(function() {
 
 			this.on('playing', function() {
 				interval = setInterval(function () {
-					il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
+					if(true)
+					{
+						il.InteractiveVideoPlayerAbstract.playingEventHandler(interval, player);
+					}
+					else
+					{
+						il.InteractiveVideoPlayerAdventure.playingEventHandler(interval, player);
+					}
 				}, 500);
 			});
 
