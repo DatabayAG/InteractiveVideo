@@ -495,7 +495,7 @@ class ilObjComment
 	 */
 	public function setCommentId($comment_id)
 	{
-		$this->comment_id = $comment_id;
+		$this->comment_id = (int)$comment_id;
 	}
 
 	/**

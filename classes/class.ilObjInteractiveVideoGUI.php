@@ -293,17 +293,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->addJavascriptAndCSSToTemplate($tpl);
 		$object->addPlayerElements($tpl);
 
-		if($this->object->getTaskActive())
-		{
-			$video_tpl->setCurrentBlock('task_description');
-			$video_tpl->setVariable('TASK_TEXT',$this->plugin->txt('task'));
-			$video_tpl->setVariable('TASK_DESCRIPTION', $this->object->getTask());
-			$video_tpl->parseCurrentBlock();
-		}
+		$this->displayTaskIfActive($video_tpl);
 
 		$this->addBackButtonIfParameterExists($video_tpl);
 
 		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());
+
 		$form = new ilPropertyFormGUI();
 		$ckeditor = new ilTextAreaInputCkeditorGUI('comment_text', 'comment_text');
 		$form->addItem($ckeditor);
@@ -323,6 +318,30 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('AUTHOR_FILTER', $this->plugin->txt('author_filter'));
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig());
 
+		$this->appendCommentElementsToTemplateIfNotDisabled($video_tpl);
+
+		$tpl->setContent($video_tpl->get());
+	}
+
+	/**
+	 * @param ilTemplate $video_tpl
+	 */
+	protected function displayTaskIfActive($video_tpl)
+	{
+		if($this->object->getTaskActive())
+		{
+			$video_tpl->setCurrentBlock('task_description');
+			$video_tpl->setVariable('TASK_TEXT', $this->plugin->txt('task'));
+			$video_tpl->setVariable('TASK_DESCRIPTION', $this->object->getTask());
+			$video_tpl->parseCurrentBlock();
+		}
+	}
+
+	/**
+	 * @param ilTemplate $video_tpl
+	 */
+	protected function appendCommentElementsToTemplateIfNotDisabled($video_tpl)
+	{
 		if($this->object->getDisableComment() != 1)
 		{
 			$comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $this->plugin->getDirectory());
@@ -334,13 +353,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $this->plugin->txt('no_text_warning'));
 			$comments_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
 
-
 			$comments_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
 			$comments_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
 			$video_tpl->setVariable("COMMENTS_FORM", $comments_tpl->get());
 		}
-
-		$tpl->setContent($video_tpl->get());
 	}
 
 	/**
@@ -397,14 +413,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question_id = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
 		$question = new ilTemplate("tpl.simple_questions.html", true, true, $this->plugin->getDirectory());
 
-		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $this->plugin->getDirectory());
-		$mathJaxSetting = new ilSetting('MathJax');
-		if($mathJaxSetting->get('enable'))
-		{
-			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
-			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
-		}
-		$question->setVariable('CK_CONFIG', $ck_editor->get());
+		$this->appendCkEditorToTemplate($question);
+
 		$question->setVariable('ANSWER_TEXT',		$this->plugin->txt('answer_text'));
 		$question->setVariable('CORRECT_SOLUTION', 	$this->plugin->txt('correct_solution'));
 		if($question_id > 0)
@@ -447,10 +457,64 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question->setVariable('QUESTION_ID', $question_id);
 		return $question->get();
 	}
-	
-
 
 	/**
+	 * @return ilTemplate
+	 */
+	protected function getCkEditorTemplate()
+	{
+		$ck_editor      = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $this->plugin->getDirectory());
+
+		$mathJaxSetting = $this->addMathJaxToGlobalTemplate();
+		if($mathJaxSetting->get('enable'))
+		{
+			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
+		}
+
+		return $ck_editor;
+	}
+
+	/**
+	 * @return ilSetting
+	 */
+	protected function addMathJaxToGlobalTemplate()
+	{
+		/**
+		 * @var $tpl ilTemplate
+		 */
+		global $tpl;
+
+		$mathJaxSetting = new ilSetting('MathJax');
+		if($mathJaxSetting->get('enable'))
+		{
+			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
+		}
+		return $mathJaxSetting;
+	}
+
+	/**
+	 * @param ilTemplate $custom_tpl
+	 */
+	protected function appendCkEditorToTemplate($custom_tpl)
+	{
+		$ck_editor = $this->getCkEditorTemplate();
+		$ck_editor->touchBlock('small_editor');
+		$custom_tpl->setVariable('CK_CONFIG', $ck_editor->get());
+	}
+
+	/**
+	 * @param ilPropertyFormGUI $a_form
+	 */
+	protected function appendCkEditorMathJaxSupportToForm($a_form)
+	{
+		$ck_editor = $this->getCkEditorTemplate();
+		$custom = new ilCustomInputGUI();
+		$custom->setHtml($ck_editor->get());
+		$a_form->addItem($custom);
+	}
+	
+	/**
+	 * @param bool $edit_screen
 	 * @return string
 	 */
 	protected function initPlayerConfig($edit_screen = false)
@@ -459,7 +523,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * $ilUser ilObjUser
 		 * $tpl ilTemplate
 		 */
-		global $ilUser, $tpl;
+		global $ilUser;
 
 		ilTextAreaInputCkeditorGUI::appendJavascriptFile();
 
@@ -485,15 +549,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('ADD_COMMENT', $this->plugin->txt('insert_comment'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
 		$config_tpl->setVariable('VIDEO_MODE', $this->object->getVideoMode());
-		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $this->plugin->getDirectory());
-		$mathJaxSetting = new ilSetting('MathJax');
-		if($mathJaxSetting->get('enable'))
-		{
-			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
-			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
-		}
-		$ck_editor->touchBlock('small_editor');
-		$config_tpl->setVariable('CK_CONFIG', $ck_editor->get());
+
+		$this->appendCkEditorToTemplate($config_tpl);
 
 		$simple_choice = new SimpleChoiceQuestion();
 		$ignore = $simple_choice->getAllNonRepeatAnsweredQuestion($ilUser->getId());
@@ -652,28 +709,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 * @param ilPropertyFormGUI $a_form
 	 */
-	protected function appendCkEditorMathJaxSupportToForm(ilPropertyFormGUI $a_form)
-	{
-		/**
-		 * @var $tpl ilTemplate
-		 */
-		global $tpl;
-		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $this->plugin->getDirectory());
-		$mathJaxSetting = new ilSetting('MathJax');
-		if($mathJaxSetting->get('enable'))
-		{
-			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
-			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
-		}
-		$custom = new ilCustomInputGUI();
-		$custom->setHtml($ck_editor->get());
-		$a_form->addItem($custom);
-	}
-
-
-	/**
-	 * @param ilPropertyFormGUI $a_form
-	 */
 	protected function appendDefaultFormOptions(ilPropertyFormGUI $a_form)
 	{
 		$this->appendModeSectionToSettingsForm($a_form);
@@ -755,7 +790,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values['source_id']			= $this->object->getSourceId();
 		$a_values['is_task']			= $this->object->getTaskActive();
 		$a_values['task']				= $this->object->getTask();
-		$a_values['video_mode']				= $this->object->getVideoMode();
+		$a_values['video_mode']			= $this->object->getVideoMode();
 	}
 
 	public function editProperties()
@@ -1134,6 +1169,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			foreach($post_ids as $comment_id)
 			{
+				$comment_id = (int) $comment_id;
 				$confirm->addItem('comment_id[]', $comment_id, $this->object->getCommentTextById($comment_id));
 			}
 
@@ -1278,11 +1314,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('editMyComments');
 
-		$mathJaxSetting = new ilSetting('MathJax');
-		if($mathJaxSetting->get('enable'))
-		{
-			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
-		}
+		$this->addMathJaxToGlobalTemplate();
+
 		$tbl_data = $this->object->getCommentsTableDataByUserId();
 		$this->plugin->includeClass('tables/class.ilInteractiveVideoCommentsTableGUI.php');
 		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editMyComments');
@@ -1359,6 +1392,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			foreach($post_ids as $comment_id)
 			{
+				$comment_id = (int) $comment_id;
 				$confirm->addItem('comment_id[]', $comment_id, $this->object->getCommentTextById($comment_id));
 			}
 
@@ -2101,7 +2135,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		if($form->checkInput())
 		{
-			$comment_id = $form->getInput('comment_id');
+			$comment_id = (int)$form->getInput('comment_id');
 			if($comment_id > 0)
 			{
 				$this->objComment = new ilObjComment($comment_id);
@@ -2295,6 +2329,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		foreach($user_ids as $user_id)
 		{
+			$user_id = (int) $user_id;
 			$login = ilObjUser::_lookupName($user_id);
 
 			$confirm->addItem('user_id[]', $user_id, $login['firstname'].' '.$login['lastname']);
@@ -2380,6 +2415,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		foreach($question_ids as $question_id)
 		{
+			$question_id = (int) $question_id;
 			$confirm->addItem('question_id[]', $question_id, $question_id);
 		}
 
