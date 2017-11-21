@@ -5,19 +5,19 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 		adventureData : {
 			"1" : [
 					{ 
-						html : "Hello World 60",
+						html : "Homeopatisches Mittel.",
 						jumpTo : 60
 					},
 					{
-						html : "YEEEEEEEEEEEEHA 65",
+						html : "Aussitzen.",
 						jumpTo : 65
 					},
 					{
-						html : "Hello World 120",
+						html : "Harter Medikamenten Cocktail.",
 						jumpTo : 120
 					},
 					{
-						html : "YEEEEEEEEEEEEHA 122",
+						html : "OP",
 						jumpTo : 122
 					}
 				]
