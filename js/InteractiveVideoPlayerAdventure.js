@@ -76,7 +76,7 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 	
 	pro.drawHtmlOverlay = function(cueTime)
 	{
-		$('#ilInteractiveVideo video').after(
+		$('#ilInteractiveVideo').children().first().after(
 			'<div class="interactiveVideoAdventureText"></div>' +
 			'<div class="interactiveVideoAdventureDisableClickThrough"></div>'
 		);
@@ -128,7 +128,3 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 	return pub;
 
 }(il));
-
-$(window).load(function(){
-	//il.InteractiveVideoPlayerAdventure.Init();
-});

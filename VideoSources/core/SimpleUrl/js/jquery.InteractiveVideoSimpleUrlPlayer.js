@@ -43,17 +43,22 @@ $( document ).ready(function() {
 			});
 
 			this.on('playing', function() {
-				interval = setInterval(function () {
+				
 					if(il.InteractiveVideo.video_mode == 0)
 					{
-						il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
+						interval = setInterval(function () {
+							il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
+						}, 500);
 					}
 					else
 					{
 						il.InteractiveVideoPlayerAdventure.Init();
-						il.InteractiveVideoPlayerAdventure.playingEventHandler(interval, player);
+
+						interval = setInterval(function () {
+							il.InteractiveVideoPlayerAdventure.playingEventHandler(interval, player);
+						}, 500);
 					}
-				}, 500);
+
 			});
 
 			this.on('contextmenu', function(e) {

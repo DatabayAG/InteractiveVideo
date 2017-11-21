@@ -19,7 +19,11 @@ $( document ).ready(function() {
 				durationCallback        : (function (){return player.duration();}),
 				currentTimeCallback     : (function (){return player.currentTime();}),
 				setCurrentTimeCallback  : (function (time){player.currentTime(time);}),
-				playerInstance          : player 
+				removeNonAdventureElements : (function (){
+					player.controlBar.progressControl.disable();
+					player.controlBar.removeChild("currentTimeDisplay");
+					player.controlBar.removeChild("remainingTimeDisplay");
+				})
 			};
 
 			il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
@@ -39,9 +43,22 @@ $( document ).ready(function() {
 			});
 
 			this.on('playing', function() {
-				interval = setInterval(function () {
-					il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
-				}, 500);
+
+				if(il.InteractiveVideo.video_mode == 0)
+				{
+					interval = setInterval(function () {
+						il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
+					}, 500);
+				}
+				else
+				{
+					il.InteractiveVideoPlayerAdventure.Init();
+
+					interval = setInterval(function () {
+						il.InteractiveVideoPlayerAdventure.playingEventHandler(interval, player);
+					}, 500);
+				}
+
 			});
 
 			this.on('contextmenu', function(e) {
