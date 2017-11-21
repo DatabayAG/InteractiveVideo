@@ -20,7 +20,7 @@ $( document ).ready(function() {
 				currentTimeCallback        : (function (){return player.currentTime();}),
 				setCurrentTimeCallback     : (function (time){player.currentTime(time);}),
 				removeNonAdventureElements : (function (){
-					player.controlBar.progressControl.seekBar.hide();
+					player.controlBar.progressControl.disable();
 					player.controlBar.removeChild("currentTimeDisplay");
 					player.controlBar.removeChild("remainingTimeDisplay");
 				})
@@ -44,12 +44,13 @@ $( document ).ready(function() {
 
 			this.on('playing', function() {
 				interval = setInterval(function () {
-					if(false)
+					if(il.InteractiveVideo.video_mode == 0)
 					{
-						il.InteractiveVideoPlayerAbstract.playingEventHandler(interval, player);
+						il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
 					}
 					else
 					{
+						il.InteractiveVideoPlayerAdventure.Init();
 						il.InteractiveVideoPlayerAdventure.playingEventHandler(interval, player);
 					}
 				}, 500);

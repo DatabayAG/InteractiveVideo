@@ -484,6 +484,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('SAVE', $this->plugin->txt('save'));
 		$config_tpl->setVariable('ADD_COMMENT', $this->plugin->txt('insert_comment'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
+		$config_tpl->setVariable('VIDEO_MODE', $this->object->getVideoMode());
 		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $this->plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
@@ -581,6 +582,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$source_id = $a_form->getInput('source_id');
 		$this->object->setSourceId(ilUtil::stripSlashes($source_id));
 
+		$video_mode = $a_form->getInput('video_mode');
+		$this->object->setVideoMode((int)$video_mode);
+
+
 		$this->object->update();
 
 		parent::updateCustom($a_form);
@@ -671,6 +676,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function appendDefaultFormOptions(ilPropertyFormGUI $a_form)
 	{
+		$this->appendModeSectionToSettingsForm($a_form);
+
+		$section_header = new ilFormSectionHeaderGUI();
+		$section_header->setTitle($this->plugin->txt('process_header'));
+		$a_form->addItem($section_header);
 
 		$description_switch = new ilCheckboxInputGUI($this->plugin->txt('task_switch'),'is_task');
 		$description_switch->setInfo($this->plugin->txt('task_switch_info'));
@@ -700,6 +710,26 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	/**
+	 * @param ilPropertyFormGUI $a_form
+	 */
+	protected function appendModeSectionToSettingsForm(ilPropertyFormGUI $a_form)
+	{
+		$section_header = new ilFormSectionHeaderGUI();
+		$section_header->setTitle($this->plugin->txt('mode_header'));
+		$a_form->addItem($section_header);
+
+		$video_mode = new ilSelectInputGUI($this->plugin->txt('video_mode'), 'video_mode');
+		$video_mode->setInfo($this->plugin->txt('video_mode_info'));
+
+		$mode_options  = array(
+			ilInteractiveVideoPlugin::CLASSIC_MODE => $this->plugin->txt('classic_mode'),
+			ilInteractiveVideoPlugin::ADVENTURE_MODE => $this->plugin->txt('adventure_mode'),
+		);
+		$video_mode->setOptions($mode_options);
+		$a_form->addItem($video_mode);
+	}
+
+	/**
 	 * @param array $a_values
 	 */
 	protected function getEditFormCustomValues(array &$a_values)
@@ -725,6 +755,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values['source_id']			= $this->object->getSourceId();
 		$a_values['is_task']			= $this->object->getTaskActive();
 		$a_values['task']				= $this->object->getTask();
+		$a_values['video_mode']				= $this->object->getVideoMode();
 	}
 
 	public function editProperties()

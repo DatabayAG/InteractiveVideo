@@ -866,3 +866,19 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_comment'))
 			'default' => 0));
 }
 ?>
+<#46>
+	<?php
+	
+	?>
+<#47>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'video_mode'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'video_mode',
+		array(
+			'type'    => 'integer',
+			'length'  => '1',
+			'notnull' => true,
+			'default' => 0));
+}
+?>

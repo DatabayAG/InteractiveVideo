@@ -130,5 +130,5 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 }(il));
 
 $(window).load(function(){
-	il.InteractiveVideoPlayerAdventure.Init();
+	//il.InteractiveVideoPlayerAdventure.Init();
 });

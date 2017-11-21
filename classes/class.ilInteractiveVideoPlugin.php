@@ -11,6 +11,16 @@ require_once 'Services/Component/classes/class.ilPluginAdmin.php';
 class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 {
 	/**
+	 * @var int
+	 */
+	const CLASSIC_MODE = 0;
+
+	/**
+	 * @var int
+	 */
+	const ADVENTURE_MODE = 1;
+
+	/**
 	 * @var string
 	 */
 	const CTYPE = 'Services';

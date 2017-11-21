@@ -85,6 +85,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	protected $task;
 
+	/**
+	 * @var int
+	 */
+	protected $video_mode = ilInteractiveVideoPlugin::CLASSIC_MODE;
+
 
 	/**
 	 * @var SimpleChoiceQuestion[]
@@ -147,6 +152,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->setTaskActive($row['is_task']);
 		$this->setTask($row['task']);
 		$this->setDisableComment($row['no_comment']);
+		$this->setVideoMode($row['video_mode']);
 
 		$this->getVideoSourceObject($row['source_id']);
 		$this->setLearningProgressMode($row['lp_mode']);
@@ -217,6 +223,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$is_task		= $this->task_active;
 						$task			= $this->task;
 						$no_comment		= $this->disable_comment;
+						$video_mode		= $this->video_mode;
 					}
 					else
 					{
@@ -228,6 +235,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$is_task		= (int)$_POST['is_task'];
 						$task			= ilUtil::stripSlashes($_POST['task']);
 						$no_comment		= (int)$_POST['no_comment'];
+						$video_mode		= (int)$_POST['video_mode'];
 					}
 
 					$ilDB->insert(
@@ -242,7 +250,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 							'source_id'      => array('text', $source_id),
 							'is_task'        => array('integer',$is_task ),
 							'task'           => array('text', $task),
-							'no_comment'     => array('integer', $no_comment)
+							'no_comment'     => array('integer', $no_comment),
+							'video_mode'     => array('integer', $video_mode)
 						)
 					);
 
@@ -297,7 +306,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 					'is_task'			=> array('integer', $this->getTaskActive()),
 					'task'				=> array('text',	$this->getTask()),
 					'lp_mode'			=> array('integer', $this->getLearningProgressMode()), 
-					'no_comment'		=> array('integer', $this->getDisableComment())
+					'no_comment'		=> array('integer', $this->getDisableComment()),
+					'video_mode'		=> array('integer', $this->getVideoMode())
 					),
 			array('obj_id' => array('integer', $this->getId())));
 	}
@@ -359,7 +369,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				'source_id'     => array('text', $this->getSourceId()),
 				'is_task'     => array('integer', $this->getTaskActive()),
 				'task'     => array('text', $this->getTask()),
-				'lp_mode' => array('integer', $this->getLearningProgressMode())
+				'lp_mode' => array('integer', $this->getLearningProgressMode()),
+				'video_mode' => array('integer', $this->getVideoMode())
 			)
 		);
 
@@ -1171,4 +1182,19 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return false;
 	}
 
+	/**
+	 * @return int
+	 */
+	public function getVideoMode()
+	{
+		return $this->video_mode;
+	}
+
+	/**
+	 * @param int $video_mode
+	 */
+	public function setVideoMode($video_mode)
+	{
+		$this->video_mode = $video_mode;
+	}
 }
