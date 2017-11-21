@@ -22,18 +22,10 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 					}
 				]
 			,
-			"18" :
+			"61" :
 				[
 					{
-						html : "Hello World",
-						jumpTo : 10
-					},
-					{
-						html : "YEEEEEEEEEEEEHA",
-						jumpTo : 15
-					},
-					{
-						html : "Hello World",
+						html : "Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Sed porttitor lectus nibh. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Sed porttitor lectus nibh. Donec rutrum congue leo eget malesuada. Pellentesque in ipsum id orci porta dapibus. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vivamus suscipit tortor eget felis porttitor volutpat. Nulla porttitor accumsan tincidunt. Cras ultricies ligula sed magna dictum porta. Pellentesque in ipsum id orci porta dapibus. Vivamus suscipit tortor eget felis porttitor volutpat. Cras ultricies ligula sed magna dictum porta. Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Vivamus suscipit tortor eget felis porttitor volutpat. Donec rutrum congue leo eget malesuada. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Donec sollicitudin molestie malesuada. Nulla quis lorem ut libero malesuada feugiat..",
 						jumpTo : 10
 					},
 					{
@@ -42,7 +34,7 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 					}
 				]
 		},
-		stopPoints : [1, 18]
+		stopPoints : [1, 61]
 	};
 
 	pub.playingEventHandler = function(interval, player)
@@ -81,14 +73,12 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 			'<div class="interactiveVideoAdventureDisableClickThrough"></div>'
 		);
 		
-		var height = pro.calculateHeightForInlineStyle(pro.adventureData[cueTime]);
-		
 		$.each(pro.adventureData[cueTime], function (index, value) {
 
 			$('.interactiveVideoAdventureText').append(
 				'<div class="interactiveVideoAdventureTextCell" ' +
-					'data-time="' + value.jumpTo + '" ' +
-					'style="height:'+height+';">' +
+					'data-time="' + value.jumpTo + '" ' + 
+					'">' +
 					 value.html + '</div>'
 			);
 		});
@@ -106,17 +96,6 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 			il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo($(this).data('time'));
 			il.InteractiveVideoPlayerAbstract.play();
 		});
-	};
-
-	pro.calculateHeightForInlineStyle = function(data)
-	{
-		var count = data.length;
-		var calculated_height = 100;
-		if(count > 0)
-		{
-			calculated_height = Math.round(100 / count);
-		}
-		return calculated_height + '%';
 	};
 
 	pub.Init = function()

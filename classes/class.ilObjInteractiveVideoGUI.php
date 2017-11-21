@@ -1509,7 +1509,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 
 		$video_tpl->setVariable('TXT_INS_COMMENT', $this->plugin->txt('insert_comment'));
-		$video_tpl->setVariable('TXT_INS_QUESTION', $this->plugin->txt('insert_question'));
+		if($this->object->getVideoMode() == ilInteractiveVideoPlugin::CLASSIC_MODE)
+		{
+			$video_tpl->setVariable('TXT_INS_QUESTION', $this->plugin->txt('insert_question'));
+		}
+		else
+		{
+			$video_tpl->setVariable('TXT_INS_QUESTION', $this->plugin->txt('insert_question_routing'));
+		}
 
 		$modal = ilModalGUI::getInstance();
 		$modal->setId("ilQuestionModal");
@@ -1909,10 +1916,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$ilTabs->activateTab('editComments');
 
-		if(!($form instanceof ilPropertyFormGUI))
+		if($this->object->getVideoMode() == ilInteractiveVideoPlugin::CLASSIC_MODE)
 		{
-			$form = $this->initQuestionForm();
-			$this->appendCkEditorMathJaxSupportToForm($form);
+			if(!($form instanceof ilPropertyFormGUI))
+			{
+				$form = $this->initQuestionForm();
+				$this->appendCkEditorMathJaxSupportToForm($form);
+			}
+		}
+		else
+		{
+			$form = new ilPropertyFormGUI();
+
 		}
 
 		$form->addCommandButton('insertQuestion', $this->lng->txt('insert'));
