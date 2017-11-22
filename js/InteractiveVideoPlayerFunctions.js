@@ -362,6 +362,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				}
 				else
 				{
+
 					object.addClass(rot);
 				}
 			}

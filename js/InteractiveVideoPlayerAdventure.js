@@ -1,6 +1,13 @@
 il.InteractiveVideoPlayerAdventure = (function (scope) {
 	'use strict';
 
+	const pri = {
+		text_cell_class     : "interactiveVideoAdventureTextCell",
+		text_class          : "interactiveVideoAdventureText",
+		disable_click_class : "interactiveVideoAdventureDisableClickThrough",
+		video_id            : "ilInteractiveVideo"
+	};
+
 	var pub = {}, pro = {
 		adventureData : {
 			"1" : [
@@ -57,12 +64,6 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 		stopPoints : [1, 15, 61]
 	};
 
-	const pri = {
-					text_cell_class :     "interactiveVideoAdventureTextCell",
-					text_class      : "interactiveVideoAdventureText",
-					disable_click_class : "interactiveVideoAdventureDisableClickThrough"
-	};
-
 	pub.playingEventHandler = function(interval, player)
 	{
 		var cueTime, j;
@@ -91,10 +92,10 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 			scope.InteractiveVideo.last_time = current_time;
 		}
 	};
-	
+
 	pro.drawHtmlOverlay = function(cueTime)
 	{
-		$('#ilInteractiveVideo').children().first().after(
+		$('#' + pri.video_id).children().first().after(
 			'<div class="' + pri.text_class + '"></div>' +
 			'<div class="' + pri.disable_click_class + '"></div>'
 		);
@@ -105,27 +106,31 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 				'<div class="' + pri.text_cell_class + '" ' +
 					'data-time="' + value.jumpTo + '" ' +
 					'data-cue-time="' + cueTime + '" ' +
-					'data-jump-id="' + value.id +'" ' +
-					'">' +
+					'data-jump-id="' + value.id +'" ">' +
 					 value.html + '</div>'
 			);
 		});
 		
-		pro.registerEventForOverlays();
+		pro.registerClickEventForOverlays();
 	};
-	
-	pro.registerEventForOverlays = function()
+
+	pro.fireOverlayClickEvent = function(that) 
+	{
+		$('.' + pri.text_class).remove();
+		$('.' + pri.disable_click_class).remove();
+		il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(that.data('time'));
+		pro.jumpPath.push(that.data('jump-id'));
+		il.InteractiveVideoPlayerAbstract.play();
+		console.log(pro.jumpPath);
+	};
+
+	pro.registerClickEventForOverlays = function()
 	{
 		var selector = $('.' + pri.text_cell_class);
 		selector.off('click');
 
 		selector.on('click', function(){
-			$('.' + pri.text_class).remove();
-			$('.' + pri.disable_click_class).remove();
-			il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo($(this).data('time'));
-			pro.jumpPath.push($(this).data('jump-id'));
-			il.InteractiveVideoPlayerAbstract.play();
-			console.log(pro.jumpPath);
+			pro.fireOverlayClickEvent($(this));
 		});
 	};
 
