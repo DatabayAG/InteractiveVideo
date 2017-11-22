@@ -57,6 +57,12 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 		stopPoints : [1, 15, 61]
 	};
 
+	const pri = {
+					text_cell_class :     "interactiveVideoAdventureTextCell",
+					text_class      : "interactiveVideoAdventureText",
+					disable_click_class : "interactiveVideoAdventureDisableClickThrough"
+	};
+
 	pub.playingEventHandler = function(interval, player)
 	{
 		var cueTime, j;
@@ -89,15 +95,17 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 	pro.drawHtmlOverlay = function(cueTime)
 	{
 		$('#ilInteractiveVideo').children().first().after(
-			'<div class="interactiveVideoAdventureText"></div>' +
-			'<div class="interactiveVideoAdventureDisableClickThrough"></div>'
+			'<div class="' + pri.text_class + '"></div>' +
+			'<div class="' + pri.disable_click_class + '"></div>'
 		);
 		
 		$.each(pro.adventureData[cueTime], function (index, value) {
 
-			$('.interactiveVideoAdventureText').append(
-				'<div class="interactiveVideoAdventureTextCell" ' +
-					'data-time="' + value.jumpTo + '" data-cue-time="' + cueTime + '" data-jump-id="' + value.id +'" ' +
+			$('.'+ pri.text_class).append(
+				'<div class="' + pri.text_cell_class + '" ' +
+					'data-time="' + value.jumpTo + '" ' +
+					'data-cue-time="' + cueTime + '" ' +
+					'data-jump-id="' + value.id +'" ' +
 					'">' +
 					 value.html + '</div>'
 			);
@@ -108,13 +116,13 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 	
 	pro.registerEventForOverlays = function()
 	{
-		$('.interactiveVideoAdventureTextCell').off('click');
-		
-		$('.interactiveVideoAdventureTextCell').on('click', function(){
-			$('.interactiveVideoAdventureText').remove();
-			$('.interactiveVideoAdventureDisableClickThrough').remove();
+		var selector = $('.' + pri.text_cell_class);
+		selector.off('click');
+
+		selector.on('click', function(){
+			$('.' + pri.text_class).remove();
+			$('.' + pri.disable_click_class).remove();
 			il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo($(this).data('time'));
-			
 			pro.jumpPath.push($(this).data('jump-id'));
 			il.InteractiveVideoPlayerAbstract.play();
 			console.log(pro.jumpPath);
