@@ -10,11 +10,10 @@ require_once 'Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvance
 class ilInteractiveVideoExportTableGUI extends ilExportTableGUI
 {
 	/**
-	 * Constructor
-	 *
-	 * @access public
-	 * @param
-	 * @return
+	 * ilInteractiveVideoExportTableGUI constructor.
+	 * @param object $a_parent_obj
+	 * @param string $a_parent_cmd
+	 * @param string $a_exp_obj
 	 */
 	public function __construct($a_parent_obj, $a_parent_cmd, $a_exp_obj)
 	{
@@ -25,7 +24,7 @@ class ilInteractiveVideoExportTableGUI extends ilExportTableGUI
 		//$this->addCustomColumn($this->lng->txt('actions'), $this, 'formatActionsList');
 	}
 
-	/***
+	/**
 	 * 
 	 */
 	protected function initMultiCommands()

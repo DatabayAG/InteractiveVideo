@@ -432,6 +432,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	}
 
 	/**
+	 * @param bool $replace_with_text
+	 * @param bool $empty_string_if_null
+	 * @param bool $replace_settings_with_text
 	 * @return array
 	 */
 	public function getCommentsTableData($replace_with_text = false, $empty_string_if_null = false, $replace_settings_with_text = false)

@@ -186,7 +186,8 @@ class SimpleChoiceQuestion
 	}
 
 	/**
-	 *
+	 * @param $qid
+	 * @return mixed
 	 */
 	public function readQuestionById($qid)
 	{

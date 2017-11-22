@@ -60,4 +60,3 @@ class ilHtmlInteractiveVideoPostPurifier extends ilHtmlPurifierAbstractLibWrappe
 		return $config;
 	}	
 }
-?>
