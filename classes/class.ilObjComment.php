@@ -380,6 +380,9 @@ class ilObjComment
 	 */
 	public function cloneTutorComments($old_id, $new_id)
 	{
+		$old_id = (int) $old_id;
+		$new_id = (int) $new_id;
+
 		/**
 		 * @var $ilDB ilDB
 		 */
@@ -422,11 +425,13 @@ class ilObjComment
 	}
 
 	/**
-	 * @param $user_id
+	 * @param int $user_id
 	 * @return string
 	 */
 	public static function getUserImageInBase64($user_id)
 	{
+		$user_id = (int) $user_id;
+
 		if(!array_key_exists($user_id, self::$user_image_cache))
 		{
 			$img_file = ilObjUser::_getPersonalPicturePath($user_id, 'xxsmall');
@@ -443,11 +448,13 @@ class ilObjComment
 	}
 	
 	/**
-	 * @param $user_id
+	 * @param int $user_id
 	 * @return string
 	 */
 	public static function lookupUsername($user_id)
 	{
+		$user_id = (int) $user_id;
+
 		if(!array_key_exists($user_id, self::$user_name_cache))
 		{
 			$user = new ilObjUser($user_id);
@@ -479,7 +486,7 @@ class ilObjComment
 	 */
 	public function setObjId($obj_id)
 	{
-		$this->obj_id = $obj_id;
+		$this->obj_id = (int) $obj_id;
 	}
 
 	/**
@@ -495,7 +502,7 @@ class ilObjComment
 	 */
 	public function setCommentId($comment_id)
 	{
-		$this->comment_id = (int)$comment_id;
+		$this->comment_id = (int) $comment_id;
 	}
 
 	/**
@@ -627,8 +634,6 @@ class ilObjComment
 		$this->is_private = $is_private;
 	}
 
-	
-	
 	/**
 	 * @return int
 	 */
