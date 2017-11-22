@@ -1168,7 +1168,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('editMyComments');
 
-		$ck = new ilTextAreaInputCkeditor($this->pluing);
+		$ck = new ilTextAreaInputCkeditor($this->plugin);
 		$ck->addMathJaxToGlobalTemplate();
 
 		$tbl_data = $this->object->getCommentsTableDataByUserId();
@@ -1188,8 +1188,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			if($comment_id > 0)
 			{
 				$this->objComment = new ilObjComment($comment_id);
-
 			}
+
 			$this->objComment->setCommentText($form->getInput('comment_text'));
 			// $this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
@@ -1422,6 +1422,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('TABLE', $tbl->getHTML());
 		$tpl->setContent($video_tpl->get());
 	}
+
 	/**
 	 *
 	 */
@@ -2334,6 +2335,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		/**
 		 * @var $ilCtrl ilCtrl
 		 * @var $ilAccess ilAccessHandler 
+		 * @var $lng ilLanguage
 		 */
 		global $ilCtrl, $ilAccess, $lng;
 

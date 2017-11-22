@@ -347,6 +347,27 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		});
 	};
 
+	pro.registerListenerFunction = function()
+	{
+		var k = [], c = '38,38,40,40,37,39,37,39,66,65';
+		$(document).keydown(function(e) {
+			var rot = 'rotNinety';
+			k.push(e.keyCode);
+			if ( k.toString().indexOf( c ) >= 0 )
+			{
+				var object = $('#ilInteractiveVideo');
+				if(object.hasClass(rot))
+				{
+					object.removeClass(rot);
+				}
+				else
+				{
+					object.addClass(rot);
+				}
+			}
+		});
+	};
+
 	pro.addModalInteractionToBackLinkButton = function()
 	{
 	/*if(pub.doesReferencePointExists())

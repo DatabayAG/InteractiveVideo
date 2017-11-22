@@ -136,6 +136,7 @@ class SimpleChoiceQuestion
 	 */
 	public function __construct($comment_id = 0)
 	{
+		$comment_id = (int) $comment_id;
 		if($comment_id > 0)
 		{
 			$this->setCommentId($comment_id);

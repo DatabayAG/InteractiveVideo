@@ -182,6 +182,7 @@ class SimpleChoiceQuestionFormEditGUI
 
 		$form->addItem($image_upload);
 	}
+
 	/**
 	 * @param ilPropertyFormGUI $form
 	 */

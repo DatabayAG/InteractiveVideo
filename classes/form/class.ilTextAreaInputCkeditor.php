@@ -19,7 +19,7 @@ class ilTextAreaInputCkeditor
 	/**
 	 * @return ilTemplate
 	 */
-	public function getCkEditorTemplate()
+	protected function getCkEditorTemplate()
 	{
 		$ck_editor      = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $this->plugin->getDirectory());
 

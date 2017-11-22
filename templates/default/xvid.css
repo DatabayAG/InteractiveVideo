@@ -316,7 +316,10 @@
 .modal_reflection_footer{
     height:25px;
 }
-
+.rotNinety{
+    transform: rotate(90deg);
+    z-index: 12;
+}
 #submit_comment_form{
     right: 85px;
     bottom: 5px;
