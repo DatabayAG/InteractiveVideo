@@ -5,7 +5,8 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 		text_cell_class     : "interactiveVideoAdventureTextCell",
 		text_class          : "interactiveVideoAdventureText",
 		disable_click_class : "interactiveVideoAdventureDisableClickThrough",
-		video_id            : "ilInteractiveVideo"
+		video_id            : "ilInteractiveVideo",
+		play_btn            : ".vjs-big-play-button .vjs-icon-placeholder"
 	};
 
 	var pub = {}, pro = {
@@ -93,25 +94,92 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 		}
 	};
 
+	pro.appendQuestionTextCell = function(id, jumpTo, text, cueTime) 
+	{
+		$('.' + pri.text_class).append(
+			'<div class="' + pri.text_cell_class + '" ' +
+			'data-time="' + jumpTo + '" ' +
+			'data-cue-time="' + cueTime + '" ' +
+			'data-jump-id="' + id + '" ">' +
+			text + '</div>'
+		);
+	};
+
 	pro.drawHtmlOverlay = function(cueTime)
 	{
+		pro.lowerPlayButtonOpacityIfQuestionsAreShown();
+
 		$('#' + pri.video_id).children().first().after(
 			'<div class="' + pri.text_class + '"></div>' +
 			'<div class="' + pri.disable_click_class + '"></div>'
 		);
-		
-		$.each(pro.adventureData[cueTime], function (index, value) {
 
-			$('.'+ pri.text_class).append(
-				'<div class="' + pri.text_cell_class + '" ' +
-					'data-time="' + value.jumpTo + '" ' +
-					'data-cue-time="' + cueTime + '" ' +
-					'data-jump-id="' + value.id +'" ">' +
-					 value.html + '</div>'
-			);
+		$.each(pro.adventureData[cueTime], function (index, value) {
+			pro.appendQuestionTextCell(value.id, value.jumpTo, value.html ,cueTime);
 		});
-		
+
+		var point = pro.getTimeFromLastJumpToPoint();
+		pro.appendQuestionTextCell(-1, point, 'Szene wiederholen' ,-1);
+
 		pro.registerClickEventForOverlays();
+	};
+
+	pro.getTimeFromLastJumpToPoint = function(length)
+	{
+		var last_jump_point = null;
+		var loop_return_value = null;
+		if(length === null || typeof length == 'undefined')
+		{
+			length = +1;
+		}
+
+		last_jump_point = pro.jumpPath[pro.jumpPath.length - length];
+		if((typeof last_jump_point === "undefined"))
+		{
+			return 0;
+		}
+		else if(last_jump_point === -1 || last_jump_point === "-1")
+		{
+			length = length +1;
+			return pro.getTimeFromLastJumpToPoint(length);
+		}
+
+		$.each(pro.adventureData, function (index, question) {
+			var break_out = false;
+			$.each(question, function (second_index, value) {
+				if(value.id == last_jump_point)
+				{
+					loop_return_value = value.jumpTo;
+					break_out = true;
+					return false;
+				}
+			});
+
+			if(break_out)
+			{
+				return false;
+			}
+		});
+
+		if(loop_return_value !== null)
+		{
+			return loop_return_value;
+		}
+		
+	};
+
+	pro.lowerPlayButtonOpacityIfQuestionsAreShown = function()
+	{
+		var opacity = $(pri.play_btn).css('opacity');
+
+		if(opacity === null || opacity === "1")
+		{
+			$(pri.play_btn).css('opacity', 0.2);
+		}
+		else
+		{
+			$(pri.play_btn).css('opacity', 1);
+		}
 	};
 
 	pro.fireOverlayClickEvent = function(that) 
@@ -119,8 +187,12 @@ il.InteractiveVideoPlayerAdventure = (function (scope) {
 		$('.' + pri.text_class).remove();
 		$('.' + pri.disable_click_class).remove();
 		il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(that.data('time'));
+
 		pro.jumpPath.push(that.data('jump-id'));
+		pro.lowerPlayButtonOpacityIfQuestionsAreShown();
+
 		il.InteractiveVideoPlayerAbstract.play();
+
 		console.log(pro.jumpPath);
 	};
 

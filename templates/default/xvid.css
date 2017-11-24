@@ -437,7 +437,7 @@ body.cke_editable{
     margin: 0.5em 0.5em 0em;
 }
 .interactiveVideoAdventureTextCell:hover{
-    opacity: 0.9;
+    opacity: 1;
     cursor: pointer;
 }
 .interactiveVideoAdventureText div:last-child
