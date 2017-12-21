@@ -602,7 +602,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function appendModeSectionToSettingsForm(ilPropertyFormGUI $a_form)
 	{
-		$section_header = new ilFormSectionHeaderGUI();
+		/*$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($this->plugin->txt('mode_header'));
 		$a_form->addItem($section_header);
 
