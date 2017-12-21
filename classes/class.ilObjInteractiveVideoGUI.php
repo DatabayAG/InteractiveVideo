@@ -564,7 +564,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function appendDefaultFormOptions(ilPropertyFormGUI $a_form)
 	{
-		$this->appendModeSectionToSettingsForm($a_form);
 
 		$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($this->plugin->txt('process_header'));
@@ -598,26 +597,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	/**
-	 * @param ilPropertyFormGUI $a_form
-	 */
-	protected function appendModeSectionToSettingsForm(ilPropertyFormGUI $a_form)
-	{
-		/*$section_header = new ilFormSectionHeaderGUI();
-		$section_header->setTitle($this->plugin->txt('mode_header'));
-		$a_form->addItem($section_header);
-
-		/*$video_mode = new ilSelectInputGUI($this->plugin->txt('video_mode'), 'video_mode');
-		$video_mode->setInfo($this->plugin->txt('video_mode_info'));
-
-		$mode_options  = array(
-			ilInteractiveVideoPlugin::CLASSIC_MODE => $this->plugin->txt('classic_mode'),
-			ilInteractiveVideoPlugin::ADVENTURE_MODE => $this->plugin->txt('adventure_mode'),
-		);
-		$video_mode->setOptions($mode_options);
-		$a_form->addItem($video_mode);*/
-	}
-
-	/**
 	 * @param array $a_values
 	 */
 	protected function getEditFormCustomValues(array &$a_values)
@@ -643,7 +622,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values['source_id']			= $this->object->getSourceId();
 		$a_values['is_task']			= $this->object->getTaskActive();
 		$a_values['task']				= $this->object->getTask();
-		$a_values['video_mode']			= $this->object->getVideoMode();
 	}
 
 	public function editProperties()
@@ -1394,15 +1372,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 
 		$video_tpl->setVariable('TXT_INS_COMMENT', $this->plugin->txt('insert_comment'));
-		if($this->object->getVideoMode() == ilInteractiveVideoPlugin::CLASSIC_MODE)
-		{
-			$video_tpl->setVariable('TXT_INS_QUESTION', $this->plugin->txt('insert_question'));
-		}
-		else
-		{
-			$video_tpl->setVariable('TXT_INS_QUESTION', $this->plugin->txt('insert_question_routing'));
-		}
 
+		$video_tpl->setVariable('TXT_INS_QUESTION', $this->plugin->txt('insert_question'));
 		$modal = ilModalGUI::getInstance();
 		$modal->setId("ilQuestionModal");
 		$modal->setBody('');
@@ -1580,19 +1551,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$ilTabs->activateTab('editComments');
 
-		if($this->object->getVideoMode() == ilInteractiveVideoPlugin::CLASSIC_MODE)
+		if(!($form instanceof ilPropertyFormGUI))
 		{
-			if(!($form instanceof ilPropertyFormGUI))
-			{
-				$simple_question = new SimpleChoiceQuestionFormEditGUI($this->plugin, $this->object);
-				$form = $simple_question->initQuestionForm();
-				$ck = new ilTextAreaInputCkeditor($this->plugin);
-				$ck->appendCkEditorMathJaxSupportToForm($form);
-			}
-		}
-		else
-		{
-			$form = new ilPropertyFormGUI();
 			$simple_question = new SimpleChoiceQuestionFormEditGUI($this->plugin, $this->object);
 			$form = $simple_question->initQuestionForm();
 			$ck = new ilTextAreaInputCkeditor($this->plugin);
