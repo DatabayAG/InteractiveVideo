@@ -182,8 +182,4 @@ visibility#:#Visibility
 no_comment#:#No Comment-field
 no_comment_info#:#There will be no comment field below the video player
 process_header#:#Process
-mode_header#:#Video Mode
-video_mode#:#Mode
-video_mode_info#:#Select the mode in which the interactive video object should run.
-classic_mode#:#Classic Mode
-adventure_mode#:#Adventure Mode
+insert_marker#:#Insert Marker

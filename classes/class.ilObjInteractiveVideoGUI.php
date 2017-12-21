@@ -71,7 +71,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 										 '/js/InteractiveVideoPlayerComments.js',
 										 '/js/InteractiveVideoPlayerFunctions.js',
 										 '/js/InteractiveVideoPlayerAbstract.js',
-										 '/js/InteractiveVideoPlayerAdventure.js'
+										 '/js/InteractiveVideoOverlayMarker.js'
 										);
 
 	/**
@@ -936,7 +936,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment->setCommentText(trim($_POST['comment_text']));
 		$comment->setCommentTime((float)$_POST['comment_time']);
 		$comment->setCommentTimeEnd($seconds_end);
-		
+
+		//Todo secure
+		if(strlen($_POST['marker']) > 0)
+		{
+			$marker = $this->calculateCorrectPositionForMarker($_POST['marker']);
+			$comment->setMarker($marker);
+			if($comment->getCommentTimeEnd() == 0)
+			{
+				$comment->setCommentTimeEnd($comment->getCommentTime() + 1 );
+			}
+		}
+
+
 		if(array_key_exists('is_reply_to', $_POST))
 		{
 			$comment->setIsReplyTo((int) $_POST['is_reply_to']);
@@ -960,6 +972,39 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment->create();
 		$this->callExit();
 	}
+
+	protected function calculateCorrectPositionForMarker($string)
+	{
+		$x = 0;
+		$y = 0;
+
+		$pos_x = '/pos_x="(\d+|\d+[\.]{1}[\d]+)"/i';
+		preg_match($pos_x, $string, $matches);
+
+		if(count($matches) == 2)
+		{
+			$x = $matches[1];
+		}
+
+		$pos_y = '/pos_y="(\d+|\d+[\.]{1}[\d]+)"/i';
+		preg_match($pos_y, $string, $matches);
+		if(count($matches) == 2)
+		{
+			$y = $matches[1];
+		}
+
+		$string = preg_replace($pos_x, '', $string);
+		$string = preg_replace($pos_y, '', $string);
+
+		$reg = '/x="(\d+)"/i';
+		$string = preg_replace($reg, 'x="'.$x . '"', $string);
+
+		$reg = '/y="(\d+)"/i';
+		$string = preg_replace($reg, 'y="'.$y . '"', $string);
+
+		return $string;
+	}
+
 
 	/**
 	 *

@@ -19,6 +19,42 @@
 				<div>{COMMENT_TIME_END_PICKER}</div>
 			</div>
 		</div>
+		<div class="col-sm-9">
+			<input type="checkbox" name="add_marker_chk" value="1" id="add_marker_chk"/> Add marker{ADD_MARKER}
+			<div class="form-inline add_marker_selector" style="display:none">
+				<div>
+					<script>
+						$( document ).ready(function() {
+							$("#width_changer").on("input change", function() {
+								$('.interactive_marker .rectangle_object').attr('width', $(this).val())
+							});
+							$("#height_changer").on("input change", function() {
+								$('.interactive_marker .rectangle_object').attr('height', $(this).val())
+							});
+							$("#color_picker").on("input change", function() {
+								$('.interactive_marker .rectangle_object').attr('style', "fill:none;stroke-width:4;stroke:" + $(this).val())
+							});
+						});
+
+					</script>
+					<div class="rect_toolbar">
+						<label for="color_picker">Color:</label><br/><input id="color_picker"  type="color" value="#ff0088"><br/>
+						<label for="width_changer">Width:</label><br/><input id="width_changer" type="range" min="1" max="300" value="40">
+						<label for="height_changer">Height:</label><br/><input id="height_changer" type="range" min="1" max="150" value="40">
+					</div>
+
+					<input type="button" class="btn btn-default btn-sm" value="Rectangle" id="btn_rect" />
+					<input type="button" class="btn btn-default btn-sm" value="Circle" id="btn_circle" />
+					<svg class="rect_prototype interactive_rectangle prototype"  viewBox="0 0 300 150">
+						<rect class="rectangle_object" x="0" y="0" width="40" height="40" style="fill:none;stroke-width:4;stroke:#ff0088"/>
+					</svg>
+					<svg class="circle_prototype interactive_circle prototype"  viewBox="0 0 300 150">
+						<circle class="circle_object" cx="50" cy="50" r="40" stroke="green" stroke-width="2" fill="none" />
+					</svg>
+				</div>
+			</div>
+		</div>
+
 	</div>
 	<div class="ilFormFooter clearfix">
 		<div class="col-sm-12 ilFormRequired"></div>

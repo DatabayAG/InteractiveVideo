@@ -8,7 +8,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pub.seekingEventHandler = function()
 	{
 		var current_time = scope.InteractiveVideoPlayerAbstract.currentTime();
-		
+
 		if (scope.InteractiveVideo.last_time > current_time)
 		{
 			scope.InteractiveVideo.last_time = current_time;
@@ -90,10 +90,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		pro.addDropDownEvent();
 
 		pro.addModalInteractionToBackLinkButton();
-		
+
 		pro.addTaskInteraction();
 	};
-	
+
 	pro.addTaskInteraction = function()
 	{
 		$('.task_interaction').on('click', function() {
@@ -117,7 +117,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pro.addHighlightToCommentWithoutEndTime = function(comment)
 	{
 		var time_end = parseInt(comment.comment_time_end, 10);
-		if(time_end === 0 || time_end === null) 
+		if(time_end === 0 || time_end === null)
 		{
 			$('.list_item_' + comment.comment_id).addClass('activeCommentWithoutEndTime');
 			setTimeout(function(){
@@ -128,14 +128,15 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pro.commentsObjectActions = function(i, current_time, player)
 	{
 		var is_interactive = parseInt(scope.InteractiveVideo.comments[i].is_interactive, 10);
+		var is_overlay_marker = parseInt(scope.InteractiveVideo.comments[i].is_overlay, 10);
 		var comment        = scope.InteractiveVideo.comments[i];
 		var stop_video     = 0;
-		
-		if (scope.InteractiveVideo.comments[i].comment_text != null) 
+
+		if (scope.InteractiveVideo.comments[i].comment_text != null)
 		{
 			$("#ul_scroll").prepend(pri.utils.buildListElement(comment, current_time, comment.user_name));
 			pro.addHighlightToCommentWithoutEndTime(comment);
-			if (comment.comment_time_end > 0) 
+			if (comment.comment_time_end > 0)
 			{
 				pri.utils.fillCommentsTimeEndBlacklist(comment.comment_time_end, comment.comment_id);
 			}
@@ -145,28 +146,33 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			stop_video = 1;
 			InteractiveVideoQuestionViewer.getQuestionPerAjax(comment.comment_id, player);
 		}
-		else if (is_interactive === 1) 
+		else if (is_interactive === 1)
 		{
 			$('.list_item_' + i).find('.comment_text').append(' (' + scope.InteractiveVideo.lang.answered_text + ') ');
 		}
 
+		if(is_overlay_marker === 1) {
+			var marker = '<g class=interactive_overlay_element_'+comment.comment_id +'>' + comment.marker + '</g>';
+			$('#ilInteractiveVideoOverlay').html($('#ilInteractiveVideoOverlay').html() + marker);
+		}
 		return stop_video;
 	};
 
-	pub.postAndAppendFakeCommentToStream = function(actual_time_in_video, comment_text, is_private, end_time) {
+	pub.postAndAppendFakeCommentToStream = function(actual_time_in_video, comment_text, is_private, end_time, marker) {
 		var fake_id = parseInt(Math.random() * 10000000, 10);
 		var tmp_obj =
-			{
-				'comment_id':         fake_id,
-				'comment_time':       actual_time_in_video,
-				'comment_text':       comment_text,
-				'comment_time_end':   end_time,
-				'user_name':          scope.InteractiveVideo.username,
-				'user_image':          scope.InteractiveVideo.user_image,
-				'is_interactive':     '0',
-				'is_private':         is_private
-			};
-		if (!tmp_obj.comment_text) 
+				{
+					'comment_id':         fake_id,
+					'comment_time':       actual_time_in_video,
+					'comment_text':       comment_text,
+					'comment_time_end':   end_time,
+					'user_name':          scope.InteractiveVideo.username,
+					'user_image':          scope.InteractiveVideo.user_image,
+					'is_interactive':     '0',
+					'is_private':         is_private,
+					'marker':             marker
+				};
+		if (!tmp_obj.comment_text)
 		{
 			$('#no_text_warning').removeClass('ilNoDisplay');
 			return;
@@ -183,7 +189,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				'comment_time':       actual_time_in_video,
 				'comment_time_end'  : end_time,
 				'comment_text':      comment_text,
-				'is_private':        is_private
+				'is_private':        is_private,
+				'marker':            marker
 			},
 			success:  function () {
 				pro.resetCommentForm();
@@ -204,7 +211,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			{
 				time = $('#comment_time_end').val();
 				time = time.split(':'); // split it at the colons
-				
+
 				var end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
 
 				if(end_time < parseInt(actual_time_in_video, 10))
@@ -214,7 +221,12 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				}
 			}
 
-			pub.postAndAppendFakeCommentToStream(actual_time_in_video, comment_text, is_private, end_time);
+			var marker = '';
+			$( '.iv_svg_marker' ).each(function( index ) {
+				marker += $(this).html();
+			});
+
+			pub.postAndAppendFakeCommentToStream(actual_time_in_video, comment_text, is_private, end_time, marker);
 		});
 	};
 
@@ -235,7 +247,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				},
 				success:  function () {
 					$('.reply_comment_' + org_id).remove();
-					$('.list_item_' + comment_id + ' .reply_comment_non_existent').remove();
+					$('.reply_comment_non_existent').remove();
 					var reply = {'comment_text' : comment_text, 'is_interactive' : 0, 'is_private' : is_private, 'user_name' :scope.InteractiveVideo.username, 'comment_id' : 'non_existent'};
 					var html = scope.InteractiveVideoPlayerComments.getCommentRepliesHtml(reply);
 					$('.list_item_' + comment_id).find('.comment_replies').append(html);
@@ -260,6 +272,9 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		$('#comment_time_end_chk').prop( 'checked', false );
 		$('.end_time_selector').hide( 'fast' );
 		$('.alert-warning').addClass('ilNoDisplay');
+		$('.iv_svg_marker').remove();
+		$('#add_marker_chk').prop( 'checked', false );
+		$('.add_marker_selector').hide( 'fast' );
 	};
 
 	pro.addPausePlayerOnClick = function()
@@ -297,6 +312,18 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				$('.end_time_selector').hide( 'fast' );
 			}
 		});
+
+		$('#add_marker_chk').change(function() {
+			if($(this).is(':checked'))
+			{
+				$('.add_marker_selector').show( 'fast' );
+				il.InteractiveVideoOverlayMarker.attachListener();
+			}
+			else
+			{
+				$('.add_marker_selector').hide( 'fast' );
+			}
+		});
 	};
 
 	pro.addBootStrapToggle = function()
@@ -310,7 +337,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			pro.isChronologicViewDeactivatedShowAllComments();
 		}());
 	};
-	
+
 	pro.isChronologicViewDeactivatedShowAllComments = function()
 	{
 		if(scope.InteractiveVideo.is_chronologic === '1')
@@ -380,7 +407,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			});
 		}*/
 	};
-	
+
 	pub.doesReferencePointExists = function()
 	{
 		var object = $('.back_link_to');
@@ -401,7 +428,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		$('#ilQuestionModal').modal('show');
 		pro.addCancelAction();
 	};
-	
+
 	pro.addCancelAction = function()
 	{
 		$('#ilQuestionModal').find('.back_link_cancel').on('click', function(event){
@@ -434,7 +461,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.refreshMathJaxView = function()
 	{
-		if (typeof MathJax != 'undefined') 
+		if (typeof MathJax != 'undefined')
 		{
 			MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 		}

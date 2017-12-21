@@ -182,8 +182,4 @@ save_without_correct_detail#:#Sie haben weder eine Reflektionfrage, noch neutral
 no_comment#:#Kein Kommentarfeld
 no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflektionsfragen mit aktiviertem Kommentarfeld sind nach wie vor möglich.
 process_header#:#Durchfürung
-mode_header#:#Video Modus
-video_mode#:#Modus
-video_mode_info#:#Wählen Sie den Modus für das Interaktive Video Plugin
-classic_mode#:#Klassicher Modus
-adventure_mode#:#Adventure Modus
+insert_marker#:#Marker Einfügen

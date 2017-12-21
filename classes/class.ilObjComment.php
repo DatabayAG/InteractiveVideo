@@ -2,6 +2,7 @@
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 require_once 'Services/User/classes/class.ilUserUtil.php';
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilHtmlInteractiveVideoPostPurifier.php';
+require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilObjCommentOverlay.php';
 
 /**
  * Class ilObjComment
@@ -90,6 +91,11 @@ class ilObjComment
 	protected $is_reply_to = 0;
 
 	/**
+	 * @var string
+	 */
+	protected $marker;
+
+	/**
 	 * @var array
 	 */
 	protected static $user_name_cache = array();
@@ -135,6 +141,7 @@ class ilObjComment
 		$this->setCommentTags($row['comment_tags']);
 		$this->setIsPrivate($row['is_private']);
 		$this->setIsReplyTo($row['is_reply_to']);
+		$this->setMarker($row['marker']);
 	}
 
 	/**
@@ -171,7 +178,8 @@ class ilObjComment
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),
 				'is_private'		=> array('integer', $this->getIsPrivate()),
-				'is_reply_to'		=> array('integer', $this->getIsReplyTo())
+				'is_reply_to'		=> array('integer', $this->getIsReplyTo()),
+				'marker'			=> array('text', $this->getMarker())
 			));
 		if($return_next_id)
 		{
@@ -216,7 +224,8 @@ class ilObjComment
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),
 				'is_private'		=> array('integer', $this->getIsPrivate()),
-				'is_reply_to'		=> array('integer', $this->getIsReplyTo())
+				'is_reply_to'		=> array('integer', $this->getIsReplyTo()),
+				'marker'			=> array('text', $this->getMarker())
 			),
 			array(
 				'comment_id' => array('integer', $this->getCommentId())
@@ -225,8 +234,7 @@ class ilObjComment
 	}
 
 	/**
-	 * delete
-	 * @param array $comment_ids
+	 * @param $comment_ids
 	 * @return bool
 	 */
 	public function deleteComments($comment_ids)
@@ -249,7 +257,7 @@ class ilObjComment
 	public function getStopPoints()
 	{
 		/**
-		 * @var ilDb $ilDB
+		 * @var $ilDB ilDB
 		 */
 		global $ilDB;
 
@@ -283,16 +291,16 @@ class ilObjComment
 
 		$query_types = array('integer','integer','integer','integer');
 		$query_data = array($this->getObjId(), 0, 1, $ilUser->getId());
-		
+
 		$where_condition = '';
-	
+
 		if(!$this->isPublic())
 		{
 			$where_condition = ' AND (user_id = %s OR is_tutor = %s OR is_interactive = %s )';
 			$query_types = array_merge($query_types, array('integer', 'integer', 'integer'));
 			$query_data = array_merge($query_data, array($ilUser->getId(), 1, 1));
 		}
-		
+
 		$res = $ilDB->queryF(
 			'SELECT *
 			FROM rep_robj_xvid_comments
@@ -334,7 +342,10 @@ class ilObjComment
 			$temp['is_interactive'] 	= $row['is_interactive'];
 			$temp['is_private'] 		= $row['is_private'];
 			$temp['is_reply_to'] 		= $row['is_reply_to'];
+			$temp['marker'] 			= $row['marker'];
 			$temp['replies']			= array();
+
+			$temp['is_overlay'] = "1";
 
 			if($row['is_reply_to'] != 0)
 			{
@@ -346,7 +357,7 @@ class ilObjComment
 				$i++;
 			}
 		}
-		
+
 		if(sizeof($is_reply_to) > 0)
 		{
 			$comments = $this->sortInReplies($is_reply_to, $comments);
@@ -411,6 +422,7 @@ class ilObjComment
 			$this->setCommentTags($row['comment_tags']);
 			$this->setIsPrivate($row['is_private']);
 			$this->setIsReplyTo($row['is_reply_to']);
+			$this->setMarker($row['marker']);
 			$new_comment_id = $this->create(true);
 			if((bool)$row['is_interactive'])
 			{
@@ -420,7 +432,7 @@ class ilObjComment
 		$simple = new SimpleChoiceQuestion();
 		foreach($questions_array as $key => $value)
 		{
-			$simple->cloneQuestionObject($key, $value);	
+			$simple->cloneQuestionObject($key, $value);
 		}
 	}
 
@@ -446,7 +458,7 @@ class ilObjComment
 
 		return self::$user_image_cache[$user_id];
 	}
-	
+
 	/**
 	 * @param int $user_id
 	 * @return string
@@ -471,8 +483,6 @@ class ilObjComment
 		return self::$user_name_cache[$user_id];
 	}
 
-	
-	################## SETTER & GETTER ##################
 	/**
 	 * @return int
 	 */
@@ -601,7 +611,6 @@ class ilObjComment
 		$this->comment_tags = $comment_tags;
 	}
 
-	
 	/**
 	 * @return string
 	 */
@@ -665,7 +674,7 @@ class ilObjComment
 	{
 		$this->is_anonymized = $is_anonymized;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -720,5 +729,21 @@ class ilObjComment
 	public static function getUserImageCache()
 	{
 		return self::$user_image_cache;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMarker()
+	{
+		return $this->marker;
+	}
+
+	/**
+	 * @param string $marker
+	 */
+	public function setMarker($marker)
+	{
+		$this->marker = $marker;
 	}
 }
