@@ -90,8 +90,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
-
-
 	/**
 	 * Functions that must be overwritten
 	 */
@@ -608,7 +606,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$section_header->setTitle($this->plugin->txt('mode_header'));
 		$a_form->addItem($section_header);
 
-		$video_mode = new ilSelectInputGUI($this->plugin->txt('video_mode'), 'video_mode');
+		/*$video_mode = new ilSelectInputGUI($this->plugin->txt('video_mode'), 'video_mode');
 		$video_mode->setInfo($this->plugin->txt('video_mode_info'));
 
 		$mode_options  = array(
@@ -616,7 +614,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			ilInteractiveVideoPlugin::ADVENTURE_MODE => $this->plugin->txt('adventure_mode'),
 		);
 		$video_mode->setOptions($mode_options);
-		$a_form->addItem($video_mode);
+		$a_form->addItem($video_mode);*/
 	}
 
 	/**

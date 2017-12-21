@@ -427,7 +427,7 @@ body.cke_editable{
     justify-content: center;
     flex-direction: column;
     background-color: white;
-    opacity: 0.8;
+    opacity: 0.9;
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: auto;
