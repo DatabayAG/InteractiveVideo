@@ -455,3 +455,9 @@ body.cke_editable{
     width:100%;
     z-index: 10;
 }
+#ilInteractiveVideo{
+    position: relative;
+}
+#ilInteractiveVideoOverlay{
+    top:0;
+}
