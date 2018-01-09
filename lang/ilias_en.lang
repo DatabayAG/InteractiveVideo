@@ -183,3 +183,13 @@ no_comment#:#No Comment-field
 no_comment_info#:#There will be no comment field below the video player
 process_header#:#Process
 insert_marker#:#Insert Marker
+color#:#Color
+stroke#:#Stroke
+width#:#Width
+height#:#Height
+rotate#:#Rotate
+rectangle#:#Rectangle
+arrow#:#Arrow
+circle#:#Circle
+scale#:#Scale
+with_marker#:#with marker

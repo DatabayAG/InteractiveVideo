@@ -131,6 +131,10 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			{
 				$txt_value = $value == 1 ? 'question' : 'comment';
 				$value = $this->lng->txt($txt_value);
+				if(strlen($a_set['marker']))
+				{
+					$value .= ' ' . ilInteractiveVideoPlugin::getInstance()->txt('with_marker');
+				}
 			}
 			else if($key == 'is_tutor')
 			{

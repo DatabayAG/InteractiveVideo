@@ -320,10 +320,28 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$comments_tpl->setVariable('TXT_ENDTIME_WARNING', $this->plugin->txt('endtime_warning'));
 			$comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $this->plugin->txt('no_text_warning'));
 			$comments_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
+			$comments_tpl->setVariable('MARKER_EDITOR', $this->buildMarkerEditorTemplate()->get());
 			$comments_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
 			$comments_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
 			$video_tpl->setVariable("COMMENTS_FORM", $comments_tpl->get());
 		}
+	}
+	
+	protected function buildMarkerEditorTemplate()
+	{
+		$marker_tpl = new ilTemplate("tpl.marker_editor.html", true, true, $this->plugin->getDirectory());
+
+		$marker_tpl->setVariable('TXT_COLOR', $this->plugin->txt('color'));
+		$marker_tpl->setVariable('TXT_STROKE', $this->plugin->txt('stroke'));
+		$marker_tpl->setVariable('TXT_WIDTH', $this->plugin->txt('width'));
+		$marker_tpl->setVariable('TXT_HEIGHT', $this->plugin->txt('height'));
+		$marker_tpl->setVariable('TXT_ROTATE', $this->plugin->txt('rotate'));
+		$marker_tpl->setVariable('TXT_RECTANGLE', $this->plugin->txt('rectangle'));
+		$marker_tpl->setVariable('TXT_ARROW', $this->plugin->txt('arrow'));
+		$marker_tpl->setVariable('TXT_CIRCLE', $this->plugin->txt('circle'));
+		$marker_tpl->setVariable('TXT_SCALE', $this->plugin->txt('scale'));
+		$marker_tpl->setVariable('TXT_ADD_MARKER', $this->plugin->txt('insert_marker'));
+		return $marker_tpl;
 	}
 
 	/**
@@ -424,9 +442,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$config_tpl->setVariable('USER_IMAGE', ilObjComment::getUserImageInBase64($ilUser->getId()));
 		}
 
-		$stop_points = $this->objComment->getStopPoints();
-		$comments = $this->objComment->getContentComments();
-
 		if($edit_screen)
 		{
 			$config_tpl->setVariable('STOP_POINTS', json_encode(array()));
@@ -435,6 +450,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		else
 		{
+			$stop_points = $this->objComment->getStopPoints();
+			$comments = $this->objComment->getContentComments();
 			$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
 			$config_tpl->setVariable('COMMENTS', json_encode($comments));
 			$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode(ilObjComment::getUserImageCache()));
@@ -1088,9 +1105,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		/**
 		 * $ilUser ilObjUser
 		 */
-		global $ilUser;
+		global $tpl, $ilUser;
 
 		$form = new ilPropertyFormGUI();
+		$custom_gui = new ilCustomInputGUI();
+		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
+		$this->addJavascriptAndCSSToTemplate($tpl);
+		$object->addPlayerElements($tpl);
+		$custom_gui->setHtml($object->getPlayer()->get() . $this->initPlayerConfig(true) . $this->buildMarkerEditorTemplate()->get());
+		$form->addItem($custom_gui);
+
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
 		$form->setTitle($this->plugin->txt('insert_comment'));
 		$ck = new ilTextAreaInputCkeditor($this->plugin);
@@ -1143,6 +1167,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 **/
 		$frm_id = new ilHiddenInputGUI('comment_id');
 		$form->addItem($frm_id);
+		
+		$fake_marker = new ilHiddenInputGUI('fake_marker');
+		$form->addItem($fake_marker);
 
 		return $form;
 	}
@@ -1577,6 +1604,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['comment_title']	= $comment_data['comment_title'];
 		$values['comment_tags']		= $comment_data['comment_tags'];
 		$values['is_private']		= $comment_data['is_private'];
+		$values['fake_marker']			= $comment_data['marker'];
 
 		return $values;
 	}

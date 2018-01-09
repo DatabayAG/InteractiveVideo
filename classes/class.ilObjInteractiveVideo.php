@@ -480,6 +480,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				$table_data[$counter]['is_tutor']			= $row['is_tutor'];
 				$table_data[$counter]['is_interactive']		= $row['is_interactive'];
 			}
+			$table_data[$counter]['marker'] = $row['marker'];
 
 			$counter++;
 		}

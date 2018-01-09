@@ -182,4 +182,14 @@ save_without_correct_detail#:#Sie haben weder eine Reflektionfrage, noch neutral
 no_comment#:#Kein Kommentarfeld
 no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflektionsfragen mit aktiviertem Kommentarfeld sind nach wie vor möglich.
 process_header#:#Durchfürung
-insert_marker#:#Marker Einfügen
+insert_marker#:#Marker einfügen
+color#:#Farbe
+stroke#:#Strichstärke
+width#:#Breite
+height#:#Höhe
+rotate#:#Drehen
+rectangle#:#Rechteck
+arrow#:#Pfeil
+circle#:#Kreis
+scale#:#Skalieren
+with_marker#:#mit Marker

@@ -27,7 +27,7 @@ $( document ).ready(function() {
 			};
 
 			il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
-			$('<svg id="ilInteractiveVideoOverlay" viewBox="0 0 300 150"></svg>').prependTo( '#ilInteractiveVideo' );
+			$('#ilInteractiveVideo').prepend($('#ilInteractiveVideoOverlay'));
 
 			this.on('seeked', function() {
 				clearInterval(interval);
