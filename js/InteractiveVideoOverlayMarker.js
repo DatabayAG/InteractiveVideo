@@ -15,6 +15,11 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		'arrow_prototype' : [
 			'iv_mk_width',
 			'iv_mk_height'
+		],
+		'line_prototype' : [
+			'iv_mk_width',
+			'iv_mk_height',
+			'iv_mk_scale'
 		]
 	};
 
@@ -23,6 +28,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		pro.attachSingleObjectListener('btn_rect', 'rect_prototype');
 		pro.attachSingleObjectListener('btn_circle', 'circle_prototype');
 		pro.attachSingleObjectListener('btn_arrow', 'arrow_prototype');
+		pro.attachSingleObjectListener('btn_line', 'line_prototype');
 		pro.attachStyleEvents();
 		pro.attachSubmitCancelListener();
 	};
@@ -34,36 +40,47 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		{
 			if(obj.val().length > 0)
 			{
+
 				il.InteractiveVideoPlayerAbstract.addOnReadyFunction(
 					(function ()
 						{
 							var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($('#comment_time').val());
 							il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
+							$('#ilInteractiveVideo').parent().attr('class', 'col-sm-6');
 						}
 					)
 				);
 
+				//Todo: add drag and drop && delete
 				var element = obj.val();
+				var proto = '';
 				pub.actual_id = 'ilInteractiveVideoOverlay';
 				pro.removeButtons();
-				if($(element).hasClass('rectangle_object'))
+				if($(element).is('rect'))
 				{
-					pro.hideMakerToolBarObjectsForForm('rect_prototype');
+					proto = 'rect_prototype';
 				}
-				else if($(element).hasClass('circle_object'))
+				else if($(element).is('circle'))
 				{
-					pro.hideMakerToolBarObjectsForForm('circle_prototype');
+					proto = 'circle_prototype';
 				}
-				else if($(element).hasClass('arrow_object'))
+				else if($(element).is('path'))
 				{
-					pro.hideMakerToolBarObjectsForForm('arrow_prototype');
+					proto = 'arrow_prototype';
 				}
+				else if($(element).is('line'))
+				{
+					proto = 'line_prototype';
+				}
+
+				pro.hideMakerToolBarObjectsForForm(proto);
+
 				$('#ilInteractiveVideoOverlay').html(element);
 				$('#add_marker_chk').click();
 				$('.add_marker_selector').show( 'fast' );
 
 				pro.attachStyleEvents();
-				//ToDO: Saving new element and deleting
+				pro.addDraggableFunction($('#' + pub.actual_id), proto);
 
 				console.log('edit screen with marker')
 			}
@@ -154,6 +171,12 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		{
 			pro.buildFillStyleForPath(obj);
 		}
+		else if(obj.children().is('line'))
+		{
+			style += pro.buildStrokeStyle(obj);
+			pro.buildStyleAttributeForRect(obj);
+			obj.children().attr('style', style)
+		}
 	};
 
 	pro.readStyleFromElement = function(obj)
@@ -169,11 +192,15 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			pro.readScale(obj);
 			pro.readRotation(obj);
 		}
-
 		else if(obj.children().is('path'))
 		{
 			pro.readFillStyle(obj);
 			pro.readScale(obj);
+			pro.readRotation(obj);
+		}
+		else if(obj.children().is('line'))
+		{
+			pro.readStrokeStyle(obj);
 			pro.readRotation(obj);
 		}
 	};
@@ -301,6 +328,33 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		});
 	 };
 
+	pro.addDraggableFunction = function(svg, prototype_class) 
+	{
+		var overlay = $('#ilInteractiveVideoPlayerContainer');
+		var scrollBasisHeight = $(document).scrollTop();
+		svg.removeClass('prototype');
+		svg.width(overlay.width());
+		svg.height(overlay.height());
+		svg.draggable({
+			stop: function (event, ui) {
+				var childPos = svg.offset();
+				var parentPos = overlay.offset();
+				var childOffset = {
+					top:  childPos.top - parentPos.top,
+					left: childPos.left - parentPos.left
+				};
+				var x = childOffset.left / (overlay.width() / 300);
+				var y = childOffset.top / (overlay.height() / 150);
+				var corrected_x = pro.getCorrectedX(prototype_class);
+				var corrected_y = pro.getCorrectedY(prototype_class);
+
+				svg.children().attr({'POS_X': x + corrected_x, 'POS_Y': y + corrected_y});
+				console.log(x, y, childOffset, childPos, parentPos, overlay.width(), overlay.height(), corrected_x, corrected_y);
+			}
+		});
+		pro.addScrollEventToDisableMarkerMovingOnScrolling(scrollBasisHeight);
+	};
+
 	pro.attachSingleObjectListener = function(button_id, prototype_class)
 	{
 		$('#' + button_id).off('click');
@@ -315,31 +369,9 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 					.attr({'id': id, 'class' : 'interactive_marker iv_svg_marker'})
 					.prependTo( '#ilInteractiveVideoPlayerContainer' );
 
-				var overlay = $('#ilInteractiveVideoPlayerContainer');
-				var scrollBasisHeight = $(document).scrollTop();
-
-				svg.removeClass('prototype');
-				svg.width(overlay.width());
-				svg.height(overlay.height());
-				svg.draggable({
-					stop: function( event, ui ) {
-						var childPos = svg.offset();
-						var parentPos = overlay.offset();
-						var childOffset = {
-							top: childPos.top - parentPos.top,
-							left: childPos.left - parentPos.left
-						};
-						var x = childOffset.left / (overlay.width() / 300);
-						var y = childOffset.top / (overlay.height() / 150);
-						var corrected_x = pro.getCorrectedX(prototype_class);
-						var corrected_y = pro.getCorrectedY(prototype_class);
-						
-						svg.children().attr({'POS_X' : x + corrected_x , 'POS_Y' : y + corrected_y});
-						console.log(x, y, childOffset, childPos, parentPos, overlay.width(), overlay.height(), corrected_x, corrected_y);
-					}
-				});
+				pro.addDraggableFunction(svg, prototype_class);
 				pro.removeButtons();
-				pro.addScrollEventToDisableMarkerMovingOnScrolling(scrollBasisHeight);
+				
 			}
 		});
 	};
@@ -377,6 +409,10 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		{
 			return 150;
 		}
+		else if(prototype_class === 'line_prototype')
+		{
+			return 100;
+		}
 	};
 
 	pro.getCorrectedY = function(prototype_class)
@@ -391,7 +427,11 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		}
 		else if(prototype_class === 'arrow_prototype')
 		{
-			return 76;
+			return 75;
+		}
+		else if(prototype_class === 'line_prototype')
+		{
+			return 75;
 		}
 	};
 
@@ -418,10 +458,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	return pub;
 
 }(il));
-
-$( document ).ready(function() {
-	
-});
 
 var interval = setInterval(function() {
 	if(document.readyState === 'complete') {
