@@ -1,7 +1,9 @@
 il.InteractiveVideoPlayerAbstract = (function (scope) {
 	'use strict';
 
-	var pub = {}, pro = {};
+	var pub = {}, pro = {
+		onReadyCallbacks : []
+	};
 	
 	pub.config = {
 		pauseCallback              : null,
@@ -9,6 +11,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		durationCallback           : null,
 		currentTimeCallback        : null,
 		setCurrentTimeCallback     : null,
+		readyCallback              : null,
 		removeNonAdventureElements : null
 	}; 
 
@@ -86,6 +89,20 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		{
 			il.InteractiveVideoPlayerFunction.finishAndReturnToReferencePoint();
 		}
+	};
+
+	pub.readyCallback = function ()
+	{
+		$.each(pro.onReadyCallbacks, function( index, value ) {
+			if (typeof value === 'function') {
+				value();
+			}
+		});
+	};
+
+	pub.addOnReadyFunction = function(callback)
+	{
+		pro.onReadyCallbacks.push(callback);
 	};
 
 	pub.protect = pro;

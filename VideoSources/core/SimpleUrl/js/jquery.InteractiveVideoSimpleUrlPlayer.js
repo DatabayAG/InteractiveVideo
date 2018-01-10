@@ -59,11 +59,14 @@ $( document ).ready(function() {
 							il.InteractiveVideoPlayerAdventure.playingEventHandler(interval, player);
 						}, 500);
 					}
-
 			});
 
 			this.on('contextmenu', function(e) {
 				e.preventDefault();
+			});
+			
+			this.on('ready', function(e){
+				il.InteractiveVideoPlayerAbstract.readyCallback();
 			});
 		});
 	});

@@ -209,10 +209,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 			if( $('#comment_time_end_chk').prop( "checked" ))
 			{
-				time = $('#comment_time_end').val();
-				time = time.split(':'); // split it at the colons
-
-				var end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
+				var end_time = pub.getSecondsFromTime($('#comment_time_end').val());
 
 				if(end_time < parseInt(actual_time_in_video, 10))
 				{
@@ -228,6 +225,12 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 			pub.postAndAppendFakeCommentToStream(actual_time_in_video, comment_text, is_private, end_time, marker);
 		});
+	};
+
+	pub.getSecondsFromTime = function(time)
+	{
+		time = time.split(':');
+		return (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
 	};
 
 	pub.addAjaxFunctionForReflectionCommentPosting = function(comment_id, org_id)

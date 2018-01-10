@@ -34,6 +34,15 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		{
 			if(obj.val().length > 0)
 			{
+				il.InteractiveVideoPlayerAbstract.addOnReadyFunction(
+					(function ()
+						{
+							var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($('#comment_time').val());
+							il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
+						}
+					)
+				);
+
 				var element = obj.val();
 				pub.actual_id = 'ilInteractiveVideoOverlay';
 				pro.removeButtons();
@@ -55,8 +64,13 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 				pro.attachStyleEvents();
 				//ToDO: Saving new element and deleting
+
 				console.log('edit screen with marker')
 			}
+		}
+		else
+		{
+			pub.attachListener();
 		}
 	};
 
