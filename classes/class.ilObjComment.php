@@ -2,7 +2,6 @@
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 require_once 'Services/User/classes/class.ilUserUtil.php';
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilHtmlInteractiveVideoPostPurifier.php';
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilObjCommentOverlay.php';
 
 /**
  * Class ilObjComment
@@ -173,7 +172,7 @@ class ilObjComment
 				'is_tutor'       	=> array('integer', (int)$this->isTutor()),
 				'is_interactive' 	=> array('integer', (int)$this->isInteractive()),
 				'comment_time'   	=> array('integer', round($this->getCommentTime(), 0)),
-				'comment_time_end'  => array('integer', round($this->getCommentTimeEnd(), 2)),
+				'comment_time_end'  => array('integer', round($this->getCommentTimeEnd(), 0)),
 				'comment_text'   	=> array('text',  $text),
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),

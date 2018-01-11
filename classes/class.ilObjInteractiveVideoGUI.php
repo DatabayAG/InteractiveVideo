@@ -955,14 +955,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment->setCommentTime((float)$_POST['comment_time']);
 		$comment->setCommentTimeEnd($seconds_end);
 
-		//Todo secure
 		if(strlen($_POST['marker']) > 0)
 		{
 			$marker = $this->calculateCorrectPositionForMarker($_POST['marker']);
+			$marker = xvidUtils::secureSvg($marker);
 			$comment->setMarker($marker);
 			if($comment->getCommentTimeEnd() == 0)
 			{
-				$comment->setCommentTimeEnd($comment->getCommentTime() + 1 );
+				$comment->setCommentTimeEnd($comment->getCommentTime() + 3 );
 			}
 		}
 

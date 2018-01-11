@@ -241,6 +241,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.removeHighlightFromComment = function (id)
 	{
 		$('.list_item_' + id).removeClass('activeComment');
+		$('.interactive_overlay_element_' + id).remove();
 	};
 
 	pro.getCSSClassForListElement = function()

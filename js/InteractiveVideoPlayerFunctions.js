@@ -153,6 +153,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		if(is_overlay_marker === 1) {
 			var marker = '<g class=interactive_overlay_element_'+comment.comment_id +'>' + comment.marker + '</g>';
+
 			$('#ilInteractiveVideoOverlay').html($('#ilInteractiveVideoOverlay').html() + marker);
 		}
 		return stop_video;
