@@ -310,6 +310,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function appendCommentElementsToTemplateIfNotDisabled($video_tpl)
 	{
+		/**
+		 * @var $ilAccess ilAccessHandler
+		 */
+		global $ilAccess;
+
 		if($this->object->getDisableComment() != 1)
 		{
 			$comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $this->plugin->getDirectory());
@@ -320,7 +325,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$comments_tpl->setVariable('TXT_ENDTIME_WARNING', $this->plugin->txt('endtime_warning'));
 			$comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $this->plugin->txt('no_text_warning'));
 			$comments_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
-			$comments_tpl->setVariable('MARKER_EDITOR', $this->buildMarkerEditorTemplate()->get());
+			$marker_template = '';
+			if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
+			{
+				$marker_template = $this->buildMarkerEditorTemplate()->get();
+			}
+			$comments_tpl->setVariable('MARKER_EDITOR', $marker_template);
 			$comments_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
 			$comments_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
 			$video_tpl->setVariable("COMMENTS_FORM", $comments_tpl->get());
@@ -1142,16 +1152,24 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	private function initCommentForm()
 	{
 		/**
-		 * $ilUser ilObjUser
+		 * @var $ilUser ilObjUser
+		 * @var $ilAccess ilAccessHandler
 		 */
-		global $tpl, $ilUser;
+		global $tpl, $ilUser, $ilAccess;
 
 		$form = new ilPropertyFormGUI();
 		$custom_gui = new ilCustomInputGUI();
 		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
 		$this->addJavascriptAndCSSToTemplate($tpl);
 		$object->addPlayerElements($tpl);
-		$custom_gui->setHtml($object->getPlayer()->get() . $this->initPlayerConfig(true) . $this->buildMarkerEditorTemplate()->get());
+
+		$marker_template = '';
+		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
+		{
+			$marker_template = $this->buildMarkerEditorTemplate()->get();
+		}
+
+		$custom_gui->setHtml($object->getPlayer()->get() . $this->initPlayerConfig(true) . $marker_template);
 		$form->addItem($custom_gui);
 
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
