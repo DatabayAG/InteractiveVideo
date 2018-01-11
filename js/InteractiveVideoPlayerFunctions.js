@@ -36,7 +36,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		var cueTime, stop_video, i, j;
 		var current_time    = scope.InteractiveVideoPlayerAbstract.currentTime();
 		var duration        = scope.InteractiveVideoPlayerAbstract.duration();
-
+console.log(current_time)
 		if (current_time >= duration) {
 			clearInterval(interval);
 			return;
@@ -131,7 +131,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		var is_overlay_marker = parseInt(scope.InteractiveVideo.comments[i].is_overlay, 10);
 		var comment        = scope.InteractiveVideo.comments[i];
 		var stop_video     = 0;
-
+console.log(scope.InteractiveVideo.comments[i], current_time)
 		if (scope.InteractiveVideo.comments[i].comment_text != null)
 		{
 			$("#ul_scroll").prepend(pri.utils.buildListElement(comment, current_time, comment.user_name));

@@ -45,26 +45,15 @@ $( document ).ready(function() {
 
 			this.on('playing', function() {
 				
-					if(il.InteractiveVideo.video_mode == 0)
-					{
-						interval = setInterval(function () {
-							il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
-						}, 500);
-					}
-					else
-					{
-						il.InteractiveVideoPlayerAdventure.Init();
-
-						interval = setInterval(function () {
-							il.InteractiveVideoPlayerAdventure.playingEventHandler(interval, player);
-						}, 500);
-					}
+				interval = setInterval(function () {
+				il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
+				}, 500);
 			});
 
 			this.on('contextmenu', function(e) {
 				e.preventDefault();
 			});
-			
+
 			this.on('ready', function(e){
 				il.InteractiveVideoPlayerAbstract.readyCallback();
 			});

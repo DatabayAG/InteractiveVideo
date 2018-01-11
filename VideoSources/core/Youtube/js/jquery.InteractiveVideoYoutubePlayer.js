@@ -31,6 +31,7 @@
 				};
 
 				il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
+				$('#ilInteractiveVideo').prepend($('#ilInteractiveVideoOverlay'));
 
 				this.on('seeked', function() {
 					clearInterval(interval);
