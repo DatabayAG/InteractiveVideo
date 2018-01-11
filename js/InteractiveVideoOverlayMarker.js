@@ -367,11 +367,10 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 				var id	= pro.getUniqueId();
 				var svg = $('.' + prototype_class).clone()
 					.attr({'id': id, 'class' : 'interactive_marker iv_svg_marker'})
-					.prependTo( '#ilInteractiveVideoPlayerContainer' );
+					.prependTo( '#ilInteractiveVideo' );
 
 				pro.addDraggableFunction(svg, prototype_class);
 				pro.removeButtons();
-				
 			}
 		});
 	};
