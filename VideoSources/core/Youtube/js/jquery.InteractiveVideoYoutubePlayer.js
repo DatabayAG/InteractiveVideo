@@ -10,6 +10,7 @@
 			var options = {
 				fluid : true,
 				"techOrder": ["youtube"],
+				"" : false,
 				"sources": [{ "type": "video/youtube", "src": "https://www.youtube.com/watch?v="+interactiveVideoYoutubeId+""}], "youtube": { "ytControls": 2 }
 			};
 
@@ -27,7 +28,8 @@
 						player.controlBar.progressControl.disable();
 						player.controlBar.removeChild("currentTimeDisplay");
 						player.controlBar.removeChild("remainingTimeDisplay");
-					})
+					}),
+					external : true
 				};
 
 				il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
@@ -68,6 +70,10 @@
 
 				this.on('contextmenu', function(e) {
 					e.preventDefault();
+				});
+
+				this.on('ready', function(e){
+					il.InteractiveVideoPlayerAbstract.readyCallback();
 				});
 			});
 		});

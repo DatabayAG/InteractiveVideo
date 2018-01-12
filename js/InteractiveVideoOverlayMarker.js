@@ -44,8 +44,12 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 				il.InteractiveVideoPlayerAbstract.addOnReadyFunction(
 					(function ()
 						{
-							var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($('#comment_time').val());
-							il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
+							if(il.InteractiveVideoPlayerAbstract.config.external === false)
+							{
+								var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($('#comment_time').val());
+								il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
+							}
+
 							$('#ilInteractiveVideo').parent().attr('class', 'col-sm-6');
 						}
 					)

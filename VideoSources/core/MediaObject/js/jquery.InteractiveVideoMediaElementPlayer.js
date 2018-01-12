@@ -23,7 +23,8 @@ $( document ).ready(function() {
 					player.controlBar.progressControl.disable();
 					player.controlBar.removeChild("currentTimeDisplay");
 					player.controlBar.removeChild("remainingTimeDisplay");
-				})
+				}),
+				external : false
 			};
 
 			il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
@@ -64,6 +65,10 @@ $( document ).ready(function() {
 
 			this.on('contextmenu', function(e) {
 				e.preventDefault();
+			});
+
+			this.on('ready', function(e){
+				il.InteractiveVideoPlayerAbstract.readyCallback();
 			});
 		});
 	});

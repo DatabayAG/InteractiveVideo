@@ -23,11 +23,11 @@ $( document ).ready(function() {
 					player.controlBar.progressControl.disable();
 					player.controlBar.removeChild("currentTimeDisplay");
 					player.controlBar.removeChild("remainingTimeDisplay");
-				})
+				}),
+				external : false
 			};
 
 			il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
-			$('#ilInteractiveVideo').prepend($('#ilInteractiveVideoOverlay'));
 
 			this.on('seeked', function() {
 				clearInterval(interval);

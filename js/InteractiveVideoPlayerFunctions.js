@@ -421,6 +421,12 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		return false;
 	};
 
+	pub.jumpToTimeInVideoFromCommentTime = function()
+	{
+		var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($('#comment_time').val());
+		il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
+	};
+
 	pub.finishAndReturnToReferencePoint = function()
 	{
 		var modal = $('.modal-body');
