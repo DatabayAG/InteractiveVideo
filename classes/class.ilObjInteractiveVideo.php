@@ -106,6 +106,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	protected $disable_comment = 0;
 
+	/**
+	 * @var int 
+	 */
+	protected $marker_for_students = 0;
+
 
 	/**
 	 * @param $src_id
@@ -153,6 +158,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->setTask($row['task']);
 		$this->setDisableComment($row['no_comment']);
 		$this->setVideoMode($row['video_mode']);
+		$this->setMarkerForStudents($row['marker_for_students']);
 
 		$this->getVideoSourceObject($row['source_id']);
 		$this->setLearningProgressMode($row['lp_mode']);
@@ -215,43 +221,46 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 					if(!$from_post)
 					{
-						$anonymized		= $this->is_anonymized;
-						$repeat			= $this->is_repeat;
-						$chronologic	= $this->is_chronologic;
-						$online			= $this->is_online;
-						$source_id		= $this->source_id;
-						$is_task		= $this->task_active;
-						$task			= $this->task;
-						$no_comment		= $this->disable_comment;
-						$video_mode		= $this->video_mode;
+						$anonymized			= $this->is_anonymized;
+						$repeat				= $this->is_repeat;
+						$chronologic		= $this->is_chronologic;
+						$online				= $this->is_online;
+						$source_id			= $this->source_id;
+						$is_task			= $this->task_active;
+						$task				= $this->task;
+						$no_comment			= $this->disable_comment;
+						$video_mode			= $this->video_mode;
+						$marker_for_students= $this->marker_for_students;
 					}
 					else
 					{
-						$anonymized		= (int)$_POST['is_anonymized'];
-						$repeat			= (int)$_POST['is_repeat'];
-						$chronologic	= (int)$_POST['is_chronologic'];
-						$online			= (int)$_POST['is_online'];
-						$source_id		= ilUtil::stripSlashes($_POST['source_id']);
-						$is_task		= (int)$_POST['is_task'];
-						$task			= ilUtil::stripSlashes($_POST['task']);
-						$no_comment		= (int)$_POST['no_comment'];
-						$video_mode		= (int)$_POST['video_mode'];
+						$anonymized			= (int)$_POST['is_anonymized'];
+						$repeat				= (int)$_POST['is_repeat'];
+						$chronologic		= (int)$_POST['is_chronologic'];
+						$online				= (int)$_POST['is_online'];
+						$source_id			= ilUtil::stripSlashes($_POST['source_id']);
+						$is_task			= (int)$_POST['is_task'];
+						$task				= ilUtil::stripSlashes($_POST['task']);
+						$no_comment			= (int)$_POST['no_comment'];
+						$video_mode			= (int)$_POST['video_mode'];
+						$marker_for_students= (int)$_POST['marker_for_students'];
 					}
 
 					$ilDB->insert(
 						self::TABLE_NAME_OBJECTS,
 						array(
-							'obj_id'         => array('integer', $this->getId()),
-							'is_anonymized'  => array('integer', $anonymized),
-							'is_repeat'      => array('integer', $repeat),
-							'is_chronologic' => array('integer', $chronologic),
-							'is_public'      => array('integer', 1),
-							'is_online'      => array('integer', $online),
-							'source_id'      => array('text', $source_id),
-							'is_task'        => array('integer',$is_task ),
-							'task'           => array('text', $task),
-							'no_comment'     => array('integer', $no_comment),
-							'video_mode'     => array('integer', $video_mode)
+							'obj_id'              => array('integer', $this->getId()),
+							'is_anonymized'       => array('integer', $anonymized),
+							'is_repeat'           => array('integer', $repeat),
+							'is_chronologic'      => array('integer', $chronologic),
+							'is_public'           => array('integer', 1),
+							'is_online'           => array('integer', $online),
+							'source_id'           => array('text', $source_id),
+							'is_task'             => array('integer',$is_task ),
+							'task'                => array('text', $task),
+							'no_comment'          => array('integer', $no_comment),
+							'video_mode'          => array('integer', $video_mode),
+							'marker_for_students' => array('integer', $marker_for_students)
 						)
 					);
 
@@ -297,17 +306,18 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		}
 
 		$ilDB->update(self::TABLE_NAME_OBJECTS ,
-			array(	'is_anonymized'		=>array('integer',	$this->isAnonymized()),
-					'is_repeat'			=>array('integer',	$this->isRepeat()),
-					'is_public'			=>array('integer',	$this->isPublic()),
-					'is_chronologic'	=>array('integer',	$this->isChronologic()),
-					'is_online'			=>array('integer',	$this->isOnline()),
-					'source_id'			=>array('text',		$this->getSourceId()),
-					'is_task'			=> array('integer', $this->getTaskActive()),
-					'task'				=> array('text',	$this->getTask()),
-					'lp_mode'			=> array('integer', $this->getLearningProgressMode()), 
-					'no_comment'		=> array('integer', $this->getDisableComment()),
-					'video_mode'		=> array('integer', $this->getVideoMode())
+			array(	'is_anonymized'			=>array('integer',	$this->isAnonymized()),
+					'is_repeat'				=>array('integer',	$this->isRepeat()),
+					'is_public'				=>array('integer',	$this->isPublic()),
+					'is_chronologic'		=>array('integer',	$this->isChronologic()),
+					'is_online'				=>array('integer',	$this->isOnline()),
+					'source_id'				=>array('text',		$this->getSourceId()),
+					'is_task'				=> array('integer', $this->getTaskActive()),
+					'task'					=> array('text',	$this->getTask()),
+					'lp_mode'				=> array('integer', $this->getLearningProgressMode()), 
+					'no_comment'			=> array('integer', $this->getDisableComment()),
+					'video_mode'			=> array('integer', $this->getVideoMode()),
+					'marker_for_students'	=> array('integer', $this->getMarkerForStudents())
 					),
 			array('obj_id' => array('integer', $this->getId())));
 	}
@@ -360,17 +370,18 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$ilDB->insert(
 			self::TABLE_NAME_OBJECTS ,
 			array(
-				'obj_id'        => array('integer', $new_obj->getId()),
-				'is_anonymized' => array('integer', $this->isAnonymized()),
-				'is_repeat' => array('integer', $this->isRepeat()),
-				'is_chronologic' => array('integer', $this->isChronologic()),
-				'is_public'     => array('integer', $this->isPublic()),
-				'no_comment'     => array('integer', $this->getDisableComment()),
-				'source_id'     => array('text', $this->getSourceId()),
-				'is_task'     => array('integer', $this->getTaskActive()),
-				'task'     => array('text', $this->getTask()),
-				'lp_mode' => array('integer', $this->getLearningProgressMode()),
-				'video_mode' => array('integer', $this->getVideoMode())
+				'obj_id'              => array('integer', $new_obj->getId()),
+				'is_anonymized'       => array('integer', $this->isAnonymized()),
+				'is_repeat'           => array('integer', $this->isRepeat()),
+				'is_chronologic'      => array('integer', $this->isChronologic()),
+				'is_public'           => array('integer', $this->isPublic()),
+				'no_comment'          => array('integer', $this->getDisableComment()),
+				'source_id'           => array('text', $this->getSourceId()),
+				'is_task'             => array('integer', $this->getTaskActive()),
+				'task'                => array('text', $this->getTask()),
+				'lp_mode'             => array('integer', $this->getLearningProgressMode()),
+				'video_mode'          => array('integer', $this->getVideoMode()),
+				'marker_for_students' => array('integer', $this->getMarkerForStudents())
 			)
 		);
 
@@ -1200,5 +1211,21 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	public function setVideoMode($video_mode)
 	{
 		$this->video_mode = $video_mode;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getMarkerForStudents()
+	{
+		return $this->marker_for_students;
+	}
+
+	/**
+	 * @param int $marker_for_students
+	 */
+	public function setMarkerForStudents($marker_for_students)
+	{
+		$this->marker_for_students = $marker_for_students;
 	}
 }

@@ -326,7 +326,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $this->plugin->txt('no_text_warning'));
 			$comments_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
 			$marker_template = '';
-			if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
+			if($this->object->getMarkerForStudents() == 1 || $ilAccess->checkAccess('write', '', $this->object->getRefId()))
 			{
 				$marker_template = $this->buildMarkerEditorTemplate()->get();
 			}
@@ -522,6 +522,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_mode = $a_form->getInput('video_mode');
 		$this->object->setVideoMode((int)$video_mode);
 
+		$marker_for_students = $a_form->getInput('marker_for_students');
+		$this->object->setMarkerForStudents((int)$marker_for_students);
+
 
 		$this->object->update();
 
@@ -622,6 +625,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$no_comment = new ilCheckboxInputGUI($this->plugin->txt('no_comment'), 'no_comment');
 		$no_comment->setInfo($this->plugin->txt('no_comment_info'));
 		$a_form->addItem($no_comment);
+
+		$marker_for_students = new ilCheckboxInputGUI($this->plugin->txt('marker_for_students'), 'marker_for_students');
+		$marker_for_students->setInfo($this->plugin->txt('marker_for_students_info'));
+		$a_form->addItem($marker_for_students);
 	}
 
 	/**
@@ -646,7 +653,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values['is_public']			= $this->object->isPublic();
 		$a_values["is_online"]			= $this->object->isOnline();
 		$a_values["is_chronologic"]		= $this->object->isChronologic();
-		$a_values["no_comment"]			= $this->object->getDisableComment();
+		$a_values["marker_for_students"]= $this->object->getMarkerForStudents();
 		$a_values['source_id']			= $this->object->getSourceId();
 		$a_values['is_task']			= $this->object->getTaskActive();
 		$a_values['task']				= $this->object->getTask();
@@ -1164,7 +1171,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$object->addPlayerElements($tpl);
 
 		$marker_template = '';
-		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
+		if($this->object->getMarkerForStudents() == 1 || $ilAccess->checkAccess('write', '', $this->object->getRefId()))
 		{
 			$marker_template = $this->buildMarkerEditorTemplate()->get();
 		}
