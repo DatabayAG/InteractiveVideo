@@ -8,7 +8,6 @@
 			il.InteractiveVideo.last_stopPoint = -1;
 
 			var options = {
-				fluid : true,
 				"techOrder": ["youtube"],
 				"" : false,
 				"sources": [{ "type": "video/youtube", "src": "https://www.youtube.com/watch?v="+interactiveVideoYoutubeId+""}], "youtube": { "ytControls": 2, "iv_load_policy": 3  }

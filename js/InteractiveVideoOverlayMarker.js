@@ -20,7 +20,9 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			'iv_mk_width',
 			'iv_mk_height',
 			'iv_mk_scale'
-		]
+		],
+		actual_marker : null,
+		marker_class  : 'magic_marker iv_svg_marker'
 	};
 
 	pub.attachListener = function()
@@ -41,27 +43,11 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			if(obj.val().length > 0)
 			{
 
+				//Todo fix pointer event
 				//Todo: add drag and drop && delete
 				var element = obj.val();
-				var proto = '';
 				pub.actual_id = 'ilInteractiveVideoOverlay';
 				pro.removeButtons();
-				if($(element).is('rect'))
-				{
-					proto = 'rect_prototype';
-				}
-				else if($(element).is('circle'))
-				{
-					proto = 'circle_prototype';
-				}
-				else if($(element).is('path'))
-				{
-					proto = 'arrow_prototype';
-				}
-				else if($(element).is('line'))
-				{
-					proto = 'line_prototype';
-				}
 
 				il.InteractiveVideoPlayerAbstract.addOnReadyFunction(
 					(function ()
@@ -71,22 +57,17 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 								var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($('#comment_time').val());
 								il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
 							}
-
-							pro.calculateMovement(proto)
 							$('#ilInteractiveVideo').parent().attr('class', 'col-sm-6');
+							pro.initialiseExistingMarker();
 						}
 					)
 				);
-
-
-				pro.hideMakerToolBarObjectsForForm(proto);
 
 				$('#ilInteractiveVideoOverlay').html(element);
 				$('#add_marker_chk').click();
 				$('.add_marker_selector').show( 'fast' );
 
 				pro.attachStyleEvents();
-				pro.addDraggableFunction($('#' + pub.actual_id), proto);
 
 				console.log('edit screen with marker')
 			}
@@ -97,55 +78,35 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		}
 	};
 
-	pro.calculateMovement = function(proto)
+	pro.initialiseExistingMarker = function()
 	{
-		var x = pro.getCorrectedX(proto);
-		var y = pro.getCorrectedY(proto);
-		var scale_x = $('#ilInteractiveVideoOverlay').offset().left / 300; 
-		var scale_y = $('#ilInteractiveVideoOverlay').offset().top / 150;
-		var org_x, org_y, object;
-		
-		if(proto === 'rect_prototype')
+		var obj = $('.magic_marker');
+		var type, proto;
+		if($(obj).is('rect'))
 		{
-			object = $('#ilInteractiveVideoOverlay .rectangle_object');
-			org_x = parseInt(object.attr('x'));
-			object.attr('x', x);
-			org_y = parseInt(object.attr('y'));
-			object.attr('y', y);
-			$('#ilInteractiveVideoOverlay').css('left', (org_x - x) * scale_x);
-			$('#ilInteractiveVideoOverlay').css('top', (org_y - y) * scale_y);
+			type = 'rect';
+			proto = 'rect_prototype';
 		}
-		else if(proto === 'circle_prototype')
+		else if($(element).is('circle'))
 		{
-			object = $('#ilInteractiveVideoOverlay .circle_object');
-			org_x = parseInt(object.attr('cx'));
-			object.attr('cx', x);
-			org_y = parseInt(object.attr('cy'));
-			object.attr('cy', y);
-			$('#ilInteractiveVideoOverlay').css('left', (org_x - x) * scale_x);
-			$('#ilInteractiveVideoOverlay').css('top', (org_y - y) * scale_y);
+			type = 'circle';
+			proto = 'circle_prototype';
 		}
-		else if(proto === 'arrow_prototype')
+		else if($(element).is('path'))
 		{
-			object = $('#ilInteractiveVideoOverlay .arrow_object');
-			org_x = parseInt(object.attr('x1'));
-			object.attr('x1', x);
-			org_y = parseInt(object.attr('y1'));
-			object.attr('y1', y);
-			$('#ilInteractiveVideoOverlay').css('left', (org_x - x) * scale_x);
-			$('#ilInteractiveVideoOverlay').css('top', (org_y - y) * scale_y);
+			type = 'path';
+			proto = 'arrow_prototype';
 		}
-		else if(proto === 'line_prototype')
+		else if($(element).is('line'))
 		{
-			object = $('#ilInteractiveVideoOverlay .line_object');
-			org_x = parseInt(object.attr('cx'));
-			object.attr('x', x);
-			org_y = parseInt(object.attr('cy'));
-			object.attr('y', y);
-			$('#ilInteractiveVideoOverlay').css('left', (org_x - x) * scale_x);
-			$('#ilInteractiveVideoOverlay').css('top', (org_y - y) * scale_y);
+			type = 'line';
+			proto = 'line_prototype';
 		}
-		console.log(proto, x ,y, org_x, org_y, scale_x, scale_y)
+		var svg = SVG('ilInteractiveVideoOverlay');
+		var marker = svg.select(type + '.magic_marker');
+		marker.draggable();
+		pri.actual_marker = marker;
+		pro.hideMakerToolBarObjectsForForm(proto);
 	};
 
 	pro.attachSubmitCancelListener = function()
@@ -153,6 +114,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		$('#ilInteractiveVideoCommentCancel').click(function()
 		{
 			pro.showButtons();
+			pro.actual_marker = null;
 		});
 
 		$('#ilInteractiveVideoCommentSubmit').click(function()
@@ -172,245 +134,78 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	pro.attachStyleEvents = function()
 	{
 		$("#width_changer").on("input change", function() {
-			$('#' + pub.actual_id).children().attr('width', $(this).val())
+			$('#' + pub.actual_id).attr('width', $(this).val())
 		});
 
 		$("#height_changer").on("input change", function() {
-			$('#' + pub.actual_id).children().attr('height', $(this).val())
+			$('#' + pub.actual_id).attr('height', $(this).val())
 		});
 
 		$("#scale_changer").on("input change", function() {
-			pro.readAndApplyStyleForElement('scale', $(this));
+			pri.actual_marker.scale($(this).val());
 		});
 
 		$("#color_picker").on("input change", function() {
-			pro.readAndApplyStyleForElement('stroke_color', $(this));
+			//Todo Workaround Arrow
+			pri.actual_marker.stroke({'color' : $(this).val()})
 		});
 
 		$("#stroke_picker").on("input change", function() {
-			pro.readAndApplyStyleForElement('stroke_size', $(this));
+			pri.actual_marker.stroke({'width' : $(this).val()})
 		});
 
 		$("#rotate_changer").on("input change", function() {
-			pro.readAndApplyStyleForElement('rotate', $(this));
+			pri.actual_marker.rotate($(this).val());
 		});
 	};
 
-	pro.readAndApplyStyleForElement = function(to, that)
+	pro.attachRectangle= function(id)
 	{
-		var obj = $('#' + pub.actual_id);
-		pro.readStyleFromElement(obj);
-		obj.data(to, that.val());
-		pro.applyStyleToElement(obj);
+		var draw = SVG('ilInteractiveVideoOverlay');
+		var rect = draw.rect(100, 80);
+		rect.stroke({ width: 4 , color : '#FF0000'});
+		rect.fill('none');
+		rect.attr('class', pri.marker_class);
+		rect.attr('id', id);
+		rect.draggable();
+		pri.actual_marker = rect;
 	};
 
-	pro.applyStyleToElement = function(obj)
+	pro.attachCircle = function(id)
 	{
-		var style = '';
-
-		if(obj.children().is('rect'))
-		{
-			style += pro.buildStrokeStyle(obj);
-			pro.buildStyleAttributeForRect(obj);
-			obj.children().attr('style', style)
-		}
-		else if(obj.children().is('circle'))
-		{
-			style += pro.buildStrokeStyle(obj);
-			pro.buildStyleForCircle(obj);
-			obj.children().attr('style', style)
-		}
-		else if(obj.children().is('path'))
-		{
-			pro.buildFillStyleForPath(obj);
-		}
-		else if(obj.children().is('line'))
-		{
-			style += pro.buildStrokeStyle(obj);
-			pro.buildStyleAttributeForRect(obj);
-			obj.children().attr('style', style)
-		}
+		var draw = SVG('ilInteractiveVideoOverlay');
+		var circle = draw.circle(100, 80);
+		circle.stroke({width: 4 , color : '#FF0000'});
+		circle.fill('none');
+		circle.scale(1, 0.9);
+		circle.attr('class', pri.marker_class);
+		circle.attr('id', id);
+		circle.draggable();
+		pri.actual_marker = circle;
 	};
 
-	pro.readStyleFromElement = function(obj)
+	pro.attachLine = function(id)
 	{
-		if(obj.children().is('rect'))
-		{
-			pro.readStrokeStyle(obj);
-			pro.readRotation(obj);
-		}
-		else if(obj.children().is('circle'))
-		{
-			pro.readStrokeStyle(obj);
-			pro.readScale(obj);
-			pro.readRotation(obj);
-		}
-		else if(obj.children().is('path'))
-		{
-			pro.readFillStyle(obj);
-			pro.readScale(obj);
-			pro.readRotation(obj);
-		}
-		else if(obj.children().is('line'))
-		{
-			pro.readStrokeStyle(obj);
-			pro.readRotation(obj);
-		}
+		var draw = SVG('ilInteractiveVideoOverlay');
+		var line = draw.line(0, 75, 150, 75);
+		line.stroke({width: 4 , color : '#FF0000'});
+		line.fill('none');
+		line.attr('class', pri.marker_class);
+		line.attr('id', id);
+		line.draggable();
+		pri.actual_marker = line;
 	};
 
-	pro.readFillStyle = function(obj)
+	pro.attachArrow = function(id)
 	{
-		var fill_color = obj.children().attr('fill');
-
-		if(typeof fill_color === "undefined")
-		{
-			fill_color = '#FF0000';
-		}
-
-		obj.data('stroke_color', fill_color);
-	};
-
-	pro.readStrokeStyle = function(obj)
-	{
-		var stroke_color = obj.children().css('stroke');
-		var stroke_size  = obj.children().css('stroke-width');
-
-		if(typeof stroke_size === "undefined")
-		{
-			stroke_size = 2;
-		}
-		if(typeof stroke_color === "undefined")
-		{
-			stroke_color = '#FF0000';
-		}
-
-		obj.data('stroke_color', stroke_color);
-		obj.data('stroke_size', stroke_size);
-	};
-
-	pro.readScale = function(obj)
-	{
-		var scale = obj.data('scale');
-
-		if(typeof scale === "undefined")
-		{
-			scale = 1;
-		}
-		obj.data('scale', scale);
-	};
-
-	pro.readRotation = function(obj)
-	{
-		var rotate = obj.data('rotate');
-
-		if(typeof rotate === "undefined")
-		{
-			rotate = 0;
-		}
-		obj.data('rotate', rotate);
-	};
-
-
-	pro.buildStrokeStyle = function(obj)
-	{
-		var stroke_color = obj.data('stroke_color');
-		var stroke_size  = obj.data('stroke_size');
-		return "fill:none;stroke-width:" + stroke_size + ";stroke:" + stroke_color;
-	};
-
-	pro.buildFillStyleForPath = function(obj)
-	{
-		var fill_color = obj.data('stroke_color');
-		var rotate = obj.data('rotate');
-		var scale = obj.data('scale');
-		var scale_text = '';
-
-		if(scale != '')
-		{
-			var x = (1 - scale) * 49;
-			var y = (1 - scale) * 59;
-			scale_text = ',translate(' + x + ',' + y + '),scale(' + scale + ')';
-		}
-		obj.children().attr('fill', fill_color);
-		obj.children().attr('transform', 'translate(100, 15),rotate(' + rotate+ ', 49, 59)' + scale_text + '');
-	};
-
-	pro.buildStyleAttributeForRect = function(obj)
-	{
-		var rotate = obj.data('rotate');
-		obj.children().attr('transform', 'rotate(' + rotate+ ', 147, 77)');
-	};
-
-	pro.buildStyleForCircle = function(obj)
-	{
-		var scale = obj.data('scale');
-		var scale_text = '';
-
-		if(scale != '')
-		{
-			scale_text = 'translate(150, 75),scale(' + scale + '),translate(-150, -75)';
-		}
-		obj.children().attr('transform', scale_text);
-	};
-
-	 pro.addScrollEventToDisableMarkerMovingOnScrolling = function(scrollBasisHeight) {
-		$(document).off('scroll');
-
-		$(document).on('scroll', function () {
-			var scrollModificationHeight = $(document).scrollTop();
-			var new_height = 0;
-			var new_top    = 0;
-			var obj        = $('.interactive_marker');
-
-			if (scrollModificationHeight > scrollBasisHeight) 
-			{
-				new_height = scrollModificationHeight - scrollBasisHeight;
-				new_top = parseInt(obj.css('top'), 10) - new_height;
-				scrollBasisHeight = scrollModificationHeight;
-				obj.css('top', new_top);
-			}
-			else 
-			{
-				new_height = scrollBasisHeight - scrollModificationHeight;
-				new_top = parseInt(obj.css('top'), 10) + new_height;
-				scrollBasisHeight = scrollModificationHeight;
-				obj.css('top', new_top);
-			}
-
-			return scrollBasisHeight;
-		});
-	 };
-
-	pro.addDraggableFunction = function(svg, prototype_class) 
-	{
-		var overlay = $('#ilInteractiveVideoPlayerContainer');
-		var scrollBasisHeight = $(document).scrollTop();
-		svg.removeClass('prototype');
-		svg.width(overlay.width());
-		svg.height(overlay.height());
-		svg.draggable({
-			start: function(){
-				$('.interactive_marker').css('pointer-events', 'all')
-			},
-			stop: function (event, ui) {
-				var childPos = svg.offset();
-				var parentPos = overlay.offset();
-				var childOffset = {
-					top:  childPos.top - parentPos.top,
-					left: childPos.left - parentPos.left
-				};
-				var x = childOffset.left / (overlay.width() / 300);
-				var y = childOffset.top / (overlay.height() / 150);
-				var corrected_x = pro.getCorrectedX(prototype_class);
-				var corrected_y = pro.getCorrectedY(prototype_class);
-
-				svg.children().attr({'POS_X': x + corrected_x, 'POS_Y': y + corrected_y});
-				$('.interactive_marker').css('pointer-events', 'none')
-				console.log(x, y, childOffset, childPos, parentPos, overlay.width(), overlay.height(), corrected_x, corrected_y);
-			}
-		});
-
-		pro.addScrollEventToDisableMarkerMovingOnScrolling(scrollBasisHeight);
+		var draw = SVG('ilInteractiveVideoOverlay');
+		var arrow = draw.path('m0,50l50,-50l50,50l-25,0l0,50l-50,0l0,-50l-25,0z');
+		arrow.fill('#FF0000');
+		arrow.stroke({'width' : 0});
+		arrow.attr('class', pri.marker_class);
+		arrow.attr('id', id);
+		arrow.draggable();
+		pri.actual_marker = arrow;
 	};
 
 	pro.attachSingleObjectListener = function(button_id, prototype_class)
@@ -423,11 +218,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			if( ! pub.stillEditingSvg())
 			{
 				var id	= pro.getUniqueId();
-				var svg = $('.' + prototype_class).clone()
-					.attr({'id': id, 'class' : 'interactive_marker iv_svg_marker'})
-					.prependTo( '#ilInteractiveVideo' );
-
-				pro.addDraggableFunction(svg, prototype_class);
+				pro.createSvgElement(id, prototype_class);
 				pro.removeButtons();
 			}
 		});
@@ -440,6 +231,26 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		return unique_id;
 	};
 
+	pro.createSvgElement = function(id, prototype_class)
+	{
+		if(prototype_class === 'rect_prototype')
+		{
+			pro.attachRectangle(id);
+		}
+		else if(prototype_class === 'circle_prototype')
+		{
+			pro.attachCircle();
+		}
+		else if(prototype_class === 'arrow_prototype')
+		{
+			pro.attachArrow();
+		}
+		else if(prototype_class === 'line_prototype')
+		{
+			pro.attachLine();
+		}
+	};
+
 	pro.removeButtons = function()
 	{
 		$('.marker_button_toolbar').addClass('prototype');
@@ -450,46 +261,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	{
 		$('.marker_button_toolbar').removeClass('prototype');
 		$('.marker_toolbar').addClass('prototype');
-	};
-
-	pro.getCorrectedX = function(prototype_class)
-	{
-		if(prototype_class === 'rect_prototype')
-		{
-			return 100;
-		}
-		else if(prototype_class === 'circle_prototype')
-		{
-			return 150;
-		}
-		else if(prototype_class === 'arrow_prototype')
-		{
-			return 150;
-		}
-		else if(prototype_class === 'line_prototype')
-		{
-			return 100;
-		}
-	};
-
-	pro.getCorrectedY = function(prototype_class)
-	{
-		if(prototype_class === 'rect_prototype')
-		{
-			return 25;
-		}
-		else if(prototype_class === 'circle_prototype')
-		{
-			return 75;
-		}
-		else if(prototype_class === 'arrow_prototype')
-		{
-			return 75;
-		}
-		else if(prototype_class === 'line_prototype')
-		{
-			return 75;
-		}
 	};
 
 	pub.stillEditingSvg = function()

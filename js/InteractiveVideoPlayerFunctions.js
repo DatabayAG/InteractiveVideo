@@ -218,12 +218,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				}
 			}
 
-			var marker = '';
-			$( '.iv_svg_marker' ).each(function( index ) {
-				marker += $(this).html();
-			});
-
-			pub.postAndAppendFakeCommentToStream(actual_time_in_video, comment_text, is_private, end_time, marker);
+			pub.postAndAppendFakeCommentToStream(actual_time_in_video, comment_text, is_private, end_time, $('#ilInteractiveVideoOverlay').html());
 		});
 	};
 

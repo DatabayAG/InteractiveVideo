@@ -67,6 +67,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	protected $custom_javascript = array(
 										 '/libs/Bootstraptoggle/bootstrap2-toggle.min.js', 
 										 '/libs/video.js/video.min.js',
+										 '/libs/svg.js/svg.js',
+										 '/libs/svg.js/svg.draggable.min.js',
 										 '/js/jquery.InteractiveVideoQuestionViewer.js',
 										 '/js/InteractiveVideoPlayerComments.js',
 										 '/js/InteractiveVideoPlayerFunctions.js',
@@ -975,6 +977,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if(strlen($_POST['marker']) > 0)
 		{
 			$marker = $this->calculateCorrectPositionForMarker($_POST['marker']);
+			$marker = '<svg>'.$marker.'</svg>';
 			$marker = xvidUtils::secureSvg($marker);
 			$comment->setMarker($marker);
 			if($comment->getCommentTimeEnd() == 0)

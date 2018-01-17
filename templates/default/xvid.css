@@ -485,6 +485,10 @@ body.cke_editable{
     pointer-events:all;
     cursor: pointer;
 }
+.magic_marker {
+    pointer-events:all;
+    cursor: pointer;
+}
 .marker_toolbar{
     margin: 10px;
 }
