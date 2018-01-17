@@ -67,8 +67,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 				$('#add_marker_chk').click();
 				$('.add_marker_selector').show( 'fast' );
 
-				pro.attachStyleEvents();
-
 				console.log('edit screen with marker')
 			}
 		}
@@ -107,6 +105,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		marker.draggable();
 		pri.actual_marker = marker;
 		pro.hideMakerToolBarObjectsForForm(proto);
+		pro.attachStyleEvents();
 	};
 
 	pro.attachSubmitCancelListener = function()
@@ -134,11 +133,11 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	pro.attachStyleEvents = function()
 	{
 		$("#width_changer").on("input change", function() {
-			$('#' + pub.actual_id).attr('width', $(this).val())
+			pri.actual_marker.width($(this).val())
 		});
 
 		$("#height_changer").on("input change", function() {
-			$('#' + pub.actual_id).attr('height', $(this).val())
+			pri.actual_marker.height($(this).val());
 		});
 
 		$("#scale_changer").on("input change", function() {
