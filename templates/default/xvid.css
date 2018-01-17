@@ -471,15 +471,19 @@ body.cke_editable{
 }
 .interactive_marker {
     position: fixed;
-    z-index: 214748363;
+    z-index: 214;
     /*background-color:rgba(255, 0, 0, 0.2);*/
 
 }
 .interactive_rectangle, .interactive_circle{
 
 }
-.rectangle_object, .circle_object{
+.rect_prototype, .circle_prototype, .arrow_prototype, .line_prototype, .interactive_marker{
+    pointer-events:none;
+}
+.interactive_marker .rectangle_object, .interactive_marker .circle_object, .interactive_marker .arrow_object, .interactive_marker .line_object{
     pointer-events:all;
+    cursor: pointer;
 }
 .marker_toolbar{
     margin: 10px;

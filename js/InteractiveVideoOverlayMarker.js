@@ -41,20 +41,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			if(obj.val().length > 0)
 			{
 
-				il.InteractiveVideoPlayerAbstract.addOnReadyFunction(
-					(function ()
-						{
-							if(il.InteractiveVideoPlayerAbstract.config.external === false)
-							{
-								var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($('#comment_time').val());
-								il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
-							}
-
-							$('#ilInteractiveVideo').parent().attr('class', 'col-sm-6');
-						}
-					)
-				);
-
 				//Todo: add drag and drop && delete
 				var element = obj.val();
 				var proto = '';
@@ -77,6 +63,22 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 					proto = 'line_prototype';
 				}
 
+				il.InteractiveVideoPlayerAbstract.addOnReadyFunction(
+					(function ()
+						{
+							if(il.InteractiveVideoPlayerAbstract.config.external === false)
+							{
+								var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($('#comment_time').val());
+								il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
+							}
+
+							pro.calculateMovement(proto)
+							$('#ilInteractiveVideo').parent().attr('class', 'col-sm-6');
+						}
+					)
+				);
+
+
 				pro.hideMakerToolBarObjectsForForm(proto);
 
 				$('#ilInteractiveVideoOverlay').html(element);
@@ -93,6 +95,57 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		{
 			pub.attachListener();
 		}
+	};
+
+	pro.calculateMovement = function(proto)
+	{
+		var x = pro.getCorrectedX(proto);
+		var y = pro.getCorrectedY(proto);
+		var scale_x = $('#ilInteractiveVideoOverlay').offset().left / 300; 
+		var scale_y = $('#ilInteractiveVideoOverlay').offset().top / 150;
+		var org_x, org_y, object;
+		
+		if(proto === 'rect_prototype')
+		{
+			object = $('#ilInteractiveVideoOverlay .rectangle_object');
+			org_x = parseInt(object.attr('x'));
+			object.attr('x', x);
+			org_y = parseInt(object.attr('y'));
+			object.attr('y', y);
+			$('#ilInteractiveVideoOverlay').css('left', (org_x - x) * scale_x);
+			$('#ilInteractiveVideoOverlay').css('top', (org_y - y) * scale_y);
+		}
+		else if(proto === 'circle_prototype')
+		{
+			object = $('#ilInteractiveVideoOverlay .circle_object');
+			org_x = parseInt(object.attr('cx'));
+			object.attr('cx', x);
+			org_y = parseInt(object.attr('cy'));
+			object.attr('cy', y);
+			$('#ilInteractiveVideoOverlay').css('left', (org_x - x) * scale_x);
+			$('#ilInteractiveVideoOverlay').css('top', (org_y - y) * scale_y);
+		}
+		else if(proto === 'arrow_prototype')
+		{
+			object = $('#ilInteractiveVideoOverlay .arrow_object');
+			org_x = parseInt(object.attr('x1'));
+			object.attr('x1', x);
+			org_y = parseInt(object.attr('y1'));
+			object.attr('y1', y);
+			$('#ilInteractiveVideoOverlay').css('left', (org_x - x) * scale_x);
+			$('#ilInteractiveVideoOverlay').css('top', (org_y - y) * scale_y);
+		}
+		else if(proto === 'line_prototype')
+		{
+			object = $('#ilInteractiveVideoOverlay .line_object');
+			org_x = parseInt(object.attr('cx'));
+			object.attr('x', x);
+			org_y = parseInt(object.attr('cy'));
+			object.attr('y', y);
+			$('#ilInteractiveVideoOverlay').css('left', (org_x - x) * scale_x);
+			$('#ilInteractiveVideoOverlay').css('top', (org_y - y) * scale_y);
+		}
+		console.log(proto, x ,y, org_x, org_y, scale_x, scale_y)
 	};
 
 	pro.attachSubmitCancelListener = function()
@@ -127,32 +180,28 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		});
 
 		$("#scale_changer").on("input change", function() {
-			var obj = $('#' + pub.actual_id);
-			pro.readStyleFromElement(obj);
-			obj.data('scale', $(this).val());
-			pro.applyStyleToElement(obj);
+			pro.readAndApplyStyleForElement('scale', $(this));
 		});
 
 		$("#color_picker").on("input change", function() {
-			var obj = $('#' + pub.actual_id);
-			pro.readStyleFromElement(obj);
-			obj.data('stroke_color', $(this).val());
-			pro.applyStyleToElement(obj);
+			pro.readAndApplyStyleForElement('stroke_color', $(this));
 		});
 
 		$("#stroke_picker").on("input change", function() {
-			var obj = $('#' + pub.actual_id);
-			pro.readStyleFromElement(obj);
-			obj.data('stroke_size', $(this).val());
-			pro.applyStyleToElement(obj);
+			pro.readAndApplyStyleForElement('stroke_size', $(this));
 		});
 
 		$("#rotate_changer").on("input change", function() {
-			var obj = $('#' + pub.actual_id);
-			pro.readStyleFromElement(obj);
-			obj.data('rotate', $(this).val());
-			pro.applyStyleToElement(obj);
+			pro.readAndApplyStyleForElement('rotate', $(this));
 		});
+	};
+
+	pro.readAndApplyStyleForElement = function(to, that)
+	{
+		var obj = $('#' + pub.actual_id);
+		pro.readStyleFromElement(obj);
+		obj.data(to, that.val());
+		pro.applyStyleToElement(obj);
 	};
 
 	pro.applyStyleToElement = function(obj)
@@ -340,6 +389,9 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		svg.width(overlay.width());
 		svg.height(overlay.height());
 		svg.draggable({
+			start: function(){
+				$('.interactive_marker').css('pointer-events', 'all')
+			},
 			stop: function (event, ui) {
 				var childPos = svg.offset();
 				var parentPos = overlay.offset();
@@ -353,9 +405,11 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 				var corrected_y = pro.getCorrectedY(prototype_class);
 
 				svg.children().attr({'POS_X': x + corrected_x, 'POS_Y': y + corrected_y});
+				$('.interactive_marker').css('pointer-events', 'none')
 				console.log(x, y, childOffset, childPos, parentPos, overlay.width(), overlay.height(), corrected_x, corrected_y);
 			}
 		});
+
 		pro.addScrollEventToDisableMarkerMovingOnScrolling(scrollBasisHeight);
 	};
 
