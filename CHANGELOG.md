@@ -1,3 +1,7 @@
+# 2.5
+1. SVG marker for videos
+2. Reply to comments
+
 # 2.0.12
 1. Display task above videos
 2. Possibility to create a comment (private/public) on reflection question

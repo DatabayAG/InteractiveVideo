@@ -7,12 +7,12 @@ The 2.x version of the InteractiveVideo Plugin is only compatible with ILIAS ver
 ## Important notice
 If you upgrade to the 2.x version of the InteractiveVideo you can not go back to version 1.x, because there are migration steps which alter the database schema.
 
-## Changes in Version 2.x
-* Youtube Videos
-* Source URL to videos
-* Possibility to create plugins for more video sources
-* Learning Progress
-* HTML editor for comments, questions and usage of Latex possible
+## Changes in version 2.5.x
+1. [SVG marker for videos](https://www.ilias.de/docu/goto_docu_wiki_wpage_4971_1357.html)
+2. [Reply to comments](https://www.ilias.de/docu/goto_docu_wiki_wpage_4967_1357.html)
+3. Changed video library to video.js
+
+## Changes in earlier versions
 * [Complete Changelog](https://github.com/DatabayAG/InteractiveVideo/blob/master/CHANGELOG.md)
 
 ## Repositories connected to the InteractiveVideo Plugin
