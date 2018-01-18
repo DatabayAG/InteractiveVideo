@@ -27,7 +27,8 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			'iv_mk_color_fill'
 		],
 		actual_marker : null,
-		marker_class  : 'magic_marker iv_svg_marker'
+		marker_class  : 'magic_marker iv_svg_marker',
+		editScreen : false
 	};
 
 	pub.attachListener = function()
@@ -71,6 +72,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 				$('#ilInteractiveVideoOverlay').html(element);
 				$('#add_marker_chk').click();
 				$('.add_marker_selector').show( 'fast' );
+				pri.editScreen = true;
 			}
 		}
 		else
@@ -109,6 +111,11 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		pri.actual_marker = marker;
 		pro.hideMakerToolBarObjectsForForm(proto);
 		pro.attachStyleEvents();
+
+		if(pri.editScreen)
+		{
+			$('.remove_marker').removeClass('prototype');
+		}
 	};
 
 	pro.attachSubmitCancelListener = function()
@@ -136,33 +143,55 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	pro.attachStyleEvents = function()
 	{
 		$("#width_changer").on("input change", function() {
-			pri.actual_marker.width($(this).val())
+			pri.actual_marker.width($(this).val());
+			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
 		$("#height_changer").on("input change", function() {
 			pri.actual_marker.height($(this).val());
+			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
 		$("#scale_changer").on("input change", function() {
 			pri.actual_marker.scale($(this).val());
+			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
 		$("#color_picker").on("input change", function() {
 			pri.actual_marker.stroke({'color' : $(this).val()});
+			pro.replaceFakeMarkerAfterAttributeChange();
 		});
-		
+
 		$("#color_picker_fill").on("input change", function() {
 			pri.actual_marker.fill({'color' : $(this).val()});
+			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
 		$("#stroke_picker").on("input change", function() {
 			pri.actual_marker.attr('stroke', pri.actual_marker.attr('stroke'));
-			pri.actual_marker.stroke({'width' : $(this).val()})
+			pri.actual_marker.stroke({'width' : $(this).val()});
+			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
 		$("#rotate_changer").on("input change", function() {
 			pri.actual_marker.rotate($(this).val());
+			pro.replaceFakeMarkerAfterAttributeChange();
 		});
+
+		$("#btn_delete").on("click", function() {
+			pri.actual_marker = null;
+			pro.showButtons();
+			$('.iv_svg_marker').remove();
+			$('#fake_marker').html('');
+			$('#add_marker_chk').prop('checked', false);
+			$('.add_marker_selector').hide( 'fast' );
+		});
+
+	};
+
+	pro.replaceFakeMarkerAfterAttributeChange = function()
+	{
+		$("#fake_marker").val($("#ilInteractiveVideoOverlay").html());
 	};
 
 	pro.attachRectangle= function(id)
@@ -261,12 +290,14 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	{
 		$('.marker_button_toolbar').addClass('prototype');
 		$('.marker_toolbar').removeClass('prototype');
+		$('.remove_marker').removeClass('prototype');
 	};
 
 	pro.showButtons = function()
 	{
 		$('.marker_button_toolbar').removeClass('prototype');
 		$('.marker_toolbar').addClass('prototype');
+		$('.remove_marker').addClass('prototype');
 	};
 
 	pub.stillEditingSvg = function()

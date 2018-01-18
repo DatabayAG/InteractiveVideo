@@ -354,6 +354,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$marker_tpl->setVariable('TXT_SCALE', $this->plugin->txt('scale'));
 		$marker_tpl->setVariable('TXT_LINE', $this->plugin->txt('line'));
 		$marker_tpl->setVariable('TXT_ADD_MARKER', $this->plugin->txt('insert_marker'));
+		$marker_tpl->setVariable('TXT_DELETE', $this->plugin->txt('delete_marker'));
 		return $marker_tpl;
 	}
 
@@ -976,7 +977,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		if(strlen($_POST['marker']) > 0)
 		{
-			$marker = $this->calculateCorrectPositionForMarker($_POST['marker']);
+			$marker = $_POST['marker'];
+			$marker = preg_replace( "/\r|\n|\t/", "", $marker );
+
 			$marker = '<svg>'.$marker.'</svg>';
 			$marker = xvidUtils::secureSvg($marker);
 			$comment->setMarker($marker);
@@ -1009,76 +1012,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$comment->create();
 		$this->callExit();
-	}
-
-	protected function calculateCorrectPositionForMarker($string)
-	{
-		$x = 0;
-		$y = 0;
-		$type_line = true;
-
-		$string = preg_replace( "/\r|\n|\t/", "", $string );
-
-		if(strpos($string, 'line') === false)
-		{
-			$type_line = false;
-		}
-
-		$pos_x = '/pos_x="(\d+|\d+[\.]{1}[\d]+)"/i';
-		preg_match($pos_x, $string, $matches);
-		if(count($matches) == 2)
-		{
-			$x = $matches[1];
-		}
-
-		$pos_y = '/pos_y="(\d+|\d+[\.]{1}[\d]+)"/i';
-		preg_match($pos_y, $string, $matches);
-		if(count($matches) == 2)
-		{
-			$y = $matches[1];
-		}
-
-		$string = preg_replace($pos_x, '', $string);
-		$string = preg_replace($pos_y, '', $string);
-
-		if($type_line)
-		{
-			$pos_x1 = '/x1="(\d+|\d+[\.]{1}[\d]+)"/i';
-			preg_match($pos_x1, $string, $matches);
-			if(count($matches) == 2)
-			{
-				$org_x1 = $matches[1];
-			}
-			$pos_x2 = '/x2="(\d+|\d+[\.]{1}[\d]+)"/i';
-			preg_match($pos_x2, $string, $matches);
-
-			if(count($matches) == 2)
-			{
-				$org_x2 = $matches[1];
-			}
-			
-			$x2 = $x + ($org_x2 - $org_x1);
-
-			$reg = '/x1="(\d+)"/i';
-			$string = preg_replace($reg, 'x1="'.$x . '"', $string);
-			$reg = '/x2="(\d+)"/i';
-			$string = preg_replace($reg, 'x2="'. $x2 . '"', $string);
-
-			$reg = '/y1="(\d+)"/i';
-			$string = preg_replace($reg, 'y1="'.$y . '"', $string);
-			$reg = '/y2="(\d+)"/i';
-			$string = preg_replace($reg, 'y2="'.$y . '"', $string);
-		}
-		else
-		{
-			$reg = '/x="(\d+)"/i';
-			$string = preg_replace($reg, 'x="'.$x . '"', $string);
-
-			$reg = '/y="(\d+)"/i';
-			$string = preg_replace($reg, 'y="'.$y . '"', $string);
-		}
-
-		return $string;
 	}
 
 
@@ -1467,6 +1400,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTime($comment_time);
 			$comment_time_end = $form->getInput('comment_time_end');
 			$this->objComment->setCommentTimeEnd($comment_time_end);
+			if(strlen($_POST['fake_marker']) > 0)
+			{
+				$marker = $_POST['fake_marker'];
+				$marker = '<svg>'.$marker.'</svg>';
+				$marker = preg_replace( "/\r|\n|\t/", "", $marker );
+				$marker = xvidUtils::secureSvg($marker);
+				$this->objComment->setMarker($marker);
+				if($this->objComment->getCommentTimeEnd() == 0)
+				{
+					$this->objComment->setCommentTimeEnd($this->objComment->getCommentTime() + 3 );
+				}
+			}
 			$this->objComment->update();
 
 			$this->editComments();
