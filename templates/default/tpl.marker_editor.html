@@ -3,11 +3,14 @@
 	<div class="form-inline add_marker_selector" style="display:none">
 		<div>
 			<div class="marker_toolbar prototype">
+				<div class="iv_mk_text marker_toolbar_element">
+					<label for="text_changer">{TXT_TEXT}</label><br/><textarea id="text_changer" placeholder="..."></textarea>
+				</div>
 				<div class="iv_mk_color marker_toolbar_element">
-					<label for="color_picker">{TXT_COLOR}</label><br/><input id="color_picker"  type="color" value="#FF0000"><br/>
+					<label for="color_picker">{TXT_COLOR}</label><br/><input id="color_picker"  type="color"><br/>
 				</div>
 				<div class="iv_mk_color_fill marker_toolbar_element">
-					<label for="color_picker">{TXT_COLOR}</label><br/><input id="color_picker_fill"  type="color" value="#FF0000"><br/>
+					<label for="color_picker">{TXT_COLOR}</label><br/><input id="color_picker_fill"  type="color"><br/>
 				</div>
 				<div class="iv_mk_stroke marker_toolbar_element">
 					<label for="stroke_picker">{TXT_STROKE}</label><br/><input id="stroke_picker" type="number" name="stroke" min="1" max="99" step="1" value="4"><br/>
@@ -22,10 +25,7 @@
 					<label for="scale_changer">{TXT_SCALE}</label><br/><input id="scale_changer" type="range" min="0.1" max="1.4" value="1"  step="0.1">
 				</div>
 				<div class="iv_mk_rotate marker_toolbar_element">
-					<label for="rotate_changer">{TXT_ROTATE}</label><br/><input id="rotate_changer" type="range" min="1" max="360" value="0">
-				</div>
-				<div class="iv_mk_text marker_toolbar_element">
-					<label for="text_changer">{TXT_TEXT}</label><br/><textarea id="text_changer"></textarea>
+					<label for="rotate_changer">{TXT_ROTATE}</label><br/><input id="rotate_changer" type="range" min="0" max="360" value="0">
 				</div>
 				<div class="iv_mk_font_size marker_toolbar_element">
 					<label for="font_size_changer">{TXT_FONT_SIZE}</label><br/><input id="font_size_changer" type="range" min="6" max="76" value="15">
