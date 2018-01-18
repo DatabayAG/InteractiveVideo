@@ -10,25 +10,40 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	}, pri = {
 		'rect_prototype' : [
 			'iv_mk_scale',
-			'iv_mk_color_fill'
+			'iv_mk_color_fill',
+			'iv_mk_font_size',
+			'iv_mk_text'
 		],
 		'circle_prototype' : [
 			'iv_mk_width',
 			'iv_mk_height',
 			'iv_mk_rotate',
-			'iv_mk_color_fill'
+			'iv_mk_color_fill',
+			'iv_mk_font_size',
+			'iv_mk_text'
 		],
 		'arrow_prototype' : [
 			'iv_mk_width',
 			'iv_mk_height',
 			'iv_mk_stroke',
-			'iv_mk_color'
+			'iv_mk_color',
+			'iv_mk_font_size',
+			'iv_mk_text'
 		],
 		'line_prototype' : [
 			'iv_mk_width',
 			'iv_mk_height',
 			'iv_mk_scale',
-			'iv_mk_color_fill'
+			'iv_mk_color_fill',
+			'iv_mk_font_size',
+			'iv_mk_text'
+		],
+		'text_prototype' : [
+			'iv_mk_width',
+			'iv_mk_height',
+			'iv_mk_stroke',
+			'iv_mk_scale',
+			'iv_mk_color'
 		],
 		actual_marker : null,
 		editScreen : false
@@ -40,6 +55,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		pro.attachSingleObjectListener('btn_circle', 'circle_prototype');
 		pro.attachSingleObjectListener('btn_arrow', 'arrow_prototype');
 		pro.attachSingleObjectListener('btn_line', 'line_prototype');
+		pro.attachSingleObjectListener('btn_text', 'text_prototype');
 		pro.attachStyleEvents();
 		pro.attachSubmitCancelListener();
 	};
@@ -104,6 +120,11 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		{
 			type = 'line';
 			proto = 'line_prototype';
+		}
+		else if($(obj).is('text'))
+		{
+			type = 'text';
+			proto = 'text_prototype';
 		}
 		var svg = SVG('ilInteractiveVideoOverlay');
 		var marker = svg.select(type + '.magic_marker');
@@ -182,6 +203,16 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
+		$("#text_changer").on("input change", function() {
+			pri.actual_marker.text($(this).val());
+			pro.replaceFakeMarkerAfterAttributeChange();
+		});
+
+		$("#font_size_changer").on("input change", function() {
+			pri.actual_marker.attr({'font-size' : $(this).val()});
+			pro.replaceFakeMarkerAfterAttributeChange();
+		});
+
 		$("#btn_delete").on("click", function() {
 			pri.actual_marker = null;
 			pro.showButtons();
@@ -215,6 +246,10 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		else if(prototype_class === 'line_prototype')
 		{
 			pro.attachLine();
+		}
+		else if(prototype_class === 'text_prototype')
+		{
+			pro.attachText();
 		}
 	};
 
@@ -267,11 +302,25 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		pri.actual_marker = arrow;
 	};
 
+	pro.attachText = function(id)
+	{
+		var draw = SVG('ilInteractiveVideoOverlay');
+		var text = draw.text('');
+		text.move(20,20).font({ fill: pri.default_color, size : 15});
+		text.fill(pro.default_color);
+		text.stroke({'width' : 0});
+		text.attr('class', pro.marker_class);
+		text.attr('id', id);
+		text.draggable();
+		pri.actual_marker = text;
+	};
+
 	pro.attachSingleObjectListener = function(button_id, prototype_class)
 	{
-		$('#' + button_id).off('click');
+		var j_object = $('#' + button_id);
+		j_object.off('click');
 
-		$('#' + button_id).click(function()
+		j_object.click(function()
 		{
 			pro.hideMakerToolBarObjectsForForm(prototype_class);
 			if( ! pub.stillEditingSvg())

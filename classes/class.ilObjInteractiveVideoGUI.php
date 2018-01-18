@@ -355,6 +355,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$marker_tpl->setVariable('TXT_LINE', $this->plugin->txt('line'));
 		$marker_tpl->setVariable('TXT_ADD_MARKER', $this->plugin->txt('insert_marker'));
 		$marker_tpl->setVariable('TXT_DELETE', $this->plugin->txt('delete_marker'));
+		$marker_tpl->setVariable('TXT_TEXT', $this->plugin->txt('text'));
+		$marker_tpl->setVariable('TXT_FONT_SIZE', $this->plugin->txt('font_size'));
 		return $marker_tpl;
 	}
 
