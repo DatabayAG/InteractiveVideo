@@ -5,21 +5,26 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		actual_id : null
 	}, pro = {}, pri = {
 		'rect_prototype' : [
-			'iv_mk_scale'
+			'iv_mk_scale',
+			'iv_mk_color_fill'
 		],
 		'circle_prototype' : [
 			'iv_mk_width',
 			'iv_mk_height',
-			'iv_mk_rotate'
+			'iv_mk_rotate',
+			'iv_mk_color_fill'
 		],
 		'arrow_prototype' : [
 			'iv_mk_width',
-			'iv_mk_height'
+			'iv_mk_height',
+			'iv_mk_stroke',
+			'iv_mk_color'
 		],
 		'line_prototype' : [
 			'iv_mk_width',
 			'iv_mk_height',
-			'iv_mk_scale'
+			'iv_mk_scale',
+			'iv_mk_color_fill'
 		],
 		actual_marker : null,
 		marker_class  : 'magic_marker iv_svg_marker'
@@ -43,8 +48,8 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			if(obj.val().length > 0)
 			{
 
-				//Todo fix pointer event
-				//Todo: add drag and drop && delete
+				//Todo: fix pointer event
+				//Todo: delete
 				var element = obj.val();
 				pub.actual_id = 'ilInteractiveVideoOverlay';
 				pro.removeButtons();
@@ -66,8 +71,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 				$('#ilInteractiveVideoOverlay').html(element);
 				$('#add_marker_chk').click();
 				$('.add_marker_selector').show( 'fast' );
-
-				console.log('edit screen with marker')
 			}
 		}
 		else
@@ -85,17 +88,17 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			type = 'rect';
 			proto = 'rect_prototype';
 		}
-		else if($(element).is('circle'))
+		else if($(obj).is('circle'))
 		{
 			type = 'circle';
 			proto = 'circle_prototype';
 		}
-		else if($(element).is('path'))
+		else if($(obj).is('path'))
 		{
 			type = 'path';
 			proto = 'arrow_prototype';
 		}
-		else if($(element).is('line'))
+		else if($(obj).is('line'))
 		{
 			type = 'line';
 			proto = 'line_prototype';
@@ -145,11 +148,15 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		});
 
 		$("#color_picker").on("input change", function() {
-			//Todo Workaround Arrow
-			pri.actual_marker.stroke({'color' : $(this).val()})
+			pri.actual_marker.stroke({'color' : $(this).val()});
+		});
+		
+		$("#color_picker_fill").on("input change", function() {
+			pri.actual_marker.fill({'color' : $(this).val()});
 		});
 
 		$("#stroke_picker").on("input change", function() {
+			pri.actual_marker.attr('stroke', pri.actual_marker.attr('stroke'));
 			pri.actual_marker.stroke({'width' : $(this).val()})
 		});
 
