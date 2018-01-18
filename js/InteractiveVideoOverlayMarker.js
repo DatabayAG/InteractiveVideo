@@ -166,7 +166,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		pro.actual_marker = null;
 		pro.resetAllFormElements();
 		$('.iv_svg_marker').remove();
-
 	};
 
 	pro.hideMakerToolBarObjectsForForm = function(prototype)
@@ -284,8 +283,8 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	{
 		var draw = pro.initialiseSVG();
 		var circle = draw.circle(100, 80);
-		pro.addStrokeAndNoFill(circle);
 		circle.scale(1, 0.9);
+		pro.addStrokeAndNoFill(circle);
 		pro.finishMarkerElement(circle, id);
 	};
 
@@ -403,11 +402,13 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		$('#height_changer').val(j_object.attr('height'));
 		$('#scale_changer').val(j_object.attr('scale'));
 		$('#rotate_changer').val(j_object.attr('rotate'));
-		$('#text_changer').val(text);
-		$('#font_size_changer').val(j_object.attr('font-size'));
+
 		if(text !== '')
 		{
-			$('#text_changer').trigger('change');
+			var j_object_txt = $('#text_changer');
+			j_object_txt.val(text);
+			j_object_txt.trigger('change');
+			$('#font_size_changer').val(j_object.attr('font-size'));
 		}
 	};
 
