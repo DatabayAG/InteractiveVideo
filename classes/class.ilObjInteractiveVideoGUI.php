@@ -979,11 +979,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		if(strlen($_POST['marker']) > 0)
 		{
-			$marker = $_POST['marker'];
-			$marker = preg_replace( "/\r|\n|\t/", "", $marker );
-
-			$marker = '<svg>'.$marker.'</svg>';
-			$marker = xvidUtils::secureSvg($marker);
+			$marker = $this->cleanMarker($_POST['marker']);
 			$comment->setMarker($marker);
 			if($comment->getCommentTimeEnd() == 0)
 			{
@@ -1404,10 +1400,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTimeEnd($comment_time_end);
 			if(strlen($_POST['fake_marker']) > 0)
 			{
-				$marker = $_POST['fake_marker'];
-				$marker = '<svg>'.$marker.'</svg>';
-				$marker = preg_replace( "/\r|\n|\t/", "", $marker );
-				$marker = xvidUtils::secureSvg($marker);
+				$marker = $this->cleanMarker($_POST['fake_marker']);
+				
 				$this->objComment->setMarker($marker);
 				if($this->objComment->getCommentTimeEnd() == 0)
 				{
@@ -1423,6 +1417,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$form->setValuesByPost();
 			$this->editComment($form);
 		}
+	}
+
+	/**
+	 * @param $marker
+	 * @return null|string|string[]
+	 */
+	protected function cleanMarker($marker)
+	{
+		$marker = '<svg>'.trim($marker).'</svg>';
+		$marker = xvidUtils::secureSvg($marker);
+		$marker = preg_replace( "/\r|\n|\t|<svg>|<\/svg>/", "", $marker );
+		$marker = '<svg>'.trim($marker).'</svg>';
+		return $marker;
 	}
 
 	/**

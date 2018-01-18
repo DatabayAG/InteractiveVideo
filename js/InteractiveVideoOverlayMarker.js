@@ -127,12 +127,14 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			type = 'text';
 			proto = 'text_prototype';
 		}
-		var svg = SVG.adopt(document.getElementById('ilInteractiveVideoOverlay'));
+		var svg = SVG('ilInteractiveVideoOverlay');
 		var marker = svg.select(type + '.magic_marker');
 		var id = pro.getUniqueId();
 		marker.id(id);
-		marker.draggable();
-		
+		marker.draggable().on('dragend', function(e){
+			pro.replaceFakeMarkerAfterAttributeChange();
+		});
+
 		pri.actual_marker = marker;
 		pro.hideMakerToolBarObjectsForForm(proto);
 		pro.attachStyleEvents();
@@ -381,6 +383,8 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	pro.setValuesFromElement = function()
 	{
 		var j_object = $('#' + pub.actual_id);
+		var text = j_object.text();
+		text = text.trim();
 		$('#color_picker').val(j_object.attr('stroke'));
 		$('#color_picker_fill').val(j_object.attr('fill'));
 		$('#stroke_picker').val(j_object.attr('stroke-width'));
@@ -388,8 +392,12 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		$('#height_changer').val(j_object.attr('height'));
 		$('#scale_changer').val(j_object.attr('scale'));
 		$('#rotate_changer').val(j_object.attr('rotate'));
-		$('#text_changer').val(j_object.text());
+		$('#text_changer').val(text);
 		$('#font_size_changer').val(j_object.attr('font-size'));
+		if(text !== '')
+		{
+			$('#text_changer').trigger('change');
+		}
 	};
 
 	pub.stillEditingSvg = function()
