@@ -320,6 +320,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			else
 			{
 				$('.add_marker_selector').hide( 'fast' );
+				il.InteractiveVideoOverlayMarker.resetForm();
 			}
 		});
 	};

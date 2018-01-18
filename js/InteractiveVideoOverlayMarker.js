@@ -151,14 +151,22 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	{
 		$('#ilInteractiveVideoCommentCancel').click(function()
 		{
-			pro.showButtons();
-			pro.actual_marker = null;
+			pub.resetForm();
 		});
 
 		$('#ilInteractiveVideoCommentSubmit').click(function()
 		{
 			pro.showButtons();
 		});
+	};
+	
+	pub.resetForm = function()
+	{
+		pro.showButtons();
+		pro.actual_marker = null;
+		pro.resetAllFormElements();
+		$('.iv_svg_marker').remove();
+
 	};
 
 	pro.hideMakerToolBarObjectsForForm = function(prototype)
@@ -227,10 +235,8 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		});
 
 		$("#btn_delete").on("click", function() {
-			pri.actual_marker = null;
-			pro.showButtons();
-			$('.iv_svg_marker').remove();
 			$('#fake_marker').html('');
+			pub.resetForm();
 			$('#add_marker_chk').prop('checked', false);
 			$('.add_marker_selector').hide( 'fast' );
 		});
