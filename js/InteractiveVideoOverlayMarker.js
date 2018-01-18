@@ -274,64 +274,69 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 	pro.attachRectangle= function(id)
 	{
-		var draw = SVG('ilInteractiveVideoOverlay');
+		var draw = pro.initialiseSVG();
 		var rect = draw.rect(100, 80);
-		rect.stroke({ width: pro.stroke_width , color : pro.default_color});
-		rect.fill('none');
-		rect.attr('class', pro.marker_class);
-		rect.attr('id', id);
-		rect.draggable();
-		pri.actual_marker = rect;
+		pro.addStrokeAndNoFill(rect);
+		pro.finishMarkerElement(rect, id);
 	};
 
 	pro.attachCircle = function(id)
 	{
-		var draw = SVG('ilInteractiveVideoOverlay');
+		var draw = pro.initialiseSVG();
 		var circle = draw.circle(100, 80);
-		circle.stroke({ width: pro.stroke_width , color : pro.default_color});
-		circle.fill('none');
+		pro.addStrokeAndNoFill(circle);
 		circle.scale(1, 0.9);
-		circle.attr('class', pro.marker_class);
-		circle.attr('id', id);
-		circle.draggable();
-		pri.actual_marker = circle;
+		pro.finishMarkerElement(circle, id);
 	};
 
 	pro.attachLine = function(id)
 	{
-		var draw = SVG('ilInteractiveVideoOverlay');
+		var draw = pro.initialiseSVG();
 		var line = draw.line(0, 75, 150, 75);
-		line.stroke({ width: pro.stroke_width , color : pro.default_color});
-		line.fill('none');
-		line.attr('class', pro.marker_class);
-		line.attr('id', id);
-		line.draggable();
-		pri.actual_marker = line;
+		pro.addStrokeAndNoFill(line);
+		pro.finishMarkerElement(line, id);
 	};
 
 	pro.attachArrow = function(id)
 	{
-		var draw = SVG('ilInteractiveVideoOverlay');
+		var draw = pro.initialiseSVG();
 		var arrow = draw.path('m0,50l50,-50l50,50l-25,0l0,50l-50,0l0,-50l-25,0z');
-		arrow.fill(pro.default_color);
-		arrow.stroke({'width' : 0});
-		arrow.attr('class', pro.marker_class);
-		arrow.attr('id', id);
-		arrow.draggable();
-		pri.actual_marker = arrow;
+		pro.addFillNoStroke(arrow);
+		pro.finishMarkerElement(arrow, id);
 	};
 
 	pro.attachText = function(id)
 	{
-		var draw = SVG('ilInteractiveVideoOverlay');
+		var draw = pro.initialiseSVG();
 		var text = draw.text($("#text_changer").val());
-		text.move(50,60).font({ fill: pri.default_color, size : 15});
-		text.fill(pro.default_color);
-		text.stroke({'width' : 0});
-		text.attr('class', pro.marker_class);
-		text.attr('id', id);
-		text.draggable();
-		pri.actual_marker = text;
+		text.move(50,60).font({size : 15});
+		pro.addFillNoStroke(text);
+		pro.finishMarkerElement(text, id);
+	};
+
+	pro.initialiseSVG = function()
+	{
+		return SVG('ilInteractiveVideoOverlay');
+	};
+	
+	pro.addStrokeAndNoFill = function(element)
+	{
+		element.stroke({ width: pro.stroke_width , color : pro.default_color});
+		element.fill('none');
+	};
+
+	pro.addFillNoStroke = function(element)
+	{
+		element.fill(pro.default_color);
+		element.stroke({'width' : 0});
+	};
+
+	pro.finishMarkerElement = function(element, id)
+	{
+		element.attr('class', pro.marker_class);
+		element.attr('id', id);
+		element.draggable();
+		pri.actual_marker = element;
 	};
 
 	pro.attachSingleObjectListener = function(button_id, prototype_class)
