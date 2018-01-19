@@ -9,55 +9,22 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		marker_class  : 'magic_marker iv_svg_marker'
 	}, pri = {
 		'rect_prototype' : [
-			'iv_mk_scale',
-			'iv_mk_color_fill',
-			'iv_mk_font_size',
-			'iv_mk_text'
+			'iv_mk_scale', 'iv_mk_color_fill', 'iv_mk_font_size', 'iv_mk_text'
 		],
 		'circle_prototype' : [
-			'iv_mk_width',
-			'iv_mk_height',
-			'iv_mk_rotate',
-			'iv_mk_color_fill',
-			'iv_mk_font_size',
-			'iv_mk_text'
+			'iv_mk_width', 'iv_mk_height', 'iv_mk_rotate', 'iv_mk_color_fill', 'iv_mk_font_size', 'iv_mk_text'
 		],
 		'arrow_prototype' : [
-			'iv_mk_width',
-			'iv_mk_height',
-			'iv_mk_stroke',
-			'iv_mk_color',
-			'iv_mk_font_size',
-			'iv_mk_text'
+			'iv_mk_width', 'iv_mk_height', 'iv_mk_stroke', 'iv_mk_color', 'iv_mk_font_size', 'iv_mk_text'
 		],
 		'line_prototype' : [
-			'iv_mk_width',
-			'iv_mk_height',
-			'iv_mk_scale',
-			'iv_mk_color_fill',
-			'iv_mk_font_size',
-			'iv_mk_text'
+			'iv_mk_width', 'iv_mk_height', 'iv_mk_scale', 'iv_mk_color_fill', 'iv_mk_font_size', 'iv_mk_text'
 		],
 		'text_prototype' : [
-			'iv_mk_width',
-			'iv_mk_height',
-			'iv_mk_stroke',
-			'iv_mk_scale',
-			'iv_mk_color'
+			'iv_mk_width', 'iv_mk_height', 'iv_mk_stroke', 'iv_mk_scale', 'iv_mk_color'
 		],
 		actual_marker : null,
 		editScreen : false
-	};
-
-	pub.attachListener = function()
-	{
-		pro.attachSingleObjectListener('btn_rect', 'rect_prototype');
-		pro.attachSingleObjectListener('btn_circle', 'circle_prototype');
-		pro.attachSingleObjectListener('btn_arrow', 'arrow_prototype');
-		pro.attachSingleObjectListener('btn_line', 'line_prototype');
-		pro.attachSingleObjectListener('btn_text', 'text_prototype');
-		pro.attachStyleEvents();
-		pro.attachSubmitCancelListener();
 	};
 
 	pub.checkForEditScreen = function()
@@ -96,6 +63,17 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			pub.attachListener();
 			$('.remove_marker').remove();
 		}
+	};
+
+	pub.attachListener = function()
+	{
+		pro.attachSingleObjectListener('btn_rect', 'rect_prototype');
+		pro.attachSingleObjectListener('btn_circle', 'circle_prototype');
+		pro.attachSingleObjectListener('btn_arrow', 'arrow_prototype');
+		pro.attachSingleObjectListener('btn_line', 'line_prototype');
+		pro.attachSingleObjectListener('btn_text', 'text_prototype');
+		pro.attachStyleEvents();
+		pro.attachSubmitCancelListener();
 	};
 
 	pro.initialiseExistingMarker = function()
@@ -145,6 +123,30 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		}
 		
 		pro.setValuesFromElement();
+	};
+
+	pro.createSvgElement = function(id, prototype_class)
+	{
+		if(prototype_class === 'rect_prototype')
+		{
+			pro.attachRectangle(id);
+		}
+		else if(prototype_class === 'circle_prototype')
+		{
+			pro.attachCircle();
+		}
+		else if(prototype_class === 'arrow_prototype')
+		{
+			pro.attachArrow();
+		}
+		else if(prototype_class === 'line_prototype')
+		{
+			pro.attachLine();
+		}
+		else if(prototype_class === 'text_prototype')
+		{
+			pro.attachText();
+		}
 	};
 
 	pro.attachSubmitCancelListener = function()
@@ -245,30 +247,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	pro.replaceFakeMarkerAfterAttributeChange = function()
 	{
 		$("#fake_marker").val($("#ilInteractiveVideoOverlay").html());
-	};
-
-	pro.createSvgElement = function(id, prototype_class)
-	{
-		if(prototype_class === 'rect_prototype')
-		{
-			pro.attachRectangle(id);
-		}
-		else if(prototype_class === 'circle_prototype')
-		{
-			pro.attachCircle();
-		}
-		else if(prototype_class === 'arrow_prototype')
-		{
-			pro.attachArrow();
-		}
-		else if(prototype_class === 'line_prototype')
-		{
-			pro.attachLine();
-		}
-		else if(prototype_class === 'text_prototype')
-		{
-			pro.attachText();
-		}
 	};
 
 	pro.attachRectangle= function(id)
