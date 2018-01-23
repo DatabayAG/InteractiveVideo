@@ -987,10 +987,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 		}
 
-
+		$reply_to_posting = false;
 		if(array_key_exists('is_reply_to', $_POST))
 		{
 			$comment->setIsReplyTo((int) $_POST['is_reply_to']);
+			if(array_key_exists('reply_to_posting', $_POST) && $_POST['reply_to_posting'] == "true" )
+			{
+				$reply_to_posting = true;
+			}
 		}
 
 		if($ilUser->getId() == ANONYMOUS_USER_ID)
@@ -1008,7 +1012,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			$comment->setIsPrivate($is_private );
 		}
-		$comment->create();
+		$comment->create(false, $reply_to_posting);
 		$this->callExit();
 	}
 

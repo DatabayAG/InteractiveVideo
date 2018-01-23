@@ -147,7 +147,7 @@ class ilObjComment
 	 * @param bool $return_next_id
 	 * @return null | int
 	 */
-	public function create($return_next_id = false)
+	public function create($return_next_id = false, $reply_to_posting = false)
 	{
 		/**
 		 * @var $ilDB   ilDB
@@ -158,7 +158,7 @@ class ilObjComment
 		$purify = new ilHtmlInteractiveVideoPostPurifier();
 		$text = $purify->purify($this->getCommentText());
 
-		if($this->getIsReplyTo() != 0)
+		if($this->getIsReplyTo() != 0 && !$reply_to_posting)
 		{
 			$this->removeOldReplyTo($this->getIsReplyTo());
 		}

@@ -256,6 +256,34 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		});
 	};
 
+	pub.addAjaxFunctionForReplyPosting = function(comment_id, org_id)
+	{
+		$("#submit_comment_form").on("click", function() {
+			var actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
+			var comment_text = $('#list_item_' + comment_id).val();
+			$.ajax({
+				type:     "POST",
+				url:      il.InteractiveVideo.post_comment_url,
+				data:     {
+					'comment_time':      actual_time_in_video,
+					'comment_text':      comment_text,
+					'is_private':        0,
+					'is_reply_to':       comment_id,
+					'reply_to_posting' : true
+				},
+				success:  function () {
+					$('.reply_comment_' + org_id).remove();
+					$('.reply_comment_non_existent').remove();
+					var reply = {'comment_text' : comment_text, 'is_interactive' : 0, 'is_private' : false, 'user_name' :scope.InteractiveVideo.username, 'comment_id' : 'non_existent' + Math.random()};
+					var html = scope.InteractiveVideoPlayerComments.getCommentRepliesHtml(reply);
+					$('.list_item_' + comment_id).find('.comment_replies').append(html);
+					$('#list_item_container_' + comment_id).remove();
+					pub.refreshMathJaxView();
+				}
+			});
+		});
+	};
+
 	pro.resetCommentFormOnClick = function()
 	{
 		$("#ilInteractiveVideoCommentCancel").on("click", function() {

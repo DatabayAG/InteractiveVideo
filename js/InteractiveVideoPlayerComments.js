@@ -61,8 +61,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 							'</div></div><div class="comment_inner_text">' +
 							pro.buildCommentTitleHtml(comment.comment_title)                                 +
 							pro.buildCommentTextHtml(comment.comment_text )                                  +
-							pro.buildCommentReplies(comment.replies )                                        + 
-							'</div></div>' +
+							pro.buildCommentReplies(comment.replies )                                        +
+							pro.buildReplyTo(comment.comment_id)+'</div></div>' +
 							pro.buildCommentTagsHtml(comment.comment_tags)                                   +
 					'</li>';
 		}
@@ -70,8 +70,34 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			value = '';
 		}
-
+		pro.registerReplyToListeners();
 		return value;
+	};
+
+	pro.buildReplyTo = function(id)
+	{
+		return '<div class="glyphicon glyphicon-share-alt flip_float_right reply_to_comment" data-reply-to-id="'+id+'" aria-hidden="true"></div>';
+	};
+	
+	pro.appendReplyToHiddenField = function(id)
+	{
+		$('#ilInteractiveVideoCommentsForm').append('<input type="hidden" value="' + id + '"/>');
+	};
+
+	pro.registerReplyToListeners = function()
+	{
+		$('.reply_to_comment').off("click");
+		$('.reply_to_comment').on("click", function() {
+			console.log('clicked on comment id ' + $(this).data('reply-to-id'));
+			var comment_id = 'list_item_'+ $(this).data('reply-to-id');
+			var comment_container = 'list_item_container_'+ $(this).data('reply-to-id');
+			if($('#' + comment_id).length == 0)
+			{
+				$('.' + comment_id).append('');
+				$('.' + comment_id).append('<div id="'+comment_container+'"><textarea id="'+comment_id+'"></textarea><input id="submit_comment_form" class="btn btn-default btn-sm" value="'+scope.InteractiveVideo.lang.save+'" type="submit"></div>');
+				scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReplyPosting($(this).data('reply-to-id'), $(this).data('reply-to-id'));
+			}
+		});
 	};
 
 	pub.fillCommentsTimeEndBlacklist = function (comment_time_end, comment_id)
