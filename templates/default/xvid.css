@@ -321,9 +321,8 @@
     z-index: 12;
 }
 #submit_comment_form{
-    right: 85px;
-    bottom: 5px;
-    position: absolute;
+    position: static;
+    margin-top: 15px;
 }
 .reply_comment{
     padding:0;
@@ -604,5 +603,10 @@ input[type=range]:focus::-ms-fill-upper {
     position: absolute;
 }
 .reply_to_container{
-
+    text-align: right;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+.reply_to_input_form{
+    width: 100%;
 }

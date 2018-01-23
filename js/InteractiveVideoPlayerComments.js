@@ -34,13 +34,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			if (scope.InteractiveVideo.comments[i].comment_time <= time && scope.InteractiveVideo.comments[i].comment_text !== null)
 			{
 				j_object.prepend(pub.buildListElement(scope.InteractiveVideo.comments[i], scope.InteractiveVideo.comments[i].comment_time, scope.InteractiveVideo.comments[i].user_name));
+				il.InteractiveVideoPlayerComments.registerReplyToListeners();
 				if(scope.InteractiveVideo.comments[i].comment_time_end > 0)
 				{
 					pub.fillCommentsTimeEndBlacklist(scope.InteractiveVideo.comments[i].comment_time_end, scope.InteractiveVideo.comments[i].comment_id);
 				}
 			}
 		}
-		pub.clearCommentsWhereTimeEndEndded(time);
+		pub.clearCommentsWhereTimeEndEnded(time);
 	};
 
 	pub.buildListElement = function (comment, time, username)
@@ -83,7 +84,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				return '';
 			}
 		}
-		return '<div class="glyphicon glyphicon-share-alt flip_float_right reply_to_comment" data-reply-to-id="'+id+'" aria-hidden="true"></div>';
+		return '<div class="glyphicon glyphicon-share-alt flip_float_right reply_to_comment" data-reply-to-id="'+id+'" aria-hidden="true" title="' +il.InteractiveVideo.lang.reply_to_title + '"></div>';
 	};
 	
 	pro.appendReplyToHiddenField = function(id)
@@ -103,7 +104,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			if($('#' + comment_id).length === 0)
 			{
 				comment_object.append('');
-				comment_object.append('<div id="'+comment_container+'" class="reply_to_container"><textarea cols="55" rows="1" id="'+comment_id+'"></textarea><input id="submit_comment_form" class="btn btn-default btn-sm submit_comment_form_to_reply" value="'+scope.InteractiveVideo.lang.save+'" type="submit"></div>');
+				comment_object.append('<div id="'+comment_container+'" class="reply_to_container"><div><input type="text" class="reply_to_input_form" id="'+comment_id+'"/></div><div><input id="submit_comment_form" class="btn btn-default btn-sm submit_comment_form_to_reply" value="'+scope.InteractiveVideo.lang.save+'" type="submit"></div></div>');
 				scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReplyPosting($(this).data('reply-to-id'), $(this).data('reply-to-id'));
 			}
 			else
@@ -189,6 +190,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				{
 					element = pub.buildListElement(scope.InteractiveVideo.comments[i], scope.InteractiveVideo.comments[i].comment_time, scope.InteractiveVideo.comments[i].user_name);
 					j_object.append(element);
+					il.InteractiveVideoPlayerComments.registerReplyToListeners();
 					if(scope.InteractiveVideo.comments[i].comment_time_end > 0 && scope.InteractiveVideo.comments[i].comment_time <= scope.InteractiveVideo.last_time)
 					{
 						pub.fillCommentsTimeEndBlacklist(scope.InteractiveVideo.comments[i].comment_time_end, scope.InteractiveVideo.comments[i].comment_id);

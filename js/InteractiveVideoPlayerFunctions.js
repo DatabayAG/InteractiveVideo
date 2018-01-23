@@ -134,6 +134,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		if (scope.InteractiveVideo.comments[i].comment_text != null)
 		{
 			$("#ul_scroll").prepend(pri.utils.buildListElement(comment, current_time, comment.user_name));
+			il.InteractiveVideoPlayerComments.registerReplyToListeners();
 			pro.addHighlightToCommentWithoutEndTime(comment);
 			if (comment.comment_time_end > 0)
 			{

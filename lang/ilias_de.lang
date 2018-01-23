@@ -200,3 +200,4 @@ delete_marker#:#Marker Löschen
 text#:#Text
 font_size#:#Schriftgröße
 is_reply_to#:#Antwort
+reply_to#:#Antworten

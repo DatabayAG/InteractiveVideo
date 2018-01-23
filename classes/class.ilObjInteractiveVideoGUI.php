@@ -434,6 +434,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('ADD_COMMENT', $this->plugin->txt('insert_comment'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
 		$config_tpl->setVariable('VIDEO_MODE', $this->object->getVideoMode());
+		$config_tpl->setVariable('REPLY_TO_TEXT', $this->plugin->txt('reply_to'));
 
 		$ck = new ilTextAreaInputCkeditor($this->plugin);
 		$ck->appendCkEditorToTemplate($config_tpl);
