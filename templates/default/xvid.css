@@ -247,19 +247,19 @@
 }
 
 .crow1{
-    background-color: rgba(35, 0, 185, 0.13);
+   /* background-color: rgba(35, 0, 185, 0.13); */
 }
 
 .crow2{
-    background-color: rgba(0, 144, 185, 0.13);
+    /*    background-color: rgba(0, 144, 185, 0.13);*/
 }
 
 .crow3{
-    background-color: rgba(35, 0, 185, 0.13);
+    /*    background-color: rgba(35, 0, 185, 0.13);*/
 }
 
 .crow4{
-    background-color: rgba(0, 144, 185, 0.13);
+    /*   background-color: rgba(0, 144, 185, 0.13);*/
 }
 .activeCommentWithoutEndTime:after, .activeComment:after{
     background-color: #b5eab2!important;
@@ -593,4 +593,16 @@ input[type=range]:focus::-ms-fill-upper {
     transform: scaleX(-1);
     padding: 5px;
     float: right;
+    position: absolute !important;
+    bottom: 0;
+    right: 0;
+    top: unset !important;
+}
+
+.submit_comment_form_to_reply{
+    right:  0 !important;
+    position: absolute;
+}
+.reply_to_container{
+
 }

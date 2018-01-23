@@ -62,7 +62,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 							pro.buildCommentTitleHtml(comment.comment_title)                                 +
 							pro.buildCommentTextHtml(comment.comment_text )                                  +
 							pro.buildCommentReplies(comment.replies )                                        +
-							pro.buildReplyTo(comment.comment_id)+'</div></div>' +
+							pro.buildReplyTo(comment.comment_id, comment)
+							+'</div></div>' +
 							pro.buildCommentTagsHtml(comment.comment_tags)                                   +
 					'</li>';
 		}
@@ -70,12 +71,18 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			value = '';
 		}
-		pro.registerReplyToListeners();
 		return value;
 	};
 
-	pro.buildReplyTo = function(id)
+	pro.buildReplyTo = function(id, comment)
 	{
+		if('has_no_reply_button' in comment)
+		{
+			if(comment.has_no_reply_button === true)
+			{
+				return '';
+			}
+		}
 		return '<div class="glyphicon glyphicon-share-alt flip_float_right reply_to_comment" data-reply-to-id="'+id+'" aria-hidden="true"></div>';
 	};
 	
@@ -84,18 +91,24 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		$('#ilInteractiveVideoCommentsForm').append('<input type="hidden" value="' + id + '"/>');
 	};
 
-	pro.registerReplyToListeners = function()
+	pub.registerReplyToListeners = function()
 	{
-		$('.reply_to_comment').off("click");
-		$('.reply_to_comment').on("click", function() {
+		var reply_object = $('.reply_to_comment');
+		reply_object.off("click");
+		reply_object.on("click", function() {
 			console.log('clicked on comment id ' + $(this).data('reply-to-id'));
 			var comment_id = 'list_item_'+ $(this).data('reply-to-id');
 			var comment_container = 'list_item_container_'+ $(this).data('reply-to-id');
-			if($('#' + comment_id).length == 0)
+			var comment_object = $('.' + comment_id);
+			if($('#' + comment_id).length === 0)
 			{
-				$('.' + comment_id).append('');
-				$('.' + comment_id).append('<div id="'+comment_container+'"><textarea id="'+comment_id+'"></textarea><input id="submit_comment_form" class="btn btn-default btn-sm" value="'+scope.InteractiveVideo.lang.save+'" type="submit"></div>');
+				comment_object.append('');
+				comment_object.append('<div id="'+comment_container+'" class="reply_to_container"><textarea cols="55" rows="1" id="'+comment_id+'"></textarea><input id="submit_comment_form" class="btn btn-default btn-sm submit_comment_form_to_reply" value="'+scope.InteractiveVideo.lang.save+'" type="submit"></div>');
 				scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReplyPosting($(this).data('reply-to-id'), $(this).data('reply-to-id'));
+			}
+			else
+			{
+				$('#' + comment_container).remove();
 			}
 		});
 	};
@@ -113,7 +126,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		pub.addHighlightToComment(comment_id);
 	};
 
-	pub.clearCommentsWhereTimeEndEndded = function (time)
+	pub.clearCommentsWhereTimeEndEnded = function (time)
 	{
 		var timestamp, id;
 		for (timestamp in scope.InteractiveVideo.blacklist_time_end) 
@@ -183,13 +196,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				}
 			}
 			scope.InteractiveVideo.is_show_all_active = true;
-			pub.clearCommentsWhereTimeEndEndded(scope.InteractiveVideo.last_time);
+			pub.clearCommentsWhereTimeEndEnded(scope.InteractiveVideo.last_time);
 		}
 		else
 		{
 			scope.InteractiveVideo.is_show_all_active = false;
 			pub.replaceCommentsAfterSeeking(scope.InteractiveVideo.last_time);
 		}
+		pub.registerReplyToListeners();
 	};
 
 	pub.rebuildCommentsViewIfShowAllIsActive = function()
@@ -211,15 +225,15 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	{
 		var element;
 		var author_list = pro.getAllUserWithComment();
-		var dropdownList = $('#dropdownMenuInteraktiveList');
+		var dropDownList = $('#dropdownMenuInteraktiveList');
 		var reset_elem = '<li><a href="#">' + scope.InteractiveVideo.lang.reset_text + '</a></li><li role="separator" class="divider"></li>';
 
-		dropdownList.html('');
-		dropdownList.append(reset_elem);
+		dropDownList.html('');
+		dropDownList.append(reset_elem);
 		for ( element in author_list) 
 		{
 			element = '<li><a href="#">' + element + '</a></li>';
-			dropdownList.append(element);
+			dropDownList.append(element);
 		}
 	};
 
@@ -360,7 +374,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.buildCommentReplies = function (replies)
 	{
-		var value = '<span class="comment_replies">';
+		var value = '<div class="comment_replies">';
 		if(replies !== undefined && replies.length > 0)
 		{
 			for (var i  = 0; i < replies.length; i++)
@@ -368,7 +382,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				value += pub.getCommentRepliesHtml(replies[i]);
 			}
 		}
-		return value + '</span>';
+		return value + '</div>';
 	};
 	
 	pub.getCommentRepliesHtml = function(reply)
