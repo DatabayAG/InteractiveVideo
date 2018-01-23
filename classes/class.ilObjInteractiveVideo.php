@@ -492,6 +492,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				$table_data[$counter]['is_interactive']		= $row['is_interactive'];
 			}
 			$table_data[$counter]['marker'] = $row['marker'];
+			$table_data[$counter]['is_reply_to'] = $row['is_reply_to'];
 
 			$counter++;
 		}
@@ -539,6 +540,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				{
 				$table_data[$counter]['is_private'] = ilInteractiveVideoPlugin::getInstance()->txt('public');
 			}
+			$table_data[$counter]['is_reply_to'] = $row['is_reply_to'];
 //			$table_data[$counter]['is_tutor']       = $row['is_tutor'];
 //			$table_data[$counter]['is_interactive'] = $row['is_interactive'];
 			$counter++;

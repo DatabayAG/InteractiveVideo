@@ -18,7 +18,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	protected $ctrl;
 	
 	/**
-	 * @param ilObjectGUI $a_parent_obj
+	 * @param ilObjectGUI|ilObjInteractiveVideoGUI $a_parent_obj
 	 * @param string      $a_parent_cmd
 	 */
 	public function __construct($a_parent_obj, $a_parent_cmd)
@@ -70,6 +70,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		{
 			$this->addColumn($a_parent_obj->plugin->txt('visibility'), 'is_private');
 		}
+		$this->addColumn($a_parent_obj->plugin->txt('is_reply_to'), 'is_reply_to', '10%');
 		$this->addColumn($this->lng->txt('actions'), 'actions', '10%');
 
 		$this->setSelectAllCheckbox('comment_id');
@@ -125,6 +126,16 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 				if($value == '00:00:00')
 				{
 					$value = '';
+				}
+			}else if($key == 'is_reply_to')
+			{
+				if($value > 0)
+				{
+					$value = $this->lng->txt('yes');
+				}
+				else
+				{
+					$value = $this->lng->txt('no');
 				}
 			}
 			else if($key == 'is_interactive')
