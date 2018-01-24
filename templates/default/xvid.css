@@ -604,9 +604,11 @@ input[type=range]:focus::-ms-fill-upper {
 }
 .reply_to_container{
     text-align: right;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
+    border-top: none;
     padding: 10px;
 }
 .reply_to_input_form{
     width: 100%;
+    border: 1px solid #ddd;
 }
