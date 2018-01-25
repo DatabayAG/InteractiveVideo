@@ -612,3 +612,8 @@ input[type=range]:focus::-ms-fill-upper {
     width: 100%;
     border: 1px solid #ddd;
 }
+
+.ilInteractiveVideoPlayerContainerCenter{
+    float: none !important;
+    margin: 0 auto;
+}

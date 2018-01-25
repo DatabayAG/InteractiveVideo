@@ -111,6 +111,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	protected $marker_for_students = 0;
 
+	/**
+	 * @var int 
+	 */
+	protected $no_comment_stream = 0;
+
 
 	/**
 	 * @param $src_id
@@ -157,6 +162,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->setTaskActive($row['is_task']);
 		$this->setTask($row['task']);
 		$this->setDisableComment($row['no_comment']);
+		$this->setNoCommentStream($row['no_comment_stream']);
 		$this->setVideoMode($row['video_mode']);
 		$this->setMarkerForStudents($row['marker_for_students']);
 
@@ -229,6 +235,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$is_task			= $this->task_active;
 						$task				= $this->task;
 						$no_comment			= $this->disable_comment;
+						$no_comment_stream  = $this->no_comment_stream;
 						$video_mode			= $this->video_mode;
 						$marker_for_students= $this->marker_for_students;
 					}
@@ -242,6 +249,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$is_task			= (int)$_POST['is_task'];
 						$task				= ilUtil::stripSlashes($_POST['task']);
 						$no_comment			= (int)$_POST['no_comment'];
+						$no_comment_stream	= (int)$_POST['no_comment_stream'];
 						$video_mode			= (int)$_POST['video_mode'];
 						$marker_for_students= (int)$_POST['marker_for_students'];
 					}
@@ -259,6 +267,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 							'is_task'             => array('integer',$is_task ),
 							'task'                => array('text', $task),
 							'no_comment'          => array('integer', $no_comment),
+							'no_comment_stream'   => array('integer', $no_comment_stream),
 							'video_mode'          => array('integer', $video_mode),
 							'marker_for_students' => array('integer', $marker_for_students)
 						)
@@ -316,6 +325,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 					'task'					=> array('text',	$this->getTask()),
 					'lp_mode'				=> array('integer', $this->getLearningProgressMode()), 
 					'no_comment'			=> array('integer', $this->getDisableComment()),
+					'no_comment_stream'		=> array('integer', $this->getNoCommentStream()),
 					'video_mode'			=> array('integer', $this->getVideoMode()),
 					'marker_for_students'	=> array('integer', $this->getMarkerForStudents())
 					),
@@ -376,6 +386,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				'is_chronologic'      => array('integer', $this->isChronologic()),
 				'is_public'           => array('integer', $this->isPublic()),
 				'no_comment'          => array('integer', $this->getDisableComment()),
+				'no_comment_stream'   => array('integer', $this->getNoCommentStream()),
 				'source_id'           => array('text', $this->getSourceId()),
 				'is_task'             => array('integer', $this->getTaskActive()),
 				'task'                => array('text', $this->getTask()),
@@ -1105,6 +1116,22 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	public function setDisableComment($disable_comment)
 	{
 		$this->disable_comment = $disable_comment;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getNoCommentStream()
+	{
+		return $this->no_comment_stream;
+	}
+
+	/**
+	 * @param int $no_comment_stream
+	 */
+	public function setNoCommentStream($no_comment_stream)
+	{
+		$this->no_comment_stream = $no_comment_stream;
 	}
 
 	/**

@@ -10,7 +10,7 @@
 			var options = {
 				"techOrder": ["youtube"],
 				"" : false,
-				"sources": [{ "type": "video/youtube", "src": "https://www.youtube.com/watch?v="+interactiveVideoYoutubeId+""}], "youtube": { "ytControls": 2, "iv_load_policy": 3  }
+				"sources": [{ "type": "video/youtube", "children": ["MediaLoader"],"src": "https://www.youtube.com/watch?v="+interactiveVideoYoutubeId+""}], "youtube": { "ytControls": 2, "iv_load_policy": 3  }
 			};
 
 			var player = videojs('ilInteractiveVideo', options, function onPlayerReady() {

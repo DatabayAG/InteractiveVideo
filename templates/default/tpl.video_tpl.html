@@ -16,7 +16,7 @@
 			</li>
 		</ul>
 		<!-- END return_link -->
-		<!-- Brand and toggle get grouped for better mobile display -->
+		<!-- BEGIN toolbar_group -->
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#tb-collapse-2">
 				<span class="sr-only">Toggle navigation</span>
@@ -44,10 +44,11 @@
 				</li>
 			</ul>
 		</div>
+		<!-- END toolbar_group -->
 	</div>
 </nav>
 <div class="row">
-	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 {CENTER_IF_STANDALONE}">
 		<!-- BEGIN task_description -->
 		<div class=ilFormHeader">
 			<h3 class="ilHeader task_interaction"><span class="task_icon arrow_down"></span><span class="task_text">{TASK_TEXT}</span></h3>
@@ -59,7 +60,7 @@
 		</div>
 		{COMMENTS_FORM}
 	</div>
-
+	<!-- BEGIN comments_stream -->
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 		<div class=ilFormHeader">
 			<h3 class="ilHeader">{TXT_COMMENTS}</h3>
@@ -69,6 +70,7 @@
 			</ul>
 		</div>
 	</div>
+	<!-- END comments_stream -->
 </div>
 {CONFIG}
 {MODAL_OVERLAY}

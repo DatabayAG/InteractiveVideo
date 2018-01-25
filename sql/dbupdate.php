@@ -909,5 +909,16 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'marker_for_students'))
 			'default' => 0));
 }
 ?>
-
+<#50>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_comment_stream'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'no_comment_stream',
+		array(
+			'type'    => 'integer',
+			'length'  => '1',
+			'notnull' => true,
+			'default' => 0));
+}
+?>
 

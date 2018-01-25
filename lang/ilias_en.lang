@@ -180,6 +180,8 @@ private#:#private
 public#:#public
 visibility#:#Visibility
 no_comment#:#No Comment-field
+no_comment_stream#:#No Comment-stream
+no_comment_stream_info#:#There will be no comment stream next to the video player, also no toolbar with filters, question work as usual.
 no_comment_info#:#There will be no comment field below the video player
 process_header#:#Process
 insert_marker#:#Insert Marker

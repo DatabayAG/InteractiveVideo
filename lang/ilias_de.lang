@@ -180,7 +180,9 @@ save_anyway#:#Trotzdem speichern
 save_without_correct#:#Sind haben keine korrekte Antwort ausgewählt
 save_without_correct_detail#:#Sie haben weder eine Reflektionfrage, noch neutrale Antworten aktiviert, sind sie sicher, das sie die Frage ohne korrekte Antwort speichern wollen?
 no_comment#:#Kein Kommentarfeld
+no_comment_stream#:#Kein Kommentar-Stream
 no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflektionsfragen mit aktiviertem Kommentarfeld sind nach wie vor möglich.
+no_comment_stream_info#:#Es wird kein Kommentar-Stream nebem dem Video angezeigt, somit auf keine Toolbar mit Filtern, Frage funktionieren weiter wie gewohnt.
 process_header#:#Durchführung
 insert_marker#:#Marker einfügen
 color#:#Farbe
