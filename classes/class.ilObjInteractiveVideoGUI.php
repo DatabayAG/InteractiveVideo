@@ -58,7 +58,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	protected $custom_css = array(
 								  '/templates/default/xvid.css',
 								  '/libs/Bootstraptoggle/bootstrap2-toggle.min.css',
-								  '/libs/video.js/video-js.min.css'
+								  '/libs/plyr/plyr.css'
 								);
 
 	/**
@@ -66,7 +66,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected $custom_javascript = array(
 										 '/libs/Bootstraptoggle/bootstrap2-toggle.min.js', 
-										 '/libs/video.js/video.min.js',
+										 '/libs/plyr/plyr.js',
 										 '/libs/svg.js/svg.js',
 										 '/libs/svg.js/svg.draggable.min.js',
 										 '/js/jquery.InteractiveVideoQuestionViewer.js',

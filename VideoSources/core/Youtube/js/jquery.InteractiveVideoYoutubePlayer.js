@@ -1,79 +1,58 @@
-	$( document ).ready(function() {
-		il.InteractiveVideoPlayerFunction.appendInteractionEvents();
-	});
+$( document ).ready(function() {
+	il.InteractiveVideoPlayerFunction.appendInteractionEvents();
+});
 
-	(function ($) {
+var player = null;
+(function ($) {
 
-		il.Util.addOnLoad(function () {
-			il.InteractiveVideo.last_stopPoint = -1;
+	il.Util.addOnLoad(function () {
+		il.InteractiveVideo.last_stopPoint = -1;
 
-			var options = {
-				"techOrder": ["youtube"],
-				"" : false,
-				"sources": [{ "type": "video/youtube", "children": ["MediaLoader"],"src": "https://www.youtube.com/watch?v="+interactiveVideoYoutubeId+""}], "youtube": { "ytControls": 2, "iv_load_policy": 3  }
-			};
+		player = plyr.setup('#ilInteractiveVideo')[0];
 
-			var player = videojs('ilInteractiveVideo', options, function onPlayerReady() {
-
-				var interval = null;
-
-				il.InteractiveVideoPlayerAbstract.config = {
-					pauseCallback           : (function (){player.pause();}),
-					playCallback            : (function (){player.play();}),
-					durationCallback        : (function (){return player.duration();}),
-					currentTimeCallback     : (function (){return player.currentTime();}),
-					setCurrentTimeCallback  : (function (time){player.currentTime(time);}),
-					removeNonAdventureElements : (function (){
-						player.controlBar.progressControl.disable();
-						player.controlBar.removeChild("currentTimeDisplay");
-						player.controlBar.removeChild("remainingTimeDisplay");
-					}),
-					external : true
-				};
-
-				il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
-				$('#ilInteractiveVideo').prepend($('#ilInteractiveVideoOverlay'));
-
-				this.on('seeked', function() {
-					clearInterval(interval);
-					il.InteractiveVideoPlayerFunction.seekingEventHandler();
-				});
-
-				this.on('pause', function() {
-					clearInterval(interval);
-					il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime();
-				});
-
-				this.on('ended', function() {
-					il.InteractiveVideoPlayerAbstract.videoFinished();
-				});
-
-				this.on('playing', function() {
-
-					if(il.InteractiveVideo.video_mode == 0)
-					{
-						interval = setInterval(function () {
-							il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
-						}, 500);
-					}
-					else
-					{
-						il.InteractiveVideoPlayerAdventure.Init();
-
-						interval = setInterval(function () {
-							il.InteractiveVideoPlayerAdventure.playingEventHandler(interval, player);
-						}, 500);
-					}
-
-				});
-
-				this.on('contextmenu', function(e) {
-					e.preventDefault();
-				});
-
-				this.on('ready', function(e){
-					il.InteractiveVideoPlayerAbstract.readyCallback();
-				});
-			});
+		var interval = null;
+		player.source({
+			type:       'video',
+			sources: [{
+				src:    interactiveVideoYoutubeId,
+				type:   'youtube'
+			}]
 		});
+		il.InteractiveVideoPlayerAbstract.config = {
+			pauseCallback              : (function (){player.pause();}),
+			playCallback               : (function (){player.play();}),
+			durationCallback           : (function (){return player.getDuration();}),
+			currentTimeCallback        : (function (){return player.getCurrentTime();}),
+			setCurrentTimeCallback     : (function (time){player.seek(time);}),
+			external : false
+		};
+
+		il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
+
+		player.on('seeked', function() {
+			clearInterval(interval);
+			il.InteractiveVideoPlayerFunction.seekingEventHandler();
+		});
+
+		player.on('pause', function() {
+			clearInterval(interval);
+			il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime();
+		});
+
+		player.on('ended', function() {
+			il.InteractiveVideoPlayerAbstract.videoFinished();
+		});
+
+		player.on('playing', function() {
+
+			interval = setInterval(function () {
+				il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
+			}, 500);
+		});
+
+		player.on('ready', function(e){
+			il.InteractiveVideoPlayerAbstract.readyCallback();
+		});
+
+	});
 })(jQuery);

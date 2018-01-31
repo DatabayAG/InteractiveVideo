@@ -2,6 +2,8 @@ $( document ).ready(function() {
 	il.InteractiveVideoPlayerFunction.appendInteractionEvents();
 });
 
+var player = null;
+
 (function ($) {
 
 	il.Util.addOnLoad(function () {
@@ -9,42 +11,36 @@ $( document ).ready(function() {
 
 		var options = {};
 
-		var player = videojs('ilInteractiveVideo', options, function onPlayerReady() {
-
+		player = plyr.setup('#ilInteractiveVideo')[0];
 		var interval = null;
 
 			il.InteractiveVideoPlayerAbstract.config = {
-				pauseCallback           : (function (){player.pause();}),
-				playCallback            : (function (){player.play();}),
-				durationCallback        : (function (){return player.duration();}),
-				currentTimeCallback     : (function (){return player.currentTime();}),
-				setCurrentTimeCallback  : (function (time){player.currentTime(time);}),
-				removeNonAdventureElements : (function (){
-					player.controlBar.progressControl.disable();
-					player.controlBar.removeChild("currentTimeDisplay");
-					player.controlBar.removeChild("remainingTimeDisplay");
-				}),
+				pauseCallback              : (function (){player.pause();}),
+				playCallback               : (function (){player.play();}),
+				durationCallback           : (function (){return player.getDuration();}),
+				currentTimeCallback        : (function (){return player.getCurrentTime();}),
+				setCurrentTimeCallback     : (function (time){player.seek(time);}),
 				external : false
 			};
 
 			il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
 			$('#ilInteractiveVideo').prepend($('#ilInteractiveVideoOverlay'));
 
-			this.on('seeked', function() {
+			player.on('seeked', function() {
 				clearInterval(interval);
 				il.InteractiveVideoPlayerFunction.seekingEventHandler();
 			});
 
-			this.on('pause', function() {
+			player.on('pause', function() {
 				clearInterval(interval);
 				il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime();
 			});
 
-			this.on('ended', function() {
+			player.on('ended', function() {
 				il.InteractiveVideoPlayerAbstract.videoFinished();
 			});
 
-			this.on('playing', function() {
+			player.on('playing', function() {
 
 				if(il.InteractiveVideo.video_mode == 0)
 				{
@@ -63,13 +59,9 @@ $( document ).ready(function() {
 
 			});
 
-			this.on('contextmenu', function(e) {
-				e.preventDefault();
-			});
 
-			this.on('ready', function(e){
+			player.on('ready', function(e){
 				il.InteractiveVideoPlayerAbstract.readyCallback();
 			});
-		});
 	});
 })(jQuery);

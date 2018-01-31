@@ -10,7 +10,7 @@ If you upgrade to the 2.x version of the InteractiveVideo you can not go back to
 ## Changes in version 2.5.x
 1. [SVG marker for videos](https://www.ilias.de/docu/goto_docu_wiki_wpage_4971_1357.html)
 2. [Reply to comments](https://www.ilias.de/docu/goto_docu_wiki_wpage_4967_1357.html)
-3. Changed video library to video.js
+3. Changed video library to [plyr](https://github.com/sampotts/plyr)
 
 ## Changes in earlier versions
 * [Complete Changelog](https://github.com/DatabayAG/InteractiveVideo/blob/master/CHANGELOG.md)
