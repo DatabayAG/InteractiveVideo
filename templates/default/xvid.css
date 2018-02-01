@@ -617,3 +617,6 @@ input[type=range]:focus::-ms-fill-upper {
     float: none !important;
     margin: 0 auto;
 }
+#ilInteractiveVideoOverlay svg .magic_marker{
+    pointer-events: none !important;
+}
