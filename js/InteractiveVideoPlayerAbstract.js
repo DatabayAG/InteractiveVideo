@@ -12,8 +12,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		currentTimeCallback        : null,
 		setCurrentTimeCallback     : null,
 		readyCallback              : null,
-		removeNonAdventureElements : null,
-		external                   : null 
+		removeNonAdventureElements : null
 	}; 
 
 	pro.first_play_action = true;
@@ -94,7 +93,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.readyCallback = function ()
 	{
-		$('#ilInteractiveVideoPlayerContainer div').prepend($('#ilInteractiveVideoOverlay'));
+		$('#ilInteractiveVideo').prepend($('#ilInteractiveVideoOverlay'));
 		$.each(pro.onReadyCallbacks, function( index, value ) {
 			if (typeof value === 'function') {
 				value();

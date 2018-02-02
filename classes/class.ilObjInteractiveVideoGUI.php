@@ -271,6 +271,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$video_tpl->setVariable('CENTER_IF_STANDALONE', 'ilInteractiveVideoPlayerContainerCenter');
 		}
+		else
+		{ 
+			$video_tpl->setVariable('CENTER_IF_STANDALONE', 'col-sm-6 col-md-6 col-lg-6');
+		}
 		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());
 
 		$form = new ilPropertyFormGUI();
@@ -445,6 +449,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
 		$config_tpl->setVariable('VIDEO_MODE', $this->object->getVideoMode());
 		$config_tpl->setVariable('REPLY_TO_TEXT', $this->plugin->txt('reply_to'));
+		$config_tpl->setVariable('JUMP_TO_TIME', $this->plugin->txt('jump_to_timestamp'));
 
 		$ck = new ilTextAreaInputCkeditor($this->plugin);
 		$ck->appendCkEditorToTemplate($config_tpl);
@@ -1648,7 +1653,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['comment_title']	= $comment_data['comment_title'];
 		$values['comment_tags']		= $comment_data['comment_tags'];
 		$values['is_private']		= $comment_data['is_private'];
-		$values['fake_marker']			= $comment_data['marker'];
+		$values['fake_marker']		= $comment_data['marker'];
 
 		return $values;
 	}

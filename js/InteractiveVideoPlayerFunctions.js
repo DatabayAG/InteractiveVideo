@@ -27,8 +27,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		{
 			pri.utils.clearAndRemarkCommentsAfterSeeking(current_time);
 		}
-
-		pri.utils.preselectActualTimeInVideo(current_time);
+		if(il.InteractiveVideoOverlayMarker.editScreen === false) 
+		{
+			pri.utils.preselectActualTimeInVideo(current_time);
+		}
 	};
 
 	pub.playingEventHandler = function(interval, player)

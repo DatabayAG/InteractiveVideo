@@ -203,3 +203,4 @@ text#:#Text
 font_size#:#Schriftgröße
 is_reply_to#:#Antwort
 reply_to#:#Antworten
+jump_to_timestamp#:#Springe zum Zeitpunkt

@@ -246,6 +246,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.preselectActualTimeInVideo = function(seconds)
 	{
+		console.log('preselect time')
 		var obj = pro.secondsToTimeCode(seconds);
 
 		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));

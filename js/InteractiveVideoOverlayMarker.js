@@ -2,7 +2,8 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	'use strict';
 
 	var pub = {
-		actual_id : null
+		actual_id : null,
+		editScreen : false
 	}, pro = {
 		default_color : '#FF0000',
 		stroke_width : 4,
@@ -23,8 +24,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		'text_prototype' : [
 			'iv_mk_width', 'iv_mk_height', 'iv_mk_stroke', 'iv_mk_scale', 'iv_mk_color'
 		],
-		actual_marker : null,
-		editScreen : false
+		actual_marker : null
 	};
 
 	pub.checkForEditScreen = function()
@@ -37,14 +37,16 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 				var element = obj.val();
 				pro.removeButtons();
-
 				il.InteractiveVideoPlayerAbstract.addOnReadyFunction(
 					(function ()
 						{
 							if(il.InteractiveVideoPlayerAbstract.config.external === false)
 							{
-								var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($('#comment_time').val());
-								il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
+								il.InteractiveVideoOverlayMarker.jumpToTimeInVideoForMarker();
+							}
+							else
+							{
+								$('.add_marker_selector').prepend('<input clasS="btn btn-default btn-sm jump_to_time_in_external" onclick="il.InteractiveVideoOverlayMarker.jumpToTimeInVideoForMarker();" type="button" value="' + il.InteractiveVideo.lang.jump_to_text + '">');
 							}
 							$('#ilInteractiveVideo').parent().attr('class', 'col-sm-6');
 							pro.initialiseExistingMarker();
@@ -55,7 +57,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 				$('#ilInteractiveVideoOverlay').html(element);
 				$('#add_marker_chk').click();
 				$('.add_marker_selector').show( 'fast' );
-				pri.editScreen = true;
+				pub.editScreen = true;
 			}
 		}
 		else
@@ -63,6 +65,12 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			pub.attachListener();
 			$('.remove_marker').remove();
 		}
+	};
+	
+	pub.jumpToTimeInVideoForMarker = function()
+	{
+		var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($('#comment_time').val());
+		il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
 	};
 
 	pub.attachListener = function()
@@ -109,6 +117,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		var marker = svg.select(type + '.magic_marker');
 		var id = pro.getUniqueId();
 		marker.id(id);
+		obj.css('cssText', 'pointer-events : all !important');
 		marker.draggable().on('dragend', function(e){
 			pro.replaceFakeMarkerAfterAttributeChange();
 		});
@@ -117,7 +126,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		pro.hideMakerToolBarObjectsForForm(proto);
 		pro.attachStyleEvents();
 
-		if(pri.editScreen)
+		if(pub.editScreen)
 		{
 			$('.remove_marker').removeClass('prototype');
 		}
@@ -413,10 +422,3 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	return pub;
 
 }(il));
-
-var interval = setInterval(function() {
-	if(document.readyState === 'complete') {
-		clearInterval(interval);
-		il.InteractiveVideoOverlayMarker.checkForEditScreen();
-	}
-}, 100);
