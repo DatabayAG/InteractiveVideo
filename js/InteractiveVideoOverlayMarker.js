@@ -12,7 +12,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		'rect_prototype' : [
 			'iv_mk_scale', 'iv_mk_color_fill', 'iv_mk_font_size', 'iv_mk_text'
 		],
-		'circle_prototype' : [
+		'ellipse_prototype' : [
 			'iv_mk_width', 'iv_mk_height', 'iv_mk_rotate', 'iv_mk_color_fill', 'iv_mk_font_size', 'iv_mk_text'
 		],
 		'arrow_prototype' : [
@@ -76,7 +76,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	pub.attachListener = function()
 	{
 		pro.attachSingleObjectListener('btn_rect', 'rect_prototype');
-		pro.attachSingleObjectListener('btn_circle', 'circle_prototype');
+		pro.attachSingleObjectListener('btn_ellipse', 'ellipse_prototype');
 		pro.attachSingleObjectListener('btn_arrow', 'arrow_prototype');
 		pro.attachSingleObjectListener('btn_line', 'line_prototype');
 		pro.attachSingleObjectListener('btn_text', 'text_prototype');
@@ -93,10 +93,10 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			type = 'rect';
 			proto = 'rect_prototype';
 		}
-		else if($(obj).is('circle'))
+		else if($(obj).is('ellipse'))
 		{
-			type = 'circle';
-			proto = 'circle_prototype';
+			type = 'ellipse';
+			proto = 'ellipse_prototype';
 		}
 		else if($(obj).is('path'))
 		{
@@ -140,9 +140,9 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		{
 			pro.attachRectangle(id);
 		}
-		else if(prototype_class === 'circle_prototype')
+		else if(prototype_class === 'ellipse_prototype')
 		{
-			pro.attachCircle();
+			pro.attachEllipse();
 		}
 		else if(prototype_class === 'arrow_prototype')
 		{
@@ -266,13 +266,13 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		pro.finishMarkerElement(rect, id);
 	};
 
-	pro.attachCircle = function(id)
+	pro.attachEllipse = function(id)
 	{
 		var draw = pro.initialiseSVG();
-		var circle = draw.circle(100, 80);
-		circle.scale(1, 0.9);
-		pro.addStrokeAndNoFill(circle);
-		pro.finishMarkerElement(circle, id);
+		var ellipse = draw.ellipse(100, 90);
+		ellipse.scale(1);
+		pro.addStrokeAndNoFill(ellipse);
+		pro.finishMarkerElement(ellipse, id);
 	};
 
 	pro.attachLine = function(id)
