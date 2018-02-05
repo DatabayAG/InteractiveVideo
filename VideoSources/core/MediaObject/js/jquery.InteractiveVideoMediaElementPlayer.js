@@ -9,9 +9,9 @@ var player = null;
 	il.Util.addOnLoad(function () {
 		il.InteractiveVideo.last_stopPoint = -1;
 
-		var options = {};
+		var options = {'debug' : il.InteractiveVideo.iv_debug};
 
-		player = plyr.setup('#ilInteractiveVideo')[0];
+		player = plyr.setup('#ilInteractiveVideo', options)[0];
 		var interval = null;
 
 			il.InteractiveVideoPlayerAbstract.config = {
