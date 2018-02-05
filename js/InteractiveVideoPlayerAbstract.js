@@ -93,7 +93,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.readyCallback = function ()
 	{
-		$('#ilInteractiveVideo').prepend($('#ilInteractiveVideoOverlay'));
+		$(player.getContainer()).prepend($('#ilInteractiveVideoOverlay'));
 		$.each(pro.onReadyCallbacks, function( index, value ) {
 			if (typeof value === 'function') {
 				value();
