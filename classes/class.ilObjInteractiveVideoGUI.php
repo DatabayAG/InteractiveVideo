@@ -473,9 +473,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$config_tpl->setVariable('USERNAME', ilObjComment::lookupUsername($ilUser->getId()));
 			$config_tpl->setVariable('USER_IMAGE', ilObjComment::getUserImageInBase64($ilUser->getId()));
 		}
-
+		
+		$config_tpl->setVariable('TUTOR_MODE', false);
 		if($edit_screen)
 		{
+			$config_tpl->setVariable('TUTOR_MODE', true);
 			$config_tpl->setVariable('STOP_POINTS', json_encode(array()));
 			$config_tpl->setVariable('COMMENTS', json_encode(array()));
 			$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode(array()));

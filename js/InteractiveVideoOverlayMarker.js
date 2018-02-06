@@ -20,7 +20,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 				'iv_mk_width', 'iv_mk_height', 'iv_mk_stroke', 'iv_mk_color', 'iv_mk_font_size', 'iv_mk_text'
 			],
 			'line_prototype' : [
-				'iv_mk_width', 'iv_mk_height', 'iv_mk_scale', 'iv_mk_color_fill', 'iv_mk_font_size', 'iv_mk_text'
+				'iv_mk_height', 'iv_mk_scale', 'iv_mk_color_fill', 'iv_mk_font_size', 'iv_mk_text'
 			],
 			'text_prototype' : [
 				'iv_mk_width', 'iv_mk_height', 'iv_mk_stroke', 'iv_mk_scale', 'iv_mk_color'
@@ -71,16 +71,8 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 				il.InteractiveVideoPlayerAbstract.addOnReadyFunction(
 					(function ()
 						{
-							if(il.InteractiveVideoPlayerAbstract.config.external === false)
-							{
-								il.InteractiveVideoOverlayMarker.jumpToTimeInVideoForMarker();
-							}
-							else
-							{
-								$(pri.classes.add_marker_selector).prepend('<input class="btn btn-default btn-sm jump_to_time_in_external" onclick="il.InteractiveVideoOverlayMarker.jumpToTimeInVideoForMarker();" type="button" value="' + il.InteractiveVideo.lang.jump_to_text + '">');
-							}
-							$(pri.ids.ilInteractiveVideo).parent().attr('class', 'col-sm-6');
-							pro.initialiseExistingMarker();
+							$('.add_marker_selector').prepend('<input class="btn btn-default btn-sm jump_to_time_in_external" onclick="il.InteractiveVideoOverlayMarker.jumpToTimeInVideoForMarker();" type="button" value="' + il.InteractiveVideo.lang.jump_to_text + '">');
+							il.InteractiveVideoOverlayMarker.initialiseExistingMarker();
 						}
 					)
 				);
@@ -115,7 +107,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		pro.attachSubmitCancelListener();
 	};
 
-	pro.initialiseExistingMarker = function()
+	pub.initialiseExistingMarker = function()
 	{
 		var obj = $('.magic_marker');
 		var type, proto;

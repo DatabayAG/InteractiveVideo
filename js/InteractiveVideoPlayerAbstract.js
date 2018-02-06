@@ -94,6 +94,14 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 	pub.readyCallback = function ()
 	{
 		$(player.getContainer()).prepend($('#ilInteractiveVideoOverlay'));
+		if(il.InteractiveVideo.tutor_mode == 'true' || il.InteractiveVideo.tutor_mode == '1')
+		{
+			if($('#ilInteractiveVideoTutorCommentSubmit').size() === 0 && $('#ilInteractiveVideoTutorQuestionSubmit').size() === 0)
+			{
+				$( '#ilInteractiveVideo').parent().attr('class', 'col-sm-6');
+			}
+		}
+
 		$.each(pro.onReadyCallbacks, function( index, value ) {
 			if (typeof value === 'function') {
 				value();
