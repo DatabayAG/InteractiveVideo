@@ -9,27 +9,58 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		stroke_width : 4,
 		marker_class  : 'magic_marker iv_svg_marker'
 	}, pri = {
-		'rect_prototype' : [
-			'iv_mk_scale', 'iv_mk_color_fill', 'iv_mk_font_size', 'iv_mk_text'
-		],
-		'ellipse_prototype' : [
-			'iv_mk_width', 'iv_mk_height', 'iv_mk_rotate', 'iv_mk_color_fill', 'iv_mk_font_size', 'iv_mk_text'
-		],
-		'arrow_prototype' : [
-			'iv_mk_width', 'iv_mk_height', 'iv_mk_stroke', 'iv_mk_color', 'iv_mk_font_size', 'iv_mk_text'
-		],
-		'line_prototype' : [
-			'iv_mk_width', 'iv_mk_height', 'iv_mk_scale', 'iv_mk_color_fill', 'iv_mk_font_size', 'iv_mk_text'
-		],
-		'text_prototype' : [
-			'iv_mk_width', 'iv_mk_height', 'iv_mk_stroke', 'iv_mk_scale', 'iv_mk_color'
-		],
+		tools : {
+			'rect_prototype' : [
+				'iv_mk_scale', 'iv_mk_color_fill', 'iv_mk_font_size', 'iv_mk_text'
+			],
+			'ellipse_prototype' : [
+				'iv_mk_width', 'iv_mk_height', 'iv_mk_rotate', 'iv_mk_color_fill', 'iv_mk_font_size', 'iv_mk_text'
+			],
+			'arrow_prototype' : [
+				'iv_mk_width', 'iv_mk_height', 'iv_mk_stroke', 'iv_mk_color', 'iv_mk_font_size', 'iv_mk_text'
+			],
+			'line_prototype' : [
+				'iv_mk_width', 'iv_mk_height', 'iv_mk_scale', 'iv_mk_color_fill', 'iv_mk_font_size', 'iv_mk_text'
+			],
+			'text_prototype' : [
+				'iv_mk_width', 'iv_mk_height', 'iv_mk_stroke', 'iv_mk_scale', 'iv_mk_color'
+			]
+		},
+		ids : {
+			'faker_marker'       : '#fake_marker',
+			'color_picker'       : '#color_picker',
+			'color_picker_fill'  : '#color_picker_fill',
+			'stroke_picker'      : '#stroke_picker',
+			'width_changer'      : '#width_changer',
+			'height_changer'     : '#height_changer',
+			'scale_changer'      : '#scale_changer',
+			'rotate_changer'     : '#rotate_changer',
+			'text_changer'       : '#text_changer',
+			'font_size_changer'  : '#font_size_changer',
+			'btn_delete'         : '#btn_delete',
+			'add_marker_chk'     : '#add_marker_chk',
+			'comment_time'       : '#comment_time',
+			'ilInteractiveVideo'              : '#ilInteractiveVideo',
+			'ilInteractiveVideoOverlay'       : '#ilInteractiveVideoOverlay',
+			'ilInteractiveVideoCommentCancel' : '#ilInteractiveVideoCommentCancel',
+			'ilInteractiveVideoCommentSubmit' : '#ilInteractiveVideoCommentSubmit'
+		},
+		classes : {
+			'remove_marker'            : '.remove_marker',
+			'marker_toolbar'           : '.marker_toolbar',
+			'marker_button_toolbar'    : '.marker_button_toolbar',
+			'add_marker_selector'      : '.add_marker_selector',
+			'marker_toolbar_element'   : '.marker_toolbar_element'
+		},
+		strings : {
+			'ilInteractiveVideoOverlay' : 'ilInteractiveVideoOverlay'
+		},
 		actual_marker : null
 	};
 
 	pub.checkForEditScreen = function()
 	{
-		var obj = $('#fake_marker');
+		var obj = $(pri.ids.faker_marker);
 		if(obj.length >= 1)
 		{
 			if(obj.val().length > 0)
@@ -46,30 +77,30 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 							}
 							else
 							{
-								$('.add_marker_selector').prepend('<input clasS="btn btn-default btn-sm jump_to_time_in_external" onclick="il.InteractiveVideoOverlayMarker.jumpToTimeInVideoForMarker();" type="button" value="' + il.InteractiveVideo.lang.jump_to_text + '">');
+								$(pri.classes.add_marker_selector).prepend('<input class="btn btn-default btn-sm jump_to_time_in_external" onclick="il.InteractiveVideoOverlayMarker.jumpToTimeInVideoForMarker();" type="button" value="' + il.InteractiveVideo.lang.jump_to_text + '">');
 							}
-							$('#ilInteractiveVideo').parent().attr('class', 'col-sm-6');
+							$(pri.ids.ilInteractiveVideo).parent().attr('class', 'col-sm-6');
 							pro.initialiseExistingMarker();
 						}
 					)
 				);
 
-				$('#ilInteractiveVideoOverlay').html(element);
-				$('#add_marker_chk').click();
-				$('.add_marker_selector').show( 'fast' );
+				$(pri.ids.ilInteractiveVideoOverlay).html(element);
+				$(pri.ids.add_marker_chk).click();
+				$(pri.classes.add_marker_selector).show( 'fast' );
 				pub.editScreen = true;
 			}
 		}
 		else
 		{
 			pub.attachListener();
-			$('.remove_marker').remove();
+			$(pri.classes.remove_marker).remove();
 		}
 	};
 	
 	pub.jumpToTimeInVideoForMarker = function()
 	{
-		var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($('#comment_time').val());
+		var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($(pri.ids.comment_time).val());
 		il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
 	};
 
@@ -113,11 +144,12 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			type = 'text';
 			proto = 'text_prototype';
 		}
-		var svg = SVG('ilInteractiveVideoOverlay');
+		var svg = SVG(pri.strings.ilInteractiveVideoOverlay);
 		var marker = svg.select(type + '.magic_marker');
 		var id = pro.getUniqueId();
 		marker.id(id);
 		obj.css('cssText', 'pointer-events : all !important');
+
 		marker.draggable().on('dragend', function(e){
 			pro.replaceFakeMarkerAfterAttributeChange();
 		});
@@ -128,9 +160,9 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 		if(pub.editScreen)
 		{
-			$('.remove_marker').removeClass('prototype');
+			$(pri.classes.remove_marker).removeClass('prototype');
 		}
-		
+
 		pro.setValuesFromElement();
 	};
 
@@ -160,12 +192,12 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 	pro.attachSubmitCancelListener = function()
 	{
-		$('#ilInteractiveVideoCommentCancel').click(function()
+		$(pri.ids.ilInteractiveVideoCommentCancel).click(function()
 		{
 			pub.resetForm();
 		});
 
-		$('#ilInteractiveVideoCommentSubmit').click(function()
+		$(pri.ids.ilInteractiveVideoCommentSubmit).click(function()
 		{
 			pro.showButtons();
 		});
@@ -181,52 +213,52 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 	pro.hideMakerToolBarObjectsForForm = function(prototype)
 	{
-		$('.marker_toolbar_element').removeClass('prototype');
-		$.each(pri[prototype], function( index, value ) {
+		$(pri.classes.marker_toolbar_element).removeClass('prototype');
+		$.each(pri.tools[prototype], function( index, value ) {
 			$('.' + value).addClass('prototype');
 		});
 	};
 
 	pro.attachStyleEvents = function()
 	{
-		$("#width_changer").on("input change", function() {
+		$(pri.ids.width_changer).on("input change", function() {
 			pri.actual_marker.width($(this).val());
 			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
-		$("#height_changer").on("input change", function() {
+		$(pri.ids.height_changer).on("input change", function() {
 			pri.actual_marker.height($(this).val());
 			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
-		$("#scale_changer").on("input change", function() {
+		$(pri.ids.scale_changer).on("input change", function() {
 			pri.actual_marker.scale($(this).val());
 			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
-		$("#color_picker").on("input change", function() {
+		$(pri.ids.color_picker).on("input change", function() {
 			pri.actual_marker.stroke({'color' : $(this).val()});
 			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
-		$("#color_picker_fill").on("input change", function() {
+		$(pri.ids.color_picker_fill).on("input change", function() {
 			pri.actual_marker.fill({'color' : $(this).val()});
 			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
-		$("#stroke_picker").on("input change", function() {
+		$(pri.ids.stroke_picker).on("input change", function() {
 			var color = $('#' + pub.actual_id).attr('stroke');
 			pri.actual_marker.attr('stroke-width' , $(this).val());
 			pri.actual_marker.attr('stroke' , color);
 			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
-		$("#rotate_changer").on("input change", function() {
+		$(pri.ids.rotate_changer).on("input change", function() {
 			pri.actual_marker.rotate($(this).val());
 			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
-		$("#text_changer").on("input change", function() {
+		$(pri.ids.text_changer).on("input change", function() {
 			if('members' in pri.actual_marker)
 			{
 				pri.actual_marker.members[0].text($(this).val());
@@ -239,23 +271,23 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
-		$("#font_size_changer").on("input change", function() {
+		$(pri.ids.font_size_changer).on("input change", function() {
 			pri.actual_marker.attr({'font-size' : $(this).val()});
 			pro.replaceFakeMarkerAfterAttributeChange();
 		});
 
-		$("#btn_delete").on("click", function() {
-			$('#fake_marker').html('');
+		$(pri.ids.btn_delete).on("click", function() {
+			$(pri.ids.faker_marker).html('');
 			pub.resetForm();
-			$('#add_marker_chk').prop('checked', false);
-			$('.add_marker_selector').hide( 'fast' );
+			$(pri.ids.add_marker_chk).prop('checked', false);
+			$(pri.classes.add_marker_selector).hide( 'fast' );
 		});
 
 	};
 
 	pro.replaceFakeMarkerAfterAttributeChange = function()
 	{
-		$("#fake_marker").val($("#ilInteractiveVideoOverlay").html());
+		$(pri.ids.faker_marker).val($(pri.ids.ilInteractiveVideoOverlay).html());
 	};
 
 	pro.attachRectangle= function(id)
@@ -294,7 +326,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	pro.attachText = function(id)
 	{
 		var draw = pro.initialiseSVG();
-		var text = draw.text($("#text_changer").val());
+		var text = draw.text($(pri.ids.text_changer).val());
 		text.move(50,60).font({size : 15});
 		pro.addFillNoStroke(text);
 		pro.finishMarkerElement(text, id);
@@ -302,7 +334,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 	pro.initialiseSVG = function()
 	{
-		return SVG('ilInteractiveVideoOverlay');
+		return SVG(pri.strings.ilInteractiveVideoOverlay);
 	};
 	
 	pro.addStrokeAndNoFill = function(element)
@@ -351,30 +383,30 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 	pro.removeButtons = function()
 	{
-		$('.marker_button_toolbar').addClass('prototype');
-		$('.marker_toolbar').removeClass('prototype');
-		$('.remove_marker').removeClass('prototype');
+		$(pri.classes.marker_button_toolbar).addClass('prototype');
+		$(pri.classes.marker_toolbar).removeClass('prototype');
+		$(pri.classes.remove_marker).removeClass('prototype');
 		pro.resetAllFormElements();
 	};
 
 	pro.showButtons = function()
 	{
-		$('.marker_button_toolbar').removeClass('prototype');
-		$('.marker_toolbar').addClass('prototype');
-		$('.remove_marker').addClass('prototype');
+		$(pri.classes.marker_button_toolbar).removeClass('prototype');
+		$(pri.classes.marker_toolbar).addClass('prototype');
+		$(pri.classes.remove_marker).addClass('prototype');
 	};
 
 	pro.resetAllFormElements = function()
 	{
-		$('#color_picker').val(pro.default_color);
-		$('#color_picker_fill').val(pro.default_color);
-		$('#stroke_picker').val(4);
-		$('#width_changer').val(100);
-		$('#height_changer').val(100);
-		$('#scale_changer').val(1);
-		$('#rotate_changer').val(0);
-		$('#text_changer').val('');
-		$('#font_size_changer').val(15);
+		$(pri.ids.color_picker).val(pro.default_color);
+		$(pri.ids.color_picker_fill).val(pro.default_color);
+		$(pri.ids.stroke_picker).val(4);
+		$(pri.ids.width_changer).val(100);
+		$(pri.ids.height_changer).val(100);
+		$(pri.ids.scale_changer).val(1);
+		$(pri.ids.rotate_changer).val(0);
+		$(pri.ids.text_changer).val('');
+		$(pri.ids.font_size_changer).val(15);
 	};
 
 	pro.setValuesFromElement = function()
@@ -382,20 +414,20 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		var j_object = $('#' + pub.actual_id);
 		var text = j_object.text();
 		text = text.trim();
-		$('#color_picker').val(j_object.attr('stroke'));
-		$('#color_picker_fill').val(j_object.attr('fill'));
-		$('#stroke_picker').val(j_object.attr('stroke-width'));
-		$('#width_changer').val(j_object.attr('width'));
-		$('#height_changer').val(j_object.attr('height'));
-		$('#scale_changer').val(j_object.attr('scale'));
-		$('#rotate_changer').val(j_object.attr('rotate'));
+		$(pri.ids.color_picker).val(j_object.attr('stroke'));
+		$(pri.ids.color_picker_fill).val(j_object.attr('fill'));
+		$(pri.ids.stroke_picker).val(j_object.attr('stroke-width'));
+		$(pri.ids.width_changer).val(j_object.attr('width'));
+		$(pri.ids.height_changer).val(j_object.attr('height'));
+		$(pri.ids.scale_changer).val(j_object.attr('scale'));
+		$(pri.ids.rotate_changer).val(j_object.attr('rotate'));
 
 		if(text !== '')
 		{
-			var j_object_txt = $('#text_changer');
+			var j_object_txt = $(pri.ids.text_changer);
 			j_object_txt.val(text);
 			j_object_txt.trigger('change');
-			$('#font_size_changer').val(j_object.attr('font-size'));
+			$(pri.ids.font_size_changer).val(j_object.attr('font-size'));
 		}
 	};
 
