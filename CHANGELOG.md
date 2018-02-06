@@ -1,6 +1,7 @@
 # 2.5
 1. SVG marker for videos
 2. Reply to comments
+3. Changed video library to [plyr](https://github.com/sampotts/plyr)
 
 # 2.0.12
 1. Display task above videos
