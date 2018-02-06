@@ -596,6 +596,7 @@ input[type=range]:focus::-ms-fill-upper {
     bottom: 0;
     right: 0;
     top: unset !important;
+    cursor: pointer;
 }
 
 .submit_comment_form_to_reply{
