@@ -158,6 +158,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 					$this->xml_writer->xmlElement('CommentIsPrivate', null, (int) $row['is_private']);
 					$this->xml_writer->xmlElement('CommentTimeEnd', null, (int) $row['comment_time_end']);
 					$this->xml_writer->xmlElement('CommentIsReplyTo', null, (int) $row['is_reply_to']);
+					$this->xml_writer->xmlElement('CommentMarker', null, (int) $row['marker']);
 
 					$this->xml_writer->xmlElement('QuestionId', null, (int) $qid);
 					$this->xml_writer->xmlElement('QuestionText', null, (string) $row['question_text']);
