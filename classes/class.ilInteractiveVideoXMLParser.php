@@ -112,7 +112,9 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 			case 'getTaskActive':
 			case 'getTask':
 			case 'getLearningProgressMode':
+			case 'noCommentStream':
 			case 'noComment':
+			case 'studentMarker':
 				if($this->inSettingsTag)
 				{
 					$this->cdata = '';
@@ -212,6 +214,14 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 				break;
 			case 'noComment':
 				$this->xvid_obj->setDisableComment(trim($this->cdata));
+				$this->cdata = '';
+				break;
+			case 'noCommentStream':
+				$this->xvid_obj->setNoCommentStream(trim($this->cdata));
+				$this->cdata = '';
+				break;
+			case 'studentMarker':
+				$this->xvid_obj->setMarkerForStudents(trim($this->cdata));
 				$this->cdata = '';
 				break;
 			case 'SourceId':
