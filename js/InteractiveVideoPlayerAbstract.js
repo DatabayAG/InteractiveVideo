@@ -94,6 +94,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 	pub.readyCallback = function ()
 	{
 		$(player.getContainer()).prepend($('#ilInteractiveVideoOverlay'));
+		console.log($('#ilInteractiveVideoTutorCommentSubmit').size(),il.InteractiveVideo.tutor_mode )
 		if(il.InteractiveVideo.tutor_mode == 'true' || il.InteractiveVideo.tutor_mode == '1')
 		{
 			if($('#ilInteractiveVideoTutorCommentSubmit').size() === 0 && $('#ilInteractiveVideoTutorQuestionSubmit').size() === 0)

@@ -45,12 +45,12 @@ var player = null;
 			});
 
 		player.on('ready', function(e){
-
+			il.InteractiveVideoOverlayMarker.checkForEditScreen();
+			il.InteractiveVideoPlayerAbstract.readyCallback();
 		});
 
 		player.on('loadedmetadata', function(e){
-			il.InteractiveVideoOverlayMarker.checkForEditScreen();
-			il.InteractiveVideoPlayerAbstract.readyCallback();
+
 		});
 
 	});
