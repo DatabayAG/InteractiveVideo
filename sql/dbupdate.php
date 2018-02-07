@@ -868,7 +868,9 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_comment'))
 ?>
 <#46>
 	<?php
-	
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'video_mode'))
+	{
+	}
 	?>
 <#47>
 <?php
