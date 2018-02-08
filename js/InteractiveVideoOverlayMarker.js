@@ -191,7 +191,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 		$(pri.ids.ilInteractiveVideoCommentSubmit).click(function()
 		{
-			if(CKEDITOR.instances.comment_text.getData() !== '')
+			if(il.InteractiveVideoPlayerFunction.getCommentTextFromEditor() !== '')
 			{
 				pro.showButtons();
 			}

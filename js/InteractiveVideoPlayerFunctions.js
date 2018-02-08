@@ -4,6 +4,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	var pub = {}, pro = {}, pri = {};
 
 	pri.utils = scope.InteractiveVideoPlayerComments;
+	
+	pub.getCommentTextFromEditor = function()
+	{
+		return CKEDITOR.instances.comment_text.getData();
+	};
 
 	pub.seekingEventHandler = function()
 	{
@@ -208,7 +213,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		$("#ilInteractiveVideoCommentSubmit").on("click", function() {
 			var time;
 			var actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
-			var comment_text = CKEDITOR.instances.comment_text.getData();
+			var comment_text = pub.getCommentTextFromEditor();
 			var is_private = $('#is_private').prop("checked");
 
 			if( $('#comment_time_end_chk').prop( "checked" ))
