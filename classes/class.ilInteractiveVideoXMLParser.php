@@ -91,6 +91,8 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 			case 'Settings':
 				$this->inSettingsTag = true;
 				$video_src_id = $this->fetchAttribute($tagAttributes, 'video_source_id');
+				$this->video_src_id = $video_src_id;
+				$this->xvid_obj->setSourceId($video_src_id);
 				$factory = new ilInteractiveVideoSourceFactory();
 				$obj = $factory->getVideoSourceObject($video_src_id);
 				if($obj == null)

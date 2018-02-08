@@ -48,7 +48,7 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 			$parser->startParsing();
 			$this->xvid_object = $parser->getObjInteractiveVideo();
 
-			$this->xvid_object->create(true);
+			$this->xvid_object->create();
 			$factory = new ilInteractiveVideoSourceFactory();
 			$source_obj = $factory->getVideoSourceObject($this->xvid_object->getSourceId());
 			$source_obj->afterImportParsing($this->xvid_object->getId(), $this->import_directory);
