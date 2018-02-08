@@ -403,7 +403,7 @@ class ilObjComment
 		$simple = new SimpleChoiceQuestion();
 		foreach($questions_array as $key => $value)
 		{
-			$simple->cloneQuestionObject($key, $value);	
+			$simple->cloneQuestionObject($key, $value);
 		}
 	}
 
