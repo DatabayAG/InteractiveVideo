@@ -369,6 +369,9 @@ class SimpleChoiceQuestion
 		 */
 		global $ilDB;
 
+
+		$_POST['answer'] = array();
+
 		$res = $ilDB->queryF('
 				SELECT * 
 				FROM ' . self::TABLE_NAME_QUESTION_TEXT . '  
