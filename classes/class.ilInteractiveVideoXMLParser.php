@@ -71,7 +71,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 		switch($tagName)
 		{
 			case 'MetaData':
-				$this->inMetaDataTag = true;
+				#$this->inMetaDataTag = true;
 				break;
 
 			case 'General':
@@ -114,7 +114,9 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 			case 'getTaskActive':
 			case 'getTask':
 			case 'getLearningProgressMode':
+			case 'noCommentStream':
 			case 'noComment':
+			case 'studentMarker':
 				if($this->inSettingsTag)
 				{
 					$this->cdata = '';
@@ -150,7 +152,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 				break;
 
 			case 'Title':
-				if($this->inMetaDataTag && $this->inMdGeneralTag)
+				#if($this->inMetaDataTag && $this->inMdGeneralTag)
 				{
 					$this->xvid_obj->setTitle(trim($this->cdata));
 					$this->cdata = '';
@@ -158,7 +160,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 				break;
 
 			case 'Description':
-				if($this->inMetaDataTag && $this->inMdGeneralTag)
+				#if($this->inMetaDataTag && $this->inMdGeneralTag)
 				{
 					$this->xvid_obj->setDescription(trim($this->cdata));
 					$this->cdata = '';
@@ -216,6 +218,14 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 				$this->xvid_obj->setDisableComment(trim($this->cdata));
 				$this->cdata = '';
 				break;
+			case 'noCommentStream':
+				$this->xvid_obj->setNoCommentStream(trim($this->cdata));
+				$this->cdata = '';
+				break;
+			case 'studentMarker':
+				$this->xvid_obj->setMarkerForStudents(trim($this->cdata));
+				$this->cdata = '';
+				break;
 			case 'SourceId':
 				$this->xvid_obj->setSourceId(trim($this->cdata));
 				$this->cdata = '';
@@ -253,7 +263,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 	{
 		return $this->xvid_obj;
 	}
-	
+
 	/**
 	 * Set import directory
 	 *
