@@ -621,3 +621,13 @@ input[type=range]:focus::-ms-fill-upper {
 #ilInteractiveVideoOverlay svg .magic_marker{
     pointer-events: none !important;
 }
+#jump_to_time_in_external{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 3333333;
+    font-size: xx-large;
+    color: black;
+    font-weight: bolder;
+    background-color: rgba(255,255,255,0.5);
+}
