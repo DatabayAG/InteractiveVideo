@@ -1126,25 +1126,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $ilUser ilObjUser
 		 * @var $ilAccess ilAccessHandler
 		 */
-		global $tpl, $ilUser, $ilAccess;
+		global $ilUser;
 
 		$form = new ilPropertyFormGUI();
-		$custom_gui = new ilCustomInputGUI();
-		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
-		$this->addJavascriptAndCSSToTemplate($tpl);
-		$object->addPlayerElements($tpl);
-
-		$marker_template = '';
-		if($this->object->getMarkerForStudents() == 1 || $ilAccess->checkAccess('write', '', $this->object->getRefId()))
-		{
-			$marker_template = $this->buildMarkerEditorTemplate()->get();
-		}
-
-		$custom_gui->setHtml($object->getPlayer()->get() . $this->initPlayerConfig(true) . $marker_template);
-		$form->addItem($custom_gui);
 
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
-		$form->setTitle($this->plugin->txt('insert_comment'));
+
 		$ck = new ilTextAreaInputCkeditor($this->plugin);
 		$ck->appendCkEditorMathJaxSupportToForm($form);
 		$section_header = new ilFormSectionHeaderGUI();
@@ -1582,23 +1569,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $ilTabs;
 
-		$ilTabs->activateTab('editComments');
 		$this->setSubTabs('editComments');
 		$ilTabs->activateSubTab('editMyComments');
 
-		if(!($form instanceof ilPropertyFormGUI))
-		{
-			$form = $this->initCommentForm();
-			$form->setValuesByArray($this->getCommentFormValues(), true);
-		}
+		$form = $this->getCommentForm($form);
 
 		$form->setFormAction($this->ctrl->getFormAction($this, 'updateMyComment'));
-		$form->setTitle($this->plugin->txt('edit_comment'));
 
 		$form->addCommandButton('updateMyComment', $this->lng->txt('save'));
 		$form->addCommandButton('editMyComments', $this->lng->txt('cancel'));
 
-		$tpl->setContent($form->getHTML());
+		$my_tpl = $this->getCommentTemplate();
+		$my_tpl->setVariable('FORM',$form->getHTML());
+		$tpl->setContent($my_tpl->get());
 	}
 
 	/**
@@ -1607,10 +1590,56 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function editComment(ilPropertyFormGUI $form = NULL)
 	{
 		/**
-		 * @var $tpl    ilTemplate
+		 * @var $tpl ilTemplate
+		 */
+		global $tpl;
+
+		$form = $this->getCommentForm($form);
+
+		$form->setFormAction($this->ctrl->getFormAction($this, 'updateComment'));
+
+		$form->addCommandButton('updateComment', $this->lng->txt('save'));
+		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
+
+		$my_tpl = $this->getCommentTemplate();
+		$my_tpl->setVariable('FORM',$form->getHTML());
+		$tpl->setContent($my_tpl->get());
+	}
+	
+	protected function getCommentTemplate()
+	{
+		/**
+		 * @var $tpl ilTemplate
+		 * @var $ilAccess ilAccessHandler
+		 */
+		global $tpl, $ilAccess;
+
+		$my_tpl = new ilTemplate("tpl.comment_form.html", true, true, $this->plugin->getDirectory());
+		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
+		$this->addJavascriptAndCSSToTemplate($tpl);
+		$object->addPlayerElements($tpl);
+
+		$marker_template = '';
+		if($this->object->getMarkerForStudents() == 1 || $ilAccess->checkAccess('write', '', $this->object->getRefId()))
+		{
+			$marker_template = $this->buildMarkerEditorTemplate()->get();
+		}
+
+		$my_tpl->setVariable('PLAYER', $object->getPlayer()->get() . $this->initPlayerConfig(true));
+		$my_tpl->setVariable('MARKER', $marker_template);
+		return $my_tpl;
+	}
+
+	/**
+	 * @param ilPropertyFormGUI|NULL $form
+	 * @return ilPropertyFormGUI
+	 */
+	protected function getCommentForm(ilPropertyFormGUI $form = NULL)
+	{
+		/**
 		 * @var $ilTabs ilTabsGUI
 		 */
-		global $tpl, $ilTabs;
+		global $ilTabs;
 
 		$ilTabs->activateTab('editComments');
 		if(!($form instanceof ilPropertyFormGUI))
@@ -1619,14 +1648,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$form->setValuesByArray($this->getCommentFormValues(), true);
 		}
 
-		$form->setFormAction($this->ctrl->getFormAction($this, 'updateComment'));
-		$form->setTitle($this->plugin->txt('edit_comment'));
-		$form->addCommandButton('updateComment', $this->lng->txt('save'));
-		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
-
-		$tpl->setContent($form->getHTML());
+		return $form;
 	}
-
+	
 	/**
 	 * @param int $comment_id
 	 * @return array
