@@ -277,20 +277,27 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());
 
-		$form = new ilPropertyFormGUI();
-		$ckeditor = new ilTextAreaInputCkeditorGUI('comment_text', 'comment_text');
-		$form->addItem($ckeditor);
-		$video_tpl->setVariable('COMMENT_TEXT', $form->getHTML());
 		$this->objComment = new ilObjComment();
 		$this->objComment->setObjId($this->object->getId());
 		$this->objComment->setIsPublic($this->object->isPublic());
 		$this->objComment->setIsAnonymized($this->object->isAnonymized());
 		$this->objComment->setIsRepeat($this->object->isRepeat());
-		$modal = ilModalGUI::getInstance();
-		$modal->setId("ilQuestionModal");
-		$modal->setType(ilModalGUI::TYPE_LARGE);
-		$modal->setBody('');
-		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
+
+		$this->appendToolbarAndCommentStreamIfActive($video_tpl);
+		$this->appendQuestionModalToTemplate($video_tpl);
+
+		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig());
+
+		$this->appendCommentElementsToTemplateIfNotDisabled($video_tpl);
+
+		$tpl->setContent($video_tpl->get());
+	}
+
+	/**
+	 * @param ilTemplate $video_tpl
+	 */
+	protected function appendToolbarAndCommentStreamIfActive($video_tpl)
+	{
 		if($this->object->getNoCommentStream() == 0)
 		{
 			$video_tpl->touchBlock('toolbar_group');
@@ -299,12 +306,24 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$video_tpl->setVariable('SHOW_ALL_COMMENTS', $this->plugin->txt('show_all_comments'));
 			$video_tpl->setVariable('AUTHOR_FILTER', $this->plugin->txt('author_filter'));
 		}
+	}
 
-		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig());
-
-		$this->appendCommentElementsToTemplateIfNotDisabled($video_tpl);
-
-		$tpl->setContent($video_tpl->get());
+	/**
+	 * @param ilTemplate $video_tpl
+	 */
+	protected function appendQuestionModalToTemplate($video_tpl)
+	{
+		$modal = ilModalGUI::getInstance();
+		$modal->setId("ilQuestionModal");
+		$modal->setType(ilModalGUI::TYPE_LARGE);
+		$modal->setBody('');
+		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
+		$modal = ilModalGUI::getInstance();
+		$modal->setId("ilInteractiveVideoAjaxModal");
+		$modal->setType(ilModalGUI::TYPE_LARGE);
+		$modal->setBody($this->showTutorInsertCommentForm(true));
+		//Todo: since we now have multiple same ids we are in trouble
+		#$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
 	}
 
 	/**
@@ -683,7 +702,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values["is_online"]			= $this->object->isOnline();
 		$a_values["is_chronologic"]		= $this->object->isChronologic();
 		$a_values["marker_for_students"]= $this->object->getMarkerForStudents();
-		$a_values["no_comment"]		= $this->object->getDisableComment();
+		$a_values["no_comment"]			= $this->object->getDisableComment();
 		$a_values["no_comment_stream"]	= $this->object->getNoCommentStream();
 		$a_values['source_id']			= $this->object->getSourceId();
 		$a_values['is_task']			= $this->object->getTaskActive();
@@ -1132,6 +1151,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
 
+		$frm_id = new ilHiddenInputGUI('comment_id');
+		$form->addItem($frm_id);
+
+		$section_header = new ilFormSectionHeaderGUI();
+		$section_header->setTitle($this->plugin->txt('comment'));
+		$form->addItem($section_header);
+		$comment = xvidUtils::constructTextAreaFormElement('comment', 'comment_text');
+		$comment->setRequired(true);
+		$form->addItem($comment);
+		/** tags are deactivated for the moment
+		$tags = new ilTextAreaInputGUI($plugin->txt('tags'), 'comment_tags');
+		$form->addItem($tags);
+		 **/
+
 		$ck = new ilTextAreaInputCkeditor($this->plugin);
 		$ck->appendCkEditorMathJaxSupportToForm($form);
 		$section_header = new ilFormSectionHeaderGUI();
@@ -1169,20 +1202,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$form->addItem($is_private);
 		}
 
-		$section_header = new ilFormSectionHeaderGUI();
-		$section_header->setTitle($this->plugin->txt('comment'));
-		$form->addItem($section_header);
-
-		$comment = xvidUtils::constructTextAreaFormElement('comment', 'comment_text');
-		$comment->setRequired(true);
-		$form->addItem($comment);
-		/** tags are deactivated for the moment
-		$tags = new ilTextAreaInputGUI($plugin->txt('tags'), 'comment_tags');
-		$form->addItem($tags);
-		 **/
-		$frm_id = new ilHiddenInputGUI('comment_id');
-		$form->addItem($frm_id);
-		
 		$fake_marker = new ilHiddenInputGUI('fake_marker');
 		$form->addItem($fake_marker);
 
@@ -1190,9 +1209,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	/**
-	 *
+	 * @param bool $ajax
 	 */
-	public function showTutorInsertCommentForm()
+	public function showTutorInsertCommentForm($ajax = false)
 	{
 		/**
 		 * @var $tpl    ilTemplate
@@ -1210,7 +1229,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addCommandButton('insertTutorComment', $this->lng->txt('insert'));
 		$form->addCommandButton('cancelComments', $this->lng->txt('cancel'));
 
-		$tpl->setContent($form->getHTML());
+		$my_tpl = $this->getCommentTemplate();
+		$my_tpl->setVariable('FORM',$form->getHTML());
+		
+		if($ajax)
+		{
+			return $my_tpl->get();
+		}
+		$tpl->setContent($my_tpl->get());
 	}
 
 	public function cancelComments()

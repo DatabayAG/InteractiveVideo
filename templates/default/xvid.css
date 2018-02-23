@@ -631,3 +631,9 @@ input[type=range]:focus::-ms-fill-upper {
     font-weight: bolder;
     background-color: rgba(255,255,255,0.5);
 }
+
+.fake_form{
+    background-color: white;
+    padding-top:15px;
+    padding-bottom: 15px;
+}
