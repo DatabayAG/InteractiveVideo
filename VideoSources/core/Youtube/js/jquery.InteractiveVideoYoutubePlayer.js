@@ -4,13 +4,23 @@ $( document ).ready(function() {
 
 var player = null;
 (function ($) {
-
 	il.Util.addOnLoad(function () {
+		il.InteractiveVideoYoutubePlayer.initPlayer();
+	});
+})(jQuery);
+
+il.InteractiveVideoYoutubePlayer = (function (scope) {
+	'use strict';
+
+	var pub = {}, pro = {};
+
+	pub.initPlayer = function()
+	{
 		il.InteractiveVideo.last_stopPoint = -1;
 
 		var options = {'debug' : il.InteractiveVideo.iv_debug};
 
-		player = plyr.setup('#ilInteractiveVideo', options)[0];
+		player = plyr.setup('.ilInteractiveVideo', options)[0];
 
 		var interval = null;
 		player.source({
@@ -20,6 +30,7 @@ var player = null;
 				type:   'youtube'
 			}]
 		});
+
 		il.InteractiveVideoPlayerAbstract.config = {
 			pauseCallback              : (function (){player.pause();}),
 			playCallback               : (function (){player.play();}),
@@ -59,6 +70,9 @@ var player = null;
 		player.on('loadedmetadata', function(e){
 
 		});
+	};
 
-	});
-})(jQuery);
+	pub.protect = pro;
+	return pub;
+
+}(il));

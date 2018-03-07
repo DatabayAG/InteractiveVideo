@@ -637,3 +637,8 @@ input[type=range]:focus::-ms-fill-upper {
     padding-top:15px;
     padding-bottom: 15px;
 }
+
+.modal-xl {
+    width: 90% !important;
+    max-width:1200px !important;
+}

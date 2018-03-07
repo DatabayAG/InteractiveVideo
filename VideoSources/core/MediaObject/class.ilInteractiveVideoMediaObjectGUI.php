@@ -35,7 +35,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 
 	/**
 	 * @param ilTemplate $tpl
-	 * @return ilTemplate
+	 * @return mixed
 	 */
 	public function addPlayerElements($tpl)
 	{
@@ -45,9 +45,10 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 
 	/**
 	 * @param ilObjInteractiveVideo $obj
-	 * @return ilTemplate
+	 * @param string     $id
+	 * @return mixed
 	 */
-	public function getPlayer($obj)
+	public function getPlayer($obj, $id)
 	{
 		require_once 'Services/WebAccessChecker/classes/class.ilWACSignedPath.php';
 		$player = new ilTemplate(self::PATH . 'tpl/tpl.video.html', false, false);

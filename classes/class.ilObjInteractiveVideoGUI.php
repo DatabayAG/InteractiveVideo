@@ -58,7 +58,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	protected $custom_css = array(
 								  '/templates/default/xvid.css',
 								  '/libs/Bootstraptoggle/bootstrap2-toggle.min.css',
-								  '/libs/plyr/plyr.css'
+								  '/libs/plyr/plyr.css',
+								  '/libs/bootstrap-timepicker/css/bootstrap-timepicker.css',
+								  '/templates/default/bootstrap_timepicker.css'
 								);
 
 	/**
@@ -73,7 +75,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 										 '/js/InteractiveVideoPlayerComments.js',
 										 '/js/InteractiveVideoPlayerFunctions.js',
 										 '/js/InteractiveVideoPlayerAbstract.js',
-										 '/js/InteractiveVideoOverlayMarker.js'
+										 '/js/InteractiveVideoOverlayMarker.js',
+										 '/js/InteractiveVideoModalHelper.js',
+										 '/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js'
 										);
 
 	/**
@@ -313,19 +317,26 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function appendQuestionModalToTemplate($video_tpl)
 	{
-		$modal = ilModalGUI::getInstance();
-		$modal->setId("ilQuestionModal");
-		$modal->setType(ilModalGUI::TYPE_LARGE);
-		$modal->setBody('');
-		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
-		$modal = ilModalGUI::getInstance();
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/form/class.ilInteractiveVideoModalExtension.php';
+		$modal = ilInteractiveVideoModalExtension::getInstance();
 		$modal->setId("ilInteractiveVideoAjaxModal");
-		$modal->setType(ilModalGUI::TYPE_LARGE);
-		$modal->setBody($this->showTutorInsertCommentForm(true));
-		//Todo: since we now have multiple same ids we are in trouble
-		#$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
+		$modal->setType(ilInteractiveVideoModalExtension::TYPE_XL);
+		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
 	}
 
+	public function getCommentAndMarkerForm()
+	{
+		$form = $this->initCommentForm();
+
+		$form->addCommandButton('insertTutorComment', $this->lng->txt('insert'));
+		$form->addCommandButton('cancelComments', $this->lng->txt('cancel'));
+
+		$my_tpl = $this->getCommentTemplate();
+		$my_tpl->setVariable('FORM',$form->getHTML());
+		echo $my_tpl->get();
+		$this->callExit();
+	}
+	
 	/**
 	 * @param ilTemplate $video_tpl
 	 */
@@ -350,7 +361,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $ilAccess;
 
-		if($this->object->getDisableComment() != 1)
+		if(false && $this->object->getDisableComment() != 1)
 		{
 			$comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $this->plugin->getDirectory());
 			$comments_tpl->setVariable('COMMENT_TIME_END', $this->plugin->txt('time_end'));
@@ -451,6 +462,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTarget($this, 'getQuestionPerAjax', '', true, false));
 		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTarget($this, 'postAnswerPerAjax', '', true, false));
 		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postComment', '', true, false));
+		$config_tpl->setVariable('GET_COMMENT_MARKER_MODAL', $this->ctrl->getLinkTarget($this, 'getCommentAndMarkerForm', '', true, false));
 		$config_tpl->setVariable('SEND_BUTTON', $this->plugin->txt('send'));
 		$config_tpl->setVariable('CLOSE_BUTTON', $this->plugin->txt('close'));
 		$config_tpl->setVariable('FEEDBACK_JUMP_TEXT', $this->plugin->txt('feedback_jump_text'));
@@ -1137,9 +1149,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	/**
+	 * @param bool $is_ajax
 	 * @return ilPropertyFormGUI
 	 */
-	private function initCommentForm()
+	private function initCommentForm($is_ajax = false)
 	{
 		/**
 		 * @var $ilUser ilObjUser
@@ -1204,8 +1217,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$fake_marker = new ilHiddenInputGUI('fake_marker');
 		$form->addItem($fake_marker);
-
-		return $form;
+		
+		if($is_ajax)
+		{
+			echo $form->getHTML();
+		}
+		else
+		{
+			return $form;
+		}
 	}
 
 	/**

@@ -36,13 +36,12 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 		}
 		return false;
 	}
-	
 
 	/**
-	 * @param ilTemplate $tpl
-	 * @return ilTemplate
+	 * @param ilObjInteractiveVideo $obj
+	 * @return mixed
 	 */
-	public function addPlayerElements($tpl)
+	public function addPlayerElements($obj)
 	{
 		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/SimpleUrl/js/jquery.InteractiveVideoSimpleUrlPlayer.js');
 		return $tpl;
@@ -50,9 +49,10 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 
 	/**
 	 * @param ilObjInteractiveVideo $obj
-	 * @return ilTemplate
+	 * @param string     $id
+	 * @return mixed
 	 */
-	public function getPlayer($obj)
+	public function getPlayer($obj, $id)
 	{
 		$player		= new ilTemplate('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/SimpleUrl/tpl/tpl.video.html', false, false);
 		$instance	= new ilInteractiveVideoSimpleUrl();

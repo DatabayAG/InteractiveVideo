@@ -40,7 +40,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			'btn_delete'         : '#btn_delete',
 			'add_marker_chk'     : '#add_marker_chk',
 			'comment_time'       : '#comment_time',
-			'ilInteractiveVideo'              : '#ilInteractiveVideo',
+			'ilInteractiveVideo'              : '.ilInteractiveVideo',
 			'ilInteractiveVideoOverlay'       : '#ilInteractiveVideoOverlay',
 			'ilInteractiveVideoCommentCancel' : '#ilInteractiveVideoCommentCancel',
 			'ilInteractiveVideoCommentSubmit' : '#ilInteractiveVideoCommentSubmit'
