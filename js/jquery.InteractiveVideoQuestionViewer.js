@@ -178,6 +178,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.appendButtonListener = function() {
 		$('#question_form').on('submit', function (e) {
+			$('#ilQuestionModal .modal_feedback').html('<div class="waitbox waitbox_smaller"></div>')
 			e.preventDefault();
 			$.ajax({
 				type:    "POST",

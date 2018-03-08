@@ -667,6 +667,13 @@ input[type=range]:focus::-ms-fill-upper {
     -webkit-animation: load8 1.1s infinite linear;
     animation: load8 1.1s infinite linear;
 }
+.waitbox_smaller,
+.waitbox_smaller:after {
+    border-radius: 50%;
+    width: 5em;
+    height: 5em;
+    margin:0 auto;
+}
 @-webkit-keyframes load8 {
     0% {
         -webkit-transform: rotate(0deg);
