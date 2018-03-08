@@ -406,3 +406,6 @@ body.cke_editable{
 .question_warning_buttons{
     text-align:center;
 }
+.comment_user_image img{
+    width:30px;
+}
