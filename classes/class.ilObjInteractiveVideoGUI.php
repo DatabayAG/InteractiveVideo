@@ -332,7 +332,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$form->addCommandButton('insertTutorComment', $this->lng->txt('insert'));
 		$form->addCommandButton('cancelComments', $this->lng->txt('cancel'));
-
 		$my_tpl = $this->getCommentTemplate();
 		$my_tpl->setVariable('FORM',$form->getHTML());
 		echo $my_tpl->get();
@@ -363,7 +362,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $ilAccess;
 
-		if(false && $this->object->getDisableComment() != 1)
+		if(!$this->checkPermissionBool('write') && $this->object->getDisableComment() != 1)
 		{
 			$comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $this->plugin->getDirectory());
 			$comments_tpl->setVariable('COMMENT_TIME_END', $this->plugin->txt('time_end'));
@@ -382,6 +381,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$comments_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
 			$comments_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
 			$video_tpl->setVariable("COMMENTS_FORM", $comments_tpl->get());
+		}
+		else if($this->checkPermissionBool('create'))
+		{
+			$comment_button = ilLinkButton::getInstance();
+			$comment_button->setCaption($this->plugin->txt('insert_comment'), false);
+			$comment_button->setOnClick('il.InteractiveVideoModalHelper.getCommentAndMarkerForm();');
+			$video_tpl->setVariable('MODAL_BUTTON_COMMENT', $comment_button->render());
+			$question_button = ilLinkButton::getInstance();
+			$question_button->setCaption($this->plugin->txt('add_question'), false);
+			$question_button->setOnClick('il.InteractiveVideoModalHelper.getQuestionCreationForModal();');
+			$video_tpl->setVariable('MODAL_BUTTON_QUESTION', $question_button->render());
 		}
 	}
 	
