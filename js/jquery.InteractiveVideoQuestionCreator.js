@@ -9,14 +9,16 @@ var InteractiveVideoQuestionCreator = (function () {
 	var pub = {}, pro = {};
 
 	pub.Init = function(){
-		$('#addQuestion').show();
+		if (typeof IVQuestionCreator != "undefined") {
+			$('#addQuestion').show();
 
-		if(IVQuestionCreator.JSON.length === 0)
-		{
-			InteractiveVideoQuestionCreator.appendEmptyJSON();
+			if(IVQuestionCreator.JSON.length === 0)
+			{
+				InteractiveVideoQuestionCreator.appendEmptyJSON();
+			}
+			InteractiveVideoQuestionCreator.buildForm();
+			$('.question_type').val(IVQuestionCreator.type);
 		}
-		InteractiveVideoQuestionCreator.buildForm();
-		$('.question_type').val(IVQuestionCreator.type);
 	};
 
 	pro.appendMultiListener = function() {
