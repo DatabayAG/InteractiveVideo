@@ -323,7 +323,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$modal = ilInteractiveVideoModalExtension::getInstance();
 		$modal->setId("ilQuestionModal");
 		$modal->setType(ilInteractiveVideoModalExtension::TYPE_XL);
-		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
+		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());$modal = ilInteractiveVideoModalExtension::getInstance();
+		$modal->setId("ilInteractiveVideoAjaxModal");
+		$modal->setType(ilInteractiveVideoModalExtension::TYPE_XL);
+		$video_tpl->setVariable("MODAL_INTERACTION_OVERLAY", $modal->getHTML());
 	}
 
 	public function getCommentAndMarkerForm()
