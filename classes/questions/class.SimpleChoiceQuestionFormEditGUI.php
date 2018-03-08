@@ -264,6 +264,7 @@ class SimpleChoiceQuestionFormEditGUI
 	 */
 	protected function appendWarningModalToQuestionForm($form)
 	{
+		//Todo: what to do with the modal?
 		$modal = ilModalGUI::getInstance();
 		$modal->setId('simple_question_warning');
 		$modal->setType(ilModalGUI::TYPE_MEDIUM);
