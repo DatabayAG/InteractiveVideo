@@ -13,7 +13,7 @@ il.InteractiveVideoModalHelper = (function (scope) {
 			})
 		).then(function (html) {
 			$('#ilInteractiveVideoAjaxModal').find('.modal-body').html(html);
-			il.InteractiveVideoYoutubePlayer.initPlayer();
+			il.InteractiveVideoPlayerAbstract.initPlayer();
 			$('#add_marker_chk').change(function() {
 				if($(this).is(':checked'))
 				{

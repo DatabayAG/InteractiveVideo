@@ -3,13 +3,21 @@ $( document ).ready(function() {
 });
 var player = null;
 (function ($) {
-
 	il.Util.addOnLoad(function () {
+		il.InteractiveVideoSimpleUrlPlayer.initPlayer();
+	});
+})(jQuery);
+il.InteractiveVideoSimpleUrlPlayer = (function (scope) {
+	'use strict';
+
+	var pub = {}, pro = {};
+	pub.initPlayer = function()
+	{
 		il.InteractiveVideo.last_stopPoint = -1;
 
 		var options = {'debug' : il.InteractiveVideo.iv_debug};
 
-		player = plyr.setup('#ilInteractiveVideo', options)[0];
+		player = plyr.setup('.ilInteractiveVideo', options)[0];
 			var interval = null;
 
 		player.debug = true;
@@ -18,7 +26,8 @@ var player = null;
 				playCallback               : (function (){player.play();}),
 				durationCallback           : (function (){return player.getDuration();}),
 				currentTimeCallback        : (function (){return player.getCurrentTime();}),
-				setCurrentTimeCallback     : (function (time){player.seek(time);})
+				setCurrentTimeCallback     : (function (time){player.seek(time);}),
+				initPlayerCallback         : il.InteractiveVideoSimpleUrlPlayer.initPlayer
 			};
 
 			il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
@@ -52,6 +61,8 @@ var player = null;
 		player.on('loadedmetadata', function(e){
 
 		});
+	};
+	pub.protect = pro;
+	return pub;
 
-	});
-})(jQuery);
+}(il));

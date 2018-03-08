@@ -12,7 +12,8 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		currentTimeCallback        : null,
 		setCurrentTimeCallback     : null,
 		readyCallback              : null,
-		removeNonAdventureElements : null
+		removeNonAdventureElements : null,
+		initPlayerCallback         : null
 	}; 
 
 	pro.first_play_action = true;
@@ -112,6 +113,13 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 	pub.addOnReadyFunction = function(callback)
 	{
 		pro.onReadyCallbacks.push(callback);
+	};
+
+	pub.initPlayer = function()
+	{
+		if (typeof pub.config.initPlayerCallback === 'function') {
+			pub.config.initPlayerCallback();
+		}
 	};
 
 	pub.protect = pro;

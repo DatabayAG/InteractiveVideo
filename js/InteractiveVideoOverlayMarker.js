@@ -6,7 +6,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		editScreen : false
 	}, pro = {
 		default_color : '#FF0000',
-		stroke_width : 4,
+		stroke_width  : 4,
 		marker_class  : 'magic_marker iv_svg_marker'
 	}, pri = {
 		tools : {

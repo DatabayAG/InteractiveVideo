@@ -36,7 +36,8 @@ il.InteractiveVideoYoutubePlayer = (function (scope) {
 			playCallback               : (function (){player.play();}),
 			durationCallback           : (function (){return player.getDuration();}),
 			currentTimeCallback        : (function (){return player.getCurrentTime();}),
-			setCurrentTimeCallback     : (function (time){player.seek(time);})
+			setCurrentTimeCallback     : (function (time){player.seek(time);}),
+			initPlayerCallback         : il.InteractiveVideoYoutubePlayer.initPlayer
 		};
 
 		il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
