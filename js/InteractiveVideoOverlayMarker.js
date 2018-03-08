@@ -57,6 +57,12 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		},
 		actual_marker : null
 	};
+	
+	pub.jumpToTimeAndRemoveOverlay = function()
+	{
+		il.InteractiveVideoOverlayMarker.jumpToTimeInVideoForMarker();
+		$('.play_overlay_jump_to_time').remove();
+	};
 
 	pub.checkForEditScreen = function()
 	{
@@ -71,7 +77,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 				il.InteractiveVideoPlayerAbstract.addOnReadyFunction(
 					(function ()
 						{
-							$('.add_marker_selector').prepend('<input class="btn btn-default btn-sm jump_to_time_in_external" onclick="il.InteractiveVideoOverlayMarker.jumpToTimeInVideoForMarker();" type="button" value="' + il.InteractiveVideo.lang.jump_to_text + '">');
+							$('.ilInteractiveVideo').prepend('<div class="play_overlay_jump_to_time"><div onclick="il.InteractiveVideoOverlayMarker.jumpToTimeAndRemoveOverlay();" class="play_overlay_jump_to_time_text">'+il.InteractiveVideo.lang.jump_to_text+'</div></div>');
 							il.InteractiveVideoOverlayMarker.initialiseExistingMarker();
 						}
 					)
@@ -149,7 +155,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		pri.actual_marker = marker;
 		pro.hideMakerToolBarObjectsForForm(proto);
 		pro.attachStyleEvents();
-
 		if(pub.editScreen)
 		{
 			$(pri.classes.remove_marker).removeClass('prototype');

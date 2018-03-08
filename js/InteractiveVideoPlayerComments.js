@@ -86,7 +86,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		}
 		return '<div class="glyphicon glyphicon-share-alt flip_float_right reply_to_comment" data-reply-to-id="'+id+'" aria-hidden="true" title="' +il.InteractiveVideo.lang.reply_to_title + '"></div>';
 	};
-	
+
 	pro.appendReplyToHiddenField = function(id)
 	{
 		$('#ilInteractiveVideoCommentsForm').append('<input type="hidden" value="' + id + '"/>');
@@ -246,8 +246,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.preselectActualTimeInVideo = function(seconds)
 	{
-		console.log('preselect time')
-		var obj = pro.secondsToTimeCode(seconds);
+		var obj = pub.secondsToTimeCode(seconds);
 
 		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));
 	};
@@ -311,7 +310,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		}
 		return 	'<time class="time"> ' +
 				'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + time + '); return false;">'+
-				pro.secondsToTimeCode(display_time)  +
+				pub.secondsToTimeCode(display_time)  +
 				'</a>' +
 				'</time>' ;
 	};
@@ -333,7 +332,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			return 	'<time class="time_end"> - ' +
 					'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + display_time + '); return false;">'+
-					pro.secondsToTimeCode(display_time)  +
+					pub.secondsToTimeCode(display_time)  +
 					'</a>' +
 					'</time>' ;
 		}
@@ -458,7 +457,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return '<div class="comment_user_image">' + image + '</div>';
 	};
 	
-	pro.secondsToTimeCode = function(time) 
+	pub.secondsToTimeCode = function(time) 
 	{
 		var obj = pro.convertSecondsToTimeObject(time);
 		var h = pro.fillWithZeros(obj.hours);

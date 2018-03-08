@@ -1756,6 +1756,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$ck->appendCkEditorMathJaxSupportToForm($form);
 		}
 
+		$this->getAnswerDefinitionsJSON();
+
 		$form->addCommandButton('insertQuestion', $this->lng->txt('insert'));
 		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
 		$tpl->setContent($form->getHTML());
