@@ -321,7 +321,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/form/class.ilInteractiveVideoModalExtension.php';
 		$modal = ilInteractiveVideoModalExtension::getInstance();
-		$modal->setId("ilInteractiveVideoAjaxModal");
+		$modal->setId("ilQuestionModal");
 		$modal->setType(ilInteractiveVideoModalExtension::TYPE_XL);
 		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
 	}

@@ -85,6 +85,13 @@ class SimpleChoiceQuestionFormEditGUI
 		if(!$ajax)
 		{
 			$form->setTitle($this->plugin->txt('insert_question'));
+			/**
+			 * $tpl ilTemplate
+			 */
+			global $tpl;
+
+			$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionCreator.js');
+			$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
 		}
 
 		$section_header = new ilFormSectionHeaderGUI();
