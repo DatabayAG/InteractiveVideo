@@ -45,8 +45,9 @@ il.InteractiveVideoModalHelper = (function (scope) {
 
 	pro.showWaitBox = function()
 	{
-		$('#ilInteractiveVideoAjaxModal').modal('show');
-		$('#ilInteractiveVideoAjaxModal').find('.modal-body').html('<div class="waitbox"></div>');
+		var modal = $('#ilInteractiveVideoAjaxModal');
+		modal.modal('show');
+		modal.find('.modal-body').html('<div class="waitbox"></div>');
 	};
 
 	pub.protect = pro;

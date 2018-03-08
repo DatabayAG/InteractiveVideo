@@ -44,13 +44,14 @@ class SimpleChoiceQuestionFormEditGUI
 	}
 
 	/**
+	 * @param bool $ajax
 	 * @return ilPropertyFormGUI
 	 */
-	public function initQuestionForm()
+	public function initQuestionForm($ajax = false)
 	{
 		$form = new ilPropertyFormGUI();
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertQuestion'));
-		$this->appendGeneralSettingsToQuestionForm($form);
+		$this->appendGeneralSettingsToQuestionForm($form, $ajax);
 
 		$this->appendQuestionSettingsToQuestionForm($form);
 
@@ -77,10 +78,14 @@ class SimpleChoiceQuestionFormEditGUI
 
 	/**
 	 * @param ilPropertyFormGUI $form
+	 * @param bool $ajax
 	 */
-	protected function appendGeneralSettingsToQuestionForm($form)
+	protected function appendGeneralSettingsToQuestionForm($form, $ajax = false)
 	{
-		$form->setTitle($this->plugin->txt('insert_question'));
+		if(!$ajax)
+		{
+			$form->setTitle($this->plugin->txt('insert_question'));
+		}
 
 		$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($this->plugin->txt('general'));

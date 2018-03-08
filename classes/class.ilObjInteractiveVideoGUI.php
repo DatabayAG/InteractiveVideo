@@ -1764,7 +1764,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function showTutorInsertQuestionFormAjax()
 	{
 		$simple_question = new SimpleChoiceQuestionFormEditGUI($this->plugin, $this->object);
-		$form = $simple_question->initQuestionForm();
+		$form = $simple_question->initQuestionForm(true);
 		$ck = new ilTextAreaInputCkeditor($this->plugin);
 		$ck->appendCkEditorMathJaxSupportToForm($form);
 		$form->addCommandButton('insertQuestion', $this->lng->txt('insert'));
