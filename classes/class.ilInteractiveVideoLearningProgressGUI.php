@@ -87,7 +87,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 		 */
 		global $ilTabs;
 
-		if($this->gui->hasPermission('write') || $this->gui->hasPermission('rep_robj_xvid_perm_view_lp'))
+		if($this->gui->hasPermission('write') || $this->gui->hasPermission('xvid_view_lp'))
 		{
 			if($this->object->getLearningProgressMode() != ilObjInteractiveVideo::LP_MODE_DEACTIVATED)
 			{
@@ -112,7 +112,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 		 */
 		global $ilTabs;
 
-		$this->gui->ensureAtLeastOnePermission(array('write', 'rep_robj_xvid_perm_view_lp'));
+		$this->gui->ensureAtLeastOnePermission(array('write', 'xvid_view_lp'));
 
 		$this->addLearningProgressSubTabs();
 		$ilTabs->activateSubTab('lp_settings');
@@ -173,7 +173,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 	 */
 	public function saveLearningProgressSettings()
 	{
-		$this->gui->ensureAtLeastOnePermission(array('write', 'rep_robj_xvid_perm_view_lp'));
+		$this->gui->ensureAtLeastOnePermission(array('write', 'xvid_view_lp'));
 
 		$form = $this->getLearningProgressSettingsForm();
 		if($form->checkInput())
@@ -211,7 +211,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 		 */
 		global $ilTabs;
 
-		$this->gui->ensureAtLeastOnePermission(array('write', 'rep_robj_xvid_perm_view_lp'));
+		$this->gui->ensureAtLeastOnePermission(array('write', 'xvid_view_lp'));
 
 		$this->addLearningProgressSubTabs();
 		$ilTabs->activateSubTab('lp_users');
@@ -231,7 +231,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 		 */
 		global $ilTabs;
 
-		$this->gui->ensureAtLeastOnePermission(array('write', 'rep_robj_xvid_perm_view_lp'));
+		$this->gui->ensureAtLeastOnePermission(array('write', 'xvid_view_lp'));
 
 		$this->addLearningProgressSubTabs();
 		$ilTabs->activateSubTab('lp_summary');
@@ -293,7 +293,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 		 */
 		global $ilTabs;
 
-		$this->gui->ensureAtLeastOnePermission(array('write', 'rep_robj_xvid_perm_view_lp'));
+		$this->gui->ensureAtLeastOnePermission(array('write', 'xvid_view_lp'));
 
 		$this->addLearningProgressSubTabs();
 		$ilTabs->activateSubTab('lp_users');
@@ -362,7 +362,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 
 	public function updateLPUsers()
 	{
-		$this->gui->ensureAtLeastOnePermission(array('write', 'rep_robj_xvid_perm_view_lp'));
+		$this->gui->ensureAtLeastOnePermission(array('write', 'xvid_view_lp'));
 
 		if(!isset($_GET['user_id']))
 		{
