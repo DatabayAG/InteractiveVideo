@@ -28,6 +28,26 @@ class ilInteractiveVideoRepositorySelectorInputGUI extends ilExplorerSelectInput
 	}
 
 	/**
+	 * @inheritdoc
+	 */
+	function setValue($a_value)
+	{
+		if ($this->explorer_gui) {
+			if (is_array($a_value)) {
+				foreach ($a_value as $v) {
+					$this->explorer_gui->setNodeOpen($v);
+					$this->explorer_gui->setNodeSelected($v);
+				}
+			} elseif ($a_value != "") {
+				$this->explorer_gui->setNodeOpen($a_value);
+				$this->explorer_gui->setNodeSelected($a_value);
+			}
+		}
+
+		parent::setValue($a_value);
+	}
+
+	/**
 	 * {@inheritdoc}
 	 */
 	public function getTitleForNodeId($a_id)

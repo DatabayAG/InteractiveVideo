@@ -463,6 +463,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTarget($this, 'postAnswerPerAjax', '', true, false));
 		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postComment', '', true, false));
 		$config_tpl->setVariable('GET_COMMENT_MARKER_MODAL', $this->ctrl->getLinkTarget($this, 'getCommentAndMarkerForm', '', true, false));
+		$config_tpl->setVariable('GET_QUESTION_CREATION_MODAL', $this->ctrl->getLinkTarget($this, 'showTutorInsertQuestionFormAjax', '', true, false));
 		$config_tpl->setVariable('SEND_BUTTON', $this->plugin->txt('send'));
 		$config_tpl->setVariable('CLOSE_BUTTON', $this->plugin->txt('close'));
 		$config_tpl->setVariable('FEEDBACK_JUMP_TEXT', $this->plugin->txt('feedback_jump_text'));
@@ -1756,6 +1757,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addCommandButton('insertQuestion', $this->lng->txt('insert'));
 		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
 		$tpl->setContent($form->getHTML());
+	}
+	
+	public function showTutorInsertQuestionFormAjax()
+	{
+		$simple_question = new SimpleChoiceQuestionFormEditGUI($this->plugin, $this->object);
+		$form = $simple_question->initQuestionForm();
+		$ck = new ilTextAreaInputCkeditor($this->plugin);
+		$ck->appendCkEditorMathJaxSupportToForm($form);
+		$form->addCommandButton('insertQuestion', $this->lng->txt('insert'));
+		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
+		echo $form->getHTML();
+		$this->callExit();
 	}
 
 

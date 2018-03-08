@@ -5,6 +5,7 @@ il.InteractiveVideoModalHelper = (function (scope) {
 
 	pub.getCommentAndMarkerForm = function()
 	{
+		pro.showWaitBox();
 		$.when(
 			$.ajax({
 				url:  scope.InteractiveVideo.get_comment_marker_modal,
@@ -12,7 +13,6 @@ il.InteractiveVideoModalHelper = (function (scope) {
 			})
 		).then(function (html) {
 			$('#ilInteractiveVideoAjaxModal').find('.modal-body').html(html);
-			$('#ilInteractiveVideoAjaxModal').modal('show');
 			il.InteractiveVideoYoutubePlayer.initPlayer();
 			$('#add_marker_chk').change(function() {
 				if($(this).is(':checked'))
@@ -27,6 +27,25 @@ il.InteractiveVideoModalHelper = (function (scope) {
 				}
 			});
 		});
+	};
+
+	pub.getQuestionCreationForModal = function()
+	{
+		pro.showWaitBox();
+		$.when(
+			$.ajax({
+				url:  scope.InteractiveVideo.get_question_creation_modal,
+				type: 'GET', dataType: 'html'
+			})
+		).then(function (html) {
+			$('#ilInteractiveVideoAjaxModal').find('.modal-body').html(html);
+		});
+	};
+
+	pro.showWaitBox = function()
+	{
+		$('#ilInteractiveVideoAjaxModal').modal('show');
+		$('#ilInteractiveVideoAjaxModal').find('.modal-body').html('<div class="waitbox"></div>');
 	};
 
 	pub.protect = pro;
