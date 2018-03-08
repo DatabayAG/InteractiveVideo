@@ -39,6 +39,7 @@ il.InteractiveVideoModalHelper = (function (scope) {
 			})
 		).then(function (html) {
 			$('#ilInteractiveVideoAjaxModal').find('.modal-body').html(html);
+			InteractiveVideoQuestionCreator.Init();
 		});
 	};
 

@@ -301,14 +301,6 @@ class SimpleChoiceQuestionFormEditGUI
 	 */
 	public function getInteractiveForm()
 	{
-		/**
-		 * $tpl ilTemplate
-		 */
-		global $tpl;
-
-		$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionCreator.js');
-		$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
-
 		$simple_choice = new SimpleChoiceQuestion();
 		$ajax_object   = new SimpleChoiceQuestionAjaxHandler();
 		$question_id   = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);

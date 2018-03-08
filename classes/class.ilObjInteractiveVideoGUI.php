@@ -77,7 +77,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 										 '/js/InteractiveVideoPlayerAbstract.js',
 										 '/js/InteractiveVideoOverlayMarker.js',
 										 '/js/InteractiveVideoModalHelper.js',
-										 '/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js'
+										 '/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js',
+										 '/../../../../../../../Services/Form/js/Form.js',
+										 '/js/jquery.InteractiveVideoQuestionCreator.js'
 										);
 
 	/**
