@@ -687,3 +687,6 @@ input[type=range]:focus::-ms-fill-upper {
         transform: rotate(360deg);
     }
 }
+.comment_user_image img{
+    width:30px;
+}

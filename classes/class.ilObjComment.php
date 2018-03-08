@@ -451,7 +451,11 @@ class ilObjComment
 			if(file_exists($img_file))
 			{
 				$binary = fread(fopen($img_file, "r"), filesize($img_file));
-				self::$user_image_cache[$user_id] = $base64 = 'data:image/jpeg;base64,' . base64_encode($binary);
+				self::$user_image_cache[$user_id] = 'data:image/jpeg;base64,' . base64_encode($binary);
+			}
+			else if(strlen($img_file) > 0)
+			{
+				self::$user_image_cache[$user_id] = $img_file;
 			}
 		}
 
