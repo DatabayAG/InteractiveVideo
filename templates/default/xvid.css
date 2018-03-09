@@ -702,7 +702,7 @@ input[type=range]:focus::-ms-fill-upper {
     height: 100%;
     background-color:rgba(0, 0, 0, 0.5);
     position: absolute;
-    z-index: 4;
+    z-index: 231; 
     display: flex;
     justify-content: center;
     align-items: center;
