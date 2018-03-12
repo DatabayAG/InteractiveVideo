@@ -156,8 +156,8 @@ var InteractiveVideoQuestionCreator = (function () {
 	};
 
 	pro.checkIfAnswerConfigurationIsValid = function() {
-		return $('#question_type').val() !== '2' && 
-				$('#neutral_type').val() !== '1' && 
+		return 	$('#question_type').val() !== '2' && 
+				$('#neutral_type').val()  !== '1' && 
 				$('.correct_solution:checked').length === 0
 	};
 

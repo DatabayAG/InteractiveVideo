@@ -185,6 +185,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		{
 			pro.attachText();
 		}
+		pro.replaceFakeMarkerAfterAttributeChange();
 	};
 
 	pro.attachSubmitCancelListener = function()
