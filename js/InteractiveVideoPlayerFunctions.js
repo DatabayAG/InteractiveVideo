@@ -325,6 +325,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 					if (scope.InteractiveVideo.pause_on_click_in_comment_field) {
 						scope.InteractiveVideoPlayerAbstract.pause();
 						$('#comment_time').val(scope.InteractiveVideoPlayerComments.secondsToTimeCode(scope.InteractiveVideoPlayerAbstract.currentTime()));
+						$('#comment_time_end').val(scope.InteractiveVideoPlayerComments.secondsToTimeCode(scope.InteractiveVideoPlayerAbstract.currentTime() + 3));
 					}
 				});
 			}
