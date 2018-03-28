@@ -379,8 +379,14 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 	pro.getUniqueId = function()
 	{
-		var unique_id = '_' + Math.random().toString(36).substr(2, 9);
-		pub.actual_id = unique_id;
+		var dt = new Date().getTime();
+		var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			var r = (dt + Math.random()*16)%16 | 0;
+			dt = Math.floor(dt/16);
+			return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+		});
+		var unique_id = '_';
+		unique_id += uuid;
 		return unique_id;
 	};
 
