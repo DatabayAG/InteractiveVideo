@@ -216,7 +216,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 		$this->addLearningProgressSubTabs();
 		$ilTabs->activateSubTab('lp_users');
 
-		$this->gui->getPluginInstance()->includeClass('class.ilInteractiveVideoLPUsersTableGUI.php');
+		$this->gui->getPluginInstance()->includeClass('tables/class.ilInteractiveVideoLPUsersTableGUI.php');
 		$table = new ilInteractiveVideoLPUsersTableGUI($this, 'showLPUsers', $this->object->getId(), $this->object->getRefId(), false);
 		$this->tpl->setContent(implode('<br />', array($table->getHTML(), $this->__getLegendHTML())));
 	}
