@@ -236,7 +236,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 		$this->addLearningProgressSubTabs();
 		$ilTabs->activateSubTab('lp_summary');
 
-		$this->gui->getPluginInstance()->includeClass('class.ilInteractiveVideoLPSummaryTableGUI.php');
+		$this->gui->getPluginInstance()->includeClass('tables/class.ilInteractiveVideoLPSummaryTableGUI.php');
 		$table = new ilInteractiveVideoLPSummaryTableGUI($this, 'showLPSummary', $this->object->getRefId(), $this->gui->getPluginInstance());
 		$this->tpl->setContent(implode('<br />', array($table->getHTML(), $this->__getLegendHTML())));
 	}
