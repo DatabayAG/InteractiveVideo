@@ -387,6 +387,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		});
 		var unique_id = '_';
 		unique_id += uuid;
+		pub.actual_id = unique_id;
 		return unique_id;
 	};
 
