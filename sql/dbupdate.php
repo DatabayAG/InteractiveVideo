@@ -868,14 +868,11 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_comment'))
 ?>
 <#46>
 <?php
-require_once("./Services/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php");
-$xoct_type_id = ilDBUpdateNewObjectType::addNewType('xvid', 'Interactive Video');
+require_once('./Services/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php');
+$read_lp = ilDBUpdateNewObjectType::getCustomRBACOperationId('read_learning_progress');
+$xoct_type_id = ilDBUpdateNewObjectType::getObjectTypeId('xvid');
 
-//Adding a new Permission xvid_view_lp ("View Learning Progress")
-$offering_admin = ilDBUpdateNewObjectType::addCustomRBACOperation( //$a_id, $a_title, $a_class, $a_pos
-	'xvid_view_lp', 'xvid_view_lp', 'object', 2010);
-if($offering_admin)
-{
-	ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $offering_admin);
+if ($read_lp && $xoct_type_id) {
+	ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
 }
 ?>

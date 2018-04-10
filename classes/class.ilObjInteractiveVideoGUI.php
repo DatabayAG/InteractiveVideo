@@ -890,7 +890,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		require_once 'Services/Tracking/classes/class.ilLearningProgressAccess.php';
 		if(ilLearningProgressAccess::checkAccess($this->object->getRefId(), true))
 		{
-			if($this->checkPermissionBool('write') || $this->checkPermissionBool('xvid_view_lp'))
+			if($this->checkPermissionBool('write') || $this->checkPermissionBool('read_learning_progress'))
 			{
 				if($this->object->getLearningProgressMode() != ilObjInteractiveVideo::LP_MODE_DEACTIVATED)
 				{
