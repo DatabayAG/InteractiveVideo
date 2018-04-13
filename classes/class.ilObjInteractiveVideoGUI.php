@@ -890,7 +890,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		require_once 'Services/Tracking/classes/class.ilLearningProgressAccess.php';
 		if(ilLearningProgressAccess::checkAccess($this->object->getRefId(), true))
 		{
-			if($this->checkPermissionBool('write'))
+			if($this->checkPermissionBool('write') || $this->checkPermissionBool('read_learning_progress'))
 			{
 				if($this->object->getLearningProgressMode() != ilObjInteractiveVideo::LP_MODE_DEACTIVATED)
 				{
@@ -965,6 +965,22 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	public function ensurePermission($permission)
 	{
+		return $this->checkPermission($permission);
+	}
+
+	/**
+	 * Public wrapper for permission assumption
+	 * @param string[] $permissions
+	 * @return bool
+	 */
+	public function ensureAtLeastOnePermission(array $permissions)
+	{
+		foreach ($permissions as $permission) {
+			if($this->checkPermissionBool($permission)) {
+				return true;
+			}
+		}
+		// Since all $permissions returned false, this checkPermission() will lead to general behaviour of redirecting and sending failure
 		return $this->checkPermission($permission);
 	}
 
@@ -2338,6 +2354,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$simple_choice = new SimpleChoiceQuestion();
 			$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
 		}
+
 		$this->showFeedbackPerAjax();
 		$this->callExit();
 	}
@@ -2392,7 +2409,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		global $ilUser;
 		$this->object->saveVideoStarted($this->obj_id, $ilUser->getId());
-		$this->object->trackProgress();
 		$this->callExit();
 	}
 

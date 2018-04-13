@@ -10,6 +10,7 @@ xvid_write#:#Interaktives Video bearbeiten
 xvid_delete#:#Interaktives Video löschen
 xvid_edit_permission#:#Rechteeinstellungen ändern
 xvid_visible#:#Interaktives Video ist sichtbar
+xvid_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
 reset#:#Zurücksetzen
 show_all_comments#:#Alle Kommentare anzeigen: 
 author_filter#:#Autorenfilter
@@ -181,3 +182,4 @@ save_without_correct#:#Sind haben keine korrekte Antwort ausgewählt
 save_without_correct_detail#:#Sie haben weder eine Reflektionfrage, noch neutrale Antworten aktiviert, sind sie sicher, das sie die Frage ohne korrekte Antwort speichern wollen?
 no_comment#:#Kein Kommentarfeld
 no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflektionsfragen mit aktiviertem Kommentarfeld sind nach wie vor möglich.
+xvid_xvid_view_lp#:#Lernfortschritt einsehen
