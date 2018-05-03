@@ -109,7 +109,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		$('.modal_reflection_footer').prepend(pro.createButtonButtons('submit_comment_form', scope.InteractiveVideo.lang.save));
 		$('.modal_reflection_footer').prepend('<input type="checkbox" name="is_private_modal" value="1" id="is_private_modal"/> ' + scope.InteractiveVideo.lang.private_text);
 		$('.modal_feedback').prepend('<textarea id="'+comment_id+'">' + pub.QuestionObject.reply_to_txt + '</textarea>');
-		if(pub.QuestionObject.reply_to_private != '')
+		if(pub.QuestionObject.reply_to_private == '1')
 		{
 			$('#is_private_modal').attr('checked', 'checked');
 		}
