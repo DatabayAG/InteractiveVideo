@@ -2418,7 +2418,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$simple = new SimpleChoiceQuestion();
 		$questions_with_points = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->object->getId());
 		$this->object->saveVideoFinished($this->obj_id, $ilUser->getId());
-		if(is_array($questions_with_points) && count($qst) > 0)
+		if(is_array($questions_with_points) && count($questions_with_points) > 0)
 		{
 			$points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->obj_id, $ilUser->getId());
 			if( count($questions_with_points) == $points )
