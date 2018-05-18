@@ -38,10 +38,10 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 	}
 
 	/**
-	 * @param ilObjInteractiveVideo $obj
+	 * @param ilTemplate $tpl
 	 * @return mixed
 	 */
-	public function addPlayerElements($obj)
+	public function addPlayerElements($tpl)
 	{
 		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/SimpleUrl/js/jquery.InteractiveVideoSimpleUrlPlayer.js');
 		return $tpl;
