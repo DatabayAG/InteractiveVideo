@@ -218,7 +218,7 @@ class SimpleChoiceQuestionFormEditGUI
 		}
 		$is_jump_correct->addSubItem($jump_correct_ts);
 		$feedback_correct->addSubItem($is_jump_correct);
-		$this->appendRepositorySelector($feedback_correct, 'feedback_correct_obj');
+		#$this->appendRepositorySelector($feedback_correct, 'feedback_correct_obj');
 		$form->addItem($feedback_correct);
 	}
 
@@ -245,7 +245,7 @@ class SimpleChoiceQuestionFormEditGUI
 		}
 		$is_jump_wrong->addSubItem($jump_wrong_ts);
 		$feedback_one_wrong->addSubItem($is_jump_wrong);
-		$this->appendRepositorySelector($feedback_one_wrong, 'feedback_wrong_obj');
+		#$this->appendRepositorySelector($feedback_one_wrong, 'feedback_wrong_obj');
 		$form->addItem($feedback_one_wrong);
 	}
 
