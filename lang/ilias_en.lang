@@ -205,3 +205,4 @@ font_size#:#Font Size
 is_reply_to#:#Is Reply
 reply_to#:#Reply to
 jump_to_timestamp#:#Jump to time
+insert_marker_info#:#You can move the marker with drag & drop on the video

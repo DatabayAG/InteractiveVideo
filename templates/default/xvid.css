@@ -716,3 +716,10 @@ input[type=range]:focus::-ms-fill-upper {
     cursor: pointer;
     
 }
+.small_info_text{
+    color: #9a9a9a;
+    margin: 2px 0 4px;
+    padding: 0;
+    font-size: 90%;
+    clear: both;
+}
