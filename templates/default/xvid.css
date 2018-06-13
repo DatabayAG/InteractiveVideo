@@ -181,11 +181,6 @@
     opacity: 0.4;
     vertical-align: -10px;
 }
-#close_form{
-    right: 5px;
-    bottom: 5px;
-    position: absolute;
-}
 .align_button{
     width: 100%;
     text-align:center;
@@ -314,7 +309,7 @@
     display:none;
 }
 .modal_reflection_footer{
-    height:25px;
+    height:45px;
 }
 .rotNinety{
     transform: rotate(90deg);
@@ -399,9 +394,13 @@ body.cke_editable{
 .question_center{
     text-align:center;
 }
-
-#sendForm{
+#close_form{
     left: 5px;
+    bottom: 5px;
+    position: absolute;
+}
+#sendForm, #submit_comment_form{
+    right: 5px;
     bottom: 5px;
     position: absolute;
 }

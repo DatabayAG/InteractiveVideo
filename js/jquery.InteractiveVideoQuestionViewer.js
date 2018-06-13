@@ -107,7 +107,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	{
 		var comment_id = 'text_reflection_comment_'+ pub.comment_id ;
 		$('.modal_reflection_footer').prepend(pro.createButtonButtons('submit_comment_form', scope.InteractiveVideo.lang.save));
-		$('.modal_reflection_footer').prepend('<input type="checkbox" name="is_private_modal" value="1" id="is_private_modal"/> ' + scope.InteractiveVideo.lang.private_text);
+		$('.modal_reflection_footer').prepend('<div><input type="checkbox" name="is_private_modal" value="1" id="is_private_modal"/>' + scope.InteractiveVideo.lang.private_text + '</div>');
 		$('.modal_feedback').prepend('<textarea id="'+comment_id+'">' + pub.QuestionObject.reply_to_txt + '</textarea>');
 		if(pub.QuestionObject.reply_to_private != '')
 		{
@@ -212,10 +212,8 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		pub.QuestionObject = array;
 		pub.QuestionObject.player = player;
 		pro.buildQuestionForm();
-		console.log('sdafdasfdsa')
 		if (pub.QuestionObject.player.isFullscreen() === true) {
 			pub.QuestionObject.player.toggleFullscreen();
-			console.log('Exit')
 		}
 		$('#ilQuestionModal').modal('show');
 	};
