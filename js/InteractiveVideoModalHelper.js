@@ -14,18 +14,6 @@ il.InteractiveVideoModalHelper = (function (scope) {
 		).then(function (html) {
 			$('#ilInteractiveVideoAjaxModal').find('.modal-body').html(html);
 			il.InteractiveVideoPlayerAbstract.initPlayer();
-			$('#add_marker_chk').change(function() {
-				if($(this).is(':checked'))
-				{
-					$('.add_marker_selector').show( 'fast' );
-					il.InteractiveVideoOverlayMarker.attachListener();
-				}
-				else
-				{
-					$('.add_marker_selector').hide( 'fast' );
-					il.InteractiveVideoOverlayMarker.resetForm();
-				}
-			});
 		});
 	};
 
@@ -45,6 +33,7 @@ il.InteractiveVideoModalHelper = (function (scope) {
 
 	pro.showWaitBox = function()
 	{
+		il.InteractiveVideoPlayerAbstract.pause();
 		var modal = $('#ilInteractiveVideoAjaxModal');
 		modal.modal('show');
 		modal.find('.modal-body').html('<div class="waitbox"></div>');
