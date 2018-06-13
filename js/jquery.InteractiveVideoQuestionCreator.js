@@ -30,7 +30,7 @@ var InteractiveVideoQuestionCreator = (function () {
 		$('.correct_solution').on('click', function (){
 			var pos = parseInt($(this).attr('meta'), 10);
 			var bool= 0;
-			if($(this).attr('checked'))
+			if($(this).prop('checked'))
 			{
 				bool = 1;
 			}
