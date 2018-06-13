@@ -212,8 +212,10 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		pub.QuestionObject = array;
 		pub.QuestionObject.player = player;
 		pro.buildQuestionForm();
-		if (pub.QuestionObject.player.isFullScreen === true) {
-			pub.QuestionObject.player.exitFullScreen();
+		console.log('sdafdasfdsa')
+		if (pub.QuestionObject.player.isFullscreen() === true) {
+			pub.QuestionObject.player.toggleFullscreen();
+			console.log('Exit')
 		}
 		$('#ilQuestionModal').modal('show');
 	};
