@@ -58,6 +58,7 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 		$instance	= new ilInteractiveVideoSimpleUrl();
 		$instance->doReadVideoSource($obj->getId());
 		$player->setVariable('SIMPLE_URL', $instance->getSimpleUrl());
+		$player->setVariable('INTERACTIVE_VIDEO_ID', $id);
 		return $player;
 	}
 

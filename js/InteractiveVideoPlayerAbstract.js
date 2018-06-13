@@ -95,6 +95,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.readyCallback = function ()
 	{
+		// Todo: fix #ilInteractiveVideoOverlay hickhack
 		$(player.getContainer()).prepend($('#ilInteractiveVideoOverlay'));
 		if(il.InteractiveVideo.tutor_mode == 'true' || il.InteractiveVideo.tutor_mode == '1')
 		{

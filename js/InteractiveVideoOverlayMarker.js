@@ -39,7 +39,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			'font_size_changer'  : '#font_size_changer',
 			'btn_delete'         : '#btn_delete',
 			'comment_time'       : '#comment_time',
-			'ilInteractiveVideo'              : '.ilInteractiveVideo',
 			'ilInteractiveVideoOverlay'       : '#ilInteractiveVideoOverlay',
 			'ilInteractiveVideoCommentCancel' : '#ilInteractiveVideoCommentCancel',
 			'ilInteractiveVideoCommentSubmit' : '#ilInteractiveVideoCommentSubmit'

@@ -23,6 +23,7 @@ il.InteractiveVideoYoutubePlayer = (function (scope) {
 		player = plyr.setup('.ilInteractiveVideo', options)[0];
 
 		var interval = null;
+
 		player.source({
 			type:       'video',
 			sources: [{
@@ -57,7 +58,6 @@ il.InteractiveVideoYoutubePlayer = (function (scope) {
 		});
 
 		player.on('playing', function() {
-
 			interval = setInterval(function () {
 				il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
 			}, 500);
@@ -72,7 +72,6 @@ il.InteractiveVideoYoutubePlayer = (function (scope) {
 
 		});
 	};
-
 	pub.protect = pro;
 	return pub;
 
