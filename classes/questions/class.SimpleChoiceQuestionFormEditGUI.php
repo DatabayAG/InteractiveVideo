@@ -114,6 +114,7 @@ class SimpleChoiceQuestionFormEditGUI
 
 		$repeat_question = new ilCheckboxInputGUI($this->plugin->txt('repeat_question'), 'repeat_question');
 		$repeat_question->setInfo($this->plugin->txt('repeat_question_info'));
+		$repeat_question->setChecked(true);
 		$form->addItem($repeat_question);
 
 		$limit_attempts = new ilCheckboxInputGUI($this->plugin->txt('limit_attempts'), 'limit_attempts');
