@@ -64,6 +64,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.jumpToTimeInVideo = function (time)
 	{
+		time = parseInt(time, 10);
 		pub.play();
 		pub.pause();
 		if(time !== null)
