@@ -38,7 +38,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			'text_changer'       : '#text_changer',
 			'font_size_changer'  : '#font_size_changer',
 			'btn_delete'         : '#btn_delete',
-			'add_marker_chk'     : '#add_marker_chk',
 			'comment_time'       : '#comment_time',
 			'ilInteractiveVideo'              : '.ilInteractiveVideo',
 			'ilInteractiveVideoOverlay'       : '#ilInteractiveVideoOverlay',
@@ -84,16 +83,15 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 				);
 
 				$(pri.ids.ilInteractiveVideoOverlay).html(element);
-				$(pri.ids.add_marker_chk).click();
 				$(pri.classes.add_marker_selector).show( 'fast' );
 				pub.editScreen = true;
 			}
 		}
 		else
 		{
-			pub.attachListener();
 			$(pri.classes.remove_marker).remove();
 		}
+		pub.attachListener();
 	};
 	
 	pub.jumpToTimeInVideoForMarker = function()
@@ -280,8 +278,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		$(pri.ids.btn_delete).on("click", function() {
 			$(pri.ids.faker_marker).html('');
 			pub.resetForm();
-			$(pri.ids.add_marker_chk).prop('checked', false);
-			$(pri.classes.add_marker_selector).hide( 'fast' );
 		});
 
 	};
