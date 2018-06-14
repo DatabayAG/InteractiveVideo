@@ -14,8 +14,10 @@ il.InteractiveVideoModalHelper = (function (scope) {
 		).then(function (html) {
 			$('#ilInteractiveVideoAjaxModal').find('.modal-body').html(html);
 			il.InteractiveVideoPlayerAbstract.initPlayer();
+			setTimeout(function(){
+				plyr.get()[1].seek(plyr.get()[0].getCurrentTime());
+			}, 250);
 			$('#ilInteractiveVideoAjaxModal').on('hidden.bs.modal', function () {
-				console.log('fire')
 				$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').remove();
 				il.InteractiveVideoOverlayMarker.checkForOverlay();
 			})
