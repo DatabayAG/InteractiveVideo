@@ -439,14 +439,14 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.addModalInteractionToBackLinkButton = function()
 	{
-	/*if(pub.doesReferencePointExists())
+	if(pub.doesReferencePointExists())
 		{
 			$('.back_link_to').on('click', function(event)
 			{
 				event.preventDefault();
 				pub.finishAndReturnToReferencePoint();
 			});
-		}*/
+		}
 	};
 
 	pub.doesReferencePointExists = function()

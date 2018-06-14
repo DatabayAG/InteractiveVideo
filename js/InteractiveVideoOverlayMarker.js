@@ -92,11 +92,29 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		}
 		pub.attachListener();
 	};
-	
+
 	pub.jumpToTimeInVideoForMarker = function()
 	{
 		var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($(pri.ids.comment_time).val());
 		il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
+	};
+
+	pri.checkForOverlay = function()
+	{
+		var svg = '<svg id="ilInteractiveVideoOverlay" viewBox="0 0 300 150" preserveAspectRatio="none"></svg>';
+		var overlay_count = $(pri.ids.ilInteractiveVideoOverlay).size();
+		if(overlay_count === 1){
+			if($('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').size()){
+				setTimeout(function(){
+					$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').prepend($('#ilInteractiveVideoOverlay'));
+				}, 30);
+				
+			}
+		}else if(overlay_count === 0){
+			$('.ilInteractiveVideo').prepend(svg);
+		}else{
+			console.log('Something totally went wrong.')
+		}
 	};
 
 	pub.attachListener = function()
@@ -108,6 +126,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		pro.attachSingleObjectListener('btn_text', 'text_prototype');
 		pro.attachStyleEvents();
 		pro.attachSubmitCancelListener();
+		pri.checkForOverlay();
 	};
 
 	pub.initialiseExistingMarker = function()
