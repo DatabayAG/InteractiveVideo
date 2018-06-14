@@ -99,16 +99,16 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
 	};
 
-	pri.checkForOverlay = function()
+	pub.checkForOverlay = function()
 	{
 		var svg = '<svg id="ilInteractiveVideoOverlay" viewBox="0 0 300 150" preserveAspectRatio="none"></svg>';
 		var overlay_count = $(pri.ids.ilInteractiveVideoOverlay).size();
 		if(overlay_count === 1){
 			if($('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').size()){
 				setTimeout(function(){
-					$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').prepend($('#ilInteractiveVideoOverlay'));
+					$('#ilInteractiveVideoOverlay').remove();
+					$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').prepend(svg);
 				}, 30);
-				
 			}
 		}else if(overlay_count === 0){
 			$('.ilInteractiveVideo').prepend(svg);
@@ -126,7 +126,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		pro.attachSingleObjectListener('btn_text', 'text_prototype');
 		pro.attachStyleEvents();
 		pro.attachSubmitCancelListener();
-		pri.checkForOverlay();
+		pub.checkForOverlay();
 	};
 
 	pub.initialiseExistingMarker = function()

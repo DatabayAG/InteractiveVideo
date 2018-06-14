@@ -14,6 +14,11 @@ il.InteractiveVideoModalHelper = (function (scope) {
 		).then(function (html) {
 			$('#ilInteractiveVideoAjaxModal').find('.modal-body').html(html);
 			il.InteractiveVideoPlayerAbstract.initPlayer();
+			$('#ilInteractiveVideoAjaxModal').on('hidden.bs.modal', function () {
+				console.log('fire')
+				$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').remove();
+				il.InteractiveVideoOverlayMarker.checkForOverlay();
+			})
 		});
 	};
 
