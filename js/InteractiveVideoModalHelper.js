@@ -17,6 +17,9 @@ il.InteractiveVideoModalHelper = (function (scope) {
 			setTimeout(function(){
 				plyr.get()[1].seek(plyr.get()[0].getCurrentTime());
 			}, 250);
+			setTimeout(function(){
+				CKEDITOR.instances.comment_text.focusManager.focus();
+			}, 380);
 			$('#ilInteractiveVideoAjaxModal').on('hidden.bs.modal', function () {
 				$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').remove();
 				il.InteractiveVideoOverlayMarker.checkForOverlay();
