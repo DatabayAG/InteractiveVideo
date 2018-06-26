@@ -333,7 +333,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$form = $this->initCommentForm();
 
-		$form->addCommandButton('insertTutorComment', $this->lng->txt('insert'));
+		$form->addCommandButton('insertTutorCommentAjax', $this->lng->txt('insert'));
 		$form->addCommandButton('cancelComments', $this->lng->txt('cancel'));
 		$my_tpl = $this->getCommentTemplate();
 		$my_tpl->setVariable('FORM',$form->getHTML());
@@ -1247,6 +1247,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	/**
 	 * @param bool $ajax
+	 * @return string| null
 	 */
 	public function showTutorInsertCommentForm($ajax = false)
 	{
@@ -1574,9 +1575,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	/**
+	 *
+	 */
+	public function insertTutorCommentAjax()
+	{
+		$this->insertComment(1, true);
+	}
+
+	/**
 	 * @param int $is_tutor
 	 */
-	private function insertComment($is_tutor = 0)
+	private function insertComment($is_tutor = 0, $ajax = false)
 	{
 		$form = $this->initCommentForm();
 
@@ -1601,23 +1610,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setMarker($form->getInput('fake_marker'));
 			$this->objComment->create();
 
-			ilUtil::sendSuccess($this->lng->txt('saved_successfully'));
-			$this->ctrl->redirect($this, 'editComments');
+			ilUtil::sendSuccess($this->lng->txt('saved_successfully'), true);
+			if($ajax){
+				$this->ctrl->redirect($this, 'showContent');
+			}else{
+				$this->ctrl->redirect($this, 'editComments');
+			}
 		}
 		else
 		{
 			$form->setValuesByPost();
 			ilUtil::sendFailure($this->lng->txt('err_check_input'),true);
 			$this->ctrl->redirect($this, 'showTutorInsertCommentForm');
-		}
-
-		if($is_tutor)
-		{
-			$this->editComments();
-		}
-		else
-		{
-			$this->showContent();
 		}
 	}
 
