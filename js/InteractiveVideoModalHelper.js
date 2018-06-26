@@ -19,6 +19,16 @@ il.InteractiveVideoModalHelper = (function (scope) {
 			}, 250);
 			setTimeout(function(){
 				CKEDITOR.instances.comment_text.focusManager.focus();
+				$('[name=cmd\\[insertTutorCommentAjax\\]]').on('click', function(){
+					var time = parseInt(plyr.get()[0].getCurrentTime(), 10);
+					var ref_id = parseInt(il.InteractiveVideo.interactive_video_ref_id, 10);
+					if(time > 0 && ref_id > 0)
+					{
+							if (typeof(Storage) !== "undefined") {
+							sessionStorage.setItem("InteractiveVideoResumeTime_" + ref_id, time + "");
+						}
+					}
+				})
 			}, 380);
 			$('#ilInteractiveVideoAjaxModal').on('hidden.bs.modal', function () {
 				$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').remove();

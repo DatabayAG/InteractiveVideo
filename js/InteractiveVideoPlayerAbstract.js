@@ -108,6 +108,18 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 				value();
 			}
 		});
+		
+		setTimeout(function(){
+			var ref_id = parseInt(il.InteractiveVideo.interactive_video_ref_id, 10);
+			var key = "InteractiveVideoResumeTime_" + ref_id;
+			if (typeof(Storage) !== "undefined") {
+				var time = parseInt(sessionStorage.getItem(key), 10);
+				if(time > 0){
+					il.InteractiveVideoPlayerAbstract.setCurrentTime(time);
+					sessionStorage.removeItem(key);
+				}
+			}
+		}, 250);
 	};
 
 	pub.addOnReadyFunction = function(callback)

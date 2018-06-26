@@ -480,6 +480,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postComment', '', true, false));
 		$config_tpl->setVariable('GET_COMMENT_MARKER_MODAL', $this->ctrl->getLinkTarget($this, 'getCommentAndMarkerForm', '', true, false));
 		$config_tpl->setVariable('GET_QUESTION_CREATION_MODAL', $this->ctrl->getLinkTarget($this, 'showTutorInsertQuestionFormAjax', '', true, false));
+		$config_tpl->setVariable('INTERACTIVE_VIDEO_REF_ID', $this->object->getRefId());
 		$config_tpl->setVariable('SEND_BUTTON', $this->plugin->txt('send'));
 		$config_tpl->setVariable('CLOSE_BUTTON', $this->plugin->txt('close'));
 		$config_tpl->setVariable('FEEDBACK_JUMP_TEXT', $this->plugin->txt('feedback_jump_text'));
