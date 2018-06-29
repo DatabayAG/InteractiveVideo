@@ -323,7 +323,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$modal = ilInteractiveVideoModalExtension::getInstance();
 		$modal->setId("ilQuestionModal");
 		$modal->setType(ilInteractiveVideoModalExtension::TYPE_XL);
-		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());$modal = ilInteractiveVideoModalExtension::getInstance();
+		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
+		$modal = ilInteractiveVideoModalExtension::getInstance();
 		$modal->setId("ilInteractiveVideoAjaxModal");
 		$modal->setType(ilInteractiveVideoModalExtension::TYPE_XL);
 		$video_tpl->setVariable("MODAL_INTERACTION_OVERLAY", $modal->getHTML());
@@ -334,7 +335,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form = $this->initCommentForm();
 
 		$form->addCommandButton('insertTutorCommentAjax', $this->lng->txt('insert'));
-		$form->addCommandButton('cancelComments', $this->lng->txt('cancel'));
+		$form->addCommandButton('cancelCommentsAjax', $this->lng->txt('cancel'));
 		$my_tpl = $this->getCommentTemplate();
 		$my_tpl->setVariable('FORM',$form->getHTML());
 		echo $my_tpl->get();
@@ -1578,13 +1579,23 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 *
 	 */
+	public function cancelCommentsAjax()
+	{
+		$this->redirectToShowContentOrEditComments(true);
+	}
+
+
+	/**
+	 *
+	 */
 	public function insertTutorCommentAjax()
 	{
 		$this->insertComment(1, true);
 	}
 
 	/**
-	 * @param int $is_tutor
+	 * @param int  $is_tutor
+	 * @param bool $ajax
 	 */
 	private function insertComment($is_tutor = 0, $ajax = false)
 	{
@@ -1612,17 +1623,25 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->create();
 
 			ilUtil::sendSuccess($this->lng->txt('saved_successfully'), true);
-			if($ajax){
-				$this->ctrl->redirect($this, 'showContent');
-			}else{
-				$this->ctrl->redirect($this, 'editComments');
-			}
+			$this->redirectToShowContentOrEditComments($ajax);
 		}
 		else
 		{
 			$form->setValuesByPost();
 			ilUtil::sendFailure($this->lng->txt('err_check_input'),true);
 			$this->ctrl->redirect($this, 'showTutorInsertCommentForm');
+		}
+	}
+
+	/**
+	 * @param $ajax
+	 */
+	private function redirectToShowContentOrEditComments($ajax)
+	{
+		if ($ajax) {
+			$this->ctrl->redirect($this, 'showContent');
+		} else {
+			$this->ctrl->redirect($this, 'editComments');
 		}
 	}
 
@@ -1788,14 +1807,23 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form = $simple_question->initQuestionForm(true);
 		$ck = new ilTextAreaInputCkeditor($this->plugin);
 		$ck->appendCkEditorMathJaxSupportToForm($form);
-		$form->addCommandButton('insertQuestion', $this->lng->txt('insert'));
-		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
+		$form->addCommandButton('insertQuestionAjax', $this->lng->txt('insert'));
+		$form->addCommandButton('editCommentsAjax', $this->lng->txt('cancel'));
 		echo $form->getHTML();
 		$this->callExit();
 	}
 
+	public function insertQuestionAjax()
+	{
+		$this->insertQuestion(true);
+	}
 
-	public function insertQuestion()
+	public function editCommentsAjax()
+	{
+		$this->redirectToShowContentOrEditComments(true);
+	}
+
+	public function insertQuestion($is_ajax = false)
 	{
 		$simple_question = new SimpleChoiceQuestionFormEditGUI($this->plugin, $this->object);
 		$form = $simple_question->initQuestionForm();
@@ -1822,7 +1850,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->performQuestionRefresh($this->objComment->getCommentId(), $form);
 
 			ilUtil::sendSuccess($this->lng->txt('saved_successfully'));
-			$this->ctrl->redirect($this, 'editComments');
+			$this->redirectToShowContentOrEditComments($is_ajax);
 		}
 		else
 		{

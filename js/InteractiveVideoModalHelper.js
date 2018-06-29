@@ -19,16 +19,7 @@ il.InteractiveVideoModalHelper = (function (scope) {
 			}, 250);
 			setTimeout(function(){
 				CKEDITOR.instances.comment_text.focusManager.focus();
-				$('[name=cmd\\[insertTutorCommentAjax\\]]').on('click', function(){
-					var time = parseInt(plyr.get()[0].getCurrentTime(), 10);
-					var ref_id = parseInt(il.InteractiveVideo.interactive_video_ref_id, 10);
-					if(time > 0 && ref_id > 0)
-					{
-							if (typeof(Storage) !== "undefined") {
-							sessionStorage.setItem("InteractiveVideoResumeTime_" + ref_id, time + "");
-						}
-					}
-				})
+				pro.addEventsToButtons('insertTutorCommentAjax', 'cancelCommentsAjax');
 			}, 380);
 			$('#ilInteractiveVideoAjaxModal').on('hidden.bs.modal', function () {
 				$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').remove();
@@ -47,6 +38,9 @@ il.InteractiveVideoModalHelper = (function (scope) {
 			})
 		).then(function (html) {
 			$('#ilInteractiveVideoAjaxModal').find('.modal-body').html(html);
+			setTimeout(function(){
+				pro.addEventsToButtons('insertQuestionAjax', 'editCommentsAjax');
+			}, 380);
 			InteractiveVideoQuestionCreator.Init();
 		});
 	};
@@ -55,8 +49,28 @@ il.InteractiveVideoModalHelper = (function (scope) {
 	{
 		il.InteractiveVideoPlayerAbstract.pause();
 		var modal = $('#ilInteractiveVideoAjaxModal');
-		modal.modal('show');
+		modal.modal({backdrop: 'static', keyboard: false}, 'show');
 		modal.find('.modal-body').html('<div class="waitbox"></div>');
+	};
+
+	pro.addEventsToButtons = function(btn_one, btn_two)
+	{
+		pro.applyEventToButton(btn_one);
+		pro.applyEventToButton(btn_two);
+	};
+
+	pro.applyEventToButton = function(button){
+		$('[name=cmd\\[' + button + '\\]]').on('click', function(){
+			var time = parseInt(plyr.get()[0].getCurrentTime(), 10);
+			var ref_id = parseInt(il.InteractiveVideo.interactive_video_ref_id, 10);
+			if(time > 0 && ref_id > 0)
+			{
+				console.log(ref_id, time);
+				if (typeof(Storage) !== "undefined") {
+					sessionStorage.setItem("InteractiveVideoResumeTime_" + ref_id, time + "");
+				}
+			}
+		});
 	};
 
 	pub.protect = pro;
