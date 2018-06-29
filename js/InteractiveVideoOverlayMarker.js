@@ -76,14 +76,13 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 					(function ()
 						{
 							$('.ilInteractiveVideo').prepend('<div class="play_overlay_jump_to_time"><div onclick="il.InteractiveVideoOverlayMarker.jumpToTimeAndRemoveOverlay();" class="play_overlay_jump_to_time_text">'+il.InteractiveVideo.lang.jump_to_text+'</div></div>');
+							$(pri.ids.ilInteractiveVideoOverlay).html(element);
+							$(pri.classes.add_marker_selector).show( 'fast' );
+							pub.editScreen = true;
 							il.InteractiveVideoOverlayMarker.initialiseExistingMarker();
 						}
 					)
 				);
-
-				$(pri.ids.ilInteractiveVideoOverlay).html(element);
-				$(pri.classes.add_marker_selector).show( 'fast' );
-				pub.editScreen = true;
 			}
 		}
 		else
@@ -175,7 +174,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		{
 			$(pri.classes.remove_marker).removeClass('prototype');
 		}
-
+		console.log(marker, $(obj), type)
 		pro.setValuesFromElement();
 	};
 

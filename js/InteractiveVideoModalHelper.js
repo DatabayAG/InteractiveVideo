@@ -65,7 +65,6 @@ il.InteractiveVideoModalHelper = (function (scope) {
 			var ref_id = parseInt(il.InteractiveVideo.interactive_video_ref_id, 10);
 			if(time > 0 && ref_id > 0)
 			{
-				console.log(ref_id, time);
 				if (typeof(Storage) !== "undefined") {
 					sessionStorage.setItem("InteractiveVideoResumeTime_" + ref_id, time + "");
 				}
