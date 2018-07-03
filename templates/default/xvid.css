@@ -401,7 +401,7 @@ body.cke_editable{
 }
 #sendForm, #submit_comment_form{
     right: 5px;
-    bottom: 5px;
+    bottom: 9px;
     position: absolute;
 }
 .question_warning_buttons{
