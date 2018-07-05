@@ -106,7 +106,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	pro.appendSelfReflectionCommentForm = function()
 	{
 		var comment_id = 'text_reflection_comment_'+ pub.comment_id ;
-		$('.modal_reflection_footer').prepend(pro.createButtonButtons('submit_comment_form', scope.InteractiveVideo.lang.save));
+		$('.modal_reflection_footer').append(pro.createButtonButtons('submit_comment_form', scope.InteractiveVideo.lang.save));
 		$('.modal_reflection_footer').prepend('<div><input type="checkbox" name="is_private_modal" value="1" id="is_private_modal"/>' + scope.InteractiveVideo.lang.private_text + '</div>');
 		$('.modal_feedback').prepend('<textarea id="'+comment_id+'">' + pub.QuestionObject.reply_to_txt + '</textarea>');
 		if(pub.QuestionObject.reply_to_private != '')
@@ -132,8 +132,8 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.addButtons = function() {
 		var question_form = $('#question_buttons_bellow_form');
-		question_form.append(pro.createButtonButtons('sendForm', scope.InteractiveVideo.lang.send_text));
 		question_form.append(pro.createButtonButtons('close_form', scope.InteractiveVideo.lang.close_text));
+		question_form.append(pro.createButtonButtons('sendForm', scope.InteractiveVideo.lang.send_text));
 		pro.appendButtonListener();
 	};
 
