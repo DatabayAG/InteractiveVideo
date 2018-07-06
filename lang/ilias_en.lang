@@ -72,7 +72,7 @@ invalid_question_ids#:#Invalid Question-Ids
 invalid_user_ids#:#Invalid User-Ids
 invalid_comment_ids#:#Invalid Comment-Ids
 comment_title#:#Comment-Title
-send#:#Send
+send#:#Submit
 close#:#Close
 question#:#Question
 is_anonymized#:#Anonymize Comments

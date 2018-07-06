@@ -70,7 +70,7 @@ invalid_question_ids#:#Ungültige Fragen-Ids
 invalid_user_ids#:#Ungültige User-Ids
 invalid_comment_ids#:#Ungültige Kommentar-Ids
 comment_title#:#Kommentar-Titel
-send#:#Abschicken
+send#:#Auswerten
 close#:#Schließen
 question#:#Frage
 is_anonymized#:#Kommentare ohne Namen anzeigen
