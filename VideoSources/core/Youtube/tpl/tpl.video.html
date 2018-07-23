@@ -1,8 +1,10 @@
 <script>
 	var interactiveVideoYoutubeId = "{YOUTUBE_ID}";
 </script>
+<!-- TODO: fix marker editing -->
 <div id="{INTERACTIVE_VIDEO_ID}" class="ilInteractiveVideo">
-	<video  <!-- BEGIN poster -->poster="{POSTER_IMAGE}" <!-- END poster --> >
-		<source type="video/mp4" src=""/>
+	<div id="ilInteractiveVideoTag"></div>
+	<video <!-- BEGIN poster -->poster="{POSTER_IMAGE}" <!-- END poster --> >
+	<source type="{VIDEO_TYPE}" src=""/>
 	</video>
 </div>

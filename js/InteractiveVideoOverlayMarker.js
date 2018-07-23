@@ -110,7 +110,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 				}, 30);
 			}
 		}else if(overlay_count === 0){
-			$('.ilInteractiveVideo').prepend(svg);
+			$('#ilInteractiveVideoTag').parent().prepend(svg);
 		}else{
 			console.log('Something totally went wrong.')
 		}

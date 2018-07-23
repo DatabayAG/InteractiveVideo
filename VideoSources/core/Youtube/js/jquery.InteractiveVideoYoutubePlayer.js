@@ -42,6 +42,7 @@ il.InteractiveVideoYoutubePlayer = (function (scope) {
 		};
 
 		il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
+		$('#ilInteractiveVideo').prepend($('#ilInteractiveVideoOverlay'));
 
 		player.on('seeked', function() {
 			clearInterval(interval);

@@ -16,11 +16,11 @@ il.InteractiveVideoModalHelper = (function (scope) {
 			il.InteractiveVideoPlayerAbstract.initPlayer();
 			setTimeout(function(){
 				plyr.get()[1].seek(plyr.get()[0].getCurrentTime());
-			}, 250);
+			}, 900);
 			setTimeout(function(){
 				CKEDITOR.instances.comment_text.focusManager.focus();
 				pro.addEventsToButtons('insertTutorCommentAjax', 'cancelCommentsAjax');
-			}, 380);
+			}, 480);
 			$('#ilInteractiveVideoAjaxModal').on('hidden.bs.modal', function () {
 				$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').remove();
 				il.InteractiveVideoOverlayMarker.checkForOverlay();
