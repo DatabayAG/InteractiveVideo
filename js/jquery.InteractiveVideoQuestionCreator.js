@@ -18,7 +18,19 @@ var InteractiveVideoQuestionCreator = (function () {
 			}
 			InteractiveVideoQuestionCreator.buildForm();
 			$('.question_type').val(IVQuestionCreator.type);
+
+			pro.workAroundFileHelper();
 		}
+	};
+
+	pro.workAroundFileHelper = function() {
+		$('.btn-file :file').on('fileselect', function(event, numFiles, label) {
+			console.log(event, numFiles, label)
+			var input = $(this).parents('.input-group').find(':text');
+			if( input.length ) {
+				input.val(label);
+			}
+		});
 	};
 
 	pro.appendMultiListener = function() {
