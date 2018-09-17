@@ -316,7 +316,9 @@
     z-index: 12;
 }
 #submit_comment_form{
-    position: static;
+    position: absolute;
+    padding-bottom: 1px;
+    padding-top: 1px;
 }
 .reply_comment{
     padding:0;
@@ -400,7 +402,6 @@ body.cke_editable{
 
 #sendForm, #submit_comment_form{
    float: right;
-   margin-right: 2px;
 }
 .question_warning_buttons{
     text-align:center;

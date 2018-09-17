@@ -104,7 +104,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			if($('#' + comment_id).length === 0)
 			{
 				comment_object.append('');
-				comment_object.append('<div id="'+comment_container+'" class="reply_to_container"><div><input type="text" class="reply_to_input_form" id="'+comment_id+'"/></div><div><input id="submit_comment_form" class="btn btn-default btn-sm submit_comment_form_to_reply" value="'+scope.InteractiveVideo.lang.save+'" type="submit"></div></div>');
+				comment_object.append('<div id="'+comment_container+'" class="reply_to_container"><input type="text" class="reply_to_input_form" id="'+comment_id+'"/><input id="submit_comment_form" class="btn btn-default btn-sm submit_comment_form_to_reply" value="'+scope.InteractiveVideo.lang.save+'" type="submit"></div>');
 				scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReplyPosting($(this).data('reply-to-id'), $(this).data('reply-to-id'));
 			}
 			else
