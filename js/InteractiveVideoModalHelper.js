@@ -41,6 +41,10 @@ il.InteractiveVideoModalHelper = (function (scope) {
 			setTimeout(function(){
 				pro.addEventsToButtons('insertQuestionAjax', 'editCommentsAjax');
 			}, 380);
+			setTimeout(function(){
+				$('#comment_time').val(
+					il.InteractiveVideoPlayerComments.secondsToTimeCode(plyr.get()[0].getCurrentTime()));
+			}, 400);
 			InteractiveVideoQuestionCreator.Init();
 		});
 	};
