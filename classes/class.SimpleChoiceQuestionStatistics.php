@@ -312,7 +312,7 @@ class SimpleChoiceQuestionStatistics
 		 */
 		global $ilDB;
 		$res          = $ilDB->queryF(
-			'SELECT count(rep_robj_xvid_answers.answer_id) AS counter FROM rep_robj_xvid_question
+			'SELECT rep_robj_xvid_answers.answer_id, count(rep_robj_xvid_answers.answer_id) AS counter FROM rep_robj_xvid_question
 				LEFT JOIN rep_robj_xvid_qus_text ON rep_robj_xvid_qus_text.question_id = rep_robj_xvid_question.question_id 
 				RIGHT JOIN rep_robj_xvid_answers ON rep_robj_xvid_qus_text.answer_id = rep_robj_xvid_answers.answer_id
 				WHERE  rep_robj_xvid_question.question_id = %s GROUP BY rep_robj_xvid_answers.answer_id',
