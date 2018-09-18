@@ -306,7 +306,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function beforeDelete()
 	{
-        if ((!$this->referenced) || ($this->countReferences() == 1)) {
+        if (((!$this->referenced) || ($this->countReferences() == 1)) && $this->video_source_object !== null ) {
             $this->getVideoSourceObject($this->getSourceId());
             $this->video_source_object->beforeDeleteVideoSource($this->getId());
             self::deleteComments(self::getCommentIdsByObjId($this->getId(), false));
