@@ -306,16 +306,19 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function beforeDelete()
 	{
-		$this->getVideoSourceObject($this->getSourceId());
-		$this->video_source_object->beforeDeleteVideoSource($this->getId());
-		self::deleteComments(self::getCommentIdsByObjId($this->getId(), false));
+        if ((!$this->referenced) || ($this->countReferences() == 1)) {
+            $this->getVideoSourceObject($this->getSourceId());
+            $this->video_source_object->beforeDeleteVideoSource($this->getId());
+            self::deleteComments(self::getCommentIdsByObjId($this->getId(), false));
 
-		/**
-		 * @var $ilDB ilDB
-		 */
-		global $ilDB;
-		$ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
-		$this->deleteMetaData();
+            /**
+             * @var $ilDB ilDB
+             */
+            global $ilDB;
+            $ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
+            $this->deleteMetaData();
+        }
+        return true;
 	}
 
 	/**
