@@ -237,7 +237,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->addHeaderAction();
 	}
 
-	public function showContent()
+	public function showContent($is_co_page = false)
 	{
 		/**
 		 * @var $tpl    ilTemplate
@@ -299,6 +299,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$comments_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
 			$comments_tpl->setVariable('TXT_CANCEL', $plugin->txt('cancel'));
 			$video_tpl->setVariable("COMMENTS_FORM", $comments_tpl->get());
+		}
+
+		if($is_co_page) {
+			return  $video_tpl->get();
 		}
 
 		$tpl->setContent($video_tpl->get());
@@ -436,11 +440,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		ilTextAreaInputCkeditorGUI::appendJavascriptFile();
 
 		$config_tpl = new ilTemplate("tpl.video_config.html", true, true, $plugin->getDirectory());
-		$config_tpl->setVariable('VIDEO_FINISHED_POST_URL', $this->ctrl->getLinkTarget($this, 'postVideoFinishedPerAjax', '', true, false));
-		$config_tpl->setVariable('VIDEO_STARTED_POST_URL', $this->ctrl->getLinkTarget($this, 'postVideoStartedPerAjax', '', true, false));
-		$config_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTarget($this, 'getQuestionPerAjax', '', true, false));
-		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTarget($this, 'postAnswerPerAjax', '', true, false));
-		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postComment', '', true, false));
+		$org_ref_id = (int) $_GET['ref_id'];
+		$this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'ref_id', $this->ref_id);
+		$config_tpl->setVariable('VIDEO_FINISHED_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postVideoFinishedPerAjax', '', true, false));
+		$config_tpl->setVariable('VIDEO_STARTED_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postVideoStartedPerAjax', '', true, false));
+		$config_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'getQuestionPerAjax', '', true, false));
+		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postAnswerPerAjax', '', true, false));
+		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postComment', '', true, false));
+		$this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'ref_id', $org_ref_id);
 		$config_tpl->setVariable('SEND_BUTTON', $plugin->txt('send'));
 		$config_tpl->setVariable('CLOSE_BUTTON', $plugin->txt('close'));
 		$config_tpl->setVariable('FEEDBACK_JUMP_TEXT', $plugin->txt('feedback_jump_text'));
