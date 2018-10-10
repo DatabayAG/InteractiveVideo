@@ -249,7 +249,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $ilTabs;
 		$ilTabs->activateTab('content');
 
-		$video_tpl = $this->show();
+		$video_tpl = $this->buildContentTemplate();
 
 		$tpl->setContent($video_tpl->get());
 	}
@@ -260,7 +260,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	public function showContentAsPageComponent()
 	{
-		$video_tpl = $this->show();
+		$video_tpl = $this->buildContentTemplate();
 		return $video_tpl->get();
 	}
 
@@ -268,7 +268,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @return ilTemplate
 	 * @throws ilTemplateException
 	 */
-	protected function show()
+	protected function buildContentTemplate()
 	{
 		/**
 		 * @var $tpl    ilTemplate
