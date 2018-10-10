@@ -237,16 +237,44 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->addHeaderAction();
 	}
 
-	public function showContent($is_co_page = false)
+	/**
+	 * @throws ilTemplateException
+	 */
+	public function showContent()
 	{
 		/**
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
 		 */
 		global $tpl, $ilTabs;
-		$plugin = ilInteractiveVideoPlugin::getInstance();
-
 		$ilTabs->activateTab('content');
+
+		$video_tpl = $this->show();
+
+		$tpl->setContent($video_tpl->get());
+	}
+
+	/**
+	 * @return string
+	 * @throws ilTemplateException
+	 */
+	public function showContentAsPageComponent()
+	{
+		$video_tpl = $this->show();
+		return $video_tpl->get();
+	}
+
+	/**
+	 * @return ilTemplate
+	 * @throws ilTemplateException
+	 */
+	protected function show()
+	{
+		/**
+		 * @var $tpl    ilTemplate
+		 */
+		global $tpl;
+		$plugin = ilInteractiveVideoPlugin::getInstance();
 
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $plugin->getDirectory());
 
@@ -300,12 +328,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$comments_tpl->setVariable('TXT_CANCEL', $plugin->txt('cancel'));
 			$video_tpl->setVariable("COMMENTS_FORM", $comments_tpl->get());
 		}
-
-		if($is_co_page) {
-			return  $video_tpl->get();
-		}
-
-		$tpl->setContent($video_tpl->get());
+		return $video_tpl;
 	}
 
 	/**
