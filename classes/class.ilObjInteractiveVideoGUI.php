@@ -291,7 +291,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$this->addBackButtonIfParameterExists($video_tpl);
 
-		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoUniqueIds.php';
+		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
+
+		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer($player_id)->get());
 		$form = new ilPropertyFormGUI();
 		$ckeditor = new ilTextAreaInputCkeditorGUI('comment_text', 'comment_text');
 		$form->addItem($ckeditor);
@@ -310,7 +313,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
 		$video_tpl->setVariable('SHOW_ALL_COMMENTS', $plugin->txt('show_all_comments'));
 		$video_tpl->setVariable('AUTHOR_FILTER', $plugin->txt('author_filter'));
-		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig());
+		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id));
 
 		if($this->object->getDisableComment() != 1)
 		{
@@ -437,13 +440,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question->setVariable('QUESTION_ID', $question_id);
 		return $question->get();
 	}
-	
-
 
 	/**
+	 * @param      $player_id
+	 * @param bool $edit_screen
 	 * @return string
+	 * @throws ilTemplateException
 	 */
-	protected function initPlayerConfig($edit_screen = false)
+	protected function initPlayerConfig($player_id, $edit_screen = false)
 	{
 		/**
 		 * $ilUser ilObjUser
@@ -463,6 +467,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		ilTextAreaInputCkeditorGUI::appendJavascriptFile();
 
 		$config_tpl = new ilTemplate("tpl.video_config.html", true, true, $plugin->getDirectory());
+		$config_tpl->setVariable('PLAYER_ID', $player_id);
 		$org_ref_id = (int) $_GET['ref_id'];
 		$this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'ref_id', $this->ref_id);
 		$config_tpl->setVariable('VIDEO_FINISHED_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postVideoFinishedPerAjax', '', true, false));
@@ -1497,7 +1502,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
 		$object->addPlayerElements($tpl);
 
-		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoUniqueIds.php';
+		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
+		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer($player_id)->get());
 
 		$video_tpl->setVariable('FORM_ACTION', $this->ctrl->getFormAction($this,'showTutorInsertForm'));
 
@@ -1516,7 +1523,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postTutorComment', '', false, false));
 
-		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig(true));
+		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, true));
 		global $ilUser;
 		$this->object->getLPStatusForUser($ilUser->getId());
 		$tbl_data = $this->object->getCommentsTableData(true, true);

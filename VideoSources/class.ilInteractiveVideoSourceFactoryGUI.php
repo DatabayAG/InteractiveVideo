@@ -53,11 +53,12 @@ class ilInteractiveVideoSourceFactoryGUI
 	}
 
 	/**
+	 * @param $player_id
 	 * @return ilTemplate
 	 */
-	public function getPlayer()
+	public function getPlayer($player_id)
 	{
-		return $this->gui_source->getPlayer($this->obj);
+		return $this->gui_source->getPlayer($player_id, $this->obj);
 	}
 
 	protected function sourceDoesNotExistsAnymore()
