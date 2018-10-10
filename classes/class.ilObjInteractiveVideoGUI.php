@@ -258,7 +258,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @return string
 	 * @throws ilTemplateException
 	 */
-	public function showContentAsPageComponent()
+	public function getContentAsString()
 	{
 		$video_tpl = $this->buildContentTemplate();
 		return $video_tpl->get();
