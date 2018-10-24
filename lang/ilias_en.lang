@@ -186,4 +186,4 @@ xvid_xvid_view_lp#:#View Learning Progress
 auto_resume#:#Auto resume
 auto_resume_info#:#If enabled, the video will be automatically resumed after closing a the modal question dialogue.
 fixed_modal#:#Block modal closing 
-fixed_modal_info#:#If enabled, a modal dialogue won't be closed if a user clicks on the brackground.
+fixed_modal_info#:#If enabled, a modal dialogue won't be closed if a user clicks on the background.
