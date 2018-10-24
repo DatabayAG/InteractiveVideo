@@ -680,6 +680,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$no_comment->setInfo($plugin->txt('no_comment_info'));
 		$a_form->addItem($no_comment);
 
+		$section = new ilFormSectionHeaderGUI();
+		$section->setTitle('modal');
+		$a_form->addItem($section);
+
 		$auto_resume = new ilCheckboxInputGUI($plugin->txt('auto_resume'), 'auto_resume');
 		$auto_resume->setInfo($plugin->txt('auto_resume_info'));
 		$a_form->addItem($auto_resume);
