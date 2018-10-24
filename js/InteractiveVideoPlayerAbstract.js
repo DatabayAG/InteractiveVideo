@@ -71,7 +71,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.resumeVideo = function ()
 	{
-		if(scope.InteractiveVideo.auto_resume === true)
+		if(scope.InteractiveVideo.auto_resume === "1")
 		{
 			pub.play();
 		}

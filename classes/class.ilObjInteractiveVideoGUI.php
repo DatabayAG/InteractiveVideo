@@ -456,6 +456,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('SAVE', $plugin->txt('save'));
 		$config_tpl->setVariable('ADD_COMMENT', $plugin->txt('insert_comment'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
+		$config_tpl->setVariable('AUTO_RESUME_AFTER_QUESTION', $this->object->isAutoResumeAfterQuestion());
+		$config_tpl->setVariable('FIXED_MODAL', $this->object->isFixedModal());
 		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
@@ -546,6 +548,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$no_comment = $a_form->getInput('no_comment');
 		$this->object->setDisableComment((int)$no_comment);
+
+		$auto_resume = $a_form->getInput('auto_resume');
+		$this->object->setAutoResumeAfterQuestion((int)$auto_resume);
+
+		$fixed_modal = $a_form->getInput('fixed_modal');
+		$this->object->setFixedModal((int)$fixed_modal);
 
 		$factory = new ilInteractiveVideoSourceFactory();
 		$source = $factory->getVideoSourceObject($a_form->getInput('source_id'));
@@ -671,6 +679,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$no_comment = new ilCheckboxInputGUI($plugin->txt('no_comment'), 'no_comment');
 		$no_comment->setInfo($plugin->txt('no_comment_info'));
 		$a_form->addItem($no_comment);
+
+		$auto_resume = new ilCheckboxInputGUI($plugin->txt('auto_resume'), 'auto_resume');
+		$auto_resume->setInfo($plugin->txt('auto_resume_info'));
+		$a_form->addItem($auto_resume);
+
+		$fixed_modal = new ilCheckboxInputGUI($plugin->txt('fixed_modal'), 'fixed_modal');
+		$fixed_modal->setInfo($plugin->txt('fixed_modal_info'));
+		$a_form->addItem($fixed_modal);
 	}
 
 	/**
@@ -699,6 +715,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values['source_id']			= $this->object->getSourceId();
 		$a_values['is_task']			= $this->object->getTaskActive();
 		$a_values['task']				= $this->object->getTask();
+		$a_values['auto_resume']		= $this->object->isAutoResumeAfterQuestion();
+		$a_values['fixed_modal']		= $this->object->isFixedModal();
 	}
 
 	public function editProperties()
