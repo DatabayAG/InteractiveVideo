@@ -376,8 +376,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				'source_id'     => array('text', $this->getSourceId()),
 				'is_task'     => array('integer', $this->getTaskActive()),
 				'task'     => array('text', $this->getTask()),
-				'auto_resume'     => array('text', $this->isAutoResumeAfterQuestion()),
-				'fixed_modal'     => array('text', $this->isFixedModal()),
+				'auto_resume'     => array('integer', $this->isAutoResumeAfterQuestion()),
+				'fixed_modal'     => array('integer', $this->isFixedModal()),
 				'lp_mode' => array('integer', $this->getLearningProgressMode())
 			)
 		);

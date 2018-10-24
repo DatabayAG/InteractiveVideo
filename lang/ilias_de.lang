@@ -183,7 +183,7 @@ save_without_correct_detail#:#Sie haben weder eine Reflektionfrage, noch neutral
 no_comment#:#Kein Kommentarfeld
 no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflektionsfragen mit aktiviertem Kommentarfeld sind nach wie vor möglich.
 xvid_xvid_view_lp#:#Lernfortschritt einsehen
-auto_resume#:#Automatisches fortsetzen
-auto_resume_info#:#Automatisches fortsetzen des Videos nach schließen der Frage
+auto_resume#:#Fortsetzen
+auto_resume_info#:#Wenn aktiviert, wird das Video beim Schließen des Fragen-Dialogs automatisch fortgesetzt.
 fixed_modal#:#Modal schließen blockieren
-fixed_modal_info#:#Modal schließt sich nicht bei klick auf den Hintergrund
+fixed_modal_info#:#Wenn aktiviert, wird ein Modal-Dialog beim Klick eines Benutzers auf den Hintergrund nicht geschlossen.

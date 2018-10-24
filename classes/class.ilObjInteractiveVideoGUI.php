@@ -686,10 +686,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$auto_resume = new ilCheckboxInputGUI($plugin->txt('auto_resume'), 'auto_resume');
 		$auto_resume->setInfo($plugin->txt('auto_resume_info'));
+		$auto_resume->setValue(1);
 		$a_form->addItem($auto_resume);
 
 		$fixed_modal = new ilCheckboxInputGUI($plugin->txt('fixed_modal'), 'fixed_modal');
 		$fixed_modal->setInfo($plugin->txt('fixed_modal_info'));
+		$fixed_modal->setValue(1);
 		$a_form->addItem($fixed_modal);
 	}
 

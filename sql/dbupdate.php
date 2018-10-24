@@ -883,8 +883,8 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'auto_resume'))
 	$ilDB->addTableColumn('rep_robj_xvid_objects', 'auto_resume',
 		array(
 			'type'    => 'integer',
-			'length'  => '1',
-			'notnull' => false,
+			'length'  => 1,
+			'notnull' => true,
 			'default' => 0)
 	);
 }
@@ -896,8 +896,8 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'fixed_modal'))
 	$ilDB->addTableColumn('rep_robj_xvid_objects', 'fixed_modal',
 		array(
 			'type'    => 'integer',
-			'length'  => '1',
-			'notnull' => false,
+			'length'  => 1,
+			'notnull' => true,
 			'default' => 0)
 	);
 }
