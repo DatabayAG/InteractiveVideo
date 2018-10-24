@@ -182,7 +182,7 @@
     vertical-align: -10px;
 }
 #close_form{
-    right: 5px;
+    left: 5px;
     bottom: 5px;
     position: absolute;
 }
@@ -399,7 +399,7 @@ body.cke_editable{
 }
 
 #sendForm{
-    left: 5px;
+    right: 5px;
     bottom: 5px;
     position: absolute;
 }
