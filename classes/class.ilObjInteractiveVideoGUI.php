@@ -660,6 +660,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$description_switch->addSubItem($description);
 		$a_form->addItem($description_switch);
 
+		$section = new ilFormSectionHeaderGUI();
+		$section->setTitle($plugin->txt('comments'));
+		$a_form->addItem($section);
+
 		$anonymized = new ilCheckboxInputGUI($plugin->txt('is_anonymized'), 'is_anonymized');
 		$anonymized->setInfo($plugin->txt('is_anonymized_info'));
 		$a_form->addItem($anonymized);
@@ -668,10 +672,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_public->setInfo($plugin->txt('is_public_info'));
 		$a_form->addItem($is_public);
 
-		$repeat = new ilCheckboxInputGUI($plugin->txt('is_repeat'), 'is_repeat');
-		$repeat->setInfo($plugin->txt('is_repeat_info'));
-		$a_form->addItem($repeat);
-
 		$chrono = new ilCheckboxInputGUI($plugin->txt('is_chronologic'), 'is_chronologic');
 		$chrono->setInfo($plugin->txt('is_chronologic_info'));
 		$a_form->addItem($chrono);
@@ -679,6 +679,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$no_comment = new ilCheckboxInputGUI($plugin->txt('no_comment'), 'no_comment');
 		$no_comment->setInfo($plugin->txt('no_comment_info'));
 		$a_form->addItem($no_comment);
+
+		$section = new ilFormSectionHeaderGUI();
+		$section->setTitle($plugin->txt('questions'));
+		$a_form->addItem($section);
+
+		$repeat = new ilCheckboxInputGUI($plugin->txt('is_repeat'), 'is_repeat');
+		$repeat->setInfo($plugin->txt('is_repeat_info'));
+		$a_form->addItem($repeat);
 
 		$section = new ilFormSectionHeaderGUI();
 		$section->setTitle('modal');
