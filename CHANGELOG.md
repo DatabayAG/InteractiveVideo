@@ -3,6 +3,7 @@
    * If enabled, a modal dialogue won't be closed if a user clicks on the background.
 2. Autoresume after question modal is closed
    * If enabled, the video will be automatically resumed after closing a the modal question dialogue. 
+
 # 2.0.12
 1. Display task above videos
 2. Possibility to create a comment (private/public) on reflection question
