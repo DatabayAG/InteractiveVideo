@@ -116,6 +116,8 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 			case 'getLearningProgressMode':
 			case 'noCommentStream':
 			case 'noComment':
+			case 'fixedModal':
+			case 'autoResumeAfterQuestion':
 			case 'studentMarker':
 				if($this->inSettingsTag)
 				{
@@ -222,8 +224,16 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 				$this->xvid_obj->setNoCommentStream(trim($this->cdata));
 				$this->cdata = '';
 				break;
+			case 'fixedModal':
+				$this->xvid_obj->setFixedModal(trim($this->cdata));
+				$this->cdata = '';
+				break;
+			case 'autoResumeAfterQuestion':
+				$this->xvid_obj->setAutoResumeAfterQuestion(trim($this->cdata));
+				$this->cdata = '';
+				break;
 			case 'studentMarker':
-				$this->xvid_obj->setMarkerForStudents(trim($this->cdata));
+			#	$this->xvid_obj->setMarkerForStudents(trim($this->cdata));
 				$this->cdata = '';
 				break;
 			case 'SourceId':
