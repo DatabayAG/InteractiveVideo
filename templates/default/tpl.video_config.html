@@ -1,9 +1,26 @@
 <script type="text/javascript">
 	if(il.InteractiveVideo === undefined){
-		il.InteractiveVideo = [];
+		il.InteractiveVideo = {};
 	}
 
-	var player = {"{PLAYER_ID}" : {
+	il.InteractiveVideo["lang"] = {
+		switch_on:                    '{SWITCH_ON}',
+		switch_off:                   '{SWITCH_OFF}',
+		send_text:                    '{SEND_BUTTON}',
+		close_text:                   '{CLOSE_BUTTON}',
+		feedback_button_text:         '{FEEDBACK_JUMP_TEXT}',
+		learning_recommendation_text: '{LEARNING_RECOMMENDATION_TEXT}',
+		answered_text:                '{ALREADY_ANSWERED_TEXT}',
+		question_text:                '{QUESTION_TEXT}',
+		private_text:                 '{PRIVATE_TEXT}',
+		reset_text:                   '{RESET_TEXT}',
+		author_filter:                '{AUTHOR_FILTER}',
+		save:                         '{SAVE}',
+		add_comment:                  '{ADD_COMMENT}',
+		more_information:             '{MORE_INFORMATION_TEXT}'
+	};
+
+	var player = {
 			video_finished_post_url:         '{VIDEO_FINISHED_POST_URL}',
 			video_started_post_url:          '{VIDEO_STARTED_POST_URL}',
 			question_get_url:                '{QUESTION_GET_URL}',
@@ -25,26 +42,8 @@
 			blacklist_time_end:              [],
 			comment_hightlight_time:         500,
 			comments:                        {COMMENTS},
-			lang:
-					 {
-						 switch_on:                    '{SWITCH_ON}',
-						 switch_off:                   '{SWITCH_OFF}',
-						 send_text:                    '{SEND_BUTTON}',
-						 close_text:                   '{CLOSE_BUTTON}',
-						 feedback_button_text:         '{FEEDBACK_JUMP_TEXT}',
-						 learning_recommendation_text: '{LEARNING_RECOMMENDATION_TEXT}',
-						 answered_text:                '{ALREADY_ANSWERED_TEXT}',
-						 question_text:                '{QUESTION_TEXT}',
-						 private_text:                 '{PRIVATE_TEXT}',
-						 reset_text:                   '{RESET_TEXT}',
-						 author_filter:                '{AUTHOR_FILTER}',
-						 save:                         '{SAVE}',
-						 add_comment:                  '{ADD_COMMENT}',
-						 more_information:             '{MORE_INFORMATION_TEXT}'
-					 }
-		}
 	};
 
-	il.InteractiveVideo.push(player);
+	il.InteractiveVideo["{PLAYER_ID}"] = (player);
 </script>
 {CK_CONFIG}

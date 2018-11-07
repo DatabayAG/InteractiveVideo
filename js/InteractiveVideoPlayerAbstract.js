@@ -43,6 +43,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.currentTime = function()
 	{
+		console.log($(this).attr('id'), 'hello')
 		var value = -1;
 		if (typeof pub.config.currentTimeCallback === 'function') {
 			value = pub.config.currentTimeCallback();
