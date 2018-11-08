@@ -652,6 +652,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
+		$section = new ilFormSectionHeaderGUI();
+		$section->setTitle($plugin->txt('task'));
+		$a_form->addItem($section);
+
 		$description_switch = new ilCheckboxInputGUI($plugin->txt('task_switch'),'is_task');
 		$description_switch->setInfo($plugin->txt('task_switch_info'));
 		$description = xvidUtils::constructTextAreaFormElement('task', 'task');
