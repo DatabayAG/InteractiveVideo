@@ -73,9 +73,9 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 	};
 
-	pub.appendInteractionEvents = function()
+	pub.appendInteractionEvents = function(id)
 	{
-		pro.addAjaxFunctionForCommentPosting();
+/*		pro.addAjaxFunctionForCommentPosting();
 
 		pro.resetCommentFormOnClick();
 
@@ -91,7 +91,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		pro.addModalInteractionToBackLinkButton();
 		
-		pro.addTaskInteraction();
+		pro.addTaskInteraction();*/
 	};
 	
 	pro.addTaskInteraction = function()
