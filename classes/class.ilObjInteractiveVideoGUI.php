@@ -666,9 +666,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$section->setTitle($plugin->txt('comments'));
 		$a_form->addItem($section);
 
-		$anonymized = new ilCheckboxInputGUI($plugin->txt('is_anonymized'), 'is_anonymized');
-		$anonymized->setInfo($plugin->txt('is_anonymized_info'));
-		$a_form->addItem($anonymized);
+		$anonymize = new ilCheckboxInputGUI($plugin->txt('is_anonymized'), 'is_anonymized');
+		$anonymize->setInfo($plugin->txt('is_anonymized_info'));
+		$a_form->addItem($anonymize);
 
 		$is_public = new ilCheckboxInputGUI($plugin->txt('is_public'), 'is_public');
 		$is_public->setInfo($plugin->txt('is_public_info'));
