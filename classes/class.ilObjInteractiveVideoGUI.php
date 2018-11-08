@@ -489,21 +489,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$config_tpl->setVariable('USER_IMAGE', ilObjComment::getUserImageInBase64($ilUser->getId()));
 		}
 
-		$stop_points = $this->objComment->getStopPoints();
-		$comments = $this->objComment->getContentComments();
+		$stop_points = array();
+		$comments    = array();
+		$image_cache = array();
+		if( ! $edit_screen)
+		{
+			$stop_points = $this->objComment->getStopPoints();
+			$comments    = $this->objComment->getContentComments();
+			$image_cache = ilObjComment::getUserImageCache();
+		}
 
-		if($edit_screen)
-		{
-			$config_tpl->setVariable('STOP_POINTS', json_encode(array()));
-			$config_tpl->setVariable('COMMENTS', json_encode(array()));
-			$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode(array()));
-		}
-		else
-		{
-			$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
-			$config_tpl->setVariable('COMMENTS', json_encode($comments));
-			$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode(ilObjComment::getUserImageCache()));
-		}
+		$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
+		$config_tpl->setVariable('COMMENTS', json_encode($comments));
+		$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode($image_cache));
 
 		return $config_tpl->get();
 	}
