@@ -370,6 +370,9 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		element.draggable().on('dragend', function(e){
 			pro.replaceFakeMarkerAfterAttributeChange();
 		});
+		element.click(function(e) {
+			e.stopPropagation();
+		});
 		pri.actual_marker = element;
 	};
 
