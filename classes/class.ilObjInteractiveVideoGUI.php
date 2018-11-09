@@ -674,9 +674,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_public->setInfo($plugin->txt('is_public_info'));
 		$a_form->addItem($is_public);
 
-		$chrono = new ilCheckboxInputGUI($plugin->txt('is_chronologic'), 'is_chronologic');
-		$chrono->setInfo($plugin->txt('is_chronologic_info'));
-		$a_form->addItem($chrono);
+		$chronology = new ilCheckboxInputGUI($plugin->txt('is_chronologic'), 'is_chronologic');
+		$chronology->setInfo($plugin->txt('is_chronologic_info'));
+		$a_form->addItem($chronology);
 
 		$no_comment = new ilCheckboxInputGUI($plugin->txt('no_comment'), 'no_comment');
 		$no_comment->setInfo($plugin->txt('no_comment_info'));
