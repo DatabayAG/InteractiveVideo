@@ -366,11 +366,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pub.doesReferencePointExists = function()
 	{
 		let object = $('.back_link_to');
-		if(object.size() > 0)
-		{
-			return true;
-		}
-		return false;
+		return (object.size() > 0);
 	};
 
 	pub.finishAndReturnToReferencePoint = function()
@@ -393,7 +389,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	};
 
 	pub.triggerVideoStarted = function (player) {
-		console.log('started', pub.getPlayerDataObjectByPlayer(player).video_started_post_url)
 		$.ajax({
 			type     : "POST",
 			dataType : "JSON",

@@ -34,7 +34,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.duration = function(player)
 	{
-		var value = -1;
+		let value = -1;
 		if (typeof pub.config.durationCallback === 'function') {
 			value = pub.config.durationCallback();
 		}
@@ -43,7 +43,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.currentTime = function(player)
 	{
-		var value = -1;
+		let value = -1;
 		if (typeof pub.config.currentTimeCallback === 'function') {
 			value = pub.config.currentTimeCallback();
 		}
@@ -64,14 +64,14 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		if(time !== null)
 		{
 			pub.setCurrentTime(time);
-			scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player).last_stopPoint = time;
+			scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player).last_stopPoint = time;
 		}
 		pub.resumeVideo();
 	};
 
 	pub.resumeVideo = function (player)
 	{
-		if(scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player).auto_resume === true)
+		if(scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player).auto_resume === true)
 		{
 			pub.play();
 		}
