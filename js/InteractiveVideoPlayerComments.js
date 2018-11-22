@@ -1,7 +1,7 @@
 il.InteractiveVideoPlayerComments = (function (scope) {
 	'use strict';
 
-	var pub = {},
+	let pub = {},
 		pro = {},
 		pri = {};
 
@@ -10,8 +10,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.sliceCommentAndStopPointsInCorrectPosition = function (tmp_obj, time)
 	{
-		var pos = 0;
-		var i;
+		let pos = 0;
+		let i;
 		for (i = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 		{
 			if (parseFloat(scope.InteractiveVideo.comments[i].comment_time) <= time)
@@ -25,8 +25,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.replaceCommentsAfterSeeking = function (time)
 	{
-		var i;
-		var j_object = $("#ul_scroll");
+		let i;
+		let j_object = $("#ul_scroll");
 		j_object.html('');
 		pub.resetCommentsTimeEndBlacklist();
 		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
@@ -45,8 +45,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.buildListElement = function (player, comment, time, username)
 	{
-		var css_class, value;
-		var player_id             = player.node.id;
+		let css_class, value;
+		let player_id             = player.node.id;
 
 		if(pro.isBuildListElementAllowed(player_id, username))
 		{
@@ -77,20 +77,22 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.fillCommentsTimeEndBlacklist = function (player_id, comment_time_end, comment_id)
 	{
-		if(scope.InteractiveVideo[player_id].blacklist_time_end[comment_time_end] === undefined)
+		let player_data = scope.InteractiveVideo[player_id];
+
+		if(player_data.blacklist_time_end[comment_time_end] === undefined)
 		{
-			scope.InteractiveVideo[player_id].blacklist_time_end[comment_time_end] = [comment_id];
+			player_data.blacklist_time_end[comment_time_end] = [comment_id];
 		}
 		else
 		{
-			scope.InteractiveVideo[player_id].blacklist_time_end[comment_time_end].push(comment_id);
+			player_data.blacklist_time_end[comment_time_end].push(comment_id);
 		}
 		pub.addHighlightToComment(comment_id);
 	};
 
 	pub.clearCommentsWhereTimeEndEndded = function (player_id, time)
 	{
-		var timestamp, id;
+		let timestamp, id;
 		for (timestamp in scope.InteractiveVideo[player_id].blacklist_time_end) 
 		{
 			if(timestamp <= time)
@@ -108,7 +110,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.clearAndRemarkCommentsAfterSeeking = function (time)
 	{
-		var i ;
+		let i ;
 		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 		{
 			if (scope.InteractiveVideo.comments[i].comment_text !== null)
@@ -137,9 +139,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.displayAllCommentsAndDeactivateCommentStream = function(on)
 	{
-		var i;
-		var j_object	= $("#ul_scroll");
-		var element		='';
+		let i;
+		let j_object	= $("#ul_scroll");
+		let element		='';
 		j_object.html('');
 		pri.cssIterator = 0;
 
@@ -169,7 +171,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.rebuildCommentsViewIfShowAllIsActive = function()
 	{
-		var j_object, position, height;
+		let j_object, position, height;
 
 		if(scope.InteractiveVideo.is_show_all_active === true)
 		{
@@ -184,10 +186,10 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.loadAllUserWithCommentsIntoFilterList = function()
 	{
-		var element;
-		var author_list = pro.getAllUserWithComment();
-		var dropdownList = $('#dropdownMenuInteraktiveList');
-		var reset_elem = '<li><a href="#">' + scope.InteractiveVideo.lang.reset_text + '</a></li><li role="separator" class="divider"></li>';
+		let element;
+		let author_list = pro.getAllUserWithComment();
+		let dropdownList = $('#dropdownMenuInteraktiveList');
+		let reset_elem = '<li><a href="#">' + scope.InteractiveVideo.lang.reset_text + '</a></li><li role="separator" class="divider"></li>';
 
 		dropdownList.html('');
 		dropdownList.append(reset_elem);
@@ -205,15 +207,15 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.preselectActualTimeInVideo = function(seconds)
 	{
-		var obj = pro.secondsToTimeCode(seconds);
+		let obj = pro.secondsToTimeCode(seconds);
 
 		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));
 	};
 
 	pro.isBuildListElementAllowed = function(player_id, username)
 	{
-		var value = false;
-		var player_data    = scope.InteractiveVideo[player_id];
+		let value = false;
+		let player_data    = scope.InteractiveVideo[player_id];
 		if(player_data.is_show_all_active === false)
 		{
 			if(player_data.filter_by_user === false ||
@@ -230,7 +232,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.setCorrectAttributeForTimeInCommentAfterPosting = function (id, time)
 	{
-		var i;
+		let i;
 		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 		{
 			if (scope.InteractiveVideo.comments[i].comment_id === id)
@@ -247,7 +249,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.getCSSClassForListElement = function()
 	{
-		var css_class;
+		let css_class;
 
 		if(pri.cssIterator === pri.cssCommentClasses.length)
 		{
@@ -262,7 +264,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.buildCommentTimeHtml = function (time, is_interactive)
 	{
-		var display_time 	= time;
+		let display_time 	= time;
 		if(parseInt(is_interactive, 10) === 1)
 		{
 			time = Math.abs(Math.round(time) - 0.1);
@@ -276,7 +278,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.buildCommentTimeEndHtml = function (comment)
 	{
-		var display_time;
+		let display_time;
 		if(comment.comment_time_end === undefined)
 		{
 			display_time 	= comment.comment_time_end;
@@ -303,7 +305,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.buildCommentUsernameHtml = function (username, is_interactive)
 	{
-		var name = username;
+		let name = username;
 
 		if(name !== '')
 		{
@@ -319,7 +321,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.buildCommentTitleHtml = function (title)
 	{
-		var t = title;
+		let t = title;
 
 		if(t === null || t === undefined)
 		{
@@ -335,7 +337,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.buildCommentReplies = function (replies)
 	{
-		var value = '<span class="comment_replies">';
+		let value = '<span class="comment_replies">';
 		if(replies !== undefined && replies.length > 0)
 		{
 			for (var i  = 0; i < replies.length; i++)
@@ -353,7 +355,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.appendPrivateHtml = function (is_private)
 	{
-		var private_comment = '';
+		let private_comment = '';
 
 		if(parseInt(is_private, 10) === 1 || is_private === true)
 		{
@@ -368,7 +370,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.buildCommentTagsHtml = function (tags)
 	{
-		var comment_tags    = '';
+		let comment_tags    = '';
 		if(tags == null || tags == '')
 		{
 			comment_tags = '';
@@ -382,7 +384,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.getAllUserWithComment = function()
 	{
-		var i, author_list = [];
+		let i, author_list = [];
 
 		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 		{
@@ -396,9 +398,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.buildCommentUserImage = function(player_id, comment) 
 	{
-		var image = '';
-		var user_id = comment.user_id;
-		var decode = JSON.parse(il.InteractiveVideo[player_id].user_image_cache);
+		let image = '';
+		let user_id = comment.user_id;
+		let decode = JSON.parse(il.InteractiveVideo[player_id].user_image_cache);
 		if(comment.user_id !== undefined && user_id in decode)
 		{
 			image = '<img src="' + decode[user_id] + '"/>';
@@ -418,10 +420,10 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	
 	pro.secondsToTimeCode = function(time) 
 	{
-		var obj = pro.convertSecondsToTimeObject(time);
-		var h = pro.fillWithZeros(obj.hours);
-		var m = pro.fillWithZeros(obj.minutes);
-		var s = pro.fillWithZeros(obj.seconds);
+		let obj = pro.convertSecondsToTimeObject(time);
+		let h = pro.fillWithZeros(obj.hours);
+		let m = pro.fillWithZeros(obj.minutes);
+		let s = pro.fillWithZeros(obj.seconds);
 		return h + ':' + m + ':' + s;
 	};
 
@@ -447,7 +449,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	
 	pro.convertSecondsToTimeObject = function(time)
 	{
-		var obj = {};
+		let obj = {};
 
 		obj.hours  =  Math.floor(time / 3600) % 24;
 		obj.minutes = Math.floor(time / 60) % 60;

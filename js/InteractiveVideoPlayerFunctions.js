@@ -7,7 +7,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.seekingEventHandler = function()
 	{
-		var current_time = scope.InteractiveVideoPlayerAbstract.currentTime();
+		let current_time = scope.InteractiveVideoPlayerAbstract.currentTime();
 		
 		if (scope.InteractiveVideo.last_time > current_time)
 		{
@@ -33,11 +33,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.playingEventHandler = function(interval, player)
 	{
-		var cueTime, stop_video, i, j;
-		var current_time    = scope.InteractiveVideoPlayerAbstract.currentTime();
-		var duration        = scope.InteractiveVideoPlayerAbstract.duration();
-		var player_id       = player.node.id;
-		var player_data     = scope.InteractiveVideo[player_id];
+		let cueTime, stop_video, i, j;
+		let current_time    = scope.InteractiveVideoPlayerAbstract.currentTime();
+		let duration        = scope.InteractiveVideoPlayerAbstract.duration();
+		let player_id       = pub.getPlayerIdFromPlayerObject(player);
+		let player_data     = pub.getPlayerDataObjectByPlayer(player);
 
 		if (current_time >= duration) {
 			clearInterval(interval);
@@ -98,8 +98,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pro.addTaskInteraction = function()
 	{
 		$('.task_interaction').on('click', function() {
-			var description = $('.task_description');
-			var icon = $('.task_icon');
+			let description = $('.task_description');
+			let icon = $('.task_icon');
 			if(! description.hasClass('closed'))
 			{
 				description.addClass('closed');
@@ -117,7 +117,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.addHighlightToCommentWithoutEndTime = function(comment)
 	{
-		var time_end = parseInt(comment.comment_time_end, 10);
+		let time_end = parseInt(comment.comment_time_end, 10);
 		if(time_end === 0 || time_end === null) 
 		{
 			$('.list_item_' + comment.comment_id).addClass('activeCommentWithoutEndTime');
@@ -128,11 +128,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.commentsObjectActions = function(i, current_time, player)
 	{
-		var id             = player.node.id;
-		var player_data    = scope.InteractiveVideo[id];
-		var is_interactive = parseInt(player_data.comments[i].is_interactive, 10);
-		var comment        = player_data.comments[i];
-		var stop_video     = 0;
+		let player_id      = pub.getPlayerIdFromPlayerObject(player);
+		let player_data    = pub.getPlayerDataObjectByPlayer(player);
+		let is_interactive = parseInt(player_data.comments[i].is_interactive, 10);
+		let comment        = player_data.comments[i];
+		let stop_video     = 0;
 
 		if (player_data.comments[i].comment_text != null) 
 		{
@@ -141,7 +141,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			pro.addHighlightToCommentWithoutEndTime(comment);
 			if (comment.comment_time_end > 0) 
 			{
-				pri.utils.fillCommentsTimeEndBlacklist(id, comment.comment_time_end, comment.comment_id);
+				pri.utils.fillCommentsTimeEndBlacklist(player_id, comment.comment_time_end, comment.comment_id);
 			}
 		}
 
@@ -158,8 +158,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	};
 
 	pub.postAndAppendFakeCommentToStream = function(actual_time_in_video, comment_text, is_private, end_time) {
-		var fake_id = parseInt(Math.random() * 10000000, 10);
-		var tmp_obj =
+		let fake_id = parseInt(Math.random() * 10000000, 10);
+		let tmp_obj =
 			{
 				'comment_id':         fake_id,
 				'comment_time':       actual_time_in_video,
@@ -199,17 +199,17 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pro.addAjaxFunctionForCommentPosting = function()
 	{
 		$("#ilInteractiveVideoCommentSubmit").on("click", function() {
-			var time;
-			var actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
-			var comment_text = CKEDITOR.instances.comment_text.getData();
-			var is_private = $('#is_private').prop("checked");
+			let time;
+			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
+			let comment_text = CKEDITOR.instances.comment_text.getData();
+			let is_private = $('#is_private').prop("checked");
 
 			if( $('#comment_time_end_chk').prop( "checked" ))
 			{
 				time = $('#comment_time_end').val();
 				time = time.split(':'); // split it at the colons
-				
-				var end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
+
+				let end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
 
 				if(end_time < parseInt(actual_time_in_video, 10))
 				{
@@ -225,9 +225,9 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pub.addAjaxFunctionForReflectionCommentPosting = function(comment_id, org_id)
 	{
 		$("#submit_comment_form").on("click", function() {
-			var actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
-			var comment_text = CKEDITOR.instances['text_reflection_comment_' + comment_id].getData();
-			var is_private = $('#is_private_modal').prop("checked");
+			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
+			let comment_text = CKEDITOR.instances['text_reflection_comment_' + comment_id].getData();
+			let is_private = $('#is_private_modal').prop("checked");
 			$.ajax({
 				type:     "POST",
 				url:      il.InteractiveVideo.post_comment_url,
@@ -269,7 +269,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pro.addPausePlayerOnClick = function()
 	{
 		CKEDITOR.on('instanceReady', function(evt) {
-			var editor = evt.editor;
+			let editor = evt.editor;
 			if(editor.name === 'comment_text')
 			{
 				editor.on('focus', function() {
@@ -328,8 +328,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		pri.utils.loadAllUserWithCommentsIntoFilterList();
 
 		$('#dropdownMenuInteraktiveList a').click(function(){
-			var value = $(this).html();
-			var show_all_active_temp = scope.InteractiveVideo.is_show_all_active;
+			let value = $(this).html();
+			let show_all_active_temp = scope.InteractiveVideo.is_show_all_active;
 
 			if(value === scope.InteractiveVideo.lang.reset_text)
 			{
@@ -365,7 +365,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	
 	pub.doesReferencePointExists = function()
 	{
-		var object = $('.back_link_to');
+		let object = $('.back_link_to');
 		if(object.size() > 0)
 		{
 			return true;
@@ -375,7 +375,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.finishAndReturnToReferencePoint = function()
 	{
-		var modal = $('.modal-body');
+		let modal = $('.modal-body');
 		modal.html('');
 		$('.modal-title').html();
 		modal.append($('.back_to_title').html());
@@ -420,6 +420,21 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		{
 			MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 		}
+	};
+
+	pub.getPlayerDataObjectByPlayer = function(player)
+	{
+		return pub.getPlayerDataObjectByPlayerId(pub.getPlayerIdFromPlayerObject(player));
+	};
+
+	pub.getPlayerIdFromPlayerObject = function(player)
+	{
+		return player.node.id;
+	};
+
+	pub.getPlayerDataObjectByPlayerId = function(player_id)
+	{
+		return scope.InteractiveVideo[player_id];
 	};
 
 	pub.protect = pro;
