@@ -43,16 +43,17 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		pub.clearCommentsWhereTimeEndEndded(time);
 	};
 
-	pub.buildListElement = function (comment, time, username)
+	pub.buildListElement = function (player, comment, time, username)
 	{
 		var css_class, value;
+		var player_id             = player.node.id;
 
-		if(pro.isBuildListElementAllowed(username))
+		if(pro.isBuildListElementAllowed(player_id, username))
 		{
 			css_class = pro.getCSSClassForListElement();
 			value =	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class + '">' +
 				'<div class="message-inner">' +
-							pro.buildCommentUserImage(comment)                   +
+							pro.buildCommentUserImage(player_id, comment)                   +
 							'<div class="comment_user_data">' + pub.buildCommentUsernameHtml(username, comment.is_interactive) +
 							pro.appendPrivateHtml(comment.is_private) +
 							'<div class="comment_time">' +
@@ -209,14 +210,15 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));
 	};
 
-	pro.isBuildListElementAllowed = function(username)
+	pro.isBuildListElementAllowed = function(player_id, username)
 	{
 		var value = false;
-		if(scope.InteractiveVideo.is_show_all_active === false)
+		var player_data    = scope.InteractiveVideo[player_id];
+		if(player_data.is_show_all_active === false)
 		{
-			if(scope.InteractiveVideo.filter_by_user === false ||
-					(   scope.InteractiveVideo.filter_by_user !== false && 
-						scope.InteractiveVideo.filter_by_user === username
+			if(player_data.filter_by_user === false ||
+					(   player_data.filter_by_user !== false &&
+						player_data.filter_by_user === username
 					)
 				)
 			{
@@ -392,11 +394,11 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return author_list;
 	};
 
-	pro.buildCommentUserImage = function(comment) 
+	pro.buildCommentUserImage = function(player_id, comment) 
 	{
 		var image = '';
 		var user_id = comment.user_id;
-		var decode = JSON.parse(il.InteractiveVideo.user_image_cache);
+		var decode = JSON.parse(il.InteractiveVideo[player_id].user_image_cache);
 		if(comment.user_id !== undefined && user_id in decode)
 		{
 			image = '<img src="' + decode[user_id] + '"/>';
