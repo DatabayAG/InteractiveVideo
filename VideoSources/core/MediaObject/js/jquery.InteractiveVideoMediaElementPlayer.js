@@ -50,21 +50,21 @@ $(document).ready(function () {
 						}, false);
 
 						media.addEventListener('play', function () {
-							il.InteractiveVideoPlayerAbstract.play();
+							il.InteractiveVideoPlayerAbstract.play(player);
 						}, false);
 
 						media.addEventListener('seeked', function () {
 							clearInterval(interval);
-							il.InteractiveVideoPlayerFunction.seekingEventHandler();
+							il.InteractiveVideoPlayerFunction.seekingEventHandler(player);
 						}, false);
 
 						media.addEventListener('pause', function () {
 							clearInterval(interval);
-							il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime();
+							il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime(player);
 						}, false);
 
 						media.addEventListener('ended', function () {
-							il.InteractiveVideoPlayerAbstract.videoFinished();
+							il.InteractiveVideoPlayerAbstract.videoFinished(player);
 						}, false);
 
 						media.addEventListener('playing', function () {

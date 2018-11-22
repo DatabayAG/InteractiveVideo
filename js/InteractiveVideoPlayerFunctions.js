@@ -392,22 +392,23 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		});
 	};
 
-	pub.triggerVideoStarted = function () {
+	pub.triggerVideoStarted = function (player) {
+		console.log('started', pub.getPlayerDataObjectByPlayer(player).video_started_post_url)
 		$.ajax({
 			type     : "POST",
 			dataType : "JSON",
-			url      : il.InteractiveVideo.video_started_post_url,
+			url      : pub.getPlayerDataObjectByPlayer(player).video_started_post_url,
 			data     : {},
 			success  : function() {
 			}
 		});
 	};
 
-	pub.triggerVideoFinished = function () {
+	pub.triggerVideoFinished = function (player) {
 		$.ajax({
 			type     : "POST",
 			dataType : "JSON",
-			url      : il.InteractiveVideo.video_finished_post_url,
+			url      : pub.getPlayerDataObjectByPlayer(player).video_finished_post_url,
 			data     : {},
 			success  : function() {
 			}

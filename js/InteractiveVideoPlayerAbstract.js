@@ -13,18 +13,18 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pro.first_play_action = true;
 
-	pub.pause = function()
+	pub.pause = function(player)
 	{
 		if (typeof pub.config.pauseCallback === 'function') {
 			pub.config.pauseCallback();
 		}
 	};
 
-	pub.play = function()
+	pub.play = function(player)
 	{
 		if (pro.first_play_action) {
 			pro.first_play_action = false;
-			il.InteractiveVideoPlayerFunction.triggerVideoStarted();
+			il.InteractiveVideoPlayerFunction.triggerVideoStarted(player);
 		}
 
 		if (typeof pub.config.playCallback === 'function') {
@@ -32,7 +32,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		}
 	};
 
-	pub.duration = function()
+	pub.duration = function(player)
 	{
 		var value = -1;
 		if (typeof pub.config.durationCallback === 'function') {
@@ -41,7 +41,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		return value;
 	};
 
-	pub.currentTime = function()
+	pub.currentTime = function(player)
 	{
 		var value = -1;
 		if (typeof pub.config.currentTimeCallback === 'function') {
@@ -50,34 +50,34 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		return value;
 	};
 
-	pub.setCurrentTime = function(time)
+	pub.setCurrentTime = function(time, player)
 	{
 		if (typeof pub.config.setCurrentTimeCallback === 'function') {
 			pub.config.setCurrentTimeCallback(time);
 		}
 	};
 
-	pub.jumpToTimeInVideo = function (time)
+	pub.jumpToTimeInVideo = function (time, player)
 	{
 		pub.play();
 		pub.pause();
 		if(time !== null)
 		{
 			pub.setCurrentTime(time);
-			scope.InteractiveVideo.last_stopPoint = time;
+			scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player).last_stopPoint = time;
 		}
 		pub.resumeVideo();
 	};
 
-	pub.resumeVideo = function ()
+	pub.resumeVideo = function (player)
 	{
-		if(scope.InteractiveVideo.auto_resume === true)
+		if(scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player).auto_resume === true)
 		{
 			pub.play();
 		}
 	};
 
-	pub.videoFinished = function()
+	pub.videoFinished = function(player)
 	{
 		il.InteractiveVideoPlayerFunction.triggerVideoFinished();
 
