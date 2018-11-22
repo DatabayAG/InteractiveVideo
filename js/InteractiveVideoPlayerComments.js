@@ -74,32 +74,32 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return value;
 	};
 
-	pub.fillCommentsTimeEndBlacklist = function (comment_time_end, comment_id)
+	pub.fillCommentsTimeEndBlacklist = function (player_id, comment_time_end, comment_id)
 	{
-		if(scope.InteractiveVideo.blacklist_time_end[comment_time_end] === undefined)
+		if(scope.InteractiveVideo[player_id].blacklist_time_end[comment_time_end] === undefined)
 		{
-			scope.InteractiveVideo.blacklist_time_end[comment_time_end] = [comment_id];
+			scope.InteractiveVideo[player_id].blacklist_time_end[comment_time_end] = [comment_id];
 		}
 		else
 		{
-			scope.InteractiveVideo.blacklist_time_end[comment_time_end].push(comment_id);
+			scope.InteractiveVideo[player_id].blacklist_time_end[comment_time_end].push(comment_id);
 		}
 		pub.addHighlightToComment(comment_id);
 	};
 
-	pub.clearCommentsWhereTimeEndEndded = function (time)
+	pub.clearCommentsWhereTimeEndEndded = function (player_id, time)
 	{
 		var timestamp, id;
-		for (timestamp in scope.InteractiveVideo.blacklist_time_end) 
+		for (timestamp in scope.InteractiveVideo[player_id].blacklist_time_end) 
 		{
 			if(timestamp <= time)
 			{
-				for (id in scope.InteractiveVideo.blacklist_time_end[timestamp]) 
+				for (id in scope.InteractiveVideo[player_id].blacklist_time_end[timestamp]) 
 				{
-					pro.removeHighlightFromComment(scope.InteractiveVideo.blacklist_time_end[timestamp][id]);
+					pro.removeHighlightFromComment(scope.InteractiveVideo[player_id].blacklist_time_end[timestamp][id]);
 				}
 
-				delete scope.InteractiveVideo.blacklist_time_end[timestamp];
+				delete scope.InteractiveVideo[player_id].blacklist_time_end[timestamp];
 			}
 		}
 		il.InteractiveVideoPlayerFunction.refreshMathJaxView();

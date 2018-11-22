@@ -36,6 +36,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		var cueTime, stop_video, i, j;
 		var current_time    = scope.InteractiveVideoPlayerAbstract.currentTime();
 		var duration        = scope.InteractiveVideoPlayerAbstract.duration();
+		var player_id       = player.node.id;
+		var player_data     = scope.InteractiveVideo[player_id];
 
 		if (current_time >= duration) {
 			clearInterval(interval);
@@ -44,19 +46,18 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		if (!isNaN(current_time) && current_time > 0) {
 
-			pri.utils.clearCommentsWhereTimeEndEndded(current_time);
-
-			for (j = scope.InteractiveVideo.stopPoints.length - 1; j >= 0; j--)
+			pri.utils.clearCommentsWhereTimeEndEndded(player_id, current_time);
+			for (j = player_data.stopPoints.length - 1; j >= 0; j--)
 			{
-				cueTime = parseInt(scope.InteractiveVideo.stopPoints[j], 10);
-				if (cueTime >= scope.InteractiveVideo.last_time && cueTime <= current_time)
+				cueTime = parseInt(player_data.stopPoints[j], 10);
+				if (cueTime >= player_data.last_time && cueTime <= current_time)
 				{
 					stop_video = 0;
-					if (scope.InteractiveVideo.last_stopPoint < cueTime)
+					if (player_data.last_stopPoint < cueTime)
 					{
-						for (i = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
+						for (i = 0; i < Object.keys(scope.InteractiveVideo[player_id].comments).length; i++)
 						{
-							if (scope.InteractiveVideo.comments[i].comment_time == cueTime)
+							if (player_data.comments[i].comment_time == cueTime)
 							{
 								stop_video = pro.commentsObjectActions(i, current_time, player);
 							}
@@ -66,10 +67,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 							}
 						}
 					}
-					scope.InteractiveVideo.last_stopPoint = parseInt(cueTime, 10);
+					player_data.last_stopPoint = parseInt(cueTime, 10);
 				}
 			}
-			scope.InteractiveVideo.last_time = current_time;
+			player_data.last_time = current_time;
 		}
 	};
 
@@ -127,21 +128,23 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.commentsObjectActions = function(i, current_time, player)
 	{
-		var is_interactive = parseInt(scope.InteractiveVideo.comments[i].is_interactive, 10);
-		var comment        = scope.InteractiveVideo.comments[i];
+		var id             = player.node.id;
+		var player_data    = scope.InteractiveVideo[id];
+		var is_interactive = parseInt(player_data.comments[i].is_interactive, 10);
+		var comment        = player_data.comments[i];
 		var stop_video     = 0;
-		
-		if (scope.InteractiveVideo.comments[i].comment_text != null) 
+
+		if (player_data.comments[i].comment_text != null) 
 		{
 			$("#ul_scroll").prepend(pri.utils.buildListElement(comment, current_time, comment.user_name));
 			pro.addHighlightToCommentWithoutEndTime(comment);
 			if (comment.comment_time_end > 0) 
 			{
-				pri.utils.fillCommentsTimeEndBlacklist(comment.comment_time_end, comment.comment_id);
+				pri.utils.fillCommentsTimeEndBlacklist(id, comment.comment_time_end, comment.comment_id);
 			}
 		}
 
-		if (is_interactive === 1 && $.inArray(comment.comment_id, scope.InteractiveVideo.ignore_questions) == -1) {
+		if (is_interactive === 1 && $.inArray(comment.comment_id, player_data.ignore_questions) == -1) {
 			stop_video = 1;
 			InteractiveVideoQuestionViewer.getQuestionPerAjax(comment.comment_id, player);
 		}
