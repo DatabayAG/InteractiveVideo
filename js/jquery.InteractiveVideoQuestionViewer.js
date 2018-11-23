@@ -1,6 +1,6 @@
 var InteractiveVideoQuestionViewer = (function (scope) {
 	'use strict';
-	var pub = {},
+	let pub = {},
 		pro = {};
 
 	pub.QuestionObject = {};
@@ -18,9 +18,9 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.buildQuestionForm = function(player) {
-		var modal = $('.modal-body');
-		var type  = parseInt(pub.QuestionObject.type, 10);
-		var img   = '';
+		let modal = $('.modal-body');
+		let type  = parseInt(pub.QuestionObject.type, 10);
+		let img   = '';
 		modal.html('');
 		$('.modal-title').html(pub.QuestionObject.question_title);
 		if(pub.QuestionObject.question_image)
@@ -61,7 +61,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.addAnswerPossibilities = function(input_type) {
-		var html = '';
+		let html = '';
 		html = '<form id="question_form">';
 		$.each(pub.QuestionObject.answers, function (l, value) {
 			html += pro.buildAnswerInputElement(input_type, value);
@@ -107,7 +107,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	
 	pro.appendSelfReflectionCommentForm = function()
 	{
-		var comment_id = 'text_reflection_comment_'+ pub.comment_id ;
+		let comment_id = 'text_reflection_comment_'+ pub.comment_id ;
 		$('.modal_reflection_footer').prepend(pro.createButtonButtons('submit_comment_form', scope.InteractiveVideo.lang.save));
 		$('.modal_reflection_footer').prepend('<input type="checkbox" name="is_private_modal" value="1" id="is_private_modal"/> ' + scope.InteractiveVideo.lang.private_text);
 		$('.modal_feedback').prepend('<textarea id="'+comment_id+'">' + pub.QuestionObject.reply_to_txt + '</textarea>');
@@ -121,7 +121,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.addToLocalIgnoreArrayIfNonRepeatable = function(){
-		var repeat = parseInt(InteractiveVideoQuestionViewer.QuestionObject.repeat_question, 10);
+		let repeat = parseInt(InteractiveVideoQuestionViewer.QuestionObject.repeat_question, 10);
 		if(repeat === 0)
 		{
 			scope.InteractiveVideo.ignore_questions.push(pub.comment_id );
@@ -133,14 +133,14 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.addButtons = function(player) {
-		var question_form = $('#question_buttons_bellow_form');
+		let question_form = $('#question_buttons_bellow_form');
 		question_form.append(pro.createButtonButtons('sendForm', scope.InteractiveVideo.lang.send_text));
 		question_form.append(pro.createButtonButtons('close_form', scope.InteractiveVideo.lang.close_text));
 		pro.appendButtonListener(player);
 	};
 
 	pro.showFeedback = function(feedback) {
-		var modal = $('.modal_feedback');
+		let modal = $('.modal_feedback');
 		modal.html('');
 		pro.showResponseFrequency(feedback.response_frequency);
 		modal.html(feedback.html);
@@ -159,8 +159,8 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.showResponseFrequency = function(response_frequency) 
 	{
-		var answers_count = 0;
-		var percentage = 0;
+		let answers_count = 0;
+		let percentage = 0;
 		if(parseInt(pub.QuestionObject.show_response_frequency, 10) === 1)
 		{
 			$.each(response_frequency, function (l, value) {
@@ -188,7 +188,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 				url:     player_data.question_post_url,
 				data:    $(this).serialize(),
 				success: function (feedback) {
-					var obj = JSON.parse(feedback);
+					let obj = JSON.parse(feedback);
 					pro.showFeedback(obj);
 					pro.addToLocalIgnoreArrayIfNonRepeatable();
 				}
