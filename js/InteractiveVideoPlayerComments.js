@@ -10,8 +10,10 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.sliceCommentAndStopPointsInCorrectPosition = function (tmp_obj, time)
 	{
+		//Todo: inject player
 		let pos = 0;
 		let i;
+
 		for (i = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 		{
 			if (parseFloat(scope.InteractiveVideo.comments[i].comment_time) <= time)
@@ -25,8 +27,10 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.replaceCommentsAfterSeeking = function (time)
 	{
+		//Todo: inject player
 		let i;
 		let j_object = $("#ul_scroll");
+
 		j_object.html('');
 		pub.resetCommentsTimeEndBlacklist();
 		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
@@ -93,6 +97,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pub.clearCommentsWhereTimeEndEndded = function (player_id, time)
 	{
 		let timestamp, id;
+
 		for (timestamp in scope.InteractiveVideo[player_id].blacklist_time_end) 
 		{
 			if(timestamp <= time)
@@ -110,7 +115,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.clearAndRemarkCommentsAfterSeeking = function (time)
 	{
+		//Todo: inject player
 		let i ;
+
 		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 		{
 			if (scope.InteractiveVideo.comments[i].comment_text !== null)
@@ -134,14 +141,17 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.resetCommentsTimeEndBlacklist = function ()
 	{
+		//Todo: inject player
 		scope.InteractiveVideo.blacklist_time_end = [];
 	};
 
 	pub.displayAllCommentsAndDeactivateCommentStream = function(on)
 	{
+		//Todo: inject player
 		let i;
 		let j_object	= $("#ul_scroll");
 		let element		='';
+
 		j_object.html('');
 		pri.cssIterator = 0;
 
@@ -171,6 +181,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.rebuildCommentsViewIfShowAllIsActive = function()
 	{
+		//Todo: inject player
 		let j_object, position, height;
 
 		if(scope.InteractiveVideo.is_show_all_active === true)
@@ -216,6 +227,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	{
 		let value = false;
 		let player_data    = scope.InteractiveVideo[player_id];
+
 		if(player_data.is_show_all_active === false)
 		{
 			if(player_data.filter_by_user === false ||
@@ -232,7 +244,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.setCorrectAttributeForTimeInCommentAfterPosting = function (id, time)
 	{
+		//Todo: inject player
 		let i;
+
 		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
 		{
 			if (scope.InteractiveVideo.comments[i].comment_id === id)
@@ -265,6 +279,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.buildCommentTimeHtml = function (time, is_interactive)
 	{
 		let display_time 	= time;
+
 		if(parseInt(is_interactive, 10) === 1)
 		{
 			time = Math.abs(Math.round(time) - 0.1);
@@ -279,6 +294,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.buildCommentTimeEndHtml = function (comment)
 	{
 		let display_time;
+
 		if(comment.comment_time_end === undefined)
 		{
 			display_time 	= comment.comment_time_end;
@@ -338,6 +354,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.buildCommentReplies = function (replies)
 	{
 		let value = '<span class="comment_replies">';
+
 		if(replies !== undefined && replies.length > 0)
 		{
 			for (var i  = 0; i < replies.length; i++)
@@ -371,6 +388,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.buildCommentTagsHtml = function (tags)
 	{
 		let comment_tags    = '';
+
 		if(tags == null || tags == '')
 		{
 			comment_tags = '';
@@ -384,6 +402,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.getAllUserWithComment = function()
 	{
+		//Todo: inject player
 		let i, author_list = [];
 
 		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
@@ -401,6 +420,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let image = '';
 		let user_id = comment.user_id;
 		let decode = JSON.parse(il.InteractiveVideo[player_id].user_image_cache);
+
 		if(comment.user_id !== undefined && user_id in decode)
 		{
 			image = '<img src="' + decode[user_id] + '"/>';
@@ -424,13 +444,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let h = pro.fillWithZeros(obj.hours);
 		let m = pro.fillWithZeros(obj.minutes);
 		let s = pro.fillWithZeros(obj.seconds);
+
 		return h + ':' + m + ':' + s;
 	};
 
 	pro.fillWithZeros = function(number)
 	{
 		number = parseInt(number, 10);
-		if(number == 0)
+		if(number === 0)
 		{
 			return '00';
 		}

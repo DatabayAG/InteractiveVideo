@@ -231,7 +231,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		}
 		$('#ilQuestionModal').modal('show');
 	};
-	
+
 	pub.protect = pro;
 	return pub;
 
