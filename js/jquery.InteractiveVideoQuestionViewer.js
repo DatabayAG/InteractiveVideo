@@ -108,15 +108,18 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	pro.appendSelfReflectionCommentForm = function()
 	{
 		let comment_id = 'text_reflection_comment_'+ pub.comment_id ;
-		$('.modal_reflection_footer').prepend(pro.createButtonButtons('submit_comment_form', scope.InteractiveVideo.lang.save));
-		$('.modal_reflection_footer').prepend('<input type="checkbox" name="is_private_modal" value="1" id="is_private_modal"/> ' + scope.InteractiveVideo.lang.private_text);
-		$('.modal_feedback').prepend('<textarea id="'+comment_id+'">' + pub.QuestionObject.reply_to_txt + '</textarea>');
+		let footer = $('.modal_reflection_footer');
+		let feedback = $('.modal_feedback');
+
+		footer.prepend(pro.createButtonButtons('submit_comment_form', scope.InteractiveVideo.lang.save));
+		footer.prepend('<input type="checkbox" name="is_private_modal" value="1" id="is_private_modal"/> ' + scope.InteractiveVideo.lang.private_text);
+		feedback.prepend('<textarea id="'+comment_id+'">' + pub.QuestionObject.reply_to_txt + '</textarea>');
 		if(pub.QuestionObject.reply_to_private == '1')
 		{
 			$('#is_private_modal').attr('checked', 'checked');
 		}
 		CKEDITOR.replace(comment_id);
-		$('.modal_feedback').prepend(scope.InteractiveVideo.lang.add_comment);
+		feedback.prepend(scope.InteractiveVideo.lang.add_comment);
 		scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReflectionCommentPosting(pub.comment_id, pub.QuestionObject.reply_original_id);
 	};
 
