@@ -7,6 +7,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 	pub.getQuestionPerAjax = function (comment_id, player) {
 		let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+
 		$.when(
 				$.ajax({
 					url:  player_data.question_get_url + '&comment_id=' + comment_id,
@@ -21,6 +22,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		let modal = $('.modal-body');
 		let type  = parseInt(pub.QuestionObject.type, 10);
 		let img   = '';
+
 		modal.html('');
 		$('.modal-title').html(pub.QuestionObject.question_title);
 		if(pub.QuestionObject.question_image)
@@ -40,7 +42,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		}
 		else if (type === 2)
 		{
-			pro.addSelfReflectionLayout();
+			pro.addSelfReflectionLayout(player);
 		}
 		pro.showPreviousAnswer();
 	};
@@ -62,6 +64,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.addAnswerPossibilities = function(input_type) {
 		let html = '';
+
 		html = '<form id="question_form">';
 		$.each(pub.QuestionObject.answers, function (l, value) {
 			html += pro.buildAnswerInputElement(input_type, value);
@@ -85,7 +88,9 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 			'<br/>';
 	};
 
-	pro.addSelfReflectionLayout = function() {
+	pro.addSelfReflectionLayout = function(player) {
+		let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+
 		$('.modal-body').append('<div class="modal_feedback"><div class="modal_reflection_footer">' + pro.createButtonButtons('close_form', scope.InteractiveVideo.lang.close_text) +'</div></div>');
 		if(parseInt(pub.QuestionObject.reflection_question_comment, 10) === 1)
 		{
@@ -93,7 +98,6 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		}
 
 		pro.appendCloseButtonListener();
-		let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
 		$.ajax({
 			type:    "POST",
 			cache:   false,
@@ -125,6 +129,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.addToLocalIgnoreArrayIfNonRepeatable = function(){
 		let repeat = parseInt(InteractiveVideoQuestionViewer.QuestionObject.repeat_question, 10);
+
 		if(repeat === 0)
 		{
 			scope.InteractiveVideo.ignore_questions.push(pub.comment_id );
@@ -137,6 +142,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.addButtons = function(player) {
 		let question_form = $('#question_buttons_bellow_form');
+
 		question_form.append(pro.createButtonButtons('sendForm', scope.InteractiveVideo.lang.send_text));
 		question_form.append(pro.createButtonButtons('close_form', scope.InteractiveVideo.lang.close_text));
 		pro.appendButtonListener(player);
@@ -144,6 +150,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.showFeedback = function(feedback) {
 		let modal = $('.modal_feedback');
+
 		modal.html('');
 		pro.showResponseFrequency(feedback.response_frequency);
 		modal.html(feedback.html);
@@ -164,6 +171,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	{
 		let answers_count = 0;
 		let percentage = 0;
+
 		if(parseInt(pub.QuestionObject.show_response_frequency, 10) === 1)
 		{
 			$.each(response_frequency, function (l, value) {
@@ -184,6 +192,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	pro.appendButtonListener = function(player) {
 		$('#question_form').on('submit', function (e) {
 			let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+
 			e.preventDefault();
 			$.ajax({
 				type:    "POST",
