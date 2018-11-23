@@ -128,6 +128,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.addToLocalIgnoreArrayIfNonRepeatable = function(){
+		//Todo: inject player
 		let repeat = parseInt(InteractiveVideoQuestionViewer.QuestionObject.repeat_question, 10);
 
 		if(repeat === 0)

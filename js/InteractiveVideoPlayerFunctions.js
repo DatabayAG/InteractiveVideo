@@ -7,6 +7,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.seekingEventHandler = function()
 	{
+		//Todo: inject player
 		let current_time = scope.InteractiveVideoPlayerAbstract.currentTime();
 		
 		if (scope.InteractiveVideo.last_time > current_time)
@@ -76,6 +77,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.appendInteractionEvents = function(id)
 	{
+		//Todo: fix this
 /*		pro.addAjaxFunctionForCommentPosting();
 
 		pro.resetCommentFormOnClick();
@@ -158,6 +160,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	};
 
 	pub.postAndAppendFakeCommentToStream = function(actual_time_in_video, comment_text, is_private, end_time) {
+		//Todo: inject player
 		let fake_id = parseInt(Math.random() * 10000000, 10);
 		let tmp_obj =
 			{
@@ -224,6 +227,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.addAjaxFunctionForReflectionCommentPosting = function(comment_id, org_id)
 	{
+		//Todo: inject player
 		$("#submit_comment_form").on("click", function() {
 			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
 			let comment_text = CKEDITOR.instances['text_reflection_comment_' + comment_id].getData();
@@ -268,6 +272,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.addPausePlayerOnClick = function()
 	{
+		//Todo: inject player
 		CKEDITOR.on('instanceReady', function(evt) {
 			let editor = evt.editor;
 			if(editor.name === 'comment_text')
@@ -317,6 +322,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	
 	pro.isChronologicViewDeactivatedShowAllComments = function()
 	{
+		//Todo: inject player
 		if(scope.InteractiveVideo.is_chronologic === '1')
 		{
 			$('#show_all_comments').click();
@@ -325,6 +331,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.addDropDownEvent = function()
 	{
+		//Todo: inject player
 		pri.utils.loadAllUserWithCommentsIntoFilterList();
 
 		$('#dropdownMenuInteraktiveList a').click(function(){
