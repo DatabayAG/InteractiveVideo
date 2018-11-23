@@ -25,26 +25,27 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		scope.InteractiveVideo.stopPoints.splice( pos + 1, 0, Math.floor(time));
 	};
 
-	pub.replaceCommentsAfterSeeking = function (time)
+	pub.replaceCommentsAfterSeeking = function (time, player)
 	{
-		//Todo: inject player
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+		let player_id = scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 		let i;
 		let j_object = $("#ul_scroll");
 
 		j_object.html('');
 		pub.resetCommentsTimeEndBlacklist();
-		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
+		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 		{
-			if (scope.InteractiveVideo.comments[i].comment_time <= time && scope.InteractiveVideo.comments[i].comment_text !== null)
+			if (player_data.comments[i].comment_time <= time && player_data.comments[i].comment_text !== null)
 			{
-				j_object.prepend(pub.buildListElement(scope.InteractiveVideo.comments[i], scope.InteractiveVideo.comments[i].comment_time, scope.InteractiveVideo.comments[i].user_name));
+				j_object.prepend(pub.buildListElement(player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name));
 				if(scope.InteractiveVideo.comments[i].comment_time_end > 0)
 				{
-					pub.fillCommentsTimeEndBlacklist(scope.InteractiveVideo.comments[i].comment_time_end, scope.InteractiveVideo.comments[i].comment_id);
+					pub.fillCommentsTimeEndBlacklist(player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
 				}
 			}
 		}
-		pub.clearCommentsWhereTimeEndEndded(time);
+		pub.clearCommentsWhereTimeEndEndded(player_id, time);
 	};
 
 	pub.buildListElement = function (player, comment, time, username)
@@ -113,22 +114,22 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		il.InteractiveVideoPlayerFunction.refreshMathJaxView();
 	};
 
-	pub.clearAndRemarkCommentsAfterSeeking = function (time)
+	pub.clearAndRemarkCommentsAfterSeeking = function (time, player)
 	{
-		//Todo: inject player
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
 		let i ;
 
-		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
+		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 		{
-			if (scope.InteractiveVideo.comments[i].comment_text !== null)
+			if (player_data.comments[i].comment_text !== null)
 			{
-				pro.removeHighlightFromComment(scope.InteractiveVideo.comments[i].comment_id);
-				if(scope.InteractiveVideo.comments[i].comment_time_end > 0 && 
-						scope.InteractiveVideo.comments[i].comment_time <= time && 
-						scope.InteractiveVideo.comments[i].comment_time_end >= time
+				pro.removeHighlightFromComment(player_data.comments[i].comment_id);
+				if(player_data.comments[i].comment_time_end > 0 &&
+					player_data.comments[i].comment_time <= time &&
+					player_data.comments[i].comment_time_end >= time
 					)
 				{
-					pub.addHighlightToComment(scope.InteractiveVideo.comments[i].comment_id);
+					pub.addHighlightToComment(player_data.comments[i].comment_id);
 				}
 			}
 		}

@@ -5,7 +5,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pri.utils = scope.InteractiveVideoPlayerComments;
 
-	pub.seekingEventHandler = function()
+	pub.seekingEventHandler = function(player)
 	{
 		//Todo: inject player
 		let current_time = scope.InteractiveVideoPlayerAbstract.currentTime();
@@ -22,11 +22,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		if(	scope.InteractiveVideo.is_show_all_active === false)
 		{
-			pri.utils.replaceCommentsAfterSeeking(current_time);
+			pri.utils.replaceCommentsAfterSeeking(current_time, player);
 		}
 		else
 		{
-			pri.utils.clearAndRemarkCommentsAfterSeeking(current_time);
+			pri.utils.clearAndRemarkCommentsAfterSeeking(current_time, player);
 		}
 
 		pri.utils.preselectActualTimeInVideo(current_time);
@@ -138,7 +138,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		if (player_data.comments[i].comment_text != null) 
 		{
-			console.log(pri.utils.buildListElement(player, comment, current_time, comment.user_name))
 			$("#ul_scroll").prepend(pri.utils.buildListElement(player, comment, current_time, comment.user_name));
 			pro.addHighlightToCommentWithoutEndTime(comment);
 			if (comment.comment_time_end > 0) 
