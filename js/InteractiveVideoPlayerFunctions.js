@@ -135,10 +135,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		let is_interactive = parseInt(player_data.comments[i].is_interactive, 10);
 		let comment        = player_data.comments[i];
 		let stop_video     = 0;
+		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll');
 
 		if (player_data.comments[i].comment_text != null) 
 		{
-			$("#ul_scroll").prepend(pri.utils.buildListElement(player, comment, current_time, comment.user_name));
+			comments_div.prepend(pri.utils.buildListElement(player, comment, current_time, comment.user_name));
 			pro.addHighlightToCommentWithoutEndTime(comment);
 			if (comment.comment_time_end > 0) 
 			{
@@ -161,6 +162,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pub.postAndAppendFakeCommentToStream = function(actual_time_in_video, comment_text, is_private, end_time) {
 		//Todo: inject player
 		let fake_id = parseInt(Math.random() * 10000000, 10);
+		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll');
 		let tmp_obj =
 			{
 				'comment_id':         fake_id,
@@ -179,7 +181,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 		pri.utils.sliceCommentAndStopPointsInCorrectPosition(tmp_obj, tmp_obj.comment_time);
 
-		$("#ul_scroll").prepend(pri.utils.buildListElement(tmp_obj, tmp_obj.comment_time, scope.InteractiveVideo.username));
+		comments_div.prepend(pri.utils.buildListElement(tmp_obj, tmp_obj.comment_time, scope.InteractiveVideo.username));
 		pub.refreshMathJaxView();
 
 		$.ajax({

@@ -76,7 +76,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			value = '';
 		}
-console.log('data: ' +value)
+
 		return value;
 	};
 

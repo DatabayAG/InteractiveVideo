@@ -299,6 +299,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ckeditor = new ilTextAreaInputCkeditorGUI('comment_text', 'comment_text');
 		$form->addItem($ckeditor);
 		$video_tpl->setVariable('COMMENT_TEXT', $form->getHTML());
+		$video_tpl->setVariable('PLAYER_ID', $player_id);
 		$this->objComment = new ilObjComment();
 		$this->objComment->setObjId($this->object->getId());
 		$this->objComment->setIsPublic($this->object->isPublic());
