@@ -8,21 +8,21 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pri.cssIterator = 0;
 	pri.cssCommentClasses = ['crow1', 'crow2', 'crow3', 'crow4'];
 
-	pub.sliceCommentAndStopPointsInCorrectPosition = function (tmp_obj, time)
+	pub.sliceCommentAndStopPointsInCorrectPosition = function (tmp_obj, time, player_data)
 	{
 		//Todo: inject player
 		let pos = 0;
 		let i;
 
-		for (i = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
+		for (i = 0; i < Object.keys(player_data.comments).length; i++)
 		{
-			if (parseFloat(scope.InteractiveVideo.comments[i].comment_time) <= time)
+			if (parseFloat(player_data.comments[i].comment_time) <= time)
 			{
 				pos = i;
 			}
 		}
-		scope.InteractiveVideo.comments.splice( pos + 1, 0 , tmp_obj);
-		scope.InteractiveVideo.stopPoints.splice( pos + 1, 0, Math.floor(time));
+		player_data.comments.splice( pos + 1, 0 , tmp_obj);
+		player_data.stopPoints.splice( pos + 1, 0, Math.floor(time));
 	};
 
 	pub.replaceCommentsAfterSeeking = function (time, player)
@@ -33,7 +33,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let j_object = $("#ul_scroll");
 
 		j_object.html('');
-		pub.resetCommentsTimeEndBlacklist();
+		pub.resetCommentsTimeEndBlacklist(player);
 		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 		{
 			if (player_data.comments[i].comment_time <= time && player_data.comments[i].comment_text !== null)
@@ -48,10 +48,10 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		pub.clearCommentsWhereTimeEndEndded(player_id, time);
 	};
 
-	pub.buildListElement = function (player, comment, time, username)
+	pub.buildListElement = function (player_id, comment, time, username)
 	{
 		let css_class, value;
-		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		
 		if(pro.isBuildListElementAllowed(player_data, username))
 		{
@@ -63,7 +63,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 							pro.appendPrivateHtml(comment.is_private) +
 							'<div class="comment_time">' +
 							pro.buildCommentTimeHtml(time, comment.is_interactive)                           +
-							pro.buildCommentTimeEndHtml(comment)                                             +
+							pro.buildCommentTimeEndHtml(comment, player_id)                                             +
 							'</div></div><div class="comment_inner_text">' +
 							pro.buildCommentTitleHtml(comment.comment_title)                                 +
 							pro.buildCommentTextHtml(comment.comment_text )                                  +
@@ -142,8 +142,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.resetCommentsTimeEndBlacklist = function ()
 	{
-		//Todo: inject player
-		scope.InteractiveVideo.blacklist_time_end = [];
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+
+		player_data.blacklist_time_end = [];
 	};
 
 	pub.displayAllCommentsAndDeactivateCommentStream = function(on)
@@ -243,16 +244,16 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return value;
 	};
 
-	pro.setCorrectAttributeForTimeInCommentAfterPosting = function (id, time)
+	pro.setCorrectAttributeForTimeInCommentAfterPosting = function (id, time, player_id)
 	{
-		//Todo: inject player
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let i;
 
-		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
+		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 		{
-			if (scope.InteractiveVideo.comments[i].comment_id === id)
+			if (player_data.comments[i].comment_id === id)
 			{
-				scope.InteractiveVideo.comments[i].comment_time_end = time;
+				player_data.comments[i].comment_time_end = time;
 			}
 		}
 	};
@@ -292,14 +293,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				'</time>' ;
 	};
 
-	pro.buildCommentTimeEndHtml = function (comment)
+	pro.buildCommentTimeEndHtml = function (comment, player_id)
 	{
 		let display_time;
 
 		if(comment.comment_time_end === undefined)
 		{
 			display_time 	= comment.comment_time_end;
-			pro.setCorrectAttributeForTimeInCommentAfterPosting(comment.comment_id, display_time);
+			pro.setCorrectAttributeForTimeInCommentAfterPosting(comment.comment_id, display_time, player_id);
 		}
 		else
 		{

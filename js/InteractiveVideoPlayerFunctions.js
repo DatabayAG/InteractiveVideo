@@ -75,26 +75,26 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 	};
 
-	pub.appendInteractionEvents = function(id)
+	pub.appendInteractionEvents = function(player_id)
 	{
 		//Todo: fix this
-/*		pro.addAjaxFunctionForCommentPosting();
+		pro.addAjaxFunctionForCommentPosting(player_id);
 
-		pro.resetCommentFormOnClick();
-
-		pro.addPausePlayerOnClick();
-
-		pro.addShowAllCommetsChange();
-
-		pro.addCommentTimeChanged();
-
-		pro.addBootStrapToggle();
-
-		pro.addDropDownEvent();
-
-		pro.addModalInteractionToBackLinkButton();
+		/*		pro.resetCommentFormOnClick();
 		
-		pro.addTaskInteraction();*/
+				pro.addPausePlayerOnClick();
+		
+				pro.addShowAllCommetsChange();
+		
+				pro.addCommentTimeChanged();
+		
+				pro.addBootStrapToggle();
+		
+				pro.addDropDownEvent();
+		
+				pro.addModalInteractionToBackLinkButton();
+				
+				pro.addTaskInteraction();*/
 	};
 	
 	pro.addTaskInteraction = function()
@@ -139,7 +139,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		if (player_data.comments[i].comment_text != null) 
 		{
-			comments_div.prepend(pri.utils.buildListElement(player, comment, current_time, comment.user_name));
+			comments_div.prepend(pri.utils.buildListElement(player_id, comment, current_time, comment.user_name));
 			pro.addHighlightToCommentWithoutEndTime(comment);
 			if (comment.comment_time_end > 0) 
 			{
@@ -159,8 +159,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		return stop_video;
 	};
 
-	pub.postAndAppendFakeCommentToStream = function(actual_time_in_video, comment_text, is_private, end_time) {
-		//Todo: inject player
+	pub.postAndAppendFakeCommentToStream = function(actual_time_in_video, comment_text, is_private, end_time, player_id) {
+		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
 		let fake_id = parseInt(Math.random() * 10000000, 10);
 		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll');
 		let tmp_obj =
@@ -169,8 +169,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				'comment_time':       actual_time_in_video,
 				'comment_text':       comment_text,
 				'comment_time_end':   end_time,
-				'user_name':          scope.InteractiveVideo.username,
-				'user_image':          scope.InteractiveVideo.user_image,
+				'user_name':          player_data.username,
+				'user_image':         player_data.user_image,
 				'is_interactive':     '0',
 				'is_private':         is_private
 			};
@@ -179,9 +179,9 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			$('#no_text_warning').removeClass('ilNoDisplay');
 			return;
 		}
-		pri.utils.sliceCommentAndStopPointsInCorrectPosition(tmp_obj, tmp_obj.comment_time);
+		pri.utils.sliceCommentAndStopPointsInCorrectPosition(tmp_obj, tmp_obj.comment_time, player_data);
 
-		comments_div.prepend(pri.utils.buildListElement(tmp_obj, tmp_obj.comment_time, scope.InteractiveVideo.username));
+		comments_div.prepend(pri.utils.buildListElement(player_id, tmp_obj, tmp_obj.comment_time, scope.InteractiveVideo.username));
 		pub.refreshMathJaxView();
 
 		$.ajax({
@@ -200,7 +200,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		});
 	};
 
-	pro.addAjaxFunctionForCommentPosting = function()
+	pro.addAjaxFunctionForCommentPosting = function(player_id)
 	{
 		$("#ilInteractiveVideoCommentSubmit").on("click", function() {
 			let time;
@@ -213,7 +213,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				time = $('#comment_time_end').val();
 				time = time.split(':'); // split it at the colons
 
-				let end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
+				var end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
 
 				if(end_time < parseInt(actual_time_in_video, 10))
 				{
@@ -222,7 +222,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				}
 			}
 
-			pub.postAndAppendFakeCommentToStream(actual_time_in_video, comment_text, is_private, end_time);
+			pub.postAndAppendFakeCommentToStream(actual_time_in_video, comment_text, is_private, end_time, player_id);
 		});
 	};
 
