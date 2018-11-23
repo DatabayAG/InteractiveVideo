@@ -181,17 +181,17 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		}
 	};
 
-	pub.rebuildCommentsViewIfShowAllIsActive = function()
+	pub.rebuildCommentsViewIfShowAllIsActive = function(player_id)
 	{
-		//Todo: inject player
+		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
 		let j_object, position, height;
 
-		if(scope.InteractiveVideo.is_show_all_active === true)
+		if(player_data.is_show_all_active === true)
 		{
-			j_object = $('#ilInteractiveVideoComments');
+			j_object = $('#ilInteractiveVideoComments_' + player_id);
 			position = j_object.scrollTop();
-			height   = $('#ul_scroll').find('li').first().height();
-			scope.InteractiveVideo.is_show_all_active = false;
+			height   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll').find('li').first().height();
+			player_data.is_show_all_active = false;
 			pub.displayAllCommentsAndDeactivateCommentStream(true);
 			j_object.scrollTop(position + height);
 		}

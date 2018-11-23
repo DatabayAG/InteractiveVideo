@@ -162,6 +162,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pub.postAndAppendFakeCommentToStream = function(actual_time_in_video, comment_text, is_private, end_time, player_id) {
 		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
 		let fake_id = parseInt(Math.random() * 10000000, 10);
+
 		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll');
 		let tmp_obj =
 			{
@@ -181,7 +182,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 		pri.utils.sliceCommentAndStopPointsInCorrectPosition(tmp_obj, tmp_obj.comment_time, player_data);
 
-		comments_div.prepend(pri.utils.buildListElement(player_id, tmp_obj, tmp_obj.comment_time, scope.InteractiveVideo.username));
+		comments_div.prepend(pri.utils.buildListElement(player_id, tmp_obj, tmp_obj.comment_time, player_data.username));
 		pub.refreshMathJaxView();
 
 		$.ajax({
@@ -195,7 +196,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			},
 			success:  function () {
 				pro.resetCommentForm();
-				pri.utils.rebuildCommentsViewIfShowAllIsActive();
+				pri.utils.rebuildCommentsViewIfShowAllIsActive(player_id);
 			}
 		});
 	};
