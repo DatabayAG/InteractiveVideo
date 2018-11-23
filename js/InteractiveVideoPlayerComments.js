@@ -147,11 +147,11 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		player_data.blacklist_time_end = [];
 	};
 
-	pub.displayAllCommentsAndDeactivateCommentStream = function(on)
+	pub.displayAllCommentsAndDeactivateCommentStream = function(on, player_id)
 	{
-		//Todo: inject player
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let i;
-		let j_object	= $("#ul_scroll");
+		let j_object	= $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll');
 		let element		='';
 
 		j_object.html('');
@@ -159,25 +159,25 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 		if(on)
 		{
-			for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
+			for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 			{
-				if (scope.InteractiveVideo.comments[i].comment_text !== null)
+				if (player_data.comments[i].comment_text !== null)
 				{
-					element = pub.buildListElement(scope.InteractiveVideo.comments[i], scope.InteractiveVideo.comments[i].comment_time, scope.InteractiveVideo.comments[i].user_name);
+					element = pub.buildListElement(player_id, player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name);
 					j_object.append(element);
-					if(scope.InteractiveVideo.comments[i].comment_time_end > 0 && scope.InteractiveVideo.comments[i].comment_time <= scope.InteractiveVideo.last_time)
+					if(player_data.comments[i].comment_time_end > 0 && player_data.comments[i].comment_time <= player_data.last_time)
 					{
-						pub.fillCommentsTimeEndBlacklist(scope.InteractiveVideo.comments[i].comment_time_end, scope.InteractiveVideo.comments[i].comment_id);
+						pub.fillCommentsTimeEndBlacklist(player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
 					}
 				}
 			}
-			scope.InteractiveVideo.is_show_all_active = true;
-			pub.clearCommentsWhereTimeEndEndded(scope.InteractiveVideo.last_time);
+			player_data.is_show_all_active = true;
+			pub.clearCommentsWhereTimeEndEndded(player_data.last_time);
 		}
 		else
 		{
-			scope.InteractiveVideo.is_show_all_active = false;
-			pub.replaceCommentsAfterSeeking(scope.InteractiveVideo.last_time);
+			player_data.is_show_all_active = false;
+			pub.replaceCommentsAfterSeeking(player_data.last_time);
 		}
 	};
 
@@ -192,15 +192,15 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			position = j_object.scrollTop();
 			height   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll').find('li').first().height();
 			player_data.is_show_all_active = false;
-			pub.displayAllCommentsAndDeactivateCommentStream(true);
+			pub.displayAllCommentsAndDeactivateCommentStream(true, player_id);
 			j_object.scrollTop(position + height);
 		}
 	};
 
-	pub.loadAllUserWithCommentsIntoFilterList = function()
+	pub.loadAllUserWithCommentsIntoFilterList = function(player_id)
 	{
 		let element;
-		let author_list = pro.getAllUserWithComment();
+		let author_list = pro.getAllUserWithComment(player_id);
 		let dropdownList = $('#dropdownMenuInteraktiveList');
 		let reset_elem = '<li><a href="#">' + scope.InteractiveVideo.lang.reset_text + '</a></li><li role="separator" class="divider"></li>';
 
@@ -402,16 +402,16 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return '<div class="comment_tags">' + comment_tags + '</div>';
 	};
 
-	pro.getAllUserWithComment = function()
+	pro.getAllUserWithComment = function(player_id)
 	{
-		//Todo: inject player
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let i, author_list = [];
 
-		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
+		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 		{
-			if ($.inArray( scope.InteractiveVideo.comments[i].user_name, author_list ) === -1)
+			if ($.inArray( player_data.comments[i].user_name, author_list ) === -1)
 			{
-				author_list[scope.InteractiveVideo.comments[i].user_name] = scope.InteractiveVideo.comments[i].user_name;
+				author_list[player_data.comments[i].user_name] = player_data.comments[i].user_name;
 			}
 		}
 		return author_list;

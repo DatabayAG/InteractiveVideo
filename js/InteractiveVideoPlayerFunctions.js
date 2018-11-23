@@ -80,11 +80,12 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		//Todo: fix this
 		pro.addAjaxFunctionForCommentPosting(player_id);
 
+		pro.addShowAllCommetsChange(player_id);
 		/*		pro.resetCommentFormOnClick();
 		
 				pro.addPausePlayerOnClick();
 		
-				pro.addShowAllCommetsChange();
+				
 		
 				pro.addCommentTimeChanged();
 		
@@ -288,10 +289,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		});
 	};
 
-	pro.addShowAllCommetsChange = function()
+	pro.addShowAllCommetsChange = function(player_id)
 	{
 		$('#show_all_comments').change(function() {
-			pri.utils.displayAllCommentsAndDeactivateCommentStream($(this).prop('checked'));
+			pri.utils.displayAllCommentsAndDeactivateCommentStream($(this).prop('checked'), player_id);
 		});
 	};
 
@@ -331,31 +332,31 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 	};
 
-	pro.addDropDownEvent = function()
+	pro.addDropDownEvent = function(player_id)
 	{
-		//Todo: inject player
-		pri.utils.loadAllUserWithCommentsIntoFilterList();
+		pri.utils.loadAllUserWithCommentsIntoFilterList(player_id);
 
 		$('#dropdownMenuInteraktiveList a').click(function(){
 			let value = $(this).html();
-			let show_all_active_temp = scope.InteractiveVideo.is_show_all_active;
+			let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
+			let show_all_active_temp = player_data.is_show_all_active;
 
 			if(value === scope.InteractiveVideo.lang.reset_text)
 			{
-				scope.InteractiveVideo.filter_by_user = false;
+				player_data.filter_by_user = false;
 				$('#dropdownMenuInteraktiveVideo').removeClass('btn-primary').html(il.InteractiveVideo.lang.author_filter);
 			}
 			else
 			{
-				scope.InteractiveVideo.filter_by_user = value;
+				player_data.filter_by_user = value;
 				$('#dropdownMenuInteraktiveVideo').addClass('btn-primary').html(il.InteractiveVideo.lang.author_filter + ' ' + value);
 			}
 
-			if(scope.InteractiveVideoPlayerAbstract.currentTime() > 0 || scope.InteractiveVideo.is_show_all_active === true)
+			if(scope.InteractiveVideoPlayerAbstract.currentTime() > 0 || player_data.is_show_all_active === true)
 			{
-				scope.InteractiveVideo.is_show_all_active = false;
-				scope.InteractiveVideoPlayerComments.displayAllCommentsAndDeactivateCommentStream(show_all_active_temp);
-				scope.InteractiveVideo.is_show_all_active = show_all_active_temp;
+				player_data.is_show_all_active = false;
+				scope.InteractiveVideoPlayerComments.displayAllCommentsAndDeactivateCommentStream(show_all_active_temp, player_id);
+				player_data.is_show_all_active = show_all_active_temp;
 			}
 		});
 	};
