@@ -38,10 +38,10 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			if (player_data.comments[i].comment_time <= time && player_data.comments[i].comment_text !== null)
 			{
-				j_object.prepend(pub.buildListElement(player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name));
-				if(scope.InteractiveVideo.comments[i].comment_time_end > 0)
+				j_object.prepend(pub.buildListElement(player, player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name));
+				if(player_data.comments[i].comment_time_end > 0)
 				{
-					pub.fillCommentsTimeEndBlacklist(player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
+					pub.fillCommentsTimeEndBlacklist(player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
 				}
 			}
 		}
@@ -51,14 +51,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pub.buildListElement = function (player, comment, time, username)
 	{
 		let css_class, value;
-		let player_id             = player.node.id;
-
-		if(pro.isBuildListElementAllowed(player_id, username))
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+		
+		if(pro.isBuildListElementAllowed(player_data, username))
 		{
 			css_class = pro.getCSSClassForListElement();
 			value =	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class + '">' +
 				'<div class="message-inner">' +
-							pro.buildCommentUserImage(player_id, comment)                   +
+							pro.buildCommentUserImage(player_data, comment)                   +
 							'<div class="comment_user_data">' + pub.buildCommentUsernameHtml(username, comment.is_interactive) +
 							pro.appendPrivateHtml(comment.is_private) +
 							'<div class="comment_time">' +
@@ -76,7 +76,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			value = '';
 		}
-
+console.log('data: ' +value)
 		return value;
 	};
 
@@ -224,10 +224,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));
 	};
 
-	pro.isBuildListElementAllowed = function(player_id, username)
+	pro.isBuildListElementAllowed = function(player_data, username)
 	{
 		let value = false;
-		let player_data    = scope.InteractiveVideo[player_id];
 
 		if(player_data.is_show_all_active === false)
 		{
@@ -240,6 +239,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				value = true;
 			}
 		}
+
 		return value;
 	};
 
@@ -416,11 +416,11 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return author_list;
 	};
 
-	pro.buildCommentUserImage = function(player_id, comment) 
+	pro.buildCommentUserImage = function(player_data, comment) 
 	{
 		let image = '';
 		let user_id = comment.user_id;
-		let decode = JSON.parse(il.InteractiveVideo[player_id].user_image_cache);
+		let decode = JSON.parse(player_data.user_image_cache);
 
 		if(comment.user_id !== undefined && user_id in decode)
 		{

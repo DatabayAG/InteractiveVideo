@@ -7,20 +7,20 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.seekingEventHandler = function(player)
 	{
-		//Todo: inject player
+		let player_data = pub.getPlayerDataObjectByPlayer(player);
 		let current_time = scope.InteractiveVideoPlayerAbstract.currentTime();
 		
-		if (scope.InteractiveVideo.last_time > current_time)
+		if (player_data.last_time > current_time)
 		{
-			scope.InteractiveVideo.last_time = current_time;
-			scope.InteractiveVideo.last_stopPoint = -1;
+			player_data.last_time = current_time;
+			player_data.last_stopPoint = -1;
 		}
-		else if (scope.InteractiveVideo.last_time < current_time)
+		else if (player_data.last_time < current_time)
 		{
-			scope.InteractiveVideo.last_time = current_time;
+			player_data.last_time = current_time;
 		}
 
-		if(	scope.InteractiveVideo.is_show_all_active === false)
+		if(player_data.is_show_all_active === false)
 		{
 			pri.utils.replaceCommentsAfterSeeking(current_time, player);
 		}
