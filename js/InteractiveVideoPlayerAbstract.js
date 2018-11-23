@@ -1,8 +1,12 @@
 il.InteractiveVideoPlayerAbstract = (function (scope) {
 	'use strict';
 
+	//Todo: make question object a object by player id
+	//Done: Questions working
+	//Done: Comments working
+	//Player object exists by id
 	var pub = {}, pro = {};
-	
+
 	pub.config = {
 		pauseCallback           : null,
 		playCallback            : null,
@@ -79,7 +83,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.videoFinished = function(player)
 	{
-		il.InteractiveVideoPlayerFunction.triggerVideoFinished();
+		il.InteractiveVideoPlayerFunction.triggerVideoFinished(player);
 
 		if(il.InteractiveVideoPlayerFunction.doesReferencePointExists())
 		{
