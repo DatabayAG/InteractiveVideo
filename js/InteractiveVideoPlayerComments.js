@@ -245,14 +245,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return value;
 	};
 
-	pro.setCorrectAttributeForTimeInCommentAfterPosting = function (id, time, player_id)
+	pro.setCorrectAttributeForTimeInCommentAfterPosting = function (comment_id, time, player_id)
 	{
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let i;
 
 		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 		{
-			if (player_data.comments[i].comment_id === id)
+			if (player_data.comments[i].comment_id === comment_id)
 			{
 				player_data.comments[i].comment_time_end = time;
 			}
@@ -281,7 +281,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.buildCommentTimeHtml = function (time, is_interactive)
 	{
-		let display_time 	= time;
+		let display_time = time;
 
 		if(parseInt(is_interactive, 10) === 1)
 		{
