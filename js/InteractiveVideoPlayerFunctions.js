@@ -82,13 +82,14 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		pro.addShowAllCommetsChange(player_id);
 		pro.addTaskInteraction(player_id);
 		pro.addPausePlayerOnClick(player_id);
+		pro.addCommentTimeChanged(player_id);
 		/*		pro.resetCommentFormOnClick();
 		
 
 		
 				
 		
-				pro.addCommentTimeChanged();
+
 		
 				pro.addBootStrapToggle();
 		
@@ -297,17 +298,20 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		});
 	};
 
-	pro.addCommentTimeChanged = function()
+	pro.addCommentTimeChanged = function(player_id)
 	{
-		$('#comment_time_end_chk').change(function() {
+		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
+
+		$('#comment_time_end_chk_' + player_id).change(function() {
 			if($(this).is(':checked'))
 			{
-				$('.end_time_selector').show( 'fast' );
+				$('.end_time_selector_' + player_id).show( 'fast' );
+				//Todo: check if this is a problem
 				pri.utils.preselectActualTimeInVideo(scope.InteractiveVideoPlayerAbstract.currentTime());
 			}
 			else
 			{
-				$('.end_time_selector').hide( 'fast' );
+				$('.end_time_selector_' + player_id).hide( 'fast' );
 			}
 		});
 	};
