@@ -195,15 +195,16 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.addAjaxFunctionForCommentPosting = function(player_id)
 	{
-		$("#ilInteractiveVideoCommentSubmit").on("click", function() {
+		$('#ilInteractiveVideoCommentSubmit_' + player_id).on("click", function() {
 			let time;
 			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
+			//Todo: get correct instance
 			let comment_text = CKEDITOR.instances.comment_text.getData();
-			let is_private = $('#is_private').prop("checked");
+			let is_private = $('#is_private' + player_id).prop("checked");
 
-			if( $('#comment_time_end_chk').prop( "checked" ))
+			if( $('#comment_time_end_chk' + player_id).prop( "checked" ))
 			{
-				time = $('#comment_time_end').val();
+				time = $('#comment_time_end' + player_id).val();
 				time = time.split(':'); // split it at the colons
 
 				var end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
