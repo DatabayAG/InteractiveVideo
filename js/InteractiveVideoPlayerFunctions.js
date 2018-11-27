@@ -77,7 +77,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.appendInteractionEvents = function(player_id)
 	{
-		//Todo: fix this
 		pro.addAjaxFunctionForCommentPosting(player_id);
 		pro.addShowAllCommetsChange(player_id);
 		pro.addTaskInteraction(player_id);
@@ -219,10 +218,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		});
 	};
 
-	pub.addAjaxFunctionForReflectionCommentPosting = function(comment_id, org_id)
+	pub.addAjaxFunctionForReflectionCommentPosting = function(comment_id, org_id, player_id)
 	{
 		//Todo: inject player
-		$("#submit_comment_form").on("click", function() {
+		$('#submit_comment_form_' + player_id).on("click", function() {
 			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
 			let comment_text = CKEDITOR.instances['text_reflection_comment_' + comment_id].getData();
 			let is_private = $('#is_private_modal').prop("checked");

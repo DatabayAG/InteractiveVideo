@@ -90,11 +90,12 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.addSelfReflectionLayout = function(player) {
 		let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+		let player_id = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 
 		$('.modal-body').append('<div class="modal_feedback"><div class="modal_reflection_footer">' + pro.createButtonButtons('close_form', scope.InteractiveVideo.lang.close_text) +'</div></div>');
 		if(parseInt(pub.QuestionObject.reflection_question_comment, 10) === 1)
 		{
-			pro.appendSelfReflectionCommentForm();
+			pro.appendSelfReflectionCommentForm(player_id);
 		}
 
 		pro.appendCloseButtonListener();
@@ -104,36 +105,36 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 			url:     player_data.question_post_url,
 			data:    {'qid' : pub.QuestionObject.question_id},
 			success: function () {
-				pro.addToLocalIgnoreArrayIfNonRepeatable();
+				pro.addToLocalIgnoreArrayIfNonRepeatable(player_id);
 			}
 		});
 	};
 	
-	pro.appendSelfReflectionCommentForm = function()
+	pro.appendSelfReflectionCommentForm = function(player_id)
 	{
 		let comment_id = 'text_reflection_comment_'+ pub.comment_id ;
 		let footer = $('.modal_reflection_footer');
 		let feedback = $('.modal_feedback');
 
 		footer.prepend(pro.createButtonButtons('submit_comment_form', scope.InteractiveVideo.lang.save));
-		footer.prepend('<input type="checkbox" name="is_private_modal" value="1" id="is_private_modal"/> ' + scope.InteractiveVideo.lang.private_text);
+		footer.prepend('<input type="checkbox" name="is_private_modal" value="1" id="is_private_modal_"' + player_id + '/> ' + scope.InteractiveVideo.lang.private_text);
 		feedback.prepend('<textarea id="'+comment_id+'">' + pub.QuestionObject.reply_to_txt + '</textarea>');
 		if(pub.QuestionObject.reply_to_private == '1')
 		{
-			$('#is_private_modal').attr('checked', 'checked');
+			$('#is_private_modal_' + player_id).attr('checked', 'checked');
 		}
 		CKEDITOR.replace(comment_id);
 		feedback.prepend(scope.InteractiveVideo.lang.add_comment);
-		scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReflectionCommentPosting(pub.comment_id, pub.QuestionObject.reply_original_id);
+		scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReflectionCommentPosting(pub.comment_id, pub.QuestionObject.reply_original_id, player_id);
 	};
 
-	pro.addToLocalIgnoreArrayIfNonRepeatable = function(){
-		//Todo: inject player
+	pro.addToLocalIgnoreArrayIfNonRepeatable = function(player_id){
+		let payer_data = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player_id):
 		let repeat = parseInt(InteractiveVideoQuestionViewer.QuestionObject.repeat_question, 10);
 
 		if(repeat === 0)
 		{
-			scope.InteractiveVideo.ignore_questions.push(pub.comment_id );
+			payer_data.ignore_questions.push(pub.comment_id );
 		}
 	};
 
@@ -193,6 +194,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	pro.appendButtonListener = function(player) {
 		$('#question_form').on('submit', function (e) {
 			let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+			let player_id = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 
 			e.preventDefault();
 			$.ajax({
@@ -203,7 +205,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 				success: function (feedback) {
 					let obj = JSON.parse(feedback);
 					pro.showFeedback(obj);
-					pro.addToLocalIgnoreArrayIfNonRepeatable();
+					pro.addToLocalIgnoreArrayIfNonRepeatable(player_id);
 				}
 			});
 		});
