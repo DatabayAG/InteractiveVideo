@@ -79,12 +79,12 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	{
 		//Todo: fix this
 		pro.addAjaxFunctionForCommentPosting(player_id);
-
 		pro.addShowAllCommetsChange(player_id);
 		pro.addTaskInteraction(player_id);
+		pro.addPausePlayerOnClick(player_id);
 		/*		pro.resetCommentFormOnClick();
 		
-				pro.addPausePlayerOnClick();
+
 		
 				
 		
@@ -104,7 +104,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		$('#task_interaction_' + player_id).on('click', function() {
 			let description = $('#task_description_' + player_id);
 			let icon = $('#task_icon_' + player_id);
-			console.log(description.hasClass('closed'))
 			if(! description.hasClass('closed'))
 			{
 				description.addClass('closed');
@@ -275,15 +274,15 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		$('.alert-warning').addClass('ilNoDisplay');
 	};
 
-	pro.addPausePlayerOnClick = function()
+	pro.addPausePlayerOnClick = function(player_id)
 	{
-		//Todo: inject player
+		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
 		CKEDITOR.on('instanceReady', function(evt) {
 			let editor = evt.editor;
-			if(editor.name === 'comment_text')
+			if(editor.name === 'comment_text_' + player_id)
 			{
 				editor.on('focus', function() {
-					if (scope.InteractiveVideo.pause_on_click_in_comment_field) {
+					if (player_data.pause_on_click_in_comment_field) {
 						scope.InteractiveVideoPlayerAbstract.pause();
 					}
 				});

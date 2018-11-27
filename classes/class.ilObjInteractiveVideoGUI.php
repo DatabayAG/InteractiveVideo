@@ -319,6 +319,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($this->object->getDisableComment() != 1)
 		{
 			$comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $plugin->getDirectory());
+			$comments_tpl->setVariable('PLAYER_ID', $player_id);
 			$comments_tpl->setVariable('COMMENT_TIME_END', $plugin->txt('time_end'));
 			$picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end');
 			$comments_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
