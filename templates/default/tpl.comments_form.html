@@ -6,11 +6,11 @@
 			<script>
 				CKEDITOR.replace('comment_text');
 			</script>
-			<input type="hidden" name="comment_time" id="comment_time" value="">
-			<div class="ilNoDisplay alert alert-warning" id="no_text_warning">{TXT_NO_TEXT_WARNING}</div>
+			<input type="hidden" name="comment_time" id="comment_time_{PLAYER_ID}" value="">
+			<div class="ilNoDisplay alert alert-warning" id="no_text_warning_{PLAYER_ID}">{TXT_NO_TEXT_WARNING}</div>
 		</div>
 		<div class="col-sm-9">
-			<input type="checkbox" name="is_private" value="1" id="is_private"/> {TXT_IS_PRIVATE}
+			<input type="checkbox" name="is_private" value="1" id="is_private_{PLAYER_ID}"/> {TXT_IS_PRIVATE}
 		</div>
 		<div class="col-sm-12">
 			<div class="ilNoDisplay alert alert-warning" id="endtime_warning">{TXT_ENDTIME_WARNING}</div>
@@ -24,7 +24,7 @@
 		<div class="col-sm-12 ilFormRequired"></div>
 		<div class="col-sm-12 ilFormCmds ilInteractiveVideoFormCommands">
 			<input id="ilInteractiveVideoCommentSubmit" class="btn btn-default btn-sm" type="submit" value="{TXT_POST}">
-			<button id="ilInteractiveVideoCommentCancel" class="btn btn-default btn-sm" type="button" value="">{TXT_CANCEL}</button>
+			<button id="ilInteractiveVideoCommentCancel_{PLAYER_ID}" class="btn btn-default btn-sm" type="button" value="">{TXT_CANCEL}</button>
 		</div>
 	</div>
 </div>

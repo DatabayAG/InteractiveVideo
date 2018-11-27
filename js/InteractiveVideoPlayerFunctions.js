@@ -85,20 +85,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		pro.addCommentTimeChanged(player_id);
 		pro.addBootStrapToggle(player_id);
 		pro.addDropDownEvent(player_id);
-		/*		pro.resetCommentFormOnClick();
-		
-
-		
-				
-		
-
-		
-		
-				
-		
-				pro.addModalInteractionToBackLinkButton();
-				
-				;*/
+		pro.addModalInteractionToBackLinkButton();
+		pro.resetCommentFormOnClick(player_id);
 	};
 	
 	pro.addTaskInteraction = function(player_id)
@@ -199,7 +187,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				'is_private':        is_private
 			},
 			success:  function () {
-				pro.resetCommentForm();
+				pro.resetCommentForm(player_id);
 				pri.utils.rebuildCommentsViewIfShowAllIsActive(player_id);
 			}
 		});
@@ -260,20 +248,20 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		});
 	};
 
-	pro.resetCommentFormOnClick = function()
+	pro.resetCommentFormOnClick = function(player_id)
 	{
-		$("#ilInteractiveVideoCommentCancel").on("click", function() {
-			pro.resetCommentForm();
+		$('#ilInteractiveVideoCommentCancel_' + player_id).on("click", function() {
+			pro.resetCommentForm(player_id);
 		});
 	};
 
-	pro.resetCommentForm = function()
+	pro.resetCommentForm = function(player_id)
 	{
 		CKEDITOR.instances.comment_text.setData('');
-		$('#is_private').prop( 'checked', false );
-		$('#comment_time_end_chk').prop( 'checked', false );
-		$('.end_time_selector').hide( 'fast' );
-		$('.alert-warning').addClass('ilNoDisplay');
+		$('#is_private_' + player_id).prop( 'checked', false );
+		$('#comment_time_end_chk_' + player_id).prop( 'checked', false );
+		$('.end_time_selector_' + player_id).hide( 'fast' );
+		$('.alert-warning_' + player_id).addClass('ilNoDisplay');
 	};
 
 	pro.addPausePlayerOnClick = function(player_id)
