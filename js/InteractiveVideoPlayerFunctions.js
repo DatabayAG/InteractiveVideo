@@ -127,6 +127,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		let comment        = player_data.comments[i];
 		let stop_video     = 0;
 		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll');
+		let language = scope.InteractiveVideo.lang;
 
 		if (player_data.comments[i].comment_text != null) 
 		{
@@ -144,7 +145,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 		else if (is_interactive === 1) 
 		{
-			$('.list_item_' + i).find('.comment_text').append(' (' + scope.InteractiveVideo.lang.answered_text + ') ');
+			$('.list_item_' + i).find('.comment_text').append(' (' + language.answered_text + ') ');
 		}
 
 		return stop_video;
@@ -306,9 +307,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.addBootStrapToggle = function(player_id)
 	{
+		let language = scope.InteractiveVideo.lang;
+
 		$('#show_all_comments_' + player_id).bootstrapToggle({
-			on: scope.InteractiveVideo.lang.switch_on,
-			off: scope.InteractiveVideo.lang.switch_off,
+			on: language.switch_on,
+			off: language.switch_off,
 			width: 50,
 			height: 27
 		}, function(){
@@ -326,6 +329,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.addDropDownEvent = function(player_id)
 	{
+		let language = scope.InteractiveVideo.lang;
 		pri.utils.loadAllUserWithCommentsIntoFilterList(player_id);
 
 		$('#dropdownMenuInteraktiveList_' + player_id + ' a').click(function(){
@@ -333,15 +337,15 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
 			let show_all_active_temp = player_data.is_show_all_active;
 
-			if(value === scope.InteractiveVideo.lang.reset_text)
+			if(value === language.reset_text)
 			{
 				player_data.filter_by_user = false;
-				$('#dropdownMenuInteraktiveVideo_' + player_id).removeClass('btn-primary').html(il.InteractiveVideo.lang.author_filter);
+				$('#dropdownMenuInteraktiveVideo_' + player_id).removeClass('btn-primary').html(language.author_filter);
 			}
 			else
 			{
 				player_data.filter_by_user = value;
-				$('#dropdownMenuInteraktiveVideo_' + player_id).addClass('btn-primary').html(il.InteractiveVideo.lang.author_filter + ' ' + value);
+				$('#dropdownMenuInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.author_filter + ' ' + value);
 			}
 
 			if(scope.InteractiveVideoPlayerAbstract.currentTime() > 0 || player_data.is_show_all_active === true)

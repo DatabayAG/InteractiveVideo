@@ -91,8 +91,9 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	pro.addSelfReflectionLayout = function(player) {
 		let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
 		let player_id = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
+		let language = scope.InteractiveVideo.lang;
 
-		$('.modal-body').append('<div class="modal_feedback"><div class="modal_reflection_footer">' + pro.createButtonButtons('close_form', scope.InteractiveVideo.lang.close_text) +'</div></div>');
+		$('.modal-body').append('<div class="modal_feedback"><div class="modal_reflection_footer">' + pro.createButtonButtons('close_form', language.close_text) +'</div></div>');
 		if(parseInt(pub.QuestionObject.reflection_question_comment, 10) === 1)
 		{
 			pro.appendSelfReflectionCommentForm(player_id);
@@ -115,16 +116,17 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		let comment_id = 'text_reflection_comment_'+ pub.comment_id ;
 		let footer = $('.modal_reflection_footer');
 		let feedback = $('.modal_feedback');
+		let language = scope.InteractiveVideo.lang;
 
-		footer.prepend(pro.createButtonButtons('submit_comment_form', scope.InteractiveVideo.lang.save));
-		footer.prepend('<input type="checkbox" name="is_private_modal" value="1" id="is_private_modal_"' + player_id + '/> ' + scope.InteractiveVideo.lang.private_text);
+		footer.prepend(pro.createButtonButtons('submit_comment_form', language.save));
+		footer.prepend('<input type="checkbox" name="is_private_modal" value="1" id="is_private_modal_"' + player_id + '/> ' + language.private_text);
 		feedback.prepend('<textarea id="'+comment_id+'">' + pub.QuestionObject.reply_to_txt + '</textarea>');
 		if(pub.QuestionObject.reply_to_private == '1')
 		{
 			$('#is_private_modal_' + player_id).attr('checked', 'checked');
 		}
 		CKEDITOR.replace(comment_id);
-		feedback.prepend(scope.InteractiveVideo.lang.add_comment);
+		feedback.prepend(language.add_comment);
 		scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReflectionCommentPosting(pub.comment_id, pub.QuestionObject.reply_original_id, player_id);
 	};
 
@@ -144,20 +146,22 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.addButtons = function(player) {
 		let question_form = $('#question_buttons_bellow_form');
+		let language = scope.InteractiveVideo.lang;
 
-		question_form.append(pro.createButtonButtons('sendForm', scope.InteractiveVideo.lang.send_text));
-		question_form.append(pro.createButtonButtons('close_form', scope.InteractiveVideo.lang.close_text));
+		question_form.append(pro.createButtonButtons('sendForm', language.send_text));
+		question_form.append(pro.createButtonButtons('close_form', language.close_text));
 		pro.appendButtonListener(player);
 	};
 
 	pro.showFeedback = function(feedback) {
 		let modal = $('.modal_feedback');
+		let language = scope.InteractiveVideo.lang;
 
 		modal.html('');
 		pro.showResponseFrequency(feedback.response_frequency);
 		modal.html(feedback.html);
 		if (parseInt(feedback.is_timed, 10) === 1) {
-			modal.append('<div class="learning_recommendation"><br/>' + scope.InteractiveVideo.lang.learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', scope.InteractiveVideo.lang.feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>');
+			modal.append('<div class="learning_recommendation"><br/>' + language.learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', language.feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>');
 			$('#jumpToTimeInVideo').on('click', function () {
 				$('#ilQuestionModal').modal('hide');
 				scope.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(feedback.time);
@@ -165,7 +169,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		}
 		if(feedback.feedback_link !== undefined && feedback.feedback_link !== '')
 		{
-			modal.append('<div class="learning_recommendation_link">' + scope.InteractiveVideo.lang.more_information + ': <span class="feedback_link_more">' + '<img src="' + feedback.feedback_icon + '"/>' + feedback.feedback_link + '</span></div>');
+			modal.append('<div class="learning_recommendation_link">' + language.more_information + ': <span class="feedback_link_more">' + '<img src="' + feedback.feedback_icon + '"/>' + feedback.feedback_link + '</span></div>');
 		}
 	};
 

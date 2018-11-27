@@ -203,7 +203,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let element;
 		let author_list = pro.getAllUserWithComment(player_id);
 		let drop_down_list = $('#dropdownMenuInteraktiveList_' + player_id);
-		let reset_elem = '<li><a href="#">' + scope.InteractiveVideo.lang.reset_text + '</a></li><li role="separator" class="divider"></li>';
+		let language = scope.InteractiveVideo.lang;
+		let reset_elem = '<li><a href="#">' + language.reset_text + '</a></li><li role="separator" class="divider"></li>';
 
 		drop_down_list.html('');
 		drop_down_list.append(reset_elem);
@@ -325,6 +326,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pub.buildCommentUsernameHtml = function (username, is_interactive)
 	{
 		let name = username;
+		let language = scope.InteractiveVideo.lang;
 
 		if(name !== '')
 		{
@@ -333,7 +335,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 		if(parseInt(is_interactive, 10) === 1)
 		{
-			name  = '[' + scope.InteractiveVideo.lang.question_text + ']';
+			name  = '[' + language.question_text + ']';
 		}
 		return 	'<span class="comment_username"> ' + name + '</span>';
 	};
@@ -376,10 +378,11 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.appendPrivateHtml = function (is_private)
 	{
 		let private_comment = '';
+		let language = scope.InteractiveVideo.lang;
 
 		if(parseInt(is_private, 10) === 1 || is_private === true)
 		{
-			private_comment = ' (' + scope.InteractiveVideo.lang.private_text + ')';
+			private_comment = ' (' + language.private_text + ')';
 		}
 		else
 		{
