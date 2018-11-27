@@ -167,7 +167,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 					j_object.append(element);
 					if(player_data.comments[i].comment_time_end > 0 && player_data.comments[i].comment_time <= player_data.last_time)
 					{
-						pub.fillCommentsTimeEndBlacklist(player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
+						pub.fillCommentsTimeEndBlacklist(player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
 					}
 				}
 			}
