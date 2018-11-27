@@ -83,6 +83,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		pro.addTaskInteraction(player_id);
 		pro.addPausePlayerOnClick(player_id);
 		pro.addCommentTimeChanged(player_id);
+		pro.addBootStrapToggle(player_id);
 		/*		pro.resetCommentFormOnClick();
 		
 
@@ -91,7 +92,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		
 
 		
-				pro.addBootStrapToggle();
 		
 				pro.addDropDownEvent();
 		
@@ -316,24 +316,23 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		});
 	};
 
-	pro.addBootStrapToggle = function()
+	pro.addBootStrapToggle = function(player_id)
 	{
-		$('#show_all_comments').bootstrapToggle({
+		$('#show_all_comments_' + player_id).bootstrapToggle({
 			on: scope.InteractiveVideo.lang.switch_on,
 			off: scope.InteractiveVideo.lang.switch_off,
 			width: 50,
 			height: 27
 		}, function(){
-			pro.isChronologicViewDeactivatedShowAllComments();
+			pro.isChronologicViewDeactivatedShowAllComments(player_id);
 		}());
 	};
 	
-	pro.isChronologicViewDeactivatedShowAllComments = function()
+	pro.isChronologicViewDeactivatedShowAllComments = function(player_id)
 	{
-		//Todo: inject player
-		if(scope.InteractiveVideo.is_chronologic === '1')
+		if(pub.getPlayerDataObjectByPlayerId(player_id).is_chronologic === '1')
 		{
-			$('#show_all_comments').click();
+			$('#show_all_comments_' + player_id).click();
 		}
 	};
 
