@@ -127,7 +127,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		let comment        = player_data.comments[i];
 		let stop_video     = 0;
 		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll');
-		let language = scope.InteractiveVideo.lang;
+		let language       = scope.InteractiveVideo.lang;
 
 		if (player_data.comments[i].comment_text != null) 
 		{
@@ -290,8 +290,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.addCommentTimeChanged = function(player_id)
 	{
-		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
-
 		$('#comment_time_end_chk_' + player_id).change(function() {
 			if($(this).is(':checked'))
 			{
@@ -389,9 +387,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	
 	pro.addCancelAction = function()
 	{
-		$('#ilQuestionModal').find('.back_link_cancel').on('click', function(event){
+		let question_modal = $('#ilQuestionModal');
+
+		question_modal.find('.back_link_cancel').on('click', function(event){
 			event.preventDefault();
-			$('#ilQuestionModal').modal('hide');
+			question_modal.modal('hide');
 		});
 	};
 
@@ -419,7 +419,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.refreshMathJaxView = function()
 	{
-		if (typeof MathJax != 'undefined') 
+		if (typeof MathJax !== 'undefined') 
 		{
 			MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 		}
