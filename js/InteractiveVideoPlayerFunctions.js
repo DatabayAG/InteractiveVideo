@@ -58,17 +58,17 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 					{
 						for (i = 0; i < Object.keys(player_data.comments).length; i++)
 						{
-							if (player_data.comments[i].comment_time == cueTime)
+							if (player_data.comments[i].comment_time === cueTime)
 							{
 								stop_video = pro.commentsObjectActions(i, current_time, player);
 							}
-							if (stop_video == 1) {
+							if (stop_video === 1) {
 								scope.InteractiveVideoPlayerAbstract.pause();
 								stop_video = 0;
 							}
 						}
 					}
-					player_data.last_stopPoint = parseInt(cueTime, 10);
+					player_data.last_stopPoint = cueTime;
 				}
 			}
 			player_data.last_time = current_time;
@@ -139,7 +139,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			}
 		}
 
-		if (is_interactive === 1 && $.inArray(comment.comment_id, player_data.ignore_questions) == -1) {
+		if (is_interactive === 1 && $.inArray(comment.comment_id, player_data.ignore_questions) === -1) {
 			stop_video = 1;
 			InteractiveVideoQuestionViewer.getQuestionPerAjax(comment.comment_id, player);
 		}
@@ -210,7 +210,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 				if(end_time < parseInt(actual_time_in_video, 10))
 				{
-					$('#endtime_warning').removeClass('ilNoDisplay');
+					$('#end_time_warning_' + player_id).removeClass('ilNoDisplay');
 					return;
 				}
 			}
