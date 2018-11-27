@@ -82,7 +82,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.fillCommentsTimeEndBlacklist = function (player_id, comment_time_end, comment_id)
 	{
-		let player_data = scope.InteractiveVideo[player_id];
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 
 		if(player_data.blacklist_time_end[comment_time_end] === undefined)
 		{
@@ -98,17 +98,18 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pub.clearCommentsWhereTimeEndEndded = function (player_id, time)
 	{
 		let timestamp, id;
+		let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 
-		for (timestamp in scope.InteractiveVideo[player_id].blacklist_time_end) 
+		for (timestamp in player_data.blacklist_time_end) 
 		{
 			if(timestamp <= time)
 			{
-				for (id in scope.InteractiveVideo[player_id].blacklist_time_end[timestamp]) 
+				for (id in player_data.blacklist_time_end[timestamp]) 
 				{
-					pro.removeHighlightFromComment(scope.InteractiveVideo[player_id].blacklist_time_end[timestamp][id]);
+					pro.removeHighlightFromComment(player_data.blacklist_time_end[timestamp][id]);
 				}
 
-				delete scope.InteractiveVideo[player_id].blacklist_time_end[timestamp];
+				delete player_data.blacklist_time_end[timestamp];
 			}
 		}
 		il.InteractiveVideoPlayerFunction.refreshMathJaxView();

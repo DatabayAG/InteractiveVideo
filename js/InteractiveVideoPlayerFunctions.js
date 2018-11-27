@@ -56,7 +56,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 					stop_video = 0;
 					if (player_data.last_stopPoint < cueTime)
 					{
-						for (i = 0; i < Object.keys(scope.InteractiveVideo[player_id].comments).length; i++)
+						for (i = 0; i < Object.keys(player_data.comments).length; i++)
 						{
 							if (player_data.comments[i].comment_time == cueTime)
 							{
