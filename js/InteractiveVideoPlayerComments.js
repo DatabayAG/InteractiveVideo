@@ -173,7 +173,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				}
 			}
 			player_data.is_show_all_active = true;
-			pub.clearCommentsWhereTimeEndEndded(player_data.last_time);
+			pub.clearCommentsWhereTimeEndEndded(player_id, player_data.last_time);
 		}
 		else
 		{
@@ -202,15 +202,16 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	{
 		let element;
 		let author_list = pro.getAllUserWithComment(player_id);
-		let dropdownList = $('#dropdownMenuInteraktiveList');
+		let drop_down_list = $('#dropdownMenuInteraktiveList_' + player_id);
 		let reset_elem = '<li><a href="#">' + scope.InteractiveVideo.lang.reset_text + '</a></li><li role="separator" class="divider"></li>';
 
-		dropdownList.html('');
-		dropdownList.append(reset_elem);
+		drop_down_list.html('');
+		drop_down_list.append(reset_elem);
 		for ( element in author_list) 
 		{
+			console.log(element)
 			element = '<li><a href="#">' + element + '</a></li>';
-			dropdownList.append(element);
+			drop_down_list.append(element);
 		}
 	};
 
