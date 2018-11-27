@@ -209,7 +209,6 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		drop_down_list.append(reset_elem);
 		for ( element in author_list) 
 		{
-			console.log(element)
 			element = '<li><a href="#">' + element + '</a></li>';
 			drop_down_list.append(element);
 		}
