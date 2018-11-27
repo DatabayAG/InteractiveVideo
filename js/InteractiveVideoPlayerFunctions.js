@@ -158,18 +158,18 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll');
 		let tmp_obj =
 			{
-				'comment_id':         fake_id,
-				'comment_time':       actual_time_in_video,
-				'comment_text':       comment_text,
-				'comment_time_end':   end_time,
-				'user_name':          player_data.username,
-				'user_image':         player_data.user_image,
-				'is_interactive':     '0',
-				'is_private':         is_private
+				'comment_id'       : fake_id,
+				'comment_time'     : actual_time_in_video,
+				'comment_text'     : comment_text,
+				'comment_time_end' : end_time,
+				'user_name'        : player_data.username,
+				'user_image'       : player_data.user_image,
+				'is_interactive'   : '0',
+				'is_private'       : is_private
 			};
 		if (!tmp_obj.comment_text) 
 		{
-			$('#no_text_warning').removeClass('ilNoDisplay');
+			$('#no_text_warning_' + player_id).removeClass('ilNoDisplay');
 			return;
 		}
 		pri.utils.sliceCommentAndStopPointsInCorrectPosition(tmp_obj, tmp_obj.comment_time, player_data);
@@ -181,10 +181,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			type:     "POST",
 			url:      il.InteractiveVideo.post_comment_url,
 			data:     {
-				'comment_time':       actual_time_in_video,
-				'comment_time_end'  : end_time,
-				'comment_text':      comment_text,
-				'is_private':        is_private
+				'comment_time'     : actual_time_in_video,
+				'comment_time_end' : end_time,
+				'comment_text'     : comment_text,
+				'is_private'       : is_private
 			},
 			success:  function () {
 				pro.resetCommentForm(player_id);
