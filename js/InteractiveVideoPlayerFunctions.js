@@ -1,7 +1,7 @@
 il.InteractiveVideoPlayerFunction = (function (scope) {
 	'use strict';
 
-	var pub = {}, pro = {}, pri = {};
+	let pub = {}, pro = {}, pri = {};
 
 	pri.utils = scope.InteractiveVideoPlayerComments;
 
@@ -81,6 +81,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		pro.addAjaxFunctionForCommentPosting(player_id);
 
 		pro.addShowAllCommetsChange(player_id);
+		pro.addTaskInteraction(player_id);
 		/*		pro.resetCommentFormOnClick();
 		
 				pro.addPausePlayerOnClick();
@@ -95,14 +96,15 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		
 				pro.addModalInteractionToBackLinkButton();
 				
-				pro.addTaskInteraction();*/
+				;*/
 	};
 	
-	pro.addTaskInteraction = function()
+	pro.addTaskInteraction = function(player_id)
 	{
-		$('.task_interaction').on('click', function() {
-			let description = $('.task_description');
-			let icon = $('.task_icon');
+		$('#task_interaction_' + player_id).on('click', function() {
+			let description = $('#task_description_' + player_id);
+			let icon = $('#task_icon_' + player_id);
+			console.log(description.hasClass('closed'))
 			if(! description.hasClass('closed'))
 			{
 				description.addClass('closed');

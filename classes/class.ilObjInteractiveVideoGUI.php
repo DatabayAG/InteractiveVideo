@@ -276,6 +276,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoUniqueIds.php';
+		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $plugin->getDirectory());
 
 		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
@@ -286,13 +288,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$video_tpl->setCurrentBlock('task_description');
 			$video_tpl->setVariable('TASK_TEXT',$plugin->txt('task'));
 			$video_tpl->setVariable('TASK_DESCRIPTION', $this->object->getTask());
+			$video_tpl->setVariable('PLAYER_ID', $player_id);
 			$video_tpl->parseCurrentBlock();
 		}
 
 		$this->addBackButtonIfParameterExists($video_tpl);
-
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoUniqueIds.php';
-		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
 
 		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer($player_id)->get());
 		$form = new ilPropertyFormGUI();
