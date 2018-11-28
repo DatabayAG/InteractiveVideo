@@ -183,7 +183,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.rebuildCommentsViewIfShowAllIsActive = function(player_id)
 	{
-		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let j_object, position, height;
 
 		if(player_data.is_show_all_active === true)

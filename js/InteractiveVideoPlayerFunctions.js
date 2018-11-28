@@ -59,12 +59,12 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 					{
 						for (i = 0; i < Object.keys(player_data.comments).length; i++)
 						{
-							if (player_data.comments[i].comment_time === cueTime)
+							if (parseInt(player_data.comments[i].comment_time, 10) === cueTime)
 							{
 								stop_video = pro.commentsObjectActions(i, current_time, player);
 							}
 							if (stop_video === 1) {
-								scope.InteractiveVideoPlayerAbstract.pause();
+								scope.InteractiveVideoPlayerAbstract.pause(player_id);
 								stop_video = 0;
 							}
 						}
@@ -109,14 +109,14 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		});
 	};
 
-	pro.addHighlightToCommentWithoutEndTime = function(comment)
+	pro.addHighlightToCommentWithoutEndTime = function(comment, player_id)
 	{
 		let time_end = parseInt(comment.comment_time_end, 10);
 		if(time_end === 0 || time_end === null) 
 		{
 			$('.list_item_' + comment.comment_id).addClass('activeCommentWithoutEndTime');
 			setTimeout(function(){
-				$('.list_item_' + comment.comment_id).removeClass('activeCommentWithoutEndTime');}, il.InteractiveVideo.comment_hightlight_time);
+				$('.list_item_' + comment.comment_id).removeClass('activeCommentWithoutEndTime');}, il.InteractiveVideo[player_id].comment_hightlight_time);
 		}
 	};
 
@@ -133,7 +133,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		if (player_data.comments[i].comment_text != null) 
 		{
 			comments_div.prepend(pri.utils.buildListElement(player_id, comment, current_time, comment.user_name));
-			pro.addHighlightToCommentWithoutEndTime(comment);
+			pro.addHighlightToCommentWithoutEndTime(comment, player_id);
 			if (comment.comment_time_end > 0) 
 			{
 				pri.utils.fillCommentsTimeEndBlacklist(player_id, comment.comment_time_end, comment.comment_id);
@@ -180,7 +180,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		$.ajax({
 			type:     "POST",
-			url:      il.InteractiveVideo.post_comment_url,
+			url:      il.InteractiveVideo[player_id].post_comment_url,
 			data:     {
 				'comment_time'     : actual_time_in_video,
 				'comment_time_end' : end_time,
@@ -200,7 +200,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			let time;
 			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
 			//Todo: get correct instance
-			let comment_text = CKEDITOR.instances.comment_text.getData();
+			let text_instance = 'comment_text_' + player_id;
+			let comment_text = CKEDITOR.instances[text_instance].getData();
 			let is_private = $('#is_private' + player_id).prop("checked");
 
 			if( $('#comment_time_end_chk' + player_id).prop( "checked" ))
@@ -230,7 +231,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			//Todo: Check values
 			$.ajax({
 				type:     "POST",
-				url:      il.InteractiveVideo.post_comment_url,
+				url:      il.InteractiveVideo[player_id].post_comment_url,
 				data:     {
 					'comment_time':      actual_time_in_video,
 					'comment_text':      comment_text,
@@ -259,7 +260,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.resetCommentForm = function(player_id)
 	{
-		CKEDITOR.instances.comment_text.setData('');
+		CKEDITOR.instances['comment_text_' + player_id].setData('');
 		$('#is_private_' + player_id).prop( 'checked', false );
 		$('#comment_time_end_chk_' + player_id).prop( 'checked', false );
 		$('.end_time_selector_' + player_id).hide( 'fast' );
@@ -275,7 +276,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			{
 				editor.on('focus', function() {
 					if (player_data.pause_on_click_in_comment_field) {
-						scope.InteractiveVideoPlayerAbstract.pause();
+						scope.InteractiveVideoPlayerAbstract.pause(player_id);
 					}
 				});
 			}
@@ -321,7 +322,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	
 	pro.isChronologicViewDeactivatedShowAllComments = function(player_id)
 	{
-		console.log(player_id)
 		if(pub.getPlayerDataObjectByPlayerId(player_id).is_chronologic === '1')
 		{
 			$('#show_all_comments_' + player_id).click();
@@ -447,7 +447,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		if(player.hasOwnProperty("h")){
 				return player.h.id;
 		}
-		
+
 		console.log('we have a problem')
 	};
 
