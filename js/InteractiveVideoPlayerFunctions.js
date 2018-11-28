@@ -23,7 +23,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		if(player_data.is_show_all_active === false)
 		{
-			pri.utils.replaceCommentsAfterSeeking(current_time, player);
+			pri.utils.replaceCommentsAfterSeeking(current_time, player_id);
 		}
 		else
 		{

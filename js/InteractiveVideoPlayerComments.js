@@ -24,15 +24,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		player_data.stopPoints.splice( pos + 1, 0, Math.floor(time));
 	};
 
-	pub.replaceCommentsAfterSeeking = function (time, player)
+	pub.replaceCommentsAfterSeeking = function (time, player_id)
 	{
-		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
-		let player_id = scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let i;
 		let j_object = $("#ul_scroll");
 
 		j_object.html('');
-		pub.resetCommentsTimeEndBlacklist(player);
+		pub.resetCommentsTimeEndBlacklist(player_id);
 		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 		{
 			if (player_data.comments[i].comment_time <= time && player_data.comments[i].comment_text !== null)
@@ -140,9 +139,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		$('.list_item_' + id).addClass('activeComment');
 	};
 
-	pub.resetCommentsTimeEndBlacklist = function ()
+	pub.resetCommentsTimeEndBlacklist = function (player_id)
 	{
-		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 
 		player_data.blacklist_time_end = [];
 	};
@@ -177,7 +176,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		else
 		{
 			player_data.is_show_all_active = false;
-			pub.replaceCommentsAfterSeeking(player_data.last_time);
+			pub.replaceCommentsAfterSeeking(player_data.last_time, player_id);
 		}
 	};
 
