@@ -66,6 +66,8 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.jumpToTimeInVideo = function (time, player_id)
 	{
+		//Todo: something is fishy here
+		player_id = $(player_id).attr('id');
 		pub.play(player_id);
 		pub.pause(player_id);
 		if(time !== null)

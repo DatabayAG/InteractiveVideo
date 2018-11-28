@@ -4,14 +4,14 @@ $(document).ready(function () {
 
 (function ($) {
 	il.Util.addOnLoad(function () {
-		$.each(il.InteractiveVideo, function (id, value) {
-			if (id !== "lang") {
-				il.InteractiveVideoPlayerFunction.appendInteractionEvents(id);
+		$.each(il.InteractiveVideo, function (player_id, value) {
+			if (player_id !== "lang") {
+				il.InteractiveVideoPlayerFunction.appendInteractionEvents(player_id);
 				var player   = null,
 					seekTime = 0,
 					interval = null;
 				il.InteractiveVideo.last_stopPoint = -1;
-				player = new MediaElementPlayer("#" + id, {
+				new MediaElementPlayer("#" + player_id, {
 
 					timerRate:         50,
 					enablePluginDebug: false,
@@ -19,14 +19,14 @@ $(document).ready(function () {
 					success: function (media) {
 
 						media.addEventListener('loadeddata', function () {
-							var player = $("video#" + id)[0];
+							player = $("video#" + player_id)[0];
 
-							il.InteractiveVideoPlayerAbstract.config[id] = {
+							il.InteractiveVideoPlayerAbstract.config[player_id] = {
 								pauseCallback:          (function () {
-									player.pause(id);
+									player.pause(player_id);
 								}),
 								playCallback:           (function () {
-									player.play(id);
+									player.play(player_id);
 								}),
 								durationCallback:       (function () {
 									return player.duration;
@@ -35,11 +35,11 @@ $(document).ready(function () {
 									return player.currentTime;
 								}),
 								setCurrentTimeCallback: (function (time) {
-									player.setCurrentTime(time, id);
+									player.setCurrentTime(time, player_id);
 								})
 							};
 
-							il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration(id));
+							il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration(player_id));
 						}, false);
 
 						media.addEventListener('loadedmetadata', function () {
@@ -50,26 +50,26 @@ $(document).ready(function () {
 						}, false);
 
 						media.addEventListener('play', function () {
-							il.InteractiveVideoPlayerAbstract.play(id);
+							il.InteractiveVideoPlayerAbstract.play(player_id);
 						}, false);
 
 						media.addEventListener('seeked', function () {
 							clearInterval(interval);
-							il.InteractiveVideoPlayerFunction.seekingEventHandler(id);
+							il.InteractiveVideoPlayerFunction.seekingEventHandler(player_id);
 						}, false);
 
 						media.addEventListener('pause', function () {
 							clearInterval(interval);
-							il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime(id);
+							il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime(player_id);
 						}, false);
 
 						media.addEventListener('ended', function () {
-							il.InteractiveVideoPlayerAbstract.videoFinished(id);
+							il.InteractiveVideoPlayerAbstract.videoFinished(player_id);
 						}, false);
 
 						media.addEventListener('playing', function () {
 							interval = setInterval(function () {
-								il.InteractiveVideoPlayerFunction.playingEventHandler(interval, id);
+								il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player_id);
 							}, 500);
 
 						}, false);

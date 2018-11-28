@@ -10,7 +10,6 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.sliceCommentAndStopPointsInCorrectPosition = function (tmp_obj, time, player_data)
 	{
-		//Todo: inject player
 		let pos = 0;
 		let i;
 
@@ -62,7 +61,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 							'<div class="comment_user_data">' + pub.buildCommentUsernameHtml(username, comment.is_interactive) +
 							pro.appendPrivateHtml(comment.is_private) +
 							'<div class="comment_time">' +
-							pro.buildCommentTimeHtml(time, comment.is_interactive)                           +
+							pro.buildCommentTimeHtml(time, comment.is_interactive, player_id)                           +
 							pro.buildCommentTimeEndHtml(comment, player_id)                                             +
 							'</div></div><div class="comment_inner_text">' +
 							pro.buildCommentTitleHtml(comment.comment_title)                                 +
@@ -280,7 +279,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return css_class;
 	};
 
-	pro.buildCommentTimeHtml = function (time, is_interactive)
+	pro.buildCommentTimeHtml = function (time, is_interactive, player_id)
 	{
 		let display_time = time;
 
@@ -289,7 +288,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			time = Math.abs(Math.round(time) - 0.1);
 		}
 		return 	'<time class="time"> ' +
-				'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + time + '); return false;">'+
+				'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + time + ', ' + player_id + '); return false;">'+
 				pro.secondsToTimeCode(display_time)  +
 				'</a>' +
 				'</time>' ;
@@ -312,7 +311,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		if(display_time > 0)
 		{
 			return 	'<time class="time_end"> - ' +
-					'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + display_time + '); return false;">'+
+					'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + display_time + ', ' + player_id + ');">'+
 					pro.secondsToTimeCode(display_time)  +
 					'</a>' +
 					'</time>' ;

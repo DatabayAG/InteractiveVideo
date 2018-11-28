@@ -198,7 +198,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	{
 		$('#ilInteractiveVideoCommentSubmit_' + player_id).on("click", function() {
 			let time;
-			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
+			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
 			//Todo: get correct instance
 			let comment_text = CKEDITOR.instances.comment_text.getData();
 			let is_private = $('#is_private' + player_id).prop("checked");
@@ -224,7 +224,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pub.addAjaxFunctionForReflectionCommentPosting = function(comment_id, org_id, player_id)
 	{
 		$('#submit_comment_form_' + player_id).on("click", function() {
-			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime();
+			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
 			let comment_text = CKEDITOR.instances['text_reflection_comment_' + comment_id].getData();
 			let is_private = $('#is_private_modal_' + player_id).prop("checked");
 			//Todo: Check values
@@ -400,7 +400,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		$.ajax({
 			type     : "POST",
 			dataType : "JSON",
-			url      : pub.getPlayerDataObjectByPlayerId(player_id).video_started_post_url,
+			url      : pub.getPlayerDataObjectByPlayer(player_id).video_started_post_url,
 			data     : {},
 			success  : function() {
 			}
