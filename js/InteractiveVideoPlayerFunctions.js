@@ -444,6 +444,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			}
 		}
 
+		if(player.hasOwnProperty("h")){
+				return player.h.id;
+		}
+		
 		console.log('we have a problem')
 	};
 
