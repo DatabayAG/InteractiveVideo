@@ -5,7 +5,7 @@ $(document).ready(function () {
 (function ($) {
 	il.Util.addOnLoad(function () {
 		$.each(il.InteractiveVideo, function (player_id, value) {
-			if (player_id !== "lang") {
+			if (value.hasOwnProperty("player_type") && value.player_type === "imo") {
 				il.InteractiveVideoPlayerFunction.appendInteractionEvents(player_id);
 				var player   = null,
 					seekTime = 0,

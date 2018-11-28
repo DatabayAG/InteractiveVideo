@@ -321,6 +321,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	
 	pro.isChronologicViewDeactivatedShowAllComments = function(player_id)
 	{
+		console.log(player_id)
 		if(pub.getPlayerDataObjectByPlayerId(player_id).is_chronologic === '1')
 		{
 			$('#show_all_comments_' + player_id).click();

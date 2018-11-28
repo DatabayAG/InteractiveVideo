@@ -314,7 +314,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
 		$video_tpl->setVariable('SHOW_ALL_COMMENTS', $plugin->txt('show_all_comments'));
 		$video_tpl->setVariable('AUTHOR_FILTER', $plugin->txt('author_filter'));
-		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id));
+		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(), false));
 
 		if($this->object->getDisableComment() != 1)
 		{
@@ -445,11 +445,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	/**
 	 * @param      $player_id
+	 * @param      $video_type
 	 * @param bool $edit_screen
 	 * @return string
 	 * @throws ilTemplateException
 	 */
-	protected function initPlayerConfig($player_id, $edit_screen = false)
+	protected function initPlayerConfig($player_id, $video_type, $edit_screen = false)
 	{
 		/**
 		 * $ilUser ilObjUser
@@ -472,6 +473,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('PLAYER_ID', $player_id);
 		$org_ref_id = (int) $_GET['ref_id'];
 		$this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'ref_id', $this->ref_id);
+		$config_tpl->setVariable('PLAYER_TYPE', $video_type);
 		$config_tpl->setVariable('VIDEO_FINISHED_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postVideoFinishedPerAjax', '', true, false));
 		$config_tpl->setVariable('VIDEO_STARTED_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postVideoStartedPerAjax', '', true, false));
 		$config_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'getQuestionPerAjax', '', true, false));
@@ -1525,7 +1527,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postTutorComment', '', false, false));
 
-		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, true));
+		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(),true));
 		global $ilUser;
 		$this->object->getLPStatusForUser($ilUser->getId());
 		$tbl_data = $this->object->getCommentsTableData(true, true);

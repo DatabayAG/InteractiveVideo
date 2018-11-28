@@ -39,6 +39,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.duration = function(player_id)
 	{
+		console.log(player_id)
 		let value = -1;
 
 		if (typeof pub.config[player_id].durationCallback === 'function') {
