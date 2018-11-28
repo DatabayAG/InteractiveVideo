@@ -8,7 +8,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pub.seekingEventHandler = function(player)
 	{
 		let player_data = pub.getPlayerDataObjectByPlayer(player);
-		let current_time = scope.InteractiveVideoPlayerAbstract.currentTime();
+		let player_id = pub.getPlayerIdFromPlayerObject(player);
+		let current_time = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
 		
 		if (player_data.last_time > current_time)
 		{
@@ -35,9 +36,9 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pub.playingEventHandler = function(interval, player)
 	{
 		let cueTime, stop_video, i, j;
-		let current_time    = scope.InteractiveVideoPlayerAbstract.currentTime();
-		let duration        = scope.InteractiveVideoPlayerAbstract.duration();
 		let player_id       = pub.getPlayerIdFromPlayerObject(player);
+		let current_time    = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
+		let duration        = scope.InteractiveVideoPlayerAbstract.duration(player_id);
 		let player_data     = pub.getPlayerDataObjectByPlayer(player);
 
 		if (current_time >= duration) {
@@ -395,22 +396,22 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		});
 	};
 
-	pub.triggerVideoStarted = function (player) {
+	pub.triggerVideoStarted = function (player_id) {
 		$.ajax({
 			type     : "POST",
 			dataType : "JSON",
-			url      : pub.getPlayerDataObjectByPlayer(player).video_started_post_url,
+			url      : pub.getPlayerDataObjectByPlayerId(player_id).video_started_post_url,
 			data     : {},
 			success  : function() {
 			}
 		});
 	};
 
-	pub.triggerVideoFinished = function (player) {
+	pub.triggerVideoFinished = function (player_id) {
 		$.ajax({
 			type     : "POST",
 			dataType : "JSON",
-			url      : pub.getPlayerDataObjectByPlayer(player).video_finished_post_url,
+			url      : pub.getPlayerDataObjectByPlayerId(player_id).video_finished_post_url,
 			data     : {},
 			success  : function() {
 			}
@@ -432,7 +433,17 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.getPlayerIdFromPlayerObject = function(player)
 	{
-		return player.node.id;
+		if(typeof player === "string"){
+			return player;
+		}
+
+		if(player.hasOwnProperty("node")){
+			if(player.node.hasOwnProperty("id")){
+				return player.node.id;
+			}
+		}
+
+		console.log('we have a problem')
 	};
 
 	pub.getPlayerDataObjectByPlayerId = function(player_id)

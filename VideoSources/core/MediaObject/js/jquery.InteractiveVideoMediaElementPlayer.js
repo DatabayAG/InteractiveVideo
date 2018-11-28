@@ -21,12 +21,12 @@ $(document).ready(function () {
 						media.addEventListener('loadeddata', function () {
 							var player = $("video#" + id)[0];
 
-							il.InteractiveVideoPlayerAbstract.config = {
+							il.InteractiveVideoPlayerAbstract.config[id] = {
 								pauseCallback:          (function () {
-									player.pause();
+									player.pause(id);
 								}),
 								playCallback:           (function () {
-									player.play();
+									player.play(id);
 								}),
 								durationCallback:       (function () {
 									return player.duration;
@@ -35,11 +35,11 @@ $(document).ready(function () {
 									return player.currentTime;
 								}),
 								setCurrentTimeCallback: (function (time) {
-									player.setCurrentTime(time);
+									player.setCurrentTime(time, id);
 								})
 							};
 
-							il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration());
+							il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration(id));
 						}, false);
 
 						media.addEventListener('loadedmetadata', function () {
@@ -50,26 +50,26 @@ $(document).ready(function () {
 						}, false);
 
 						media.addEventListener('play', function () {
-							il.InteractiveVideoPlayerAbstract.play(player);
+							il.InteractiveVideoPlayerAbstract.play(id);
 						}, false);
 
 						media.addEventListener('seeked', function () {
 							clearInterval(interval);
-							il.InteractiveVideoPlayerFunction.seekingEventHandler(player);
+							il.InteractiveVideoPlayerFunction.seekingEventHandler(id);
 						}, false);
 
 						media.addEventListener('pause', function () {
 							clearInterval(interval);
-							il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime(player);
+							il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime(id);
 						}, false);
 
 						media.addEventListener('ended', function () {
-							il.InteractiveVideoPlayerAbstract.videoFinished(player);
+							il.InteractiveVideoPlayerAbstract.videoFinished(id);
 						}, false);
 
 						media.addEventListener('playing', function () {
 							interval = setInterval(function () {
-								il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
+								il.InteractiveVideoPlayerFunction.playingEventHandler(interval, id);
 							}, 500);
 
 						}, false);
