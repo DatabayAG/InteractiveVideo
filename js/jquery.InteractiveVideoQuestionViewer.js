@@ -113,6 +113,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	
 	pro.appendSelfReflectionCommentForm = function(player_id)
 	{
+		//Todo: check this
 		let comment_id = 'text_reflection_comment_'+ pub.comment_id ;
 		let footer = $('.modal_reflection_footer');
 		let feedback = $('.modal_feedback');
@@ -231,7 +232,9 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	pro.showQuestionInteractionForm = function(comment_id, array, player) {
 		pub.comment_id = comment_id;
 		pub.QuestionObject = array;
-		pub.QuestionObject.player = player;
+		pub.QuestionObject.player = $('#' + player)[0];
+		//Todo: fix this, fullscreen isn't working
+		console.log(player, 'player', pub.QuestionObject.player.isFullScreen)
 		pro.buildQuestionForm(player);
 		if (pub.QuestionObject.player.isFullScreen === true) {
 			pub.QuestionObject.player.exitFullScreen();
