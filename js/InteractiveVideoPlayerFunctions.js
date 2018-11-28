@@ -202,11 +202,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			//Todo: get correct instance
 			let text_instance = 'comment_text_' + player_id;
 			let comment_text = CKEDITOR.instances[text_instance].getData();
-			let is_private = $('#is_private' + player_id).prop("checked");
+			let is_private = $('#is_private_' + player_id).prop("checked");
 
-			if( $('#comment_time_end_chk' + player_id).prop( "checked" ))
+			if( $('#comment_time_end_chk_' + player_id).prop( "checked" ))
 			{
-				time = $('#comment_time_end' + player_id).val();
+				time = $('#comment_time_end_' + player_id).val();
 				time = time.split(':'); // split it at the colons
 
 				var end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
@@ -296,8 +296,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			if($(this).is(':checked'))
 			{
 				$('.end_time_selector_' + player_id).show( 'fast' );
-				//Todo: check if this is a problem
-				pri.utils.preselectActualTimeInVideo(scope.InteractiveVideoPlayerAbstract.currentTime());
+				pri.utils.preselectActualTimeInVideo(scope.InteractiveVideoPlayerAbstract.currentTime(player_id));
 			}
 			else
 			{
@@ -448,7 +447,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				return player.h.id;
 		}
 
-		console.log('we have a problem')
+		console.log('we have a problem', player)
 	};
 
 	pub.getPlayerDataObjectByPlayerId = function(player_id)
