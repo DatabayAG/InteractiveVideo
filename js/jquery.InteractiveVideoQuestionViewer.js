@@ -99,7 +99,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 			pro.appendSelfReflectionCommentForm(player_id);
 		}
 
-		pro.appendCloseButtonListener();
+		pro.appendCloseButtonListener(player_id);
 		$.ajax({
 			type:    "POST",
 			cache:   false,
@@ -196,10 +196,10 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.appendButtonListener = function(player) {
-		$('#question_form').on('submit', function (e) {
-			let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
-			let player_id = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
+		let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+		let player_id = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 
+		$('#question_form').on('submit', function (e) {
 			e.preventDefault();
 			$.ajax({
 				type:    "POST",
@@ -213,14 +213,14 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 				}
 			});
 		});
-		pro.appendCloseButtonListener(player);
+		pro.appendCloseButtonListener(player_id);
 	};
 
-	pro.appendCloseButtonListener = function(player)
+	pro.appendCloseButtonListener = function(player_id)
 	{
 		$('#close_form').on('click', function () {
 			$('#ilQuestionModal').modal('hide');
-			scope.InteractiveVideoPlayerAbstract.resumeVideo(player);
+			scope.InteractiveVideoPlayerAbstract.resumeVideo(player_id);
 		});
 	};
 
