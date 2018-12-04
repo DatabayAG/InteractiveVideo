@@ -221,7 +221,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pub.preselectActualTimeInVideo = function(seconds)
 	{
 		let obj = pro.secondsToTimeCode(seconds);
-//Todo: fix this
+//Todo: fix this, this id does not exists anywhere
 		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));
 	};
 

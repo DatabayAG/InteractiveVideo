@@ -199,7 +199,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		$('#ilInteractiveVideoCommentSubmit_' + player_id).on("click", function() {
 			let time;
 			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
-			//Todo: get correct instance
 			let text_instance = 'comment_text_' + player_id;
 			let comment_text = CKEDITOR.instances[text_instance].getData();
 			let is_private = $('#is_private_' + player_id).prop("checked");
@@ -209,7 +208,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				time = $('#comment_time_end_' + player_id).val();
 				time = time.split(':'); // split it at the colons
 
-				var end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
+				let end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
 
 				if(end_time < parseInt(actual_time_in_video, 10))
 				{
@@ -228,7 +227,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
 			let comment_text = CKEDITOR.instances['text_reflection_comment_' + comment_id].getData();
 			let is_private = $('#is_private_modal_' + player_id).prop("checked");
-			//Todo: Check values
 			$.ajax({
 				type:     "POST",
 				url:      il.InteractiveVideo[player_id].post_comment_url,
