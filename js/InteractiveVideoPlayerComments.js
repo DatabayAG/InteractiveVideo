@@ -36,7 +36,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			if (player_data.comments[i].comment_time <= time && player_data.comments[i].comment_text !== null)
 			{
-				j_object.prepend(pub.buildListElement(player, player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name));
+				j_object.prepend(pub.buildListElement(player_id, player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name));
 				if(player_data.comments[i].comment_time_end > 0)
 				{
 					pub.fillCommentsTimeEndBlacklist(player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
