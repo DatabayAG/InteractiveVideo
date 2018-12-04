@@ -28,7 +28,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	{
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let i;
-		let j_object = $("#ul_scroll");
+		let j_object = $("#ul_scroll_" + player_id);
 
 		j_object.html('');
 		pub.resetCommentsTimeEndBlacklist(player_id);
@@ -150,7 +150,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	{
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let i;
-		let j_object	= $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll');
+		let j_object	= $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id);
 		let element		='';
 
 		j_object.html('');
@@ -189,7 +189,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			j_object = $('#ilInteractiveVideoComments_' + player_id);
 			position = j_object.scrollTop();
-			height   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll').find('li').first().height();
+			height   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id).find('li').first().height();
 			player_data.is_show_all_active = false;
 			pub.displayAllCommentsAndDeactivateCommentStream(true, player_id);
 			j_object.scrollTop(position + height);

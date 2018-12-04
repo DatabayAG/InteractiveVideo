@@ -127,7 +127,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		let is_interactive = parseInt(player_data.comments[i].is_interactive, 10);
 		let comment        = player_data.comments[i];
 		let stop_video     = 0;
-		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll');
+		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id);
 		let language       = scope.InteractiveVideo.lang;
 
 		if (player_data.comments[i].comment_text != null) 
@@ -156,7 +156,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
 		let fake_id = parseInt(Math.random() * 10000000, 10);
 
-		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll');
+		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id);
 		let tmp_obj =
 			{
 				'comment_id'       : fake_id,
