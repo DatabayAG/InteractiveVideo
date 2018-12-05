@@ -1450,15 +1450,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	public function updateComment()
 	{
+		$valid = false;
 		$form = $this->initCommentForm();
 
-		if($form->checkInput())
-		{
+		if($form->checkInput()) {
+			$valid            = true;
+			$comment_time     = $form->getInput('comment_time');
+			$comment_time_end = $form->getInput('comment_time_end');
+			if ($comment_time > $comment_time_end) {
+				$valid = false;
+				ilUtil::sendFailure($this->plugin->txt('endtime_warning'));
+			}
 			$comment_id = $form->getInput('comment_id');
-			if($comment_id > 0)
-			{
+			if ($comment_id > 0) {
 				$this->objComment = new ilObjComment($comment_id);
-
 			}
 			$this->objComment->setCommentText($form->getInput('comment_text'));
 			// $this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
@@ -1466,13 +1471,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setInteractive(0);
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
 
-			// calculate seconds
-			$comment_time = $form->getInput('comment_time');
 			$this->objComment->setCommentTime($comment_time);
-			$comment_time_end = $form->getInput('comment_time_end');
 			$this->objComment->setCommentTimeEnd($comment_time_end);
+		}
+		if($valid){
 			$this->objComment->update();
-
 			$this->editComments();
 		}
 		else
