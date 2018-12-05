@@ -346,7 +346,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				$('#dropdownMenuInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.author_filter + ' ' + value);
 			}
 
-			if(scope.InteractiveVideoPlayerAbstract.currentTime() > 0 || player_data.is_show_all_active === true)
+			if(scope.InteractiveVideoPlayerAbstract.currentTime(player_id) > 0 || player_data.is_show_all_active === true)
 			{
 				player_data.is_show_all_active = false;
 				scope.InteractiveVideoPlayerComments.displayAllCommentsAndDeactivateCommentStream(show_all_active_temp, player_id);
