@@ -208,7 +208,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				time = $('#comment_time_end_' + player_id).val();
 				time = time.split(':'); // split it at the colons
 
-				let end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
+				var end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
 
 				if(end_time < parseInt(actual_time_in_video, 10))
 				{
