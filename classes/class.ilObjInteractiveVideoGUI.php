@@ -1520,6 +1520,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 
 		$video_tpl->setVariable('TXT_INS_COMMENT', $plugin->txt('insert_comment'));
+		$video_tpl->setVariable('PLAYER_ID', $player_id);
 		$video_tpl->setVariable('TXT_INS_QUESTION', $plugin->txt('insert_question'));
 
 		require_once("./Services/UIComponent/Modal/classes/class.ilModalGUI.php");

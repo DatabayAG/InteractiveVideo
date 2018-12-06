@@ -28,11 +28,11 @@
 
 <script type="text/javascript">
 	$("#ilInteractiveVideoTutorCommentSubmit").on("click", function(e) {
-		$('#comment_time').val(il.InteractiveVideoPlayerAbstract.currentTime());
+		$('#comment_time').val(il.InteractiveVideoPlayerAbstract.currentTime("{PLAYER_ID}"));
 	});
 
 	$("#ilInteractiveVideoTutorQuestionSubmit").on("click", function(e) {
-		$('#comment_time').val(il.InteractiveVideoPlayerAbstract.currentTime());
+		$('#comment_time').val(il.InteractiveVideoPlayerAbstract.currentTime("{PLAYER_ID}""));
 	});
 
 </script>
