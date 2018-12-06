@@ -1407,7 +1407,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			ilUtil::sendFailure($plugin->txt('invalid_comment_ids'));
 		}
-		$this->ctrl->redirect($this, 'editMyComment');
+		$this->ctrl->redirect($this, 'editMyComments');
 	}
 
 	public function postTutorComment()
