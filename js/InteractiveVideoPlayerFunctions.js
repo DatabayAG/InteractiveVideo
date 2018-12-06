@@ -269,24 +269,27 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	{
 		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
 		let editor_name = 'comment_text_' + player_id;
-		CKEDITOR.on('instanceReady', function(evt) {
-			let editor = evt.editor;
-			if(editor.name === editor_name)
-			{
-				editor.on('focus', function() {
-					if (player_data.pause_on_click_in_comment_field) {
-						scope.InteractiveVideoPlayerAbstract.pause(player_id);
-					}
-				});
-			}
-		});
+		if($('#comment_text_' + player_id).size() > 0){
+			CKEDITOR.on('instanceReady', function(evt) {
+				let editor = evt.editor;
+				if(editor.name === editor_name)
+				{
+					editor.on('focus', function() {
+						if (player_data.pause_on_click_in_comment_field) {
+							scope.InteractiveVideoPlayerAbstract.pause(player_id);
+						}
+					});
+				}
+			});
 
-		//because the initialisation of youtube is slower than the init of CKEDITOR we need to reinit CKEDITOR
-		if(player_data.player_type === 'ytb') {
-			let editor_old_instance = CKEDITOR.instances[editor_name];
-			if (editor_old_instance) { editor_old_instance.destroy(true); }
-			CKEDITOR.replace(editor_name);
+			//because the initialisation of youtube is slower than the init of CKEDITOR we need to reinit CKEDITOR
+			if(player_data.player_type === 'ytb') {
+				let editor_old_instance = CKEDITOR.instances[editor_name];
+				if (editor_old_instance) { editor_old_instance.destroy(true); }
+				CKEDITOR.replace(editor_name);
+			}
 		}
+
 
 	};
 
