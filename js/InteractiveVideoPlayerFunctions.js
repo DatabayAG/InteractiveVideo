@@ -279,6 +279,14 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				});
 			}
 		});
+
+		//cause the initialisation of youtube is faster than the init of CKEDITOR we need to reinit CKEDITOR
+		if(player_data.player_type === 'ytb') {
+			let editor_new_instance = CKEDITOR.instances['comment_text_' + player_id];
+			if (editor_new_instance) { editor_new_instance.destroy(true); }
+			CKEDITOR.replace('comment_text_' + player_id);
+		}
+
 	};
 
 	pro.addShowAllCommetsChange = function(player_id)
