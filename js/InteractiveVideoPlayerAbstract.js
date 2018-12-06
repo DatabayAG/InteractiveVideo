@@ -75,7 +75,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 			pub.setCurrentTime(time, player_id);
 			scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id).last_stopPoint = time;
 		}
-		pub.resumeVideo(player_id);
+		pub.play(player_id);
 	};
 
 	pub.resumeVideo = function (player_id)
