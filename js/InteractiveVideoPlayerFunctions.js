@@ -281,10 +281,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			}
 		});
 
-		//cause the initialisation of youtube is faster than the init of CKEDITOR we need to reinit CKEDITOR
+		//because the initialisation of youtube is slower than the init of CKEDITOR we need to reinit CKEDITOR
 		if(player_data.player_type === 'ytb') {
-			let editor_new_instance = CKEDITOR.instances[editor_name];
-			if (editor_new_instance) { editor_new_instance.destroy(true); }
+			let editor_old_instance = CKEDITOR.instances[editor_name];
+			if (editor_old_instance) { editor_old_instance.destroy(true); }
 			CKEDITOR.replace(editor_name);
 		}
 
