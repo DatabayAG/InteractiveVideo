@@ -269,7 +269,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	{
 		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
 		let editor_name = 'comment_text_' + player_id;
-		if($('#comment_text_' + player_id).size() > 0){
+		if($('#' + editor_name).size() > 0){
 			CKEDITOR.on('instanceReady', function(evt) {
 				let editor = evt.editor;
 				if(editor.name === editor_name)
