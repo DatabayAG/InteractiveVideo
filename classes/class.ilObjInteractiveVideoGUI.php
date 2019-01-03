@@ -192,6 +192,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					
 					case 'updateProperties':
 					case 'editProperties':
+					case 'addSubtitle':
+					case 'postAddSubtitle':
 					case 'confirmDeleteComment':
 					case 'deleteComment': 
 					case 'editComments':  
@@ -745,6 +747,44 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->edit();
 	}
 
+	public function addSubtitle()
+	{
+		/**
+		 * @var $ilTabs ilTabsGUI
+		 */
+		global $ilTabs, $tpl;
+
+		$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
+		$ilTabs->addSubTab('addSubtitle', $this->lng->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
+
+		$ilTabs->activateTab('editProperties');
+		$ilTabs->activateSubTab('addSubtitle');
+
+		$lng = $this->lng;
+		$ilCtrl = $this->ctrl;
+
+		include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
+		include_once("Services/Form/classes/class.ilFileInputGUI.php");
+		$form = new ilPropertyFormGUI();
+		$form->setTarget("_top");
+		$form->setFormAction($ilCtrl->getFormAction($this, "update"));
+		$form->setTitle($lng->txt("subtitle"));
+		
+		$file = new ilFileInputGUI();
+		$file->setSuffixes(array('vtt'));
+		$form->addItem($file);
+
+		$form->addCommandButton('postAddSubtitle', $this->lng->txt('save'));
+		$form->addCommandButton('addSubtitle', $this->lng->txt('cancel'));
+		$tpl->setContent($form->getHTML());
+	}
+
+	public function postAddSubtitle()
+	{
+		$a = $_FILES;
+		$b = 0;
+	}
+
 	/**
 	 * @return ilPropertyFormGUI
 	 */
@@ -903,7 +943,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $ilTabs   ilTabsGUI
 		 * @var $ilAccess ilAccessHandler
 		 */
-		global $ilTabs, $ilAccess;
+		global $ilTabs, $ilAccess, $ilCtrl;
 
 		if($ilAccess->checkAccess('read', '', $this->object->getRefId()))
 		{
@@ -915,6 +955,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
 		{
 			$ilTabs->addTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
+			if($ilCtrl->getCmd() === 'editProperties')
+			{
+				$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
+				$ilTabs->addSubTab('addSubtitle', $this->lng->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
+			}
 		}
 		
 		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
