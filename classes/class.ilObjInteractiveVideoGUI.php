@@ -755,7 +755,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $ilTabs, $tpl;
 
 		$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
-		$ilTabs->addSubTab('addSubtitle', $this->lng->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
+		$ilTabs->addSubTab('addSubtitle', $this->plugin->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
 
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('addSubtitle');
@@ -787,7 +787,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 
 		$form->addCommandButton('postAddSubtitle', $this->lng->txt('save'));
-		$form->addCommandButton('addSubtitle', $this->lng->txt('cancel'));
+		$form->addCommandButton('editProperties', $this->lng->txt('cancel'));
 		$tpl->setContent($form->getHTML());
 	}
 
@@ -986,7 +986,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			if($ilCtrl->getCmd() === 'editProperties')
 			{
 				$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
-				$ilTabs->addSubTab('addSubtitle', $this->lng->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
+				$ilTabs->addSubTab('addSubtitle', $this->plugin->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
 			}
 		}
 		
