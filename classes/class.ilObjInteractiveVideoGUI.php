@@ -766,10 +766,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
 		include_once("Services/Form/classes/class.ilFileInputGUI.php");
 		include_once("Services/Form/classes/class.ilFormSectionHeaderGUI.php");
+		include_once("Services/Form/classes/class.ilHiddenInputGUI.php");
 		$form = new ilPropertyFormGUI();
 		$form->setTarget("_top");
 		$form->setFormAction($ilCtrl->getFormAction($this, "update"));
-		$form->setTitle($this->plugin-->txt("subtitle"));
+		$form->setTitle($this->plugin->txt("subtitle"));
 		
 		$file = new ilFileInputGUI($this->plugin->txt('subtitle'), 'subtitle');
 		$file->setSuffixes(array('vtt'));
@@ -781,9 +782,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					$title = new ilFormSectionHeaderGUI();
 					$title->setTitle($entry);
 					$form->addItem($title);
-					$short = new ilTextInputGUI($this->plugin->txt('short_title'), 'short_title');
+					$short = new ilTextInputGUI($this->plugin->txt('short_title'), 's_' . $entry);
 					$form->addItem($short);
-					$long = new ilTextInputGUI($this->plugin->txt('long_title'), 'long_title');
+					$long = new ilTextInputGUI($this->plugin->txt('long_title'), 'l_' . $entry);
 					$form->addItem($long);
 				}
 			}
