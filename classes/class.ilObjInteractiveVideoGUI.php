@@ -765,14 +765,30 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
 		include_once("Services/Form/classes/class.ilFileInputGUI.php");
+		include_once("Services/Form/classes/class.ilFormSectionHeaderGUI.php");
 		$form = new ilPropertyFormGUI();
 		$form->setTarget("_top");
 		$form->setFormAction($ilCtrl->getFormAction($this, "update"));
-		$form->setTitle($lng->txt("subtitle"));
+		$form->setTitle($this->plugin-->txt("subtitle"));
 		
-		$file = new ilFileInputGUI();
+		$file = new ilFileInputGUI($this->plugin->txt('subtitle'), 'subtitle');
 		$file->setSuffixes(array('vtt'));
 		$form->addItem($file);
+
+		if ($handle = opendir(ilUtil::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/')) {
+			while (false !== ($entry = readdir($handle))) {
+				if ($entry != "." && $entry != "..") {
+					$title = new ilFormSectionHeaderGUI();
+					$title->setTitle($entry);
+					$form->addItem($title);
+					$short = new ilTextInputGUI($this->plugin->txt('short_title'), 'short_title');
+					$form->addItem($short);
+					$long = new ilTextInputGUI($this->plugin->txt('long_title'), 'long_title');
+					$form->addItem($long);
+				}
+			}
+			closedir($handle);
+		}
 
 		$form->addCommandButton('postAddSubtitle', $this->lng->txt('save'));
 		$form->addCommandButton('addSubtitle', $this->lng->txt('cancel'));
@@ -781,8 +797,22 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	public function postAddSubtitle()
 	{
-		$a = $_FILES;
-		$b = 0;
+		if(array_key_exists('tmp_name', $_FILES['subtitle'])
+			&& $_FILES['subtitle']['tmp_name'] != ''
+			&& file_exists($_FILES['subtitle']['tmp_name']))
+		{
+			$tmp_name = $_FILES['subtitle']['tmp_name'];
+			$file_name = $_FILES['subtitle']['name'];
+			$part			= 'xvid_' . $this->object->getId() . '/subtitles/';
+			$path			= xvidUtils::ensureFileSavePathExists($part);
+			$new_file		= $path.$file_name;
+			if(@copy($tmp_name, $new_file))
+			{
+				chmod($new_file, 0770);
+			}
+			$b = 0;
+		}
+		$this->addSubtitle();
 	}
 
 	/**
