@@ -20,6 +20,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	const TABLE_NAME_COMMENTS = 'rep_robj_xvid_comments';
 	const TABLE_NAME_QUESTIONS = 'rep_robj_xvid_question';
 	const TABLE_NAME_LP = 'rep_robj_xvid_lp';
+	const TABLE_NAME_SUB_TITLE = 'rep_robj_xvid_subtitle';
 	
 	/**
 	 * @var int
@@ -172,6 +173,28 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$row = $ilDB->fetchAssoc($res);
 
 		return $row['source_id'];
+	}
+
+	/**
+	 * @param $data_short
+	 * @param $data_long
+	 */
+	public function saveSubtitleData($data_short, $data_long)
+	{
+		global $ilDB;
+
+		$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_SUB_TITLE . ' WHERE obj_id = %s',
+			array('integer'), array($this->getId()));
+
+		if(count($data_short) > 0) {
+			foreach ($data_short as $name => $value) {
+				
+			}
+
+			foreach ($data_long as $name => $value) {
+				
+			}
+		}
 	}
 
 	protected function doCreate($a_clone_mode = false)

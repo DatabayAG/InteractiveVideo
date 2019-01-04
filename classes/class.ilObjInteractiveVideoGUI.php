@@ -799,8 +799,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			&& $_FILES['subtitle']['name'] != ''
 			&& file_exists($_FILES['subtitle']['tmp_name']))
 		{
-			$tmp_name = $_FILES['subtitle']['tmp_name'];
-			$file_name = $_FILES['subtitle']['name'];
+			$tmp_name = ilUtil::stripSlashes($_FILES['subtitle']['tmp_name']);
+			$file_name = ilUtil::stripSlashes($_FILES['subtitle']['name']);
 			$part			= 'xvid_' . $this->object->getId() . '/subtitles/';
 			$path			= xvidUtils::ensureFileSavePathExists($part);
 			$new_file		= $path.$file_name;
@@ -808,9 +808,37 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			{
 				chmod($new_file, 0770);
 			}
-			$b = 0;
+		
 		}
+		$data_short = array();
+		$data_long  = array();
+		foreach ($_POST as $name => $value) {
+			#$name = ilUtil::stripSlashes($name);
+			#$value = ilUtil::stripSlashes($value);
+
+			if (substr($name, 0, 2) === "l#") {
+				$data_long = $this->fillDataForSubtitles($name, $value, $data_long);
+			} elseif (substr($name, 0, 2) === "s#") {
+				$data_short = $this->fillDataForSubtitles($name, $value, $data_short);
+			}
+		}
+		$this->object->saveSubtitleData($data_short, $data_long);
+		
 		$this->addSubtitle();
+	}
+
+	/**
+	 * @param $name
+	 * @param $value
+	 * @param $data
+	 * @return bool|null|string|string[]
+	 */
+	protected function fillDataForSubtitles($name, $value, $data)
+	{
+		$cut             = substr($name, 2);
+		$cut             = preg_replace('/_vtt$/', '.vtt', $cut);
+		$data[$cut]      = $value;
+		return $data;
 	}
 
 	/**
