@@ -186,15 +186,47 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_SUB_TITLE . ' WHERE obj_id = %s',
 			array('integer'), array($this->getId()));
 
+		$titles = array();
 		if(count($data_short) > 0) {
 			foreach ($data_short as $name => $value) {
-				
+				$titles[$name]['s'] = $value;
 			}
 
 			foreach ($data_long as $name => $value) {
-				
+				$titles[$name]['l'] = $value;
 			}
 		}
+
+		foreach ($titles as $name => $value) {
+			$ilDB->insert(
+				self::TABLE_NAME_SUB_TITLE,
+				array(
+					'obj_id'      => array('integer', $this->getId()),
+					'file_name'   => array('text', $name),
+					'short_title' => array('text', $value['s']),
+					'long_title'  => array('text', $value['l'])
+				));
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getSubtitleData()
+	{
+		global $ilDB;
+		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_SUB_TITLE. ' WHERE obj_id = %s',
+			array('integer'), array($this->getId()));
+
+		$sub_title_data = array();
+
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$sub_title_data[$row['file_name']]['s'] = $row['short_title'];
+			$sub_title_data[$row['file_name']]['l'] = $row['long_title'];
+		}
+
+		return $sub_title_data;
 	}
 
 	protected function doCreate($a_clone_mode = false)

@@ -11,6 +11,15 @@ $(document).ready(function () {
 					seekTime = 0,
 					interval = null;
 				il.InteractiveVideo.last_stopPoint = -1;
+
+				var track = document.createElement('track');
+				track.kind = 'subtitles';
+				track.label = 'Deutsch !!! TO REPLACED !!!';
+				track.src = 'http://localhost-php7/projekte/1_dev/5_3_x/www/data/default/xvid/xvid_342/subtitles/big_buck_bunny:ger.vtt';
+				track.srclang = 'en';
+
+				$("#" + player_id).append(track);
+
 				new MediaElementPlayer("#" + player_id, {
 
 					timerRate:         50,
@@ -76,6 +85,8 @@ $(document).ready(function () {
 					}
 				});
 			}
+		
 		});
+
 	});
 })(jQuery);

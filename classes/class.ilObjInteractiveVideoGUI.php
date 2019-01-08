@@ -771,24 +771,47 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$file->setSuffixes(array('vtt'));
 		$form->addItem($file);
 
-		if ($handle = opendir(ilUtil::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/')) {
-			while (false !== ($entry = readdir($handle))) {
-				if ($entry != "." && $entry != "..") {
-					$title = new ilFormSectionHeaderGUI();
-					$title->setTitle($entry);
-					$form->addItem($title);
-					$short = new ilTextInputGUI($this->plugin->txt('short_title'), 's#' . $entry);
-					$form->addItem($short);
-					$long = new ilTextInputGUI($this->plugin->txt('long_title'), 'l#' . $entry);
-					$form->addItem($long);
-				}
+		$subtitle_data = $this->object->getSubtitleData();
+		$subtitle_files = $this->getSubtitleFiles();
+		
+		foreach($subtitle_files as $name){
+			$title = new ilFormSectionHeaderGUI();
+			$title->setTitle($name);
+			$form->addItem($title);
+			$short = new ilTextInputGUI($this->plugin->txt('short_title'), 's#' . $name);
+			$short_title = '';
+			if(array_key_exists($name, $subtitle_data)) {
+				$short_title = $subtitle_data[$name]['s'];
 			}
-			closedir($handle);
+			$short->setValue($short_title);
+			$form->addItem($short);
+
+			$long = new ilTextInputGUI($this->plugin->txt('long_title'), 'l#' . $name);
+			$long_title = '';
+			if(array_key_exists($name, $subtitle_data)) {
+				$long_title = $subtitle_data[$name]['l'];
+			}
+			$long->setValue($long_title);
+			$form->addItem($long);
 		}
+
 
 		$form->addCommandButton('postAddSubtitle', $this->lng->txt('save'));
 		$form->addCommandButton('editProperties', $this->lng->txt('cancel'));
 		$tpl->setContent($form->getHTML());
+	}
+	
+	protected function getSubtitleFiles(){
+		$sub_titles = array();
+		if ($handle = opendir(ilUtil::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/')) {
+			while (false !== ($entry = readdir($handle))) {
+				if ($entry != "." && $entry != "..") {
+					$sub_titles[$entry] = $entry;
+				}
+			}
+		}
+		closedir($handle);
+		return $sub_titles;
 	}
 
 	public function postAddSubtitle()
