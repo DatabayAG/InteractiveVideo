@@ -860,11 +860,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$cut             = substr($name, 2);
 		$cut             = preg_replace('/_vtt$/', '.vtt', $cut);
+		$cut             = preg_replace('/_srt$/', '.srt', $cut);
 		$data[$cut]      = $value;
 		return $data;
 	}
 
-	/**
+	/**ilMediaPoolPresentationGUI
 	 * @return ilPropertyFormGUI
 	 */
 	public function initEditForm()
