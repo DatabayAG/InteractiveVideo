@@ -775,16 +775,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$subtitle_files = $this->getSubtitleFiles();
 		
 		foreach($subtitle_files as $name){
-			$title = new ilFormSectionHeaderGUI();
-			$title->setTitle($name);
-			$form->addItem($title);
+			$title = new ilNonEditableValueGUI();
+			$title->setTitle($this->lng->txt('file'));
+			$title->setValue($name);
+
 			$short = new ilTextInputGUI($this->plugin->txt('short_title'), 's#' . $name);
 			$short_title = '';
 			if(array_key_exists($name, $subtitle_data)) {
 				$short_title = $subtitle_data[$name]['s'];
 			}
 			$short->setValue($short_title);
-			$form->addItem($short);
+			$title->addSubItem($short);
 
 			$long = new ilTextInputGUI($this->plugin->txt('long_title'), 'l#' . $name);
 			$long_title = '';
@@ -792,7 +793,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$long_title = $subtitle_data[$name]['l'];
 			}
 			$long->setValue($long_title);
-			$form->addItem($long);
+			$title->addSubItem($long);
+
+			$form->addItem($title);
 		}
 
 
@@ -800,7 +803,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addCommandButton('editProperties', $this->lng->txt('cancel'));
 		$tpl->setContent($form->getHTML());
 	}
-	
+
+	/**
+	 * @return array
+	 */
 	protected function getSubtitleFiles(){
 		$sub_titles = array();
 		if ($handle = opendir(ilUtil::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/')) {
