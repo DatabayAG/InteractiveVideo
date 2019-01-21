@@ -27,7 +27,8 @@
 			question_get_url:                '{QUESTION_GET_URL}',
 			question_post_url:               '{QUESTION_POST_URL}',
 			post_comment_url:                '{POST_COMMENT_URL}',
-			interactive_video_ref_id       : '{INTERACTIVE_VIDEO_REF_ID}',
+			interactive_video_ref_id:        '{INTERACTIVE_VIDEO_REF_ID}',
+			installation_client_id :         '{INTERACTIVE_INSTALLATION_CLIENT_ID}',
 			stopPoints:                      {STOP_POINTS},
 			ignore_questions:                {IGNORE_QUESTIONS},
 			username:                        "{USERNAME}",
@@ -47,5 +48,7 @@
 	};
 
 	il.InteractiveVideo["{PLAYER_ID}"] = (player);
+	
+	console.log('CONFIG TEMPLATE PLAYER ID:', "{PLAYER_ID}")
 </script>
 {CK_CONFIG}

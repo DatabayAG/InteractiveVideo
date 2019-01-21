@@ -3,7 +3,7 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 
 	let pub = {}, pro = {}, pri = {
 		storage_key : "InteractiveVideoResumeTime_",
-		storage_media : sessionStorage
+		storage_media : localStorage
 	};
 
 	pub.checkForResumeValue = function(player_id){
@@ -12,6 +12,12 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 
 			if (pro.IsStorageAvailable()) {
 				let saved_time = parseFloat(pri.storage_media.getItem(key));
+				let duration = scope.InteractiveVideoPlayerAbstract.duration(player_id);
+
+				if(saved_time >= duration){
+					saved_time = 0.001;
+				}
+
 				if(saved_time > 0){
 					scope.InteractiveVideoPlayerAbstract.setCurrentTime(player_id, saved_time);
 					pro.removeExistingKey();
@@ -41,7 +47,9 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 
 	pro.getStorageKey = function(player_id){
 		let ref_id = parseInt(scope.InteractiveVideo[player_id].interactive_video_ref_id, 10);
-		return pri.storage_key + ref_id;
+		let client_id = scope.InteractiveVideo[player_id].installation_client_id;
+
+		return pri.storage_key + client_id + '_' + ref_id;
 	};
 
 	pro.IsStorageAvailable = function(){
