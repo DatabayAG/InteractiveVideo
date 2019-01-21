@@ -71,9 +71,10 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 		let player_config  = scope.InteractiveVideo[player_id];
 		let client_id      = player_config.installation_client_id;
 
-		$.each(data_grave, function( ref_id, timestamp ) {
-			console.log(  pri.storage_key + '_' + client_id + '_' + ref_id + ": " + timestamp );
-			// pri.storage_media.removeItem(pri.storage_key + '_' + client_id + '_' + ref_id );
+		data_grave = pri.sortObjectByValue(data_grave);
+		$.each(data_grave, function( index, value ) {
+			console.log(  pri.storage_key + '_' + client_id + '_' + value[0] + ',' + value[1] );
+			// pri.storage_media.removeItem(pri.storage_key + '_' + client_id + '_' + value[0] );
 		});
 	};
 	
@@ -87,6 +88,23 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 
 		return data_grave
 	};
+
+	pri.sortObjectByValue = function(object) {
+			let sortable = [];
+
+			for(let key in object) {
+				if(object.hasOwnProperty(key)) {
+					sortable.push([key, object[key]]);
+				}
+			}
+
+			sortable.sort(function(a, b) {
+				return a[1]-b[1];
+			});
+
+			return sortable; 
+	};
+
 
 	pro.IsStorageAvailable = function () {
 
