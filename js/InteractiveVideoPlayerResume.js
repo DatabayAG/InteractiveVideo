@@ -6,42 +6,46 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 		storage_media : sessionStorage
 	};
 
-	pub.checkForResumeValue = function(){
+	pub.checkForResumeValue = function(player_id){
 		setTimeout(function(){
-			let key = pro.getStorageKey();
+			let key = pro.getStorageKey(player_id);
 
-			if (typeof(Storage) !== "undefined") {
-				let time = parseInt(pri.storage_media.getItem(key), 10);
+			if (pro.IsStorageAvailable()) {
+				let time = parseFloat(pri.storage_media.getItem(key));
 				if(time > 0){
-					il.InteractiveVideoPlayerAbstract.setCurrentTime(time);
+					scope.InteractiveVideoPlayerAbstract.setCurrentTime(time);
 					pro.removeExistingKey();
 				}
 			}
 		}, 250);
 	};
 
-	pub.saveResumeTime = function(){
-		let key = pro.getStorageKey();
-		let current_time = il.InteractiveVideoPlayerAbstract.getCurrentTime();
+	pub.saveResumeTime = function(player_id){
+		let key = pro.getStorageKey(player_id);
+		let current_time = scope.InteractiveVideoPlayerAbstract.getCurrentTime();
 
-		if (typeof(Storage) !== "undefined") {
+		if (pro.IsStorageAvailable()) {
 			if(current_time > 0){
 				pri.storage_media.setItem(key, current_time);
 			}
 		}
 	};
 
-	pro.removeExistingKey = function(){
-		let key = pro.getStorageKey();
+	pro.removeExistingKey = function(player_id){
+		let key = pro.getStorageKey(player_id);
 
-		if (typeof(Storage) !== "undefined") {
+		if (pro.IsStorageAvailable()) {
 			pri.storage_media.removeItem(key);
 		}
 	};
 
-	pro.getStorageKey = function(){
-		let ref_id = parseInt(il.InteractiveVideo.interactive_video_ref_id, 10);
+	pro.getStorageKey = function(player_id){
+		let ref_id = parseInt(scope.InteractiveVideo[player_id].interactive_video_ref_id, 10);
 		return pri.storage_key + ref_id;
+	};
+
+	pro.IsStorageAvailable = function(){
+		return (typeof(Storage) !== "undefined");
 	};
 
 	pub.protect = pro;

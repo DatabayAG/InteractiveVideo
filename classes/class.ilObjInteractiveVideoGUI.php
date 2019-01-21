@@ -540,6 +540,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		else
 		{
+			$config_tpl->setVariable('INTERACTIVE_VIDEO_REF_ID', $this->object->getRefId());
 			$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
 			$config_tpl->setVariable('COMMENTS', json_encode($comments));
 			$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode(ilObjComment::getUserImageCache()));

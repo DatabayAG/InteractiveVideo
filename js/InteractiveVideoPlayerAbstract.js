@@ -27,6 +27,8 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.play = function(player_id)
 	{
+		il.InteractiveVideoPlayerResume.checkForResumeValue(player_id);
+
 		if (pro.first_play_action) {
 			pro.first_play_action = false;
 			il.InteractiveVideoPlayerFunction.triggerVideoStarted(player_id);
