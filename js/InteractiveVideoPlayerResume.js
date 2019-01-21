@@ -9,6 +9,7 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 	pub.checkForResumeValue = function (player_id) {
 		setTimeout(function () {
 			let key = pri.getStorageKey(player_id);
+
 			if (pro.IsStorageAvailable()) {
 				let saved_time = parseFloat(pri.storage_media.getItem(key));
 				let duration = scope.InteractiveVideoPlayerAbstract.duration(player_id);
@@ -36,6 +37,7 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 
 	pro.removeExistingKey = function (player_id) {
 		let key = pri.getStorageKey(player_id);
+
 		if (pro.IsStorageAvailable()) {
 			pri.storage_media.removeItem(key);
 		}
@@ -72,9 +74,9 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 		let client_id      = player_config.installation_client_id;
 
 		data_grave = pri.sortObjectByValue(data_grave);
-		$.each(data_grave, function( index, value ) {
-			console.log(  pri.storage_key + '_' + client_id + '_' + value[0] + ',' + value[1] );
-			// pri.storage_media.removeItem(pri.storage_key + '_' + client_id + '_' + value[0] );
+		$.each(data_grave, function( ref_id, time ) {
+			console.log('Cleanup: ' +  pri.storage_key + '_' + client_id + '_' + ref_id + ',' + time );
+			// pri.storage_media.removeItem(pri.storage_key + '_' + client_id + '_' + ref_id );
 		});
 	};
 	
@@ -90,7 +92,8 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 	};
 
 	pri.sortObjectByValue = function(object) {
-			let sortable = [];
+			let sortable      = [];
+			let sorted_object = {};
 
 			for(let key in object) {
 				if(object.hasOwnProperty(key)) {
@@ -102,7 +105,11 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 				return a[1]-b[1];
 			});
 
-			return sortable; 
+			for (let i = 0; i < sortable.length; i++) {
+				sorted_object[sortable[i][0]] = sortable[i][1];
+			}
+
+			return sorted_object; 
 	};
 
 
