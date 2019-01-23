@@ -93,7 +93,7 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 		let data_grave     = JSON.parse(pri.storage_media.getItem(data_grave_key));
 
 		if(data_grave == undefined ) {
-			data_grave = {342: 324234, 234: 1231, 4234234: 122321342};
+			data_grave = {};
 		}
 
 		return data_grave
