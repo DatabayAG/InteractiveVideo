@@ -3,7 +3,8 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 
 	let pub = {}, pro = {}, pri = {
 		storage_key:   "InteractiveVideoResumeTime",
-		storage_media: localStorage
+		storage_media: localStorage,
+		delete_entries_older_than : 31539999000
 	};
 
 	pub.checkForResumeValue = function (player_id) {
@@ -72,34 +73,48 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 		let data_grave     = pri.getDataGraveObject();
 		let player_config  = scope.InteractiveVideo[player_id];
 		let client_id      = player_config.installation_client_id;
+		let today_time = new Date().getTime();
 
 		data_grave = pri.sortObjectByValue(data_grave);
 		$.each(data_grave, function( ref_id, time ) {
 			console.log('Cleanup: ' +  pri.storage_key + '_' + client_id + '_' + ref_id + ',' + time );
-			// pri.storage_media.removeItem(pri.storage_key + '_' + client_id + '_' + ref_id );
+			if((time + pri.delete_entries_older_than) <= today_time) {
+				console.log('Entry is older so it will be deleted.');
+				// pri.storage_media.removeItem(pri.storage_key + '_' + client_id + '_' + ref_id );
+				pri.removeKeyFromDataGraveObject(ref_id)
+			} else {
+				console.log('Entry is not older so it will be ignored.');
+			}
 		});
 	};
-	
+
 	pri.getDataGraveObject = function() {
 		let data_grave_key = pri.storage_key + '_DataGrave';
 		let data_grave     = JSON.parse(pri.storage_media.getItem(data_grave_key));
 
 		if(data_grave == undefined ) {
-			data_grave = {};
+			data_grave = {342: 324234, 234: 1231, 4234234: 122321342};
 		}
 
 		return data_grave
 	};
 
-	pri.sortObjectByValue = function(object) {
-			let sortable      = [];
-			let sorted_object = {};
+	pri.removeKeyFromDataGraveObject = function(key) {
+		let data_grave_key = pri.storage_key + '_DataGrave';
+		let data_grave     = JSON.parse(pri.storage_media.getItem(data_grave_key));
 
-			for(let key in object) {
-				if(object.hasOwnProperty(key)) {
-					sortable.push([key, object[key]]);
-				}
-			}
+		if(data_grave == undefined ) {
+			data_grave = {};
+		} else {
+			delete data_grave[key];
+		}
+
+		pri.storage_media.setItem(data_grave_key, JSON.stringify(data_grave));
+	};
+
+	pri.sortObjectByValue = function(object) {
+			let sorted_object = {};
+			let sortable = Object.entries(object);
 
 			sortable.sort(function(a, b) {
 				return a[1]-b[1];
