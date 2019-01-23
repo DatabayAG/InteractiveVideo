@@ -25,7 +25,7 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 	};
 
 	pub.saveResumeTime = function (player_id) {
-		let key = pri.getStorageKey(player_id);
+		let key          = pri.getStorageKey(player_id);
 		let current_time = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
 
 		if (pro.IsStorageAvailable()) {
