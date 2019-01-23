@@ -60,12 +60,15 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 
 	pri.writeItemToStorage = function(key, current_time, player_id)  {
 		let ref_id         = pri.getRefIdFromPlayerConfig(scope.InteractiveVideo[player_id]);
-		let data_grave     = pri.getDataGraveObject();
 		let data_grave_key = pri.storage_key + '_DataGrave';
 
-		data_grave[ref_id] = new Date().getTime();
-		pri.storage_media.setItem(key, current_time);
-		pri.storage_media.setItem(data_grave_key, JSON.stringify(data_grave));
+		if(pri.storage_media.getItem(key) !== current_time) {
+			let data_grave     = pri.getDataGraveObject();
+			data_grave[ref_id] = new Date().getTime();
+			pri.storage_media.setItem(key, current_time);
+			pri.storage_media.setItem(data_grave_key, JSON.stringify(data_grave));
+		}
+
 	};
 
 	pub.cleanUpStorage = function(player_id) {

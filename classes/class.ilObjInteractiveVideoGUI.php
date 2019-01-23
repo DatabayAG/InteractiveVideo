@@ -776,29 +776,31 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$subtitle_data = $this->object->getSubtitleData();
 		$subtitle_files = $this->getSubtitleFiles();
-		
-		foreach($subtitle_files as $name){
-			$title = new ilNonEditableValueGUI();
-			$title->setTitle($this->lng->txt('file'));
-			$title->setValue($name);
 
-			$short = new ilTextInputGUI($this->plugin->txt('short_title'), 's#' . $name);
-			$short_title = '';
-			if(array_key_exists($name, $subtitle_data)) {
-				$short_title = $subtitle_data[$name]['s'];
+		if(count($subtitle_files) > 0) {
+			foreach($subtitle_files as $name){
+				$title = new ilNonEditableValueGUI();
+				$title->setTitle($this->lng->txt('file'));
+				$title->setValue($name);
+
+				$short = new ilTextInputGUI($this->plugin->txt('short_title'), 's#' . $name);
+				$short_title = '';
+				if(array_key_exists($name, $subtitle_data)) {
+					$short_title = $subtitle_data[$name]['s'];
+				}
+				$short->setValue($short_title);
+				$title->addSubItem($short);
+
+				$long = new ilTextInputGUI($this->plugin->txt('long_title'), 'l#' . $name);
+				$long_title = '';
+				if(array_key_exists($name, $subtitle_data)) {
+					$long_title = $subtitle_data[$name]['l'];
+				}
+				$long->setValue($long_title);
+				$title->addSubItem($long);
+
+				$form->addItem($title);
 			}
-			$short->setValue($short_title);
-			$title->addSubItem($short);
-
-			$long = new ilTextInputGUI($this->plugin->txt('long_title'), 'l#' . $name);
-			$long_title = '';
-			if(array_key_exists($name, $subtitle_data)) {
-				$long_title = $subtitle_data[$name]['l'];
-			}
-			$long->setValue($long_title);
-			$title->addSubItem($long);
-
-			$form->addItem($title);
 		}
 
 
@@ -812,15 +814,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function getSubtitleFiles(){
 		$sub_titles = array();
-		if ($handle = opendir(ilUtil::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/')) {
-			while (false !== ($entry = readdir($handle))) {
-				if ($entry != "." && $entry != "..") {
-					$sub_titles[$entry] = $entry;
+		$directory = ilUtil::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/';
+		
+		if(file_exists($directory)) {
+			if ($handle = opendir($directory)) {
+				while (false !== ($entry = readdir($handle))) {
+					if ($entry != "." && $entry != "..") {
+						$sub_titles[$entry] = $entry;
+					}
 				}
 			}
+			closedir($handle);
+			return $sub_titles;
 		}
-		closedir($handle);
-		return $sub_titles;
+
 	}
 
 	public function postAddSubtitle()
