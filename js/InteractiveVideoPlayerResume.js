@@ -2,8 +2,8 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 	'use strict';
 
 	let pub = {}, pro = {}, pri = {
-		storage_key:   "InteractiveVideoResumeTime",
-		storage_media: localStorage,
+		storage_key               :  "InteractiveVideoResumeTime",
+		storage_media             : localStorage,
 		delete_entries_older_than : 31539999000
 	};
 
@@ -46,8 +46,8 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 
 	pri.getStorageKey = function (player_id) {
 		let player_config = scope.InteractiveVideo[player_id];
-		let ref_id        = pri.getRefIdFromPlayerConfig(player_config);
 		let client_id     = player_config.installation_client_id;
+		let ref_id        = pri.getRefIdFromPlayerConfig(player_config);
 
 		return pri.storage_key + '_' + client_id + '_' + ref_id;
 	};
@@ -61,10 +61,8 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 		let ref_id         = pri.getRefIdFromPlayerConfig(scope.InteractiveVideo[player_id]);
 		let data_grave     = pri.getDataGraveObject();
 		let data_grave_key = pri.storage_key + '_DataGrave';
-		let d = new Date();
-		let n = d.getTime();
 
-		data_grave[ref_id] = n;
+		data_grave[ref_id] = new Date().getTime();
 		pri.storage_media.setItem(key, current_time);
 		pri.storage_media.setItem(data_grave_key, JSON.stringify(data_grave));
 	};
@@ -80,8 +78,8 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 			console.log('Cleanup: ' +  pri.storage_key + '_' + client_id + '_' + ref_id + ',' + time );
 			if((time + pri.delete_entries_older_than) <= today_time) {
 				console.log('Entry is older so it will be deleted.');
-				// pri.storage_media.removeItem(pri.storage_key + '_' + client_id + '_' + ref_id );
-				pri.removeKeyFromDataGraveObject(ref_id)
+				// pri.removeExistingKey(player_id);
+				// pri.removeKeyFromDataGraveObject(ref_id)
 			} else {
 				console.log('Entry is not older so it will be ignored.');
 			}
