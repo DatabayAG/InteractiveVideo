@@ -15,9 +15,6 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		setCurrentTimeCallback  : null
 	}; 
 
-	//Todo fix this
-	pro.first_play_action = true;
-
 	pub.pause = function(player_id)
 	{
 		if (typeof pub.config[player_id].pauseCallback === 'function') {
@@ -27,10 +24,11 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.play = function(player_id)
 	{
-		il.InteractiveVideoPlayerResume.checkForResumeValue(player_id);
+		let player_config = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 
-		if (pro.first_play_action) {
-			pro.first_play_action = false;
+		if (player_config.first_play_action) {
+			player_config.first_play_action = false;
+			il.InteractiveVideoPlayerResume.checkForResumeValue(player_id);
 			il.InteractiveVideoPlayerFunction.triggerVideoStarted(player_id);
 		}
 
