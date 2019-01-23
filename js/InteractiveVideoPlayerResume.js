@@ -13,7 +13,7 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 
 			if (pro.IsStorageAvailable()) {
 				let saved_time = parseFloat(pri.storage_media.getItem(key));
-				let duration = scope.InteractiveVideoPlayerAbstract.duration(player_id);
+				let duration   = scope.InteractiveVideoPlayerAbstract.duration(player_id);
 
 				if ( ! isNaN(saved_time) || ! saved_time >= duration || ! saved_time < 0) {
 					scope.InteractiveVideoPlayerAbstract.setCurrentTime(saved_time, player_id);
@@ -72,7 +72,7 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 		let data_grave     = pri.getDataGraveObject();
 		let player_config  = scope.InteractiveVideo[player_id];
 		let client_id      = player_config.installation_client_id;
-		let today_time = new Date().getTime();
+		let today_time     = new Date().getTime();
 
 		data_grave = pri.sortObjectByValue(data_grave);
 		$.each(data_grave, function( ref_id, time ) {
@@ -113,7 +113,7 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 
 	pri.sortObjectByValue = function(object) {
 			let sorted_object = {};
-			let sortable = Object.entries(object);
+			let sortable      = Object.entries(object);
 
 			sortable.sort(function(a, b) {
 				return a[1]-b[1];
