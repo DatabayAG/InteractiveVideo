@@ -15,12 +15,11 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 				let saved_time = parseFloat(pri.storage_media.getItem(key));
 				let duration = scope.InteractiveVideoPlayerAbstract.duration(player_id);
 
-				if (isNaN(saved_time) || saved_time >= duration || saved_time < 0) {
-					saved_time = 0.0001;
+				if ( ! isNaN(saved_time) || ! saved_time >= duration || ! saved_time < 0) {
+					scope.InteractiveVideoPlayerAbstract.setCurrentTime(saved_time, player_id);
+					pro.removeExistingKey(player_id);
 				}
 
-				scope.InteractiveVideoPlayerAbstract.setCurrentTime(saved_time, player_id);
-				pro.removeExistingKey(player_id);
 			}
 		}, 250);
 	};
@@ -37,10 +36,12 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 	};
 
 	pro.removeExistingKey = function (player_id) {
-		let key = pri.getStorageKey(player_id);
+		let key    = pri.getStorageKey(player_id);
+		let ref_id = pri.getRefIdFromPlayerConfig(scope.InteractiveVideo[player_id]);
 
 		if (pro.IsStorageAvailable()) {
 			pri.storage_media.removeItem(key);
+			pri.removeKeyFromDataGraveObject(ref_id);
 		}
 	};
 
@@ -97,14 +98,14 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 		return data_grave
 	};
 
-	pri.removeKeyFromDataGraveObject = function(key) {
+	pri.removeKeyFromDataGraveObject = function(ref_id) {
 		let data_grave_key = pri.storage_key + '_DataGrave';
 		let data_grave     = JSON.parse(pri.storage_media.getItem(data_grave_key));
 
 		if(data_grave == undefined ) {
 			data_grave = {};
 		} else {
-			delete data_grave[key];
+			delete data_grave[ref_id];
 		}
 
 		pri.storage_media.setItem(data_grave_key, JSON.stringify(data_grave));
