@@ -25,12 +25,11 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 	};
 
 	pub.saveResumeTime = function (player_id) {
-		let key          = pri.getStorageKey(player_id);
 		let current_time = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
 
 		if (pro.IsStorageAvailable()) {
 			if (current_time > 0) {
-				pri.writeItemToStorage(key, current_time, player_id);
+				pri.writeItemToStorage(current_time, player_id);
 			}
 		}
 	};
@@ -58,7 +57,8 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 		return parseInt(player_config.interactive_video_ref_id, 10);
 	};
 
-	pri.writeItemToStorage = function(key, current_time, player_id)  {
+	pri.writeItemToStorage = function(current_time, player_id)  {
+		let key            = pri.getStorageKey(player_id);
 		let ref_id         = pri.getRefIdFromPlayerConfig(scope.InteractiveVideo[player_id]);
 		let data_grave_key = pri.storage_key + '_DataGrave';
 
