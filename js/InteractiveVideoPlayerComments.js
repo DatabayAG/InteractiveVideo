@@ -457,7 +457,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.preselectValueOfEndTimeSelection = function(time, element)
 	{
 		element.val(time);
-		$('#comment_time_end').timepicker('setTime', time);
+		if($('#comment_time_end').size() > 0) {
+			$('#comment_time_end').timepicker('setTime', time);
+		}
 	};
 	
 	pub.protect = pro;
