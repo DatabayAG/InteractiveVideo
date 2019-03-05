@@ -19,7 +19,6 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.buildQuestionForm = function(player) {
-		console.log('PLAYER', player)
 		let modal = $('.modal-body');
 		let type  = parseInt(pub.QuestionObject.type, 10);
 		let img   = '';
@@ -235,7 +234,6 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		pub.QuestionObject = array;
 		pub.QuestionObject.player = player
 		//Todo: fix this, fullscreen isn't working
-		console.log(player, 'player', pub.QuestionObject.player.isFullScreen)
 		pro.buildQuestionForm(player);
 		if (pub.QuestionObject.player.isFullScreen === true) {
 			pub.QuestionObject.player.exitFullScreen();
