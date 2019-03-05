@@ -524,21 +524,15 @@ class SimpleChoiceQuestion
 		global $ilDB;
 
 		$res = $ilDB->queryF(
-			'SELECT usr_id, sum(points) as points FROM rep_robj_xvid_objects 
-			INNER JOIN rep_robj_xvid_lp 
-			INNER JOIN rep_robj_xvid_comments 
-			INNER JOIN rep_robj_xvid_question
-			INNER JOIN rep_robj_xvid_score
-			WHERE rep_robj_xvid_objects.obj_id = rep_robj_xvid_lp.obj_id 
-			AND rep_robj_xvid_comments.obj_id = rep_robj_xvid_objects.obj_id 
-			AND rep_robj_xvid_question.comment_id = rep_robj_xvid_comments.comment_id  
-			AND rep_robj_xvid_question.question_id = rep_robj_xvid_score.question_id
-			AND rep_robj_xvid_objects.obj_id = %s 
-			AND started = 1 
-			AND ended = 1 
-			AND neutral_answer = 0 
-			AND points = 1 
-			GROUP BY usr_id;',
+			'SELECT sum(points) as points, rep_robj_xvid_score.user_id as usr_id FROM rep_robj_xvid_comments 
+		LEFT JOIN rep_robj_xvid_question ON rep_robj_xvid_question.comment_id = rep_robj_xvid_comments.comment_id
+        LEFT JOIN rep_robj_xvid_answers ON rep_robj_xvid_answers.question_id = rep_robj_xvid_question.question_id
+		LEFT JOIN rep_robj_xvid_score ON rep_robj_xvid_answers.user_id = rep_robj_xvid_score.user_id AND rep_robj_xvid_answers.question_id = rep_robj_xvid_score.question_id
+		WHERE rep_robj_xvid_comments.obj_id = %s 
+        AND is_interactive = 1
+        AND neutral_answer = 0
+        AND points = 1
+        GROUP BY usr_id',
 			array('integer'),
 			array(($oid))
 		);
@@ -996,7 +990,7 @@ class SimpleChoiceQuestion
 			SELECT 		question_id 
 			FROM 		' . self::TABLE_NAME_QUESTION . ' qst
 			INNER JOIN 	' . self::TABLE_NAME_COMMENTS . '  cmt on qst.comment_id = cmt.comment_id
-			WHERE		obj_id = %s AND is_interactive = %s AND neutral_answer = %s AND "type" != 2',
+			WHERE		obj_id = %s AND is_interactive = %s AND neutral_answer = %s AND type <> 2',
 			array('integer', 'integer', 'integer'), array($obj_id, 1, 0));
 
 		$question_ids = array();

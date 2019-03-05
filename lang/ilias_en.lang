@@ -10,6 +10,7 @@ xvid_write#:#User can edit Interactive Video
 xvid_delete#:#User can move or delete Interactive Video
 xvid_edit_permission#:#User can change permission settings
 xvid_visible#:#Interactive Video is visible
+xvid_read_learning_progress#:#User can view learning progress of other users
 reset#:#Reset
 crs_create_xvid#:#Create Interactive Video
 grp_create_xvid#:#Create Interactive Video
@@ -206,3 +207,5 @@ is_reply_to#:#Is Reply
 reply_to#:#Reply to
 jump_to_timestamp#:#Jump to time
 insert_marker_info#:#You can move the marker with drag & drop on the video
+
+xvid_xvid_view_lp#:#View Learning Progress

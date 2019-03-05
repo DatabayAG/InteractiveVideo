@@ -2,8 +2,11 @@
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 require_once 'Services/Repository/classes/class.ilObjectPluginAccess.php';
-require_once 'Services/AccessControl/interfaces/interface.ilConditionHandling.php';
-require_once 'Services/AccessControl/interfaces/interface.ilConditionHandling.php';
+if(version_compare(ILIAS_VERSION_NUMERIC, '5.4.0', '>=')) {
+	require_once 'Services/Conditions/interfaces/interface.ilConditionHandling.php';
+} else{
+	require_once 'Services/AccessControl/interfaces/interface.ilConditionHandling.php';
+}
 require_once 'Services/WebAccessChecker/interfaces/interface.ilWACCheckingClass.php';
 
 /**

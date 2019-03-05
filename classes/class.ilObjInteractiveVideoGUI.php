@@ -926,7 +926,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		require_once 'Services/Tracking/classes/class.ilLearningProgressAccess.php';
 		if(ilLearningProgressAccess::checkAccess($this->object->getRefId(), true))
 		{
-			if($this->checkPermissionBool('write'))
+			if($this->checkPermissionBool('write') || $this->checkPermissionBool('read_learning_progress'))
 			{
 				if($this->object->getLearningProgressMode() != ilObjInteractiveVideo::LP_MODE_DEACTIVATED)
 				{
@@ -1000,6 +1000,22 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	public function ensurePermission($permission)
 	{
+		return $this->checkPermission($permission);
+	}
+
+	/**
+	 * Public wrapper for permission assumption
+	 * @param string[] $permissions
+	 * @return bool
+	 */
+	public function ensureAtLeastOnePermission(array $permissions)
+	{
+		foreach ($permissions as $permission) {
+			if($this->checkPermissionBool($permission)) {
+				return true;
+			}
+		}
+		// Since all $permissions returned false, this checkPermission() will lead to general behaviour of redirecting and sending failure
 		return $this->checkPermission($permission);
 	}
 
@@ -2336,6 +2352,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$simple_choice = new SimpleChoiceQuestion();
 			$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
 		}
+
 		$this->showFeedbackPerAjax();
 		$this->callExit();
 	}
@@ -2390,7 +2407,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		global $ilUser;
 		$this->object->saveVideoStarted($this->obj_id, $ilUser->getId());
-		$this->object->trackProgress();
 		$this->callExit();
 	}
 
@@ -2398,12 +2414,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		global $ilUser;
 		$simple = new SimpleChoiceQuestion();
-		$qst = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->object->getId());
+		$questions_with_points = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->object->getId());
 		$this->object->saveVideoFinished($this->obj_id, $ilUser->getId());
-		if(is_array($qst) && count($qst) > 0)
+		if(is_array($questions_with_points) && count($questions_with_points) > 0)
 		{
 			$points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->obj_id, $ilUser->getId());
-			$questions_with_points = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->obj_id);
 			if( count($questions_with_points) == $points )
 			{
 				$this->object->updateLP();

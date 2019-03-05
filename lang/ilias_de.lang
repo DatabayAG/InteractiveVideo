@@ -10,6 +10,7 @@ xvid_write#:#Interaktives Video bearbeiten
 xvid_delete#:#Interaktives Video löschen
 xvid_edit_permission#:#Rechteeinstellungen ändern
 xvid_visible#:#Interaktives Video ist sichtbar
+xvid_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
 reset#:#Zurücksetzen
 show_all_comments#:#Alle Kommentare anzeigen: 
 author_filter#:#Autorenfilter
