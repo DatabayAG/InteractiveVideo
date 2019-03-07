@@ -1,4 +1,4 @@
-# 2.0.17
+# 2.0.18
 1. Block modal closing by clicking on the background
    * If enabled, a modal dialogue won't be closed if a user clicks on the background.
 2. Autoresume after question modal is closed
