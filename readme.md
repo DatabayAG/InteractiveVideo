@@ -57,7 +57,7 @@ The InteractiveVideo Plugin for ILIAS gives you the possibility to create a vide
 ![Create Question](https://databayag.github.io/InteractiveVideo/2.0.x/4.png)
 
 ## Interactive Video Sources & Plugin Slots
-![Main View](https://databayag.github.io/InteractiveVideo/2.0.x/5.png
+![Main View](https://databayag.github.io/InteractiveVideo/2.0.x/5.png)
 
 ## Interactive Video Modal options
-![Main View](https://databayag.github.io/InteractiveVideo/2.0.18/modal_options.png)
+![Modal settings](https://databayag.github.io/InteractiveVideo/2.0.18/modal_options.png)
