@@ -456,6 +456,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('SAVE', $plugin->txt('save'));
 		$config_tpl->setVariable('ADD_COMMENT', $plugin->txt('insert_comment'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
+		$config_tpl->setVariable('AUTO_RESUME_AFTER_QUESTION', $this->object->isAutoResumeAfterQuestion());
+		$config_tpl->setVariable('FIXED_MODAL', $this->object->isFixedModal());
 		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
@@ -487,21 +489,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$config_tpl->setVariable('USER_IMAGE', ilObjComment::getUserImageInBase64($ilUser->getId()));
 		}
 
-		$stop_points = $this->objComment->getStopPoints();
-		$comments = $this->objComment->getContentComments();
+		$stop_points = array();
+		$comments    = array();
+		$image_cache = array();
+		if( ! $edit_screen)
+		{
+			$stop_points = $this->objComment->getStopPoints();
+			$comments    = $this->objComment->getContentComments();
+			$image_cache = ilObjComment::getUserImageCache();
+		}
 
-		if($edit_screen)
-		{
-			$config_tpl->setVariable('STOP_POINTS', json_encode(array()));
-			$config_tpl->setVariable('COMMENTS', json_encode(array()));
-			$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode(array()));
-		}
-		else
-		{
-			$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
-			$config_tpl->setVariable('COMMENTS', json_encode($comments));
-			$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode(ilObjComment::getUserImageCache()));
-		}
+		$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
+		$config_tpl->setVariable('COMMENTS', json_encode($comments));
+		$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode($image_cache));
 
 		return $config_tpl->get();
 	}
@@ -546,6 +546,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$no_comment = $a_form->getInput('no_comment');
 		$this->object->setDisableComment((int)$no_comment);
+
+		$auto_resume = $a_form->getInput('auto_resume');
+		$this->object->setAutoResumeAfterQuestion((int)$auto_resume);
+
+		$fixed_modal = $a_form->getInput('fixed_modal');
+		$this->object->setFixedModal((int)$fixed_modal);
 
 		$factory = new ilInteractiveVideoSourceFactory();
 		$source = $factory->getVideoSourceObject($a_form->getInput('source_id'));
@@ -646,31 +652,57 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
+		$section = new ilFormSectionHeaderGUI();
+		$section->setTitle($plugin->txt('task'));
+		$a_form->addItem($section);
+
 		$description_switch = new ilCheckboxInputGUI($plugin->txt('task_switch'),'is_task');
 		$description_switch->setInfo($plugin->txt('task_switch_info'));
 		$description = xvidUtils::constructTextAreaFormElement('task', 'task');
 		$description_switch->addSubItem($description);
 		$a_form->addItem($description_switch);
 
-		$anonymized = new ilCheckboxInputGUI($plugin->txt('is_anonymized'), 'is_anonymized');
-		$anonymized->setInfo($plugin->txt('is_anonymized_info'));
-		$a_form->addItem($anonymized);
+		$section = new ilFormSectionHeaderGUI();
+		$section->setTitle($plugin->txt('comments'));
+		$a_form->addItem($section);
+
+		$anonymize = new ilCheckboxInputGUI($plugin->txt('is_anonymized'), 'is_anonymized');
+		$anonymize->setInfo($plugin->txt('is_anonymized_info'));
+		$a_form->addItem($anonymize);
 
 		$is_public = new ilCheckboxInputGUI($plugin->txt('is_public'), 'is_public');
 		$is_public->setInfo($plugin->txt('is_public_info'));
 		$a_form->addItem($is_public);
 
-		$repeat = new ilCheckboxInputGUI($plugin->txt('is_repeat'), 'is_repeat');
-		$repeat->setInfo($plugin->txt('is_repeat_info'));
-		$a_form->addItem($repeat);
-
-		$chrono = new ilCheckboxInputGUI($plugin->txt('is_chronologic'), 'is_chronologic');
-		$chrono->setInfo($plugin->txt('is_chronologic_info'));
-		$a_form->addItem($chrono);
+		$chronology = new ilCheckboxInputGUI($plugin->txt('is_chronologic'), 'is_chronologic');
+		$chronology->setInfo($plugin->txt('is_chronologic_info'));
+		$a_form->addItem($chronology);
 
 		$no_comment = new ilCheckboxInputGUI($plugin->txt('no_comment'), 'no_comment');
 		$no_comment->setInfo($plugin->txt('no_comment_info'));
 		$a_form->addItem($no_comment);
+
+		$section = new ilFormSectionHeaderGUI();
+		$section->setTitle($plugin->txt('questions'));
+		$a_form->addItem($section);
+
+		$repeat = new ilCheckboxInputGUI($plugin->txt('is_repeat'), 'is_repeat');
+		$repeat->setInfo($plugin->txt('is_repeat_info'));
+		$a_form->addItem($repeat);
+
+		$section = new ilFormSectionHeaderGUI();
+		$section->setTitle('modal');
+		$a_form->addItem($section);
+
+		$auto_resume = new ilCheckboxInputGUI($plugin->txt('auto_resume'), 'auto_resume');
+		$auto_resume->setInfo($plugin->txt('auto_resume_info'));
+		$auto_resume->setValue(1);
+		$a_form->addItem($auto_resume);
+
+		$fixed_modal = new ilCheckboxInputGUI($plugin->txt('fixed_modal'), 'fixed_modal');
+		$fixed_modal->setInfo($plugin->txt('fixed_modal_info'));
+		$fixed_modal->setValue(1);
+		$a_form->addItem($fixed_modal);
 	}
 
 	/**
@@ -699,6 +731,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values['source_id']			= $this->object->getSourceId();
 		$a_values['is_task']			= $this->object->getTaskActive();
 		$a_values['task']				= $this->object->getTask();
+		$a_values['auto_resume']		= $this->object->isAutoResumeAfterQuestion();
+		$a_values['fixed_modal']		= $this->object->isFixedModal();
 	}
 
 	public function editProperties()

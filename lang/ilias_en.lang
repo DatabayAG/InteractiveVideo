@@ -183,3 +183,7 @@ visibility#:#Visibility
 no_comment#:#No Comment-field
 no_comment_info#:#There will be no comment field below the video player
 xvid_xvid_view_lp#:#View Learning Progress
+auto_resume#:#Auto resume
+auto_resume_info#:#If enabled, the video will be automatically resumed after closing a the modal question dialogue.
+fixed_modal#:#Block modal closing 
+fixed_modal_info#:#If enabled, a modal dialogue won't be closed if a user clicks on the background.
