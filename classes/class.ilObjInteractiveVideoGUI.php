@@ -201,6 +201,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					case 'confirmUpdateQuestion':
 				    case 'insertQuestion':
                     case 'completeCsvExport':
+                    case 'removeSubtitle ':
                     $this->checkPermission('write');
 						$this->$cmd();
 						break;
@@ -777,7 +778,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$subtitle_data = $this->object->getSubtitleData();
 		$subtitle_files = $this->getSubtitleFiles();
 
-		if(count($subtitle_files) > 0) {
+		if(is_array($subtitle_files) && count($subtitle_files) > 0) {
 			foreach($subtitle_files as $name){
 				$title = new ilNonEditableValueGUI();
 				$title->setTitle($this->lng->txt('file'));
@@ -799,6 +800,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$long->setValue($long_title);
 				$title->addSubItem($long);
 
+				include_once "Services/UIComponent/Button/classes/class.ilLinkButton.php";
+				$button = ilLinkButton::getInstance();
+				$button->setCaption("remove");
+				$ilCtrl->setParameterByClass('ilObjInteractiveVideoGUI', "remove_subtitle_file", $name);
+				$remove_link = $ilCtrl->getLinkTargetByClass('ilObjInteractiveVideoGUI',  "removeSubtitle");
+				$ilCtrl->setParameterByClass('ilObjInteractiveVideoGUI', "remove_subtitle_file", "");
+				$button->setUrl($remove_link);
+
+				$title->setInfo($button->render());
 				$form->addItem($title);
 			}
 		}
@@ -826,6 +836,24 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 			closedir($handle);
 			return $sub_titles;
+		}
+
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function removeSubtitle(){
+
+		$filename = ilUtil::stripSlashes($_GET['remove_subtitle_file']);
+		$file = ilUtil::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/' . $filename;
+
+		if(file_exists($file)) {
+			unlink($file);
+			$this->object->removeSubtitleData($filename);
+			ilUtil::sendSuccess($this->plugin->txt('subtitle_removed'), true);
+			$this->ctrl->redirect($this, 'addSubtitle');
+			
 		}
 
 	}

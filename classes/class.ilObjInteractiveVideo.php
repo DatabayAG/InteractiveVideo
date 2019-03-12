@@ -210,6 +210,17 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	}
 
 	/**
+	 * @param $filename
+	 */
+	public function removeSubtitleData($filename)
+	{
+		global $ilDB;
+
+		$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_SUB_TITLE . ' WHERE obj_id = %s && file_name = %s',
+			array('integer', 'text'), array($this->getId(), $filename));
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getSubtitleData()
