@@ -499,6 +499,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('SAVE', $plugin->txt('save'));
 		$config_tpl->setVariable('ADD_COMMENT', $plugin->txt('insert_comment'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
+		$config_tpl->setVariable('HAS_TRACKS', $this->getSubtitleDataAndFilesForJson());
 		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
@@ -750,6 +751,25 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$this->edit();
 	}
+	
+	protected function getSubtitleDataAndFilesForJson(){
+		$subtitle_data = $this->object->getSubtitleData();
+		$subtitle_files = $this->getSubtitleFiles();
+		
+		$data = array();
+		$dir = ilUtil::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/';
+		if(is_array($subtitle_files) && count($subtitle_files) > 0) {
+			foreach($subtitle_files as $key => $name){
+				$track = new stdClass();
+				$track->label = $subtitle_data[$name]['l'];
+				$track->src = $dir . $name;
+				$track->srclang = $subtitle_data[$name]['s'];
+				$data[] = $track;
+			}
+		}
+		#print_r($data); exit;
+		return json_encode($data);
+	}
 
 	public function addSubtitle()
 	{
@@ -841,7 +861,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	/**
-	 * @return array
 	 */
 	protected function removeSubtitle(){
 
