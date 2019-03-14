@@ -929,15 +929,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$data_short = array();
 		$data_long  = array();
 		foreach ($_POST as $name => $value) {
-			#$name = ilUtil::stripSlashes($name);
-			#$value = ilUtil::stripSlashes($value);
 
 			if (substr($name, 0, 2) === "l#") {
 				$data_long = $this->fillDataForSubtitles($name, $value, $data_long);
 			} elseif (substr($name, 0, 2) === "s#") {
 				$data_short = $this->fillDataForSubtitles($name, $value, $data_short);
-				$cut             = substr($name, 2);
-				if($data_short[$cut] == '') {
+				$short_title = $data_short;
+				array_pop($short_title);
+				if($short_title == '') {
 					ilUtil::sendFailure(ilInteractiveVideoPlugin::getInstance()->txt('you_need_a_short_title'), true);
 					$this->ctrl->redirect($this, 'addSubtitle');
 				}
@@ -956,6 +955,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function fillDataForSubtitles($name, $value, $data)
 	{
+		$name  = ilUtil::stripSlashesRecursive($name);
+		$value = ilUtil::stripSlashesRecursive($value);
+
 		$cut             = substr($name, 2);
 		$cut             = preg_replace('/_vtt$/', '.vtt', $cut);
 		$cut             = preg_replace('/_srt$/', '.srt', $cut);
