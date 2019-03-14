@@ -27,7 +27,7 @@ function onYouTubeIframeAPIReady() {
 						};
 						il.InteractiveVideoPlayerFunction.appendInteractionEvents(player_id);
 						il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration(player_id));
-
+						il.InteractiveVideoSubtitle.initializeSubtitleTracks(player_id);
 						player.addEventListener('onStateChange', function (e) {
 							if (e.data === -1) {
 								if (seekTime > 0) {

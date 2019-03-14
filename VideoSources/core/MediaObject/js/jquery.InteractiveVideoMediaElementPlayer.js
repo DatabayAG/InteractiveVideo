@@ -12,15 +12,7 @@ $(document).ready(function () {
 					interval = null;
 				il.InteractiveVideo.last_stopPoint = -1;
 
-				$.each(il.InteractiveVideo[player_id].tracks[0], function (key, value) {
-					console.log(key, value)
-					var track = document.createElement('track');
-					track.kind = 'subtitles';
-					track.label = value.label;
-					track.src = value.src;
-					track.srclang = value.srclang;
-					$("#" + player_id).append(track);
-				});
+				il.InteractiveVideoSubtitle.initializeSubtitleTracks(player_id);
 
 				new MediaElementPlayer("#" + player_id, {
 

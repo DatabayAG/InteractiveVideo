@@ -472,6 +472,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerFunctions.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstract.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerResume.js');
+		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoSubtitle.js');
 		ilTextAreaInputCkeditorGUI::appendJavascriptFile();
 
 		$config_tpl = new ilTemplate("tpl.video_config.html", true, true, $plugin->getDirectory());
@@ -811,6 +812,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					$short_title = $subtitle_data[$name]['s'];
 				}
 				$short->setValue($short_title);
+				$short->setRequired(true);
 				$title->addSubItem($short);
 
 				$long = new ilTextInputGUI($this->plugin->txt('long_title'), 'l#' . $name);
@@ -931,6 +933,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$data_long = $this->fillDataForSubtitles($name, $value, $data_long);
 			} elseif (substr($name, 0, 2) === "s#") {
 				$data_short = $this->fillDataForSubtitles($name, $value, $data_short);
+				$cut             = substr($name, 2);
+				if($data_short[$cut] == '') {
+				#	ilUtil::sendFailure(ilInteractiveVideoPlugin::getInstance()->txt('you_need_a_short_title'), true);
+				#	$this->ctrl->redirect($this, 'addSubtitle');
+				}
 			}
 		}
 		$this->object->saveSubtitleData($data_short, $data_long);

@@ -1,4 +1,5 @@
 $( document ).ready(function() {
+
 });
 
 (function ($) {
@@ -10,6 +11,8 @@ $( document ).ready(function() {
 					seekTime = 0,
 					interval = null;
 				il.InteractiveVideo.last_stopPoint = -1;
+				il.InteractiveVideoSubtitle.initializeSubtitleTracks(player_id);
+
 				new MediaElementPlayer("#" + player_id, {
 
 					timerRate:         50,
@@ -46,6 +49,7 @@ $( document ).ready(function() {
 								media.currentTime = seekTime;
 								seekTime = 0;
 							}
+							$('.mejs-captions-layer.mejs-layer').css({'width' :'100%'})
 						}, false);
 
 						media.addEventListener('play', function () {
