@@ -195,6 +195,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					case 'addSubtitle':
 					case 'postAddSubtitle':
 					case 'confirmDeleteComment':
+					case 'confirmRemoveSubtitle':
 					case 'deleteComment': 
 					case 'editComments':  
 				    case 'editQuestion': 
@@ -824,7 +825,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$button = ilLinkButton::getInstance();
 				$button->setCaption("remove");
 				$ilCtrl->setParameterByClass('ilObjInteractiveVideoGUI', "remove_subtitle_file", $name);
-				$remove_link = $ilCtrl->getLinkTargetByClass('ilObjInteractiveVideoGUI',  "removeSubtitle");
+				$remove_link = $ilCtrl->getLinkTargetByClass('ilObjInteractiveVideoGUI',  "confirmRemoveSubtitle");
 				$ilCtrl->setParameterByClass('ilObjInteractiveVideoGUI', "remove_subtitle_file", "");
 				$button->setUrl($remove_link);
 
@@ -875,6 +876,30 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			
 		}
 
+	}
+
+	/**
+	 *
+	 */
+	public function confirmRemoveSubtitle()
+	{
+		/**
+		 * @var $tpl    ilTemplate
+		 * @var $ilTabs ilTabsGUI
+		 */
+		global $tpl, $ilTabs;
+
+		$ilTabs->activateTab('editProperties');
+		$ilTabs->activateSubTab('addSubtitle');
+
+		require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
+		$confirm = new ilConfirmationGUI();
+		$confirm->setFormAction($this->ctrl->getFormAction($this, 'removeSubtitle'));
+		$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_delete_subtitle'));
+		$confirm->setConfirm($this->lng->txt('confirm'), 'removeSubtitle');
+		$confirm->setCancel($this->lng->txt('cancel'), 'addSubtitle');
+
+		$tpl->setContent($confirm->getHTML());
 	}
 
 	public function postAddSubtitle()

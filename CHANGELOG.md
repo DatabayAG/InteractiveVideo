@@ -1,3 +1,7 @@
+# 2.0.20
+1. Auto resume if re-entering the video
+2. Support for subtitles
+
 # 2.0.12
 1. Display task above videos
 2. Possibility to create a comment (private/public) on reflection question
