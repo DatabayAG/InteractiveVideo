@@ -421,3 +421,7 @@ body.cke_editable{
     font-size: 30px !important;
 }
 
+.mejs-controls .mejs-captions-button .mejs-captions-selector ul li label{
+    font-size: 14px !important;
+} 
+
