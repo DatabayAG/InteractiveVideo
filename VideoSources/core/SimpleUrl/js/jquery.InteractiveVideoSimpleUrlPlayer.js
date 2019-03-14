@@ -49,6 +49,7 @@ $( document ).ready(function() {
 								media.currentTime = seekTime;
 								seekTime = 0;
 							}
+							//Workaround for subtitle layout error with medialementjs
 							$('.mejs-captions-layer.mejs-layer').css({'width' :'100%'})
 						}, false);
 

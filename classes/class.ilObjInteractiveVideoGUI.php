@@ -867,7 +867,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function removeSubtitle(){
 
-		$filename = ilUtil::stripSlashes($_GET['remove_subtitle_file']);
+		$filename = ilUtil::stripSlashes($_POST['remove_subtitle_file']);
 		$file = ilUtil::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/' . $filename;
 
 		if(file_exists($file)) {
@@ -889,7 +889,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
 		 */
-		global $tpl, $ilTabs;
+		global $tpl, $ilTabs, $ilCtrl;
 
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('addSubtitle');
@@ -901,7 +901,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$confirm->setConfirm($this->lng->txt('confirm'), 'removeSubtitle');
 		$confirm->setCancel($this->lng->txt('cancel'), 'addSubtitle');
 
+		$filename = ilUtil::stripSlashes($_GET['remove_subtitle_file']);
+		$confirm->addItem('remove_subtitle_file', $filename, $filename);
 		$tpl->setContent($confirm->getHTML());
+
 	}
 
 	public function postAddSubtitle()
@@ -935,8 +938,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$data_short = $this->fillDataForSubtitles($name, $value, $data_short);
 				$cut             = substr($name, 2);
 				if($data_short[$cut] == '') {
-				#	ilUtil::sendFailure(ilInteractiveVideoPlugin::getInstance()->txt('you_need_a_short_title'), true);
-				#	$this->ctrl->redirect($this, 'addSubtitle');
+					ilUtil::sendFailure(ilInteractiveVideoPlugin::getInstance()->txt('you_need_a_short_title'), true);
+					$this->ctrl->redirect($this, 'addSubtitle');
 				}
 			}
 		}
