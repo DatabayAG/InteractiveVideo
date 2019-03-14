@@ -409,3 +409,15 @@ body.cke_editable{
 .comment_user_image img{
     width:30px;
 }
+
+.mejs-controls .mejs-captions-button .mejs-captions-selector ul li label{
+    width: auto !important;
+}
+.mejs-captions-layer{
+    font-size: 18px !important;
+}
+
+.mejs-container-fullscreen .mejs-captions-layer{
+    font-size: 30px !important;
+}
+
