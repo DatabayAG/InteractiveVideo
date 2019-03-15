@@ -21,87 +21,54 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	const TABLE_NAME_QUESTIONS = 'rep_robj_xvid_question';
 	const TABLE_NAME_LP = 'rep_robj_xvid_lp';
 	const TABLE_NAME_SUB_TITLE = 'rep_robj_xvid_subtitle';
-	
-	/**
-	 * @var int
-	 */
+
+	/** @var int */
 	const LP_MODE_DEACTIVATED = 0;
 
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	const LP_MODE_BY_QUESTIONS = 99;
 
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	protected $learning_progress_mode = self::LP_MODE_DEACTIVATED;
 
-	/**
-	 * @var bool
-	 */
+	/** @var bool */
 	protected $is_online = false;
 
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	protected $is_anonymized = 0;
-	/**
-	 * @var int
-	 */
+
+	/** @var int */
 	protected $is_repeat = 0;
 
-	/**
-	 * @var int
-	 */
+	/** @var int	 */
 	protected $is_chronologic = 0;
 
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	protected $is_public = 0;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $source_id;
 
-	/**
-	 * @var ilInteractiveVideoSource
-	 */
+	/** @var ilInteractiveVideoSource */
 	protected $video_source_object;
 
-	/**
-	 * @var 
-	 */
+	/** @var */
 	protected $video_source_import_object;
-	
-	/**
-	 * @var int
-	 */
+
+	/** @var int */
 	protected $task_active = 0;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $task;
 
-
-	/**
-	 * @var SimpleChoiceQuestion[]
-	 */
+	/** @var SimpleChoiceQuestion[] */
 	public $import_simple_choice = array();
 
-	/**
-	 * @var ilObjComment[]
-	 */
+	/** @var ilObjComment[] */
 	public $import_comment = array();
 
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	protected $disable_comment = 0;
-
 
 	/**
 	 * @param $src_id

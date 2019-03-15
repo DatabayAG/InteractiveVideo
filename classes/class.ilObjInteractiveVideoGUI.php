@@ -3,6 +3,7 @@
 require_once 'Services/Repository/classes/class.ilObjectPluginGUI.php';
 require_once 'Services/PersonalDesktop/interfaces/interface.ilDesktopItemHandling.php';
 require_once 'Services/Form/classes/class.ilPropertyFormGUI.php';
+require_once 'Services/UIComponent/Button/classes/class.ilLinkButton.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactoryGUI.php';
@@ -28,24 +29,16 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilInteractiveVideoF
  */
 class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopItemHandling
 {
-	/**
-	 * @var ilCtrl
-	 */
+	/** @var ilCtrl */
 	protected $ctrl;
 
-	/**
-	 * @var ilObjInteractiveVideo $object
-	 */
+	/** @var ilObjInteractiveVideo $object */
 	public $object;
 	
-	/**
-	 * @var $objComment ilObjComment
-	 */
+	/** @var $objComment ilObjComment */
 	public $objComment;
 
-	/**
-	 * @var ilPlugin
-	 */
+	/** @var ilPlugin */
 	public $plugin;
 
 	/**
@@ -753,13 +746,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$this->edit();
 	}
-	
+
 	protected function getSubtitleDataAndFilesForJson(){
+		$data = array();
 		$subtitle_data = $this->object->getSubtitleData();
 		$subtitle_files = $this->getSubtitleFiles();
-		
-		$data = array();
-		$dir = ilUtil::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/';
+		$dir  = $this->getPathForSubtitleFiles();
+
 		if(is_array($subtitle_files) && count($subtitle_files) > 0) {
 			foreach($subtitle_files as $key => $name){
 				$track = new stdClass();
@@ -771,6 +764,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		#print_r($data); exit;
 		return json_encode($data);
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getPathForSubtitleFiles()
+	{
+		return ilUtil::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/';
 	}
 
 	public function addSubtitle()
@@ -823,7 +824,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$long->setValue($long_title);
 				$title->addSubItem($long);
 
-				include_once "Services/UIComponent/Button/classes/class.ilLinkButton.php";
 				$button = ilLinkButton::getInstance();
 				$button->setCaption("remove");
 				$ilCtrl->setParameterByClass('ilObjInteractiveVideoGUI', "remove_subtitle_file", $name);
@@ -847,8 +847,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function getSubtitleFiles(){
 		$sub_titles = array();
-		$directory = ilUtil::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/';
-		
+		$directory = $this->getPathForSubtitleFiles();
+
 		if(file_exists($directory)) {
 			if ($handle = opendir($directory)) {
 				while (false !== ($entry = readdir($handle))) {
@@ -858,9 +858,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				}
 			}
 			closedir($handle);
-			return $sub_titles;
 		}
 
+		return $sub_titles;
 	}
 
 	/**
