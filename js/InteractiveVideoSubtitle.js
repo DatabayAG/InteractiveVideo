@@ -6,7 +6,7 @@ il.InteractiveVideoSubtitle = (function (scope) {
 	};
 
 	pub.initializeSubtitleTracks = function(player_id){
-		$.each(il.InteractiveVideo[player_id].tracks[0], function (key, value) {
+		$.each(il.InteractiveVideo[player_id].tracks.flat(), function (key, value) {
 
 			let track = document.createElement('track');
 			track.kind    = pri.subtitles;
