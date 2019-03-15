@@ -392,4 +392,9 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 			$this->saveDataToDb($obj_id);
 		}
 	}
+
+	public function hasOwnPlayer()
+	{
+		return false;
+	}
 }

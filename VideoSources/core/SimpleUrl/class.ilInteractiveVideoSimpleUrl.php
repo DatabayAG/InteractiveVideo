@@ -233,4 +233,10 @@ class ilInteractiveVideoSimpleUrl implements ilInteractiveVideoSource
 	{
 
 	}
+
+	public function hasOwnPlayer()
+	{
+		return false;
+	}
+
 }
