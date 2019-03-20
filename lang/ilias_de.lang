@@ -187,3 +187,4 @@ auto_resume#:#Fortsetzen
 auto_resume_info#:#Wenn aktiviert, wird das Video beim Schließen des Fragen-Dialogs automatisch fortgesetzt.
 fixed_modal#:#Modal schließen blockieren
 fixed_modal_info#:#Wenn aktiviert, wird ein Modal-Dialog beim Klick eines Benutzers auf den Hintergrund nicht geschlossen.
+modal_section#:#Verhalten des Fragendialoges
