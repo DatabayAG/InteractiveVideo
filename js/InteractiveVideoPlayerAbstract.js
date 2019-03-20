@@ -66,12 +66,12 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 			pub.setCurrentTime(time);
 			scope.InteractiveVideo.last_stopPoint = time;
 		}
-		pub.resumeVideo();
+		pub.play();
 	};
 
 	pub.resumeVideo = function ()
 	{
-		if(scope.InteractiveVideo.auto_resume === true)
+		if(scope.InteractiveVideo.auto_resume === "1")
 		{
 			pub.play();
 		}

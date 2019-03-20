@@ -27,7 +27,7 @@ If you upgrade to the 2.x version of the InteractiveVideo you can not go back to
 4. Search the **InteractiveVideo** plugin in the list of plugin and choose **Activate** from the **Actions** drop down.
 
 ### Workaround patch for making the Interactive Videos work with the Web Access Checker
-Simply insert the following line into the file 'Services/MediaObjects/classes/class.ilObjMediaObject.php' at round about line number 1397, which should read like this in the original:
+Simply insert the following line into the file 'Services/MediaObjects/classes/class.ilObjMediaObject.php' at round about line number 1511, which should read like this in the original:
 
 	case "mep":
 		$obj_id = $id;
@@ -58,3 +58,6 @@ The InteractiveVideo Plugin for ILIAS gives you the possibility to create a vide
 
 ## Interactive Video Sources & Plugin Slots
 ![Main View](https://databayag.github.io/InteractiveVideo/2.0.x/5.png)
+
+## Interactive Video Modal options
+![Modal settings](https://databayag.github.io/InteractiveVideo/2.0.18/modal_options.png)

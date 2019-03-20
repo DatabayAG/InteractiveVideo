@@ -876,3 +876,29 @@ if ($read_lp && $xoct_type_id) {
 	ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
 }
 ?>
+<#47>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'auto_resume'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'auto_resume',
+		array(
+			'type'    => 'integer',
+			'length'  => 1,
+			'notnull' => true,
+			'default' => 0)
+	);
+}
+?>
+<#48>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'fixed_modal'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'fixed_modal',
+		array(
+			'type'    => 'integer',
+			'length'  => 1,
+			'notnull' => true,
+			'default' => 0)
+	);
+}
+?>

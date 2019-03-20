@@ -196,10 +196,18 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.appendCloseButtonListener = function()
 	{
-		$('#close_form').on('click', function () {
+		let close_form = $('#close_form');
+		let question_modal = $('#ilQuestionModal');
+
+		close_form.off('click');
+		close_form.on('click', function () {
 			$('#ilQuestionModal').modal('hide');
-			scope.InteractiveVideoPlayerAbstract.resumeVideo();
 		});
+
+		question_modal.off('hidden.bs.modal');
+		question_modal.on('hidden.bs.modal', function () {
+			scope.InteractiveVideoPlayerAbstract.resumeVideo();
+		})
 	};
 
 	pro.createButtonButtons = function(id, value) {
@@ -214,7 +222,12 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		if (pub.QuestionObject.player.isFullScreen === true) {
 			pub.QuestionObject.player.exitFullScreen();
 		}
-		$('#ilQuestionModal').modal('show');
+
+		var config = {};
+		if(scope.InteractiveVideo.fixed_modal === "1") {
+			config = {backdrop: 'static', keyboard: false};
+		}
+		$('#ilQuestionModal').modal(config, 'show');
 	};
 	
 	pub.protect = pro;

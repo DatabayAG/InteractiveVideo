@@ -356,6 +356,7 @@ class SimpleChoiceQuestion
 		global $ilDB;
 
 		$_POST['answer'] = array();
+		$_POST['correct'] = array();
 
 		$res = $ilDB->queryF('
 				SELECT * 

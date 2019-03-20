@@ -85,6 +85,15 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	protected $task;
 
+	/**
+	 * @var boolean
+	 */
+	protected $auto_resume_after_question = 0;
+
+	/**
+	 * @var boolean
+	 */
+	protected $fixed_modal = 0;
 
 	/**
 	 * @var SimpleChoiceQuestion[]
@@ -147,6 +156,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->setTaskActive($row['is_task']);
 		$this->setTask($row['task']);
 		$this->setDisableComment($row['no_comment']);
+		$this->setAutoResumeAfterQuestion($row['auto_resume']);
+		$this->setFixedModal($row['fixed_modal']);
 
 		$this->getVideoSourceObject($row['source_id']);
 		$this->setLearningProgressMode($row['lp_mode']);
@@ -216,6 +227,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$is_task		= $this->task_active;
 						$task			= $this->task;
 						$no_comment		= $this->disable_comment;
+						$auto_resume	= $this->auto_resume_after_question;
+						$fixed_modal	= $this->fixed_modal;
 					}
 					else
 					{
@@ -227,6 +240,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$is_task		= (int)$_POST['is_task'];
 						$task			= ilUtil::stripSlashes($_POST['task']);
 						$no_comment		= (int)$_POST['no_comment'];
+						$auto_resume	= (int)$_POST['auto_resume'];
+						$fixed_modal	= (int)$_POST['fixed_modal'];
 					}
 
 					$ilDB->insert(
@@ -240,6 +255,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 							'is_online'      => array('integer', $online),
 							'source_id'      => array('text', $source_id),
 							'is_task'        => array('integer',$is_task ),
+							'auto_resume'    => array('integer',$auto_resume ),
+							'fixed_modal'    => array('integer',$fixed_modal ),
 							'task'           => array('text', $task),
 							'no_comment'     => array('integer', $no_comment)
 						)
@@ -294,7 +311,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 					'is_online'			=>array('integer',	$this->isOnline()),
 					'source_id'			=>array('text',		$this->getSourceId()),
 					'is_task'			=> array('integer', $this->getTaskActive()),
-					'task'				=> array('text',	$this->getTask()),
+					'task'				=> array('text',	$this->getTask()), 
+					 'auto_resume'     => array('integer',    $this->isAutoResumeAfterQuestion()),
+					 'fixed_modal'     => array('integer',    $this->isFixedModal()),
 					'lp_mode'			=> array('integer', $this->getLearningProgressMode()), 
 					'no_comment'		=> array('integer', $this->getDisableComment())
 					),
@@ -306,16 +325,19 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function beforeDelete()
 	{
-		$this->getVideoSourceObject($this->getSourceId());
-		$this->video_source_object->beforeDeleteVideoSource($this->getId());
-		self::deleteComments(self::getCommentIdsByObjId($this->getId(), false));
+        if (((!$this->referenced) || ($this->countReferences() == 1)) && $this->video_source_object !== null ) {
+            $this->getVideoSourceObject($this->getSourceId());
+            $this->video_source_object->beforeDeleteVideoSource($this->getId());
+            self::deleteComments(self::getCommentIdsByObjId($this->getId(), false));
 
-		/**
-		 * @var $ilDB ilDB
-		 */
-		global $ilDB;
-		$ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
-		$this->deleteMetaData();
+            /**
+             * @var $ilDB ilDB
+             */
+            global $ilDB;
+            $ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
+            $this->deleteMetaData();
+        }
+        return true;
 	}
 
 	/**
@@ -354,6 +376,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				'source_id'     => array('text', $this->getSourceId()),
 				'is_task'     => array('integer', $this->getTaskActive()),
 				'task'     => array('text', $this->getTask()),
+				'auto_resume'     => array('integer', $this->isAutoResumeAfterQuestion()),
+				'fixed_modal'     => array('integer', $this->isFixedModal()),
 				'lp_mode' => array('integer', $this->getLearningProgressMode())
 			)
 		);
@@ -1135,6 +1159,38 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isAutoResumeAfterQuestion()
+	{
+		return $this->auto_resume_after_question;
+	}
+
+	/**
+	 * @param bool $auto_resume_after_question
+	 */
+	public function setAutoResumeAfterQuestion($auto_resume_after_question)
+	{
+		$this->auto_resume_after_question = $auto_resume_after_question;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isFixedModal()
+	{
+		return $this->fixed_modal;
+	}
+
+	/**
+	 * @param bool $fixed_modal
+	 */
+	public function setFixedModal($fixed_modal)
+	{
+		$this->fixed_modal = $fixed_modal;
 	}
 
 }
