@@ -909,7 +909,7 @@ if(!$ilDB->tableExists('rep_robj_xvid_subtitle'))
 		);
 
 		$ilDB->createTable('rep_robj_xvid_subtitle', $fields);
-		$ilDB->addPrimaryKey('rep_robj_xvid_subtitle', array('obj_id', 'file_name', 'short_title'));
+		$ilDB->addPrimaryKey('rep_robj_xvid_subtitle', array('obj_id', 'short_title'));
 	}
 }
 ?>
