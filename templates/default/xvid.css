@@ -423,5 +423,11 @@ body.cke_editable{
 
 .mejs-controls .mejs-captions-button .mejs-captions-selector ul li label{
     font-size: 14px !important;
-} 
+}
 
+.mejs-captions-position{
+    width: 25% !important;
+}
+.mejs-container-fullscreen .mejs-captions-position{
+    width: 100% !important;
+}
