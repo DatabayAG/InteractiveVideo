@@ -917,6 +917,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$tmp_name = ilUtil::stripSlashes($_FILES['subtitle']['tmp_name']);
 			$file_name = ilUtil::stripSlashes($_FILES['subtitle']['name']);
+            $file_name = str_replace('/\s+/', '_', $file_name);
 			$part			= 'xvid_' . $this->object->getId() . '/subtitles/';
 			$path			= xvidUtils::ensureFileSavePathExists($part);
 			$new_file		= $path.$file_name;
