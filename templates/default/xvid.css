@@ -425,9 +425,6 @@ body.cke_editable{
     font-size: 14px !important;
 }
 
-.mejs-captions-position{
-    width: 85% !important;
-}
-.mejs-container-fullscreen .mejs-captions-position{
+.mejs-captions-layer.mejs-layer{
     width: 100% !important;
 }
