@@ -1,45 +1,57 @@
 <script type="text/javascript">
-	il.InteractiveVideo =
-	{
-		video_finished_post_url 		: '{VIDEO_FINISHED_POST_URL}',
-		video_started_post_url 			: '{VIDEO_STARTED_POST_URL}',
-		question_get_url 				: '{QUESTION_GET_URL}',
-		question_post_url 				: '{QUESTION_POST_URL}',
-		post_comment_url 				: '{POST_COMMENT_URL}',
-		stopPoints 						: {STOP_POINTS},
-		ignore_questions				: {IGNORE_QUESTIONS},
-		username						: "{USERNAME}",
-		user_image						: "{USER_IMAGE}",
-		user_image_cache				: '{USER_IMAGES_CACHE}',
-		auto_resume						: '{AUTO_RESUME_AFTER_QUESTION}',
-		fixed_modal						: '{FIXED_MODAL}',
-		pause_on_click_in_comment_field	: true,
-		iv_debug						: false,
-		last_stopPoint 					: -1,
-		last_time						: 0,
-		is_show_all_active				: false,
-		filter_by_user					: false,
-		is_chronologic					: '{IS_CHRONOLOGIC_VALUE}',
-		blacklist_time_end				: [],
-		comment_hightlight_time			: 500,
-		comments 						: {COMMENTS},
-		lang :
-			 {
-				 switch_on						: '{SWITCH_ON}',
-				 switch_off						: '{SWITCH_OFF}',
-				 send_text						: '{SEND_BUTTON}',
-				 close_text						: '{CLOSE_BUTTON}',
-				 feedback_button_text			: '{FEEDBACK_JUMP_TEXT}',
-				 learning_recommendation_text	: '{LEARNING_RECOMMENDATION_TEXT}',
-				 answered_text					: '{ALREADY_ANSWERED_TEXT}',
-				 question_text					: '{QUESTION_TEXT}',
-				 private_text					: '{PRIVATE_TEXT}',
-				 reset_text	   					: '{RESET_TEXT}',
-				 author_filter					: '{AUTHOR_FILTER}',
-				 save							: '{SAVE}',
-				 add_comment					: '{ADD_COMMENT}',
-				 more_information				: '{MORE_INFORMATION_TEXT}'
-			 }
+	if(il.InteractiveVideo === undefined){
+		il.InteractiveVideo = {};
+	}
+
+	il.InteractiveVideo["lang"] = {
+		switch_on:                    '{SWITCH_ON}',
+		switch_off:                   '{SWITCH_OFF}',
+		send_text:                    '{SEND_BUTTON}',
+		close_text:                   '{CLOSE_BUTTON}',
+		feedback_button_text:         '{FEEDBACK_JUMP_TEXT}',
+		learning_recommendation_text: '{LEARNING_RECOMMENDATION_TEXT}',
+		answered_text:                '{ALREADY_ANSWERED_TEXT}',
+		question_text:                '{QUESTION_TEXT}',
+		private_text:                 '{PRIVATE_TEXT}',
+		reset_text:                   '{RESET_TEXT}',
+		author_filter:                '{AUTHOR_FILTER}',
+		save:                         '{SAVE}',
+		add_comment:                  '{ADD_COMMENT}',
+		more_information:             '{MORE_INFORMATION_TEXT}'
 	};
+
+	var player = {
+			player_type:                     '{PLAYER_TYPE}',
+			video_finished_post_url:         '{VIDEO_FINISHED_POST_URL}',
+			video_started_post_url:          '{VIDEO_STARTED_POST_URL}',
+			question_get_url:                '{QUESTION_GET_URL}',
+			question_post_url:               '{QUESTION_POST_URL}',
+			post_comment_url:                '{POST_COMMENT_URL}',
+			interactive_video_ref_id:        '{INTERACTIVE_VIDEO_REF_ID}',
+			installation_client_id :         '{INTERACTIVE_INSTALLATION_CLIENT_ID}',
+			stopPoints:                      {STOP_POINTS},
+			ignore_questions:                {IGNORE_QUESTIONS},
+			username:                        "{USERNAME}",
+			user_image:                      "{USER_IMAGE}",
+			user_image_cache:                '{USER_IMAGES_CACHE}',
+			auto_resume:                     false,
+		    fixed_modal	:                    '{FIXED_MODAL}',
+			pause_on_click_in_comment_field: true,
+			iv_debug:                        false,
+			last_stopPoint:                  -1,
+			last_time:                       0,
+			is_show_all_active:              false,
+			filter_by_user:                  false,
+			is_chronologic:                  '{IS_CHRONOLOGIC_VALUE}',
+			blacklist_time_end:              [],
+			comment_hightlight_time:         500,
+			comments:                        {COMMENTS},
+			first_play_action:               true,
+			tracks:                          [{HAS_TRACKS}]
+	};
+
+	il.InteractiveVideo["{PLAYER_ID}"] = (player);
+	
+	console.log('CONFIG TEMPLATE PLAYER ID:', "{PLAYER_ID}")
 </script>
 {CK_CONFIG}

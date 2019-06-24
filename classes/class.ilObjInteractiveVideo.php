@@ -20,69 +20,45 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	const TABLE_NAME_COMMENTS = 'rep_robj_xvid_comments';
 	const TABLE_NAME_QUESTIONS = 'rep_robj_xvid_question';
 	const TABLE_NAME_LP = 'rep_robj_xvid_lp';
-	
-	/**
-	 * @var int
-	 */
+	const TABLE_NAME_SUB_TITLE = 'rep_robj_xvid_subtitle';
+
+	/** @var int */
 	const LP_MODE_DEACTIVATED = 0;
 
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	const LP_MODE_BY_QUESTIONS = 99;
 
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	protected $learning_progress_mode = self::LP_MODE_DEACTIVATED;
 
-	/**
-	 * @var bool
-	 */
+	/** @var bool */
 	protected $is_online = false;
 
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	protected $is_anonymized = 0;
-	/**
-	 * @var int
-	 */
+
+	/** @var int */
 	protected $is_repeat = 0;
 
-	/**
-	 * @var int
-	 */
+	/** @var int	 */
 	protected $is_chronologic = 0;
 
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	protected $is_public = 0;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $source_id;
 
-	/**
-	 * @var ilInteractiveVideoSource
-	 */
+	/** @var ilInteractiveVideoSource */
 	protected $video_source_object;
 
-	/**
-	 * @var 
-	 */
+	/** @var */
 	protected $video_source_import_object;
-	
-	/**
-	 * @var int
-	 */
+
+	/** @var int */
 	protected $task_active = 0;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $task;
 
 	/**
@@ -98,18 +74,14 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	/**
 	 * @var SimpleChoiceQuestion[]
 	 */
+	/** @var SimpleChoiceQuestion[] */
 	public $import_simple_choice = array();
 
-	/**
-	 * @var ilObjComment[]
-	 */
+	/** @var ilObjComment[] */
 	public $import_comment = array();
 
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	protected $disable_comment = 0;
-
 
 	/**
 	 * @param $src_id
@@ -183,6 +155,71 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$row = $ilDB->fetchAssoc($res);
 
 		return $row['source_id'];
+	}
+
+	/**
+	 * @param $data_short
+	 * @param $data_long
+	 */
+	public function saveSubtitleData($data_short, $data_long)
+	{
+		global $ilDB;
+
+		$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_SUB_TITLE . ' WHERE obj_id = %s',
+			array('integer'), array($this->getId()));
+
+		$titles = array();
+		if(count($data_short) > 0) {
+			foreach ($data_short as $name => $value) {
+				$titles[$name]['s'] = $value;
+			}
+
+			foreach ($data_long as $name => $value) {
+				$titles[$name]['l'] = $value;
+			}
+		}
+
+		foreach ($titles as $name => $value) {
+			$ilDB->insert(
+				self::TABLE_NAME_SUB_TITLE,
+				array(
+					'obj_id'      => array('integer', $this->getId()),
+					'file_name'   => array('text', $name),
+					'short_title' => array('text', $value['s']),
+					'long_title'  => array('text', $value['l'])
+				));
+		}
+	}
+
+	/**
+	 * @param $filename
+	 */
+	public function removeSubtitleData($filename)
+	{
+		global $ilDB;
+
+		$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_SUB_TITLE . ' WHERE obj_id = %s && file_name = %s',
+			array('integer', 'text'), array($this->getId(), $filename));
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getSubtitleData()
+	{
+		global $ilDB;
+		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_SUB_TITLE. ' WHERE obj_id = %s',
+			array('integer'), array($this->getId()));
+
+		$sub_title_data = array();
+
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$sub_title_data[$row['file_name']]['s'] = $row['short_title'];
+			$sub_title_data[$row['file_name']]['l'] = $row['long_title'];
+		}
+
+		return $sub_title_data;
 	}
 
 	protected function doCreate($a_clone_mode = false)
@@ -510,7 +547,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			$table_data[$counter]['comment_id']			= $row['comment_id'];
 			$table_data[$counter]['comment_time']		= xvidUtils::getTimeStringFromSeconds($row['comment_time']);
 			$table_data[$counter]['comment_time_end']	= xvidUtils::getTimeStringFromSeconds($row['comment_time_end']);
-			$table_data[$counter]['comment_title']		= $row['comment_title'];
+			$table_data[$counter]['title']		= $row['comment_title'];
 			//	$table_data[$counter]['user_id']			= $row['user_id'];
 			$table_data[$counter]['comment_text']		= $row['comment_text'];
 

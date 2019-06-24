@@ -43,9 +43,10 @@ interface ilInteractiveVideoSourceGUI
 	public function addPlayerElements($tpl);
 
 	/**
+	 * @param                       $player_id
 	 * @param ilObjInteractiveVideo $obj
-	 * @return 
+	 * @return
 	 */
-	public function getPlayer($obj);
+	public function getPlayer($player_id, $obj);
 
 }

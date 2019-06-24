@@ -54,13 +54,15 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	}
 
 	/**
+	 * @param                       $player_id
 	 * @param ilObjInteractiveVideo $obj
 	 * @return ilTemplate
 	 */
-	public function getPlayer($obj)
+	public function getPlayer($player_id, $obj)
 	{
 		$player = new ilTemplate(self::PATH . 'tpl/tpl.video.html', false, false);
 		$instance = new ilInteractiveVideoYoutube();
+		$player->setVariable('PLAYER_ID', $player_id);
 		$player->setVariable('YOUTUBE_ID', $instance->doReadVideoSource($obj->getId()));
 		return $player;
 	}

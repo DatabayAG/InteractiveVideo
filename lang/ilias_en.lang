@@ -188,3 +188,9 @@ auto_resume_info#:#If enabled, the video will be automatically resumed after clo
 fixed_modal#:#Block modal closing 
 fixed_modal_info#:#If enabled, a modal dialogue won't be closed if a user clicks on the background.
 modal_section#:#Behaviour of Question Dialogue
+subtitle#:#Subtitle
+short_title#:#Short title
+long_title#:#Title
+subtitle_removed#:#Subtitle removed
+sure_delete_subtitle#:#Are you sure you want to remove this subtitle?
+you_need_a_short_title#:#You need to provide a short title!

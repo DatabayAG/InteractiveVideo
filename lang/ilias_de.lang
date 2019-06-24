@@ -29,7 +29,7 @@ comment#:#Kommentar
 comments#:#Kommentare
 post#:#Posten
 cancel#:#Abbrechen
-sure_delete_comment#:#Sind Sie sicher, dass die die gewählten Kommentare löschen möchten?
+sure_delete_comment#:#Sind Sie sicher, dass Sie die gewählten Kommentare löschen möchten?
 missing_comment_text#:#Bitte geben Sie einen Kommentar ein.
 missing_stopping_point#:#Der Haltepunkt wurde nicht zum Server übertragen. Bitte versuchen Sie es erneut.
 invalid_comment_ids#:#Einige Kommentare konnten nicht gefunden werden. 
@@ -188,3 +188,10 @@ auto_resume_info#:#Wenn aktiviert, wird das Video beim Schließen des Fragen-Dia
 fixed_modal#:#Modal schließen blockieren
 fixed_modal_info#:#Wenn aktiviert, wird ein Modal-Dialog beim Klick eines Benutzers auf den Hintergrund nicht geschlossen.
 modal_section#:#Verhalten des Fragendialoges
+subtitle#:#Untertitel
+short_title#:#Kürzel
+long_title#:#Titel
+subtitle_removed#:#Untertitel gelöscht
+sure_delete_subtitle#:#Sind Sie sicher das sie diesen Untertitle löschen wollen?
+you_need_a_short_title#:#Sie müssen einen Kurztitle eintragen!
+

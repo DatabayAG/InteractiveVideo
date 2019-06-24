@@ -1,3 +1,7 @@
+# 2.0.20
+1. Auto resume if re-entering the video
+2. Support for subtitles
+
 # 2.0.18
 1. Block modal closing by clicking on the background
    * If enabled, a modal dialogue won't be closed if a user clicks on the background.

@@ -1,8 +1,12 @@
 il.InteractiveVideoPlayerAbstract = (function (scope) {
 	'use strict';
 
+	//Todo: make question object a object by player id
+	//Done: Questions working
+	//Done: Comments working
+	//Player object exists by id
 	var pub = {}, pro = {};
-	
+
 	pub.config = {
 		pauseCallback           : null,
 		playCallback            : null,
@@ -11,75 +15,79 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		setCurrentTimeCallback  : null
 	}; 
 
-	pro.first_play_action = true;
-
-	pub.pause = function()
+	pub.pause = function(player_id)
 	{
-		if (typeof pub.config.pauseCallback === 'function') {
-			pub.config.pauseCallback();
+		if (typeof pub.config[player_id].pauseCallback === 'function') {
+			pub.config[player_id].pauseCallback();
 		}
 	};
 
-	pub.play = function()
+	pub.play = function(player_id)
 	{
-		if (pro.first_play_action) {
-			pro.first_play_action = false;
-			il.InteractiveVideoPlayerFunction.triggerVideoStarted();
+		let player_config = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+
+		if (player_config.first_play_action) {
+			player_config.first_play_action = false;
+			il.InteractiveVideoPlayerResume.checkForResumeValue(player_id);
+			il.InteractiveVideoPlayerFunction.triggerVideoStarted(player_id);
 		}
 
-		if (typeof pub.config.playCallback === 'function') {
-			pub.config.playCallback();
+		if (typeof pub.config[player_id].playCallback === 'function') {
+			pub.config[player_id].playCallback();
 		}
 	};
 
-	pub.duration = function()
+	pub.duration = function(player_id)
 	{
-		var value = -1;
-		if (typeof pub.config.durationCallback === 'function') {
-			value = pub.config.durationCallback();
+		let value = -1;
+
+		if (typeof pub.config[player_id].durationCallback === 'function') {
+			value = pub.config[player_id].durationCallback();
 		}
 		return value;
 	};
 
-	pub.currentTime = function()
+	pub.currentTime = function(player_id)
 	{
-		var value = -1;
-		if (typeof pub.config.currentTimeCallback === 'function') {
-			value = pub.config.currentTimeCallback();
+		let value = -1;
+
+		if (typeof pub.config[player_id].currentTimeCallback === 'function') {
+			value = pub.config[player_id].currentTimeCallback();
 		}
 		return value;
 	};
 
-	pub.setCurrentTime = function(time)
+	pub.setCurrentTime = function(time, player_id)
 	{
-		if (typeof pub.config.setCurrentTimeCallback === 'function') {
-			pub.config.setCurrentTimeCallback(time);
+		if (typeof pub.config[player_id].setCurrentTimeCallback === 'function') {
+			pub.config[player_id].setCurrentTimeCallback(time);
 		}
 	};
 
-	pub.jumpToTimeInVideo = function (time)
+	pub.jumpToTimeInVideo = function (time, player_id)
 	{
-		pub.play();
-		pub.pause();
+		player_id = $(player_id).attr('id');
+		pub.play(player_id);
+		pub.pause(player_id);
 		if(time !== null)
 		{
-			pub.setCurrentTime(time);
-			scope.InteractiveVideo.last_stopPoint = time;
+			pub.setCurrentTime(time, player_id);
+			scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id).last_stopPoint = time;
 		}
-		pub.play();
+		pub.play(player_id);
 	};
 
-	pub.resumeVideo = function ()
+	pub.resumeVideo = function (player_id)
 	{
-		if(scope.InteractiveVideo.auto_resume === "1")
+		if(scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id).auto_resume === true)
 		{
-			pub.play();
+			pub.play(player_id);
 		}
 	};
 
-	pub.videoFinished = function()
+	pub.videoFinished = function(player_id)
 	{
-		il.InteractiveVideoPlayerFunction.triggerVideoFinished();
+		il.InteractiveVideoPlayerFunction.triggerVideoFinished(player_id);
 
 		if(il.InteractiveVideoPlayerFunction.doesReferencePointExists())
 		{

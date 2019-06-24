@@ -1,63 +1,67 @@
 il.InteractiveVideoPlayerComments = (function (scope) {
 	'use strict';
 
-	var pub = {},
+	let pub = {},
 		pro = {},
 		pri = {};
 
 	pri.cssIterator = 0;
 	pri.cssCommentClasses = ['crow1', 'crow2', 'crow3', 'crow4'];
 
-	pub.sliceCommentAndStopPointsInCorrectPosition = function (tmp_obj, time)
+	pub.sliceCommentAndStopPointsInCorrectPosition = function (tmp_obj, time, player_data)
 	{
-		var pos = 0;
-		var i;
-		for (i = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
+		let pos = 0;
+		let i;
+
+		for (i = 0; i < Object.keys(player_data.comments).length; i++)
 		{
-			if (parseFloat(scope.InteractiveVideo.comments[i].comment_time) <= time)
+			if (parseFloat(player_data.comments[i].comment_time) <= time)
 			{
 				pos = i;
 			}
 		}
-		scope.InteractiveVideo.comments.splice( pos + 1, 0 , tmp_obj);
-		scope.InteractiveVideo.stopPoints.splice( pos + 1, 0, Math.floor(time));
+		player_data.comments.splice( pos + 1, 0 , tmp_obj);
+		player_data.stopPoints.splice( pos + 1, 0, Math.floor(time));
 	};
 
-	pub.replaceCommentsAfterSeeking = function (time)
+	pub.replaceCommentsAfterSeeking = function (time, player_id)
 	{
-		var i;
-		var j_object = $("#ul_scroll");
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+		let i;
+		let j_object = $("#ul_scroll_" + player_id);
+
 		j_object.html('');
-		pub.resetCommentsTimeEndBlacklist();
-		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
+		pub.resetCommentsTimeEndBlacklist(player_id);
+		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 		{
-			if (scope.InteractiveVideo.comments[i].comment_time <= time && scope.InteractiveVideo.comments[i].comment_text !== null)
+			if (player_data.comments[i].comment_time <= time && player_data.comments[i].comment_text !== null)
 			{
-				j_object.prepend(pub.buildListElement(scope.InteractiveVideo.comments[i], scope.InteractiveVideo.comments[i].comment_time, scope.InteractiveVideo.comments[i].user_name));
-				if(scope.InteractiveVideo.comments[i].comment_time_end > 0)
+				j_object.prepend(pub.buildListElement(player_id, player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name));
+				if(player_data.comments[i].comment_time_end > 0)
 				{
-					pub.fillCommentsTimeEndBlacklist(scope.InteractiveVideo.comments[i].comment_time_end, scope.InteractiveVideo.comments[i].comment_id);
+					pub.fillCommentsTimeEndBlacklist(player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
 				}
 			}
 		}
-		pub.clearCommentsWhereTimeEndEndded(time);
+		pub.clearCommentsWhereTimeEndEndded(player_id, time);
 	};
 
-	pub.buildListElement = function (comment, time, username)
+	pub.buildListElement = function (player_id, comment, time, username)
 	{
-		var css_class, value;
-
-		if(pro.isBuildListElementAllowed(username))
+		let css_class, value;
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+		
+		if(pro.isBuildListElementAllowed(player_data, username))
 		{
 			css_class = pro.getCSSClassForListElement();
 			value =	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class + '">' +
 				'<div class="message-inner">' +
-							pro.buildCommentUserImage(comment)                   +
+							pro.buildCommentUserImage(player_data, comment)                   +
 							'<div class="comment_user_data">' + pub.buildCommentUsernameHtml(username, comment.is_interactive) +
 							pro.appendPrivateHtml(comment.is_private) +
 							'<div class="comment_time">' +
-							pro.buildCommentTimeHtml(time, comment.is_interactive)                           +
-							pro.buildCommentTimeEndHtml(comment)                                             +
+							pro.buildCommentTimeHtml(time, comment.is_interactive, player_id)                           +
+							pro.buildCommentTimeEndHtml(comment, player_id)                                             +
 							'</div></div><div class="comment_inner_text">' +
 							pro.buildCommentTitleHtml(comment.comment_title)                                 +
 							pro.buildCommentTextHtml(comment.comment_text )                                  +
@@ -74,51 +78,57 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return value;
 	};
 
-	pub.fillCommentsTimeEndBlacklist = function (comment_time_end, comment_id)
+	pub.fillCommentsTimeEndBlacklist = function (player_id, comment_time_end, comment_id)
 	{
-		if(scope.InteractiveVideo.blacklist_time_end[comment_time_end] === undefined)
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+
+		if(player_data.blacklist_time_end[comment_time_end] === undefined)
 		{
-			scope.InteractiveVideo.blacklist_time_end[comment_time_end] = [comment_id];
+			player_data.blacklist_time_end[comment_time_end] = [comment_id];
 		}
 		else
 		{
-			scope.InteractiveVideo.blacklist_time_end[comment_time_end].push(comment_id);
+			player_data.blacklist_time_end[comment_time_end].push(comment_id);
 		}
 		pub.addHighlightToComment(comment_id);
 	};
 
-	pub.clearCommentsWhereTimeEndEndded = function (time)
+	pub.clearCommentsWhereTimeEndEndded = function (player_id, time)
 	{
-		var timestamp, id;
-		for (timestamp in scope.InteractiveVideo.blacklist_time_end) 
+		let timestamp, id;
+		let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+
+		for (timestamp in player_data.blacklist_time_end) 
 		{
 			if(timestamp <= time)
 			{
-				for (id in scope.InteractiveVideo.blacklist_time_end[timestamp]) 
+				for (id in player_data.blacklist_time_end[timestamp]) 
 				{
-					pro.removeHighlightFromComment(scope.InteractiveVideo.blacklist_time_end[timestamp][id]);
+					pro.removeHighlightFromComment(player_data.blacklist_time_end[timestamp][id]);
 				}
 
-				delete scope.InteractiveVideo.blacklist_time_end[timestamp];
+				delete player_data.blacklist_time_end[timestamp];
 			}
 		}
 		il.InteractiveVideoPlayerFunction.refreshMathJaxView();
 	};
 
-	pub.clearAndRemarkCommentsAfterSeeking = function (time)
+	pub.clearAndRemarkCommentsAfterSeeking = function (time, player)
 	{
-		var i ;
-		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+		let i ;
+
+		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 		{
-			if (scope.InteractiveVideo.comments[i].comment_text !== null)
+			if (player_data.comments[i].comment_text !== null)
 			{
-				pro.removeHighlightFromComment(scope.InteractiveVideo.comments[i].comment_id);
-				if(scope.InteractiveVideo.comments[i].comment_time_end > 0 && 
-						scope.InteractiveVideo.comments[i].comment_time <= time && 
-						scope.InteractiveVideo.comments[i].comment_time_end >= time
+				pro.removeHighlightFromComment(player_data.comments[i].comment_id);
+				if(player_data.comments[i].comment_time_end > 0 &&
+					player_data.comments[i].comment_time <= time &&
+					player_data.comments[i].comment_time_end >= time
 					)
 				{
-					pub.addHighlightToComment(scope.InteractiveVideo.comments[i].comment_id);
+					pub.addHighlightToComment(player_data.comments[i].comment_id);
 				}
 			}
 		}
@@ -129,71 +139,77 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		$('.list_item_' + id).addClass('activeComment');
 	};
 
-	pub.resetCommentsTimeEndBlacklist = function ()
+	pub.resetCommentsTimeEndBlacklist = function (player_id)
 	{
-		scope.InteractiveVideo.blacklist_time_end = [];
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+
+		player_data.blacklist_time_end = [];
 	};
 
-	pub.displayAllCommentsAndDeactivateCommentStream = function(on)
+	pub.displayAllCommentsAndDeactivateCommentStream = function(on, player_id)
 	{
-		var i;
-		var j_object	= $("#ul_scroll");
-		var element		='';
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+		let i;
+		let j_object	= $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id);
+		let element		='';
+
 		j_object.html('');
 		pri.cssIterator = 0;
 
 		if(on)
 		{
-			for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
+			for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 			{
-				if (scope.InteractiveVideo.comments[i].comment_text !== null)
+				if (player_data.comments[i].comment_text !== null)
 				{
-					element = pub.buildListElement(scope.InteractiveVideo.comments[i], scope.InteractiveVideo.comments[i].comment_time, scope.InteractiveVideo.comments[i].user_name);
+					element = pub.buildListElement(player_id, player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name);
 					j_object.append(element);
-					if(scope.InteractiveVideo.comments[i].comment_time_end > 0 && scope.InteractiveVideo.comments[i].comment_time <= scope.InteractiveVideo.last_time)
+					if(player_data.comments[i].comment_time_end > 0 && player_data.comments[i].comment_time <= player_data.last_time)
 					{
-						pub.fillCommentsTimeEndBlacklist(scope.InteractiveVideo.comments[i].comment_time_end, scope.InteractiveVideo.comments[i].comment_id);
+						pub.fillCommentsTimeEndBlacklist(player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
 					}
 				}
 			}
-			scope.InteractiveVideo.is_show_all_active = true;
-			pub.clearCommentsWhereTimeEndEndded(scope.InteractiveVideo.last_time);
+			player_data.is_show_all_active = true;
+			pub.clearCommentsWhereTimeEndEndded(player_id, player_data.last_time);
 		}
 		else
 		{
-			scope.InteractiveVideo.is_show_all_active = false;
-			pub.replaceCommentsAfterSeeking(scope.InteractiveVideo.last_time);
+			player_data.is_show_all_active = false;
+			pub.replaceCommentsAfterSeeking(player_data.last_time, player_id);
 		}
 	};
 
-	pub.rebuildCommentsViewIfShowAllIsActive = function()
+	pub.rebuildCommentsViewIfShowAllIsActive = function(player_id)
 	{
-		var j_object, position, height;
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+		let j_object, position, height;
 
-		if(scope.InteractiveVideo.is_show_all_active === true)
+		if(player_data.is_show_all_active === true)
 		{
-			j_object = $('#ilInteractiveVideoComments');
+			j_object = $('#ilInteractiveVideoComments_' + player_id);
 			position = j_object.scrollTop();
-			height   = $('#ul_scroll').find('li').first().height();
-			scope.InteractiveVideo.is_show_all_active = false;
-			pub.displayAllCommentsAndDeactivateCommentStream(true);
+			height   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id).find('li').first().height();
+			player_data.is_show_all_active = false;
+			pub.displayAllCommentsAndDeactivateCommentStream(true, player_id);
 			j_object.scrollTop(position + height);
 		}
 	};
 
-	pub.loadAllUserWithCommentsIntoFilterList = function()
+	pub.loadAllUserWithCommentsIntoFilterList = function(player_id)
 	{
-		var element;
-		var author_list = pro.getAllUserWithComment();
-		var dropdownList = $('#dropdownMenuInteraktiveList');
-		var reset_elem = '<li><a href="#">' + scope.InteractiveVideo.lang.reset_text + '</a></li><li role="separator" class="divider"></li>';
+		let element;
+		let author_list = pro.getAllUserWithComment(player_id);
+		let drop_down_list = $('#dropdownMenuInteraktiveList_' + player_id);
+		let language = scope.InteractiveVideo.lang;
+		let reset_elem = '<li><a href="#">' + language.reset_text + '</a></li><li role="separator" class="divider"></li>';
 
-		dropdownList.html('');
-		dropdownList.append(reset_elem);
+		drop_down_list.html('');
+		drop_down_list.append(reset_elem);
 		for ( element in author_list) 
 		{
 			element = '<li><a href="#">' + element + '</a></li>';
-			dropdownList.append(element);
+			drop_down_list.append(element);
 		}
 	};
 
@@ -204,36 +220,40 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.preselectActualTimeInVideo = function(seconds)
 	{
-		var obj = pro.secondsToTimeCode(seconds);
-
+		let obj = pro.secondsToTimeCode(seconds);
+//Todo: fix this, this id does not exists anywhere
 		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));
 	};
 
-	pro.isBuildListElementAllowed = function(username)
+	pro.isBuildListElementAllowed = function(player_data, username)
 	{
-		var value = false;
-		if(scope.InteractiveVideo.is_show_all_active === false)
+		let value = false;
+
+		if(player_data.is_show_all_active === false)
 		{
-			if(scope.InteractiveVideo.filter_by_user === false ||
-					(   scope.InteractiveVideo.filter_by_user !== false && 
-						scope.InteractiveVideo.filter_by_user === username
+			if(player_data.filter_by_user === false ||
+					(   player_data.filter_by_user !== false &&
+						player_data.filter_by_user === username
 					)
 				)
 			{
 				value = true;
 			}
 		}
+
 		return value;
 	};
 
-	pro.setCorrectAttributeForTimeInCommentAfterPosting = function (id, time)
+	pro.setCorrectAttributeForTimeInCommentAfterPosting = function (comment_id, time, player_id)
 	{
-		var i;
-		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+		let i;
+
+		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 		{
-			if (scope.InteractiveVideo.comments[i].comment_id === id)
+			if (player_data.comments[i].comment_id === comment_id)
 			{
-				scope.InteractiveVideo.comments[i].comment_time_end = time;
+				player_data.comments[i].comment_time_end = time;
 			}
 		}
 	};
@@ -245,7 +265,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.getCSSClassForListElement = function()
 	{
-		var css_class;
+		let css_class;
 
 		if(pri.cssIterator === pri.cssCommentClasses.length)
 		{
@@ -258,27 +278,29 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return css_class;
 	};
 
-	pro.buildCommentTimeHtml = function (time, is_interactive)
+	pro.buildCommentTimeHtml = function (time, is_interactive, player_id)
 	{
-		var display_time 	= time;
+		let display_time = time;
+
 		if(parseInt(is_interactive, 10) === 1)
 		{
 			time = Math.abs(Math.round(time) - 0.1);
 		}
 		return 	'<time class="time"> ' +
-				'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + time + '); return false;">'+
+				'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + time + ', ' + player_id + '); return false;">'+
 				pro.secondsToTimeCode(display_time)  +
 				'</a>' +
 				'</time>' ;
 	};
 
-	pro.buildCommentTimeEndHtml = function (comment)
+	pro.buildCommentTimeEndHtml = function (comment, player_id)
 	{
-		var display_time;
+		let display_time;
+
 		if(comment.comment_time_end === undefined)
 		{
 			display_time 	= comment.comment_time_end;
-			pro.setCorrectAttributeForTimeInCommentAfterPosting(comment.comment_id, display_time);
+			pro.setCorrectAttributeForTimeInCommentAfterPosting(comment.comment_id, display_time, player_id);
 		}
 		else
 		{
@@ -288,7 +310,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		if(display_time > 0)
 		{
 			return 	'<time class="time_end"> - ' +
-					'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + display_time + '); return false;">'+
+					'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + display_time + ', ' + player_id + ');">'+
 					pro.secondsToTimeCode(display_time)  +
 					'</a>' +
 					'</time>' ;
@@ -301,7 +323,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.buildCommentUsernameHtml = function (username, is_interactive)
 	{
-		var name = username;
+		let name = username;
+		let language = scope.InteractiveVideo.lang;
 
 		if(name !== '')
 		{
@@ -310,14 +333,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 		if(parseInt(is_interactive, 10) === 1)
 		{
-			name  = '[' + scope.InteractiveVideo.lang.question_text + ']';
+			name  = '[' + language.question_text + ']';
 		}
 		return 	'<span class="comment_username"> ' + name + '</span>';
 	};
 
 	pro.buildCommentTitleHtml = function (title)
 	{
-		var t = title;
+		let t = title;
 
 		if(t === null || t === undefined)
 		{
@@ -333,7 +356,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.buildCommentReplies = function (replies)
 	{
-		var value = '<span class="comment_replies">';
+		let value = '<span class="comment_replies">';
+
 		if(replies !== undefined && replies.length > 0)
 		{
 			for (var i  = 0; i < replies.length; i++)
@@ -351,11 +375,12 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.appendPrivateHtml = function (is_private)
 	{
-		var private_comment = '';
+		let private_comment = '';
+		let language = scope.InteractiveVideo.lang;
 
 		if(parseInt(is_private, 10) === 1 || is_private === true)
 		{
-			private_comment = ' (' + scope.InteractiveVideo.lang.private_text + ')';
+			private_comment = ' (' + language.private_text + ')';
 		}
 		else
 		{
@@ -366,7 +391,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.buildCommentTagsHtml = function (tags)
 	{
-		var comment_tags    = '';
+		let comment_tags    = '';
+
 		if(tags == null || tags == '')
 		{
 			comment_tags = '';
@@ -378,25 +404,27 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return '<div class="comment_tags">' + comment_tags + '</div>';
 	};
 
-	pro.getAllUserWithComment = function()
+	pro.getAllUserWithComment = function(player_id)
 	{
-		var i, author_list = [];
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+		let i, author_list = [];
 
-		for (i  = 0; i < Object.keys(scope.InteractiveVideo.comments).length; i++)
+		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 		{
-			if ($.inArray( scope.InteractiveVideo.comments[i].user_name, author_list ) === -1)
+			if ($.inArray( player_data.comments[i].user_name, author_list ) === -1)
 			{
-				author_list[scope.InteractiveVideo.comments[i].user_name] = scope.InteractiveVideo.comments[i].user_name;
+				author_list[player_data.comments[i].user_name] = player_data.comments[i].user_name;
 			}
 		}
 		return author_list;
 	};
 
-	pro.buildCommentUserImage = function(comment) 
+	pro.buildCommentUserImage = function(player_data, comment) 
 	{
-		var image = '';
-		var user_id = comment.user_id;
-		var decode = JSON.parse(il.InteractiveVideo.user_image_cache);
+		let image = '';
+		let user_id = comment.user_id;
+		let decode = JSON.parse(player_data.user_image_cache);
+
 		if(comment.user_id !== undefined && user_id in decode)
 		{
 			image = '<img src="' + decode[user_id] + '"/>';
@@ -416,17 +444,18 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	
 	pro.secondsToTimeCode = function(time) 
 	{
-		var obj = pro.convertSecondsToTimeObject(time);
-		var h = pro.fillWithZeros(obj.hours);
-		var m = pro.fillWithZeros(obj.minutes);
-		var s = pro.fillWithZeros(obj.seconds);
+		let obj = pro.convertSecondsToTimeObject(time);
+		let h = pro.fillWithZeros(obj.hours);
+		let m = pro.fillWithZeros(obj.minutes);
+		let s = pro.fillWithZeros(obj.seconds);
+
 		return h + ':' + m + ':' + s;
 	};
 
 	pro.fillWithZeros = function(number)
 	{
 		number = parseInt(number, 10);
-		if(number == 0)
+		if(number === 0)
 		{
 			return '00';
 		}
@@ -445,7 +474,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	
 	pro.convertSecondsToTimeObject = function(time)
 	{
-		var obj = {};
+		let obj = {};
 
 		obj.hours  =  Math.floor(time / 3600) % 24;
 		obj.minutes = Math.floor(time / 60) % 60;

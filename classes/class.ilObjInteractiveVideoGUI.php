@@ -3,6 +3,7 @@
 require_once 'Services/Repository/classes/class.ilObjectPluginGUI.php';
 require_once 'Services/PersonalDesktop/interfaces/interface.ilDesktopItemHandling.php';
 require_once 'Services/Form/classes/class.ilPropertyFormGUI.php';
+require_once 'Services/UIComponent/Button/classes/class.ilLinkButton.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactoryGUI.php';
@@ -28,24 +29,16 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilInteractiveVideoF
  */
 class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopItemHandling
 {
-	/**
-	 * @var ilCtrl
-	 */
+	/** @var ilCtrl */
 	protected $ctrl;
 
-	/**
-	 * @var ilObjInteractiveVideo $object
-	 */
+	/** @var ilObjInteractiveVideo $object */
 	public $object;
 	
-	/**
-	 * @var $objComment ilObjComment
-	 */
+	/** @var $objComment ilObjComment */
 	public $objComment;
 
-	/**
-	 * @var
-	 */
+	/** @var ilPlugin */
 	public $plugin;
 
 	/**
@@ -192,13 +185,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					
 					case 'updateProperties':
 					case 'editProperties':
+					case 'addSubtitle':
+					case 'postAddSubtitle':
 					case 'confirmDeleteComment':
+					case 'confirmRemoveSubtitle':
 					case 'deleteComment': 
 					case 'editComments':  
 				    case 'editQuestion': 
 					case 'confirmUpdateQuestion':
 				    case 'insertQuestion':
                     case 'completeCsvExport':
+                    case 'removeSubtitle ':
                     $this->checkPermission('write');
 						$this->$cmd();
 						break;
@@ -237,6 +234,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->addHeaderAction();
 	}
 
+	/**
+	 * @throws ilTemplateException
+	 */
 	public function showContent()
 	{
 		/**
@@ -244,10 +244,37 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $ilTabs ilTabsGUI
 		 */
 		global $tpl, $ilTabs;
-		$plugin = ilInteractiveVideoPlugin::getInstance();
-
 		$ilTabs->activateTab('content');
 
+		$video_tpl = $this->buildContentTemplate();
+
+		$tpl->setContent($video_tpl->get());
+	}
+
+	/**
+	 * @return string
+	 * @throws ilTemplateException
+	 */
+	public function getContentAsString()
+	{
+		$video_tpl = $this->buildContentTemplate();
+		return $video_tpl->get();
+	}
+
+	/**
+	 * @return ilTemplate
+	 * @throws ilTemplateException
+	 */
+	protected function buildContentTemplate()
+	{
+		/**
+		 * @var $tpl    ilTemplate
+		 */
+		global $tpl;
+		$plugin = ilInteractiveVideoPlugin::getInstance();
+
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoUniqueIds.php';
+		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $plugin->getDirectory());
 
 		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
@@ -258,16 +285,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$video_tpl->setCurrentBlock('task_description');
 			$video_tpl->setVariable('TASK_TEXT',$plugin->txt('task'));
 			$video_tpl->setVariable('TASK_DESCRIPTION', $this->object->getTask());
+			$video_tpl->setVariable('PLAYER_ID', $player_id);
 			$video_tpl->parseCurrentBlock();
 		}
 
 		$this->addBackButtonIfParameterExists($video_tpl);
 
-		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());
+		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer($player_id)->get());
 		$form = new ilPropertyFormGUI();
 		$ckeditor = new ilTextAreaInputCkeditorGUI('comment_text', 'comment_text');
 		$form->addItem($ckeditor);
 		$video_tpl->setVariable('COMMENT_TEXT', $form->getHTML());
+		$video_tpl->setVariable('PLAYER_ID', $player_id);
 		$this->objComment = new ilObjComment();
 		$this->objComment->setObjId($this->object->getId());
 		$this->objComment->setIsPublic($this->object->isPublic());
@@ -282,13 +311,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
 		$video_tpl->setVariable('SHOW_ALL_COMMENTS', $plugin->txt('show_all_comments'));
 		$video_tpl->setVariable('AUTHOR_FILTER', $plugin->txt('author_filter'));
-		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig());
+		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(), false));
 
 		if($this->object->getDisableComment() != 1)
 		{
 			$comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $plugin->getDirectory());
+			$comments_tpl->setVariable('PLAYER_ID', $player_id);
 			$comments_tpl->setVariable('COMMENT_TIME_END', $plugin->txt('time_end'));
-			$picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end');
+			$picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end_' . $player_id);
 			$comments_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
 			$comments_tpl->setVariable('TXT_COMMENT', $plugin->txt('insert_comment'));
 			$comments_tpl->setVariable('TXT_ENDTIME_WARNING', $plugin->txt('endtime_warning'));
@@ -300,8 +330,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$comments_tpl->setVariable('TXT_CANCEL', $plugin->txt('cancel'));
 			$video_tpl->setVariable("COMMENTS_FORM", $comments_tpl->get());
 		}
-
-		$tpl->setContent($video_tpl->get());
+		return $video_tpl;
 	}
 
 	/**
@@ -410,13 +439,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question->setVariable('QUESTION_ID', $question_id);
 		return $question->get();
 	}
-	
-
 
 	/**
+	 * @param      $player_id
+	 * @param      $video_type
+	 * @param bool $edit_screen
 	 * @return string
+	 * @throws ilTemplateException
 	 */
-	protected function initPlayerConfig($edit_screen = false)
+	protected function initPlayerConfig($player_id, $video_type, $edit_screen = false)
 	{
 		/**
 		 * $ilUser ilObjUser
@@ -433,14 +464,21 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerComments.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerFunctions.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstract.js');
+		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerResume.js');
+		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoSubtitle.js');
 		ilTextAreaInputCkeditorGUI::appendJavascriptFile();
 
 		$config_tpl = new ilTemplate("tpl.video_config.html", true, true, $plugin->getDirectory());
-		$config_tpl->setVariable('VIDEO_FINISHED_POST_URL', $this->ctrl->getLinkTarget($this, 'postVideoFinishedPerAjax', '', true, false));
-		$config_tpl->setVariable('VIDEO_STARTED_POST_URL', $this->ctrl->getLinkTarget($this, 'postVideoStartedPerAjax', '', true, false));
-		$config_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTarget($this, 'getQuestionPerAjax', '', true, false));
-		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTarget($this, 'postAnswerPerAjax', '', true, false));
-		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postComment', '', true, false));
+		$config_tpl->setVariable('PLAYER_ID', $player_id);
+		$org_ref_id = (int) $_GET['ref_id'];
+		$this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'ref_id', $this->ref_id);
+		$config_tpl->setVariable('PLAYER_TYPE', $video_type);
+		$config_tpl->setVariable('VIDEO_FINISHED_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postVideoFinishedPerAjax', '', true, false));
+		$config_tpl->setVariable('VIDEO_STARTED_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postVideoStartedPerAjax', '', true, false));
+		$config_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'getQuestionPerAjax', '', true, false));
+		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postAnswerPerAjax', '', true, false));
+		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postComment', '', true, false));
+		$this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'ref_id', $org_ref_id);
 		$config_tpl->setVariable('SEND_BUTTON', $plugin->txt('send'));
 		$config_tpl->setVariable('CLOSE_BUTTON', $plugin->txt('close'));
 		$config_tpl->setVariable('FEEDBACK_JUMP_TEXT', $plugin->txt('feedback_jump_text'));
@@ -458,6 +496,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
 		$config_tpl->setVariable('AUTO_RESUME_AFTER_QUESTION', $this->object->isAutoResumeAfterQuestion());
 		$config_tpl->setVariable('FIXED_MODAL', $this->object->isFixedModal());
+		$config_tpl->setVariable('HAS_TRACKS', $this->getSubtitleDataAndFilesForJson());
 		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
@@ -502,6 +541,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
 		$config_tpl->setVariable('COMMENTS', json_encode($comments));
 		$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode($image_cache));
+		$config_tpl->setVariable('INTERACTIVE_VIDEO_REF_ID', $this->object->getRefId());
+		$config_tpl->setVariable('INTERACTIVE_INSTALLATION_CLIENT_ID', CLIENT_ID);
 
 		return $config_tpl->get();
 	}
@@ -740,7 +781,226 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->edit();
 	}
 
+	protected function getSubtitleDataAndFilesForJson(){
+		$data = array();
+		$subtitle_data = $this->object->getSubtitleData();
+		$subtitle_files = $this->getSubtitleFiles();
+		$dir  = $this->getPathForSubtitleFiles();
+
+		if(is_array($subtitle_files) && count($subtitle_files) > 0) {
+			foreach($subtitle_files as $key => $name){
+				$track = new stdClass();
+				$track->label = $subtitle_data[$name]['l'];
+				$track->src = $dir . $name;
+				$track->srclang = $subtitle_data[$name]['s'];
+				$data[] = $track;
+			}
+		}
+		#print_r($data); exit;
+		return json_encode($data);
+	}
+
 	/**
+	 * @return string
+	 */
+	protected function getPathForSubtitleFiles()
+	{
+		return ilUtil::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/';
+	}
+
+	public function addSubtitle()
+	{
+		/**
+		 * @var $ilTabs ilTabsGUI
+		 */
+		global $ilTabs, $tpl;
+
+		$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
+		$ilTabs->addSubTab('addSubtitle', $this->plugin->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
+
+		$ilTabs->activateTab('editProperties');
+		$ilTabs->activateSubTab('addSubtitle');
+
+		$ilCtrl = $this->ctrl;
+
+		$form = new ilPropertyFormGUI();
+		$form->setTarget("_top");
+		$form->setFormAction($ilCtrl->getFormAction($this, "update"));
+		$form->setTitle($this->plugin->txt("subtitle"));
+		
+		$file = new ilFileInputGUI($this->plugin->txt('subtitle'), 'subtitle');
+		$file->setSuffixes(array('vtt'));
+		$form->addItem($file);
+
+		$subtitle_data = $this->object->getSubtitleData();
+		$subtitle_files = $this->getSubtitleFiles();
+
+		if(is_array($subtitle_files) && count($subtitle_files) > 0) {
+			foreach($subtitle_files as $name){
+				$title = new ilNonEditableValueGUI();
+				$title->setTitle($this->lng->txt('file'));
+				$title->setValue($name);
+
+				$short = new ilTextInputGUI($this->plugin->txt('short_title'), 's#' . $name);
+				$short_title = '';
+				if(array_key_exists($name, $subtitle_data)) {
+					$short_title = $subtitle_data[$name]['s'];
+				}
+				$short->setValue($short_title);
+				$short->setRequired(true);
+				$title->addSubItem($short);
+
+				$long = new ilTextInputGUI($this->plugin->txt('long_title'), 'l#' . $name);
+				$long_title = '';
+				if(array_key_exists($name, $subtitle_data)) {
+					$long_title = $subtitle_data[$name]['l'];
+				}
+				$long->setValue($long_title);
+				$title->addSubItem($long);
+
+				$button = ilLinkButton::getInstance();
+				$button->setCaption("remove");
+				$ilCtrl->setParameterByClass('ilObjInteractiveVideoGUI', "remove_subtitle_file", $name);
+				$remove_link = $ilCtrl->getLinkTargetByClass('ilObjInteractiveVideoGUI',  "confirmRemoveSubtitle");
+				$ilCtrl->setParameterByClass('ilObjInteractiveVideoGUI', "remove_subtitle_file", "");
+				$button->setUrl($remove_link);
+
+				$title->setInfo($button->render());
+				$form->addItem($title);
+			}
+		}
+
+
+		$form->addCommandButton('postAddSubtitle', $this->lng->txt('save'));
+		$form->addCommandButton('editProperties', $this->lng->txt('cancel'));
+		$tpl->setContent($form->getHTML());
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function getSubtitleFiles(){
+		$sub_titles = array();
+		$directory = $this->getPathForSubtitleFiles();
+
+		if(file_exists($directory)) {
+			if ($handle = opendir($directory)) {
+				while (false !== ($entry = readdir($handle))) {
+					if ($entry != "." && $entry != "..") {
+						$sub_titles[$entry] = $entry;
+					}
+				}
+			}
+			closedir($handle);
+		}
+
+		return $sub_titles;
+	}
+
+	/**
+	 */
+	protected function removeSubtitle(){
+
+		$filename = ilUtil::stripSlashes($_POST['remove_subtitle_file']);
+		$file = ilUtil::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/' . $filename;
+
+		if(file_exists($file)) {
+			unlink($file);
+			$this->object->removeSubtitleData($filename);
+			ilUtil::sendSuccess($this->plugin->txt('subtitle_removed'), true);
+			$this->ctrl->redirect($this, 'addSubtitle');
+			
+		}
+
+	}
+
+	/**
+	 *
+	 */
+	public function confirmRemoveSubtitle()
+	{
+		/**
+		 * @var $tpl    ilTemplate
+		 * @var $ilTabs ilTabsGUI
+		 */
+		global $tpl, $ilTabs, $ilCtrl;
+
+		$ilTabs->activateTab('editProperties');
+		$ilTabs->activateSubTab('addSubtitle');
+
+		require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
+		$confirm = new ilConfirmationGUI();
+		$confirm->setFormAction($this->ctrl->getFormAction($this, 'removeSubtitle'));
+		$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_delete_subtitle'));
+		$confirm->setConfirm($this->lng->txt('confirm'), 'removeSubtitle');
+		$confirm->setCancel($this->lng->txt('cancel'), 'addSubtitle');
+
+		$filename = ilUtil::stripSlashes($_GET['remove_subtitle_file']);
+		$confirm->addItem('remove_subtitle_file', $filename, $filename);
+		$tpl->setContent($confirm->getHTML());
+
+	}
+
+	public function postAddSubtitle()
+	{
+		if(array_key_exists('tmp_name', $_FILES['subtitle'])
+			&& $_FILES['subtitle']['tmp_name'] != ''
+			&& array_key_exists('name', $_FILES['subtitle'])
+			&& $_FILES['subtitle']['name'] != ''
+			&& file_exists($_FILES['subtitle']['tmp_name']))
+		{
+			$tmp_name = ilUtil::stripSlashes($_FILES['subtitle']['tmp_name']);
+			$file_name = ilUtil::stripSlashes($_FILES['subtitle']['name']);
+            $file_name = str_replace(' ', '_', $file_name);
+			$part			= 'xvid_' . $this->object->getId() . '/subtitles/';
+			$path			= xvidUtils::ensureFileSavePathExists($part);
+			$new_file		= $path.$file_name;
+			if(@copy($tmp_name, $new_file))
+			{
+				chmod($new_file, 0770);
+			}
+		
+		}
+		$data_short = array();
+		$data_long  = array();
+		foreach ($_POST as $name => $value) {
+
+			if (substr($name, 0, 2) === "l#") {
+				$data_long = $this->fillDataForSubtitles($name, $value, $data_long);
+			} elseif (substr($name, 0, 2) === "s#") {
+				$data_short = $this->fillDataForSubtitles($name, $value, $data_short);
+				$short_title = $data_short;
+				array_pop($short_title);
+				if($short_title == '') {
+					ilUtil::sendFailure(ilInteractiveVideoPlugin::getInstance()->txt('you_need_a_short_title'), true);
+					$this->ctrl->redirect($this, 'addSubtitle');
+				}
+			}
+		}
+		$this->object->saveSubtitleData($data_short, $data_long);
+		
+		$this->addSubtitle();
+	}
+
+	/**
+	 * @param $name
+	 * @param $value
+	 * @param $data
+	 * @return bool|null|string|string[]
+	 */
+	protected function fillDataForSubtitles($name, $value, $data)
+	{
+		$name  = ilUtil::stripSlashesRecursive($name);
+		$value = ilUtil::stripSlashesRecursive($value);
+
+		$cut             = substr($name, 2);
+		$cut             = preg_replace('/_vtt$/', '.vtt', $cut);
+		$cut             = preg_replace('/_srt$/', '.srt', $cut);
+		$data[$cut]      = $value;
+		return $data;
+	}
+
+	/**ilMediaPoolPresentationGUI
 	 * @return ilPropertyFormGUI
 	 */
 	public function initEditForm()
@@ -898,7 +1158,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $ilTabs   ilTabsGUI
 		 * @var $ilAccess ilAccessHandler
 		 */
-		global $ilTabs, $ilAccess;
+		global $ilTabs, $ilAccess, $ilCtrl;
 
 		if($ilAccess->checkAccess('read', '', $this->object->getRefId()))
 		{
@@ -910,6 +1170,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
 		{
 			$ilTabs->addTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
+			if($ilCtrl->getCmd() === 'editProperties')
+			{
+				$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
+				if( ! $this->object->getVideoSourceObject($this->object->getSourceId())->hasOwnPlayer()) {
+					$ilTabs->addSubTab('addSubtitle', $this->plugin->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
+				}
+			}
 		}
 		
 		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
@@ -1402,7 +1669,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			ilUtil::sendFailure($plugin->txt('invalid_comment_ids'));
 		}
-		$this->ctrl->redirect($this, 'editMyComment');
+		$this->ctrl->redirect($this, 'editMyComments');
 	}
 
 	public function postTutorComment()
@@ -1445,15 +1712,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	public function updateComment()
 	{
+		$valid = false;
 		$form = $this->initCommentForm();
 
-		if($form->checkInput())
-		{
+		if($form->checkInput()) {
+			$valid            = true;
+			$comment_time     = $form->getInput('comment_time');
+			$comment_time_end = $form->getInput('comment_time_end');
+			if ($comment_time > $comment_time_end) {
+				$valid = false;
+				ilUtil::sendFailure($this->plugin->txt('endtime_warning'));
+			}
 			$comment_id = $form->getInput('comment_id');
-			if($comment_id > 0)
-			{
+			if ($comment_id > 0) {
 				$this->objComment = new ilObjComment($comment_id);
-
 			}
 			$this->objComment->setCommentText($form->getInput('comment_text'));
 			// $this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
@@ -1461,13 +1733,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setInteractive(0);
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
 
-			// calculate seconds
-			$comment_time = $form->getInput('comment_time');
 			$this->objComment->setCommentTime($comment_time);
-			$comment_time_end = $form->getInput('comment_time_end');
 			$this->objComment->setCommentTimeEnd($comment_time_end);
+		}
+		if($valid){
 			$this->objComment->update();
-
 			$this->editComments();
 		}
 		else
@@ -1501,7 +1771,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
 		$object->addPlayerElements($tpl);
 
-		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer()->get());
+		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoUniqueIds.php';
+		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
+		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer($player_id)->get());
 
 		$video_tpl->setVariable('FORM_ACTION', $this->ctrl->getFormAction($this,'showTutorInsertForm'));
 
@@ -1510,6 +1782,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 
 		$video_tpl->setVariable('TXT_INS_COMMENT', $plugin->txt('insert_comment'));
+		$video_tpl->setVariable('PLAYER_ID', $player_id);
 		$video_tpl->setVariable('TXT_INS_QUESTION', $plugin->txt('insert_question'));
 
 		require_once("./Services/UIComponent/Modal/classes/class.ilModalGUI.php");
@@ -1520,7 +1793,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postTutorComment', '', false, false));
 
-		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig(true));
+		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(),true));
 		global $ilUser;
 		$this->object->getLPStatusForUser($ilUser->getId());
 		$tbl_data = $this->object->getCommentsTableData(true, true);

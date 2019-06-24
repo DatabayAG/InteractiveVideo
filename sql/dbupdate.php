@@ -902,3 +902,40 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'fixed_modal'))
 	);
 }
 ?>
+<#49>
+<?php
+if(!$ilDB->tableExists('rep_robj_xvid_subtitle'))
+{
+	if(!$ilDB->tableExists('rep_robj_xvid_subtitle'))
+	{
+		$fields = array(
+			'obj_id'     => array(
+				'type'    => 'integer',
+				'length'  => '4',
+				'notnull' => true
+			),
+			'file_name'         => array(
+				'type'    => 'text',
+				'length'  => '1000',
+				'notnull' => false,
+				'default' => null
+			),
+			'short_title'   => array(
+				'type'    => 'text',
+				'length'  => '1000',
+				'notnull' => false,
+				'default' => null
+			),
+			'long_title'     => array(
+				'type'    => 'text',
+				'length'  => '1000',
+				'notnull' => false,
+				'default' => null
+			)
+		);
+
+		$ilDB->createTable('rep_robj_xvid_subtitle', $fields);
+		$ilDB->addPrimaryKey('rep_robj_xvid_subtitle', array('obj_id', 'short_title'));
+	}
+}
+?>
