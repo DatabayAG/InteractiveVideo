@@ -7,6 +7,11 @@ The 2.x version of the InteractiveVideo Plugin is only compatible with ILIAS ver
 ## Important notice
 If you upgrade to the 2.x version of the InteractiveVideo you can not go back to version 1.x, because there are migration steps which alter the database schema.
 
+## Changes in Version 2.2.21
+* Auto-resume
+* Support of subtitles, if own player is used
+* New Modal settings 
+
 ## Changes in Version 2.x
 * Youtube Videos
 * Source URL to videos
@@ -61,3 +66,7 @@ The InteractiveVideo Plugin for ILIAS gives you the possibility to create a vide
 
 ## Interactive Video Modal options
 ![Modal settings](https://databayag.github.io/InteractiveVideo/2.0.18/modal_options.png)
+
+## Interactive Video Subtitles
+![Subtitle](https://databayag.github.io/InteractiveVideo/2.0.21/subtitle.png)
+
