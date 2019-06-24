@@ -9,8 +9,8 @@ If you upgrade to the 2.x version of the InteractiveVideo you can not go back to
 
 ## Changes in Version 2.2.21
 * Auto-resume
-* Support of subtitles, if own player is used
-* New Modal settings 
+* [Support of subtitles, if own player is used](https://github.com/DatabayAG/InteractiveVideo#interactive-video-subtitles)
+* [New Modal settings](https://github.com/DatabayAG/InteractiveVideo#interactive-video-modal-options) 
 
 ## Changes in Version 2.x
 * Youtube Videos
