@@ -99,10 +99,10 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pro.disableAllOtherInstances = function(player_id)
 	{
-		$.each(pub.config, function (instance_id, value) {
+		$.each(pub.config, function (instance_id, player) {
 			if(instance_id.indexOf('iv_') !== -1){
 				if(player_id !== instance_id) {
-					value.pauseCallback();
+					player.pauseCallback();
 				}
 			}
 		});
