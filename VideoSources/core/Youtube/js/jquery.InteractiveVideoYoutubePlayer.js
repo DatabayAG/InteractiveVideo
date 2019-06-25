@@ -13,17 +13,17 @@ var player = null,
 function onYouTubeIframeAPIReady() {
 	$.each(il.InteractiveVideo, function (player_id, value) {
 		if (value.hasOwnProperty("player_type") && value.player_type === "ytb") {
-			let player = new YT.Player(player_id, {
+			var player = new YT.Player(player_id, {
 				videoId:           interactiveVideoYoutubeId,
 				events:            {
 					'onStateChange': onPlayerStateChange,
 					'onReady':       function (media) {
 						il.InteractiveVideoPlayerAbstract.config[player_id] = {
-							pauseCallback           : (function (){player.pauseVideo();}),
-							playCallback            : (function (){player.playVideo();}),
-							durationCallback        : (function (){return player.getDuration();}),
-							currentTimeCallback     : (function (){return player.getCurrentTime();}),
-							setCurrentTimeCallback  : (function (time){player.seekTo(time);})
+							pauseCallback           : (function (){player.pauseVideo(player_id);}),
+							playCallback            : (function (){player.playVideo(player_id);}),
+							durationCallback        : (function (){return player.getDuration(player_id);}),
+							currentTimeCallback     : (function (){return player.getCurrentTime(player_id);}),
+							setCurrentTimeCallback  : (function (time){player.seekTo(time, player_id);})
 						};
 						il.InteractiveVideoPlayerFunction.appendInteractionEvents(player_id);
 						il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration(player_id));

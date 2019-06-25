@@ -240,9 +240,8 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	pro.showQuestionInteractionForm = function(comment_id, array, player) {
 		pub.comment_id = comment_id;
 		pub.QuestionObject = array;
-		pub.QuestionObject.player = $('#' + player)[0];
+		pub.QuestionObject.player = player
 		//Todo: fix this, fullscreen isn't working
-		console.log(player, 'player', pub.QuestionObject.player.isFullScreen)
 		pro.buildQuestionForm(player);
 		if (pub.QuestionObject.player.isFullScreen === true) {
 			pub.QuestionObject.player.exitFullScreen();
