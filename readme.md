@@ -17,14 +17,6 @@ If you upgrade to the 2.x version of the InteractiveVideo you can not go back to
 * [New Modal settings](https://github.com/DatabayAG/InteractiveVideo#interactive-video-modal-options) 
 * [Complete Changelog](https://github.com/DatabayAG/InteractiveVideo/blob/master/CHANGELOG.md)
 
-## Changes in Version 2.x
-* Youtube Videos
-* Source URL to videos
-* Possibility to create plugins for more video sources
-* Learning Progress
-* HTML editor for comments, questions and usage of Latex possible
-* [Complete Changelog](https://github.com/DatabayAG/InteractiveVideo/blob/master/CHANGELOG.md)
-
 ## Repositories connected to the InteractiveVideo Plugin
 * [COPage Plugin for InteractiveVideo References in LearningModules](https://github.com/DatabayAG/InteractiveVideoReference)
 * [Video Source Plugin for Vimeo](https://github.com/DatabayAG/InteractiveVideoVimeo)
