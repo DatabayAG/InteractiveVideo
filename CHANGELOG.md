@@ -1,3 +1,6 @@
+# 2.2.23
+* It is now possible with the use of the [COPage Plugin](https://github.com/DatabayAG/InteractiveVideoReference) to include interactive videos in learning modules
+
 # 2.0.20
 1. Auto resume if re-entering the video
 2. Support for subtitles
