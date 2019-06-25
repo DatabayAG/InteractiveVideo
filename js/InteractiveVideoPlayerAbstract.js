@@ -31,6 +31,8 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 			il.InteractiveVideoPlayerResume.checkForResumeValue(player_id);
 			il.InteractiveVideoPlayerFunction.triggerVideoStarted(player_id);
 		}
+		
+		pro.disableAllOtherInstances(player_id);
 
 		if (typeof pub.config[player_id].playCallback === 'function') {
 			pub.config[player_id].playCallback();
@@ -93,6 +95,17 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		{
 			il.InteractiveVideoPlayerFunction.finishAndReturnToReferencePoint();
 		}
+	};
+
+	pro.disableAllOtherInstances = function(player_id)
+	{
+		$.each(pub.config, function (instance_id, value) {
+			if(instance_id.indexOf('iv_') !== -1){
+				if(player_id !== instance_id) {
+					value.pauseCallback();
+				}
+			}
+		});
 	};
 
 	pub.protect = pro;
