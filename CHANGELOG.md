@@ -1,4 +1,4 @@
-# 2.2.23
+# 2.0.23
 1. It is now possible with the use of the [COPage Plugin](https://github.com/DatabayAG/InteractiveVideoReference) to include interactive videos in learning modules
 
 # 2.0.20
