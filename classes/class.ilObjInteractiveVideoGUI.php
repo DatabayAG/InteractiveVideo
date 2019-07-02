@@ -407,7 +407,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		else
 		{
 			$answers = array();
-			if(is_array($_POST) && array_key_exists('answer', $_POST) && sizeof($_POST['answer'] > 0))
+			if(is_array($_POST) && array_key_exists('answer', $_POST) && sizeof($_POST['answer']) > 0)
 			{
 				$post_answers = ilUtil::stripSlashesRecursive($_POST['answer']);
 				foreach($post_answers as $key => $value)
