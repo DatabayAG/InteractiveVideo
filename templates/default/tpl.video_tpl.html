@@ -1,4 +1,4 @@
-<nav class="ilToolbar navbar navbar-default yamm " role="navigation" id="2">
+<nav class="ilToolbar navbar navbar-default yamm {LIGHT_VERSION} " role="navigation" id="2">
 	<div class="container-fluid interativeVideoNavHeader">
 		<!-- BEGIN return_link -->
 		<ul class="ilToolbarItems nav navbar-nav">
@@ -47,7 +47,7 @@
 	</div>
 </nav>
 <div class="row">
-	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+	<div class="col-xs-12 {IV_BOOTSTRAP_CLASS_IF_NOT_LIGHT_VERSION}">
 		<!-- BEGIN task_description -->
 		<div class=ilFormHeader">
 			<h3 class="ilHeader" id="task_interaction_{PLAYER_ID}"><span id="task_icon_{PLAYER_ID}" class="task_icon arrow_down"></span><span class="task_text">{TASK_TEXT}</span></h3>
@@ -60,7 +60,7 @@
 		{COMMENTS_FORM}
 	</div>
 
-	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 {LIGHT_VERSION}">
 		<div class=ilFormHeader">
 			<h3 class="ilHeader">{TXT_COMMENTS}</h3>
 		</div>

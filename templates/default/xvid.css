@@ -428,3 +428,7 @@ body.cke_editable{
 .mejs-captions-layer.mejs-layer{
     width: 100% !important;
 }
+
+.iv_light_version{
+    display:none !important;
+}

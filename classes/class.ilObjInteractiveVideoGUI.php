@@ -251,21 +251,23 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($video_tpl->get());
 	}
 
-	/**
-	 * @return string
-	 * @throws ilTemplateException
-	 */
-	public function getContentAsString()
+    /**
+     * @param bool $light_version
+     * @return string
+     * @throws ilTemplateException
+     */
+	public function getContentAsString($light_version = false)
 	{
-		$video_tpl = $this->buildContentTemplate();
+		$video_tpl = $this->buildContentTemplate($light_version);
 		return $video_tpl->get();
 	}
 
-	/**
-	 * @return ilTemplate
-	 * @throws ilTemplateException
-	 */
-	protected function buildContentTemplate()
+    /**
+     * @param bool $light_version
+     * @return ilTemplate
+     * @throws ilTemplateException
+     */
+	protected function buildContentTemplate($light_version = false)
 	{
 		/**
 		 * @var $tpl    ilTemplate
@@ -292,6 +294,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->addBackButtonIfParameterExists($video_tpl);
 
 		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer($player_id)->get());
+		if( ! $light_version) {
+            $video_tpl->setVariable('IV_BOOTSTRAP_CLASS_IF_NOT_LIGHT_VERSION', 'col-sm-6 col-md-6 col-lg-6');
+        }
 		$form = new ilPropertyFormGUI();
 		$ckeditor = new ilTextAreaInputCkeditorGUI('comment_text', 'comment_text');
 		$form->addItem($ckeditor);
@@ -309,11 +314,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$modal->setBody('');
 		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
 		$video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
+		if($light_version) {
+            $video_tpl->setVariable('LIGHT_VERSION', 'iv_light_version');
+        }
 		$video_tpl->setVariable('SHOW_ALL_COMMENTS', $plugin->txt('show_all_comments'));
 		$video_tpl->setVariable('AUTHOR_FILTER', $plugin->txt('author_filter'));
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(), false));
 
-		if($this->object->getDisableComment() != 1)
+		if($this->object->getDisableComment() != 1 && ! $light_version)
 		{
 			$comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $plugin->getDirectory());
 			$comments_tpl->setVariable('PLAYER_ID', $player_id);
