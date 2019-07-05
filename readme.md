@@ -9,6 +9,7 @@ If you upgrade to the 2.x version of the InteractiveVideo you can not go back to
 
 ## Changes in Version 2.0.23
 * It is now possible with the use of the [COPage Plugin](https://github.com/DatabayAG/InteractiveVideoReference) to include interactive videos in learning modules
+* **Important** Please ensure you upgrade the video plugins (in the folder `VideoSources/plugin`) if you use any.
 * [Complete Changelog](https://github.com/DatabayAG/InteractiveVideo/blob/master/CHANGELOG.md)
 
 ## Changes in Version 2.0.21
