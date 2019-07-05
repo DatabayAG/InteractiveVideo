@@ -922,7 +922,7 @@ if(!$ilDB->tableExists('rep_robj_xvid_subtitle'))
 			),
 			'short_title'   => array(
 				'type'    => 'text',
-				'length'  => '1000',
+				'length'  => '500',
 				'notnull' => false,
 				'default' => null
 			),
