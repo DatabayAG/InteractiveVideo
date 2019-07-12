@@ -169,7 +169,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			array('integer'), array($this->getId()));
 
 		$titles = array();
-		if(count($data_short) > 0) {
+		if(is_array($data_short) && count($data_short) > 0) {
 			foreach ($data_short as $name => $value) {
 				$titles[$name]['s'] = $value;
 			}

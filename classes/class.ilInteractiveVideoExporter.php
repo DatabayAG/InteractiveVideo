@@ -142,7 +142,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		$this->xml_writer->xmlStartTag('Questions');
 		$simple_questions = new SimpleChoiceQuestion();
 		$question_ids = $simple_questions->getInteractiveQuestionIdsByObjId($this->obj_id);
-		if(count($question_ids) > 0)
+		if(is_array($question_ids) && count($question_ids) > 0)
 		{
 			foreach($question_ids as $key => $qid)
 			{

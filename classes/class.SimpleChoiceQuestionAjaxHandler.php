@@ -283,7 +283,7 @@ class SimpleChoiceQuestionAjaxHandler
 		{
 			$question_data[] = $row;
 		}
-		if(count($question_data) === 0)
+		if(is_array($question_data) && count($question_data) === 0)
 		{
 			$question_data[] = '';
 		}
