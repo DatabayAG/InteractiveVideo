@@ -1050,12 +1050,12 @@ class SimpleChoiceQuestion
 						'user_id'     => array('integer', $usr_id),
 						'answer_id'   => array('integer', (int)$value)
 					));
-				if(sizeof($answers) !== sizeof($correct_answers) || !in_array($value, $correct_answers))
+				if(is_array($answers) && sizeof($answers) !== sizeof($correct_answers) || !in_array($value, $correct_answers))
 				{
 					$points = 0;
 				}
 			}
-			if(sizeof($answers) == 0)
+			if(is_array($answers) && sizeof($answers) == 0)
 			{
 				$points = 0;
 			}

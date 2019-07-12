@@ -337,7 +337,7 @@ class ilObjComment
 			}
 		}
 		
-		if(sizeof($is_reply_to) > 0)
+		if(is_array($is_reply_to) && sizeof($is_reply_to) > 0)
 		{
 			$comments = $this->sortInReplies($is_reply_to, $comments);
 		}

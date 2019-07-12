@@ -76,11 +76,11 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 	{
 		if($matches = preg_split('/:/', $time))
 		{
-			if(sizeof($matches) == 3)
+			if(is_array($matches) && sizeof($matches) == 3)
 			{
 				return self::escapeHourMinutesSeconds($matches[0], $matches[1], $matches[2]);
 			}
-			else if(sizeof($matches) == 2)
+			else if(is_array($matches) && sizeof($matches) == 2)
 			{
 				return self::escapeHourMinutesSeconds('00', $matches[0], $matches[1]);
 			}

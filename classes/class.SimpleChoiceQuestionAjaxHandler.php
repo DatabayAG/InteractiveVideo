@@ -235,7 +235,7 @@ class SimpleChoiceQuestionAjaxHandler
 
 		#$build_json['neutral_answer']         = $neutral_answer;
 
-		if(sizeof($answered) > 0)
+		if(is_array($answered) && sizeof($answered) > 0)
 		{
 			$build_json['previous_answer'] = $answered;
 			$build_json['feedback']        = json_decode(self::getFeedbackForQuestion($question_id));

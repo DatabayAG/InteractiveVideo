@@ -206,7 +206,7 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	{
 		$regex = '/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/';
 		preg_match_all($regex, $value, $matches);
-		if(sizeof($matches) == 2 && array_key_exists(0, $matches[1]))
+		if(is_array($matches) && sizeof($matches) == 2 && array_key_exists(0, $matches[1]))
 		{
 			return $matches[1][0];
 		}

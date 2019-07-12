@@ -141,7 +141,7 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 	{
 		$seconds = 0;
 		$comment_time = preg_split('/:/', $comment_time);
-		if(sizeof($comment_time) == 3)
+		if(is_array($comment_time) && sizeof($comment_time) == 3)
 		{
 			$seconds = ((int)$comment_time[0] * 3600) + ((int)$comment_time[1] * 60) + (int)$comment_time[2];
 		}
