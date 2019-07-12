@@ -455,7 +455,7 @@ class SimpleChoiceQuestion
 				'neutral_answer' => array('integer', $this->getNeutralAnswer()),
 				'question_image' => array('text', $this->getQuestionImage()),
 			));
-		if(count($_POST['answer']) > 0 && $_POST['question_type'] != self::REFLECTION)
+		if(is_array($_POST['answer']) && count($_POST['answer']) > 0 && $_POST['question_type'] != self::REFLECTION)
 		{
 			foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
 			{

@@ -959,7 +959,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				$usrs_points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId());
 				foreach($usrs_points as $usr_id => $points)
 				{
-					if($points == count($qst))
+					if(is_array($qst) && ($points == count($qst)))
 					{
 						$user_ids[$usr_id] = $usr_id;
 					}
@@ -1039,7 +1039,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		if(is_array($qst) && count($qst) > 0)
 		{
 			$usr_points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId(), $a_user_id);
-			if($usr_points == count($qst))
+			if(is_array($qst) && ($usr_points == count($qst)))
 			{
 				$status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
 			}

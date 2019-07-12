@@ -1403,7 +1403,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
 		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
 
-		if(count($wrong_comment_ids) == 0)
+		if(is_array($wrong_comment_ids) && (count($wrong_comment_ids) == 0))
 		{
 			foreach($post_ids as $comment_id)
 			{
@@ -1431,7 +1431,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
 		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
-		if(count($wrong_comment_ids) == 0)
+		if(is_array($wrong_comment_ids) && (count($wrong_comment_ids) == 0))
 		{
 			$this->object->deleteComments($_POST['comment_id']);
 			ilUtil::sendSuccess(ilInteractiveVideoPlugin::getInstance()->txt('comments_successfully_deleted'));
@@ -1630,7 +1630,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
 		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
 
-		if(count($wrong_comment_ids) == 0)
+		if(is_array($wrong_comment_ids) && (count($wrong_comment_ids) == 0))
 		{
 			foreach($post_ids as $comment_id)
 			{
@@ -1661,14 +1661,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment_ids = array_keys($comments);
 		$user_ids = array_unique($comments);
 
-		if(count($user_ids)> 1)
+		if(is_array($user_ids) && (count($user_ids)> 1))
 		{
 			ilUtil::sendFailure($plugin->txt('invalid_comment_ids'));
 			$this->editMyComments();
 		}
 
 		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
-		if(count($wrong_comment_ids) == 0)
+		if(is_array($wrong_comment_ids) && (count($wrong_comment_ids) == 0))
 		{
 			$this->object->deleteComments($_POST['comment_id']);
 			ilUtil::sendSuccess($plugin->txt('comments_successfully_deleted'));
@@ -2360,7 +2360,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		#$question_id = $question->existQuestionForCommentId($comment_id);
 		$question->setCommentId($comment_id);
 		$question->setType((int)$form->getInput('question_type'));
-		if(count($_FILES) > 0 && array_key_exists('question_image', $_FILES))
+		if(is_array($_FILES) && count($_FILES) > 0 && array_key_exists('question_image', $_FILES))
 		{
 			$this->object->uploadImage($comment_id, $question, $_FILES['question_image']);
 		}
@@ -2538,7 +2538,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$user_ids = $_POST['user_id'];
 
-		if(count($user_ids) > 0)
+		if(is_array($user_ids) && (count($user_ids) > 0))
 		{
 			$simple = new SimpleChoiceQuestion();
 			$simple->deleteUserResults($user_ids, $this->obj_id);
@@ -2622,7 +2622,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$question_ids = $_POST['question_id'];
 
-		if(count($question_ids) > 0)
+		if(is_array($question_ids) && (count($question_ids) > 0))
 		{
 			$simple = new SimpleChoiceQuestion();
 			$simple->deleteQuestionsResults($question_ids);
@@ -2736,7 +2736,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if(is_array($questions_with_points) && count($questions_with_points) > 0)
 		{
 			$points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->obj_id, $ilUser->getId());
-			if( count($questions_with_points) == $points )
+			if(is_array($questions_with_points) && (count($questions_with_points) == $points ))
 			{
 				$this->object->updateLP();
 			}
