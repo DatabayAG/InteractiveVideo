@@ -6,6 +6,7 @@ objs_xvid_duplicate#:#Copy Interactive Videos
 xvid_add#:#Add Interactive Video
 xvid_new#:#Add new Interactive Video
 xvid_read#:#User can read Interactive Video
+xvid_copy#:#User can copy the Interactive Video
 xvid_write#:#User can edit Interactive Video
 xvid_delete#:#User can move or delete Interactive Video
 xvid_edit_permission#:#User can change permission settings
