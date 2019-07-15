@@ -1,3 +1,6 @@
+# 2.0.24
+1. Compatibility to ILIAS 5.4
+
 # 2.0.23
 1. It is now possible with the use of the [COPage Plugin](https://github.com/DatabayAG/InteractiveVideoReference) to include interactive videos in learning modules
 

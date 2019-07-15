@@ -7,16 +7,18 @@ The 2.x version of the InteractiveVideo Plugin is only compatible with ILIAS ver
 ## Important notice
 If you upgrade to the 2.x version of the InteractiveVideo you can not go back to version 1.x, because there are migration steps which alter the database schema.
 
+## Changes in Version 2.0.24
+* Compatibility to ILIAS 5.4
+* [Complete Changelog](https://github.com/DatabayAG/InteractiveVideo/blob/master/CHANGELOG.md)
+
 ## Changes in Version 2.0.23
 * It is now possible with the use of the [COPage Plugin](https://github.com/DatabayAG/InteractiveVideoReference) to include interactive videos in learning modules
 * **Important** Please ensure you upgrade the video plugins (in the folder `VideoSources/plugin`) if you use any.
-* [Complete Changelog](https://github.com/DatabayAG/InteractiveVideo/blob/master/CHANGELOG.md)
 
 ## Changes in Version 2.0.21
 * Auto-resume
 * [Support of subtitles, if own player is used](https://github.com/DatabayAG/InteractiveVideo#interactive-video-subtitles)
 * [New Modal settings](https://github.com/DatabayAG/InteractiveVideo#interactive-video-modal-options) 
-* [Complete Changelog](https://github.com/DatabayAG/InteractiveVideo/blob/master/CHANGELOG.md)
 
 ## Repositories connected to the InteractiveVideo Plugin
 * [COPage Plugin for InteractiveVideo References in LearningModules](https://github.com/DatabayAG/InteractiveVideoReference)
