@@ -4,8 +4,10 @@
 require_once 'Services/Repository/classes/class.ilObjectPluginAccess.php';
 if(version_compare(ILIAS_VERSION_NUMERIC, '5.4.0', '>=')) {
 	require_once 'Services/Conditions/interfaces/interface.ilConditionHandling.php';
+	require_once('./Services/Conditions/classes/class.ilConditionHandler.php');
 } else{
 	require_once 'Services/AccessControl/interfaces/interface.ilConditionHandling.php';
+	require_once 'Services/AccessControl/classes/class.ilConditionHandler.php';
 }
 require_once 'Services/WebAccessChecker/interfaces/interface.ilWACCheckingClass.php';
 
@@ -76,8 +78,6 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 	 */
 	public static function getConditionOperators()
 	{
-		require_once 'Services/AccessControl/classes/class.ilConditionHandler.php';
-
 		return array(
 			ilConditionHandler::OPERATOR_LP
 		);
@@ -88,8 +88,6 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 	 */
 	public static function checkCondition($a_trigger_obj_id, $a_operator, $a_value, $a_usr_id)
 	{
-		require_once 'Services/AccessControl/classes/class.ilConditionHandler.php';
-
 		switch($a_operator)
 		{
 			case ilConditionHandler::OPERATOR_LP:
