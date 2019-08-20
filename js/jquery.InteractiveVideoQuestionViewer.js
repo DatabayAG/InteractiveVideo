@@ -44,10 +44,10 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		{
 			pro.addSelfReflectionLayout(player);
 		}
-		pro.showPreviousAnswer();
+		pro.showPreviousAnswer(player);
 	};
 
-	pro.showPreviousAnswer = function()
+	pro.showPreviousAnswer = function(player)
 	{
 		if(pub.QuestionObject.feedback !== undefined && pub.QuestionObject.previous_answer !== undefined)
 		{
@@ -56,7 +56,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 			});
 			if(pub.QuestionObject.type != 2)
 			{
-				pro.showFeedback(pub.QuestionObject.feedback);
+				pro.showFeedback(pub.QuestionObject.feedback, player);
 			}
 		}
 		il.InteractiveVideoPlayerFunction.refreshMathJaxView();
@@ -154,7 +154,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		pro.appendButtonListener(player);
 	};
 
-	pro.showFeedback = function(feedback) {
+	pro.showFeedback = function(feedback, player) {
 		let modal = $('.modal_feedback');
 		let language = scope.InteractiveVideo.lang;
 
@@ -165,7 +165,8 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 			modal.append('<div class="learning_recommendation"><br/>' + language.learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', language.feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>');
 			$('#jumpToTimeInVideo').on('click', function () {
 				$('#ilQuestionModal').modal('hide');
-				scope.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(feedback.time);
+				var player_id = scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
+				scope.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(feedback.time, player_id);
 			});
 		}
 		if(feedback.feedback_link !== undefined && feedback.feedback_link !== '')
