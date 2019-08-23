@@ -16,7 +16,7 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 				let duration   = scope.InteractiveVideoPlayerAbstract.duration(player_id);
 
 				if ( ! isNaN(saved_time) || ! saved_time >= duration || ! saved_time < 0) {
-					scope.InteractiveVideoPlayerAbstract.setCurrentTime(saved_time, player_id);
+					scope.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(saved_time, player_id);
 					pro.removeExistingKey(player_id);
 				}
 
