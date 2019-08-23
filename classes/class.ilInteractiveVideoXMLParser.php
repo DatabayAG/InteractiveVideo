@@ -116,6 +116,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 			case 'getLearningProgressMode':
 			case 'noCommentStream':
 			case 'noComment':
+			case 'noToolbar':
 			case 'fixedModal':
 			case 'autoResumeAfterQuestion':
 			case 'studentMarker':
@@ -218,6 +219,10 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 				break;
 			case 'noComment':
 				$this->xvid_obj->setDisableComment(trim($this->cdata));
+				$this->cdata = '';
+				break;
+			case 'noToolbar':
+				$this->xvid_obj->setDisableToolbar(trim($this->cdata));
 				$this->cdata = '';
 				break;
 			case 'noCommentStream':

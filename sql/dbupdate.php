@@ -939,3 +939,16 @@ if(!$ilDB->tableExists('rep_robj_xvid_subtitle'))
 	}
 }
 ?>
+<#50>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_toolbar'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'no_toolbar',
+		array(
+			'type'    => 'integer',
+			'length'  => 1,
+			'notnull' => true,
+			'default' => 0)
+	);
+}
+?>

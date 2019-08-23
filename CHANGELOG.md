@@ -1,3 +1,6 @@
+# 2.0.25
+1. Disable toolbar setting
+
 # 2.0.24
 1. Compatibility to ILIAS 5.4
 

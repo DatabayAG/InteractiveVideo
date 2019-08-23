@@ -7,9 +7,12 @@ The 2.x version of the InteractiveVideo Plugin is only compatible with ILIAS ver
 ## Important notice
 If you upgrade to the 2.x version of the InteractiveVideo you can not go back to version 1.x, because there are migration steps which alter the database schema.
 
+## Changes in Version 2.0.25
+* Disable toolbar setting
+* [Complete Changelog](https://github.com/DatabayAG/InteractiveVideo/blob/master/CHANGELOG.md)
+
 ## Changes in Version 2.0.24
 * Compatibility to ILIAS 5.4
-* [Complete Changelog](https://github.com/DatabayAG/InteractiveVideo/blob/master/CHANGELOG.md)
 
 ## Changes in Version 2.0.23
 * It is now possible with the use of the [COPage Plugin](https://github.com/DatabayAG/InteractiveVideoReference) to include interactive videos in learning modules

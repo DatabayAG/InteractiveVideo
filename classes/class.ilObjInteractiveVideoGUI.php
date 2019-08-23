@@ -317,8 +317,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($light_version) {
             $video_tpl->setVariable('LIGHT_VERSION', 'iv_light_version');
         }
-		$video_tpl->setVariable('SHOW_ALL_COMMENTS', $plugin->txt('show_all_comments'));
-		$video_tpl->setVariable('AUTHOR_FILTER', $plugin->txt('author_filter'));
+		if($this->object->getDisableToolbar() == "0"){
+			$video_tpl->setVariable('SHOW_ALL_COMMENTS', $plugin->txt('show_all_comments'));
+			$video_tpl->setVariable('AUTHOR_FILTER', $plugin->txt('author_filter'));
+		}
+
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(), false));
 
 		if($this->object->getDisableComment() != 1 && ! $light_version)
@@ -596,6 +599,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$no_comment = $a_form->getInput('no_comment');
 		$this->object->setDisableComment((int)$no_comment);
 
+		$no_toolbar = $a_form->getInput('no_toolbar');
+		$this->object->setDisableToolbar((int)$no_toolbar);
+
 		$auto_resume = $a_form->getInput('auto_resume');
 		$this->object->setAutoResumeAfterQuestion((int)$auto_resume);
 
@@ -731,6 +737,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$no_comment->setInfo($plugin->txt('no_comment_info'));
 		$a_form->addItem($no_comment);
 
+		$no_toolbar = new ilCheckboxInputGUI($plugin->txt('no_toolbar'), 'no_toolbar');
+		$no_toolbar->setInfo($plugin->txt('no_toolbar_info'));
+		$a_form->addItem($no_toolbar);
+
 		$section = new ilFormSectionHeaderGUI();
 		$section->setTitle($plugin->txt('questions'));
 		$a_form->addItem($section);
@@ -777,6 +787,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values["is_online"]			= $this->object->isOnline();
 		$a_values["is_chronologic"]		= $this->object->isChronologic();
 		$a_values["no_comment"]			= $this->object->getDisableComment();
+		$a_values["no_toolbar"]			= $this->object->getDisableToolbar();
 		$a_values['source_id']			= $this->object->getSourceId();
 		$a_values['is_task']			= $this->object->getTaskActive();
 		$a_values['task']				= $this->object->getTask();
