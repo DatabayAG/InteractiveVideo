@@ -297,10 +297,16 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.addShowAllCommetsChange = function(player_id)
 	{
-		$('#show_all_comments_' + player_id).change(function() {
-			//Todo: fix display all comments if toolbar is deactivated
-			pri.utils.displayAllCommentsAndDeactivateCommentStream($(this).prop('checked'), player_id);
-		});
+		let filter_element = $('#show_all_comments_' + player_id);
+		if(filter_element.length >= 1){
+			filter_element.change(function() {
+				pri.utils.displayAllCommentsAndDeactivateCommentStream($(this).prop('checked'), player_id);
+			});
+		} else{
+			let show_all = (pub.getPlayerDataObjectByPlayerId(player_id).is_chronologic === '1');
+			pri.utils.displayAllCommentsAndDeactivateCommentStream(show_all, player_id);
+		}
+
 	};
 
 	pro.addCommentTimeChanged = function(player_id)
