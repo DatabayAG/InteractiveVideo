@@ -298,6 +298,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pro.addShowAllCommetsChange = function(player_id)
 	{
 		$('#show_all_comments_' + player_id).change(function() {
+			//Todo: fix display all comments if toolbar is deactivated
 			pri.utils.displayAllCommentsAndDeactivateCommentStream($(this).prop('checked'), player_id);
 		});
 	};
