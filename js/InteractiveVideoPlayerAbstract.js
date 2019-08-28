@@ -25,7 +25,6 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 	pub.play = function(player_id)
 	{
 		let player_config = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
-console.log(player_id, player_config)
 		if (player_config.first_play_action) {
 			player_config.first_play_action = false;
 			il.InteractiveVideoPlayerResume.checkForResumeValue(player_id);
@@ -68,7 +67,9 @@ console.log(player_id, player_config)
 
 	pub.jumpToTimeInVideo = function (time, player_id)
 	{
-//		player_id = $(player_id).attr('id');
+		if(typeof player_id === "object") {
+			player_id = $(player_id).attr('id');
+		}
 		pub.play(player_id);
 		pub.pause(player_id);
 		if(time !== null)
