@@ -132,12 +132,12 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.addToLocalIgnoreArrayIfNonRepeatable = function(player_id){
-		let payer_data = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player_id);
+		let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let repeat = parseInt(InteractiveVideoQuestionViewer.QuestionObject.repeat_question, 10);
 
 		if(repeat === 0)
 		{
-			payer_data.ignore_questions.push(pub.comment_id );
+			player_data.ignore_questions.push(pub.comment_id );
 		}
 	};
 
