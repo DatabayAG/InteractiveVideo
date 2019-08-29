@@ -165,6 +165,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 			modal.append('<div class="learning_recommendation"><br/>' + language.learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', language.feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>');
 			$('#jumpToTimeInVideo').on('click', function () {
 				$('#ilQuestionModal').modal('hide');
+				console.log(player)
 				var player_id = scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 				scope.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(feedback.time, player_id);
 			});
@@ -210,7 +211,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 				data:    $(this).serialize(),
 				success: function (feedback) {
 					let obj = JSON.parse(feedback);
-					pro.showFeedback(obj);
+					pro.showFeedback(obj, player);
 					pro.addToLocalIgnoreArrayIfNonRepeatable(player_id);
 				}
 			});
