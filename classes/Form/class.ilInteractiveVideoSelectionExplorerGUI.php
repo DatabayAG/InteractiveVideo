@@ -45,6 +45,9 @@ class ilInteractiveVideoSelectionExplorerGUI extends ilRepositoryExplorerGUI
 		return true;
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	function getNodeHref($a_node)
 	{
 		return '#';
