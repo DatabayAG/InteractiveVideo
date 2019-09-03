@@ -44,4 +44,10 @@ class ilInteractiveVideoSelectionExplorerGUI extends ilRepositoryExplorerGUI
 	{
 		return true;
 	}
+
+	function getNodeHref($a_node)
+	{
+		return '#';
+	}
+
 }
