@@ -54,7 +54,6 @@ function onYouTubeIframeAPIReady() {
 
 						// Youtube iframe player doesn't fire onStateChange event if in pause mode
 						player.addEventListener('onStateChange', function (e) {
-							console.log(e)
 							// -1 (unstarted)
 							if (e.data === -1) {
 								if (seekTime > 0) {

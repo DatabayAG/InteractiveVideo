@@ -231,7 +231,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 		question_modal.off('hidden.bs.modal');
 		question_modal.on('hidden.bs.modal', function () {
-			scope.InteractiveVideoPlayerAbstract.resumeVideo();
+			scope.InteractiveVideoPlayerAbstract.resumeVideo(player_id);
 		})
 	};
 
