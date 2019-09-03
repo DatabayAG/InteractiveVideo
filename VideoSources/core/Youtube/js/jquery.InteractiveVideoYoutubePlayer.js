@@ -8,7 +8,10 @@ $( document ).ready(function() {
 
 var player = null,
 	seekTime= 0,
+	repeat_interval = null,
 	interval = null;
+
+
 
 function onYouTubeIframeAPIReady() {
 	$.each(il.InteractiveVideo, function (player_id, value) {
@@ -28,34 +31,61 @@ function onYouTubeIframeAPIReady() {
 						il.InteractiveVideoPlayerFunction.appendInteractionEvents(player_id);
 						il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration(player_id));
 						il.InteractiveVideoSubtitle.initializeSubtitleTracks(player_id);
+
+						function seekInPlayer(player_id) {
+							if (il.InteractiveVideo.last_time > 0 &&
+									(il.InteractiveVideo.last_time <
+											il.InteractiveVideoPlayerAbstract.currentTime(player_id) + 1 ||
+											il.InteractiveVideoPlayerAbstract.currentTime(player_id) >
+											il.InteractiveVideo.last_time + 1)) {
+								clearInterval(interval);
+								il.InteractiveVideoPlayerFunction.seekingEventHandler(player_id);
+							}
+						}
+
+						function repeatingYoutubeFunc() {
+						if(il.InteractiveVideo.last_time != il.InteractiveVideoPlayerAbstract.currentTime(player_id)) {
+								il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime(player_id);
+								seekInPlayer(player_id);
+							}
+							clearInterval(repeat_interval);
+							repeat_interval = setTimeout(repeatingYoutubeFunc, 500);
+						}
+
+						// Youtube iframe player doesn't fire onStateChange event if in pause mode
 						player.addEventListener('onStateChange', function (e) {
+							console.log(e)
+							// -1 (unstarted)
 							if (e.data === -1) {
 								if (seekTime > 0) {
 									media.currentTime = seekTime;
 									seekTime = 0;
 								}
 							}
+							// 0 (ended)
 							else if (e.data === 0) {
 								il.InteractiveVideoPlayerAbstract.videoFinished(player_id);
 							}
+							// 1 (playing)
 							else if (e.data === 1) {
 								il.InteractiveVideoPlayerAbstract.play(player_id);
 
 								interval = setInterval(function () {
 									il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player);
 								}, 500);
+								clearInterval(repeat_interval);
 							}
+							// 2 (paused)
 							else if (e.data === 2) {
 								clearInterval(interval);
 								il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime(player_id);
+								clearInterval(repeat_interval);
+		console.log(e, 'pause')
+								repeat_interval = setTimeout(repeatingYoutubeFunc, 500);
 							}
+							// 3 (buffering)
 							else if (e.data === 3) {
-								if (il.InteractiveVideo.last_time > 0 &&
-									(il.InteractiveVideo.last_time < il.InteractiveVideoPlayerAbstract.currentTime(player_id) + 1 ||
-										il.InteractiveVideoPlayerAbstract.currentTime(player_id) > il.InteractiveVideo.last_time + 1)) {
-									clearInterval(interval);
-									il.InteractiveVideoPlayerFunction.seekingEventHandler(player_id);
-								}
+								seekInPlayer(player_id);
 							}
 						});
 					}
