@@ -32,10 +32,13 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 
 		$this->setId('xvid_comments_' . $a_parent_obj->object->getId());
 		parent::__construct($a_parent_obj, $a_parent_cmd);
-		$ilToolbar->addButton(
-			$a_parent_obj->plugin->txt('export_comments'),
-			$ilCtrl->getLinkTarget($a_parent_obj, 'exportMyComments')
-		);
+		if($a_parent_cmd === "editMyComments"){
+            $ilToolbar->addButton(
+                $a_parent_obj->plugin->txt('export_comments'),
+                $ilCtrl->getLinkTarget($a_parent_obj, 'exportMyComments')
+            );
+        }
+
 		$this->setFormAction($this->ctrl->getFormAction($a_parent_obj, $a_parent_cmd));
 		$this->setDefaultOrderDirection('ASC');
 		$this->setDefaultOrderField('comment_time');
