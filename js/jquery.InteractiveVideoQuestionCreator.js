@@ -77,7 +77,6 @@ var InteractiveVideoQuestionCreator = (function () {
 					'class':'checkbox correct_solution'
 				}
 			);
-			console.log(value)
 			if(parseInt(value.correct,10) === 1 )
 			{
 				inner.find('.correct_solution').attr('checked' , 'checked');
