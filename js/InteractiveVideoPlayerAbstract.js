@@ -74,7 +74,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		pub.pause(player_id);
 		if(time !== null)
 		{
-			pub.setCurrentTime(time, player_id);
+			pub.setCurrentTime(time, player_id);26100
 			scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id).last_stopPoint = time;
 		}
 		pub.play(player_id);
