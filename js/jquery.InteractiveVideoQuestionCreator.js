@@ -25,7 +25,7 @@ var InteractiveVideoQuestionCreator = (function () {
 		$('.correct_solution').on('click', function (){
 			var pos = parseInt($(this).attr('meta'), 10);
 			var bool= 0;
-			if($(this).attr('checked'))
+			if($(this).is(':checked'))
 			{
 				bool = 1;
 			}
@@ -73,9 +73,11 @@ var InteractiveVideoQuestionCreator = (function () {
 				{
 					'name' : 'correct[' + l + ']',
 					'meta' : l,
+					
 					'class':'checkbox correct_solution'
 				}
 			);
+			console.log(value)
 			if(parseInt(value.correct,10) === 1 )
 			{
 				inner.find('.correct_solution').attr('checked' , 'checked');
