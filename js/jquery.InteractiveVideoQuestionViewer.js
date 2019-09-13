@@ -250,7 +250,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		}
 
 		var config = {};
-		if(scope.InteractiveVideo.fixed_modal === "1") {
+		if(il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player).fixed_modal === "1") {
 			config = {backdrop: 'static', keyboard: false};
 		}
 		$('#ilQuestionModal').modal(config, 'show');
