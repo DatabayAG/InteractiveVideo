@@ -317,7 +317,7 @@
     height:25px;
 }
 
-#submit_comment_form{
+.submit_comment_form{
     right: 85px;
     bottom: 5px;
     position: absolute;

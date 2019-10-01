@@ -82,7 +82,6 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.resumeVideo = function (player_id)
 	{
-		console.log(scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id), player_id)
 		if(scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id).auto_resume === true ||
 				scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id).auto_resume === "1")
 		{
