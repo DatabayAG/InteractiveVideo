@@ -45,8 +45,7 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 	public function addPlayerElements($tpl)
 	{
 		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/SimpleUrl/js/jquery.InteractiveVideoSimpleUrlPlayer.js');
-		$tpl->addJavaScript('Services/MediaObjects/media_element_2_14_2/mediaelement-and-player.js');
-		$tpl->addCss('Services/MediaObjects/media_element_2_14_2/mediaelementplayer.css');
+        ilPlayerUtil::initMediaElementJs($tpl);
 		return $tpl;
 	}
 
