@@ -69,7 +69,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 		global $ilDB;
 		$ilDB->query('DROP TABLE 	rep_robj_xvid_comments, rep_robj_xvid_objects, 
 									rep_robj_xvid_qus_text, rep_robj_xvid_question,
-									rep_robj_xvid_answers, rep_robj_xvid_score');
+									rep_robj_xvid_answers, rep_robj_xvid_score, rep_robj_xvid_sources');
 		if($ilDB->sequenceExists('rep_robj_xvid_comments'))
 		{
 			$ilDB->dropSequence('rep_robj_xvid_comments');
@@ -81,6 +81,10 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 		if($ilDB->sequenceExists('rep_robj_xvid_qus_text'))
 		{
 			$ilDB->dropSequence('rep_robj_xvid_qus_text');
+		}
+		if($ilDB->sequenceExists('rep_robj_xvid_sources'))
+		{
+			$ilDB->dropSequence('rep_robj_xvid_sources');
 		}
 	}
 
