@@ -580,7 +580,7 @@ if(!$ilDB->tableExists('rep_robj_xvid_plugins'))
 ?>
 <#28>
 <?php
-if($ilDB->tableExists('rep_robj_xvid_plugins'))
+if($ilDB->tableExists('rep_robj_xvid_plugins') && ! $ilDB->tableExists('rep_robj_xvid_sources'))
 {
 	$ilDB->renameTable('rep_robj_xvid_plugins', 'rep_robj_xvid_sources');
 }
