@@ -78,8 +78,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
                                 rep_robj_xvid_score, 
                                 rep_robj_xvid_sources, 
                                 rep_robj_xvid_subtitle, 
-                                rep_robj_xvid_surl, 
-                                rep_robj_xvid_vimeo, 
+                                rep_robj_xvid_surl,
                                 rep_robj_xvid_youtube');
 		if($ilDB->sequenceExists('rep_robj_xvid_comments'))
 		{
