@@ -61,13 +61,13 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 		return self::PNAME;
 	}
 
-	protected function uninstallCustom()
-	{
+    protected function uninstallCustom()
+    {
         /** @var $ilDB ilDBInterface */
         global $ilDB;
 
         $drop_table_list = array(
-        'rep_robj_xvid_answers',
+            'rep_robj_xvid_answers',
             'rep_robj_xvid_comments',
             'rep_robj_xvid_lp',
             'rep_robj_xvid_objects',
@@ -88,15 +88,14 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
             'rep_robj_xvid_qus_text'
         );
 
-        foreach($drop_table_list as $key => $table) {
-            if($ilDB->tableExists($table)){
+        foreach ($drop_table_list as $key => $table) {
+            if ($ilDB->tableExists($table)) {
                 $ilDB->dropTable($table);
             }
         }
 
-        foreach($drop_sequence_list as $key => $sequence) {
-            if($ilDB->sequenceExists($sequence))
-            {
+        foreach ($drop_sequence_list as $key => $sequence) {
+            if ($ilDB->sequenceExists($sequence)) {
                 $ilDB->dropSequence($sequence);
             }
         }
