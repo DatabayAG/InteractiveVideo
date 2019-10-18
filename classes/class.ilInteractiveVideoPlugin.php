@@ -63,36 +63,45 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 
 	protected function uninstallCustom()
 	{
-		/**
-		 * @var $ilDB ilDB
-		 */
-		global $ilDB;
-		$ilDB->query('DROP TABLE 
-                                rep_robj_xvid_answers, 
-                                rep_robj_xvid_comments, 
-                                rep_robj_xvid_lp, 
-                                rep_robj_xvid_mobs, 
-                                rep_robj_xvid_objects, 
-                                rep_robj_xvid_question, 
-                                rep_robj_xvid_qus_text, 
-                                rep_robj_xvid_score, 
-                                rep_robj_xvid_sources, 
-                                rep_robj_xvid_subtitle, 
-                                rep_robj_xvid_surl,
-                                rep_robj_xvid_youtube');
-		if($ilDB->sequenceExists('rep_robj_xvid_comments'))
-		{
-			$ilDB->dropSequence('rep_robj_xvid_comments');
-		}
-		if($ilDB->sequenceExists('rep_robj_xvid_question'))
-		{
-			$ilDB->dropSequence('rep_robj_xvid_question');
-		}
-		if($ilDB->sequenceExists('rep_robj_xvid_qus_text'))
-		{
-			$ilDB->dropSequence('rep_robj_xvid_qus_text');
-		}
-	}
+        /** @var $ilDB ilDBInterface */
+        global $ilDB;
+
+        $drop_table_list = array(
+        'rep_robj_xvid_answers',
+            'rep_robj_xvid_comments',
+            'rep_robj_xvid_lp',
+            'rep_robj_xvid_objects',
+            'rep_robj_xvid_question',
+            'rep_robj_xvid_qus_text',
+            'rep_robj_xvid_score',
+            'rep_robj_xvid_sources',
+            'rep_robj_xvid_subtitle',
+            'rep_robj_xvid_youtube',
+            'rep_robj_xvid_surl',
+            'rep_robj_xvid_mobs',
+            'rep_robj_xvid_vimeo'
+        );
+
+        $drop_sequence_list = array(
+            'rep_robj_xvid_comments',
+            'rep_robj_xvid_question',
+            'rep_robj_xvid_qus_text'
+        );
+
+        foreach($drop_table_list as $key => $table) {
+            if($ilDB->tableExists($table)){
+                $ilDB->dropTable($table);
+            }
+        }
+
+        foreach($drop_sequence_list as $key => $sequence) {
+            if($ilDB->sequenceExists($sequence))
+            {
+                $ilDB->dropSequence($sequence);
+            }
+        }
+
+    }
 
 	/**
 	 * @param RecursiveIteratorIterator $rii
