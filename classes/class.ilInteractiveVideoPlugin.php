@@ -100,6 +100,8 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
             }
         }
 
+        $ilDB->queryF('DELETE FROM il_wac_secure_path WHERE path = %s ',
+            array('text'), array('xvid'));
     }
 
 	/**
