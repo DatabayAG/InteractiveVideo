@@ -87,7 +87,7 @@ limit_attempts#:#Versuche begrenzen
 limit_attempts_info#:#Der Benutzer darf die Frage nur einmal beantworten
 is_private_comment#:#Privater Kommentar
 feedback_jump_text#:#Springe zu
-repeat_question_info#:#Wenn  aktiviert, wird die Frage bei jedem Abspielen des Videos immer wieder angezeigt. Falls die Option "Korrekt beantwortete Fragen wiederholen" in den Einstellungen deaktiviert ist, wird die Frage nur so lange angezeigt, bis sie korrekt beantwortet wurde und danach übersprungen.
+repeat_question_info#:#Wenn aktiviert, wird die Frage bei jedem Abspielen des Videos immer wieder angezeigt. Die Frage wird erst dann nicht mehr angezeigt, wenn die Option "Korrekt beantwortete Fragen überspringen" in den Einstellungen aktiviert ist.
 sum#:#Korrekt
 answered#:#Beantwortet
 csv_export#:#CSV Export
