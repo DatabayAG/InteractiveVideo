@@ -1,3 +1,23 @@
+- [InteractiveVideo](#interactivevideo)
+  * [ILIAS compatibility](#ilias-compatibility)
+  * [Important notice](#important-notice)
+  * [Changes in Version 2.0.25](#changes-in-version-2025)
+  * [Changes in Version 2.0.24](#changes-in-version-2024)
+  * [Changes in Version 2.0.23](#changes-in-version-2023)
+  * [Changes in Version 2.0.21](#changes-in-version-2021)
+  * [Repositories connected to the InteractiveVideo Plugin](#repositories-connected-to-the-interactivevideo-plugin)
+  * [Installation Instructions](#installation-instructions)
+    + [Workaround patch for making the Interactive Videos work with the Web Access Checker](#workaround-patch-for-making-the-interactive-videos-work-with-the-web-access-checker)
+- [What is it for?](#what-is-it-for-)
+  * [Interactive Video Main View](#interactive-video-main-view)
+  * [Interactive Video Question View](#interactive-video-question-view)
+  * [Interactive Video Create Images from Media Object Source](#interactive-video-create-images-from-media-object-source)
+  * [Interactive Video Create Question](#interactive-video-create-question)
+  * [Interactive Video Sources & Plugin Slots](#interactive-video-sources---plugin-slots)
+  * [Interactive Video Modal options](#interactive-video-modal-options)
+  * [Interactive Video Subtitles](#interactive-video-subtitles)
+
+
 # InteractiveVideo
 ILIAS Interactive Video Plugin
 
@@ -72,4 +92,3 @@ The InteractiveVideo Plugin for ILIAS gives you the possibility to create a vide
 
 ## Interactive Video Subtitles
 ![Subtitle](https://databayag.github.io/InteractiveVideo/2.0.21/subtitle.png)
-
