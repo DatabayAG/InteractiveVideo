@@ -1,3 +1,4 @@
+# Table of content
 - [InteractiveVideo](#interactivevideo)
   * [ILIAS compatibility](#ilias-compatibility)
   * [Important notice](#important-notice)
