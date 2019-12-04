@@ -50,6 +50,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		if (!isNaN(current_time) && current_time > 0) {
 
+			pri.checkForCompulsoryQuestion(player_id, current_time);
 			pri.utils.clearCommentsWhereTimeEndEndded(player_id, current_time);
 			for (j = player_data.stopPoints.length - 1; j >= 0; j--)
 			{
@@ -78,6 +79,17 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 	};
 
+	pri.checkForCompulsoryQuestion = function(player_id, current_time)
+	{
+		let compulsory_question = il.InteractiveVideo[player_id].compulsoryQuestions;
+		$.each(compulsory_question, function (time, comment_id) {
+				if(current_time >= time) {
+					il.InteractiveVideoPlayerAbstract.setCurrentTime(time - 0.6, player_id);
+					//Todo: remove compulsory question after answer
+				}
+		});
+	};
+	
 	pub.appendInteractionEvents = function(player_id)
 	{
 		pro.addAjaxFunctionForCommentPosting(player_id);
