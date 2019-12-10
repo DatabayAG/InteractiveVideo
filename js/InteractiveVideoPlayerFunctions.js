@@ -82,11 +82,14 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pri.checkForCompulsoryQuestion = function(player_id, current_time)
 	{
 		let compulsory_question = il.InteractiveVideo[player_id].compulsoryQuestions;
-		$.each(compulsory_question, function (time, comment_id) {
-				if(current_time >= time) {
-					il.InteractiveVideoPlayerAbstract.setCurrentTime(time - 0.6, player_id);
+		$.each(compulsory_question, function (key, object) {
+			console.log(object)
+			if(object.answered == false){
+				if(current_time >= object.time) {
+					il.InteractiveVideoPlayerAbstract.setCurrentTime(object.time - 0.6, player_id);
 					//Todo: remove compulsory question after answer
 				}
+			}
 		});
 	};
 	
