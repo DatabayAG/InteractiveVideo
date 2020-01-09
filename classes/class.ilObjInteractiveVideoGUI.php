@@ -1738,7 +1738,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$valid            = true;
 			$comment_time     = $form->getInput('comment_time');
 			$comment_time_end = $form->getInput('comment_time_end');
-			if ($comment_time > $comment_time_end) {
+			if ($comment_time_end > 0 && $comment_time > $comment_time_end) {
 				$valid = false;
 				ilUtil::sendFailure($this->plugin->txt('endtime_warning'));
 			}
