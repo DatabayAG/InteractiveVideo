@@ -111,7 +111,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	 */
 	public function numericOrdering($column)
 	{
-		if('comment_time' == $column || 'comment_time' ==  $column )
+		if('comment_time' == $column || 'comment_time_end' ==  $column )
 		{
 			return true;
 		}
