@@ -1818,6 +1818,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tbl_data = $this->object->getCommentsTableData(true, true);
 		$plugin->includeClass('class.ilInteractiveVideoCommentsTableGUI.php');
 		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editComments');
+        $tbl->setIsPublic($this->object->isPublic());
 		$tbl->setData($tbl_data);
 		$video_tpl->setVariable('TABLE', $tbl->getHTML());
 		$tpl->setContent($video_tpl->get());
