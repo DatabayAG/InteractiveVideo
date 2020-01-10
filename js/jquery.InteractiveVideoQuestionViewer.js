@@ -51,6 +51,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	{
 		if(pub.QuestionObject.feedback !== undefined && pub.QuestionObject.previous_answer !== undefined)
 		{
+			pro.disableInteractionsIfLimitAttemptsIsActivated();
 			$.each(pub.QuestionObject.previous_answer, function (l, value) {
 				$('#answer_' + value).attr('checked', true);
 			});
@@ -213,10 +214,22 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 					let obj = JSON.parse(feedback);
 					pro.showFeedback(obj, player);
 					pro.addToLocalIgnoreArrayIfNonRepeatable(player_id);
+					pro.disableInteractionsIfLimitAttemptsIsActivated(player_id);
 				}
 			});
 		});
 		pro.appendCloseButtonListener(player_id);
+	};
+
+	pro.disableInteractionsIfLimitAttemptsIsActivated = function(player_id)
+	{
+		let limit_attempts = InteractiveVideoQuestionViewer.QuestionObject.limit_attempts;
+		
+		if(limit_attempts === '1') {
+			$("#question_form :input").attr("disabled", true);
+			$('#close_form').prop('disabled', false);
+		}
+
 	};
 
 	pro.appendCloseButtonListener = function(player_id)
