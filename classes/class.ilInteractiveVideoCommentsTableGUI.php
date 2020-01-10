@@ -126,7 +126,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	{
 		foreach ($a_set as $key => $value)
 		{
-		    if($this->isPublic() == 0 && $this->DIC->user()->getId() !== $a_set['user_id']) {
+		    if($this->isPublic() == 0 && $this->DIC->user()->getId() != $a_set['user_id']) {
 		        continue;
             }
 			if($key == 'comment_id')
