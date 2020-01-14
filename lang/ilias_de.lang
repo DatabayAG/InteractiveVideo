@@ -22,7 +22,7 @@ root_create_xvid#:#Neues Interaktives Video anlegen
 cat_create_xvid#:#Neues Interaktives Video anlegen
 interactive#:#Interaktive
 tutor#:#Tutor
-questions_comments#:#Fragen und Kommentare
+questions_comments#:#Fragen und öffentliche Kommentare
 questions_comments_sub_tab#:#Verwalten
 sure_delete_comments#:#Sind Sie sicher, dass die selektierten Commentare gelöscht werden sollen?
 video_file#:#Video
@@ -78,7 +78,7 @@ question#:#Frage
 is_anonymized#:#Kommentare ohne Namen anzeigen
 is_anonymized_info#:#Wenn aktiviert, werden alle Kommentare ohne Benutzernamen angezeigt.
 is_public#:#Alle Kommentare veröffentlichen
-is_public_info#:#Wenn aktiviert, können alle Benutzer alle Kommentare lesen. Im anderen Fall sehen sie nur ihre eigenen Kommentare
+is_public_info#:#Wenn aktiviert, können alle Benutzer alle ÖFFENTLICHE Kommentare lesen. Im anderen Fall sehen sie nur ihre eigenen Kommentare
 correct_answered#:#Richtig beantwortet
 show_my_results#:#Meine Ergebnisse
 is_jump_correct#:#"Richtig"-Sprungmarke verwenden
