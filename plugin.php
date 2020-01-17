@@ -11,8 +11,8 @@ $ilias_min_version = '5.1.0';
 $ilias_max_version = '5.4.999';
 
 // optional, but useful: Add one or more responsible persons and a contact email
-$responsible      = 'Nadia Ahmad / Michael Jansen / Max Becker / Guido Vollbach';
-$responsible_mail = 'nahmad@databay.de / mjansen@databay.de / mbecker@databay.de / gvollbach@databay.de';
+$responsible      = 'Nadia Ahmad / Michael Jansen / Guido Vollbach';
+$responsible_mail = 'nahmad@databay.de / mjansen@databay.de / gvollbach@databay.de';
 
 $learning_progress = true;
 $supports_export = true;
