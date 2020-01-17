@@ -77,6 +77,22 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			}
 			player_data.last_time = current_time;
 		}
+		pro.autoScrollForViewAllComments(player_id);
+	};
+
+	pro.autoScrollForViewAllComments = function(player_id)
+	{
+		let scrollHeight = 0;
+		let j_obj_scroll_div	= $('#ilInteractiveVideoComments_' + player_id);
+		let current_time    = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
+
+		$('#ul_scroll_' + player_id + ' li').each(function() {
+				if($(this).find('.time').data('time') <= current_time) {
+				scrollHeight += $(this).height();
+			}
+		});
+		
+		j_obj_scroll_div.scrollTop(scrollHeight);
 	};
 
 	pri.checkForCompulsoryQuestion = function(player_id, current_time)
