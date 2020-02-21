@@ -24,13 +24,13 @@ interactive#:#Interaktive
 tutor#:#Tutor
 questions_comments#:#Fragen und öffentliche Kommentare
 questions_comments_sub_tab#:#Verwalten
-sure_delete_comments#:#Sind Sie sicher, dass die selektierten Commentare gelöscht werden sollen?
+sure_delete_comments#:#Sind Sie sicher, dass Sie die gewählten Kommentare löschen möchten?
 video_file#:#Video
 comment#:#Kommentar
 comments#:#Kommentare
 post#:#Posten
 cancel#:#Abbrechen
-sure_delete_comment#:#Sind Sie sicher, dass Sie die gewählten Kommentare löschen möchten?
+sure_delete_comment#:#Sind Sie sicher, dass Sie den gewählten Kommentar löschen möchten?
 missing_comment_text#:#Bitte geben Sie einen Kommentar ein.
 missing_stopping_point#:#Der Haltepunkt wurde nicht zum Server übertragen. Bitte versuchen Sie es erneut.
 invalid_comment_ids#:#Einige Kommentare konnten nicht gefunden werden. 
@@ -45,7 +45,7 @@ correct_solution#:#Richtige Lösung
 add_question#:#Frage hinzufügen
 single_choice#:#Single Choice
 multiple_choice#:#Multiple Choice
-correct#:#Richtige beantwortete Fragen
+correct#:#Richtig beantwortete Fragen
 questions#:#Fragen
 results#:#Ergebnisse
 user_results#:#Benutzerergebnisse
@@ -63,14 +63,14 @@ repeat_question#:#Frage wiederholen
 tags#:#Tags
 question_text#:#Fragentext
 question_type#:#Fragentyp
-feedback_correct#:#Feedback Richtige Antwort
+feedback_correct#:#Feedback richtige Antwort
 feedback_one_wrong#:#Feedback bei mindestens einer falschen Antwort
 results_successfully_deleted#:#Die gewählten Ergebnisse wurden erfolgreich gelöscht
 sure_delete_results#:#Sind Sie sicher, dass Sie die gewählten Ergebnisse löschen möchten?
 comments_successfully_deleted#:#Die gewählten Kommentare wurden erfolgreich gelöscht
-invalid_question_ids#:#Ungültige Fragen-Ids
-invalid_user_ids#:#Ungültige User-Ids
-invalid_comment_ids#:#Ungültige Kommentar-Ids
+invalid_question_ids#:#Ungültige Fragen-IDs
+invalid_user_ids#:#Ungültige User-IDs
+invalid_comment_ids#:#Ungültige Kommentar-IDs
 comment_title#:#Kommentar-Titel
 send#:#Abschicken
 close#:#Schließen
@@ -78,7 +78,7 @@ question#:#Frage
 is_anonymized#:#Kommentare ohne Namen anzeigen
 is_anonymized_info#:#Wenn aktiviert, werden alle Kommentare ohne Benutzernamen angezeigt.
 is_public#:#Alle Kommentare veröffentlichen
-is_public_info#:#Wenn aktiviert, können alle Benutzer alle ÖFFENTLICHE Kommentare lesen. Im anderen Fall sehen sie nur ihre eigenen Kommentare
+is_public_info#:#Wenn aktiviert, können alle Benutzer alle ÖFFENTLICHE Kommentare lesen. Im anderen Fall sehen Sie nur ihre eigenen Kommentare
 correct_answered#:#Richtig beantwortet
 show_my_results#:#Meine Ergebnisse
 is_jump_correct#:#"Richtig"-Sprungmarke verwenden
@@ -90,16 +90,16 @@ feedback_jump_text#:#Springe zu
 repeat_question_info#:#Wenn aktiviert, wird die Frage bei jedem Abspielen des Videos immer wieder angezeigt. Die Frage wird erst dann nicht mehr angezeigt, wenn die Option "Korrekt beantwortete Fragen überspringen" in den Einstellungen aktiviert ist.
 sum#:#Korrekt
 answered#:#Beantwortet
-csv_export#:#CSV Export
+csv_export#:#CSV-Export
 complete_question_results#:#Komplette Fragenergebnisse
 feedback#:#Feedback
 already_answered#:#Frage wurde bereits beantwortet.
 reflection#:#Reflexionsfrage
 answers#:#Antworten
 sure_update_question#:#Sind Sie sicher, dass Sie die Frage überschreiben wollen? Vorhandene Benutzerergebnisse werden gelöscht!
-question_type_info#:#Sie können zwischen drei Fragetypen wählen: Single Choice, Multiple Choice und Reflexionsfragen. Eine Reflexionsfrage wird wie eine SC bzw. eine MC Frage angezeigt, enthält jedoch keine Antwortmöglichkeiten. Sie wird sofort als bestanden gewertet, wenn Sie einem Nutzer mindestens einmal angezeigt wurde.
-is_jump_correct_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage richtig beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblended.
-is_jump_wrong_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage falsch beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblended.
+question_type_info#:#Sie können zwischen drei Fragetypen wählen: Single Choice, Multiple Choice und Reflexionsfragen. Eine Reflexionsfrage wird wie eine SC- bzw. eine MC-Frage angezeigt, enthält jedoch keine Antwortmöglichkeiten. Sie wird sofort als bestanden gewertet, wenn Sie einem Nutzer mindestens einmal angezeigt wurde.
+is_jump_correct_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage richtig beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblendet.
+is_jump_wrong_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage falsch beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblendet.
 learning_recommendation#:#Lernempfehlung an folgender Stelle im Video
 is_repeat#:#Korrekt beantwortete Fragen überspringen
 is_repeat_info#:#Wenn diese Option aktiviert ist, werden bereits korrekt beantwortete Fragen beim Abspielen übersprungen.
@@ -128,10 +128,10 @@ rbac_create_xvid#:#Interaktives Video anlegen
 source#:#Quelle
 installed_version#:#Installierte Databank Version: %s, Datei Datenbank Version %s
 source_does_not_exist#:#Quelle existiert nicht mehr oder wurde in der Administration deaktiviert
-update_db#:#Datenbank Updates einspielen
+update_db#:#Datenbank-Updates einspielen
 db_up_to_date#:#Datenbank aktuell
 db_update_worked#:#Datenbank erfolgreich aktualisiert
-db_update_failed#:#Datenbank Update schlug fehl: %s
+db_update_failed#:#Datenbank-Update schlug fehl: %s
 task_switch#:#Aufgabenstellung aktivieren
 task_switch_info#:#Aufgabenstellung aktivieren
 task#:#Aufgabenstellung
@@ -141,27 +141,27 @@ lp_users#:#Benutzer
 lp_matrix#:#Matrixansicht
 lp_summary#:#Zusammenfassung
 lp_settings#:#Einstellungen
-select_at_least_one#:#Bitte wählen sie mindestens eine Quelle aus.
+select_at_least_one#:#Bitte wählen Sie mindestens eine Quelle aus.
 back_to#:#zurück zu
 back_to_title#:#Wollen Sie zum Urprungsobjekt %s (%s) zurückkehren?
 save#:#Speichern
-at_least_one_source#:#Es wird mindestens eine Video Quelle benötigt, stellen sie bitte sicher das sie in der Konfiguration des Interaktive Video Plugins mindestens eine Quelle ausgewählt haben.
-feedback_correct_obj#:#Feedback Link auf Magazin Objekt bei korrekter Antwort
-feedback_correct_obj_info#:#Feedback Link auf Magazin Objekt bei korrekter Antwort
-feedback_wrong_obj#:#Feedback Link auf Magazin Objekt bei mindestens einer falschen Antwort
-feedback_wrong_obj_info#:#Feedback Link auf Magazin Objekt bei mindestens einer falschen Antwort
+at_least_one_source#:#Es wird mindestens eine Video-Quelle benötigt, stellen Sie bitte sicher, dass Sie in der Konfiguration des Interaktive Video Plugins mindestens eine Quelle ausgewählt haben.
+feedback_correct_obj#:#Feedback-Link auf Magazin-Objekt bei korrekter Antwort
+feedback_correct_obj_info#:#Feedback-Link auf Magazin-Objekt bei korrekter Antwort
+feedback_wrong_obj#:#Feedback-Link auf Magazin-Objekt bei mindestens einer falschen Antwort
+feedback_wrong_obj_info#:#Feedback-Link auf Magazin-Objekt bei mindestens einer falschen Antwort
 show_comment_field#:#Zeige ein Kommtarfeld an
 show_comment_field_info#:#Zeige ein Kommtarfeld unter der Reflektionsfrage an
 more_informations#:#Weiterführende Informationen
 neutral_type#:#Bewertung
 with_correct#:#Mit korrekter Antwort
 neutral#:#Neutrale Antworten
-neutral_type_info#:#Wenn die Option Neutrale Anworten ausgewählt ist, gibt es keine richtige Lösung für diese Aufgabe
+neutral_type_info#:#Wenn die Option 'Neutrale Anworten' ausgewählt ist, gibt es keine richtige Lösung für diese Aufgabe
 feedback_neutral#:#Feedback
-feedback_jump_neutral_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblended.
+feedback_jump_neutral_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblendet.
 feedback_jump_neutral#:#Sprungmarke
-feedback_repository_neutral#:#Feedback Link zu einem Repository Object
-feedback_repository_neutral_info#:#Feedback Link zu einem Repository Object
+feedback_repository_neutral#:#Feedback-Link zu einem Magazin-Objekt
+feedback_repository_neutral_info#:#Feedback-Link zu einem Magazin-Objekt
 neutral_questions#:#Neutrale Fragen
 neutral_question#:#Neutrale Frage
 export_comments#:#Kommentare exportieren
@@ -180,7 +180,7 @@ public#:#öffentlich
 visibility#:#Sichtbarkeit
 save_anyway#:#Trotzdem speichern
 save_without_correct#:#Sind haben keine korrekte Antwort ausgewählt
-save_without_correct_detail#:#Sie haben weder eine Reflektionfrage, noch neutrale Antworten aktiviert, sind sie sicher, das sie die Frage ohne korrekte Antwort speichern wollen?
+save_without_correct_detail#:#Sie haben weder eine Reflektionfrage, noch neutrale Antworten aktiviert, sind Sie sicher, dass Sie die Frage ohne korrekte Antwort speichern wollen?
 no_comment#:#Kein Kommentarfeld
 no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflektionsfragen mit aktiviertem Kommentarfeld sind nach wie vor möglich.
 xvid_xvid_view_lp#:#Lernfortschritt einsehen
@@ -193,8 +193,8 @@ subtitle#:#Untertitel
 short_title#:#Kürzel
 long_title#:#Titel
 subtitle_removed#:#Untertitel gelöscht
-sure_delete_subtitle#:#Sind Sie sicher das sie diesen Untertitle löschen wollen?
-you_need_a_short_title#:#Sie müssen einen Kurztitle eintragen!
+sure_delete_subtitle#:#Sind Sie sicher das Sie diesen Untertitel löschen wollen?
+you_need_a_short_title#:#Sie müssen einen Kurztitel eintragen!
 no_toolbar#:#Toolbar deaktivieren
 no_toolbar_info#:#Es wird keine Toolbar mit Filtern angezeigt
 
