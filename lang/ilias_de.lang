@@ -22,7 +22,8 @@ root_create_xvid#:#Neues Interaktives Video anlegen
 cat_create_xvid#:#Neues Interaktives Video anlegen
 interactive#:#Interaktive
 tutor#:#Tutor
-questions_comments#:#Fragen und öffentliche Kommentare
+questions_comments#:#Fragen und Kommentare
+questions_comments_new#:#Fragen und öffentliche Kommentare
 questions_comments_sub_tab#:#Verwalten
 sure_delete_comments#:#Sind Sie sicher, dass die selektierten Commentare gelöscht werden sollen?
 video_file#:#Video

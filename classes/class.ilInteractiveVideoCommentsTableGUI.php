@@ -59,7 +59,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$this->setDefaultOrderDirection('ASC');
 		$this->setDefaultOrderField('comment_time');
 
-		$title = $a_parent_obj->plugin->txt('questions_comments');
+		$title = $a_parent_obj->plugin->txt('questions_comments_new');
 		if($a_parent_cmd == 'editMyComments')
 		{
 			$title = $a_parent_obj->plugin->txt('my_comments');
