@@ -8,6 +8,7 @@ $( document ).ready(function() {
 	}
 	InteractiveVideoQuestionCreator.Init();
 	$('.question_type').val(IVQuestionCreator.type);
+	InteractiveVideoQuestionCreator.protect.showHideFormElementsPointsForNeutralAnswers();
 });
 
 
