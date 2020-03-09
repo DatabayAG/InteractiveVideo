@@ -26,7 +26,15 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 
 	pub.saveResumeTime = function (player_id) {
 		let current_time = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
+		pro.saveTimeInStorage(current_time, player_id);
+	};
 
+	pub.saveExternalResumeTime = function (player_id, time) {
+		let current_time = parseFloat(time);
+		pro.saveTimeInStorage(current_time, player_id);
+	};
+
+	pro.saveTimeInStorage = function(current_time, player_id) {
 		if (pro.IsStorageAvailable()) {
 			if (current_time > 0) {
 				pri.writeItemToStorage(current_time, player_id);
