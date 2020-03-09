@@ -105,7 +105,7 @@ is_jump_correct_info#:#In case the question was answered correctly, you can sele
 is_jump_wrong_info#:#In case the question was answered incorrectly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
 learning_recommendation#:#Learning recommendation within the video at
 is_repeat#:#Skip correctly answered questions
-is_repeat_info#:#If this option is activated, questions that have already been answered correctly will be skipped during playback.
+is_repeat_info#:#If this option is activated, questions that have already been answered correctly will be skipped when users watches the video again.
 offline#:#Offline
 status#:#Status
 is_chronologic#:#Show all comments at all times

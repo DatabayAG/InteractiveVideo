@@ -103,7 +103,7 @@ is_jump_correct_info#:#Sie können hier eine Sprungmarke zu einer relevanten Ste
 is_jump_wrong_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage falsch beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblendet.
 learning_recommendation#:#Lernempfehlung an folgender Stelle im Video
 is_repeat#:#Korrekt beantwortete Fragen überspringen
-is_repeat_info#:#Wenn diese Option aktiviert ist, werden bereits korrekt beantwortete Fragen beim Abspielen übersprungen.
+is_repeat_info#:#Wenn diese Option aktiviert ist, werden bereits korrekt beantwortete Fragen beim wiederholten Abspielen übersprungen.
 offline#:#Offline
 status#:#Status
 is_chronologic#:#Alle Kommentare von Beginn an zeigen
