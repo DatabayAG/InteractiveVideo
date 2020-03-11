@@ -49,7 +49,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		scope.InteractiveVideoPlayerResume.saveResumeTime(player_id);
 
 		if (!isNaN(current_time) && current_time > 0) {
-
 			pri.utils.clearCommentsWhereTimeEndEndded(player_id, current_time);
 			for (j = player_data.stopPoints.length - 1; j >= 0; j--)
 			{
@@ -74,7 +73,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 					player_data.last_stopPoint = cueTime;
 				}
 			}
-			player_data.last_time = current_time;
+			player_data.last_time = parseInt(current_time, 10);
 		}
 	};
 
