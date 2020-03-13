@@ -123,6 +123,11 @@ class SimpleChoiceQuestion
 	 */
 	protected $question_image = '';
 
+    /**
+     * @var int 
+     */
+	protected $compulsory_question = 0;
+
 	/**
 	 * @var string
 	 */
@@ -172,6 +177,7 @@ class SimpleChoiceQuestion
 			$this->setIsJumpWrong($row['is_jump_wrong']);
 			$this->setShowWrongIcon($row['show_wrong_icon']);
 			$this->setJumpWrongTs($row['jump_wrong_ts']);
+			$this->setCompulsoryQuestion($row['compulsory_question']);
 			$this->setShowResponseFrequency($row['show_response_frequency']);
 			$this->setFeedbackCorrectId($row['feedback_correct_ref_id']);
 			$this->setFeedbackWrongId($row['feedback_wrong_ref_id']);
@@ -394,6 +400,7 @@ class SimpleChoiceQuestion
 			$this->setIsJumpWrong($row['is_jump_wrong']);
 			$this->setShowWrongIcon($row['show_wrong_icon']);
 			$this->setJumpWrongTs($row['jump_wrong_ts']);
+			$this->setCompulsoryQuestion($row['compulsory_question']);
 			$this->setShowResponseFrequency($row['show_response_frequency']);
 			$this->setFeedbackCorrectId($row['feedback_correct_ref_id']);
 			$this->setFeedbackWrongId($row['feedback_wrong_ref_id']);
@@ -447,6 +454,7 @@ class SimpleChoiceQuestion
 				'show_wrong_icon'    => array('integer', $this->getShowWrongIcon()),
 				'is_jump_wrong'      => array('integer', $this->getIsJumpWrong()),
 				'jump_wrong_ts'      => array('integer', $this->getJumpWrongTs()),
+				'compulsory_question' => array('integer', $this->getCompulsoryQuestion()),
 				'show_response_frequency' => array('integer', $this->getShowResponseFrequency()),
 				'feedback_correct_ref_id' => array('integer', $this->getFeedbackCorrectId()),
 				'feedback_wrong_ref_id' => array('integer', $this->getFeedbackWrongId()),
@@ -864,6 +872,36 @@ class SimpleChoiceQuestion
 		return $results;
 	}
 
+    /**
+     * @param int $obj_id
+     * @return array
+     */
+	public static function getAllCompulsoryQuestions($obj_id)
+	{
+		global $ilDB;
+		$res     = $ilDB->queryF('
+			SELECT * 
+			FROM ' . self::TABLE_NAME_COMMENTS . ' comments, 
+				' . self::TABLE_NAME_QUESTION . '  questions 
+			LEFT JOIN rep_robj_xvid_score ON questions.question_id = rep_robj_xvid_score.question_id
+			WHERE comments.comment_id = questions.comment_id 
+			AND questions.compulsory_question = 1
+			AND comments.obj_id = %s',
+			array('integer'),
+			array((int)$obj_id)
+		);
+		$results = array();
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$results[] = [
+			    'time' => $row['comment_time'],
+			    'comment_id' => $row['comment_id'],
+			    'answered' => $row['points'] != null ? true : false
+            ];
+		}
+		return $results;
+	}
+
 	/**
 	 * @param int $user_id
 	 * @return array
@@ -1257,4 +1295,20 @@ class SimpleChoiceQuestion
 	{
 		$this->question_image = $question_image;
 	}
+
+    /**
+     * @return int
+     */
+    public function getCompulsoryQuestion()
+    {
+        return $this->compulsory_question;
+    }
+
+    /**
+     * @param int $compulsory_question
+     */
+    public function setCompulsoryQuestion($compulsory_question)
+    {
+        $this->compulsory_question = $compulsory_question;
+    }
 } 

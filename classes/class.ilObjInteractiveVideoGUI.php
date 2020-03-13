@@ -539,17 +539,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$config_tpl->setVariable('USER_IMAGE', ilObjComment::getUserImageInBase64($ilUser->getId()));
 		}
 
-		$stop_points = array();
-		$comments    = array();
-		$image_cache = array();
+		$stop_points          = array();
+		$comments             = array();
+		$image_cache          = array();
+		$compulsory_questions = array();
 		if( ! $edit_screen)
 		{
 			$stop_points = $this->objComment->getStopPoints();
 			$comments    = $this->objComment->getContentComments();
 			$image_cache = ilObjComment::getUserImageCache();
+            $compulsory_questions = SimpleChoiceQuestion::getAllCompulsoryQuestions($this->obj_id);
 		}
 
 		$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
+		$config_tpl->setVariable('COMPULSORY_QUESTIONS', json_encode($compulsory_questions));
 		$config_tpl->setVariable('COMMENTS', json_encode($comments));
 		$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode($image_cache));
 		$config_tpl->setVariable('INTERACTIVE_VIDEO_REF_ID', $this->object->getRefId());
@@ -2000,6 +2003,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$repeat_question->setInfo($plugin->txt('repeat_question_info'));
 		$form->addItem($repeat_question);
 
+		$compulsory_question = new ilCheckboxInputGUI($plugin->txt('compulsory_question'), 'compulsory_question');
+        $compulsory_question->setInfo($plugin->txt('compulsory_question_info'));
+		$form->addItem($compulsory_question);
+
 		$limit_attempts = new ilCheckboxInputGUI($plugin->txt('limit_attempts'), 'limit_attempts');
 		$limit_attempts->setInfo($plugin->txt('limit_attempts_info'));
 		$form->addItem($limit_attempts);
@@ -2274,6 +2281,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['jump_wrong_ts']			= $question_data['question_data']['jump_wrong_ts'];
 		$values['limit_attempts']			= $question_data['question_data']['limit_attempts'];
 		$values['repeat_question']			= $question_data['question_data']['repeat_question'];
+		$values['compulsory_question']		= $question_data['question_data']['compulsory_question'];
 		$values['feedback_correct_obj']		= $question_data['question_data']['feedback_correct_ref_id'];
 		$values['feedback_wrong_obj']		= $question_data['question_data']['feedback_wrong_ref_id'];
 		$values['show_comment_field']		= $question_data['question_data']['reflection_question_comment'];
@@ -2404,6 +2412,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$question->setShowResponseFrequency((int)$form->getInput('show_response_frequency'));
 		$question->setRepeatQuestion((int)$form->getInput('repeat_question'));
+		$question->setCompulsoryQuestion((int)$form->getInput('compulsory_question'));
 		$question->setReflectionQuestionComment((int)$form->getInput('show_comment_field'));
 		$question->setNeutralAnswer((int)$form->getInput('neutral_type'));
 		$question->deleteQuestionsIdByCommentId($comment_id);

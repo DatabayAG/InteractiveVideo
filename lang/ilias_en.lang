@@ -197,3 +197,5 @@ sure_delete_subtitle#:#Are you sure you want to remove this subtitle?
 you_need_a_short_title#:#You need to provide a short title!
 no_toolbar#:#Deactivate toolbar
 no_toolbar_info#:#No toolbar with filters will be shown
+compulsory_question#:#Compulsory question
+compulsory_question_info#:#This question must be answered

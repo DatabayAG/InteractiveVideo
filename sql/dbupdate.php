@@ -952,3 +952,19 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_toolbar'))
 	);
 }
 ?>
+<#51>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_question'))
+{
+    if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'compulsory_question'))
+    {
+        $ilDB->addTableColumn('rep_robj_xvid_question', 'compulsory_question',
+            array(
+                'type'    => 'integer',
+                'length'  => '1',
+                'notnull' => false,
+                'default' => null
+            ));
+    }
+}
+?>
