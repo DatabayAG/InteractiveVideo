@@ -1,9 +1,9 @@
 var InteractiveVideoQuestionViewer = (function (scope) {
 	'use strict';
 	let pub = {},
-		pro = {},
-		pri = {
-			locked : false
+			pro = {},
+			pri = {
+				locked : false
 		};
 
 	pub.QuestionObject = {};
@@ -55,14 +55,11 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 			pro.addAnswerPossibilities('radio');
 			pro.addFeedbackDiv();
 			pro.addButtons(player);
-		}
-		else if (type === 1){
+		} else if (type === 1) {
 			pro.addAnswerPossibilities('checkbox');
 			pro.addFeedbackDiv();
 			pro.addButtons(player);
-		}
-		else if (type === 2)
-		{
+		} else if (type === 2) {
 			pro.addSelfReflectionLayout(player);
 		}
 		pro.showPreviousAnswer(player);
@@ -100,9 +97,9 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	{
 		return  '<label for="answer_'   + value.answer_id + '">' +
 			'<input' +
-			' id="answer_' + value.answer_id + '" name="answer[]"' +
+			' id="answer_'  + value.answer_id + '" name="answer[]"' +
 			' value="'      + value.answer_id + '"' +
-			' type="'     + input_type + '">' +
+			' type="'       + input_type + '">' +
 			value.answer +
 			'</label>' + 
 			'<div class="progress rf_listener response_frequency_' + value.answer_id + ' ilNoDisplay"></div>' +
@@ -232,7 +229,6 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 				success: function (feedback) {
 					let obj = JSON.parse(feedback);
 					let question_id = InteractiveVideoQuestionViewer.QuestionObject.question_id;
-					console.log(question_id)
 					if(question_id in il.InteractiveVideo[player_id].compulsoryQuestions) {
 						il.InteractiveVideo[player_id].compulsoryQuestions[question_id].answered = true;
 					}
@@ -269,7 +265,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 	pro.showQuestionInteractionForm = function(comment_id, array, player) {
 		pub.comment_id = comment_id;
 		pub.QuestionObject = array;
-		pub.QuestionObject.player = player
+		pub.QuestionObject.player = player;
 		//Todo: fix this, fullscreen isn't working
 		pro.buildQuestionForm(player);
 		if (pub.QuestionObject.player.isFullScreen === true) {
