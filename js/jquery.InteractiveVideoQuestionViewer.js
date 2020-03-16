@@ -18,17 +18,32 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		});
 	};
 
+	pro.addCompulsoryHeader = function(header){
+		$('#ilQuestionModal .modal-header').removeClass('compulsory');
+		if(pub.QuestionObject.compulsory_question === "1") {
+			header = '<span class="compulsory_question">' + il.InteractiveVideo["lang"].compulsory + '</span>';
+			$('#ilQuestionModal .modal-header').addClass('compulsory');
+		}
+		return header;
+	};
+
 	pro.buildQuestionForm = function(player) {
-		let modal = $('.modal-body');
-		let type  = parseInt(pub.QuestionObject.type, 10);
-		let img   = '';
+		let modal  = $('.modal-body');
+		let type   = parseInt(pub.QuestionObject.type, 10);
+		let img    = '';
+		let header = '';
 
 		modal.html('');
-		$('.modal-title').html(pub.QuestionObject.question_title);
+
+		header = pro.addCompulsoryHeader();
+
+		$('.modal-title').html(pub.QuestionObject.question_title + ' ' + header);
+
 		if(pub.QuestionObject.question_image)
 		{
 			img = '<div class="question_image_container"><img class="question_image" src="' + pub.QuestionObject.question_image+ '"/></div>';
 		}
+
 		modal.append(img + '<div class="question_center"><p>' + pub.QuestionObject.question_text + '</p></div>');
 		if (type === 0) {
 			pro.addAnswerPossibilities('radio');
@@ -250,7 +265,9 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		}
 
 		var config = {};
-		if(il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player).fixed_modal === "1") {
+		if(il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player).fixed_modal === "1" ||
+				pub.QuestionObject.compulsory_question === "1"
+		) {
 			config = {backdrop: 'static', keyboard: false};
 		}
 		$('#ilQuestionModal').modal(config, 'show');

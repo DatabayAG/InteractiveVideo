@@ -432,3 +432,13 @@ body.cke_editable{
 .iv_light_version{
     display:none !important;
 }
+
+.compulsory_question{
+    float:right;
+    margin-right: 10px;
+    font-style: italic;
+}
+
+.modal-header.compulsory{
+    background-color: khaki;   
+}

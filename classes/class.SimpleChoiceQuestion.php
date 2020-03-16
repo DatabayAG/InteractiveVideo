@@ -893,7 +893,7 @@ class SimpleChoiceQuestion
 		$results = array();
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$results[] = [
+			$results[$row['comment_id']] = [
 			    'time' => $row['comment_time'],
 			    'comment_id' => $row['comment_id'],
 			    'answered' => $row['points'] != null ? true : false

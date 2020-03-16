@@ -83,11 +83,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	{
 		let compulsory_question = il.InteractiveVideo[player_id].compulsoryQuestions;
 		$.each(compulsory_question, function (key, object) {
-			console.log(object)
 			if(object.answered == false){
 				if(current_time >= object.time) {
-					il.InteractiveVideoPlayerAbstract.setCurrentTime(object.time - 0.6, player_id);
+					il.InteractiveVideoPlayerAbstract.setCurrentTime(object.time - 0.1, player_id);
 					//Todo: remove compulsory question after answer
+					return false;
 				}
 			}
 		});
