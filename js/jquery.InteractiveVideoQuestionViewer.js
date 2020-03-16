@@ -266,7 +266,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 
 		var config = {};
 		if(il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player).fixed_modal === "1" ||
-				pub.QuestionObject.compulsory_question === "1"
+				( pub.QuestionObject.compulsory_question === "1" && ! pub.QuestionObject.feedback )
 		) {
 			config = {backdrop: 'static', keyboard: false};
 		}
