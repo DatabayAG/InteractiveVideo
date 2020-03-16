@@ -880,7 +880,7 @@ class SimpleChoiceQuestion
 	{
 		global $ilDB;
 		$res     = $ilDB->queryF('
-			SELECT * 
+			SELECT comments.comment_time, questions.question_id, comments.comment_id, points 
 			FROM ' . self::TABLE_NAME_COMMENTS . ' comments, 
 				' . self::TABLE_NAME_QUESTION . '  questions 
 			LEFT JOIN rep_robj_xvid_score ON questions.question_id = rep_robj_xvid_score.question_id
@@ -893,10 +893,11 @@ class SimpleChoiceQuestion
 		$results = array();
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$results[$row['comment_id']] = [
-			    'time' => $row['comment_time'],
-			    'comment_id' => $row['comment_id'],
-			    'answered' => $row['points'] != null ? true : false
+			$results[$row['question_id']] = [
+			    'time'          => $row['comment_time'],
+                'question_id'   => $row['question_id'],
+			    'comment_id'    => $row['comment_id'],
+			    'answered'      => $row['points'] != null ? true : false
             ];
 		}
 		return $results;

@@ -85,8 +85,9 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		$.each(compulsory_question, function (key, object) {
 			if(object.answered == false){
 				if(current_time >= object.time) {
-					il.InteractiveVideoPlayerAbstract.setCurrentTime(object.time - 0.1, player_id);
-					//Todo: remove compulsory question after answer
+					il.InteractiveVideoPlayerAbstract.pause(player_id);
+					//il.InteractiveVideoPlayerAbstract.setCurrentTime(parseInt(object.time, 10) + 0.1, player_id);
+					InteractiveVideoQuestionViewer.getQuestionPerAjax(object.comment_id, player_id);
 					return false;
 				}
 			}
