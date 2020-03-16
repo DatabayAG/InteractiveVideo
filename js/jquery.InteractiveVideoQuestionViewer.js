@@ -239,7 +239,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 				data:    $(this).serialize(),
 				success: function (feedback) {
 					let obj = JSON.parse(feedback);
-					let question_id = InteractiveVideoQuestionViewer.QuestionObject.question_id;
+					let question_id = pub.QuestionObject.question_id;
 					if(question_id in il.InteractiveVideo[player_id].compulsoryQuestions) {
 						il.InteractiveVideo[player_id].compulsoryQuestions[question_id].answered = true;
 					}
