@@ -86,7 +86,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			if(object.answered == false){
 				if(current_time >= object.time) {
 					il.InteractiveVideoPlayerAbstract.pause(player_id);
-					//il.InteractiveVideoPlayerAbstract.setCurrentTime(parseInt(object.time, 10) + 0.1, player_id);
+					il.InteractiveVideoPlayerAbstract.setCurrentTime(parseInt(object.time, 10) + 0.1, player_id);
 					InteractiveVideoQuestionViewer.getQuestionPerAjax(object.comment_id, player_id);
 					return false;
 				}
