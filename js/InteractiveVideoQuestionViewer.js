@@ -3,8 +3,8 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	let pub = {},
 			pro = {},
 			pri = {
-				locked: false,
-				ids:    {
+				locked:  false,
+				ids:     {
 					modal:                    '#ilQuestionModal',
 					question_form:            '#question_form',
 					close_form:               '#close_form',
@@ -12,6 +12,11 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 					answer_part:              '#answer_',
 					private_modal:            '#is_private_modal_',
 					question_btns_below_form: '#question_buttons_bellow_form',
+				},
+				classes: {
+					modal_body:     '.modal-body',
+					modal_title:    '.modal-title',
+					modal_feedback: '.modal_feedback',
 				},
 			};
 
@@ -61,7 +66,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.buildQuestionForm = function(player) {
-		let modal  = $('.modal-body');
+		let modal  = $(pri.classes.modal_body);
 		let type   = parseInt(pub.QuestionObject.type, 10);
 		let img    = '';
 		let header = '';
@@ -86,7 +91,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 			pro.addSelfReflectionLayout(player);
 		}
 		header = pro.addCompulsoryHeader(header);
-		$('.modal-title').html(pub.QuestionObject.question_title + ' ' + header);
+		$(pri.classes.modal_title).html(pub.QuestionObject.question_title + ' ' + header);
 		pro.showPreviousAnswer(player);
 	};
 
@@ -115,7 +120,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		html += '<input name="qid" value ="' + pub.QuestionObject.question_id + '" type="hidden"/>';
 		html += '<div id="question_buttons_bellow_form"></div>';
 		html += '</form>';
-		$('.modal-body').append(html);
+		$(pri.classes.modal_body).append(html);
 	};
 
 	pro.buildAnswerInputElement = function(input_type, value)
@@ -136,7 +141,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		let player_id = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 		let language = scope.InteractiveVideo.lang;
 
-		$('.modal-body').append('<div class="modal_feedback"><div class="modal_reflection_footer">' + pro.createButtonButtons('close_form', language.close_text) +'</div></div>', '');
+		$(pri.classes.modal_body).append('<div class="modal_feedback"><div class="modal_reflection_footer">' + pro.createButtonButtons('close_form', language.close_text) +'</div></div>', '');
 		if(parseInt(pub.QuestionObject.reflection_question_comment, 10) === 1)
 		{
 			pro.appendSelfReflectionCommentForm(player_id);
@@ -159,7 +164,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		//Todo: check this
 		let comment_id = 'text_reflection_comment_'+ pub.comment_id ;
 		let footer = $('.modal_reflection_footer');
-		let feedback = $('.modal_feedback');
+		let feedback = $(pri.classes.modal_feedback);
 		let language = scope.InteractiveVideo.lang;
 
 		footer.prepend(pro.createButtonButtons('submit_comment_form_' + player_id, language.save, 'submit_comment_form'));
@@ -198,7 +203,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.showFeedback = function(feedback, player) {
-		let modal = $('.modal_feedback');
+		let modal = $(pri.classes.modal_feedback);
 		let language = scope.InteractiveVideo.lang;
 		let player_id = scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 
