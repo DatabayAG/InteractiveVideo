@@ -3,14 +3,17 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	let pub = {},
 			pro = {},
 			pri = {
-				locked : false,
-				ids : {
-					modal : '#ilQuestionModal',
-					question_form : '#question_form',
-					close_form : '#close_form'
-				}
-
-		};
+				locked: false,
+				ids:    {
+					modal:                    '#ilQuestionModal',
+					question_form:            '#question_form',
+					close_form:               '#close_form',
+					time_string:              '#jumpToTimeInVideo',
+					answer_part:              '#answer_',
+					private_modal:            '#is_private_modal_',
+					question_btns_below_form: '#question_buttons_bellow_form',
+				},
+			};
 
 	pub.QuestionObject = {};
 
@@ -92,7 +95,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		if(pub.QuestionObject.feedback !== undefined && pub.QuestionObject.previous_answer !== undefined)
 		{
 			$.each(pub.QuestionObject.previous_answer, function (l, value) {
-				$('#answer_' + value).attr('checked', true);
+				$(pri.ids.answer_part + value).attr('checked', true);
 			});
 			if(pub.QuestionObject.type != 2)
 			{
@@ -164,7 +167,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		feedback.prepend('<textarea id="'+comment_id+'">' + pub.QuestionObject.reply_to_txt + '</textarea>');
 		if(pub.QuestionObject.reply_to_private == '1')
 		{
-			$('#is_private_modal_' + player_id).attr('checked', 'checked');
+			$(pri.ids.private_modal + player_id).attr('checked', 'checked');
 		}
 		CKEDITOR.replace(comment_id);
 		feedback.prepend(language.add_comment);
@@ -186,7 +189,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.addButtons = function(player) {
-		let question_form = $('#question_buttons_bellow_form');
+		let question_form = $(pri.ids.question_btns_below_form);
 		let language = scope.InteractiveVideo.lang;
 
 		question_form.append(pro.createButtonButtons('sendForm', language.send_text, ''));
@@ -204,7 +207,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		modal.html(feedback.html);
 		if (parseInt(feedback.is_timed, 10) === 1) {
 			modal.append('<div class="learning_recommendation"><br/>' + language.learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', language.feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>', '');
-			$('#jumpToTimeInVideo').on('click', function () {
+			$(pri.ids.time_string).on('click', function () {
 				$(pri.ids.modal).modal('hide');
 
 				scope.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(feedback.time, player_id);
