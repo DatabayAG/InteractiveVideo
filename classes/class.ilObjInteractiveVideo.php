@@ -490,9 +490,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		global $ilDB;
 
 		$res = $ilDB->queryF('
-			SELECT * FROM ' . self::TABLE_NAME_COMMENTS . ' 
+			SELECT * FROM ' . self::TABLE_NAME_COMMENTS . ' comments,
+			     ' . self::TABLE_NAME_QUESTIONS . '   questions 
 			WHERE obj_id = %s
 			AND is_private = %s
+			AND comments.comment_id = questions.comment_id 
 			ORDER BY comment_time ASC',
 			array('integer', 'integer'), array($this->getId(),0));
 
@@ -522,11 +524,13 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			{
 				$table_data[$counter]['is_tutor']			= xvidUtils::yesNoString($row['is_tutor']);
 				$table_data[$counter]['is_interactive']		= xvidUtils::yesNoString($row['is_interactive']);
+				$table_data[$counter]['compulsory']= xvidUtils::yesNoString($row['compulsory_question']);
 			}
 			else
 			{
 				$table_data[$counter]['is_tutor']			= $row['is_tutor'];
 				$table_data[$counter]['is_interactive']		= $row['is_interactive'];
+				$table_data[$counter]['compulsory']= $row['compulsory_question'];
 			}
 
 			$counter++;

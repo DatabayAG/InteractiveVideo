@@ -73,6 +73,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		{
 			$this->addColumn($a_parent_obj->plugin->txt('visibility'), 'is_private');
 		}
+		$this->addColumn($a_parent_obj->plugin->txt('compulsory'), 'compulsory', '10%');
 		$this->addColumn($this->lng->txt('actions'), '', '10%');
 
 		$this->setSelectAllCheckbox('comment_id');
@@ -133,6 +134,11 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			else if($key == 'is_interactive')
 			{
 				$txt_value = $value == 1 ? 'question' : 'comment';
+				$value = $this->lng->txt($txt_value);
+			}
+			else if($key == 'compulsory')
+			{
+				$txt_value = $value == 1 ? 'yes' : 'no';
 				$value = $this->lng->txt($txt_value);
 			}
 			else if($key == 'is_tutor')
