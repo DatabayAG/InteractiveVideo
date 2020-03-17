@@ -5,7 +5,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 	//Done: Questions working
 	//Done: Comments working
 	//Player object exists by id
-	var pub = {}, pro = {};
+	let pub = {}, pro = {};
 
 	pub.config = {
 		pauseCallback           : null,
@@ -74,7 +74,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		pub.pause(player_id);
 		if(time !== null)
 		{
-			pub.setCurrentTime(time, player_id);26100
+			pub.setCurrentTime(time, player_id);
 			scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id).last_stopPoint = time;
 		}
 		pub.play(player_id);

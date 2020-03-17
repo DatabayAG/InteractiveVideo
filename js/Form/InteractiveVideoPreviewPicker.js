@@ -1,7 +1,7 @@
 il.InteractiveVideoPreviewPicker = (function (scope) {
 	'use strict';
 
-	var pub = {}, pro = {};
+	let pub = {}, pro = {};
 
 	pub.config = {
 		modal_id	: 'ffmpeg_extract_modal',
@@ -41,9 +41,9 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 			data:	{time : $('#ffmpeg_time_picker').val()}, 
 			success: function (json) 
 				{
-					var images = JSON.parse(json);
-					var html = '';
-					var button = $('.use_as_question_image').html();
+					let images = JSON.parse(json);
+					let html = '';
+					let button = $('.use_as_question_image').html();
 					if(images.error === undefined)
 					{
 						$.each(images, function (key, value)
@@ -70,7 +70,7 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 		$('.question_image_select').off('click');
 
 		$('.question_image_select').on('click', function(){
-			var img = $(this).parent().find('.preview_image').attr('src');
+			let img = $(this).parent().find('.preview_image').attr('src');
 
 			if($('#il_prop_cont_question_image').find('img').length > 0)
 			{
@@ -97,7 +97,7 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 	
 	pro.makeModalBootstrapCompatible = function()
 	{
-		var size = 'col-xs-12';
+		let size = 'col-xs-12';
 		$('.modal-body').addClass(size);
 		$('.modal-content').addClass(size);
 	};

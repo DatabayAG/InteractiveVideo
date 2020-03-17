@@ -360,7 +360,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 		if(replies !== undefined && replies.length > 0)
 		{
-			for (var i  = 0; i < replies.length; i++)
+			for (let i  = 0; i < replies.length; i++)
 			{
 				value += pub.getCommentRepliesHtml(replies[i]);
 			}
@@ -382,10 +382,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			private_comment = ' (' + language.private_text + ')';
 		}
-		else
-		{
-			private_comment = '';
-		}
+
 		return '<span class="private_text">'+ private_comment + '</span> ';
 	};
 

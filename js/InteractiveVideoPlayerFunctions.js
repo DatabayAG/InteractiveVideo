@@ -194,7 +194,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.postAndAppendFakeCommentToStream = function(actual_time_in_video, comment_text, is_private, end_time, player_id) {
 		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
-		let fake_id = parseInt(Math.random() * 10000000, 10);
+		let fake_id = Math.random() * 10000000;
 
 		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id);
 		let tmp_obj =
@@ -248,7 +248,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				time = $('#comment_time_end_' + player_id).val();
 				time = time.split(':'); // split it at the colons
 
-				var end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
+				let end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
 
 				if(end_time < parseInt(actual_time_in_video, 10))
 				{
@@ -279,8 +279,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				success:  function () {
 					$('.reply_comment_' + org_id).remove();
 					$('.list_item_' + comment_id + ' .reply_comment_non_existent').remove();
-					var reply = {'comment_text' : comment_text, 'is_interactive' : 0, 'is_private' : is_private, 'user_name' : scope.InteractiveVideo[player_id].username, 'comment_id' : 'non_existent'};
-					var html = scope.InteractiveVideoPlayerComments.getCommentRepliesHtml(reply);
+					let reply = {'comment_text' : comment_text, 'is_interactive' : 0, 'is_private' : is_private, 'user_name' : scope.InteractiveVideo[player_id].username, 'comment_id' : 'non_existent'};
+					let html = scope.InteractiveVideoPlayerComments.getCommentRepliesHtml(reply);
 					$('.list_item_' + comment_id).find('.comment_replies').append(html);
 					$('#ilQuestionModal').modal('hide');
 					pub.refreshMathJaxView();
