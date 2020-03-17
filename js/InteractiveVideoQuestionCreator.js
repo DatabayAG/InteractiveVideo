@@ -4,14 +4,14 @@ $( document ).ready(function() {
 
 	if(IVQuestionCreator.JSON.length === 0)
 	{
-		InteractiveVideoQuestionCreator.appendEmptyJSON();
+		il.InteractiveVideoQuestionCreator.appendEmptyJSON();
 	}
-	InteractiveVideoQuestionCreator.Init();
+	il.InteractiveVideoQuestionCreator.Init();
 	$('.question_type').val(IVQuestionCreator.type);
 });
 
 
-var InteractiveVideoQuestionCreator = (function () {
+il.InteractiveVideoQuestionCreator = (function () {
 	'use strict';
 
 	var pub = {}, pro = {};

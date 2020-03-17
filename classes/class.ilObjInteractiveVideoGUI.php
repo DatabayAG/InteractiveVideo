@@ -392,7 +392,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionCreator.js');
+		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoQuestionCreator.js');
 		$tpl->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
 		$simple_choice = new SimpleChoiceQuestion();
         $ajax_object   = new SimpleChoiceQuestionAjaxHandler();
@@ -471,7 +471,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
 		$tpl->addCss($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.css');
 		$tpl->addJavaScript($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.js');
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
+		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoQuestionViewer.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerComments.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerFunctions.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstract.js');

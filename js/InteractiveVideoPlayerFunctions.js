@@ -109,7 +109,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				if(current_time >= object.time) {
 					il.InteractiveVideoPlayerAbstract.pause(player_id);
 					il.InteractiveVideoPlayerAbstract.setCurrentTime(parseInt(object.time, 10) + 0.1, player_id);
-					InteractiveVideoQuestionViewer.getQuestionPerAjax(object.comment_id, player_id);
+					il.InteractiveVideoQuestionViewer.getQuestionPerAjax(object.comment_id, player_id);
 					return false;
 				}
 			}
@@ -182,7 +182,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		if (is_interactive === 1 && $.inArray(comment.comment_id, player_data.ignore_questions) === -1) {
 			stop_video = 1;
-			InteractiveVideoQuestionViewer.getQuestionPerAjax(comment.comment_id, player);
+			il.InteractiveVideoQuestionViewer.getQuestionPerAjax(comment.comment_id, player);
 		}
 		else if (is_interactive === 1) 
 		{
