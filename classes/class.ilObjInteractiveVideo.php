@@ -499,41 +499,34 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 		$counter    = 0;
 		$table_data = array();
-		while($row = $ilDB->fetchAssoc($res))
-		{
-			$table_data[$counter]['comment_id']			= $row['comment_id'];
+		while($row = $ilDB->fetchAssoc($res)) {
+            $table_data[$counter]['comment_id'] = $row['comment_id'];
 
-			if($replace_with_text)
-			{
-				$table_data[$counter]['comment_time']		= xvidUtils::getTimeStringFromSeconds($row['comment_time'], false);
-				$table_data[$counter]['comment_time_end']	= xvidUtils::getTimeStringFromSeconds($row['comment_time_end'], $replace_with_text, $empty_string_if_null);
-			}
-			else
-			{
-				$table_data[$counter]['comment_time']		= $row['comment_time'];
-				$table_data[$counter]['comment_time_end']	= $row['comment_time_end'];
-			}
-			$table_data[$counter]['user_id']			= $row['user_id'];
-			$table_data[$counter]['title']				= $row['comment_title'];
-			$table_data[$counter]['comment_text']		= $row['comment_text'];
-			if($strip_tags){
-				$table_data[$counter]['comment_text'] = strip_tags($row['comment_text']);
-			}
-			if($replace_settings_with_text)
-			{
-				$table_data[$counter]['is_tutor']			= xvidUtils::yesNoString($row['is_tutor']);
-				$table_data[$counter]['is_interactive']		= xvidUtils::yesNoString($row['is_interactive']);
-				$table_data[$counter]['compulsory']         = xvidUtils::yesNoString($row['compulsory_question']);
-			}
-			else
-			{
-				$table_data[$counter]['is_tutor']			= $row['is_tutor'];
-				$table_data[$counter]['is_interactive']		= $row['is_interactive'];
-				$table_data[$counter]['compulsory']         = $row['compulsory_question'];
-			}
+            if ($replace_with_text) {
+                $table_data[$counter]['comment_time']     = xvidUtils::getTimeStringFromSeconds($row['comment_time'], false);
+                $table_data[$counter]['comment_time_end'] = xvidUtils::getTimeStringFromSeconds($row['comment_time_end'], $replace_with_text, $empty_string_if_null);
+            } else {
+                $table_data[$counter]['comment_time']     = $row['comment_time'];
+                $table_data[$counter]['comment_time_end'] = $row['comment_time_end'];
+            }
+            $table_data[$counter]['user_id']              = $row['user_id'];
+            $table_data[$counter]['title']                = $row['comment_title'];
+            $table_data[$counter]['comment_text']         = $row['comment_text'];
+            if ($strip_tags) {
+                $table_data[$counter]['comment_text']     = strip_tags($row['comment_text']);
+            }
+            if ($replace_settings_with_text) {
+                $table_data[$counter]['is_tutor']         = xvidUtils::yesNoString($row['is_tutor']);
+                $table_data[$counter]['is_interactive']   = xvidUtils::yesNoString($row['is_interactive']);
+                $table_data[$counter]['compulsory']       = xvidUtils::yesNoString($row['compulsory_question']);
+            } else {
+                $table_data[$counter]['is_tutor']         = $row['is_tutor'];
+                $table_data[$counter]['is_interactive']   = $row['is_interactive'];
+                $table_data[$counter]['compulsory']       = $row['compulsory_question'];
+            }
 
-			$counter++;
-		}
+            $counter++;
+        }
 
 		return $table_data;
 
