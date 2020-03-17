@@ -39,7 +39,9 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		pub.toggleCloseButtons(false);
 		$(pri.id_modal + ' .modal-header').removeClass('compulsory');
 		if(pub.QuestionObject.compulsory_question === "1") {
-			pub.toggleCloseButtons(true);
+			if(! pub.QuestionObject.feedback) {
+				pub.toggleCloseButtons(true);
+			}
 			header = '<span class="compulsory_question">' + il.InteractiveVideo["lang"].compulsory + '</span>';
 			$(pri.id_modal + ' .modal-header').addClass('compulsory');
 		}
