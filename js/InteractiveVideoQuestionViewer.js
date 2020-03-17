@@ -10,8 +10,10 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	pub.QuestionObject = {};
 
 	pub.getQuestionPerAjax = function (comment_id, player) {
-		if(pri.locked === false) {
-			pri.locked = true;
+		if(pro.isQuestionLockEnabled() && $(pri.id_modal).css('display') === 'none'){
+				pro.removeQuestionLock();
+		}
+
 			let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
 
 			$.when(
@@ -20,9 +22,11 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 						type: 'GET', dataType: 'json'
 					})
 			).then(function (array) {
-				pro.showQuestionInteractionForm(comment_id, array, player);
+				if(pro.isQuestionLockDisabled()) {
+					pro.enableQuestionLock();
+					pro.showQuestionInteractionForm(comment_id, array, player);
+				}
 			});
-		}
 	};
 
 	pub.toggleCloseButtons = function(show) {
@@ -263,13 +267,13 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		close_form.off('click');
 		close_form.on('click', function () {
 			question_modal.modal('hide');
-			pri.locked = false;
+			pro.removeQuestionLock();
 		});
 
 		question_modal.off('hidden.bs.modal');
 		question_modal.on('hidden.bs.modal', function () {
 			scope.InteractiveVideoPlayerAbstract.resumeVideo(player_id);
-			pri.locked = false;
+			pro.removeQuestionLock();
 		})
 	};
 
@@ -294,6 +298,22 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 			config = {backdrop: 'static', keyboard: false};
 		}
 		$(pri.id_modal).modal(config, 'show');
+	};
+
+	pro.enableQuestionLock = function(){
+		pri.locked = true;
+	};
+
+	pro.removeQuestionLock = function(){
+		pri.locked = false;
+	};
+
+	pro.isQuestionLockEnabled = function(){
+		return pri.locked === true;
+	};
+
+	pro.isQuestionLockDisabled = function(){
+		return pri.locked === false;
 	};
 
 	pub.protect = pro;
