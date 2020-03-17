@@ -1,3 +1,7 @@
+# 2.0.52
+1. Compulsory questions
+2. Automatic scrolling if show all comments is active
+
 # 2.0.25
 1. Disable toolbar setting
 

@@ -2,6 +2,7 @@
 - [InteractiveVideo](#interactivevideo)
   * [ILIAS compatibility](#ilias-compatibility)
   * [Important notice](#important-notice)
+  * [Changes in Version 2.0.52](#changes-in-version-2052)
   * [Changes in Version 2.0.25](#changes-in-version-2025)
   * [Changes in Version 2.0.24](#changes-in-version-2024)
   * [Changes in Version 2.0.23](#changes-in-version-2023)
@@ -27,6 +28,10 @@ The 2.x version of the InteractiveVideo Plugin is only compatible with ILIAS ver
 
 ## Important notice
 If you upgrade to the 2.x version of the InteractiveVideo you can not go back to version 1.x, because there are migration steps which alter the database schema.
+
+## Changes in Version 2.0.52
+* Compulsory questions
+* Automatic scrolling if show all comments is active
 
 ## Changes in Version 2.0.25
 * Disable toolbar setting
