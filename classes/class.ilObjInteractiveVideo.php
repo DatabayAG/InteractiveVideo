@@ -964,19 +964,14 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$qst = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
 		if(is_array($qst) && count($qst) > 0)
 		{
-			$simple = new SimpleChoiceQuestion();
-			$qst = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
-			if(is_array($qst) && count($qst) > 0)
-			{
-				$usrs_points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId());
-				foreach($usrs_points as $usr_id => $points)
-				{
-					if(is_array($qst) && ($points == count($qst)))
-					{
-						$user_ids[$usr_id] = $usr_id;
-					}
-				}
-			}
+            $usrs_points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId());
+            foreach($usrs_points as $usr_id => $points)
+            {
+                if(is_array($qst) && ($points == count($qst)))
+                {
+                    $user_ids[$usr_id] = $usr_id;
+                }
+            }
 		}
 		else
 		{
@@ -1148,12 +1143,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return self::LP_MODE_DEACTIVATED;
 	}
 
-	public function updateLP()
+	public function updateLearningProgressForActor()
 	{
-		/**
-		 * @var $ilUser ilObjUser
-		 */
-		global $ilUser;
+		global $DIC;
 
 		require_once "./Services/Tracking/classes/status/class.ilLPStatusEvent.php";
 		require_once "./Services/Tracking/classes/class.ilLPStatusWrapper.php";
@@ -1161,28 +1153,31 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 		ilLPStatusWrapper::_updateStatus(
 			$this->getId(),
-			$ilUser->getId()
+            $DIC->user()->getId()
 		);
 	}
 
-	public function trackProgress()
+    /**
+     * @param array $usrIds
+     */
+    public function refreshLearningProgress(array $usrIds = [])
+    {
+        require_once "./Services/Tracking/classes/status/class.ilLPStatusEvent.php";
+        require_once "./Services/Tracking/classes/class.ilLPStatusWrapper.php";
+        require_once "./Services/Tracking/classes/class.ilLearningProgress.php";
+
+        ilLPStatusWrapper::_refreshStatus(
+            $this->getId(),
+            empty($usrIds) ? null : $usrIds
+        );
+    }
+
+	public function trackReadEvent()
 	{
-		/**
-		 * @var $ilUser ilObjUser
-		 */
-		global $ilUser;
+        global $DIC;
 
-		require_once "./Services/Tracking/classes/class.ilChangeEvent.php";
-		require_once "./Services/Tracking/classes/status/class.ilLPStatusEvent.php";
-		require_once "./Services/Tracking/classes/class.ilLPStatusWrapper.php";
-		require_once "./Services/Tracking/classes/class.ilLearningProgress.php";
-
-		ilLearningProgress::_tracProgress(
-			$ilUser->getId(),
-			$this->getId(),
-			$this->getRefId(),
-			$this->getType()
-		);
+        require_once 'Services/Tracking/classes/class.ilChangeEvent.php';
+        ilChangeEvent::_recordReadEvent($this->getType(), $this->getRefId(), $this->getId(), $DIC->user()->getId());
 	}
 
 
