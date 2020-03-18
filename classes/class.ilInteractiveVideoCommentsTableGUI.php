@@ -138,7 +138,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			}
 			else if($key == 'compulsory')
 			{
-				$txt_value = $value == 1 ? 'yes' : 'no';
+				$txt_value = $value == 1 ? 'yes' : '';
 				$value = $this->lng->txt($txt_value);
 			}
 			else if($key == 'is_tutor')
