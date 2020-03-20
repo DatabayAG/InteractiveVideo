@@ -114,7 +114,7 @@ class ilObjComment
 	public function read()
 	{
 		/**
-		 * @var $ilDB ilDB
+		 * @var $ilDB ilDBInterface
 		 */
 		global $ilDB;
 
@@ -143,10 +143,10 @@ class ilObjComment
 	 */
 	public function create($return_next_id = false)
 	{
-		/**
-		 * @var $ilDB   ilDB
-		 * @var $ilUser ilObjUser
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         * @var $ilUser ilObjUser
+         */
 		global $ilDB, $ilUser;
 		$purify = new ilHtmlInteractiveVideoPostPurifier();
 		$text = $purify->purify($this->getCommentText());
@@ -184,6 +184,10 @@ class ilObjComment
 	 */
 	public function removeOldReplyTo($reply_to)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         * @var $ilUser ilObjUser
+         */
 		global $ilDB, $ilUser;
 		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_comments WHERE is_reply_to = %s AND user_id = %s',
 			array('integer', 'integer'), array($reply_to, $ilUser->getId()));
@@ -191,10 +195,10 @@ class ilObjComment
 
 	public function update()
 	{
-		/**
-		 * @var $ilDB ilDB
-		 * @var $ilUser ilObjUser
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         * @var $ilUser ilObjUser
+         */
 		global $ilDB, $ilUser;
 		$purify = new ilHtmlInteractiveVideoPostPurifier();
 		$text = $purify->purify($this->getCommentText());
@@ -224,6 +228,9 @@ class ilObjComment
 	 */
 	public function deleteComments($comment_ids)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		if(!is_array($comment_ids))
@@ -238,9 +245,9 @@ class ilObjComment
 	 */
 	public function getStopPoints()
 	{
-		/**
-		 * @vas $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF(
@@ -266,9 +273,9 @@ class ilObjComment
 	 */
 	public function getContentComments()
 	{
-		/**
-		 * @var $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB, $ilUser;
 
 		$query_types = array('integer','integer','integer','integer');
@@ -370,6 +377,9 @@ class ilObjComment
 	 */
 	public function cloneTutorComments($old_id, $new_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 		$questions_array = array();
 		$res = $ilDB->queryF(
