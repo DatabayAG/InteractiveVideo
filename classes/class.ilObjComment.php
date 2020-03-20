@@ -99,11 +99,22 @@ class ilObjComment
 	 */
 	protected static $user_image_cache = array();
 
+    /**
+     * @var ilDBInterface 
+     */
+	protected $db;
+
 	/**
 	 * @param int $comment_id
 	 */
 	public function __construct($comment_id = 0)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
+	    global $ilDB;
+	    $this->db = $ilDB;
+    
 		if($comment_id > 0)
 		{
 			$this->setCommentId($comment_id);
@@ -113,17 +124,13 @@ class ilObjComment
 
 	public function read()
 	{
-		/**
-		 * @var $ilDB ilDBInterface
-		 */
-		global $ilDB;
 
-		$res = $ilDB->queryF(
+		$res = $this->db->queryF(
 			'SELECT * FROM rep_robj_xvid_comments WHERE comment_id = %s',
 			array('integer'),
 			array($this->getCommentId())
 		);
-		$row = $ilDB->fetchAssoc($res);
+		$row = $this->db->fetchAssoc($res);
 
 		$this->setCommentText($row['comment_text']);
 		$this->setCommentTime($row['comment_time']);
@@ -144,10 +151,9 @@ class ilObjComment
 	public function create($return_next_id = false)
 	{
         /**
-         * @var $ilDB ilDBInterface
          * @var $ilUser ilObjUser
          */
-		global $ilDB, $ilUser;
+		global $ilUser;
 		$purify = new ilHtmlInteractiveVideoPostPurifier();
 		$text = $purify->purify($this->getCommentText());
 
@@ -155,9 +161,9 @@ class ilObjComment
 		{
 			$this->removeOldReplyTo($this->getIsReplyTo());
 		}
-		$next_id = $ilDB->nextId('rep_robj_xvid_comments');
+		$next_id = $this->db->nextId('rep_robj_xvid_comments');
 		$this->setCommentId($next_id);
-		$ilDB->insert('rep_robj_xvid_comments',
+        $this->db->insert('rep_robj_xvid_comments',
 			array(
 				'comment_id'     	=> array('integer', $next_id),
 				'obj_id'         	=> array('integer', $this->getObjId()),
@@ -185,25 +191,23 @@ class ilObjComment
 	public function removeOldReplyTo($reply_to)
 	{
         /**
-         * @var $ilDB ilDBInterface
          * @var $ilUser ilObjUser
          */
-		global $ilDB, $ilUser;
-		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_comments WHERE is_reply_to = %s AND user_id = %s',
+		global $ilUser;
+        $this->db->manipulateF('DELETE FROM rep_robj_xvid_comments WHERE is_reply_to = %s AND user_id = %s',
 			array('integer', 'integer'), array($reply_to, $ilUser->getId()));
 	}
 
 	public function update()
 	{
         /**
-         * @var $ilDB ilDBInterface
          * @var $ilUser ilObjUser
          */
-		global $ilDB, $ilUser;
+		global $ilUser;
 		$purify = new ilHtmlInteractiveVideoPostPurifier();
 		$text = $purify->purify($this->getCommentText());
 
-		$ilDB->update('rep_robj_xvid_comments',
+        $this->db->update('rep_robj_xvid_comments',
 			array(
 				'is_interactive' 	=> array('integer', (int)$this->isInteractive()),
 				'user_id'        	=> array('integer', $ilUser->getId()),
@@ -228,15 +232,11 @@ class ilObjComment
 	 */
 	public function deleteComments($comment_ids)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
 
 		if(!is_array($comment_ids))
 			return false;
 
-		$ilDB->manipulate('DELETE FROM rep_robj_xvid_comments WHERE ' . $ilDB->in('comment_id', $comment_ids, false, 'integer'));
+        $this->db->manipulate('DELETE FROM rep_robj_xvid_comments WHERE ' . $this->db->in('comment_id', $comment_ids, false, 'integer'));
 	}
 
 
@@ -245,12 +245,7 @@ class ilObjComment
 	 */
 	public function getStopPoints()
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
-
-		$res = $ilDB->queryF(
+		$res = $this->db->queryF(
 			'SELECT comment_time
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s
@@ -260,7 +255,7 @@ class ilObjComment
 		);
 
 		$stop_points = array();
-		while($row = $ilDB->fetchAssoc($res))
+		while($row = $this->db->fetchAssoc($res))
 		{
 			$stop_points[] = $row['comment_time'];
 		}
@@ -273,10 +268,7 @@ class ilObjComment
 	 */
 	public function getContentComments()
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB, $ilUser;
+		global $ilUser;
 
 		$query_types = array('integer','integer','integer','integer');
 		$query_data = array($this->getObjId(), 0, 1, $ilUser->getId());
@@ -290,7 +282,7 @@ class ilObjComment
 			$query_data = array_merge($query_data, array($ilUser->getId(), 1, 1));
 		}
 		
-		$res = $ilDB->queryF(
+		$res = $this->db->queryF(
 			'SELECT *
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s 
@@ -304,7 +296,7 @@ class ilObjComment
 		$comments = array();
 		$is_reply_to = array();
 		$i = 0;
-		while($row = $ilDB->fetchAssoc($res))
+		while($row = $this->db->fetchAssoc($res))
 		{
 			$temp = array();
 			$temp['comment_id'] = $row['comment_id'];
@@ -377,12 +369,8 @@ class ilObjComment
 	 */
 	public function cloneTutorComments($old_id, $new_id)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
 		$questions_array = array();
-		$res = $ilDB->queryF(
+		$res = $this->db->queryF(
 			'SELECT *
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s
@@ -391,7 +379,7 @@ class ilObjComment
 			array('integer'),
 			array($old_id)
 		);
-		while($row = $ilDB->fetchAssoc($res))
+		while($row = $this->db->fetchAssoc($res))
 		{
 			$this->setObjId($new_id);
 			$this->setCommentText($row['comment_text']);
