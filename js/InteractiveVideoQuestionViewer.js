@@ -100,6 +100,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	{
 		if(pub.QuestionObject.feedback !== undefined && pub.QuestionObject.previous_answer !== undefined)
 		{
+			pro.disableInteractionsIfLimitAttemptsIsActivated();
 			$.each(pub.QuestionObject.previous_answer, function (l, value) {
 				$(pri.ids.answer_part + value).attr('checked', true);
 			});
@@ -169,7 +170,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		let language = scope.InteractiveVideo.lang;
 
 		footer.prepend(pro.createButtonButtons('submit_comment_form_' + player_id, language.save, 'submit_comment_form'));
-		footer.prepend('<input type="checkbox" name="is_private_modal" value="1" id="is_private_modal_"' + player_id + '/> ' + language.private_text);
+		footer.prepend('<input type="checkbox" name="is_private_modal" value="1" id="is_private_modal_' + player_id + '"/> ' + language.private_text);
 		feedback.prepend('<textarea id="'+comment_id+'">' + pub.QuestionObject.reply_to_txt + '</textarea>');
 		if(pub.QuestionObject.reply_to_private == '1')
 		{
@@ -186,7 +187,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 
 		if(repeat === 0)
 		{
-			player_data.ignore_questions.push(pub.comment_id );
+			player_data.ignore_questions.push(pub.comment_id);
 		}
 	};
 
@@ -213,12 +214,13 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		modal.html(feedback.html);
 		if (parseInt(feedback.is_timed, 10) === 1) {
 			modal.append('<div class="learning_recommendation"><br/>' + language.learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', language.feedback_button_text + ' ' + mejs.Utility.secondsToTimeCode(feedback.time)) + '</div>', '');
-			$(pri.ids.time_string).on('click', function () {
+				let player_id = scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
+				$(pri.ids.time_string).on('click', function () {
 				$(pri.ids.modal).modal('hide');
 
 				scope.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(feedback.time, player_id);
 			});
-		}
+		};
 		if(feedback.feedback_link !== undefined && feedback.feedback_link !== '')
 		{
 			modal.append('<div class="learning_recommendation_link">' + language.more_information + ': <span class="feedback_link_more">' + '<img src="' + feedback.feedback_icon + '"/>' + feedback.feedback_link + '</span></div>');
@@ -267,10 +269,22 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 					pro.showFeedback(obj, player);
 					pro.addToLocalIgnoreArrayIfNonRepeatable(player_id);
 					pub.toggleCloseButtons(false);
+					pro.disableInteractionsIfLimitAttemptsIsActivated(player_id);
 				}
 			});
 		});
 		pro.appendCloseButtonListener(player_id);
+	};
+
+	pro.disableInteractionsIfLimitAttemptsIsActivated = function(player_id)
+	{
+		let limit_attempts = InteractiveVideoQuestionViewer.QuestionObject.limit_attempts;
+		
+		if(limit_attempts === '1') {
+			$("#question_form :input").attr("disabled", true);
+			$('#close_form').prop('disabled', false);
+		}
+
 	};
 
 	pro.appendCloseButtonListener = function(player_id)

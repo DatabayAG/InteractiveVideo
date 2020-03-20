@@ -82,7 +82,7 @@ class SimpleChoiceQuestionsOverviewTableGUI extends ilTable2GUI
 		$value = $this->lng->txt($txt_value);
 		$this->tpl->setVariable('NEUTRAL_QUESTION', $value);
 		$this->tpl->setVariable('USER_ANSWERED_CORRECT', $a_set['correct']);
-		if($a_set['percentage'] != '')
+		if($a_set['percentage'] != '' || ($a_set['neutral_question'] != 1 && $a_set['percentage'] == 0.0))
 		{
 			$this->tpl->setVariable('PERCENTAGE', $a_set['percentage'] . '%');
 		}

@@ -1742,7 +1742,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$valid            = true;
 			$comment_time     = $form->getInput('comment_time');
 			$comment_time_end = $form->getInput('comment_time_end');
-			if ($comment_time > $comment_time_end) {
+			if ($comment_time_end > 0 && $comment_time > $comment_time_end) {
 				$valid = false;
 				ilUtil::sendFailure($this->plugin->txt('endtime_warning'));
 			}
@@ -1817,11 +1817,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postTutorComment', '', false, false));
 
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(),true));
-		global $ilUser;
-		$this->object->getLPStatusForUser($ilUser->getId());
+
 		$tbl_data = $this->object->getCommentsTableData(true, true);
 		$plugin->includeClass('class.ilInteractiveVideoCommentsTableGUI.php');
 		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editComments');
+        $tbl->setIsPublic($this->object->isPublic());
 		$tbl->setData($tbl_data);
 		$video_tpl->setVariable('TABLE', $tbl->getHTML());
 		$tpl->setContent($video_tpl->get());
@@ -2563,6 +2563,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$simple = new SimpleChoiceQuestion();
 			$simple->deleteUserResults($user_ids, $this->obj_id);
+			$this->object->refreshLearningProgress();
 			ilUtil::sendSuccess(ilInteractiveVideoPlugin::getInstance()->txt('results_successfully_deleted'));
 		}
 		else
@@ -2647,6 +2648,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$simple = new SimpleChoiceQuestion();
 			$simple->deleteQuestionsResults($question_ids);
+			$this->object->refreshLearningProgress();
 			ilUtil::sendSuccess(ilInteractiveVideoPlugin::getInstance()->txt('results_successfully_deleted'));
 		}
 		else
@@ -2743,29 +2745,21 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	public function postVideoStartedPerAjax()
 	{
-		global $ilUser;
-		$this->object->saveVideoStarted($this->obj_id, $ilUser->getId());
+		global $DIC;
+
+		$this->object->trackReadEvent();
+		$this->object->saveVideoStarted($this->obj_id, $DIC->user()->getId());
+        $this->object->updateLearningProgressForActor();
+
 		$this->callExit();
 	}
 
 	public function postVideoFinishedPerAjax()
 	{
 		global $ilUser;
-		$simple = new SimpleChoiceQuestion();
-		$questions_with_points = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->object->getId());
-		$this->object->saveVideoFinished($this->obj_id, $ilUser->getId());
-		if(is_array($questions_with_points) && count($questions_with_points) > 0)
-		{
-			$points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->obj_id, $ilUser->getId());
-			if(is_array($questions_with_points) && (count($questions_with_points) == $points ))
-			{
-				$this->object->updateLP();
-			}
-		}
-		else
-		{
-			$this->object->updateLP();
-		}
+
+        $this->object->saveVideoFinished($this->obj_id, $ilUser->getId());
+        $this->object->updateLearningProgressForActor();
 
 		$this->callExit();
 	}

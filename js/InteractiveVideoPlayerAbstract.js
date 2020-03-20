@@ -74,6 +74,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		pub.pause(player_id);
 		if(time !== null)
 		{
+			il.InteractiveVideoPlayerResume.saveExternalResumeTime(player_id, time);
 			pub.setCurrentTime(time, player_id);
 			scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id).last_stopPoint = time;
 		}

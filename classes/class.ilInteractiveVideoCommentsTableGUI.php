@@ -16,6 +16,21 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	 * @var ilCtrl
 	 */
 	protected $ctrl;
+
+    /**
+     * @var int 
+     */
+	protected $is_public = 1;
+	
+	protected $DIC;
+	
+	public function setIsPublic($public) {
+	    $this->is_public = $public;
+    }
+    
+    public function isPublic() {
+	    return $this->is_public;
+    }
 	
 	/**
 	 * @param ilObjectGUI $a_parent_obj
@@ -27,8 +42,9 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		 * @var $ilCtrl ilCtrl
 		 * @var ilToolbarGUI $ilToolbar 
 		 */
-		global $ilCtrl, $ilAccess, $ilToolbar;
+		global $ilCtrl, $ilAccess, $ilToolbar, $DIC;
 		$this->ctrl = $ilCtrl;
+		$this->DIC = $DIC;
 
 		$this->setId('xvid_comments_' . $a_parent_obj->object->getId());
 		parent::__construct($a_parent_obj, $a_parent_cmd);
@@ -43,7 +59,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$this->setDefaultOrderDirection('ASC');
 		$this->setDefaultOrderField('comment_time');
 
-		$title = $a_parent_obj->plugin->txt('questions_comments');
+		$title = $a_parent_obj->plugin->txt('questions_comments_new');
 		if($a_parent_cmd == 'editMyComments')
 		{
 			$title = $a_parent_obj->plugin->txt('my_comments');
@@ -96,7 +112,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	 */
 	public function numericOrdering($column)
 	{
-		if('comment_time' == $column || 'comment_time' ==  $column )
+		if('comment_time' == $column || 'comment_time_end' ==  $column )
 		{
 			return true;
 		}
@@ -109,6 +125,13 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	 */
 	protected function fillRow($a_set)
 	{
+        if($this->isPublic() == 0 && $this->DIC->user()->getId() != $a_set['user_id']) {
+            $this->tpl->setCurrentBlock('no_row');
+            $this->tpl->setVariable('VAL_SPACE', '-');
+            $this->tpl->parseCurrentBlock();
+           return;
+        }
+        
 		foreach ($a_set as $key => $value)
 		{
 			if($key == 'comment_id')

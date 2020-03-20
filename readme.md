@@ -1,4 +1,3 @@
-# Table of content
 - [InteractiveVideo](#interactivevideo)
   * [ILIAS compatibility](#ilias-compatibility)
   * [Important notice](#important-notice)
@@ -18,7 +17,6 @@
   * [Interactive Video Sources & Plugin Slots](#interactive-video-sources---plugin-slots)
   * [Interactive Video Modal options](#interactive-video-modal-options)
   * [Interactive Video Subtitles](#interactive-video-subtitles)
-
 
 # InteractiveVideo
 ILIAS Interactive Video Plugin

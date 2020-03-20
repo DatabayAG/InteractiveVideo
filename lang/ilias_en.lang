@@ -21,7 +21,8 @@ cat_create_xvid#:#Create Interactive Video
 interactive#:#Interactive
 questions_comments_sub_tab#:#Edit
 tutor#:#Tutor
-questions_comments#:#Questions and Comments
+questions_comments#:#Questions and comments
+questions_comments_new#:#Questions and public comments
 sure_delete_comments#:#Are you sure you want to delete the selected comments?
 video_file#:#Video
 comment#:#Comment
@@ -80,7 +81,7 @@ question#:#Question
 is_anonymized#:#Anonymize Comments
 is_anonymized_info#:#If enabled all comments are shown without usernames 
 is_public#:#Publish All Comments
-is_public_info#:#If enabled all users are able to read all comments, otherwise they are only able to see their own comments
+is_public_info#:#If enabled all users are able to read all PUBLIC comments, otherwise they are only able to see own comments.
 correct_answered#:#Answered correctly
 show_my_results#:#My Results
 is_jump_correct#:#Use 'Correct'-Jump Label
@@ -104,7 +105,7 @@ is_jump_correct_info#:#In case the question was answered correctly, you can sele
 is_jump_wrong_info#:#In case the question was answered incorrectly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
 learning_recommendation#:#Learning recommendation within the video at
 is_repeat#:#Skip correctly answered questions
-is_repeat_info#:#If this option is activated, questions that have already been answered correctly will be skipped during playback.
+is_repeat_info#:#If this option is activated, questions that have already been answered correctly will be skipped when users watches the video again.
 offline#:#Offline
 status#:#Status
 is_chronologic#:#Show all comments at all times
