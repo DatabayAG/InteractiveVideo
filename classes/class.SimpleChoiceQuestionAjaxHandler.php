@@ -11,11 +11,13 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestio
  */
 class SimpleChoiceQuestionAjaxHandler
 {
-	/**
-	 * @param $feedback_ref_id
-	 * @param $json
-	 * @return mixed
-	 */
+    /**
+     * @param $feedback_ref_id
+     * @param $json
+     * @return mixed
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     */
 	private function appendFeedback($feedback_ref_id, $json)
 	{
 		if($feedback_ref_id > 0)
@@ -27,10 +29,12 @@ class SimpleChoiceQuestionAjaxHandler
 		return $json;
 	}
 
-	/**
-	 * @param int $qid question_id
-	 * @return string
-	 */
+    /**
+     * @param $qid
+     * @return false|string
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     */
 	public function getFeedbackForQuestion($qid)
 	{
 		$scoring  = new SimpleChoiceQuestionScoring();
@@ -118,10 +122,13 @@ class SimpleChoiceQuestionAjaxHandler
 		return json_encode($json);
 	}
 
-	/**
-	 * @param $ref_id
-	 * @return string
-	 */
+    /**
+     * @param $ref_id
+     * @return string
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     * @throws ilTemplateException
+     */
 	protected function getLinkIfReadAccessForObjectByRefId($ref_id)
 	{
 		if($ref_id != null && $ref_id != 0)
@@ -149,15 +156,19 @@ class SimpleChoiceQuestionAjaxHandler
 		}
 		return '';
 	}
-	/**
-	 * @param int $cid comment_id
-	 * @return string
-	 */
+
+    /**
+     * @param $cid
+     * @return false|string
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     * @throws ilWACException
+     */
 	public function getJsonForCommentId($cid)
 	{
-		/**
-		 * @var $ilDB   ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB, $ilUser;
 		$res = $ilDB->queryF('
 			SELECT * 
@@ -272,9 +283,9 @@ class SimpleChoiceQuestionAjaxHandler
 	 */
 	public function getJsonForQuestionId($qid)
 	{
-		/**
-		 * @var $ilDB   ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF('SELECT answer_id, answer, correct FROM rep_robj_xvid_qus_text WHERE question_id = %s',

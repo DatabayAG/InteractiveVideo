@@ -61,9 +61,9 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 	 */
 	public static function checkOnline($a_id)
 	{
-		/**
-		 * @var $ilDB iLDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$set = $ilDB->query('

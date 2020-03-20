@@ -33,7 +33,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
     }
 	
 	/**
-	 * @param ilObjectGUI $a_parent_obj
+	 * @param ilObjectGUI|ilObjInteractiveVideoGUI $a_parent_obj
 	 * @param string      $a_parent_cmd
 	 */
 	public function __construct($a_parent_obj, $a_parent_cmd)
