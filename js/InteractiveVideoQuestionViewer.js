@@ -17,6 +17,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 					modal_body:     '.modal-body',
 					modal_title:    '.modal-title',
 					modal_feedback: '.modal_feedback',
+					modal_close:    '.close'
 				},
 			};
 
@@ -45,10 +46,10 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	pub.toggleCloseButtons = function(show) {
 		if (show) {
 			$(pri.ids.modal + ' ' + pri.ids.close_form).hide();
-			$(pri.ids.modal + ' .close').hide();
+			$(pri.ids.modal + ' ' + pri.classes.modal_close).hide();
 		} else {
 			$(pri.ids.modal + ' ' + pri.ids.close_form).show();
-			$(pri.ids.modal + ' .close').show();
+			$(pri.ids.modal + ' ' + pri.classes.modal_close).show();
 		}
 	};
 
