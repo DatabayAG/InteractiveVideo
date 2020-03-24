@@ -85,18 +85,21 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	{
 		let scrollHeight = 0;
 		let j_obj_scroll_div	= $('#ilInteractiveVideoComments_' + player_id);
-		let current_time    = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
+		let current_time      = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
+		let show_all          = scope.InteractiveVideo[player_id].is_show_all_active;
 
-		if(pri.last_current_time !== current_time){
+		if(show_all) {
+			if(pri.last_current_time !== current_time){
 
-			$('#ul_scroll_' + player_id + ' li').each(function() {
-				if($(this).find('.time').data('time') <= current_time) {
-					scrollHeight += $(this).height();
-				}
-			});
+				$('#ul_scroll_' + player_id + ' li').each(function() {
+					if($(this).find('.time').data('time') <= current_time) {
+						scrollHeight += $(this).height();
+					}
+				});
 
-			pri.last_current_time = current_time;
-			j_obj_scroll_div.scrollTop(scrollHeight);
+				pri.last_current_time = current_time;
+				j_obj_scroll_div.scrollTop(scrollHeight);
+			}
 		}
 	};
 
