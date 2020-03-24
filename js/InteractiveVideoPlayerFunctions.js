@@ -461,12 +461,14 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			}
 		}
 
+		//Youtube
 		if(player.hasOwnProperty("f")){
 			if(player.f.id !== undefined) {
 				return player.f.id;
 			}
 		}
 
+		//Youtube
 		if(player.hasOwnProperty("i")){
 			if(player.i.id !== undefined) {
 				return player.i.id;
