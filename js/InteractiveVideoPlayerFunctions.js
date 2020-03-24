@@ -461,8 +461,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			}
 		}
 
-		if(player.hasOwnProperty("i")){
-				return player.i.id;
+		if(player.hasOwnProperty("f")){
+				return player.f.id;
 		}
 	};
 
