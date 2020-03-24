@@ -462,7 +462,15 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 
 		if(player.hasOwnProperty("f")){
+			if(player.f.id !== undefined) {
 				return player.f.id;
+			}
+		}
+
+		if(player.hasOwnProperty("i")){
+			if(player.i.id !== undefined) {
+				return player.i.id;
+			}
 		}
 	};
 
