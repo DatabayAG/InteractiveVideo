@@ -462,6 +462,14 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 
 		//Youtube
+		if(typeof player.getIframe !== "undefined"){
+			let iframe_id = $(player.getIframe()).attr('id');
+			if(iframe_id !== undefined){
+				return iframe_id;
+			}
+		}
+
+		//Youtube
 		if(player.hasOwnProperty("f")){
 			if(player.f.id !== undefined) {
 				return player.f.id;
