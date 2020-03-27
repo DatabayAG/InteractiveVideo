@@ -2553,6 +2553,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$simple = new SimpleChoiceQuestion();
 			$simple->deleteUserResults($user_ids, $this->obj_id);
+			$this->object->refreshLearningProgress();
 			ilUtil::sendSuccess(ilInteractiveVideoPlugin::getInstance()->txt('results_successfully_deleted'));
 		}
 		else
@@ -2637,6 +2638,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$simple = new SimpleChoiceQuestion();
 			$simple->deleteQuestionsResults($question_ids);
+			$this->object->refreshLearningProgress();
 			ilUtil::sendSuccess(ilInteractiveVideoPlugin::getInstance()->txt('results_successfully_deleted'));
 		}
 		else
@@ -2733,29 +2735,21 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	public function postVideoStartedPerAjax()
 	{
-		global $ilUser;
-		$this->object->saveVideoStarted($this->obj_id, $ilUser->getId());
+		global $DIC;
+
+		$this->object->trackReadEvent();
+		$this->object->saveVideoStarted($this->obj_id, $DIC->user()->getId());
+        $this->object->updateLearningProgressForActor();
+
 		$this->callExit();
 	}
 
 	public function postVideoFinishedPerAjax()
 	{
 		global $ilUser;
-		$simple = new SimpleChoiceQuestion();
-		$questions_with_points = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->object->getId());
-		$this->object->saveVideoFinished($this->obj_id, $ilUser->getId());
-		if(is_array($questions_with_points) && count($questions_with_points) > 0)
-		{
-			$points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->obj_id, $ilUser->getId());
-			if(is_array($questions_with_points) && (count($questions_with_points) == $points ))
-			{
-				$this->object->updateLP();
-			}
-		}
-		else
-		{
-			$this->object->updateLP();
-		}
+
+        $this->object->saveVideoFinished($this->obj_id, $ilUser->getId());
+        $this->object->updateLearningProgressForActor();
 
 		$this->callExit();
 	}
