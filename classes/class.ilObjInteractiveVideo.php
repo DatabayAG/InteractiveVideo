@@ -992,7 +992,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function getLPNotAttempted()
 	{
-		return array();
+       return [];
 	}
 
 	/**
@@ -1001,16 +1001,15 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function getLPFailed()
 	{
-		if(in_array($this->getLearningProgressMode(), array(self::LP_MODE_DEACTIVATED)))
-		{
-			return array();
-		}
+        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_DEACTIVATED])) {
+            return [];
+        }
 
-		$user_ids = array();
+        $users = [];
 
-		// NOT IMPLEMENTED
+        // NOT IMPLEMENTED
 
-		return $user_ids;
+        return $users;
 	}
 
 	/**
@@ -1019,16 +1018,18 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function getLPInProgress()
 	{
-		if(in_array($this->getLearningProgressMode(), array(self::LP_MODE_DEACTIVATED)))
-		{
-			return array();
-		}
+        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_DEACTIVATED])) {
+            return [];
+        }
 
-		$user_ids = array();
+        $users = array_unique(array_values(array_map(static function (array $event) {
+            return $event['usr_id'];
+        }, ilChangeEvent::_lookupReadEvents($this->getId()))));
 
-		$users = array_diff((array)$user_ids, $this->getLPCompleted());
-		$users = array_diff((array)$users, $this->getLPFailed());
-		return $users ? $users : array();
+        $users = array_diff((array) $users, $this->getLPCompleted());
+        $users = array_diff((array) $users, $this->getLPFailed());
+
+        return $users;
 	}
 
 	/**
