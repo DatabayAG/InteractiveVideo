@@ -1034,37 +1034,28 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function getLPStatusForUser($a_user_id)
 	{
-		$status = ilLPStatus::LP_STATUS_NOT_ATTEMPTED_NUM;
+        $status = ilLPStatus::LP_STATUS_NOT_ATTEMPTED_NUM;
 
-		require_once 'Services/Tracking/classes/class.ilChangeEvent.php';
-		if (ilChangeEvent::hasAccessed($this->getId(), $a_user_id))
-		{
-			$status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
-		}
+        require_once 'Services/Tracking/classes/class.ilChangeEvent.php';
+        if (ilChangeEvent::hasAccessed($this->getId(), $a_user_id)) {
+            $status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
+        }
 
-		$simple = new SimpleChoiceQuestion();
-		$qst = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
-		if(is_array($qst) && count($qst) > 0)
-		{
-			$usr_points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId(), $a_user_id);
-			if(is_array($qst) && ($usr_points == count($qst)))
-			{
-				$status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
-			}
-			else
-			{
-				$status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
-			}
-		}
-		else
-		{
-			if($this->isLearningProgressCompletedForUser($this->getId(), $a_user_id))
-			{
-				$status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
-			}
-		}
+        $simple = new SimpleChoiceQuestion();
+        $questionIds = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
+        if ($questionIds !== []) {
+            $totalPointsOfUser = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId(), $a_user_id);
+            if ($totalPointsOfUser == count($questionIds)) {
+                $status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
+            } elseif ($status === ilLPStatus::LP_STATUS_IN_PROGRESS_NUM/* || $userHasAnyAnswerData */) {
+                // TODO: Impl. $userHasAnyAnswerData
+                $status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
+            }
+        } elseif ($this->isLearningProgressCompletedForUser($this->getId(), $a_user_id)) {
+            $status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
+        }
 
-		return $status;
+        return $status;
 	}
 
 	/**
