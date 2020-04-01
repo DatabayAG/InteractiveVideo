@@ -282,6 +282,36 @@ class SimpleChoiceQuestion
 		return false;
 	}
 
+    /**
+     * @param $obj_id
+     * @param $user_id
+     * @return bool
+     */
+    public static function getUserWithAnsweredQuestion($obj_id, $user_id)
+    {
+        /**
+         * $ilDB ilDB
+         */
+        global $ilDB;
+        
+        $users = [];
+
+        $res = $ilDB->queryF('
+			SELECT * FROM ' . self::TABLE_NAME_ANSWERS . ' ans
+			INNER JOIN ' . self::TABLE_NAME_QUESTION . ' qst on ans.question_id = qst.question_id 
+			INNER JOIN ' . self::TABLE_NAME_COMMENTS . ' comment on qst.comment_id = comment.comment_id
+			WHERE obj_id = %s 
+			AND ans.user_id = %s
+			',
+			array('integer', 'integer'), array($obj_id, $user_id));
+
+        if($ilDB->numRows($res) > 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
 	/**
 	 * @param $question_id
 	 * @return bool

@@ -1043,13 +1043,15 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
         $simple = new SimpleChoiceQuestion();
         $questionIds = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
+        $userHasAnyAnswerData = $simple->getUserWithAnsweredQuestion($this->getId(), $a_user_id);
+        
+        $status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
         if ($questionIds !== []) {
             $totalPointsOfUser = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId(), $a_user_id);
             if ($totalPointsOfUser == count($questionIds)) {
                 $status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
-            } elseif ($status === ilLPStatus::LP_STATUS_IN_PROGRESS_NUM/* || $userHasAnyAnswerData */) {
-                // TODO: Impl. $userHasAnyAnswerData
-                $status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
+            } elseif ($status === ilLPStatus::LP_STATUS_IN_PROGRESS_NUM || $userHasAnyAnswerData ) {
+                    $status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
             }
         } elseif ($this->isLearningProgressCompletedForUser($this->getId(), $a_user_id)) {
             $status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
