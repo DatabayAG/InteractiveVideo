@@ -33,7 +33,7 @@ function onYouTubeIframeAPIReady() {
 						il.InteractiveVideoSubtitle.initializeSubtitleTracks(player_id);
 
 						function seekInPlayer(player_id) {
-							if (il.InteractiveVideo.last_time > 0 &&
+							if (il.InteractiveVideo.last_time >= 0 &&
 									(il.InteractiveVideo.last_time <
 											il.InteractiveVideoPlayerAbstract.currentTime(player_id) + 1 ||
 											il.InteractiveVideoPlayerAbstract.currentTime(player_id) >
@@ -79,7 +79,6 @@ function onYouTubeIframeAPIReady() {
 								clearInterval(interval);
 								il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime(player_id);
 								clearInterval(repeat_interval);
-		console.log(e, 'pause')
 								repeat_interval = setTimeout(repeatingYoutubeFunc, 500);
 							}
 							// 3 (buffering)
