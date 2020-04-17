@@ -32,12 +32,21 @@ function onYouTubeIframeAPIReady() {
 						il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration(player_id));
 						il.InteractiveVideoSubtitle.initializeSubtitleTracks(player_id);
 
-						function seekInPlayer(player_id) {
+						function checkIfSeekEventShouldBeTriggered() {
 							if (il.InteractiveVideo.last_time >= 0 &&
 									(il.InteractiveVideo.last_time <
 											il.InteractiveVideoPlayerAbstract.currentTime(player_id) + 1 ||
 											il.InteractiveVideoPlayerAbstract.currentTime(player_id) >
-											il.InteractiveVideo.last_time + 1)) {
+											il.InteractiveVideo.last_time + 1) ||
+									il.InteractiveVideoPlayerAbstract.currentTime(player_id) === 0)
+									{
+										return true;
+									}
+									return false;
+						}
+						function seekInPlayer(player_id) {
+							if(checkIfSeekEventShouldBeTriggered())
+							{
 								clearInterval(interval);
 								il.InteractiveVideoPlayerFunction.seekingEventHandler(player_id);
 							}
