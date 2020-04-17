@@ -98,18 +98,18 @@ il.InteractiveVideoSourceYoutube = (function (scope) {
  };
 
 	pub.seekInPlayer = function(player_id) {
-		if(pro.checkIfSeekEventShouldBeTriggered())
+		if(pro.checkIfSeekEventShouldBeTriggered(player_id))
 		{
 			clearInterval(interval);
 			il.InteractiveVideoPlayerFunction.seekingEventHandler(player_id);
 		}
 	};
 
-	pro.checkIfSeekEventShouldBeTriggered = function() {
-		if ( pro.lastTimeIsGreaterAsZero &&
-				( pro.lastTimeIsSmallerThanCurrentTime 
-						|| pro.lastTimeIsGreaterThanCurrentTime 
-						|| pro.currentTimeEqualsZero
+	pro.checkIfSeekEventShouldBeTriggered = function(player_id) {
+		if ( pro.lastTimeIsGreaterAsZero() &&
+				( pro.lastTimeIsSmallerThanCurrentTime(player_id) 
+						|| pro.lastTimeIsGreaterThanCurrentTime(player_id) 
+						|| pro.currentTimeEqualsZero(player_id)
 				) 
 			 )
 		{
@@ -122,17 +122,17 @@ il.InteractiveVideoSourceYoutube = (function (scope) {
 		return il.InteractiveVideo.last_time >= 0;
 	};
 
-	pro.lastTimeIsSmallerThanCurrentTime = function() {
+	pro.lastTimeIsSmallerThanCurrentTime = function(player_id) {
 		return il.InteractiveVideo.last_time <
 				il.InteractiveVideoPlayerAbstract.currentTime(player_id) + 1;
 	};
 
-	pro.lastTimeIsGreaterThanCurrentTime = function() {
+	pro.lastTimeIsGreaterThanCurrentTime = function(player_id) {
 		return il.InteractiveVideoPlayerAbstract.currentTime(player_id) >
 				il.InteractiveVideo.last_time + 1;
 	};
 
-	pro.currentTimeEqualsZero = function() {
+	pro.currentTimeEqualsZero = function(player_id) {
 		return il.InteractiveVideoPlayerAbstract.currentTime(player_id) === 0
 	};
 
