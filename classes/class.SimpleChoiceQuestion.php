@@ -287,14 +287,12 @@ class SimpleChoiceQuestion
      * @param $user_id
      * @return bool
      */
-    public static function getUserWithAnsweredQuestion($obj_id, $user_id)
+    public function getUserWithAnsweredQuestion($obj_id, $user_id)
     {
         /**
          * $ilDB ilDB
          */
         global $ilDB;
-        
-        $users = [];
 
         $res = $ilDB->queryF('
 			SELECT * FROM ' . self::TABLE_NAME_ANSWERS . ' ans
