@@ -1021,13 +1021,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
             return $event['usr_id'];
         }, ilChangeEvent::_lookupReadEvents($this->getId()))));
 
-        /**
-         * @gvollbach: Please implement something like $simple->getUsersWithAnsweredQuestion($this->getId()); and push the user ids
-         * to the array
-         */
+        $simple = new SimpleChoiceQuestion();
+        $users = array_unique(array_merge($users, $simple->getUsersWithAnsweredQuestion($this->getId())));
 
-        $users = array_diff((array) $users, $this->getLPCompleted());
-        $users = array_diff((array) $users, $this->getLPFailed());
+        $users = array_diff($users, $this->getLPCompleted());
+        $users = array_diff($users, $this->getLPFailed());
 
         return $users;
 	}

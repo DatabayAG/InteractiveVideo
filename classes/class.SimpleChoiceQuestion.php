@@ -283,6 +283,38 @@ class SimpleChoiceQuestion
 	}
 
     /**
+     * @param int $obj_id
+     * @return int[]
+     */
+    public function getUsersWithAnsweredQuestion($obj_id)
+    {
+        /**
+         * $ilDB ilDB
+         */
+        global $ilDB;
+
+        $res = $ilDB->queryF('
+			SELECT ans.user_id
+			FROM ' . self::TABLE_NAME_ANSWERS . ' ans
+			INNER JOIN ' . self::TABLE_NAME_QUESTION . ' qst
+			    ON ans.question_id = qst.question_id 
+			INNER JOIN ' . self::TABLE_NAME_COMMENTS . ' comment
+			    ON qst.comment_id = comment.comment_id
+			WHERE obj_id = %s 
+			',
+            ['integer',],
+            [$obj_id,]
+        );
+
+        $usrIds = [];
+        while ($row = $ilDB->fetchAssoc($res)) {
+            $usrIds[$row['ans.user_id']] = $row['ans.user_id'];
+        }
+
+        return array_values($usrIds);
+    }
+
+    /**
      * @param $obj_id
      * @param $user_id
      * @return bool
