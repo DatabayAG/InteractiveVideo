@@ -262,7 +262,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		if(il.InteractiveVideo[player].hasOwnProperty("player")
 			&& il.InteractiveVideo[player].player !== undefined
 			) {
-				il.InteractiveVideo[player].player.exitFullScreen();
+			//il.InteractiveVideo[player].player.exitFullScreen();
 			}
 
 		var config = {};
