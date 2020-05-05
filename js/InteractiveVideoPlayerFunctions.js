@@ -35,8 +35,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.playingEventHandler = function(interval, player)
 	{
+		console.log('event', player)
 		let cueTime, stop_video, i, j;
 		let player_id       = pub.getPlayerIdFromPlayerObject(player);
+		console.log("playingEventHandler", player_id, player)
 		let current_time    = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
 		let duration        = scope.InteractiveVideoPlayerAbstract.duration(player_id);
 		let player_data     = pub.getPlayerDataObjectByPlayer(player);
@@ -482,6 +484,18 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				return player.i.id;
 			}
 		}
+
+		//Vimeo
+		if(typeof player.hasOwnProperty('element')){
+			if(player.element.parentNode) {
+				let iframe_id = player.element.parentNode.id;
+				if(iframe_id !== undefined){
+					return iframe_id;
+				}
+			}
+
+		}
+		console.log('No id found, there seems to be something wrong!')
 	};
 
 	pub.getPlayerDataObjectByPlayerId = function(player_id)
