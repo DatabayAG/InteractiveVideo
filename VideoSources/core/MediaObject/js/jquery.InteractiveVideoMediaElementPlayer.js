@@ -14,7 +14,7 @@ $(document).ready(function () {
 
 				il.InteractiveVideoSubtitle.initializeSubtitleTracks(player_id);
 
-				new MediaElementPlayer("#" + player_id, {
+				il.InteractiveVideo[player_id].player = new MediaElementPlayer("#" + player_id, {
 
 					timerRate:         50,
 					enablePluginDebug: false,

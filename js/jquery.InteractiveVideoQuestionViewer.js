@@ -255,11 +255,15 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		pub.comment_id = comment_id;
 		pub.QuestionObject = array;
 		pub.QuestionObject.player = player
-		//Todo: fix this, fullscreen isn't working
 		pro.buildQuestionForm(player);
-		if (pub.QuestionObject.player.isFullScreen === true) {
-			pub.QuestionObject.player.exitFullScreen();
+		if(typeof player !== "string") {
+			player = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 		}
+		if(il.InteractiveVideo[player].hasOwnProperty("player")
+			&& il.InteractiveVideo[player].player !== undefined
+			) {
+				il.InteractiveVideo[player].player.exitFullScreen();
+			}
 
 		var config = {};
 		if(il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player).fixed_modal === "1") {
