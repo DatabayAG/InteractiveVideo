@@ -3,6 +3,7 @@ require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/In
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/class.ilInteractiveVideoMediaObject.php';
 require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
 require_once 'Services/MediaObjects/classes/class.ilObjMediaObjectGUI.php';
+require_once 'Services/MediaObjects/classes/class.ilPlayerUtil.php';
 /**
  * Class ilInteractiveVideoMediaObjectGUI
  * @author Guido Vollbach <gvollbach@databay.de>
