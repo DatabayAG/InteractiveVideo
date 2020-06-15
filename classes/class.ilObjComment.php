@@ -273,20 +273,20 @@ class ilObjComment
 
 		$query_types = array('integer','integer','integer','integer');
 		$query_data = array($this->getObjId(), 0, 1, $ilUser->getId());
-		
+
 		$where_condition = '';
-	
+
 		if(!$this->isPublic())
 		{
 			$where_condition = ' AND (user_id = %s OR is_tutor = %s OR is_interactive = %s )';
 			$query_types = array_merge($query_types, array('integer', 'integer', 'integer'));
 			$query_data = array_merge($query_data, array($ilUser->getId(), 1, 1));
 		}
-		
+
 		$res = $ilDB->queryF(
 			'SELECT *
 			FROM rep_robj_xvid_comments
-			WHERE obj_id = %s 
+			WHERE obj_id = %s
 			AND ( is_private = %s OR (is_private = %s AND user_id = %s))'.
 			$where_condition.'
 			ORDER BY comment_time, comment_id ASC',
@@ -336,7 +336,7 @@ class ilObjComment
 				$i++;
 			}
 		}
-		
+
 		if(is_array($is_reply_to) && sizeof($is_reply_to) > 0)
 		{
 			$comments = $this->sortInReplies($is_reply_to, $comments);
@@ -415,7 +415,7 @@ class ilObjComment
 	{
 		if(!array_key_exists($user_id, self::$user_image_cache))
 		{
-			$img_file = ilObjUser::_getPersonalPicturePath($user_id, 'xxsmall');
+			$img_file = ilObjUser::_getPersonalPicturePath($user_id, 'xxsmall', true);
 			$img_file = preg_split('/\?/', $img_file);
 			$img_file = $img_file[0];
 			if(file_exists($img_file))
@@ -431,7 +431,7 @@ class ilObjComment
 
 		return self::$user_image_cache[$user_id];
 	}
-	
+
 	/**
 	 * @param $user_id
 	 * @return string
@@ -454,7 +454,7 @@ class ilObjComment
 		return self::$user_name_cache[$user_id];
 	}
 
-	
+
 	################## SETTER & GETTER ##################
 	/**
 	 * @return int
@@ -584,7 +584,7 @@ class ilObjComment
 		$this->comment_tags = $comment_tags;
 	}
 
-	
+
 	/**
 	 * @return string
 	 */
@@ -617,8 +617,8 @@ class ilObjComment
 		$this->is_private = $is_private;
 	}
 
-	
-	
+
+
 	/**
 	 * @return int
 	 */
@@ -650,7 +650,7 @@ class ilObjComment
 	{
 		$this->is_anonymized = $is_anonymized;
 	}
-	
+
 	/**
 	 * @return int
 	 */
