@@ -200,8 +200,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
      */
     public function refreshStatusAndShowLPSettings()
     {
-        include_once 'Services/Tracking/classes/class.ilLPStatusWrapper.php';
-        ilLPStatusWrapper::_refreshStatus($this->object->getId());
+        $this->object->refreshLearningProgress();
 
         $this->showLPSettings();
     }
