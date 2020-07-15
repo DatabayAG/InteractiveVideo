@@ -342,8 +342,8 @@ class SimpleChoiceQuestion
                 FROM rep_robj_xvid_comments
                 INNER JOIN rep_robj_xvid_question
                     ON rep_robj_xvid_question.comment_id = rep_robj_xvid_comments.comment_id
-                    AND rep_robj_xvid_question.type != 2
-                WHERE rep_robj_xvid_comments.is_interactive = 1 AND rep_robj_xvid_comments.obj_id = %s
+                    AND rep_robj_xvid_question.type != %s
+                WHERE rep_robj_xvid_comments.is_interactive = %s AND rep_robj_xvid_comments.obj_id = %s
             );
             ',
             ['integer', 'integer', 'integer', 'integer', 'integer', 'integer'],
