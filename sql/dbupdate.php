@@ -960,7 +960,6 @@ $ilDB->addPrimaryKey('rep_robj_xvid_objects', array('obj_id'));
 <?php
 $ilDB->addIndex('rep_robj_xvid_comments', ['is_interactive', 'obj_id'], 'i2');
 ?>
-?>
 <#53>
 <?php
 $ilDB->addIndex('rep_robj_xvid_question', ['comment_id', 'type'], 'i2');

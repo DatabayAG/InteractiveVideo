@@ -239,8 +239,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	public function showContent()
 	{
-	    $x = ob_get_contents();
-	    return;
 		/**
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
