@@ -956,31 +956,37 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      */
     public function getLPCompleted()
     {
-        $user_ids = [];
+        $usrIds = [];
 
         if (in_array($this->getLearningProgressMode(), array(self::LP_MODE_DEACTIVATED))) {
         }
 
+        $simple = new SimpleChoiceQuestion();
+
         if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_ANSWERED_QUESTIONS])) {
-            // TODO
+            $qst = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
+            if (is_array($qst) && count($qst) > 0) {
+                $usrIds = $simple->getUsersWithAllAnsweredQuestionsMap($this->getId());
+            } else {
+                $usrIds = $this->getAllStartedAndFinishedUsers($this->getId());
+            }
         }
 
         if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_QUESTIONS])) {
-            $simple = new SimpleChoiceQuestion();
             $qst = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
             if (is_array($qst) && count($qst) > 0) {
                 $usrs_points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId());
                 foreach ($usrs_points as $usr_id => $points) {
                     if (is_array($qst) && ($points == count($qst))) {
-                        $user_ids[$usr_id] = $usr_id;
+                        $usrIds[$usr_id] = $usr_id;
                     }
                 }
             } else {
-                $user_ids = $this->getAllStartedAndFinishedUsers($this->getId());
+                $usrIds = $this->getAllStartedAndFinishedUsers($this->getId());
             }
         }
 
-        return array_values($user_ids);
+        return array_values($usrIds);
     }
 
     /**
@@ -1019,20 +1025,13 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
             return [];
         }
 
-        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_ANSWERED_QUESTIONS])) {
-            $users = array_unique(array_values(array_map(static function (array $event) {
-                return $event['usr_id'];
-            }, ilChangeEvent::_lookupReadEvents($this->getId()))));
-
-            // TODO
-
-            $users = array_diff($users, $this->getLPCompleted());
-            $users = array_diff($users, $this->getLPFailed());
-
-            return $users;
-        }
-
-        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_QUESTIONS])) {
+        if (in_array(
+            $this->getLearningProgressMode(),
+            [
+                self::LP_MODE_BY_ANSWERED_QUESTIONS,
+                self::LP_MODE_BY_QUESTIONS,
+            ]
+        )) {
             $users = array_unique(array_values(array_map(static function (array $event) {
                 return $event['usr_id'];
             }, ilChangeEvent::_lookupReadEvents($this->getId()))));
@@ -1067,12 +1066,25 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
             $status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
         }
 
+        $simple = new SimpleChoiceQuestion();
+
         if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_ANSWERED_QUESTIONS])) {
-            // TODO
+            $questionIds = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
+            $userHasAnyAnswerData = $simple->getUserWithAnsweredQuestion($this->getId(), $a_user_id);
+
+            if ($questionIds !== []) {
+                $usrIds = $simple->getUsersWithAllAnsweredQuestionsMap($this->getId());
+                if (isset($usrIds[$a_user_id])) {
+                    $status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
+                } elseif ($userHasAnyAnswerData) {
+                    $status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
+                }
+            } elseif ($this->isLearningProgressCompletedForUser($this->getId(), $a_user_id)) {
+                $status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
+            }
         }
 
         if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_QUESTIONS])) {
-            $simple = new SimpleChoiceQuestion();
             $questionIds = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
             $userHasAnyAnswerData = $simple->getUserWithAnsweredQuestion($this->getId(), $a_user_id);
 
