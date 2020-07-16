@@ -308,7 +308,7 @@ class SimpleChoiceQuestion
 
         $usrIds = [];
         while ($row = $ilDB->fetchAssoc($res)) {
-            $usrIds[$row['ans.user_id']] = $row['ans.user_id'];
+            $usrIds[$row['user_id']] = $row['user_id'];
         }
 
         return array_values($usrIds);
