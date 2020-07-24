@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 require_once 'Services/Repository/classes/class.ilObjectPluginGUI.php';
-require_once 'Services/PersonalDesktop/interfaces/interface.ilDesktopItemHandling.php';
+require_once 'Services/Dashboard/interfaces/interface.ilDesktopItemHandling.php';
 require_once 'Services/Form/classes/class.ilPropertyFormGUI.php';
 require_once 'Services/UIComponent/Button/classes/class.ilLinkButton.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';

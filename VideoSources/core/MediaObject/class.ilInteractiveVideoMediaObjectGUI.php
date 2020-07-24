@@ -55,7 +55,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	{
 		require_once 'Services/WebAccessChecker/classes/class.ilWACSignedPath.php';
 		$player = new ilTemplate(self::PATH . 'tpl/tpl.video.html', false, false);
-		ilObjMediaObjectGUI::includePresentationJS($player);
+		ilObjMediaObjectGUI::includePresentationJS();
 		$media_object = new ilInteractiveVideoMediaObject();
 		$mob_id     = $media_object->doReadVideoSource($obj->getId());
 		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
