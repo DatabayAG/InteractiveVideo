@@ -20,27 +20,25 @@ $(document).ready(function () {
 					stretching: "responsive",
 
 					success: function (media) {
-
+						player = $("#" + player_id)[0];
+						il.InteractiveVideoPlayerAbstract.config[player_id] = {
+							pauseCallback:          (function () {
+								player.pause(player_id);
+							}),
+							playCallback:           (function () {
+								player.play(player_id);
+							}),
+							durationCallback:       (function () {
+								return player.duration;
+							}),
+							currentTimeCallback:    (function () {
+								return player.currentTime;
+							}),
+							setCurrentTimeCallback: (function (time) {
+								player.setCurrentTime(time, player_id);
+							})
+						};
 						media.addEventListener('loadedmetadata', function () {
-							player = $("#" + player_id)[0];
-							il.InteractiveVideoPlayerAbstract.config[player_id] = {
-								pauseCallback:          (function () {
-									player.pause(player_id);
-								}),
-								playCallback:           (function () {
-									player.play(player_id);
-								}),
-								durationCallback:       (function () {
-									return player.duration;
-								}),
-								currentTimeCallback:    (function () {
-									return player.currentTime;
-								}),
-								setCurrentTimeCallback: (function (time) {
-									player.setCurrentTime(time, player_id);
-								})
-							};
-
 							il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration(player_id));
 						}, false);
 

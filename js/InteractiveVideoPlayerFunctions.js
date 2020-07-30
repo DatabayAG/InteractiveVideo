@@ -35,10 +35,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.playingEventHandler = function(interval, player)
 	{
-		console.log('event', player)
 		let cueTime, stop_video, i, j;
 		let player_id       = pub.getPlayerIdFromPlayerObject(player);
-		console.log("playingEventHandler", player_id, player)
 		let current_time    = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
 		let duration        = scope.InteractiveVideoPlayerAbstract.duration(player_id);
 		let player_data     = pub.getPlayerDataObjectByPlayer(player);
