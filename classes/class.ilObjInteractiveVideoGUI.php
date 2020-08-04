@@ -2617,7 +2617,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		foreach($question_ids as $question_id)
 		{
-			$confirm->addItem('question_id[]', $question_id, $question_id);
+		    $title = ilObjComment::getCommentTitleByQuestionId($question_id);
+			$confirm->addItem('question_id[]', $question_id, $title);
 		}
 
 		$tpl->setContent($confirm->getHTML());

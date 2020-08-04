@@ -454,6 +454,35 @@ class ilObjComment
 		return self::$user_name_cache[$user_id];
 	}
 
+    /**
+     * @param int $question_id
+     * @return string
+     */
+	public static function getCommentTitleByQuestionId($question_id)
+    {
+        /**
+         * @vas $ilDB ilDB
+         */
+        global $ilDB;
+
+        $title = $question_id;
+        
+        $res = $ilDB->queryF(
+            'SELECT * FROM rep_robj_xvid_comments
+                    INNER JOIN rep_robj_xvid_question 
+                        ON rep_robj_xvid_comments.comment_id = rep_robj_xvid_question.comment_id
+                        WHERE rep_robj_xvid_question.question_id=%s;',
+            array('integer'),
+            array($question_id)
+        );
+        
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            $title = $row['comment_title'];
+        }
+
+        return $title;
+    }
 	
 	################## SETTER & GETTER ##################
 	/**
