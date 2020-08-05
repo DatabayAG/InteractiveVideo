@@ -152,7 +152,7 @@ feedback_correct_obj_info#:#Feedback-Link auf Magazin-Objekt bei korrekter Antwo
 feedback_wrong_obj#:#Feedback-Link auf Magazin-Objekt bei mindestens einer falschen Antwort
 feedback_wrong_obj_info#:#Feedback-Link auf Magazin-Objekt bei mindestens einer falschen Antwort
 show_comment_field#:#Zeige ein Kommtarfeld an
-show_comment_field_info#:#Zeige ein Kommtarfeld unter der Reflektionsfrage an
+show_comment_field_info#:#Zeige ein Kommtarfeld unter der Reflexionsfrage an
 more_informations#:#Weiterführende Informationen
 neutral_type#:#Bewertung
 with_correct#:#Mit korrekter Antwort
@@ -181,9 +181,9 @@ public#:#öffentlich
 visibility#:#Sichtbarkeit
 save_anyway#:#Trotzdem speichern
 save_without_correct#:#Sind haben keine korrekte Antwort ausgewählt
-save_without_correct_detail#:#Sie haben weder eine Reflektionfrage, noch neutrale Antworten aktiviert, sind Sie sicher, dass Sie die Frage ohne korrekte Antwort speichern wollen?
+save_without_correct_detail#:#Sie haben weder eine Reflexionsfrage, noch neutrale Antworten aktiviert, sind Sie sicher, dass Sie die Frage ohne korrekte Antwort speichern wollen?
 no_comment#:#Kein Kommentarfeld
-no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflektionsfragen mit aktiviertem Kommentarfeld sind nach wie vor möglich.
+no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflexionsfrage mit aktiviertem Kommentarfeld sind nach wie vor möglich.
 xvid_xvid_view_lp#:#Lernfortschritt einsehen
 auto_resume#:#Fortsetzen
 auto_resume_info#:#Wenn aktiviert, wird das Video beim Schließen des Fragen-Dialogs automatisch fortgesetzt.

@@ -159,7 +159,7 @@ var InteractiveVideoQuestionCreator = (function () {
 		$('#is_interactive').parent().parent().parent().parent().append(question_form);
 		pro.createQuestionForm();
 		pro.appendSingleListener();
-		$('input[name="cmd[insertQuestion]"]').on('click', function (evt)
+		$('input[name="cmd[insertQuestion]"], input[name="cmd[confirmUpdateQuestion]"]').on('click', function (evt)
 		{
 			if($('#question_type').val() != 2 && $('#neutral_type').val() != 1 && $('.correct_solution:checked').length == 0)
 			{
