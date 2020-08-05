@@ -115,7 +115,6 @@ var InteractiveVideoQuestionCreator = (function () {
 		if(IVQuestionCreator.type !== 2){
 			if( value === 0)
 			{
-				console.log('show')
 				$('label[for="feedback_correct"]').html(IVQuestionCreator.lang.correct.label_feedback);
 				$('label[for="is_jump_correct"]').html(IVQuestionCreator.lang.correct.label_jump);
 				$('#il_prop_cont_is_jump_correct .help-block').html(IVQuestionCreator.lang.correct.label_jump_info);
