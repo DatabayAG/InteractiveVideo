@@ -1624,9 +1624,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		if(!isset($_POST['comment_id']) || !is_array($_POST['comment_id']) || !count($_POST['comment_id']))
 		{
-			ilUtil::sendFailure($this->lng->txt('select_one'));
-			$this->editComments();
-			return;
+			ilUtil::sendFailure($this->lng->txt('select_one'), true);
+            $this->ctrl->redirect($this, 'editMyComments');
 		}
 
 		require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
