@@ -2300,7 +2300,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment_id = (int)$_POST['comment_id'];
 		$form_values = array();
 
-		if(!$chk =  SimpleChoiceQuestion::existUserAnswer($comment_id))
+		if(!$chk =  SimpleChoiceQuestion::existAnswer($comment_id))
 		{
 			$this->updateQuestion();
 		}

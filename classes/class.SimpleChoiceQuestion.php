@@ -281,6 +281,32 @@ class SimpleChoiceQuestion
 		}
 		return false;
 	}
+	
+	/**
+	 * @param $comment_id
+	 * @return bool
+	 */
+	public static function existAnswer($comment_id)
+	{
+		/**
+		 * $ilUser ilUser
+		 * $ilDB ilDB
+		 */
+		global $ilUser, $ilDB;
+
+		$res = $ilDB->queryF('
+			SELECT * FROM ' . self::TABLE_NAME_ANSWERS . ' ans
+			INNER JOIN ' . self::TABLE_NAME_QUESTION . ' qst on ans.question_id = qst.question_id 
+			WHERE comment_id = %s
+			',
+			array('integer'), array($comment_id));
+
+		if($ilDB->numRows($res) > 0)
+		{
+			return true;
+		}
+		return false;
+	}
 
     /**
      * @param int $obj_id
