@@ -1500,6 +1500,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($ilUser->getId() != ANONYMOUS_USER_ID)
 		{
 			$is_private = new ilCheckboxInputGUI($plugin->txt('is_private_comment'), 'is_private');
+            if( $this->object->isPublic() == 0) {
+                $is_private->setChecked(true);
+            }
 			$form->addItem($is_private);
 		}
 
