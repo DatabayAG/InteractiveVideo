@@ -72,6 +72,11 @@ class ilObjComment
 	/**
 	 * @var int
 	 */
+	protected $is_table_of_content = 0;
+
+	/**
+	 * @var int
+	 */
 	protected $is_public = 0;
 
 	/**
@@ -134,6 +139,7 @@ class ilObjComment
 		$this->setCommentTitle($row['comment_title']);
 		$this->setCommentTags($row['comment_tags']);
 		$this->setIsPrivate($row['is_private']);
+		$this->setIsTableOfContent($row['is_table_of_content']);
 		$this->setIsReplyTo($row['is_reply_to']);
 	}
 
@@ -170,6 +176,7 @@ class ilObjComment
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),
 				'is_private'		=> array('integer', $this->getIsPrivate()),
+				'is_table_of_content'=> array('integer', $this->getIsTableOfContent()),
 				'is_reply_to'		=> array('integer', $this->getIsReplyTo())
 			));
 		if($return_next_id)
@@ -209,6 +216,7 @@ class ilObjComment
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),
 				'is_private'		=> array('integer', $this->getIsPrivate()),
+				'is_table_of_content'=> array('integer', $this->getIsTableOfContent()),
 				'is_reply_to'		=> array('integer', $this->getIsReplyTo())
 			),
 			array(
@@ -323,6 +331,7 @@ class ilObjComment
 			$temp['comment_tags'] 		= $row['comment_tags'];
 			$temp['is_interactive'] 	= $row['is_interactive'];
 			$temp['is_private'] 		= $row['is_private'];
+			$temp['is_table_of_content'] = $row['is_table_of_content'];
 			$temp['is_reply_to'] 		= $row['is_reply_to'];
 			$temp['replies']			= array();
 
@@ -393,6 +402,7 @@ class ilObjComment
 			$this->setCommentTitle($row['comment_title']);
 			$this->setCommentTags($row['comment_tags']);
 			$this->setIsPrivate($row['is_private']);
+			$this->setIsTableOfContent($row['is_table_of_content']);
 			$this->setIsReplyTo($row['is_reply_to']);
 			$new_comment_id = $this->create(true);
 			if((bool)$row['is_interactive'])
@@ -646,7 +656,21 @@ class ilObjComment
 		$this->is_private = $is_private;
 	}
 
-	
+    /**
+     * @return int
+     */
+    public function getIsTableOfContent()
+    {
+        return $this->is_table_of_content;
+    }
+
+    /**
+     * @param int $is_table_of_content
+     */
+    public function setIsTableOfContent($is_table_of_content)
+    {
+        $this->is_table_of_content = $is_table_of_content;
+    }
 	
 	/**
 	 * @return int

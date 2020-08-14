@@ -515,6 +515,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			$table_data[$counter]['user_id']			= $row['user_id'];
 			$table_data[$counter]['title']				= $row['comment_title'];
 			$table_data[$counter]['comment_text']		= $row['comment_text'];
+			$table_data[$counter]['is_table_of_content']= $row['is_table_of_content'];
 			if($strip_tags){
 				$table_data[$counter]['comment_text'] = strip_tags($row['comment_text']);
 			}
@@ -562,6 +563,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			$table_data[$counter]['title']		= $row['comment_title'];
 			//	$table_data[$counter]['user_id']			= $row['user_id'];
 			$table_data[$counter]['comment_text']		= $row['comment_text'];
+			$table_data[$counter]['is_table_of_content'] = $row['is_table_of_content'];
 
 			if($row['is_private'] == 1)
 			{

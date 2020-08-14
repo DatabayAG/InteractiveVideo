@@ -1354,6 +1354,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment->setUserId($ilUser->getId());
 		$comment->setCommentText(trim($_POST['comment_text']));
 		$comment->setCommentTime((float)$_POST['comment_time']);
+		$comment->setIsTableOfContent((int)$_POST['is_table_of_content']);
 		$comment->setCommentTimeEnd($seconds_end);
 		
 		if(array_key_exists('is_reply_to', $_POST))
@@ -1506,6 +1507,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$form->addItem($is_private);
 		}
 
+        $is_table_of_content = new ilCheckboxInputGUI($plugin->txt('is_table_of_content'), 'is_table_of_content');
+		$form->addItem($is_table_of_content);
+        
 		$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($plugin->txt('comment'));
 		$form->addItem($section_header);
@@ -1594,6 +1598,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
 			$this->objComment->setInteractive(0);
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
+			$this->objComment->setIsTableOfContent((int)$form->getInput('is_table_of_content'));
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
@@ -1758,6 +1763,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
 			$this->objComment->setInteractive(0);
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
+            $this->objComment->setIsTableOfContent((int)$form->getInput('is_table_of_content'));
 
 			$this->objComment->setCommentTime($comment_time);
 			$this->objComment->setCommentTimeEnd($comment_time_end);
@@ -1855,6 +1861,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			// $this->objComment->setCommentTags((string)$form->getInput('comment_tags'));
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
+			$this->objComment->setIsTableOfContent((int)$form->getInput('is_table_of_content'));
 
 			// calculate seconds
 			$comment_time		= $form->getInput('comment_time');
@@ -1968,6 +1975,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['comment_title']	= $comment_data['comment_title'];
 		$values['comment_tags']		= $comment_data['comment_tags'];
 		$values['is_private']		= $comment_data['is_private'];
+		$values['is_table_of_content'] = $comment_data['is_table_of_content'];
 
 		return $values;
 	}
