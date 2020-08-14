@@ -314,6 +314,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$modal->setBody('');
 		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
 		$video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
+        if($this->object->doesTocCommentExists()){
+            $video_tpl->setVariable('TXT_TOC', $plugin->txt('toc'));
+        }
+
 		if($light_version) {
             $video_tpl->setVariable('LIGHT_VERSION', 'iv_light_version');
         }
@@ -541,16 +545,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$stop_points = array();
 		$comments    = array();
+        $comments_toc= array();
 		$image_cache = array();
 		if( ! $edit_screen)
 		{
 			$stop_points = $this->objComment->getStopPoints();
 			$comments    = $this->objComment->getContentComments();
+			$comments_toc= $this->objComment->getContentComments(true);
 			$image_cache = ilObjComment::getUserImageCache();
 		}
 
 		$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
 		$config_tpl->setVariable('COMMENTS', json_encode($comments));
+		$config_tpl->setVariable('COMMENTS_TOC', json_encode($comments_toc));
 		$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode($image_cache));
 		$config_tpl->setVariable('INTERACTIVE_VIDEO_REF_ID', $this->object->getRefId());
 		$config_tpl->setVariable('INTERACTIVE_INSTALLATION_CLIENT_ID', CLIENT_ID);

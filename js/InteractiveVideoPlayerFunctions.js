@@ -80,7 +80,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pub.appendInteractionEvents = function(player_id)
 	{
 		pro.addAjaxFunctionForCommentPosting(player_id);
-		pro.addShowAllCommetsChange(player_id);
+		pub.addShowAllCommentsChange(player_id);
 		pro.addTaskInteraction(player_id);
 		pro.addPausePlayerOnClick(player_id);
 		pro.addCommentTimeChanged(player_id);
@@ -294,7 +294,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	};
 
-	pro.addShowAllCommetsChange = function(player_id)
+	pub.addShowAllCommentsChange = function(player_id)
 	{
 		let filter_element = $('#show_all_comments_' + player_id);
 		if(filter_element.length >= 1){

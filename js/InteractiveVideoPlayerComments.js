@@ -51,7 +51,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let css_class, value;
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		
-		if(pro.isBuildListElementAllowed(player_data, username))
+		if(pro.isBuildListElementAllowed(player_data, username) && 	comment.is_table_of_content === "0")
 		{
 			css_class = pro.getCSSClassForListElement();
 			value =	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class + '">' +
@@ -211,6 +211,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			element = '<li><a href="#">' + element + '</a></li>';
 			drop_down_list.append(element);
 		}
+		pro.registerTabEvent(player_id);
 	};
 
 	pub.fillEndTimeSelector = function(seconds)
@@ -223,6 +224,29 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let obj = pro.secondsToTimeCode(seconds);
 //Todo: fix this, this id does not exists anywhere
 		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));
+	};
+	
+	pro.registerTabEvent = function(player_id)
+	{
+		$('.iv_tab_comments_' + player_id).on('click', function() {
+			let time = il.InteractiveVideoPlayerAbstract.currentTime(player_id);
+			let filter_element = $('#show_all_comments_' + player_id);
+
+			if(filter_element.prop('checked')){
+				il.InteractiveVideoPlayerComments.rebuildCommentsViewIfShowAllIsActive(player_id);
+			} else {
+				pub.replaceCommentsAfterSeeking(time, player_id);
+			}
+		});
+		
+		$('.iv_tab_toc_' + player_id).on('click', function() {
+			$('#ul_scroll_' + player_id).html('');
+			pro.buildToc(player_id);
+		});
+	};
+	
+	pro.buildToc = function(player_id) {
+		
 	};
 
 	pro.isBuildListElementAllowed = function(player_data, username)
@@ -370,6 +394,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	
 	pub.getCommentRepliesHtml = function(reply)
 	{
+		if(reply.is_table_of_content === "1") {
+			return '';
+		}
 		return '<div class="reply_comment reply_comment_' + reply.comment_id + '">' + pub.buildCommentUsernameHtml(reply.user_name, reply.is_interactive) + ': ' + reply.comment_text + ' ' + pro.appendPrivateHtml(reply.is_private) + '</div>';
 	};
 

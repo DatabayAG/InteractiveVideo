@@ -269,13 +269,14 @@ class ilObjComment
 		return $stop_points;
 	}
 
-	/**
-	 * @return array
-	 */
-	public function getContentComments()
+    /**
+     * @param false $toc
+     * @return array
+     */
+	public function getContentComments($toc = false)
 	{
 		/**
-		 * @var $ilDB ilDB
+		 * @var $ilDB 
 		 */
 		global $ilDB, $ilUser;
 
@@ -341,7 +342,12 @@ class ilObjComment
 			}
 			else
 			{
-				$comments[$i] = $temp;
+			    if($toc === false) {
+                    $comments[$i] = $temp;
+                } elseif($toc === true && $temp['is_table_of_content'] === "1"){
+                    $comments[$i] = $temp;
+                }
+				
 				$i++;
 			}
 		}

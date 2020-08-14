@@ -597,6 +597,25 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 	}
 
+    /**
+     * @return bool
+     */
+    public function doesTocCommentExists()
+    {
+        global $ilDB;
+
+        $res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE is_table_of_content = %s AND obj_id = %s',
+            array('integer', 'integer'), array(1, $this->id));
+
+        $state = false;
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            $state = true;
+            continue;
+        }
+        return $state;
+    }
+
 	/**
 	 * @param $comment_id
 	 * @return mixed
