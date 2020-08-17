@@ -89,6 +89,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     /** @var int */
 	protected $show_toc_first = 0;
 
+    /** @var int */
+	protected $disable_comment_stream = 0;
+
 	/**
 	 * @param $src_id
 	 * @return ilInteractiveVideoSource
@@ -138,6 +141,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->setAutoResumeAfterQuestion($row['auto_resume']);
 		$this->setFixedModal($row['fixed_modal']);
 		$this->setShowTocFirst($row['show_toc_first']);
+		$this->setDisableCommentStream($row['disable_comment_stream']);
 
 		$this->getVideoSourceObject($row['source_id']);
 		$this->setLearningProgressMode($row['lp_mode']);
@@ -276,6 +280,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$auto_resume	= $this->auto_resume_after_question;
 						$fixed_modal	= $this->fixed_modal;
 						$show_toc_first	= $this->show_toc_first;
+						$disable_comment_stream	= $this->disable_comment_stream;
 					}
 					else
 					{
@@ -291,6 +296,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$auto_resume	= (int)$_POST['auto_resume'];
 						$fixed_modal	= (int)$_POST['fixed_modal'];
 						$show_toc_first	= (int)$_POST['show_toc_first'];
+						$disable_comment_stream	= (int)$_POST['disable_comment_stream'];
 					}
 
 					$ilDB->insert(
@@ -309,7 +315,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 							'task'           => array('text', $task),
 							'no_comment'     => array('integer', $no_comment),
 							'no_toolbar'     => array('integer', $no_toolbar),
-							'show_toc_first' => array('integer', $show_toc_first)
+							'show_toc_first' => array('integer', $show_toc_first),
+							'disable_comment_stream' => array('integer', $disable_comment_stream)
 						)
 					);
 
@@ -366,6 +373,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 					'auto_resume'       => array('integer', $this->isAutoResumeAfterQuestion()),
 					'fixed_modal'       => array('integer', $this->isFixedModal()),
 					'show_toc_first'    => array('integer', $this->getShowTocFirst()),
+					'disable_comment_stream'    => array('integer', $this->getDisableCommentStream()),
 					'lp_mode'			=> array('integer', $this->getLearningProgressMode()), 
 					'no_comment'		=> array('integer', $this->getDisableComment()),
 					'no_toolbar'		=> array('integer', $this->getDisableToolbar())
@@ -433,6 +441,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				'auto_resume'     => array('integer', $this->isAutoResumeAfterQuestion()),
 				'fixed_modal'     => array('integer', $this->isFixedModal()),
 				'show_toc_first'  => array('integer', $this->getShowTocFirst()),
+				'disable_comment_stream'  => array('integer', $this->getDisableCommentStream()),
 				'lp_mode' => array('integer', $this->getLearningProgressMode())
 			)
 		);
@@ -1277,6 +1286,22 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     public function setShowTocFirst($show_toc_first)
     {
         $this->show_toc_first = $show_toc_first;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDisableCommentStream()
+    {
+        return $this->disable_comment_stream;
+    }
+
+    /**
+     * @param int $disable_comment_stream
+     */
+    public function setDisableCommentStream($disable_comment_stream)
+    {
+        $this->disable_comment_stream = $disable_comment_stream;
     }
 
 	/**

@@ -247,7 +247,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			pro.buildToc(player_id);
 		});
 
-		if(player_data.show_toc_first === true || player_data.show_toc_first === "1") {
+		if(player_data.disable_comment_stream === "1" || player_data.show_toc_first === "1") {
 			pro.displayCommentsOrToc(false, player_id);
 			pro.buildToc(player_id);
 		} else {

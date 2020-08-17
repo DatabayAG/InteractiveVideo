@@ -201,5 +201,7 @@ no_toolbar_info#:#No toolbar with filters will be shown
 save_without_correct_detail#:#You don't have selected a reflection question or have you selected a question without correct answers, are you sure you want to save the question?
 is_table_of_content#:#Table of content
 toc#:#Table of content
-show_toc_first#:#Show Table of content
+show_toc_first#:#Show Table of content first
 show_toc_first_info#:#Show table of content as first page
+disable_comment_stream#:#Disable comment stream
+disable_comment_stream_info#:#Disable comment stream
