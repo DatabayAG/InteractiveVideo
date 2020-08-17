@@ -432,3 +432,32 @@ body.cke_editable{
 .iv_light_version{
     display:none !important;
 }
+
+.toc-inner {
+    padding-top: 0px;
+}
+
+.scroll-text ul.ul_toc_iv li:after {
+    background: #fff;
+    border: 2px solid #ccc;
+    border-radius: 0;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    content: "";
+    height: 15px;
+    left: -36px;
+    position: absolute;
+    top: 2px;
+    width: 15px;
+}
+
+.iv_tab_navigation .active{
+    background-color: rgba(76, 101, 134, 0.3) !important;
+}
+
+.iv_tab {
+    border: 1px solid lightgray !important;
+}
+
+.iv-tabs{
+    margin-top: 0px;
+}

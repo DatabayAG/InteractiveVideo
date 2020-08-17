@@ -86,6 +86,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	/** @var int */
 	protected $disable_toolbar = 0;
 
+    /** @var int */
+	protected $show_toc_first = 0;
+
 	/**
 	 * @param $src_id
 	 * @return ilInteractiveVideoSource
@@ -134,6 +137,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->setDisableToolbar($row['no_toolbar']);
 		$this->setAutoResumeAfterQuestion($row['auto_resume']);
 		$this->setFixedModal($row['fixed_modal']);
+		$this->setShowTocFirst($row['show_toc_first']);
 
 		$this->getVideoSourceObject($row['source_id']);
 		$this->setLearningProgressMode($row['lp_mode']);
@@ -271,6 +275,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$no_toolbar		= $this->disable_toolbar;
 						$auto_resume	= $this->auto_resume_after_question;
 						$fixed_modal	= $this->fixed_modal;
+						$show_toc_first	= $this->show_toc_first;
 					}
 					else
 					{
@@ -285,6 +290,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$no_toolbar		= (int)$_POST['no_toolbar'];
 						$auto_resume	= (int)$_POST['auto_resume'];
 						$fixed_modal	= (int)$_POST['fixed_modal'];
+						$show_toc_first	= (int)$_POST['show_toc_first'];
 					}
 
 					$ilDB->insert(
@@ -302,7 +308,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 							'fixed_modal'    => array('integer',$fixed_modal ),
 							'task'           => array('text', $task),
 							'no_comment'     => array('integer', $no_comment),
-							'no_toolbar'     => array('integer', $no_toolbar)
+							'no_toolbar'     => array('integer', $no_toolbar),
+							'show_toc_first' => array('integer', $show_toc_first)
 						)
 					);
 
@@ -356,8 +363,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 					'source_id'			=>array('text',		$this->getSourceId()),
 					'is_task'			=> array('integer', $this->getTaskActive()),
 					'task'				=> array('text',	$this->getTask()), 
-					 'auto_resume'      => array('integer',    $this->isAutoResumeAfterQuestion()),
-					 'fixed_modal'      => array('integer',    $this->isFixedModal()),
+					'auto_resume'       => array('integer', $this->isAutoResumeAfterQuestion()),
+					'fixed_modal'       => array('integer', $this->isFixedModal()),
+					'show_toc_first'    => array('integer', $this->getShowTocFirst()),
 					'lp_mode'			=> array('integer', $this->getLearningProgressMode()), 
 					'no_comment'		=> array('integer', $this->getDisableComment()),
 					'no_toolbar'		=> array('integer', $this->getDisableToolbar())
@@ -424,6 +432,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				'task'     => array('text', $this->getTask()),
 				'auto_resume'     => array('integer', $this->isAutoResumeAfterQuestion()),
 				'fixed_modal'     => array('integer', $this->isFixedModal()),
+				'show_toc_first'  => array('integer', $this->getShowTocFirst()),
 				'lp_mode' => array('integer', $this->getLearningProgressMode())
 			)
 		);
@@ -1253,6 +1262,22 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	{
 		$this->fixed_modal = $fixed_modal;
 	}
+
+    /**
+     * @return int
+     */
+    public function getShowTocFirst()
+    {
+        return $this->show_toc_first;
+    }
+
+    /**
+     * @param int $show_toc_first
+     */
+    public function setShowTocFirst($show_toc_first)
+    {
+        $this->show_toc_first = $show_toc_first;
+    }
 
 	/**
 	 * @return int

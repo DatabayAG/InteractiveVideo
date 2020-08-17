@@ -511,6 +511,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
 		$config_tpl->setVariable('AUTO_RESUME_AFTER_QUESTION', $this->object->isAutoResumeAfterQuestion());
 		$config_tpl->setVariable('FIXED_MODAL', $this->object->isFixedModal());
+		$config_tpl->setVariable('SHOW_TOC_FIRST', $this->object->getShowTocFirst());
 		$config_tpl->setVariable('HAS_TRACKS', $this->getSubtitleDataAndFilesForJson());
 		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
@@ -608,6 +609,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$no_toolbar = $a_form->getInput('no_toolbar');
 		$this->object->setDisableToolbar((int)$no_toolbar);
+
+        $show_toc_first = $a_form->getInput('show_toc_first');
+		$this->object->setShowTocFirst((int)$show_toc_first);
 
 		$auto_resume = $a_form->getInput('auto_resume');
 		$this->object->setAutoResumeAfterQuestion((int)$auto_resume);
@@ -746,7 +750,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$no_toolbar = new ilCheckboxInputGUI($plugin->txt('no_toolbar'), 'no_toolbar');
 		$no_toolbar->setInfo($plugin->txt('no_toolbar_info'));
-		$a_form->addItem($no_toolbar);
+		$a_form->addItem($no_toolbar);		
+		
+		$show_toc_first = new ilCheckboxInputGUI($plugin->txt('show_toc_first'), 'show_toc_first');
+        $show_toc_first->setInfo($plugin->txt('show_toc_first_info'));
+		$a_form->addItem($show_toc_first);
 
 		$section = new ilFormSectionHeaderGUI();
 		$section->setTitle($plugin->txt('questions'));
@@ -795,6 +803,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values["is_chronologic"]		= $this->object->isChronologic();
 		$a_values["no_comment"]			= $this->object->getDisableComment();
 		$a_values["no_toolbar"]			= $this->object->getDisableToolbar();
+		$a_values["show_toc_first"]		= $this->object->getShowTocFirst();
 		$a_values['source_id']			= $this->object->getSourceId();
 		$a_values['is_task']			= $this->object->getTaskActive();
 		$a_values['task']				= $this->object->getTask();

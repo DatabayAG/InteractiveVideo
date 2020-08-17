@@ -971,3 +971,16 @@ if($ilDB->tableExists('rep_robj_xvid_comments'))
     }
 }
 ?>
+<#53>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'show_toc_first'))
+{
+    $ilDB->addTableColumn('rep_robj_xvid_objects', 'show_toc_first',
+        array(
+            'type'    => 'integer',
+            'length'  => 1,
+            'notnull' => true,
+            'default' => 0)
+    );
+}
+?>
