@@ -956,3 +956,18 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_toolbar'))
 <?php
 $ilDB->addPrimaryKey('rep_robj_xvid_objects', array('obj_id'));
 ?>
+<#52>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_question'))
+{
+    if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'show_best_solution'))
+    {
+        $ilDB->addTableColumn('rep_robj_xvid_question', 'show_best_solution',
+            array(
+                'type'    => 'integer',
+                'length'  => '1',
+                'notnull' => true,
+                'default' => 0));
+    }
+}
+?>

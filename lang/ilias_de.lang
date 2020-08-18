@@ -198,4 +198,5 @@ sure_delete_subtitle#:#Sind Sie sicher das Sie diesen Untertitel löschen wollen
 you_need_a_short_title#:#Sie müssen einen Kurztitel eintragen!
 no_toolbar#:#Toolbar deaktivieren
 no_toolbar_info#:#Es wird keine Toolbar mit Filtern angezeigt
-
+show_best_solution#:#Zeige bestmögliche Lösung
+show_best_solution_info#:#Zeige bestmögliche Lösung

@@ -199,3 +199,5 @@ you_need_a_short_title#:#You need to provide a short title!
 no_toolbar#:#Deactivate toolbar
 no_toolbar_info#:#No toolbar with filters will be shown
 save_without_correct_detail#:#You don't have selected a reflection question or have you selected a question without correct answers, are you sure you want to save the question?
+show_best_solution#:#Show best solution
+show_best_solution_info#:#Show best solution

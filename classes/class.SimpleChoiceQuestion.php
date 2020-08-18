@@ -101,6 +101,11 @@ class SimpleChoiceQuestion
 	/**
 	 * @var int
 	 */
+	protected $show_best_solution = 0;
+
+	/**
+	 * @var int
+	 */
 	protected $feedback_correct_id;
 
 	/**
@@ -173,6 +178,7 @@ class SimpleChoiceQuestion
 			$this->setShowWrongIcon($row['show_wrong_icon']);
 			$this->setJumpWrongTs($row['jump_wrong_ts']);
 			$this->setShowResponseFrequency($row['show_response_frequency']);
+			$this->setShowBestSolution($row['show_best_solution']);
 			$this->setFeedbackCorrectId($row['feedback_correct_ref_id']);
 			$this->setFeedbackWrongId($row['feedback_wrong_ref_id']);
 			$this->setRepeatQuestion($row['repeat_question']);
@@ -481,6 +487,7 @@ class SimpleChoiceQuestion
 			$this->setShowWrongIcon($row['show_wrong_icon']);
 			$this->setJumpWrongTs($row['jump_wrong_ts']);
 			$this->setShowResponseFrequency($row['show_response_frequency']);
+			$this->setShowBestSolution($row['show_best_solution']);
 			$this->setFeedbackCorrectId($row['feedback_correct_ref_id']);
 			$this->setFeedbackWrongId($row['feedback_wrong_ref_id']);
 			$this->setRepeatQuestion($row['repeat_question']);
@@ -534,6 +541,7 @@ class SimpleChoiceQuestion
 				'is_jump_wrong'      => array('integer', $this->getIsJumpWrong()),
 				'jump_wrong_ts'      => array('integer', $this->getJumpWrongTs()),
 				'show_response_frequency' => array('integer', $this->getShowResponseFrequency()),
+				'show_best_solution' => array('integer', $this->getShowBestSolution()),
 				'feedback_correct_ref_id' => array('integer', $this->getFeedbackCorrectId()),
 				'feedback_wrong_ref_id' => array('integer', $this->getFeedbackWrongId()),
 				'repeat_question'    => array('integer', $this->getRepeatQuestion()),
@@ -812,6 +820,22 @@ class SimpleChoiceQuestion
 		$this->show_response_frequency = $show_response_frequency;
 	}
 
+    /**
+     * @return int
+     */
+    public function getShowBestSolution()
+    {
+        return $this->show_best_solution;
+    }
+
+    /**
+     * @param int $show_best_solution
+     */
+    public function setShowBestSolution($show_best_solution)
+    {
+        $this->show_best_solution = $show_best_solution;
+    }
+    
 	/**
 	 * @return int
 	 */
