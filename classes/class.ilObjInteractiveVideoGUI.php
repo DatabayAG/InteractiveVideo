@@ -1534,9 +1534,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             }
 			$form->addItem($is_private);
 		}
-
-        $is_table_of_content = new ilCheckboxInputGUI($plugin->txt('is_table_of_content'), 'is_table_of_content');
-		$form->addItem($is_table_of_content);
         
 		$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($plugin->txt('comment'));
@@ -1553,6 +1550,77 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($frm_id);
 
 		return $form;
+	}
+
+    /**
+     * @return ilPropertyFormGUI
+     */
+    private function initChapterForm()
+    {
+        $plugin = ilInteractiveVideoPlugin::getInstance();
+
+        $form = new ilPropertyFormGUI();
+        $form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
+        $form->setTitle($plugin->txt('insert_chapter'));
+        $this->appendCkEditorMathJaxSupportToForm($form);
+        $section_header = new ilFormSectionHeaderGUI();
+        $section_header->setTitle($plugin->txt('general'));
+        $form->addItem($section_header);
+
+        $title = new ilTextInputGUI($this->lng->txt('title'), 'comment_title');
+        $title->setRequired(true);
+        $form->addItem($title);
+
+        $time = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'comment_time');
+        #$time->setShowTime(true);
+        #$time->setShowSeconds(true);
+
+        if(isset($_POST['comment_time']))
+        {
+            $seconds = $_POST['comment_time'];
+            $time->setValueByArray(array('comment_time' => (int)$seconds));
+        }
+        $form->addItem($time);
+
+        $section_header = new ilFormSectionHeaderGUI();
+        $section_header->setTitle($plugin->txt('comment'));
+        $form->addItem($section_header);
+
+        $comment = xvidUtils::constructTextAreaFormElement('comment', 'comment_text');
+        $form->addItem($comment);
+
+        $frm_id = new ilHiddenInputGUI('comment_id');
+        $form->addItem($frm_id);
+        
+        $is_toc = new ilHiddenInputGUI('is_table_of_content');
+        $is_toc->setValue(1);
+        $form->addItem($is_toc);
+
+        return $form;
+    }
+
+	/**
+	 *
+	 */
+	public function showTutorInsertChapterForm()
+	{
+		/**
+		 * @var $tpl    ilTemplate
+		 * @var $ilTabs ilTabsGUI
+		 */
+		global $tpl, $ilTabs;
+
+		$this->setSubTabs('editComments');
+
+		$ilTabs->activateTab('editComments');
+		$ilTabs->activateSubTab('editComments');
+
+		$form = $this->initChapterForm();
+
+		$form->addCommandButton('insertTutorChapter', $this->lng->txt('insert'));
+		$form->addCommandButton('cancelComments', $this->lng->txt('cancel'));
+
+		$tpl->setContent($form->getHTML());
 	}
 
 	/**
@@ -1807,6 +1875,36 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
+	public function updateChapter()
+	{
+		$valid = false;
+		$form = $this->initChapterForm();
+
+		if($form->checkInput()) {
+			$valid            = true;
+			$comment_time     = $form->getInput('comment_time');
+			$comment_id = $form->getInput('comment_id');
+			if ($comment_id > 0) {
+				$this->objComment = new ilObjComment($comment_id);
+			}
+			$this->objComment->setCommentText($form->getInput('comment_text'));
+			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
+			$this->objComment->setInteractive(0);
+			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
+            $this->objComment->setIsTableOfContent((int)$form->getInput('is_table_of_content'));
+			$this->objComment->setCommentTime($comment_time);
+		}
+		if($valid){
+			$this->objComment->update();
+			$this->editComments();
+		}
+		else
+		{
+			$form->setValuesByPost();
+			$this->editChapter($form);
+		}
+	}
+
 	/**
 	 * @param int $current_time
 	 */
@@ -1844,6 +1942,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('TXT_INS_COMMENT', $plugin->txt('insert_comment'));
 		$video_tpl->setVariable('PLAYER_ID', $player_id);
 		$video_tpl->setVariable('TXT_INS_QUESTION', $plugin->txt('insert_question'));
+		$video_tpl->setVariable('TXT_INS_CHAPTER', $plugin->txt('insert_chapter'));
 
 		require_once("./Services/UIComponent/Modal/classes/class.ilModalGUI.php");
 		$modal = ilModalGUI::getInstance();
@@ -1863,6 +1962,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('TABLE', $tbl->getHTML());
 		$tpl->setContent($video_tpl->get());
 	}
+
 	/**
 	 *
 	 */
@@ -1872,12 +1972,26 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	/**
-	 * @param int $is_tutor
+	 *
 	 */
-	private function insertComment($is_tutor = 0)
+	public function insertTutorChapter()
 	{
-		$form = $this->initCommentForm();
+		$this->insertComment(1, true);
+	}
 
+    /**
+     * @param int   $is_tutor
+     * @param false $is_chapter
+     * @throws ilTemplateException
+     */
+	private function insertComment($is_tutor = 0, $is_chapter = false)
+	{
+	    if($is_chapter) {
+            $form = $this->initChapterForm();
+        } else {
+            $form = $this->initCommentForm();
+        }
+   
 		if($form->checkInput())
 		{
 			$this->objComment = new ilObjComment();
@@ -1907,6 +2021,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$form->setValuesByPost();
 			ilUtil::sendFailure($this->lng->txt('err_check_input'),true);
+			if($is_chapter === true) {
+                $this->ctrl->redirect($this, 'showTutorInsertChapterForm');
+            }
 			$this->ctrl->redirect($this, 'showTutorInsertCommentForm');
 		}
 
@@ -1975,11 +2092,69 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$tpl->setContent($form->getHTML());
 	}
+	
+	/**
+	 * @param ilPropertyFormGUI $form
+	 */
+	public function editChapter(ilPropertyFormGUI $form = NULL)
+	{
+		/**
+		 * @var $tpl    ilTemplate
+		 * @var $ilTabs ilTabsGUI
+		 */
+		global $tpl, $ilTabs;
+
+		$ilTabs->activateTab('editComments');
+		if(!($form instanceof ilPropertyFormGUI))
+		{
+			$form = $this->initChapterForm();
+			$form->setValuesByArray($this->getChapterFomValues(), true);
+		}
+
+		$form->setFormAction($this->ctrl->getFormAction($this, 'updateChapter'));
+		$form->setTitle(ilInteractiveVideoPlugin::getInstance()->txt('edit_chapter'));
+		$form->addCommandButton('updateChapter', $this->lng->txt('save'));
+		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
+
+		$tpl->setContent($form->getHTML());
+	}
 
 	/**
 	 * @param int $comment_id
 	 */
 	private function getCommentFormValues($comment_id = 0)
+	{		
+		if($comment_id == 0)
+		{
+			if(!isset($_GET['comment_id']) && !isset($_POST['comment_id']))
+			{
+				ilUtil::sendFailure(ilInteractiveVideoPlugin::getInstance()->txt('no_comment_id_given'), true);
+				return $this->showContent();
+			}
+			else
+			{
+				$comment_id = (int)$_GET['comment_id'] ? (int)$_GET['comment_id'] : (int)$_POST['comment_id'] ;
+			}
+		}
+
+		$comment_data				= $this->object->getCommentDataById($comment_id);
+		$values['comment_id']		= $comment_data['comment_id'];
+		$values['comment_time']		= $comment_data['comment_time'];
+		$values['comment_time_end']	= $comment_data['comment_time_end'];
+		$values['comment_text']		= $comment_data['comment_text'];
+		$values['is_interactive']	= $comment_data['is_interactive'];
+		$values['comment_title']	= $comment_data['comment_title'];
+		$values['comment_tags']		= $comment_data['comment_tags'];
+		$values['is_private']		= $comment_data['is_private'];
+		$values['is_table_of_content'] = $comment_data['is_table_of_content'];
+
+		return $values;
+	}
+	
+	/**
+	 * @param int $comment_id
+	 */
+	private function getChapterFomValues($comment_id = 0)
 	{		
 		if($comment_id == 0)
 		{

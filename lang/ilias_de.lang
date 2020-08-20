@@ -204,4 +204,5 @@ show_toc_first#:#Zeige Inhaltsverzeichnis als erstes
 show_toc_first_info#:#Zeige Inhaltsverzeichnis zuerst an
 disable_comment_stream#:#Deaktiviere Kommentarstream
 disable_comment_stream_info#:#Deaktiviere Kommentarstream
-
+insert_chapter#:#Kapitel einfügen
+edit_chapter#:#Kapitel editieren

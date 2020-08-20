@@ -156,6 +156,11 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			else if($key == 'is_interactive')
 			{
 				$txt_value = $value == 1 ? 'question' : 'comment';
+				if($txt_value === 'comment'){
+				    if($a_set['is_table_of_content'] === "1") {
+				        $txt_value = 'chapter';
+                    }
+                }
 				$value = $this->lng->txt($txt_value);
 			}
 			else if($key == 'is_tutor')
@@ -178,7 +183,10 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		}	
 		else
 		{
-			$link_target =  $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editComment' : 'editMyComment');	
+			$link_target =  $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editComment' : 'editMyComment');
+            if($a_set['is_table_of_content'] === "1") {
+                $link_target =  $this->ctrl->getLinkTarget($this->parent_obj,'editChapter');
+            }
 		}
 		
 		$current_selection_list->addItem($this->lng->txt('edit'), '', $link_target);
