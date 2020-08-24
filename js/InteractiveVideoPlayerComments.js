@@ -323,9 +323,11 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		$('.toc_item').on('click', function() {
 			if($(this).find('.toc_description').css('display') === 'block'){
 				$(this).find('.toc_description').hide();
+				$(this).find('.toc_description').removeClass('tocManualOverride');
 			} else {
 				$('.toc_description').hide();
 				$(this).find('.toc_description').show();
+				$(this).find('.toc_description').addClass('tocManualOverride');
 			}
 		});
 	};
@@ -340,6 +342,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				$('.toc_item').removeClass('activeToc');
 				$(this).addClass('activeToc');
 				$('.toc_description').hide();
+				$('.tocManualOverride').show();
 				$(this).find('.toc_description').show();
 			}
 		});
