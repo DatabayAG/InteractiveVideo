@@ -461,3 +461,11 @@ body.cke_editable{
 .iv-tabs{
     margin-top: 0px;
 }
+
+.activeToc:after{
+    background-color: #b5eab2 !important
+}
+
+.toc_description{
+    display: none;
+}

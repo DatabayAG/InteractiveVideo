@@ -115,6 +115,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		$this->xml_writer->xmlElement('getLearningProgressMode', null, (int)$this->object->getLearningProgressMode());
 		$this->xml_writer->xmlElement('noComment', null, (int)$this->object->getDisableComment());
 		$this->xml_writer->xmlElement('noToolbar', null, (int)$this->object->getDisableToolbar());
+		$this->xml_writer->xmlElement('showTocFirst', null, (int)$this->object->getShowTocFirst());
 		$this->xml_writer->xmlElement('fixedModal', null, (int)$this->object->isFixedModal());
 		$this->xml_writer->xmlElement('autoResumeAfterQuestion', null, (int)$this->object->isAutoResumeAfterQuestion());
 
@@ -161,6 +162,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 					$this->xml_writer->xmlElement('CommentIsPrivate', null, (int) $row['is_private']);
 					$this->xml_writer->xmlElement('CommentTimeEnd', null, (int) $row['comment_time_end']);
 					$this->xml_writer->xmlElement('CommentIsReplyTo', null, (int) $row['is_reply_to']);
+					$this->xml_writer->xmlElement('CommentIsTableOfContent', null, (int) $row['is_table_of_content']);
 
 					$this->xml_writer->xmlElement('QuestionId', null, (int) $qid);
 					$this->xml_writer->xmlElement('QuestionText', null, (string) $row['question_text']);

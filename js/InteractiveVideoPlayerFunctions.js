@@ -47,6 +47,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 
 		scope.InteractiveVideoPlayerResume.saveResumeTime(player_id);
+		pri.utils.highlightTocItem(player_id, current_time);
 
 		if (!isNaN(current_time) && current_time > 0) {
 			pri.utils.clearCommentsWhereTimeEndEndded(player_id, current_time);

@@ -117,6 +117,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 			case 'noCommentStream':
 			case 'noComment':
 			case 'noToolbar':
+			case 'showTocFirst':
 			case 'fixedModal':
 			case 'autoResumeAfterQuestion':
 			case 'studentMarker':
@@ -235,6 +236,10 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 				break;
 			case 'autoResumeAfterQuestion':
 				$this->xvid_obj->setAutoResumeAfterQuestion(trim($this->cdata));
+				$this->cdata = '';
+				break;
+			case 'show_toc_first':
+				$this->xvid_obj->setShowTocFirst(trim($this->cdata));
 				$this->cdata = '';
 				break;
 			case 'studentMarker':

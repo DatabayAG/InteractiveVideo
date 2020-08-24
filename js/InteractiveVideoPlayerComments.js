@@ -295,7 +295,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			let obj = player_data.comments_toc[key];
 			if (obj.comment_text !== null)
 			{
-				element = pro.buildTocElement(obj, player_id);
+				element = pro.buildTocElement(obj, player_id, player_data);
 				j_object.append(element);
 			}
 		}
@@ -303,24 +303,33 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		pub.clearCommentsWhereTimeEndEndded(player_id, player_data.last_time);
 	};
 	
-	pro.buildTocElement = function(comment, player_id) {
-		let toc_end = '';
+	pro.buildTocElement = function(comment, player_id, player_data) {
 		let comment_title = ' ';
-		
-		if(comment.comment_time_end !== "0") {
-			toc_end = ' - ' + pro.buildCommentTimeHtml(comment.comment_time_end, comment.is_interactive, player_id);
-		}
-		
+
 		if(comment.comment_title !== '') {
 			comment_title = ' ' + comment.comment_title + ' <br/> ';
 		}
-		
-		return '<li class="list_item_' + comment.comment_id +'"><div class="toc-inner"><h5>' + 
-			 pro.buildCommentTimeHtml(comment.comment_time, comment.is_interactive, player_id)  + 
-			 toc_end + 
+
+		return '<li class="toc_item toc_item_' + comment.comment_id +'" data-toc-time="' + comment.comment_time + '"><div class="toc-inner"><h5>' + 
+			 pro.buildCommentTimeHtml(comment.comment_time, comment.is_interactive, player_id)  +
 			 comment_title + '</h5>' + 
-			 '<div>' + comment.comment_text + '</div>' +
+			 '<div class="toc_description">' + comment.comment_text + '</div>' +
 			'</div></li>';
+	};
+	
+	pub.highlightTocItem = function(player_id, current_time){
+		
+		$( ".toc_item" ).each(function( index ) {
+			let toc_time = $( this ).data('toc-time');
+			let toc_time_next = $( this ).next().data('toc-time');
+			if(toc_time <= current_time
+				&& !(toc_time_next < current_time)) {
+				$('.toc_item').removeClass('activeToc');
+				$(this).addClass('activeToc');
+				$('.toc_description').hide();
+				$(this).find('.toc_description').show();
+			}
+		});
 	};
 
 	pro.isBuildListElementAllowed = function(player_data, username)
