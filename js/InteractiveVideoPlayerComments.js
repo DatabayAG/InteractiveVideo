@@ -301,7 +301,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		}
 
 		pro.registerTocClickListener(player_id);
-		pub.clearCommentsWhereTimeEndEndded(player_id, player_data.last_time);
+		pub.highlightTocItem(player_id, player_data.last_time);
 	};
 	
 	pro.buildTocElement = function(comment, player_id, player_data) {
