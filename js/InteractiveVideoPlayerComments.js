@@ -300,6 +300,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			}
 		}
 
+		pro.registerTocClickListener(player_id);
 		pub.clearCommentsWhereTimeEndEndded(player_id, player_data.last_time);
 	};
 	
@@ -315,6 +316,18 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			 comment_title + '</h5>' + 
 			 '<div class="toc_description">' + comment.comment_text + '</div>' +
 			'</div></li>';
+	};
+
+	pro.registerTocClickListener = function(player_id) {
+		$('.toc_item').off('click');
+		$('.toc_item').on('click', function() {
+			if($(this).find('.toc_description').css('display') === 'block'){
+				$(this).find('.toc_description').hide();
+			} else {
+				$('.toc_description').hide();
+				$(this).find('.toc_description').show();
+			}
+		});
 	};
 	
 	pub.highlightTocItem = function(player_id, current_time){
