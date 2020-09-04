@@ -2902,6 +2902,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
 		}
 
+		$this->object->refreshLearningProgress([$this->user->getId()]);
+
 		$this->showFeedbackPerAjax();
 		$this->callExit();
 	}

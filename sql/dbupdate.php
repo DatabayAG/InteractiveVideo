@@ -997,3 +997,11 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'disable_comment_stream'))
     );
 }
 ?>
+<#55>
+<?php
+$ilDB->addIndex('rep_robj_xvid_comments', ['is_interactive', 'obj_id'], 'i2');
+?>
+<#56>
+<?php
+$ilDB->addIndex('rep_robj_xvid_question', ['comment_id', 'type'], 'i2');
+?>

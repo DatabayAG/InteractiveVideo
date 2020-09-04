@@ -341,6 +341,50 @@ class SimpleChoiceQuestion
     }
 
     /**
+     * @param int $obj_id
+     * @return array<int, int>
+     */
+    public function getUsersWithAllAnsweredQuestionsMap($obj_id)
+    {
+        /**
+         * $ilDB ilDB
+         */
+        global $ilDB;
+
+        $res = $ilDB->queryF('
+            SELECT
+                rep_robj_xvid_answers.user_id
+            FROM rep_robj_xvid_answers
+            INNER JOIN rep_robj_xvid_question
+                ON rep_robj_xvid_question.question_id = rep_robj_xvid_answers.question_id
+                AND rep_robj_xvid_question.type != %s
+            INNER JOIN rep_robj_xvid_comments
+                ON rep_robj_xvid_comments.comment_id = rep_robj_xvid_question.comment_id
+                AND rep_robj_xvid_comments.is_interactive = %s
+            WHERE rep_robj_xvid_comments.obj_id = %s
+            GROUP BY rep_robj_xvid_answers.user_id
+            HAVING COUNT(rep_robj_xvid_answers.user_id) = (
+                SELECT COUNT(rep_robj_xvid_question.question_id)
+                FROM rep_robj_xvid_comments
+                INNER JOIN rep_robj_xvid_question
+                    ON rep_robj_xvid_question.comment_id = rep_robj_xvid_comments.comment_id
+                    AND rep_robj_xvid_question.type != %s
+                WHERE rep_robj_xvid_comments.is_interactive = %s AND rep_robj_xvid_comments.obj_id = %s
+            );
+            ',
+            ['integer', 'integer', 'integer', 'integer', 'integer', 'integer'],
+            [2, 1, $obj_id, 2, 1, $obj_id]
+        );
+
+        $usrIds = [];
+        while ($row = $ilDB->fetchAssoc($res)) {
+            $usrIds[$row['user_id']] = $row['user_id'];
+        }
+
+        return $usrIds;
+    }
+
+    /**
      * @param $obj_id
      * @param $user_id
      * @return bool
@@ -617,7 +661,6 @@ class SimpleChoiceQuestion
 			return 0;
 		}
 		return $user_ids;
-
 	}
 	
 	/**
