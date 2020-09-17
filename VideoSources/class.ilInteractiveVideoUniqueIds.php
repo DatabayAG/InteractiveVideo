@@ -33,8 +33,7 @@ class ilInteractiveVideoUniqueIds
 	 */
 	public function getNewId()
 	{
-		$new_id = $this->generateUniqueId();
-		return $new_id;
+        return $this->generateUniqueId();
 	}
 
 	/**
@@ -45,7 +44,7 @@ class ilInteractiveVideoUniqueIds
 	{
 		$unique_id = '';
 		for ($i = 0; $i <= self::ROUNDS; $i++) {
-			$rand = 'iv_' . rand();
+            $rand = uniqid('iv_');
 			if (!in_array($rand, $this->id_container)) {
 				$this->id_container[$rand] = $rand;
 				$unique_id                 = $rand;

@@ -33,7 +33,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
     }
 	
 	/**
-	 * @param ilObjectGUI $a_parent_obj
+	 * @param ilObjectGUI|ilObjInteractiveVideoGUI $a_parent_obj
 	 * @param string      $a_parent_cmd
 	 */
 	public function __construct($a_parent_obj, $a_parent_cmd)
@@ -89,6 +89,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		{
 			$this->addColumn($a_parent_obj->plugin->txt('visibility'), 'is_private');
 		}
+		$this->addColumn($a_parent_obj->plugin->txt('compulsory'), 'compulsory', '10%');
 		$this->addColumn($this->lng->txt('actions'), '', '10%');
 
 		$this->setSelectAllCheckbox('comment_id');
@@ -161,6 +162,11 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 				        $txt_value = 'chapter';
                     }
                 }
+				$value = $this->lng->txt($txt_value);
+			}
+			else if($key == 'compulsory')
+			{
+				$txt_value = $value == 1 ? 'yes' : '';
 				$value = $this->lng->txt($txt_value);
 			}
 			else if($key == 'is_tutor')

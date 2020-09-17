@@ -11,11 +11,13 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestio
  */
 class SimpleChoiceQuestionAjaxHandler
 {
-	/**
-	 * @param $feedback_ref_id
-	 * @param $json
-	 * @return mixed
-	 */
+    /**
+     * @param $feedback_ref_id
+     * @param $json
+     * @return mixed
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     */
 	private function appendFeedback($feedback_ref_id, $json)
 	{
 		if($feedback_ref_id > 0)
@@ -27,10 +29,12 @@ class SimpleChoiceQuestionAjaxHandler
 		return $json;
 	}
 
-	/**
-	 * @param int $qid question_id
-	 * @return string
-	 */
+    /**
+     * @param $qid
+     * @return false|string
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     */
 	public function getFeedbackForQuestion($qid)
 	{
 		$scoring  = new SimpleChoiceQuestionScoring();
@@ -118,10 +122,13 @@ class SimpleChoiceQuestionAjaxHandler
 		return json_encode($json);
 	}
 
-	/**
-	 * @param $ref_id
-	 * @return string
-	 */
+    /**
+     * @param $ref_id
+     * @return string
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     * @throws ilTemplateException
+     */
 	protected function getLinkIfReadAccessForObjectByRefId($ref_id)
 	{
 		if($ref_id != null && $ref_id != 0)
@@ -149,15 +156,19 @@ class SimpleChoiceQuestionAjaxHandler
 		}
 		return '';
 	}
-	/**
-	 * @param int $cid comment_id
-	 * @return string
-	 */
+
+    /**
+     * @param $cid
+     * @return false|string
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     * @throws ilWACException
+     */
 	public function getJsonForCommentId($cid)
 	{
-		/**
-		 * @var $ilDB   ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB, $ilUser;
 		$res = $ilDB->queryF('
 			SELECT * 
@@ -192,6 +203,7 @@ class SimpleChoiceQuestionAjaxHandler
 			$repeat_question         = $row['repeat_question'];
 			$show_reflection_question_comment = $row['reflection_question_comment'];
 			$question_image          = $row['question_image'];
+			$compulsory              = $row['compulsory_question'];
 			#$neutral_answer         = $row['neutral_answer'];
 			$counter++;
 		}
@@ -227,6 +239,7 @@ class SimpleChoiceQuestionAjaxHandler
 		$build_json['jump_wrong_ts']           = $jump_wrong_ts;
 		$build_json['show_response_frequency'] = $show_response_frequency;
 		$build_json['reflection_question_comment'] = $show_reflection_question_comment;
+		$build_json['compulsory_question']     = $compulsory;
 		$build_json['repeat_question']         = $repeat_question;
 		if($question_image != null)
 		{
@@ -270,9 +283,9 @@ class SimpleChoiceQuestionAjaxHandler
 	 */
 	public function getJsonForQuestionId($qid)
 	{
-		/**
-		 * @var $ilDB   ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF('SELECT answer_id, answer, correct FROM rep_robj_xvid_qus_text WHERE question_id = %s',

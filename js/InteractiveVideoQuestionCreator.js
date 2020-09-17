@@ -4,28 +4,28 @@ $( document ).ready(function() {
 
 	if(IVQuestionCreator.JSON.length === 0)
 	{
-		InteractiveVideoQuestionCreator.appendEmptyJSON();
+		il.InteractiveVideoQuestionCreator.appendEmptyJSON();
 	}
-	InteractiveVideoQuestionCreator.Init();
+	il.InteractiveVideoQuestionCreator.Init();
 	$('.question_type').val(IVQuestionCreator.type);
 	InteractiveVideoQuestionCreator.protect.showHideFormElementsPointsForNeutralAnswers();
 });
 
 
-var InteractiveVideoQuestionCreator = (function () {
+il.InteractiveVideoQuestionCreator = (function () {
 	'use strict';
 
-	var pub = {}, pro = {};
+	let pub = {}, pro = {};
 
 	pro.appendMultiListener = function() {
 		$('.text_field').on('blur', function (){
-			var pos = parseInt($(this).attr('meta'), 10);
+			let pos = parseInt($(this).attr('meta'), 10);
 			IVQuestionCreator.JSON[pos].answer = $(this).val();
 		});
 
 		$('.correct_solution').on('click', function (){
-			var pos = parseInt($(this).attr('meta'), 10);
-			var bool= 0;
+			let pos = parseInt($(this).attr('meta'), 10);
+			let bool= 0;
 			if($(this).is(':checked'))
 			{
 				bool = 1;
@@ -34,7 +34,7 @@ var InteractiveVideoQuestionCreator = (function () {
 		});
 		$('.clone_fields_add').on('click', function ()
 		{
-			var insert = new Object({
+			let insert = new Object({
 				answer  : '',
 				correct: 0
 			});
@@ -56,9 +56,9 @@ var InteractiveVideoQuestionCreator = (function () {
 	};
 
 	pro.createQuestionForm = function() {
-		var prototype 	= $('#inner_question_editor_prototype');
-		var table		= $('#table_body_question_editor');
-		var inner		= '';
+		let prototype 	= $('#inner_question_editor_prototype');
+		let table		= $('#table_body_question_editor');
+		let inner		= '';
 		table.html('');
 		$.each(IVQuestionCreator.JSON, function(l,value){
 			prototype.clone().attr({id: 'inner_' + l }).appendTo(table);
@@ -154,7 +154,7 @@ var InteractiveVideoQuestionCreator = (function () {
 	};
 
 	pub.Init = function () {
-		var question_form = $('#addQuestion');
+		let question_form = $('#addQuestion');
 		$('#is_interactive').parent().parent().parent().parent().append(question_form);
 		pro.createQuestionForm();
 		pro.appendSingleListener();

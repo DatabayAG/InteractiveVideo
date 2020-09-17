@@ -119,9 +119,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 	protected function doRead()
 	{
-		/**
-		 * @var $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF(
@@ -157,9 +157,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	protected function getOldVideoSource()
 	{
-		/**
-		 * @var $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF(
@@ -178,6 +178,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function saveSubtitleData($data_short, $data_long)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_SUB_TITLE . ' WHERE obj_id = %s',
@@ -211,6 +214,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function removeSubtitleData($filename)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_SUB_TITLE . ' WHERE obj_id = %s && file_name = %s',
@@ -222,7 +228,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function getSubtitleData()
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
+
 		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_SUB_TITLE. ' WHERE obj_id = %s',
 			array('integer'), array($this->getId()));
 
@@ -237,6 +247,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return $sub_title_data;
 	}
 
+    /**
+     * @param bool $a_clone_mode
+     * @throws ilException
+     */
 	protected function doCreate($a_clone_mode = false)
 	{
 		/**
@@ -264,6 +278,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				{
 					$this->getVideoSourceObject($src_id);
 					$this->video_source_object->doCreateVideoSource($this->getId());
+                    /**
+                     * @var $ilDB ilDBInterface
+                     */
 					global $ilDB;
 
 					$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = %s',
@@ -350,9 +367,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	protected function doUpdate()
 	{
-		/**
-		 * @var $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		parent::doUpdate();
@@ -395,7 +412,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
             self::deleteComments(self::getCommentIdsByObjId($this->getId(), false));
 
             /**
-             * @var $ilDB ilDB
+             * @var $ilDB ilDBInterface
              */
             global $ilDB;
             $ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = ' . $ilDB->quote($this->getId(), 'integer'));
@@ -423,6 +440,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 		$this->cloneMetaData($new_obj);
 
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$ilDB->manipulateF('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = %s',
@@ -480,14 +500,15 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->setType('xvid');
 	}
 
-
-
 	/**
 	 * @param $comment_ids
 	 * @return array | bool
 	 */
 	public static function getQuestionIdsByCommentIds($comment_ids)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		if(!is_array($comment_ids))
@@ -503,15 +524,23 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return $question_ids;
 	}
 
-	/**
-	 * @return array
-	 */
+    /**
+     * @param bool $replace_with_text
+     * @param bool $empty_string_if_null
+     * @param bool $replace_settings_with_text
+     * @param bool $strip_tags
+     * @return array
+     */
 	public function getCommentsTableData($replace_with_text = false, $empty_string_if_null = false, $replace_settings_with_text = false, $strip_tags = false)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF('
-			SELECT * FROM ' . self::TABLE_NAME_COMMENTS . ' 
+			SELECT * FROM ' . self::TABLE_NAME_COMMENTS . ' comments
+			LEFT JOIN	' . self::TABLE_NAME_QUESTIONS . '  questions ON comments.comment_id = questions.comment_id 
 			WHERE obj_id = %s
 			AND is_private = %s
 			ORDER BY comment_time ASC',
@@ -519,9 +548,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 		$counter    = 0;
 		$table_data = array();
-		while($row = $ilDB->fetchAssoc($res))
-		{
-			$table_data[$counter]['comment_id']			= $row['comment_id'];
+		while($row = $ilDB->fetchAssoc($res)) {
+            $table_data[$counter]['comment_id'] = $row['comment_id'];
 
 			if($replace_with_text)
 			{
@@ -544,25 +572,30 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			{
 				$table_data[$counter]['is_tutor']			= xvidUtils::yesNoString($row['is_tutor']);
 				$table_data[$counter]['is_interactive']		= xvidUtils::yesNoString($row['is_interactive']);
+                $table_data[$counter]['compulsory']         = xvidUtils::yesNoString($row['compulsory_question']);
 			}
 			else
 			{
 				$table_data[$counter]['is_tutor']			= $row['is_tutor'];
 				$table_data[$counter]['is_interactive']		= $row['is_interactive'];
+                $table_data[$counter]['compulsory']       = $row['compulsory_question'];
 			}
 
-			$counter++;
-		}
+            $counter++;
+        }
 
 		return $table_data;
 
 	}
 
-	/**
-	 * @return array
-	 */
+    /**
+     * @return array
+     */
 	public function getCommentsTableDataByUserId()
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB, $ilUser;
 
 		$res = $ilDB->queryF('
@@ -602,20 +635,21 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return $table_data;
 	}
 
-	/**
-	 * @param $comment_id
-	 * @return mixed
-	 */
+    /**
+     * @param $comment_id
+     * @return mixed
+     */
 	public function getCommentDataById($comment_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE comment_id = %s',
 			array('integer'), array($comment_id));
 
-		$row = $ilDB->fetchAssoc($res);
-		return $row;
-
+        return $ilDB->fetchAssoc($res);
 	}
 
     /**
@@ -643,9 +677,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function getQuestionDataById($comment_id)
 	{
-		/**
-		 * $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = 	$ilDB->queryF('SELECT * FROM  ' . self::TABLE_NAME_QUESTIONS. ' WHERE comment_id = %s',
@@ -664,7 +698,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	public function getCommentTextById($comment_id)
 	{
 		/**
-		 * $ilDB ilDB
+		 * @var $ilDB ilDBInterface
 		 */
 		global $ilDB;
 
@@ -683,9 +717,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function getCommentIdsByObjId($obj_id, $with_user_id = true)
 	{
-		/**
-		 * $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$comment_ids = array();
@@ -706,20 +740,21 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return $comment_ids;
 	}
 
-	/**
-	 * delete
-	 * @param array $comment_ids
-	 * @return bool
-	 */
+    /**
+     * @param $comment_ids
+     * @return bool
+     */
 	public function deleteComments($comment_ids)
 	{
-		/**
-		 * $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		if(!is_array($comment_ids))
-			return false;
+        {
+            return false;
+        }
 
 		$question_ids = self::getQuestionIdsByCommentIds($comment_ids);
 		SimpleChoiceQuestion::deleteQuestions($question_ids);
@@ -733,9 +768,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function saveVideoStarted($obj_id, $usr_id)
 	{
-		/**
-		 * $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 		if(!$this->doesLearningProgressEntryExists($obj_id, $usr_id))
 		{
@@ -756,9 +791,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function saveVideoFinished($obj_id, $usr_id)
 	{
-		/**
-		 * $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 		if(!$this->doesLearningProgressEntryExists($obj_id, $usr_id))
 		{
@@ -792,6 +827,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function doesLearningProgressEntryExists($obj_id, $usr_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_LP . ' WHERE obj_id = %s AND usr_id = %s',
@@ -811,6 +849,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function getAllStartedAndFinishedUsers($obj_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$usr_ids = array();
@@ -831,6 +872,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public function isLearningProgressCompletedForUser($obj_id, $usr_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_LP . ' WHERE obj_id = %s AND usr_id = %s AND started = 1 AND ended = 1',
@@ -1043,15 +1087,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      */
     public function getLPFailed()
     {
-        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_DEACTIVATED])) {
-            return [];
+        if(in_array($this->getLearningProgressMode(), array(self::LP_MODE_DEACTIVATED)))
+        {
+            return array();
         }
 
-        $users = [];
-
-        // NOT IMPLEMENTED
-
-        return $users;
+        return array();
     }
 
     /**
@@ -1260,7 +1301,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         ilChangeEvent::_recordReadEvent($this->getType(), $this->getRefId(), $this->getId(), $DIC->user()->getId());
 	}
 
-
+    /**
+     * @param       $comment_id
+     * @param SimpleChoiceQuestion $question
+     * @param array $a_upload
+     * @return bool
+     */
 	public function uploadImage($comment_id, $question, array $a_upload)
 	{
 		if(!$this->id)

@@ -1005,3 +1005,19 @@ $ilDB->addIndex('rep_robj_xvid_comments', ['is_interactive', 'obj_id'], 'i2');
 <?php
 $ilDB->addIndex('rep_robj_xvid_question', ['comment_id', 'type'], 'i2');
 ?>
+<#57>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_question'))
+{
+    if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'compulsory_question'))
+    {
+        $ilDB->addTableColumn('rep_robj_xvid_question', 'compulsory_question',
+            array(
+                'type'    => 'integer',
+                'length'  => '1',
+                'notnull' => false,
+                'default' => null
+            ));
+    }
+}
+?>

@@ -474,3 +474,13 @@ body.cke_editable{
 .toc_item{
     cursor: pointer;
 }
+
+.compulsory_question{
+    float:right;
+    margin-right: 10px;
+    font-style: italic;
+}
+
+.modal-header.compulsory{
+    background-color: orange;
+}

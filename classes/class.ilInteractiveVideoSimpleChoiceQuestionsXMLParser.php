@@ -33,10 +33,11 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 	 */
 	protected $questions = 0;
 
-	/**
-	 * @param ilObjInteractiveVideo $xvid_obj
-	 * @param                      $xmlFile
-	 */
+    /**
+     * ilInteractiveVideoSimpleChoiceQuestionsXMLParser constructor.
+     * @param ilObjInteractiveVideo $xvid_obj
+     * @param $xmlFile
+     */
 	public function __construct($xvid_obj, $xmlFile)
 	{
 		$this->xvid_obj = $xvid_obj;

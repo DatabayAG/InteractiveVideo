@@ -409,7 +409,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			time = Math.abs(Math.round(time) - 0.1);
 		}
-		return 	'<time class="time"> ' +
+		return 	'<time class="time" data-time="' + time + '"> ' +
 				'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + time + ', ' + player_id + '); return false;">'+
 				pro.secondsToTimeCode(display_time)  +
 				'</a>' +
@@ -483,7 +483,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 		if(replies !== undefined && replies.length > 0)
 		{
-			for (var i  = 0; i < replies.length; i++)
+			for (let i  = 0; i < replies.length; i++)
 			{
 				value += pub.getCommentRepliesHtml(replies[i]);
 			}
@@ -508,10 +508,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			private_comment = ' (' + language.private_text + ')';
 		}
-		else
-		{
-			private_comment = '';
-		}
+
 		return '<span class="private_text">'+ private_comment + '</span> ';
 	};
 

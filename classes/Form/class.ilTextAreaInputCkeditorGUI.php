@@ -18,9 +18,11 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 		$this->usePurifier(true);
 	}
 
-	/**
-	 * Insert property html
-	 */
+    /**
+     * @param ilTemplate $a_tpl
+     * @return int|void
+     * @throws ilTemplateException
+     */
 	public function insert($a_tpl)
 	{
 		$this->appendJavascriptFile();

@@ -313,7 +313,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$modal->setType(ilModalGUI::TYPE_LARGE);
 		$modal->setBody('');
 		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
-		
+
         if($this->object->getDisableCommentStream() !== "1"){
             $video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
         }
@@ -388,9 +388,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
-	/**
-	 * @return string
-	 */
+    /**
+     * @return string
+     * @throws ilTemplateException
+     */
 	public function getInteractiveForm()
 	{
 		/**
@@ -399,7 +400,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionCreator.js');
+		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoQuestionCreator.js');
 		$tpl->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
 		$simple_choice = new SimpleChoiceQuestion();
         $ajax_object   = new SimpleChoiceQuestionAjaxHandler();
@@ -478,7 +479,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
 		$tpl->addCss($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.css');
 		$tpl->addJavaScript($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.js');
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionViewer.js');
+		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoQuestionViewer.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerComments.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerFunctions.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstract.js');
@@ -503,6 +504,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('LEARNING_RECOMMENDATION_TEXT', $plugin->txt('learning_recommendation'));
 		$config_tpl->setVariable('MORE_INFORMATION_TEXT', $plugin->txt('more_informations'));
 		$config_tpl->setVariable('ALREADY_ANSWERED_TEXT', $plugin->txt('already_answered'));
+		$config_tpl->setVariable('COMPULSORY', $plugin->txt('compulsory_question'));
 		$config_tpl->setVariable('QUESTION_TEXT', $plugin->txt('question'));
 		$config_tpl->setVariable('PRIVATE_TEXT', $plugin->txt('is_private_comment'));
 		$config_tpl->setVariable('RESET_TEXT', $plugin->txt('reset'));
@@ -552,15 +554,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comments    = array();
         $comments_toc= array();
 		$image_cache = array();
+        $compulsory_questions = array();
 		if( ! $edit_screen)
 		{
 			$stop_points = $this->objComment->getStopPoints();
 			$comments    = $this->objComment->getContentComments();
 			$comments_toc= $this->objComment->getContentComments(true);
 			$image_cache = ilObjComment::getUserImageCache();
+            $compulsory_questions = SimpleChoiceQuestion::getAllCompulsoryQuestions($this->obj_id);
 		}
 
 		$config_tpl->setVariable('STOP_POINTS', json_encode($stop_points));
+		$config_tpl->setVariable('COMPULSORY_QUESTIONS', json_encode($compulsory_questions));
 		$config_tpl->setVariable('COMMENTS', json_encode($comments));
 		$config_tpl->setVariable('COMMENTS_TOC', json_encode($comments_toc));
 		$config_tpl->setVariable('USER_IMAGES_CACHE', json_encode($image_cache));
@@ -616,7 +621,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         $show_toc_first = $a_form->getInput('show_toc_first');
 		$this->object->setShowTocFirst((int)$show_toc_first);
- 
+
         $disable_comment_stream = $a_form->getInput('disable_comment_stream');
 		$this->object->setDisableCommentStream((int)$disable_comment_stream);
 
@@ -676,9 +681,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return $form;
 	}
 
-	/**
-	 * @param ilPropertyFormGUI $a_form
-	 */
+    /**
+     * @param ilPropertyFormGUI $a_form
+     * @throws ilTemplateException
+     */
 	protected function initEditCustomForm(ilPropertyFormGUI $a_form)
 	{
 		/**
@@ -696,9 +702,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	}
 
-	/**
-	 * @param ilPropertyFormGUI $a_form
-	 */
+    /**
+     * @param ilPropertyFormGUI $a_form
+     * @throws ilTemplateException
+     */
 	protected function appendCkEditorMathJaxSupportToForm(ilPropertyFormGUI $a_form)
 	{
 		/**
@@ -757,16 +764,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$no_toolbar = new ilCheckboxInputGUI($plugin->txt('no_toolbar'), 'no_toolbar');
 		$no_toolbar->setInfo($plugin->txt('no_toolbar_info'));
-		$a_form->addItem($no_toolbar);		
-		
+		$a_form->addItem($no_toolbar);
+
 		$show_toc_first = new ilCheckboxInputGUI($plugin->txt('show_toc_first'), 'show_toc_first');
         $show_toc_first->setInfo($plugin->txt('show_toc_first_info'));
 		$a_form->addItem($show_toc_first);
-		
+
         $disable_comment_stream = new ilCheckboxInputGUI($plugin->txt('disable_comment_stream'), 'disable_comment_stream');
         $disable_comment_stream->setInfo($plugin->txt('disable_comment_stream_info'));
         $a_form->addItem($disable_comment_stream);
-        
+
 		$section = new ilFormSectionHeaderGUI();
 		$section->setTitle($plugin->txt('questions'));
 		$a_form->addItem($section);
@@ -970,7 +977,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
 		 */
-		global $tpl, $ilTabs, $ilCtrl;
+		global $tpl, $ilTabs;
 
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('addSubtitle');
@@ -1181,22 +1188,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function initHeaderAction($a_sub_type = null, $a_sub_id = null)
 	{
-		/**
-		 * @var $ilUser ilObjUser
-		 */
-		global $ilUser;
-
-		$lg = parent::initHeaderAction();
-		
-		if($lg instanceof ilObjInteractiveVideoListGUI)
-		{
-			if($ilUser->getId() != ANONYMOUS_USER_ID)
-			{
-				// Maybe handle notifications in future ...
-			}
-		}
-
-		return $lg;
+        return parent::initHeaderAction();
 	}
 
 	protected function setTabs()
@@ -1306,21 +1298,21 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return $this->checkPermissionBool($permission);
 	}
 
-	/**
-	 * Public wrapper for permission assumption
-	 * @param string $permission
-	 * @return bool
-	 */
+    /**
+     * @param $permission
+     * @return bool
+     * @throws ilObjectException
+     */
 	public function ensurePermission($permission)
 	{
 		return $this->checkPermission($permission);
 	}
 
-	/**
-	 * Public wrapper for permission assumption
-	 * @param string[] $permissions
-	 * @return bool
-	 */
+    /**
+     * @param array $permissions
+     * @return bool
+     * @throws ilObjectException
+     */
 	public function ensureAtLeastOnePermission(array $permissions)
 	{
 		foreach ($permissions as $permission) {
@@ -1342,7 +1334,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 #region COMMENTS
 
-
+    /**
+     * @throws ilTemplateException
+     */
 	public function postComment()
 	{
 		/**
@@ -1482,9 +1476,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->editComments();
 	}
 
-	/**
-	 * @return ilPropertyFormGUI
-	 */
+    /**
+     * @return ilPropertyFormGUI
+     * @throws ilTemplateException
+     */
 	private function initCommentForm()
 	{
 		/**
@@ -1534,7 +1529,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             }
 			$form->addItem($is_private);
 		}
-        
+
 		$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($plugin->txt('comment'));
 		$form->addItem($section_header);
@@ -1591,7 +1586,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         $frm_id = new ilHiddenInputGUI('comment_id');
         $form->addItem($frm_id);
-        
+
         $is_toc = new ilHiddenInputGUI('is_table_of_content');
         $is_toc->setValue(1);
         $form->addItem($is_toc);
@@ -1678,6 +1673,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($tbl->getHTML());
 	}
 
+    /**
+     * @throws ilTemplateException
+     */
 	public function updateMyComment()
 	{
 		$form = $this->initCommentForm();
@@ -1703,7 +1701,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$comment_time_end = $form->getInput('comment_time_end');
 			$this->objComment->setCommentTimeEnd($comment_time_end);
 			$this->objComment->update();
-			
+
 			if($comment_time_end <= $comment_time && $comment_time_end !== 0){
                 ilUtil::sendFailure($this->plugin->txt('endtime_warning'));
                 $form->setValuesByPost();
@@ -1719,6 +1717,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
+    /**
+     *
+     */
 	public function confirmDeleteMyComment()
 	{
 		/**
@@ -1764,6 +1765,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
+    /**
+     *
+     */
 	public function deleteMyComment()
 	{
 		$plugin = ilInteractiveVideoPlugin::getInstance();
@@ -1837,6 +1841,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->editComments($current_time);
 	}
 
+    /**
+     * @throws ilTemplateException
+     */
 	public function updateComment()
 	{
 		$valid = false;
@@ -1991,7 +1998,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         } else {
             $form = $this->initCommentForm();
         }
-   
+
 		if($form->checkInput())
 		{
 			$this->objComment = new ilObjComment();
@@ -2037,9 +2044,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
-	/**
-	 * @param ilPropertyFormGUI $form
-	 */
+    /**
+     * @param ilPropertyFormGUI|null $form
+     * @throws ilTemplateException
+     */
 	public function editMyComment(ilPropertyFormGUI $form = NULL)
 	{
 		/**
@@ -2067,9 +2075,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($form->getHTML());
 	}
 
-	/**
-	 * @param ilPropertyFormGUI $form
-	 */
+    /**
+     * @param ilPropertyFormGUI|null $form
+     * @throws ilTemplateException
+     */
 	public function editComment(ilPropertyFormGUI $form = NULL)
 	{
 		/**
@@ -2092,7 +2101,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$tpl->setContent($form->getHTML());
 	}
-	
+
 	/**
 	 * @param ilPropertyFormGUI $form
 	 */
@@ -2119,11 +2128,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($form->getHTML());
 	}
 
-	/**
-	 * @param int $comment_id
-	 */
+    /**
+     * @param int $comment_id
+     * @return array|void
+     * @throws ilTemplateException
+     */
 	private function getCommentFormValues($comment_id = 0)
 	{		
+	    $values = array();
 		if($comment_id == 0)
 		{
 			if(!isset($_GET['comment_id']) && !isset($_POST['comment_id']))
@@ -2150,12 +2162,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		return $values;
 	}
-	
+
 	/**
 	 * @param int $comment_id
 	 */
 	private function getChapterFomValues($comment_id = 0)
-	{		
+	{
 		if($comment_id == 0)
 		{
 			if(!isset($_GET['comment_id']) && !isset($_POST['comment_id']))
@@ -2185,9 +2197,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 #endregion
 
 #region QUESTIONS
-	/**
-	 * @return ilPropertyFormGUI
-	 */
+    /**
+     * @return ilPropertyFormGUI
+     * @throws ilTemplateException
+     */
 	public function initQuestionForm()
 	{
 		$plugin = ilInteractiveVideoPlugin::getInstance();
@@ -2217,6 +2230,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$repeat_question = new ilCheckboxInputGUI($plugin->txt('repeat_question'), 'repeat_question');
 		$repeat_question->setInfo($plugin->txt('repeat_question_info'));
 		$form->addItem($repeat_question);
+
+		$compulsory_question = new ilCheckboxInputGUI($plugin->txt('compulsory_question'), 'compulsory_question');
+        $compulsory_question->setInfo($plugin->txt('compulsory_question_info'));
+		$form->addItem($compulsory_question);
 
 		$limit_attempts = new ilCheckboxInputGUI($plugin->txt('limit_attempts'), 'limit_attempts');
 		$limit_attempts->setInfo($plugin->txt('limit_attempts_info'));
@@ -2337,7 +2354,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	/**
-	 * @param ilPropertyFormGUI $form
+	 * @param ilTextAreaInputGUI $form
 	 * @param $post_var
 	 */
 	protected function appendRepositorySelector($form, $post_var)
@@ -2362,9 +2379,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addSubItem($root_ref_id);
 	}
 
-	/**
-	 * @param ilPropertyFormGUI $form
-	 */
+    /**
+     * @param ilPropertyFormGUI|null $form
+     * @throws ilTemplateException
+     */
 	public function showTutorInsertQuestionForm(ilPropertyFormGUI $form = NULL)
 	{
 		/**
@@ -2386,7 +2404,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($form->getHTML());
 	}
 
-
+    /**
+     * @throws ilTemplateException
+     */
 	public function insertQuestion()
 	{
 		$form = $this->initQuestionForm();
@@ -2423,9 +2443,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
-	/**
-	 * @param ilPropertyFormGUI $form
-	 */
+    /**
+     * @param ilPropertyFormGUI|null $form
+     * @throws ilTemplateException
+     */
 	public function editQuestion(ilPropertyFormGUI $form = NULL)
 	{
 		/**
@@ -2449,12 +2470,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($form->getHTML());
 	}
 
-	/**
-	 * @param int $comment_id
-	 * @return array
-	 */
+    /**
+     * @param int $comment_id
+     * @return array|void
+     * @throws ilTemplateException
+     */
 	private function getQuestionFormValues($comment_id = 0)
 	{
+	    $values = array();
+
 		if($comment_id == 0)
 		{
 			if(!isset($_GET['comment_id']) && !isset($_POST['comment_id']))
@@ -2492,6 +2516,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['jump_wrong_ts']			= $question_data['question_data']['jump_wrong_ts'];
 		$values['limit_attempts']			= $question_data['question_data']['limit_attempts'];
 		$values['repeat_question']			= $question_data['question_data']['repeat_question'];
+		$values['compulsory_question']		= $question_data['question_data']['compulsory_question'];
 		$values['feedback_correct_obj']		= $question_data['question_data']['feedback_correct_ref_id'];
 		$values['feedback_wrong_obj']		= $question_data['question_data']['feedback_wrong_ref_id'];
 		$values['show_comment_field']		= $question_data['question_data']['reflection_question_comment'];
@@ -2501,7 +2526,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return $values;
 	}
 
-
+    /**
+     *
+     */
 	public function confirmUpdateQuestion()
 	{
 		/**
@@ -2541,6 +2568,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
+    /**
+     * @throws ilTemplateException
+     */
 	public function updateQuestion()
 	{
 		$form = $this->initQuestionForm();
@@ -2622,6 +2652,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$question->setShowResponseFrequency((int)$form->getInput('show_response_frequency'));
 		$question->setRepeatQuestion((int)$form->getInput('repeat_question'));
+		$question->setCompulsoryQuestion((int)$form->getInput('compulsory_question'));
 		$question->setReflectionQuestionComment((int)$form->getInput('show_comment_field'));
 		$question->setNeutralAnswer((int)$form->getInput('neutral_type'));
 		$question->deleteQuestionsIdByCommentId($comment_id);
@@ -2629,9 +2660,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	}
 
-	/**
-	 * @return string
-	 */
+    /**
+     * @return string
+     * @throws ilTemplateException
+     */
 	public function getAnswerDefinitionsJSON()
 	{
 		$simple_choice = new SimpleChoiceQuestion();
@@ -2652,6 +2684,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return $question->get();
 	}
 
+    /**
+     *
+     */
 	public function showResults()
 	{
 		/**
@@ -2674,6 +2709,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($tbl->getHTML());
 	}
 
+    /**
+     *
+     */
 	public function showMyResults()
 	{
 		/**
@@ -2695,6 +2733,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($tbl->getHTML());
 	}
 
+    /**
+     *
+     */
 	public function showCompleteOverviewOverAllResults()
 	{
 		/**
@@ -2717,6 +2758,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	}
 
+    /**
+     *
+     */
 	public function confirmDeleteUserResults()
 	{
 		/**
@@ -2803,6 +2847,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($tbl->getHTML());
 	}
 
+    /**
+     *
+     */
 	public function confirmDeleteQuestionsResults()
 	{
 		/**
@@ -2842,6 +2889,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$tpl->setContent($confirm->getHTML());
 	}
 
+    /**
+     *
+     */
 	public function deleteQuestionsResults()
 	{
 		if(!isset($_POST['question_id']) || !is_array($_POST['question_id']) || !count($_POST['question_id']))
@@ -2869,6 +2919,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 #endregion
 
 #region AJAX
+    /**
+     *
+     */
 	public function getQuestionPerAjax()
 	{
 		$ajax_object = new SimpleChoiceQuestionAjaxHandler();
@@ -2887,6 +2940,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return;
 	}
 
+    /**
+     *
+     */
 	public function postAnswerPerAjax()
 	{
 		if(SimpleChoiceQuestion::isLimitAttemptsEnabled((int)$_POST['qid']) == false)
@@ -2982,6 +3038,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 #endregion
 
 #region EXPORT
+    /**
+     *
+     */
 	public function completeCsvExport()
 	{
 
@@ -3029,7 +3088,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
 	}
-	
+
+    /**
+     *
+     */
 	public function exportMyComments()
 	{
 		global $lng;
@@ -3065,6 +3127,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
 	}
 
+    /**
+     *
+     */
 	public function exportAllComments()
 	{
 		global $lng;
