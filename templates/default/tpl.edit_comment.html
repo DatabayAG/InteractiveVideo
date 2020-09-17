@@ -28,15 +28,7 @@
 {CONFIG}
 
 <script type="text/javascript">
-	$("#ilInteractiveVideoTutorCommentSubmit").on("click", function(e) {
-		$('#comment_time').val(il.InteractiveVideoPlayerAbstract.currentTime("{PLAYER_ID}"));
-	});
-
-	$("#ilInteractiveVideoTutorQuestionSubmit").on("click", function(e) {
-		$('#comment_time').val(il.InteractiveVideoPlayerAbstract.currentTime("{PLAYER_ID}"));
-	});
-
-	$("#ilInteractiveVideoChapterSubmit").on("click", function(e) {
+	$("#ilInteractiveVideoTutorCommentSubmit, #ilInteractiveVideoTutorQuestionSubmit, #ilInteractiveVideoChapterSubmit").on("click", function(e) {
 		$('#comment_time').val(il.InteractiveVideoPlayerAbstract.currentTime("{PLAYER_ID}"));
 	});
 
