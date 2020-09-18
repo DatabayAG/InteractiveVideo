@@ -170,6 +170,10 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			{
 				continue;
 			}
+			else if($key == 'compulsory')
+			{
+				$value = xvidUtils::yesNoString($value);
+			}
 
 			$this->tpl->setVariable('VAL_'.strtoupper($key), $value);
 		}

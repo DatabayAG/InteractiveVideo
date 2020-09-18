@@ -568,7 +568,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			if($strip_tags){
 				$table_data[$counter]['comment_text'] = strip_tags($row['comment_text']);
 			}
-			if($replace_settings_with_text || $replace_with_text)
+			if($replace_settings_with_text )
 			{
 				$table_data[$counter]['is_tutor']			= xvidUtils::yesNoString($row['is_tutor']);
 				$table_data[$counter]['is_interactive']		= xvidUtils::yesNoString($row['is_interactive']);
