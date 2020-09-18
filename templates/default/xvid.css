@@ -484,3 +484,7 @@ body.cke_editable{
 .modal-header.compulsory{
     background-color: #a2cde6;
 }
+
+.ilFormFooter .iv_comment_buttons{
+    text-align: left !important;
+}
