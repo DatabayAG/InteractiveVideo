@@ -21,8 +21,8 @@ cat_create_xvid#:#Create Interactive Video
 interactive#:#Interactive
 questions_comments_sub_tab#:#Edit
 tutor#:#Tutor
-questions_comments#:#Questions and comments
-questions_comments_new#:#Questions and public comments
+questions_comments#:#Questions, chapters and comments
+questions_comments_new#:#Questions, chapters, public comments
 sure_delete_comments#:#Are you sure you want to delete the selected comments?
 video_file#:#Video
 comment#:#Comment
