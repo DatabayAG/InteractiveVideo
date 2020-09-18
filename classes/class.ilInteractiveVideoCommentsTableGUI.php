@@ -81,15 +81,17 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		if($ilAccess->checkAccess('write', '', $a_parent_obj->object->getRefId()) && $a_parent_cmd == 'editComments')
 		{
 			$this->addColumn($a_parent_obj->plugin->txt('type'), 'is_interactive');
+            $this->addColumn($a_parent_obj->plugin->txt('compulsory'), 'compulsory', '10%');
 			//$this->addColumn($a_parent_obj->plugin->txt('tutor'), 'is_tutor');
 			
 //			$this->addCommandButton('showTutorInsertCommentForm', $this->lng->txt('insert'));
 		}
 		else
 		{
+            $this->addColumn($a_parent_obj->plugin->txt('compulsory'), 'compulsory', '10%');
 			$this->addColumn($a_parent_obj->plugin->txt('visibility'), 'is_private');
 		}
-		$this->addColumn($a_parent_obj->plugin->txt('compulsory'), 'compulsory', '10%');
+
 		$this->addColumn($this->lng->txt('actions'), '', '10%');
 
 		$this->setSelectAllCheckbox('comment_id');
@@ -162,11 +164,6 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 				        $txt_value = 'chapter';
                     }
                 }
-				$value = $this->lng->txt($txt_value);
-			}
-			else if($key == 'compulsory')
-			{
-				$txt_value = $value == 1 ? 'yes' : '';
 				$value = $this->lng->txt($txt_value);
 			}
 			else if($key == 'is_tutor')
