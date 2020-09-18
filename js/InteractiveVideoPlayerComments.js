@@ -244,12 +244,12 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		
 		$('.iv_tab_toc_' + player_id).on('click', function() {
 			pro.displayCommentsOrToc(false, player_id);
-			pro.buildToc(player_id);
+			pub.buildToc(player_id);
 		});
 
 		if(player_data.disable_comment_stream === "1" || player_data.show_toc_first === "1") {
 			pro.displayCommentsOrToc(false, player_id);
-			pro.buildToc(player_id);
+			pub.buildToc(player_id);
 		} else {
 			pro.displayCommentsOrToc(true, player_id);
 		}
@@ -284,7 +284,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	};
 	
-	pro.buildToc = function(player_id) {
+	pub.buildToc = function(player_id) {
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let j_object	= $('#ilInteractiveVideoComments_' + player_id + ' #ul_toc_' + player_id);
 		let element		='';

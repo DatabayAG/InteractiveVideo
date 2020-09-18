@@ -33,6 +33,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 
 		pri.utils.preselectActualTimeInVideo(current_time);
+		il.InteractiveVideoPlayerComments.buildToc(player_id);
 	};
 
 	pub.playingEventHandler = function(interval, player)
