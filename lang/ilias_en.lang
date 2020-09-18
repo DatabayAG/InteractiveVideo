@@ -58,7 +58,7 @@ answered#:#Questions answered
 question_results#:#Question Results
 user_answered#:#User Answered
 user_correct#:#User Answered Correct
-insert_question#:#Insert question
+insert_question#:#Insert Question
 insert_comment#:#Insert Comment
 my_comments#:#My Comments
 general#:#General
@@ -209,7 +209,7 @@ disable_comment_stream#:#Disable comment stream
 disable_comment_stream_info#:#Disable comment stream
 insert_chapter#:#Insert Chapter
 edit_chapter#:#Edit Chapter
-
+comment_table_title#:#Comment / Question Text
 compulsory_question#:#Compulsory question
 compulsory#:#Compulsory
 compulsory_question_info#:#This question must be answered

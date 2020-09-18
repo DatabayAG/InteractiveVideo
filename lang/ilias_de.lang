@@ -208,6 +208,7 @@ disable_comment_stream#:#Deaktiviere Kommentarstream
 disable_comment_stream_info#:#Deaktiviere Kommentarstream
 insert_chapter#:#Kapitel einfügen
 edit_chapter#:#Kapitel editieren
+comment_table_title#:#Kommentar / Fragentext
 compulsory_question#:#Verpflichtende Frage
 compulsory#:#Verpflichtend
 compulsory_question_info#:#Diese Frage muss beantwortet werden, bevor das Video weiter geschaut werden kann
