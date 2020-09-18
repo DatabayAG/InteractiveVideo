@@ -539,7 +539,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		global $ilDB;
 
 		$res = $ilDB->queryF('
-			SELECT * FROM ' . self::TABLE_NAME_COMMENTS . ' comments
+			SELECT *, comments.comment_id as cid  FROM ' . self::TABLE_NAME_COMMENTS . ' comments
 			LEFT JOIN	' . self::TABLE_NAME_QUESTIONS . '  questions ON comments.comment_id = questions.comment_id 
 			WHERE obj_id = %s
 			AND is_private = %s
@@ -549,7 +549,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$counter    = 0;
 		$table_data = array();
 		while($row = $ilDB->fetchAssoc($res)) {
-            $table_data[$counter]['comment_id'] = $row['comment_id'];
+            $table_data[$counter]['comment_id'] = $row['cid'];
 
 			if($replace_with_text)
 			{
