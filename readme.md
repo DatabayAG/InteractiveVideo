@@ -13,9 +13,9 @@
   * [Interactive Video Sources & Plugin Slots](#interactive-video-sources---plugin-slots)
   * [Interactive Video Modal options](#interactive-video-modal-options)
   * [Interactive Video Subtitles](#interactive-video-subtitles)
-  * [Interactive Video Compulsory Question](#interactive-video-compulsory-questions)
+  * [Interactive Video Compulsory Questions](#interactive-video-compulsory-questions)
   * [Interactive Video Learning_progress](#interactive-video-learning-progress)
-  * [Interactive Video Subtitles](#interactive-video-table-of-content)
+  * [Interactive Video Table of Contents](#interactive-video-table-of-content)
 
 # InteractiveVideo
 ILIAS Interactive Video Plugin
@@ -68,6 +68,7 @@ The InteractiveVideo Plugin for ILIAS gives you the possibility to create a vide
 
 ## Interactive Video Question View
 ![Question View](https://databayag.github.io/InteractiveVideo/2.0.x/2.png)
+
 ## Interactive Video Create Images from Media Object Source
 ![Create Images from Media Object Source](https://databayag.github.io/InteractiveVideo/2.0.x/3.png)
 
