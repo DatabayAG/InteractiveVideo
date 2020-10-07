@@ -80,7 +80,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$this->addColumn($a_parent_obj->plugin->txt('comment_table_title'), 'comment_text');
 		if($ilAccess->checkAccess('write', '', $a_parent_obj->object->getRefId()) && $a_parent_cmd == 'editComments')
 		{
-			$this->addColumn($a_parent_obj->plugin->txt('type'), 'is_interactive');
+			$this->addColumn($a_parent_obj->plugin->txt('type'), 'type');
             $this->addColumn($a_parent_obj->plugin->txt('compulsory'), 'compulsory', '10%');
 			//$this->addColumn($a_parent_obj->plugin->txt('tutor'), 'is_tutor');
 			
@@ -156,15 +156,9 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 					$value = '';
 				}
 			}
-			else if($key == 'is_interactive')
+			else if($key == 'type')
 			{
-				$txt_value = $value == 1 ? 'question' : 'comment';
-				if($txt_value === 'comment'){
-				    if($a_set['is_table_of_content'] === "1") {
-				        $txt_value = 'chapter';
-                    }
-                }
-				$value = $this->lng->txt($txt_value);
+				$value = $this->lng->txt($value);
 			}
 			else if($key == 'is_tutor')
 			{

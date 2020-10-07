@@ -580,6 +580,13 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				$table_data[$counter]['is_interactive']		= $row['is_interactive'];
                 $table_data[$counter]['compulsory']       = $row['compulsory_question'];
 			}
+			$type = 'comment';
+			if($row['is_interactive'] == "1") {
+			    $type = 'question';
+            } else if ( $row['is_table_of_content'] == "1") {
+			    $type = 'chapter';
+            }
+            $table_data[$counter]['type']       = $type;
 
             $counter++;
         }
