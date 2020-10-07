@@ -325,7 +325,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				$(this).find('.toc_description').hide();
 				$(this).find('.toc_description').removeClass('tocManualOverride');
 			} else {
-				$('.toc_description').hide();
+				//$('.toc_description').hide();
 				$(this).find('.toc_description').show();
 				$(this).find('.toc_description').addClass('tocManualOverride');
 			}
