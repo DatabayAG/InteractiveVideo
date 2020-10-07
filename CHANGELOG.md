@@ -1,4 +1,4 @@
-# 2.5.0
+# 2.5.1
 1. Compulsory questions
 2. Automatic scrolling if show all comments is active
 3. New Learning Progress mode

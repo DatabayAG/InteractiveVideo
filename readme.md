@@ -23,9 +23,6 @@ ILIAS Interactive Video Plugin
 ## ILIAS compatibility
 Since there are a lot of changes in ILIAS 6, there will be a new branch '6_x' which is compatible with ILIAS 6, for older ILIAS versions you can still use the master branch.
 
-## Important notice
-If you upgrade to the 2.x version of the InteractiveVideo you can not go back to version 1.x, because there are migration steps which alter the database schema.
-
 ## Changes in Version 2.5.1
 * Compulsory questions
 * Automatic scrolling if show all comments is active

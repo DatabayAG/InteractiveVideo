@@ -327,6 +327,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			} else {
 				$('.toc_description').hide();
 				$(this).find('.toc_description').show();
+				let toc_time = $(this).data('toc-time');
+				il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(toc_time,  player_id);
 				$(this).find('.toc_description').addClass('tocManualOverride');
 			}
 		});
