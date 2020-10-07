@@ -449,6 +449,7 @@ body.cke_editable{
     top: 2px;
     width: 15px;
     z-index: 33;
+    pointer-events: none;
 }
 
 .iv_tab_navigation .active{

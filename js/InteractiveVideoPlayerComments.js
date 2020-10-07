@@ -319,16 +319,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	};
 
 	pro.registerTocClickListener = function(player_id) {
-		$('.toc_item').off('click');
-		$('.toc_item').on('click', function() {
+		$('.toc-inner').off('click');
+		$('.toc-inner').on('click', function() {
 			if($(this).find('.toc_description').css('display') === 'block'){
 				$(this).find('.toc_description').hide();
 				$(this).find('.toc_description').removeClass('tocManualOverride');
 			} else {
 				$('.toc_description').hide();
 				$(this).find('.toc_description').show();
-				let toc_time = $(this).data('toc-time');
-				il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(toc_time,  player_id);
 				$(this).find('.toc_description').addClass('tocManualOverride');
 			}
 		});
