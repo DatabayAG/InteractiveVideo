@@ -312,12 +312,12 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let comment_title = ' ';
 
 		if(comment.comment_title !== '') {
-			comment_title = ' ' + comment.comment_title + ' <br/> ';
+			comment_title = ' ' + comment.comment_title;
 		}
 
-		return '<li class="toc_item toc_item_' + comment.comment_id +'" data-toc-time="' + comment.comment_time + '"><div class="toc-inner"><h5>' + 
+		return '<li class="toc_item toc_item_' + comment.comment_id +'" data-toc-time="' + comment.comment_time + '"><div class="toc-inner"><h5>' +
 			 pro.buildCommentTimeHtml(comment.comment_time, comment.is_interactive, player_id)  +
-			 comment_title + '</h5>' + 
+			 comment_title + '<span class="toc_arrow glyphicon glyphicon-triangle-right"></span></h5>' +
 			 '<div class="toc_description">' + comment.comment_text + '</div>' +
 			'</div></li>';
 	};
@@ -328,11 +328,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			if($(this).find('.toc_description').css('display') === 'block'){
 				$(this).find('.toc_description').hide();
 				$(this).find('.toc_description').removeClass('tocManualOverride');
+				$(this).parent().removeClass('tocManualOverride');
 			} else {
 				//$('.toc_description').hide();
 				$(this).find('.toc_description').show();
 				$(this).find('.toc_description').addClass('tocManualOverride');
+				$(this).parent().addClass('tocManualOverride');
 			}
+			pro.changeArrowForTocItem(player_id);
 		});
 	};
 	
@@ -349,6 +352,24 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				$('.tocManualOverride').show();
 				$(this).find('.toc_description').show();
 			}
+		});
+		pro.changeArrowForTocItem(player_id);
+	};
+
+	pro.changeArrowForTocItem = function(player_id){
+
+		$( ".toc_item" ).each(function( index ) {
+			let span = $(this).find('.toc_arrow');
+
+			if($(this).hasClass('activeToc') || $(this).hasClass('tocManualOverride')){
+				console.log('change', span.attr('class'))
+				span.removeClass('glyphicon-triangle-right');
+				span.addClass('glyphicon-triangle-bottom');
+			} else {
+				span.addClass('glyphicon-triangle-right');
+				span.removeClass('glyphicon-triangle-bottom');
+			}
+			console.log('change', span.attr('class'))
 		});
 	};
 

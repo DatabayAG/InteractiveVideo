@@ -457,7 +457,7 @@ body.cke_editable{
 }
 
 .iv_tab {
-   
+    border-radius: 0.5em 0.5em 0 0 !important;
 }
 
 .iv-tabs{
@@ -474,6 +474,10 @@ body.cke_editable{
 
 .toc_item{
     cursor: pointer;
+}
+
+.toc_arrow{
+    float: right
 }
 
 .compulsory_question{
