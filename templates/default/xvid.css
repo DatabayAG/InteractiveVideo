@@ -80,7 +80,7 @@
 .scroll-text ul li:before {
     background: #fff;
     border-radius: 2px;
-    bottom: -35px;
+    bottom: -20px;
     box-shadow: 0 0 3px rgba(0,0,0,0.2);
     content: "";
     height: 120%;
