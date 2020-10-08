@@ -87,6 +87,7 @@
     left: -30px;
     position: absolute;
     width: 3px;
+    cursor: default;
 }
 .scroll-text ul li:after {
     background: #fff;
