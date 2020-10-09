@@ -494,3 +494,7 @@ body.cke_editable{
 .ilFormFooter .iv_comment_buttons{
     text-align: left !important;
 }
+
+li.toc_item > div > h5 > time {
+    padding-right: 20px;
+}

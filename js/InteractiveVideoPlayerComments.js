@@ -315,9 +315,15 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			comment_title = ' ' + comment.comment_title;
 		}
 
-		return '<li class="toc_item toc_item_' + comment.comment_id +'" data-toc-time="' + comment.comment_time + '"><div class="toc-inner"><h5>' +
+		let comment_text_exists_class = 'no_description';
+		let add_span_arrow = '';
+		if(comment.comment_text != ''){
+			comment_text_exists_class = 'description_exists';
+			add_span_arrow = '<span class="toc_arrow glyphicon glyphicon-triangle-right"></span>';
+		}
+		return '<li class="toc_item toc_item_' + comment.comment_id +' ' + comment_text_exists_class + '" data-toc-time="' + comment.comment_time + '"><div class="toc-inner"><h5>' +
 			 pro.buildCommentTimeHtml(comment.comment_time, comment.is_interactive, player_id)  +
-			 comment_title + '<span class="toc_arrow glyphicon glyphicon-triangle-right"></span></h5>' +
+			 comment_title + add_span_arrow + '</h5>' +
 			 '<div class="toc_description">' + comment.comment_text + '</div>' +
 			'</div></li>';
 	};
@@ -359,17 +365,18 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.changeArrowForTocItem = function(player_id){
 
 		$( ".toc_item" ).each(function( index ) {
-			let span = $(this).find('.toc_arrow');
+			if($(this).hasClass('description_exists')){
+				let span = $(this).find('.toc_arrow');
 
-			if($(this).hasClass('activeToc') || $(this).hasClass('tocManualOverride')){
-				console.log('change', span.attr('class'))
-				span.removeClass('glyphicon-triangle-right');
-				span.addClass('glyphicon-triangle-bottom');
-			} else {
-				span.addClass('glyphicon-triangle-right');
-				span.removeClass('glyphicon-triangle-bottom');
+				if($(this).hasClass('activeToc') || $(this).hasClass('tocManualOverride')){
+					console.log('change', span.attr('class'))
+					span.removeClass('glyphicon-triangle-right');
+					span.addClass('glyphicon-triangle-bottom');
+				} else {
+					span.addClass('glyphicon-triangle-right');
+					span.removeClass('glyphicon-triangle-bottom');
+				}
 			}
-			console.log('change', span.attr('class'))
 		});
 	};
 
