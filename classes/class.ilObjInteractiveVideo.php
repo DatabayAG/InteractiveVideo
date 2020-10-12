@@ -1419,4 +1419,27 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->disable_toolbar = $disable_toolbar;
 	}
 
+
+    /**
+     * @param int $usrId
+     * @return int
+     */
+    public function getPercentageForUser($usrId)
+    {
+        $percentage = 0;
+
+        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_DEACTIVATED])) {
+            return $percentage;
+        }
+
+        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_ANSWERED_QUESTIONS])) {
+            $percentage = 79;
+        }
+
+        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_QUESTIONS])) {
+            $percentage = 69;
+        }
+
+        return $percentage;
+    }
 }
