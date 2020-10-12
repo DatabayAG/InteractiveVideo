@@ -398,9 +398,9 @@ class SimpleChoiceQuestion
     /**
      * @param $obj_id
      * @param $user_id
-     * @return bool
+     * @return int
      */
-    public function getUserWithAnsweredQuestion($obj_id, $user_id)
+    public function getNumberOfAnsweredQuestions($obj_id, $user_id)
     {
         /**
          * $ilDB ilDB
@@ -408,19 +408,23 @@ class SimpleChoiceQuestion
         global $ilDB;
 
         $res = $ilDB->queryF('
-			SELECT * FROM ' . self::TABLE_NAME_ANSWERS . ' ans
+			SELECT COUNT(*) cnt FROM ' . self::TABLE_NAME_ANSWERS . ' ans
 			INNER JOIN ' . self::TABLE_NAME_QUESTION . ' qst on ans.question_id = qst.question_id 
 			INNER JOIN ' . self::TABLE_NAME_COMMENTS . ' comment on qst.comment_id = comment.comment_id
 			WHERE obj_id = %s 
 			AND ans.user_id = %s
 			',
-			array('integer', 'integer'), array($obj_id, $user_id));
+			['integer', 'integer'],
+            [$obj_id, $user_id]
+        );
 
-        if($ilDB->numRows($res) > 0)
-        {
-            return true;
+        $row = $ilDB->fetchAssoc($res);
+
+        if (is_array($row) && isset($row['cnt'])) {
+            return (int) $row['cnt'];
         }
-        return false;
+
+        return 0;
     }
 
 	/**
