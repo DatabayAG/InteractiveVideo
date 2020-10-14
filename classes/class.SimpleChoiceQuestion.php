@@ -364,7 +364,7 @@ class SimpleChoiceQuestion
 
         $res = $ilDB->queryF('
             SELECT
-                rep_robj_xvid_answers.user_id
+                rep_robj_xvid_answers.user_id, COUNT(DISTINCT(rep_robj_xvid_answers.answer_id))
             FROM rep_robj_xvid_answers
             INNER JOIN rep_robj_xvid_question
                 ON rep_robj_xvid_question.question_id = rep_robj_xvid_answers.question_id
@@ -374,7 +374,7 @@ class SimpleChoiceQuestion
                 AND rep_robj_xvid_comments.is_interactive = %s
             WHERE rep_robj_xvid_comments.obj_id = %s
             GROUP BY rep_robj_xvid_answers.user_id
-            HAVING COUNT(rep_robj_xvid_answers.user_id) = (
+            HAVING COUNT(DISTINCT(rep_robj_xvid_answers.question_id)) = (
                 SELECT COUNT(rep_robj_xvid_question.question_id)
                 FROM rep_robj_xvid_comments
                 INNER JOIN rep_robj_xvid_question
@@ -408,7 +408,7 @@ class SimpleChoiceQuestion
         global $ilDB;
 
         $res = $ilDB->queryF('
-			SELECT COUNT(*) cnt FROM ' . self::TABLE_NAME_ANSWERS . ' ans
+			SELECT COUNT(DISTINCT(ans.question_id)) cnt FROM ' . self::TABLE_NAME_ANSWERS . ' ans
 			INNER JOIN ' . self::TABLE_NAME_QUESTION . ' qst on ans.question_id = qst.question_id 
 			INNER JOIN ' . self::TABLE_NAME_COMMENTS . ' comment on qst.comment_id = comment.comment_id
 			WHERE obj_id = %s 
