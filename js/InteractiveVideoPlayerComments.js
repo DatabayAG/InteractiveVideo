@@ -323,7 +323,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		}
 		return '<li class="toc_item toc_item_' + comment.comment_id +' ' + comment_text_exists_class + '" data-toc-time="' + comment.comment_time + '"><div class="toc-inner"><h5>' +
 			 pro.buildCommentTimeHtml(comment.comment_time, comment.is_interactive, player_id)  +
-			 comment_title + add_span_arrow + '</h5>' +
+			 '<div class="toc_title">' + comment_title + add_span_arrow + '</div></h5>' +
 			 '<div class="toc_description">' + comment.comment_text + '</div>' +
 			'</div></li>';
 	};

@@ -498,3 +498,18 @@ body.cke_editable{
 li.toc_item > div > h5 > time {
     padding-right: 20px;
 }
+.toc_title{
+    display: inline-block;
+    width: 82%;
+    padding-top: 3px;
+    padding-bottom: 1px;
+}
+.description_exists .toc_title:hover{
+    background-color:#dce2eb;
+}
+.no_description .toc_title{
+    cursor: default;
+}
+.iv_tab_navigation .nav-tabs{
+    border: none !important;;
+}
