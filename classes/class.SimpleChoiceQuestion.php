@@ -646,20 +646,23 @@ class SimpleChoiceQuestion
 	/**
 	 * @param      $oid
 	 * @param null $a_user_id
-	 * @return int|array
+	 * @return int|array<int, int>
 	 */
 	public function getAllUsersWithCompletelyCorrectAnswers($oid, $a_user_id = null)
 	{
-		$user_ids = array();
+		$user_ids = [];
         /**
          * @var $ilDB ilDBInterface
          */
 		global $ilDB;
 		$res = $ilDB->queryF(
-			'SELECT sum(points) as points, rep_robj_xvid_score.user_id as usr_id FROM rep_robj_xvid_comments 
-		LEFT JOIN rep_robj_xvid_question ON rep_robj_xvid_question.comment_id = rep_robj_xvid_comments.comment_id
-        LEFT JOIN rep_robj_xvid_answers ON rep_robj_xvid_answers.question_id = rep_robj_xvid_question.question_id
-		LEFT JOIN rep_robj_xvid_score ON rep_robj_xvid_answers.user_id = rep_robj_xvid_score.user_id AND rep_robj_xvid_answers.question_id = rep_robj_xvid_score.question_id
+			'
+        SELECT SUM(points) points, rep_robj_xvid_score.user_id usr_id
+        FROM rep_robj_xvid_comments 
+		INNER JOIN rep_robj_xvid_question
+		    ON rep_robj_xvid_question.comment_id = rep_robj_xvid_comments.comment_id
+		INNER JOIN rep_robj_xvid_score
+		    ON rep_robj_xvid_score.question_id = rep_robj_xvid_question.question_id
 		WHERE rep_robj_xvid_comments.obj_id = %s 
         AND is_interactive = 1
         AND neutral_answer = 0
@@ -670,7 +673,7 @@ class SimpleChoiceQuestion
 		);
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$user_ids[$row['usr_id']] = $row['points'];
+			$user_ids[$row['usr_id']] = (int) $row['points'];
 		}
 		
 		if($a_user_id != null && array_key_exists($a_user_id, $user_ids))
