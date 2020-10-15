@@ -79,7 +79,7 @@ question#:#Frage
 is_anonymized#:#Kommentare ohne Namen anzeigen
 is_anonymized_info#:#Wenn aktiviert, werden alle Kommentare ohne Benutzernamen angezeigt.
 is_public#:#Alle Kommentare veröffentlichen
-is_public_info#:#Wenn aktiviert, können alle Benutzer alle ÖFFENTLICHE Kommentare lesen. Im anderen Fall sehen Sie nur ihre eigenen Kommentare
+is_public_info#:#Wenn aktiviert, können alle Benutzer alle ÖFFENTLICHE Kommentare lesen. Im anderen Fall sehen Sie nur ihre eigenen Kommentare und öffentliche Kommentare, welche von Administratoren erstellt wurden (im Tab "Fragen, Kapitel und Kommentare").
 correct_answered#:#Richtig beantwortet
 show_my_results#:#Meine Ergebnisse
 is_jump_correct#:#"Richtig"-Sprungmarke verwenden
