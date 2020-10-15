@@ -874,21 +874,15 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	}
 
 	/**
-	 * @param $obj_id
-	 * @param $usr_id
+	 * @param int $usr_id
 	 * @return bool
 	 */
-	public function isLearningProgressCompletedForUser($obj_id, $usr_id)
+	public function hasUserStartedAndFinishedVideo($usr_id)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+		$res = $this->db->queryF('SELECT * FROM ' . self::TABLE_NAME_LP . ' WHERE obj_id = %s AND usr_id = %s AND started = 1 AND ended = 1',
+			array('integer', 'integer'),array($this->getId(), $usr_id));
 
-		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_LP . ' WHERE obj_id = %s AND usr_id = %s AND started = 1 AND ended = 1',
-			array('integer', 'integer'), array($obj_id, $usr_id));
-
-		$row = $ilDB->fetchAssoc($res);
+		$row = $this->db->fetchAssoc($res);
 		if($row == null)
 		{
 			return false;
@@ -1047,33 +1041,26 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      */
     public function getLPCompleted()
     {
+        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_DEACTIVATED])) {
+            return [];
+        }
+
         $usrIds = [];
-
-        if (in_array($this->getLearningProgressMode(), array(self::LP_MODE_DEACTIVATED))) {
-        }
-
         $simple = new SimpleChoiceQuestion();
+        $questionIds = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
 
-        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_ANSWERED_QUESTIONS])) {
-            $qst = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
-            if (is_array($qst) && count($qst) > 0) {
-                $usrIds = $simple->getUsersWithAllAnsweredQuestionsMap($this->getId());
-            } else {
-                $usrIds = $this->getAllStartedAndFinishedUsers($this->getId());
-            }
-        }
-
-        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_QUESTIONS])) {
-            $qst = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
-            if (is_array($qst) && count($qst) > 0) {
+        if ($questionIds === []) {
+            $usrIds = $this->getAllStartedAndFinishedUsers($this->getId());
+        } else {
+            if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_QUESTIONS])) {
                 $usrs_points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId());
                 foreach ($usrs_points as $usr_id => $points) {
-                    if (is_array($qst) && ($points == count($qst))) {
+                    if ($points === count($questionIds)) {
                         $usrIds[$usr_id] = $usr_id;
                     }
                 }
-            } else {
-                $usrIds = $this->getAllStartedAndFinishedUsers($this->getId());
+            } elseif (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_ANSWERED_QUESTIONS])) {
+                $usrIds = $simple->getUsersWithAllAnsweredQuestionsMap($this->getId());
             }
         }
 
@@ -1156,39 +1143,68 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
         $simple = new SimpleChoiceQuestion();
 
-        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_ANSWERED_QUESTIONS])) {
-            $questionIds = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
-            $numberOfAnsweredQuestions = $simple->getNumberOfAnsweredQuestions($this->getId(), $a_user_id);
+        $questionIds = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
+        $numberOfAnsweredQuestions = $simple->getNumberOfAnsweredQuestions($this->getId(), $a_user_id);
 
-            if ($questionIds !== []) {
-                $usrIds = $simple->getUsersWithAllAnsweredQuestionsMap($this->getId());
-                if (isset($usrIds[$a_user_id])) {
-                    $status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
-                } elseif ($numberOfAnsweredQuestions > 0) {
-                    $status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
-                }
-            } elseif ($this->isLearningProgressCompletedForUser($this->getId(), $a_user_id)) {
+        if ($questionIds === []) {
+            if ($this->hasUserStartedAndFinishedVideo($a_user_id)) {
                 $status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
             }
-        }
+        } else {
+            if ($numberOfAnsweredQuestions > 0) {
+                $status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
+            }
 
-        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_QUESTIONS])) {
-            $questionIds = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
-            $numberOfAnsweredQuestions = $simple->getNumberOfAnsweredQuestions($this->getId(), $a_user_id);
-
-            if ($questionIds !== []) {
+            if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_QUESTIONS])) {
                 $totalPointsOfUser = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId(), $a_user_id);
-                if ($totalPointsOfUser == count($questionIds)) {
+                if ($totalPointsOfUser === count($questionIds)) {
                     $status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
-                } elseif ($numberOfAnsweredQuestions > 0) {
-                    $status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
                 }
-            } elseif ($this->isLearningProgressCompletedForUser($this->getId(), $a_user_id)) {
-                $status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
+            } elseif (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_ANSWERED_QUESTIONS])) {
+                if (count($questionIds) === $numberOfAnsweredQuestions) {
+                    $status = ilLPStatus::LP_STATUS_COMPLETED_NUM;
+                }
             }
         }
 
         return $status;
+    }
+
+    /**
+     * @param int $usrId
+     * @return int
+     */
+    public function getPercentageForUser($usrId)
+    {
+        $percentage = 0;
+        $simple = new SimpleChoiceQuestion();
+
+        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_DEACTIVATED])) {
+            return $percentage;
+        }
+
+        $questionIds = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
+        if ($questionIds === []) {
+            if ($this->hasUserStartedAndFinishedVideo($usrId)) {
+                $percentage = 100;
+            }
+
+            return $percentage;
+        }
+
+        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_QUESTIONS])) {
+            $achievedPoints = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId(), $usrId);
+            $percentage = round(($achievedPoints / count($questionIds)) * 100);
+        } elseif (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_ANSWERED_QUESTIONS])) {
+            $numberOfAnsweredQuestions = $simple->getNumberOfAnsweredQuestions($this->getId(), $usrId);
+            $percentage = round(($numberOfAnsweredQuestions / count($questionIds)) * 100);
+        }
+
+        if ($percentage > 100) {
+            $percentage = 100;
+        }
+
+        return (int) $percentage;
     }
 
 	/**
@@ -1418,40 +1434,4 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	{
 		$this->disable_toolbar = $disable_toolbar;
 	}
-
-
-    /**
-     * @param int $usrId
-     * @return int
-     */
-    public function getPercentageForUser($usrId)
-    {
-        $percentage = 0;
-        $simple = new SimpleChoiceQuestion();
-
-        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_DEACTIVATED])) {
-            return $percentage;
-        }
-
-        $questionIds = $simple->getInteractiveNotNeutralQuestionIdsByObjId($this->getId());
-        if ($questionIds === []) {
-            return $percentage;
-        }
-
-        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_ANSWERED_QUESTIONS])) {
-            $numberOfAnsweredQuestions = $simple->getNumberOfAnsweredQuestions($this->getId(), $usrId);
-            $percentage = round(($numberOfAnsweredQuestions / count($questionIds)) * 100);
-        }
-
-        if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_QUESTIONS])) {
-            $achievedPoints = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId(), $usrId);
-            $percentage = round(($achievedPoints / count($questionIds)) * 100);
-        }
-
-        if ($percentage > 100) {
-            $percentage = 100;
-        }
-
-        return $percentage;
-    }
 }
