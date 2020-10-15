@@ -100,7 +100,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				});
 
 				pri.last_current_time = current_time;
-				j_obj_scroll_div.scrollTop(scrollHeight);
+				//j_obj_scroll_div.scrollTop(scrollHeight);
 			}
 		}
 	};
