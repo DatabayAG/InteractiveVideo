@@ -246,13 +246,13 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			let text_instance = 'comment_text_' + player_id;
 			let comment_text = CKEDITOR.instances[text_instance].getData();
 			let is_private = $('#is_private_' + player_id).prop("checked");
-
+			let end_time = 0;
 			if( $('#comment_time_end_chk_' + player_id).prop( "checked" ))
 			{
 				time = $('#comment_time_end_' + player_id).val();
 				time = time.split(':'); // split it at the colons
 
-				let end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
+				end_time = (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
 
 				if(end_time < parseInt(actual_time_in_video, 10))
 				{
