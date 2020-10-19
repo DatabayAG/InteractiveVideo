@@ -200,7 +200,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		let language = scope.InteractiveVideo.lang;
 
 		question_form.append(pro.createButtonButtons('sendForm', language.send_text, ''));
-		question_form.append(pro.createButtonButtons('close_form', language.close_text, ''));
+		question_form.append(pro.createButtonButtons('close_form', language.close_text, '', 'button'));
 		pro.appendButtonListener(player);
 	};
 
@@ -255,6 +255,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		let player_id = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 
 		$(pri.ids.question_form).on('submit', function (e) {
+			console.log('hello',e)
 			e.preventDefault();
 			$.ajax({
 				type:    "POST",
@@ -306,8 +307,11 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		})
 	};
 
-	pro.createButtonButtons = function(id, value, class_string) {
-		return '<input id="' + id + '" class="btn btn-default btn-sm ' + class_string + '" value="' + value + '" '+ 'type="submit">';
+	pro.createButtonButtons = function(id, value, class_string, type) {
+		if(typeof type === 'undefined' || type === null){
+			type = 'submit';
+		}
+		return '<input id="' + id + '" class="btn btn-default btn-sm ' + class_string + '" value="' + value + '" '+ 'type="' + type + '">';
 	};
 
 	pro.showQuestionInteractionForm = function(comment_id, array, player) {
