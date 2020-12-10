@@ -210,7 +210,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				'user_name'        : player_data.username,
 				'user_image'       : player_data.user_image,
 				'is_interactive'   : '0',
-				'is_private'       : is_private
+				'is_private'       : is_private,
+				'is_table_of_content' : '0'
 			};
 		if (!tmp_obj.comment_text) 
 		{
@@ -218,7 +219,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			return;
 		}
 		pri.utils.sliceCommentAndStopPointsInCorrectPosition(tmp_obj, tmp_obj.comment_time, player_data);
-
 		comments_div.prepend(pri.utils.buildListElement(player_id, tmp_obj, tmp_obj.comment_time, player_data.username));
 		pub.refreshMathJaxView();
 
