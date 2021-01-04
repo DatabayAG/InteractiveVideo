@@ -224,7 +224,22 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 						}
 						else
 						{
-							throw new ilException(sprintf("Unsupported plugin command %s ind %s", $cmd, __METHOD__));
+						    $class = ilUtil::stripSlashes($_GET['xvid_plugin_ctrl']);
+						    $dir = ltrim($class,'il');
+                            $dir = rtrim($dir,'GUI');
+						    $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $class . '.php';
+                            if(file_exists($path)){
+                                require_once $path;
+						        global $DIC;
+						        $class = new $class($DIC);
+                                if(method_exists($class, $cmd))
+                                {
+                                    $class->{$cmd}();
+                                }
+                            }
+                             else {
+                                throw new ilException(sprintf("Unsupported plugin command %s ind %s", $cmd, __METHOD__));
+                            }
 						}
 						break;
 				}
@@ -823,7 +838,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values["no_toolbar"]			= $this->object->getDisableToolbar();
 		$a_values["show_toc_first"]		= $this->object->getShowTocFirst();
 		$a_values["disable_comment_stream"]		= $this->object->getDisableCommentStream();
-		$a_values['source_id']			= $this->object->getSourceId();
+		$source_id = $this->object->getSourceId();
+		if(array_key_exists('xvid_source_id', $_GET) && $_GET['xvid_source_id'] !== ''){
+		    $source_id = ilUtil::stripSlashes($_GET['xvid_source_id']);
+        }
+		$a_values['source_id']			= $source_id;
 		$a_values['is_task']			= $this->object->getTaskActive();
 		$a_values['task']				= $this->object->getTask();
 		$a_values['auto_resume']		= $this->object->isAutoResumeAfterQuestion();
@@ -832,6 +851,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	public function editProperties()
 	{
+	    global $DIC;
+        $customJS = ilUtil::stripSlashes($_GET['xvid_custom_js']);
+        $DIC->ui()->mainTemplate()->addOnLoadCode('"' . $customJS . '"');
+        $DIC->ui()->mainTemplate()->addOnLoadCode('console.log('. $customJS .')');
 		$this->edit();
 	}
 
@@ -1129,7 +1152,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 
 		$item_group->setValue($factory->getDefaultVideoSource());
-
 		if($non_active)
 		{
 			ilUtil::sendFailure(ilInteractiveVideoPlugin::getInstance()->txt('at_least_one_source'));
@@ -1228,31 +1250,35 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 
 		require_once 'Services/Tracking/classes/class.ilLearningProgressAccess.php';
-		if(ilLearningProgressAccess::checkAccess($this->object->getRefId(), true))
-		{
-			if($this->checkPermissionBool('write') || $this->checkPermissionBool('read_learning_progress'))
-			{
-				if($this->object->getLearningProgressMode() != ilObjInteractiveVideo::LP_MODE_DEACTIVATED)
-				{
-					$ilTabs->addTab('learning_progress', $this->lng->txt('learning_progress'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoLearningProgressGUI', 'showLpUsers'));
-				}
-				else
-				{
-					$ilTabs->addTab('learning_progress', $this->lng->txt('learning_progress'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoLearningProgressGUI', 'showLPSettings'));
-				}
-			}
-			else if($this->checkPermissionBool('read') && $this->object->getLearningProgressMode() != ilObjInteractiveVideo::LP_MODE_DEACTIVATED)
-			{
-				$ilTabs->addTab('learning_progress', $this->lng->txt('learning_progress'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoLearningProgressGUI', 'showLPUserDetails'));
-			}
-		}
-		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
-		{
-			if(ilInteractiveVideoPlugin::getInstance()->isCoreMin52())
-			{
-				$ilTabs->addTab('export', $this->lng->txt('export'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoExportGUI', ''));
-			}
-		}
+		$a = $this->object;
+		if(! $this->object instanceof ilObjRootFolder) {
+            if(ilLearningProgressAccess::checkAccess($this->object->getRefId(), true))
+            {
+                if($this->checkPermissionBool('write') || $this->checkPermissionBool('read_learning_progress'))
+                {
+                    if($this->object->getLearningProgressMode() != ilObjInteractiveVideo::LP_MODE_DEACTIVATED)
+                    {
+                        $ilTabs->addTab('learning_progress', $this->lng->txt('learning_progress'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoLearningProgressGUI', 'showLpUsers'));
+                    }
+                    else
+                    {
+                        $ilTabs->addTab('learning_progress', $this->lng->txt('learning_progress'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoLearningProgressGUI', 'showLPSettings'));
+                    }
+                }
+                else if($this->checkPermissionBool('read') && $this->object->getLearningProgressMode() != ilObjInteractiveVideo::LP_MODE_DEACTIVATED)
+                {
+                    $ilTabs->addTab('learning_progress', $this->lng->txt('learning_progress'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoLearningProgressGUI', 'showLPUserDetails'));
+                }
+            }
+            if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
+            {
+                if(ilInteractiveVideoPlugin::getInstance()->isCoreMin52())
+                {
+                    $ilTabs->addTab('export', $this->lng->txt('export'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoExportGUI', ''));
+                }
+            }
+        }
+
 
 		$this->addPermissionTab();
 	}
