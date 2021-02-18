@@ -23,7 +23,7 @@ questions_comments_sub_tab#:#Edit
 tutor#:#Tutor
 questions_comments#:#Questions, chapters and comments
 questions_comments_new#:#Questions, chapters, public comments
-sure_delete_comments#:#Are you sure you want to delete the selected comments?
+sure_delete_comments#:#Are you sure you want to delete the selected comments/questions/chapters?
 video_file#:#Video
 comment#:#Comment
 comments#:#Comments
@@ -31,7 +31,7 @@ switch_on#:#On
 switch_off#:#Off
 post#:#Post
 cancel#:#Cancel
-sure_delete_comment#:#Are you sure, you want to delete the selected comments?
+sure_delete_comment#:#Are you sure, you want to delete the selected comments/questions/chapters?
 missing_comment_text#:#Please enter a comment.
 missing_stopping_point#:#The stopping point was not trasnferred to the server. Please try again.
 invalid_comment_ids#:#Some comments could not be found.

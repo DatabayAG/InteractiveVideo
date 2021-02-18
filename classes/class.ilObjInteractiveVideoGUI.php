@@ -1466,7 +1466,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			foreach($post_ids as $comment_id)
 			{
-				$confirm->addItem('comment_id[]', $comment_id, $this->object->getCommentTextById($comment_id));
+			    $texts = $this->object->getCommentTextById($comment_id);
+			    if(strlen($texts['title']) > 0){
+			        $text = $texts['title'];
+                } else {
+                    $text = $texts['text'];
+                }
+				$confirm->addItem('comment_id[]', $comment_id, $text);
 			}
 
 			$tpl->setContent($confirm->getHTML());
@@ -1780,7 +1786,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			foreach($post_ids as $comment_id)
 			{
-				$confirm->addItem('comment_id[]', $comment_id, $this->object->getCommentTextById($comment_id));
+                $texts = $this->object->getCommentTextById($comment_id);
+                if(strlen($texts['title']) > 0){
+                    $text = $texts['title'];
+                } else {
+                    $text = $texts['text'];
+                }
+                $confirm->addItem('comment_id[]', $comment_id, $text);
 			}
 
 			$tpl->setContent($confirm->getHTML());

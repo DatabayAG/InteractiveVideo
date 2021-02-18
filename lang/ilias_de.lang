@@ -25,13 +25,13 @@ tutor#:#Tutor
 questions_comments#:#Fragen, Kapitel und Kommentare
 questions_comments_new#:#Fragen, Kapitel und öffentliche Kommentare
 questions_comments_sub_tab#:#Verwalten
-sure_delete_comments#:#Sind Sie sicher, dass Sie die gewählten Kommentare löschen möchten?
+sure_delete_comments#:#Sind Sie sicher, dass Sie die gewählten Kommentare/Fragen/Kapitel löschen möchten?
 video_file#:#Video
 comment#:#Kommentar
 comments#:#Kommentare
 post#:#Posten
 cancel#:#Abbrechen
-sure_delete_comment#:#Sind Sie sicher, dass Sie den gewählten Kommentar löschen möchten?
+sure_delete_comment#:#Sind Sie sicher, dass Sie den gewählten Kommentare/Fragen/Kapitel löschen möchten?
 missing_comment_text#:#Bitte geben Sie einen Kommentar ein.
 missing_stopping_point#:#Der Haltepunkt wurde nicht zum Server übertragen. Bitte versuchen Sie es erneut.
 invalid_comment_ids#:#Einige Kommentare konnten nicht gefunden werden. 

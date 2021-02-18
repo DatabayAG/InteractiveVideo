@@ -701,7 +701,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 	/**
 	 * @param $comment_id
-	 * @return string
+	 * @return array
 	 */
 	public function getCommentTextById($comment_id)
 	{
@@ -710,12 +710,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		 */
 		global $ilDB;
 
-		$res = $ilDB->queryF('SELECT comment_text FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE comment_id = %s',
+		$res = $ilDB->queryF('SELECT comment_text, comment_title FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE comment_id = %s',
 			array('integer'), array($comment_id));
 
 		$row = $ilDB->fetchAssoc($res);
 
-		return (string)$row['comment_text'];
+		return ['text' => $row['comment_text'], 'title' => $row['comment_title']];
 	}
 
 	/**

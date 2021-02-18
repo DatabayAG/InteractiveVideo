@@ -67,6 +67,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.buildQuestionForm = function(player) {
+		//Todo: make modal operations use id and .find()
 		let modal  = $(pri.classes.modal_body);
 		let type   = parseInt(pub.QuestionObject.type, 10);
 		let img    = '';
