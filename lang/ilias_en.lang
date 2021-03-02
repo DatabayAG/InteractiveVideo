@@ -204,7 +204,7 @@ save_without_correct_detail#:#You don't have selected a reflection question or h
 is_table_of_content#:#Table of Content
 toc#:#Table of Content
 show_toc_first#:#Show Table of content first
-show_toc_first_info#:#Show table of content as first page
+show_toc_first_info#:#Show table of content as first page. In order to see such a table of content chapters have to be created (in the tab "Questions, chapters and comments")
 disable_comment_stream#:#Disable comment stream
 disable_comment_stream_info#:#Disable comment stream
 insert_chapter#:#Insert Chapter
