@@ -17,7 +17,9 @@ function onYouTubeIframeAPIReady() {
 	$.each(il.InteractiveVideo, function (player_id, value) {
 		if (value.hasOwnProperty("player_type") && value.player_type === "ytb") {
 			var player = new YT.Player(player_id, {
-				videoId:           interactiveVideoYoutubeId,
+				// fau: fixIvMultiYoutube - use data attribute instead of global variable
+				videoId:           $('#'+player_id).attr('data-youtube-id'),
+				// fau.
 				events:            {
 					'onStateChange': onPlayerStateChange,
 					'onReady':       function (media) {
