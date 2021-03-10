@@ -3160,7 +3160,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$csvoutput = "";
 		foreach ($csv as $row)
 		{
-			$csvoutput .= join($row, $separator) . "\n";
+			$csvoutput .= join($separator, $row) . "\n";
 		}
 		ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
 	}
@@ -3188,6 +3188,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($head_row, $plugin->txt('comment'));
 		array_push($head_row, $plugin->txt('tutor'));
 		array_push($head_row, $plugin->txt('interactive'));
+		array_push($head_row, $plugin->txt('compulsory'));
+		array_push($head_row, $plugin->txt('type'));
 
 		array_push($csv, ilUtil::processCSVRow($head_row, TRUE, $separator) );
 		foreach ($data as $key => $row)
@@ -3202,7 +3204,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$csvoutput = "";
 		foreach ($csv as $row)
 		{
-			$csvoutput .= join($row, $separator) . "\n";
+			$csvoutput .= join($separator, $row) . "\n";
 		}
 		ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
 	}
