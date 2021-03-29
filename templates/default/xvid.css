@@ -513,3 +513,50 @@ li.toc_item > div > h5 > time {
 .iv_tab_navigation .nav-tabs{
     border: none !important;;
 }
+
+
+.iv_show_best_solution{
+    text-align: center;
+    padding-top: 5px;
+}
+.iv_best_solution_hidden{
+    display:none;
+}
+
+.iv_best_solution_value{
+    margin: auto;
+    width: 50%;
+}
+
+.modal_feedback .wrong_answer{
+    background-color: #FFE7E7;
+    border-color: #EBCCD1;
+    padding:15px;
+}
+
+.modal_feedback .correct_answer{
+    background-color: #E7FFE7;
+    border-color: #D6E9C6;
+    padding:15px;
+}
+.modal_feedback .correct_answer:before {
+    color: #008000;
+    font-size: 30px;
+    font-family: "Glyphicons Halflings";
+    content: " \e013";
+    opacity: 0.4;
+    vertical-align: -10px;
+}
+
+.modal_feedback .wrong_answer:before {
+    color: #880000;
+    font-size: 30px;
+    font-family: "Glyphicons Halflings";
+    content: " \e014";
+    opacity: 0.4;
+    vertical-align: -10px;
+}
+
+.best_solution_answer{
+    padding-left: 5px;
+}

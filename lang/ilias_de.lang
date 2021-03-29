@@ -212,3 +212,5 @@ comment_table_title#:#Kommentar / Fragentext
 compulsory_question#:#Verpflichtende Frage
 compulsory#:#Verpflichtend
 compulsory_question_info#:#Diese Frage muss beantwortet werden, bevor das Video weiter geschaut werden kann
+show_best_solution#:#Zeige bestmögliche Lösung
+show_best_solution_info#:#Zeige bestmögliche Lösung

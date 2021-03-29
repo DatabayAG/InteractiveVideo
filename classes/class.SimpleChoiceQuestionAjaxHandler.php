@@ -119,9 +119,37 @@ class SimpleChoiceQuestionAjaxHandler
 		$json['html'] .= '<div style="padding-top:10px;"></div>';
 		$simple                     = new SimpleChoiceQuestionStatistics();
 		$json['response_frequency'] = $simple->getResponseFrequency((int)$qid);
+
+        $json['best_solution'] = '';
+        if($feedback['show_best_solution'] == "1" && $feedback['neutral_answer'] != 1) {
+            $json['html'] .= '<div class="iv_show_best_solution"><input class="btn btn-default btn-sm" id="show_best_solution"  type="submit"/></div><div class="iv_best_solution_value"></div>';
+            $json['best_solution'] = '<div class="iv_best_solution_hidden">' . $this->getBestSolution($qid) . '</div>';
+        }
+
 		return json_encode($json);
 	}
 
+    /**
+     * @param int $qid
+     */
+	protected function getBestSolution($qid)
+    {
+        $best_solution = '';
+	    $answers = $this->getAnswersForQuestionId($qid, false);
+        foreach($answers as $answer) {
+            $class = 'wrong_answer';
+            if($answer['correct'] === "1") {
+                $class = 'correct_answer';
+            }
+            $best_solution .= '<div><span class="' . $class . '"></span><span class="best_solution_answer">' . $answer['answer'] . '</span></div>';
+        }
+        return $best_solution;
+    }
+
+	/**
+	 * @param $ref_id
+	 * @return string
+	 */
     /**
      * @param $ref_id
      * @return string
@@ -277,11 +305,12 @@ class SimpleChoiceQuestionAjaxHandler
 		return json_encode($build_json);
 	}
 
-	/**
-	 * @param $qid
-	 * @return string
-	 */
-	public function getJsonForQuestionId($qid)
+    /**
+     * @param      $qid
+     * @param bool $asJson
+     * @return false|string
+     */
+	public function getAnswersForQuestionId($qid, $asJson = true)
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -300,6 +329,9 @@ class SimpleChoiceQuestionAjaxHandler
 		{
 			$question_data[] = '';
 		}
-		return json_encode($question_data);
+		if($asJson){
+            return json_encode($question_data);
+        }
+        return $question_data;
 	}
 }

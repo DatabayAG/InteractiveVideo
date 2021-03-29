@@ -227,6 +227,16 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		{
 			modal.append('<div class="learning_recommendation_link">' + language.more_information + ': <span class="feedback_link_more">' + '<img src="' + feedback.feedback_icon + '"/>' + feedback.feedback_link + '</span></div>');
 		}
+
+		$('.iv_best_solution_value').html(feedback.best_solution);
+		$('#show_best_solution').val('Show best solution');
+		$('.iv_show_best_solution').off('click');
+		$('.iv_show_best_solution').on('click', function () {
+			$('.iv_best_solution_hidden').removeClass('iv_best_solution_hidden');
+			$('#sendForm').remove()
+			$('#question_form input').prop( "disabled", true )
+			$('#close_form').prop( "disabled", false )
+		});
 	};
 
 	pro.showResponseFrequency = function(response_frequency) 

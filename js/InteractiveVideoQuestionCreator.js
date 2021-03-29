@@ -123,6 +123,7 @@ il.InteractiveVideoQuestionCreator = (function () {
 				$('.correct_solution').show();
 				$('#il_prop_cont_show_correct_icon').show();
 				$('#il_prop_cont_feedback_one_wrong').show();
+				$('#il_prop_cont_show_best_solution').show();
 				$('#answer_table').find('th').eq(1).show();
 			}
 			else
@@ -136,6 +137,7 @@ il.InteractiveVideoQuestionCreator = (function () {
 				$('.correct_solution').hide();
 				$('#il_prop_cont_feedback_one_wrong').hide();
 				$('#il_prop_cont_show_correct_icon').hide();
+				$('#il_prop_cont_show_best_solution').hide();
 				$('#answer_table').find('th').eq(1).hide();
 			}
 		}

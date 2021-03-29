@@ -434,7 +434,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question->setVariable('CORRECT_SOLUTION', 	$plugin->txt('correct_solution'));
 		if($question_id > 0)
 		{
-			$question->setVariable('JSON', $ajax_object->getJsonForQuestionId($question_id));
+			$question->setVariable('JSON', $ajax_object->getAnswersForQuestionId($question_id));
 			$question->setVariable('QUESTION_TYPE', $simple_choice->getTypeByQuestionId($question_id));
 			$question->setVariable('QUESTION_TEXT', $simple_choice->getQuestionTextQuestionId($question_id));
 		}
@@ -528,6 +528,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('SWITCH_OFF', $plugin->txt('switch_off'));
 		$config_tpl->setVariable('SAVE', $plugin->txt('save'));
 		$config_tpl->setVariable('ADD_COMMENT', $plugin->txt('insert_comment'));
+		$config_tpl->setVariable('SHOW_BEST_SOLUTION', $plugin->txt('show_best_solution'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
 		$config_tpl->setVariable('AUTO_RESUME_AFTER_QUESTION', $this->object->isAutoResumeAfterQuestion());
 		$config_tpl->setVariable('FIXED_MODAL', $this->object->isFixedModal());
@@ -2359,6 +2360,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$show_response_frequency->setInfo($plugin->txt('show_response_frequency_info'));
 		$form->addItem($show_response_frequency);
 
+        $show_best_solution = new ilCheckboxInputGUI($plugin->txt('show_best_solution'), 'show_best_solution');
+        $show_best_solution->setInfo($plugin->txt('show_best_solution_info'));
+        $form->addItem($show_best_solution);
+
 		$show_comment_field = new ilCheckboxInputGUI($plugin->txt('show_comment_field'), 'show_comment_field');
 		$show_comment_field->setInfo($plugin->txt('show_comment_field_info'));
 		$form->addItem($show_comment_field);
@@ -2549,6 +2554,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['jump_correct_ts']			= $question_data['question_data']['jump_correct_ts'];
 		$values['feedback_one_wrong']		= $question_data['question_data']['feedback_one_wrong'];
 		$values['show_response_frequency']	= $question_data['question_data']['show_response_frequency'];
+		$values['show_best_solution']	    = $question_data['question_data']['show_best_solution'];
 		$values['is_jump_wrong']			= $question_data['question_data']['is_jump_wrong'];
 		$values['show_wrong_icon']			= $question_data['question_data']['show_wrong_icon'];
 		$values['jump_wrong_ts']			= $question_data['question_data']['jump_wrong_ts'];
@@ -2689,6 +2695,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question->setJumpWrongTs((int)$form->getInput('jump_wrong_ts'));
 
 		$question->setShowResponseFrequency((int)$form->getInput('show_response_frequency'));
+		$question->setShowBestSolution((int)$form->getInput('show_best_solution'));
 		$question->setRepeatQuestion((int)$form->getInput('repeat_question'));
 		$question->setCompulsoryQuestion((int)$form->getInput('compulsory_question'));
 		$question->setReflectionQuestionComment((int)$form->getInput('show_comment_field'));
@@ -2710,7 +2717,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question = new ilTemplate("tpl.simple_questions.html", true, true, ilInteractiveVideoPlugin::getInstance()->getDirectory());
 		if($question_id > 0)
 		{
-			$question->setVariable('JSON', $ajax_object->getJsonForQuestionId($question_id));
+			$question->setVariable('JSON', $ajax_object->getAnswersForQuestionId($question_id));
 			$question->setVariable('QUESTION_TYPE', $simple_choice->getTypeByQuestionId($question_id));
 		}
 		else

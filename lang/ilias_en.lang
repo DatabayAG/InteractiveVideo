@@ -213,3 +213,5 @@ comment_table_title#:#Comment / Question Text
 compulsory_question#:#Compulsory question
 compulsory#:#Compulsory
 compulsory_question_info#:#This question must be answered
+show_best_solution#:#Show best solution
+show_best_solution_info#:#Show best solution
