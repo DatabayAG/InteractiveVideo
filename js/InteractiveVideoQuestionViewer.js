@@ -229,7 +229,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		}
 
 		$('.iv_best_solution_value').html(feedback.best_solution);
-		$('#show_best_solution').val('Show best solution');
+		$('#show_best_solution').val(il.InteractiveVideo["lang"].show_best_solution);
 		$('.iv_show_best_solution').off('click');
 		$('.iv_show_best_solution').on('click', function () {
 			$('.iv_best_solution_hidden').removeClass('iv_best_solution_hidden');
