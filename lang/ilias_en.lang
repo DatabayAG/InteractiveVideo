@@ -62,11 +62,11 @@ insert_question#:#Insert Question
 insert_comment#:#Insert Comment
 my_comments#:#My Comments
 general#:#General
-repeat_question#:#Repeat Question
+repeat_question#:#Repeat question
 tags#:#Tags
-question_text#:#Question Text
-question_type#:#Question Type
-feedback_correct#:#Feedback Correct Answer
+question_text#:#Question text
+question_type#:#Question type
+feedback_correct#:#Feedback correct answer
 feedback_one_wrong#:#Feedback at least one wrong
 results_successfully_deleted#:#The selected results are deleted successfully
 sure_delete_results#:#Are you sure, you want to delete the selected results?
@@ -84,8 +84,8 @@ is_public#:#Publish All Comments
 is_public_info#:#"If enabled all users are able to read all PUBLIC comments. Otherwise they are only able to see own comments and public comments created by administrators (in the tab "Questions, chapters and comments")
 correct_answered#:#Answered correctly
 show_my_results#:#My Results
-is_jump_correct#:#Use 'Correct'-Jump Label
-is_jump_wrong#:#Use 'Wrong'-Jump Label
+is_jump_correct#:#Use 'Correct'-Jump label
+is_jump_wrong#:#Use 'Wrong'-Jump label
 limit_attempts#:#Limit attempts
 limit_attempts_info#:#If enabled the user only can answer a question once.
 is_private_comment#:#Private Comment
@@ -111,8 +111,8 @@ status#:#Status
 is_chronologic#:#Show all comments at all times
 is_chronologic_info#:#If this option is activated, all comments for the video will be shown in chronological order at all times.
 time_end#:#End Time
-show_response_frequency#:#Show response frequencies after question is answered
-show_response_frequency_info#:#The response frequencies of all answering options are shown as percentages beneath each answering option after the question has been answered.
+show_response_frequency#:#Show response frequencies
+show_response_frequency_info#:#After answering the question, the response frequencies of all answering options are shown as percentages beneath each answering option.
 type#:#Type
 title_of_question#:#Questiontitle
 endtime_warning#:#The endtime you selected is smaller than the actual time
@@ -151,10 +151,10 @@ back_to#:#back to
 back_to_title#:#Do you want to go back to %s (%s)?
 save#:#Save
 at_least_one_source#:#You need to select at least one source, make sure there is at least one active source in the configuration of the Interactive Video Plugin.
-feedback_correct_obj#:#Feedback Link for Repository Object for correct answer
-feedback_correct_obj_info#:#Feedback Link for Repository Object for correct answer
-feedback_wrong_obj#:#Feedback Link for Repository Object for at least one wrong answer
-feedback_wrong_obj_info#:#Feedback Link for Repository Object for at least one wrong answer
+feedback_correct_obj#:#Feedback link for repository object for correct answer
+feedback_correct_obj_info#:#Feedback link for repository object for correct answer
+feedback_wrong_obj#:#Feedback link for repository object for at least one wrong answer
+feedback_wrong_obj_info#:#Feedback link for repository object for at least one wrong answer
 show_comment_field#:#Show comment field
 show_comment_field_info#:#Show comment field below this reflection question
 more_informations#:#More Information
@@ -171,7 +171,7 @@ neutral_questions#:#Neutral Questions
 neutral_question#:#Neutral Question
 export_comments#:#Export Comments
 export_all_comments#:#Export All Comments
-question_image#:#Question Image
+question_image#:#Question image
 extract#:#Generate Thumbnail from Video
 use_this_image#:#Use this image
 time_for_preview#:#Time: 
@@ -214,4 +214,4 @@ compulsory_question#:#Compulsory question
 compulsory#:#Compulsory
 compulsory_question_info#:#This question must be answered
 show_best_solution#:#Show solution
-show_best_solution_info#:#Show best solution
+show_best_solution_info#:#After answering the question, users can display the correct solution (via button "Show solution").

@@ -109,8 +109,8 @@ status#:#Status
 is_chronologic#:#Alle Kommentare von Beginn an zeigen
 is_chronologic_info#:#Wenn diese Option aktiviert wird, wird die Option 'Alle Kommentare' vorausgewählt und es werden alle Kommentare des gesamten Videos von Beginn an in chronologischer Reihenfolge angezeigt.
 time_end#:#Ende der Passage
-show_response_frequency#:#Zeige Antworthäufigkeiten nach dem Antworten an
-show_response_frequency_info#:#Nachdem die Frage beantwortet wurde, wird unter jeder Antwortoption die relative Häufigkeit in Prozent angezeigt
+show_response_frequency#:#Zeige Antworthäufigkeiten
+show_response_frequency_info#:#Nachdem die Frage beantwortet wurde, wird unter jeder Antwortoption die relative Antworthäufigkeit in Prozent angezeigt
 type#:#Typ
 title_of_question#:#Titel der Frage
 endtime_warning#:#Das Ende der Passage darf nicht kleiner sein als die aktuelle Zeit im Video
@@ -213,4 +213,4 @@ compulsory_question#:#Verpflichtende Frage
 compulsory#:#Verpflichtend
 compulsory_question_info#:#Diese Frage muss beantwortet werden, bevor das Video weiter geschaut werden kann
 show_best_solution#:#Lösung zeigen
-show_best_solution_info#:#Zeige bestmögliche Lösung
+show_best_solution_info#:#Nachdem die Frage beantwortet wurde, können sich Nutzer die richtige Lösung anzeigen lassen (über Button «Lösung zeigen»).

@@ -2356,13 +2356,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->appendRepositorySelector($feedback_one_wrong, 'feedback_wrong_obj');
 		$form->addItem($feedback_one_wrong);
 
-		$show_response_frequency = new ilCheckboxInputGUI($plugin->txt('show_response_frequency'), 'show_response_frequency');
-		$show_response_frequency->setInfo($plugin->txt('show_response_frequency_info'));
-		$form->addItem($show_response_frequency);
-
         $show_best_solution = new ilCheckboxInputGUI($plugin->txt('show_best_solution'), 'show_best_solution');
         $show_best_solution->setInfo($plugin->txt('show_best_solution_info'));
         $form->addItem($show_best_solution);
+
+		$show_response_frequency = new ilCheckboxInputGUI($plugin->txt('show_response_frequency'), 'show_response_frequency');
+		$show_response_frequency->setInfo($plugin->txt('show_response_frequency_info'));
+		$form->addItem($show_response_frequency);
 
 		$show_comment_field = new ilCheckboxInputGUI($plugin->txt('show_comment_field'), 'show_comment_field');
 		$show_comment_field->setInfo($plugin->txt('show_comment_field_info'));
