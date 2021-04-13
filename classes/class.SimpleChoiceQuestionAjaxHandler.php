@@ -41,6 +41,7 @@ class SimpleChoiceQuestionAjaxHandler
 		$score    = $scoring->getScoreForQuestionOnUserId($qid);
 		$feedback = $scoring->getFeedbackByQuestionId($qid);
 		$json     = array();
+		$correct = false;
 		if(is_array($feedback))
 		{
 			if($feedback['neutral_answer'] != 1)
@@ -93,6 +94,7 @@ class SimpleChoiceQuestionAjaxHandler
 						$json['html']          = $start_div . $feedback['feedback_correct'] .'</div>';
 						$json['is_timed']      = $feedback['is_jump_correct'];
 						$json['time']          = $feedback['jump_correct_ts'];
+						$correct = true;
 					}
 				}
 				else
@@ -114,6 +116,7 @@ class SimpleChoiceQuestionAjaxHandler
 					$json['is_timed']      = $feedback['is_jump_correct'];
 					$json['time']          = $feedback['jump_correct_ts'];
 				}
+				$json['correct'] = $correct;
 			}
 
 		$json['html'] .= '<div style="padding-top:10px;"></div>';

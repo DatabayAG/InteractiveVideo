@@ -209,7 +209,6 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		let modal = $(pri.classes.modal_feedback);
 		let language = scope.InteractiveVideo.lang;
 		let player_id = scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
-
 		modal.html('');
 		pro.showResponseFrequency(feedback.response_frequency);
 		modal.html(feedback.html);
@@ -230,13 +229,18 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 
 		$('.iv_best_solution_value').html(feedback.best_solution);
 		$('#show_best_solution').val(il.InteractiveVideo["lang"].show_best_solution);
-		$('.iv_show_best_solution').off('click');
-		$('.iv_show_best_solution').on('click', function () {
-			$('.iv_best_solution_hidden').removeClass('iv_best_solution_hidden');
-			$('#sendForm').remove()
-			$('#question_form input').prop( "disabled", true )
-			$('#close_form').prop( "disabled", false )
-		});
+		$('#show_best_solution').hide();
+		if(feedback.correct != true) {
+			$('#show_best_solution').show();
+			$('.iv_show_best_solution').off('click');
+			$('.iv_show_best_solution').on('click', function () {
+				$('.iv_best_solution_hidden').removeClass('iv_best_solution_hidden');
+				$('#sendForm').remove()
+				$('#question_form input').prop( "disabled", true )
+				$('#close_form').prop( "disabled", false )
+			});
+		}
+
 	};
 
 	pro.showResponseFrequency = function(response_frequency) 
