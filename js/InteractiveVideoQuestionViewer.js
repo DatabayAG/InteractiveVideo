@@ -243,18 +243,23 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 				$('#sendForm').remove()
 				$('#question_form input').prop( "disabled", true )
 				$('#close_form').prop( "disabled", false )
-				pro.showBestSolutionIsClicked()
+				pro.showBestSolutionIsClicked(player_id)
 			});
 		}
 
 	};
 
-	pro.showBestSolutionIsClicked = function() {
+	pro.showBestSolutionIsClicked = function(player_id) {
 		$('#show_best_solution').prop("disabled", true)
-		//Todo check if it is possible to answer question multiple times
 		if(pub.QuestionObject.limit_attempts === "0"){
 			$('#question_buttons_bellow_form').append(pro.createButtonButtons('repeat_question', scope.InteractiveVideo.lang.repeat, 'question_repeat_btn', 'button'))
+			$('.question_repeat_btn').off('click');
+			$('.question_repeat_btn').on('click', function () {
+				let time = parseInt(pub.QuestionObject.time, 10);
 
+				$(pri.ids.modal).modal('hide');
+				il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(time - 1, player_id);
+			});
 		}
 	}
 

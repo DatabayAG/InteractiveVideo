@@ -552,7 +552,7 @@ li.toc_item > div > h5 > time {
     float:left;
 }
 .best_solution_answer_view, .best_solution_block{
-    background-color: lightblue;
+    background-color: #bde0ff;;
 }
 .best_solution_answer_view {
  margin-bottom: -10px;

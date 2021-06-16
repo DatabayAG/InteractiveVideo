@@ -200,9 +200,11 @@ class SimpleChoiceQuestionAjaxHandler
 		$res = $ilDB->queryF('
 			SELECT * 
 			FROM  rep_robj_xvid_question question, 
-				  rep_robj_xvid_qus_text answers 
+				  rep_robj_xvid_qus_text answers,
+				  rep_robj_xvid_comments comments 
 			WHERE question.comment_id = %s 
-			AND   question.question_id = answers.question_id',
+			AND   question.question_id = answers.question_id
+			AND   question.comment_id = comments.comment_id',
 			array('integer'), array((int)$cid)
 		);
 
@@ -231,6 +233,7 @@ class SimpleChoiceQuestionAjaxHandler
 			$show_reflection_question_comment = $row['reflection_question_comment'];
 			$question_image          = $row['question_image'];
 			$compulsory              = $row['compulsory_question'];
+			$time                    = $row['comment_time'];
 			#$neutral_answer         = $row['neutral_answer'];
 			$counter++;
 		}
@@ -268,6 +271,7 @@ class SimpleChoiceQuestionAjaxHandler
 		$build_json['reflection_question_comment'] = $show_reflection_question_comment;
 		$build_json['compulsory_question']     = $compulsory;
 		$build_json['repeat_question']         = $repeat_question;
+		$build_json['time']                    = $time;
 		if($question_image != null)
 		{
 			$build_json['question_image']          = ilWACSignedPath::signFile($question_image);
