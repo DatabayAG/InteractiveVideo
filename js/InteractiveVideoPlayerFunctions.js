@@ -176,7 +176,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		if (player_data.comments[i].comment_text != null) 
 		{
-			console.log('commentsObjectActions')
 			comments_div.prepend(pri.utils.buildListElement(player_id, comment, current_time, comment.user_name));
 			pro.addHighlightToCommentWithoutEndTime(comment, player_id);
 			if (comment.comment_time_end > 0) 
@@ -220,7 +219,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			return;
 		}
 		pri.utils.sliceCommentAndStopPointsInCorrectPosition(tmp_obj, tmp_obj.comment_time, player_data);
-		console.log('fake')
 		comments_div.prepend(pri.utils.buildListElement(player_id, tmp_obj, tmp_obj.comment_time, player_data.username));
 		pub.refreshMathJaxView();
 

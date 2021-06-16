@@ -36,7 +36,6 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			if (player_data.comments[i].comment_time <= time && player_data.comments[i].comment_text !== null)
 			{
-				console.log('seek', player_data.comments[i].comment_text)
 				j_object.prepend(pub.buildListElement(player_id, player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name));
 				if(player_data.comments[i].comment_time_end > 0)
 				{
@@ -374,7 +373,6 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				let span = $(this).find('.toc_arrow');
 
 				if($(this).hasClass('activeToc') || $(this).hasClass('tocManualOverride')){
-					console.log('change', span.attr('class'))
 					span.removeClass('glyphicon-triangle-right');
 					span.addClass('glyphicon-triangle-bottom');
 				} else {
