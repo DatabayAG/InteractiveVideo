@@ -17,7 +17,8 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 					modal_body:     '.modal-body',
 					modal_title:    '.modal-title',
 					modal_feedback: '.modal_feedback',
-					modal_close:    '.close'
+					modal_close:    '.close',
+					modal_content:  '.modal-content'
 				},
 			};
 
@@ -115,28 +116,27 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.addAnswerPossibilities = function(input_type) {
 		let html = '';
-
-		html = '<form id="question_form">';
+		$('#question_buttons_bellow_form').remove()
+		html = '<div class="question_flex_div"><form id="question_form">';
 		$.each(pub.QuestionObject.answers, function (l, value) {
 			html += pro.buildAnswerInputElement(input_type, value);
 		});
 		html += '<input name="qid" value ="' + pub.QuestionObject.question_id + '" type="hidden"/>';
 		html += '<div id="question_buttons_bellow_form"></div>';
-		html += '</form>';
+		html += '</form></div>';
 		$(pri.classes.modal_body).append(html);
 	};
 
 	pro.buildAnswerInputElement = function(input_type, value)
 	{
-		return  '<label for="answer_'   + value.answer_id + '">' +
+		return  '<label for="answer_'   + value.answer_id + '" class="answer_label">' +
 			'<input' +
 			' id="answer_'  + value.answer_id + '" name="answer[]"' +
 			' value="'      + value.answer_id + '"' +
 			' type="'       + input_type + '">' +
 			value.answer +
 			'</label>' + 
-			'<div class="progress rf_listener response_frequency_' + value.answer_id + ' ilNoDisplay"></div>' +
-			'<br/>';
+			'<div class="progress rf_listener response_frequency_' + value.answer_id + ' ilNoDisplay"></div>';
 	};
 
 	pro.addSelfReflectionLayout = function(player) {
@@ -193,15 +193,17 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.addFeedbackDiv = function() {
-		$(pri.ids.question_form).after('<div class="modal_feedback"></div>');
+		$('.modal_feedback').remove()
+		$(pri.classes.modal_body).after('<div class="modal_feedback"></div>');
 	};
 
 	pro.addButtons = function(player) {
 		let question_form = $(pri.ids.question_btns_below_form);
+		$('.question_action_btn').remove()
 		let language = scope.InteractiveVideo.lang;
 
-		question_form.append(pro.createButtonButtons('sendForm', language.send_text, ''));
-		question_form.append(pro.createButtonButtons('close_form', language.close_text, '', 'button'));
+		question_form.append(pro.createButtonButtons('close_form', language.close_text, 'question_action_btn', 'button'));
+		question_form.append(pro.createButtonButtons('sendForm', language.send_text, 'question_action_btn'));
 		pro.appendButtonListener(player);
 	};
 
@@ -209,6 +211,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		let modal = $(pri.classes.modal_feedback);
 		let language = scope.InteractiveVideo.lang;
 		let player_id = scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
+		$(pri.classes.modal_content).append($('#question_buttons_bellow_form'))
 		modal.html('');
 		pro.showResponseFrequency(feedback.response_frequency);
 		modal.html(feedback.html);
@@ -228,20 +231,59 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		}
 
 		$('.iv_best_solution_value').html(feedback.best_solution);
+		$('#question_buttons_bellow_form').append($('#show_best_solution'))
 		$('#show_best_solution').val(il.InteractiveVideo["lang"].show_best_solution);
 		$('#show_best_solution').hide();
 		if(feedback.correct != true) {
 			$('#show_best_solution').show();
-			$('.iv_show_best_solution').off('click');
-			$('.iv_show_best_solution').on('click', function () {
+			$('#show_best_solution').off('click');
+			$('#show_best_solution').on('click', function () {
 				$('.iv_best_solution_hidden').removeClass('iv_best_solution_hidden');
+				pro.sortAppendBestSolution();
 				$('#sendForm').remove()
 				$('#question_form input').prop( "disabled", true )
 				$('#close_form').prop( "disabled", false )
+				pro.showBestSolutionIsClicked()
 			});
 		}
 
 	};
+
+	pro.showBestSolutionIsClicked = function() {
+		$('#show_best_solution').prop("disabled", true)
+		//Todo check if it is possible to answer question multiple times
+		if(pub.QuestionObject.limit_attempts === "0"){
+			$('#question_buttons_bellow_form').append(pro.createButtonButtons('repeat_question', scope.InteractiveVideo.lang.repeat, 'question_repeat_btn', 'button'))
+
+		}
+	}
+
+	pro.sortAppendBestSolution = function()
+	{
+		$('.best_solution_block').remove()
+		$('.best_solution_answer_view').remove();
+		$.each($('.best_solution_answer'), function (key, object) {
+			let question_type = pub.QuestionObject.type;
+			let answer_id = parseInt($(object).data('best-solution'), 10);
+			let answer_state = parseInt($(object).data('answer-state'), 10);
+			if(question_type === "0"){
+				let element = '<div class="best_solution_answer_view"><input type="radio" disabled=""></div>'
+				if(answer_state === 1) {
+					element = '<div class="best_solution_answer_view"><input type="radio" disabled="" checked="checked"></div>'
+				}
+				$( element).prependTo($('#answer_' + answer_id).parent())
+			} else if (question_type === "1"){
+				let element = '<div class="best_solution_answer_view"><input type="checkbox" disabled=""></div>'
+				if(answer_state === 1) {
+					element = '<div class="best_solution_answer_view"><input type="checkbox" disabled="" checked="checked"></div>'
+				}
+				$( element).prependTo($('#answer_' + answer_id).parent())
+			}
+
+		});
+
+		$('.question_flex_div').prepend($('<div class="best_solution_block">' + il.InteractiveVideo["lang"].solution + ': </div>'))
+	}
 
 	pro.showResponseFrequency = function(response_frequency) 
 	{
@@ -270,7 +312,6 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		let player_id = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 
 		$(pri.ids.question_form).on('submit', function (e) {
-			console.log('hello',e)
 			e.preventDefault();
 			$.ajax({
 				type:    "POST",

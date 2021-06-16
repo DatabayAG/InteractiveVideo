@@ -213,4 +213,6 @@ compulsory_question#:#Verpflichtende Frage
 compulsory#:#Verpflichtend
 compulsory_question_info#:#Diese Frage muss beantwortet werden, bevor das Video weiter geschaut werden kann
 show_best_solution#:#Lösung zeigen
+solution#:#Lösung
+repeat#:#Wiederholen
 show_best_solution_info#:#Nachdem die Frage beantwortet wurde, können sich Nutzer die richtige Lösung anzeigen lassen (über Button «Lösung zeigen»).

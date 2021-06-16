@@ -140,11 +140,7 @@ class SimpleChoiceQuestionAjaxHandler
         $best_solution = '';
 	    $answers = $this->getAnswersForQuestionId($qid, false);
         foreach($answers as $answer) {
-            $class = 'wrong_answer';
-            if($answer['correct'] === "1") {
-                $class = 'correct_answer';
-            }
-            $best_solution .= '<div><span class="' . $class . '"></span><span class="best_solution_answer">' . $answer['answer'] . '</span></div>';
+            $best_solution .= '<div class="best_solution_answer" data-best-solution="'. $answer["answer_id"] .'" data-answer-state="'.$answer['correct'].'"></div>';
         }
         return $best_solution;
     }

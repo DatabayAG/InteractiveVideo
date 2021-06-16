@@ -214,4 +214,6 @@ compulsory_question#:#Compulsory question
 compulsory#:#Compulsory
 compulsory_question_info#:#This question must be answered
 show_best_solution#:#Show solution
+solution#:#Solution
+repeat#:#Repeat
 show_best_solution_info#:#After answering the question, users can display the correct solution (via button "Show solution").
