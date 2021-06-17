@@ -392,6 +392,7 @@ body.cke_editable{
 }
 .question_center{
     text-align:center;
+    padding-bottom: 30px;
 }
 
 .question_warning_buttons{
@@ -564,6 +565,7 @@ li.toc_item > div > h5 > time {
     padding: 5px;
     margin-top: -30px;
     margin-right: -18px;
+    font-weight: bolder;
 }
 
 .question_flex_div{
@@ -573,7 +575,7 @@ li.toc_item > div > h5 > time {
     display: flex;
 }
 .answer_label input:nth-child(2)  {
-    margin-left: 15px;
+    margin-left: 5px;
     margin-right: 5px;
 }
 #question_buttons_bellow_form{

@@ -8,6 +8,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 					modal:                    '#ilQuestionModal',
 					question_form:            '#question_form',
 					close_form:               '#close_form',
+					send_form:                '#sendForm',
 					time_string:              '#jumpToTimeInVideo',
 					answer_part:              '#answer_',
 					private_modal:            '#is_private_modal_',
@@ -316,23 +317,26 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
 		let player_id = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 
-		$(pri.ids.question_form).on('submit', function (e) {
+		$(pri.ids.send_form).off('click')
+		$(pri.ids.send_form).on('click', function (e) {
 			e.preventDefault();
 			$.ajax({
 				type:    "POST",
 				cache:   false,
 				url:     player_data.question_post_url,
-				data:    $(this).serialize(),
+				data:    $(pri.ids.question_form).serialize(),
 				success: function (feedback) {
 					let obj = JSON.parse(feedback);
 					let question_id = pub.QuestionObject.question_id;
 					if(question_id in il.InteractiveVideo[player_id].compulsoryQuestions) {
 						il.InteractiveVideo[player_id].compulsoryQuestions[question_id].answered = true;
 					}
+					$('#show_best_solution').remove();
 					pro.showFeedback(obj, player);
 					pro.addToLocalIgnoreArrayIfNonRepeatable(player_id);
 					pub.toggleCloseButtons(false);
 					pro.disableInteractionsIfLimitAttemptsIsActivated(player_id);
+
 				}
 			});
 		});
