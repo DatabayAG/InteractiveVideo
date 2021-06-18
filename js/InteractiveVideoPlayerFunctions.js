@@ -286,10 +286,39 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 					let reply = {'comment_text' : comment_text, 'is_interactive' : 0, 'is_private' : is_private, 'user_name' : scope.InteractiveVideo[player_id].username, 'comment_id' : 'non_existent'};
 					let html = scope.InteractiveVideoPlayerComments.getCommentRepliesHtml(reply);
 					$('.list_item_' + comment_id).find('.comment_replies').append(html);
-					$('#ilQuestionModal').modal('hide');
-					pub.refreshMathJaxView();
+					pro.decideSolutionHandlingForReflectionQuestion(player_id);
 				}
 			});
+		});
+	};
+
+	pro.decideSolutionHandlingForReflectionQuestion = function(player_id) {
+		let question = il.InteractiveVideoQuestionViewer.QuestionObject;
+		if(question.show_best_solution === "1" && question.show_best_solution_text.length >= 0){
+			let reflection_solution = '<input id="reflection_solution" class="btn btn-default btn-sm" value="' +  il.InteractiveVideo.lang.show_best_solution + '" '+ 'type="submit">';
+			let best_solution_element = '<div class="iv_show_best_solution_reflection iv_best_solution_hidden">' +
+				'<div class="reflection_best_solution_title">' + il.InteractiveVideo.lang.solution + ': </div>' +
+				'<div class="reflection_best_solution_text">' + question.show_best_solution_text + '</div>' +
+				'</div>';
+			$('.submit_comment_form').prop('disabled', true);
+			$('.modal_feedback').append($(best_solution_element))
+			$('#question_reflection_buttons_bellow_form').append(reflection_solution)
+			pro.registerReflectionBestSolutionListener(player_id);
+		} else {
+			$('#ilQuestionModal').modal('hide');
+			pub.refreshMathJaxView();
+		}
+	};
+
+	pro.registerReflectionBestSolutionListener = function(player_id)
+	{
+		let reflection_solution_btn = $('#reflection_solution');
+console.log(player_id)
+		reflection_solution_btn.off('click');
+		reflection_solution_btn.on('click', function () {
+			reflection_solution_btn.prop('disabled', true);
+			$('.iv_show_best_solution_reflection').removeClass('iv_best_solution_hidden')
+			il.InteractiveVideoQuestionViewer.showBestSolutionForReflectionIsClicked(player_id);
 		});
 	};
 

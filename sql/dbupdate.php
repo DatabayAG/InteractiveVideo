@@ -1037,3 +1037,19 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
     }
 }
 ?>
+<#59>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_question'))
+{
+    if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'show_best_solution_text'))
+    {
+        $ilDB->addTableColumn('rep_robj_xvid_question', 'show_best_solution_text',
+            array(
+                'type'    => 'text',
+                'length'  => '4000',
+                'notnull' => false,
+                'default' => null
+            ));
+    }
+}
+?>

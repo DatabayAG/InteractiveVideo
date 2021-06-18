@@ -234,6 +234,8 @@ class SimpleChoiceQuestionAjaxHandler
 			$question_image          = $row['question_image'];
 			$compulsory              = $row['compulsory_question'];
 			$time                    = $row['comment_time'];
+			$show_best_solution      = $row['show_best_solution'];
+			$show_best_solution_text = $row['show_best_solution_text'];
 			#$neutral_answer         = $row['neutral_answer'];
 			$counter++;
 		}
@@ -270,6 +272,8 @@ class SimpleChoiceQuestionAjaxHandler
 		$build_json['show_response_frequency'] = $show_response_frequency;
 		$build_json['reflection_question_comment'] = $show_reflection_question_comment;
 		$build_json['compulsory_question']     = $compulsory;
+		$build_json['show_best_solution']     = $show_best_solution;
+		$build_json['show_best_solution_text']     = $show_best_solution_text;
 		$build_json['repeat_question']         = $repeat_question;
 		$build_json['time']                    = $time;
 		if($question_image != null)

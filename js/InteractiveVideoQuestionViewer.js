@@ -25,24 +25,32 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 
 	pub.QuestionObject = {};
 
+	pro.cleanModal = function() {
+		$('.modal-title').html('');
+		$('.modal-body').html('');
+		$('#question_buttons_bellow_form').remove();
+		$('.modal_feedback').remove();
+	}
+
 	pub.getQuestionPerAjax = function (comment_id, player) {
-		if(pro.isQuestionLockEnabled() && $(pri.ids.modal).css('display') === 'none'){
+		pro.cleanModal();
+		if(pro.isQuestionLockEnabled() && $(pri.ids.modal).css('display') === 'none') {
 				pro.removeQuestionLock();
 		}
 
-			let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+		let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
 
-			$.when(
-					$.ajax({
-						url:  player_data.question_get_url + '&comment_id=' + comment_id,
-						type: 'GET', dataType: 'json'
-					})
-			).then(function (array) {
-				if(pro.isQuestionLockDisabled()) {
-					pro.enableQuestionLock();
-					pro.showQuestionInteractionForm(comment_id, array, player);
-				}
-			});
+		$.when(
+				$.ajax({
+					url:  player_data.question_get_url + '&comment_id=' + comment_id,
+					type: 'GET', dataType: 'json'
+				})
+		).then(function (array) {
+			if(pro.isQuestionLockDisabled()) {
+				pro.enableQuestionLock();
+				pro.showQuestionInteractionForm(comment_id, array, player);
+			}
+		});
 	};
 
 	pub.toggleCloseButtons = function(show) {
@@ -79,7 +87,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 
 		if(pub.QuestionObject.question_image)
 		{
-			img = '<div class="question_image_container"><img class="question_image" src="' + pub.QuestionObject.question_image+ '"/></div>';
+			img = '<div class="question_image_container"><img class="question_image" src="' + pub.QuestionObject.question_image + '"/></div>';
 		}
 
 		modal.append(img + '<div class="question_center"><p>' + pub.QuestionObject.question_text + '</p></div>');
@@ -165,13 +173,15 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	
 	pro.appendSelfReflectionCommentForm = function(player_id)
 	{
-		//Todo: check this
 		let comment_id = 'text_reflection_comment_'+ pub.comment_id ;
 		let footer = $('.modal_reflection_footer');
 		let feedback = $(pri.classes.modal_feedback);
 		let language = scope.InteractiveVideo.lang;
+		let html = '<div id="question_reflection_buttons_bellow_form"></div>';
+		$(pri.classes.modal_body).append(html);
 
-		footer.prepend(pro.createButtonButtons('submit_comment_form_' + player_id, language.save, 'submit_comment_form'));
+		$('#question_reflection_buttons_bellow_form').prepend(pro.createButtonButtons('submit_comment_form_' + player_id, language.save, 'submit_comment_form'));
+		$('#question_reflection_buttons_bellow_form').prepend($(pri.ids.close_form));
 		footer.prepend('<input type="checkbox" name="is_private_modal" value="1" id="is_private_modal_' + player_id + '"/> ' + language.private_text);
 		feedback.prepend('<textarea id="'+comment_id+'">' + pub.QuestionObject.reply_to_txt + '</textarea>');
 		if(pub.QuestionObject.reply_to_private == '1')
@@ -256,6 +266,20 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 			$('#question_buttons_bellow_form').append(pro.createButtonButtons('repeat_question', scope.InteractiveVideo.lang.repeat, 'question_repeat_btn', 'button'))
 			$('.question_repeat_btn').off('click');
 			$('.question_repeat_btn').on('click', function () {
+				let time = parseInt(pub.QuestionObject.time, 10);
+
+				$(pri.ids.modal).modal('hide');
+				il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(time - 1, player_id);
+			});
+		}
+	}
+
+	pub.showBestSolutionForReflectionIsClicked = function(player_id) {
+		$('#show_best_solution').prop("disabled", true)
+		if(pub.QuestionObject.limit_attempts === "0"){
+			$('#question_reflection_buttons_bellow_form').append(pro.createButtonButtons('repeat_question', scope.InteractiveVideo.lang.repeat, 'question_repeat_btn', 'button'))
+			$('#repeat_question').off('click');
+			$('#repeat_question').on('click', function () {
 				let time = parseInt(pub.QuestionObject.time, 10);
 
 				$(pri.ids.modal).modal('hide');
