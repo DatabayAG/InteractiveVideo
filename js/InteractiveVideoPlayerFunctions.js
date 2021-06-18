@@ -301,7 +301,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				'<div class="reflection_best_solution_text">' + question.show_best_solution_text + '</div>' +
 				'</div>';
 			$('.submit_comment_form').prop('disabled', true);
-			$('.modal_feedback').append($(best_solution_element))
+			$('.question_center').append($(best_solution_element))
 			$('#question_reflection_buttons_bellow_form').append(reflection_solution)
 			pro.registerReflectionBestSolutionListener(player_id);
 		} else {
