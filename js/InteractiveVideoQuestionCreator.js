@@ -8,7 +8,9 @@ InteractiveVideoQuestionCreator = (function () {
 			let pos = parseInt($(this).attr('meta'), 10);
 			IVQuestionCreator.JSON[pos].answer = $(this).val();
 		});
-
+		$('#show_best_solution').on('click', function (){
+			pro.showHideFormElementsForReflectionType();
+		});
 		$('.correct_solution').on('click', function (){
 			let pos = parseInt($(this).attr('meta'), 10);
 			let bool= 0;
@@ -83,7 +85,7 @@ InteractiveVideoQuestionCreator = (function () {
 			$('#il_prop_cont_show_response_frequency').hide();
 			$('#il_prop_cont_neutral_type').hide();
 			$('#il_prop_cont_show_comment_field').show();
-			$('#il_prop_cont_show_best_solution_text').show();
+			$('#subform_show_best_solution').show();
 		}
 		else
 		{
@@ -93,7 +95,7 @@ InteractiveVideoQuestionCreator = (function () {
 			$('#il_prop_cont_show_response_frequency').show();
 			$('#il_prop_cont_neutral_type').show();
 			$('#il_prop_cont_show_comment_field').hide();
-			$('#il_prop_cont_show_best_solution_text').hide();
+			$('#subform_show_best_solution').hide();
 		}
 	};
 
