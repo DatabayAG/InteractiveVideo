@@ -561,7 +561,10 @@ li.toc_item > div > h5 > time {
     padding: 5px;
 }
 .reflection_best_solution_title{
-    font-weight: bolder;
+
+}
+.reflection_best_solution_text{
+    text-align: left;
 }
 .best_solution_answer_view {
  margin-bottom: -10px;
