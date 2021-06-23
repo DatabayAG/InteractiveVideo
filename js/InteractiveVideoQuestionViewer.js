@@ -32,7 +32,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		$('.modal_feedback').remove();
 	}
 
-	pub.getQuestionPerAjax = function (comment_id, player) {
+	pub.getQuestionPerAjax = function (comment_id, player, show_previous_answer) {
 		pro.cleanModal();
 		if(pro.isQuestionLockEnabled() && $(pri.ids.modal).css('display') === 'none') {
 				pro.removeQuestionLock();
@@ -48,7 +48,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		).then(function (array) {
 			if(pro.isQuestionLockDisabled()) {
 				pro.enableQuestionLock();
-				pro.showQuestionInteractionForm(comment_id, array, player);
+				pro.showQuestionInteractionForm(comment_id, array, player, show_previous_answer);
 			}
 		});
 	};
@@ -76,7 +76,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		return header;
 	};
 
-	pro.buildQuestionForm = function(comment_id, player) {
+	pro.buildQuestionForm = function(comment_id, player, show_previous_answer) {
 		//Todo: make modal operations use id and .find()
 		let modal  = $(pri.classes.modal_body);
 		let type   = parseInt(pub.QuestionObject.type, 10);
@@ -103,7 +103,10 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		}
 		header = pro.addCompulsoryHeader(header);
 		$(pri.classes.modal_title).html(pub.QuestionObject.question_title + ' ' + header);
-		pro.showPreviousAnswer(comment_id, player);
+		if(show_previous_answer){
+			pro.showPreviousAnswer(comment_id, player)
+		}
+
 	};
 
 	pro.showPreviousAnswer = function(comment_id, player)
@@ -130,9 +133,9 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 			html += pro.buildAnswerInputElement(input_type, value);
 		});
 		html += '<input name="qid" value ="' + pub.QuestionObject.question_id + '" type="hidden"/>';
-		html += '<div id="question_buttons_bellow_form"></div>';
 		html += '</form></div>';
 		$(pri.classes.modal_body).append(html);
+		$(pri.classes.modal_content).append('<div id="question_buttons_bellow_form"></div>');
 	};
 
 	pro.buildAnswerInputElement = function(input_type, value)
@@ -204,7 +207,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.addFeedbackDiv = function() {
 		$('.modal_feedback').remove()
-		$(pri.classes.modal_body).after('<div class="modal_feedback"></div>');
+		$(pri.ids.question_btns_below_form).before('<div class="modal_feedback"></div>');
 	};
 
 	pro.addButtons = function(comment_id, player, type) {
@@ -269,7 +272,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 
 				//$(pri.ids.modal).modal('hide');
 				pro.removeQuestionLock();
-				pub.getQuestionPerAjax(comment_id, player);
+				pub.getQuestionPerAjax(comment_id, player, false);
 				//il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(time - 1, player_id);
 			});
 		}
@@ -412,11 +415,11 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		return '<input id="' + id + '" class="btn btn-default btn-sm ' + class_string + '" value="' + value + '" '+ 'type="' + type + '">';
 	};
 
-	pro.showQuestionInteractionForm = function(comment_id, array, player) {
+	pro.showQuestionInteractionForm = function(comment_id, array, player, show_previous_answer) {
 		pub.comment_id = comment_id;
 		pub.QuestionObject = array;
 		pub.QuestionObject.player = player
-		pro.buildQuestionForm(comment_id, player);
+		pro.buildQuestionForm(comment_id, player, show_previous_answer);
 		if(typeof player !== "string") {
 			player = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 		}

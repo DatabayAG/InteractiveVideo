@@ -590,10 +590,12 @@ li.toc_item > div > h5 > time {
 }
 #question_buttons_bellow_form{
     float: right;
-    margin-bottom: -20px;
     background-color: white;
     height: 27px;
     width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 40px;
 }
 #question_reflection_buttons_bellow_form{
     background-color: white;
