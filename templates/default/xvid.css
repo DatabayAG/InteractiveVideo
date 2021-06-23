@@ -615,3 +615,6 @@ li.toc_item > div > h5 > time {
     background-color: #f8d7da;
     border-color: #f5c6cb;
 }
+.question_center p {
+    text-align: left;
+}
