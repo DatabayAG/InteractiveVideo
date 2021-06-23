@@ -75,7 +75,7 @@ invalid_question_ids#:#Invalid Question-Ids
 invalid_user_ids#:#Invalid User-Ids
 invalid_comment_ids#:#Invalid Comment-Ids
 comment_title#:#Comment-Title
-send#:#Send
+send#:#Check
 close#:#Close
 question#:#Question
 is_anonymized#:#Anonymize Comments
@@ -215,7 +215,7 @@ compulsory#:#Compulsory
 compulsory_question_info#:#This question must be answered
 show_best_solution#:#Show solution
 solution#:#Solution
-repeat#:#Repeat
+repeat#:#Retry
 best_solution_text#:#Best solution
 best_solution_text_info#:#If a comment field is offered (see below), a user cannot view the solution until he/she has saved an answer.
 show_best_solution_info#:#After answering the question, users can display the correct solution (via button "Show solution").
