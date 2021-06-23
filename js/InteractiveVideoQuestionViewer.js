@@ -94,11 +94,11 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		if (type === 0) {
 			pro.addAnswerPossibilities('radio');
 			pro.addFeedbackDiv();
-			pro.addButtons(player);
+			pro.addButtons(player, type);
 		} else if (type === 1) {
 			pro.addAnswerPossibilities('checkbox');
 			pro.addFeedbackDiv();
-			pro.addButtons(player);
+			pro.addButtons(player, type);
 		} else if (type === 2) {
 			pro.addSelfReflectionLayout(player);
 		}
@@ -208,14 +208,14 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		$(pri.classes.modal_body).after('<div class="modal_feedback"></div>');
 	};
 
-	pro.addButtons = function(player) {
+	pro.addButtons = function(player, type) {
 		let question_form = $(pri.ids.question_btns_below_form);
 		$('.question_action_btn').remove()
 		let language = scope.InteractiveVideo.lang;
 
 		question_form.append(pro.createButtonButtons('close_form', language.close_text, 'question_action_btn', 'button'));
 		question_form.append(pro.createButtonButtons('sendForm', language.send_text, 'question_action_btn'));
-		pro.appendButtonListener(player);
+		pro.appendButtonListener(player, type);
 	};
 
 	pro.showFeedback = function(feedback, player) {
@@ -337,14 +337,14 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		}
 	};
 
-	pro.appendButtonListener = function(player) {
+	pro.appendButtonListener = function(player, type) {
 		let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
 		let player_id = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 
 		$(pri.ids.send_form).off('click')
 		$(pri.ids.send_form).on('click', function (e) {
 			e.preventDefault();
-			if($(pri.ids.question_form + ' input:checked').length === 0) {
+			if(type === 0 && $(pri.ids.question_form + ' input:checked').length === 0) {
 				if($(pri.classes.modal_body + ' .modal_alert').length === 0){
 					$(pri.classes.modal_body).prepend('<div class="modal_alert">' + il.InteractiveVideo.lang.at_least_one_answer + '</div>');
 				}
