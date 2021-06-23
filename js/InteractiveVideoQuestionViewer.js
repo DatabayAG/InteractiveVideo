@@ -156,9 +156,12 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		let language = scope.InteractiveVideo.lang;
 
 		$(pri.classes.modal_body).append('<div class="modal_feedback"><div class="modal_reflection_footer">' + pro.createButtonButtons('close_form', language.close_text) +'</div></div>', '');
-		if(parseInt(pub.QuestionObject.reflection_question_comment, 10) === 1)
-		{
+		if(parseInt(pub.QuestionObject.reflection_question_comment, 10) === 1) {
 			pro.appendSelfReflectionCommentForm(player_id);
+		} else if(parseInt(pub.QuestionObject.show_best_solution, 10) === 1) {
+			let html = '<div id="question_reflection_buttons_bellow_form"></div>';
+			$(pri.classes.modal_body).append(html);
+			il.InteractiveVideoPlayerFunction.decideSolutionHandlingForReflectionQuestion(player_id);
 		}
 
 		pro.appendCloseButtonListener(player_id);
