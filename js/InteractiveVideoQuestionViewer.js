@@ -251,7 +251,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 				$('.iv_best_solution_hidden').removeClass('iv_best_solution_hidden');
 				pro.sortAppendBestSolution();
 				$('#sendForm').remove()
-				$('#question_form input').prop( "disabled", true )
+				$('#question_form input[name="answer[]"]').prop( "disabled", true )
 				$('#close_form').prop( "disabled", false )
 				pro.showBestSolutionIsClicked(comment_id, player)
 			});
@@ -298,15 +298,15 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 			let answer_id = parseInt($(object).data('best-solution'), 10);
 			let answer_state = parseInt($(object).data('answer-state'), 10);
 			if(question_type === "0"){
-				let element = '<div class="best_solution_answer_view"><input type="radio" disabled=""></div>'
+				let element = '<div class="best_solution_answer_view"><input type="radio" onClick="return false;"></div>'
 				if(answer_state === 1) {
-					element = '<div class="best_solution_answer_view"><input type="radio" disabled="" checked="checked"></div>'
+					element = '<div class="best_solution_answer_view"><input type="radio" onClick="return false;" checked="checked"></div>'
 				}
 				$( element).prependTo($('#answer_' + answer_id).parent())
 			} else if (question_type === "1"){
-				let element = '<div class="best_solution_answer_view"><input type="checkbox" disabled=""></div>'
+				let element = '<div class="best_solution_answer_view"><input type="checkbox" onClick="return false;"></div>'
 				if(answer_state === 1) {
-					element = '<div class="best_solution_answer_view"><input type="checkbox" disabled="" checked="checked"></div>'
+					element = '<div class="best_solution_answer_view"><input type="checkbox" onClick="return false;" checked="checked"></div>'
 				}
 				$( element).prependTo($('#answer_' + answer_id).parent())
 			}
