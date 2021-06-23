@@ -215,6 +215,6 @@ compulsory_question_info#:#Diese Frage muss beantwortet werden, bevor das Video 
 show_best_solution#:#Lösung zeigen
 solution#:#Lösung
 repeat#:#Wiederholen
-show_best_solution_text#:#Bestmögliche Lösung Beschreibungstext
-show_best_solution_text_info#:#Bestmögliche Lösung Beschreibungstext
+best_solution_text#:#Bestmögliche Lösung
+best_solution_text_info#:#Wenn ein Kommentarfeld angeboten wird (siehe unten), kann sich ein Nutzer die Lösung erst anzeigen lassen, wenn er/sie eine Antwort gespeichert hat.
 show_best_solution_info#:#Nachdem die Frage beantwortet wurde, können sich Nutzer die richtige Lösung anzeigen lassen (über Button «Lösung zeigen»).

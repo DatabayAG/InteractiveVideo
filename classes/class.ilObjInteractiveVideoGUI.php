@@ -2361,8 +2361,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $show_best_solution = new ilCheckboxInputGUI($plugin->txt('show_best_solution'), 'show_best_solution');
         $show_best_solution->setInfo($plugin->txt('show_best_solution_info'));
 
-        $show_best_solution_text = xvidUtils::constructTextAreaFormElement('show_best_solution_text', 'show_best_solution_text');
-        $show_best_solution_text->setInfo($plugin->txt('show_best_solution_text_info'));
+        $show_best_solution_text = xvidUtils::constructTextAreaFormElement('best_solution_text', 'best_solution_text');
+        $show_best_solution_text->setInfo($plugin->txt('best_solution_text_info'));
         $show_best_solution->addSubItem($show_best_solution_text);
 
         $form->addItem($show_best_solution);
