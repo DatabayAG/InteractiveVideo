@@ -85,7 +85,9 @@ InteractiveVideoQuestionCreator = (function () {
 			$('#il_prop_cont_show_response_frequency').hide();
 			$('#il_prop_cont_neutral_type').hide();
 			$('#il_prop_cont_show_comment_field').show();
-			$('#subform_show_best_solution').show();
+			if( $('#show_best_solution').is(':checked')){
+				$('#subform_show_best_solution').show();
+			}
 		}
 		else
 		{
