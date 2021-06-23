@@ -219,3 +219,4 @@ repeat#:#Repeat
 best_solution_text#:#Best solution
 best_solution_text_info#:#If a comment field is offered (see below), a user cannot view the solution until he/she has saved an answer.
 show_best_solution_info#:#After answering the question, users can display the correct solution (via button "Show solution").
+at_least_one_answer#:#Please select an answer

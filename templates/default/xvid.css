@@ -609,3 +609,9 @@ li.toc_item > div > h5 > time {
 .checkbox-inline #show_best_solution{
     margin-left: -20px !important;
 }
+
+.modal_alert{
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}

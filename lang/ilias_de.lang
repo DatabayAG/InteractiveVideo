@@ -218,3 +218,4 @@ repeat#:#Wiederholen
 best_solution_text#:#Bestmögliche Lösung
 best_solution_text_info#:#Wenn ein Kommentarfeld angeboten wird (siehe unten), kann sich ein Nutzer die Lösung erst anzeigen lassen, wenn er/sie eine Antwort gespeichert hat.
 show_best_solution_info#:#Nachdem die Frage beantwortet wurde, können sich Nutzer die richtige Lösung anzeigen lassen (über Button «Lösung zeigen»).
+at_least_one_answer#:#Bitte wählen Sie eine Antwort aus

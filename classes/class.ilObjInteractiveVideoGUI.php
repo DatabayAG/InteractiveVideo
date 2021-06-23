@@ -531,11 +531,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('SAVE', $plugin->txt('save'));
 		$config_tpl->setVariable('ADD_COMMENT', $plugin->txt('insert_comment'));
 		$config_tpl->setVariable('SHOW_BEST_SOLUTION', $plugin->txt('show_best_solution'));
+		$config_tpl->setVariable('AT_LEAST_ONE_ANSWER', $plugin->txt('at_least_one_answer'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
 		$config_tpl->setVariable('AUTO_RESUME_AFTER_QUESTION', $this->object->isAutoResumeAfterQuestion());
 		$config_tpl->setVariable('FIXED_MODAL', $this->object->isFixedModal());
 		$config_tpl->setVariable('SHOW_TOC_FIRST', $this->object->getShowTocFirst());
 		$config_tpl->setVariable('DISABLE_COMMENT_STREAM', $this->object->getDisableCommentStream());
+		$config_tpl->setVariable('HAS_TRACKS', $this->getSubtitleDataAndFilesForJson());
 		$config_tpl->setVariable('HAS_TRACKS', $this->getSubtitleDataAndFilesForJson());
 		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');

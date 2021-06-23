@@ -344,25 +344,33 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		$(pri.ids.send_form).off('click')
 		$(pri.ids.send_form).on('click', function (e) {
 			e.preventDefault();
-			$.ajax({
-				type:    "POST",
-				cache:   false,
-				url:     player_data.question_post_url,
-				data:    $(pri.ids.question_form).serialize(),
-				success: function (feedback) {
-					let obj = JSON.parse(feedback);
-					let question_id = pub.QuestionObject.question_id;
-					if(question_id in il.InteractiveVideo[player_id].compulsoryQuestions) {
-						il.InteractiveVideo[player_id].compulsoryQuestions[question_id].answered = true;
-					}
-					$('#show_best_solution').remove();
-					pro.showFeedback(obj, player);
-					pro.addToLocalIgnoreArrayIfNonRepeatable(player_id);
-					pub.toggleCloseButtons(false);
-					pro.disableInteractionsIfLimitAttemptsIsActivated(player_id);
-
+			if($(pri.ids.question_form + ' input:checked').length === 0) {
+				if($(pri.classes.modal_body + ' .modal_alert').length === 0){
+					$(pri.classes.modal_body).prepend('<div class="modal_alert">' + il.InteractiveVideo.lang.at_least_one_answer + '</div>');
 				}
-			});
+			} else {
+				$(pri.classes.modal_body + ' .modal_alert').remove()
+
+				$.ajax({
+					type:    "POST",
+					cache:   false,
+					url:     player_data.question_post_url,
+					data:    $(pri.ids.question_form).serialize(),
+					success: function (feedback) {
+						let obj = JSON.parse(feedback);
+						let question_id = pub.QuestionObject.question_id;
+						if(question_id in il.InteractiveVideo[player_id].compulsoryQuestions) {
+							il.InteractiveVideo[player_id].compulsoryQuestions[question_id].answered = true;
+						}
+						$('#show_best_solution').remove();
+						pro.showFeedback(obj, player);
+						pro.addToLocalIgnoreArrayIfNonRepeatable(player_id);
+						pub.toggleCloseButtons(false);
+						pro.disableInteractionsIfLimitAttemptsIsActivated(player_id);
+
+					}
+				});
+			}
 		});
 		pro.appendCloseButtonListener(player_id);
 	};
