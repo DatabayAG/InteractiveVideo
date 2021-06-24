@@ -130,10 +130,9 @@
 
 .modal_feedback{
     margin: 5px 0px 5px 0px;
-    padding: 5px;
+    /* padding: 5px; */
     margin-right: 10px;
-    margin-left: 10px;
-
+    /* margin-left: 10px;
 }
 
 .modal_feedback .neutral{
@@ -622,4 +621,8 @@ li.toc_item > div > h5 > time {
 }
 .question_center p {
     text-align: left;
+}
+
+.best_solution_answer_view, .best_solution_answer_view input {
+    cursor: default !important;
 }
