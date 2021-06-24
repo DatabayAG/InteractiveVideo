@@ -2363,7 +2363,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $show_best_solution = new ilCheckboxInputGUI($plugin->txt('show_best_solution'), 'show_best_solution');
         $show_best_solution->setInfo($plugin->txt('show_best_solution_info'));
 
-        $show_best_solution_text = xvidUtils::constructTextAreaFormElement('best_solution_text', 'best_solution_text');
+        $show_best_solution_text = xvidUtils::constructTextAreaFormElement('best_solution_text', 'show_best_solution_text');
         $show_best_solution_text->setInfo($plugin->txt('best_solution_text_info'));
         $show_best_solution->addSubItem($show_best_solution_text);
 
@@ -2564,7 +2564,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['feedback_one_wrong']		= $question_data['question_data']['feedback_one_wrong'];
 		$values['show_response_frequency']	= $question_data['question_data']['show_response_frequency'];
 		$values['show_best_solution']	    = $question_data['question_data']['show_best_solution'];
-		$values['show_best_solution_text']  = $question_data['question_data']['best_solution_text'];
+		$values['show_best_solution_text']  = $question_data['question_data']['show_best_solution_text'];
 		$values['is_jump_wrong']			= $question_data['question_data']['is_jump_wrong'];
 		$values['show_wrong_icon']			= $question_data['question_data']['show_wrong_icon'];
 		$values['jump_wrong_ts']			= $question_data['question_data']['jump_wrong_ts'];
@@ -2706,7 +2706,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$question->setShowResponseFrequency((int)$form->getInput('show_response_frequency'));
 		$question->setShowBestSolution((int)$form->getInput('show_best_solution'));
-		$question->setShowBestSolutionText(ilUtil::stripSlashes($form->getInput('best_solution_text')));
+		$question->setShowBestSolutionText(ilUtil::stripSlashes($form->getInput('show_best_solution_text')));
 		$question->setRepeatQuestion((int)$form->getInput('repeat_question'));
 		$question->setCompulsoryQuestion((int)$form->getInput('compulsory_question'));
 		$question->setReflectionQuestionComment((int)$form->getInput('show_comment_field'));
