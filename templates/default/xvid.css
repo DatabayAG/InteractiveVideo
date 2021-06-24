@@ -561,7 +561,8 @@ li.toc_item > div > h5 > time {
     padding: 5px;
 }
 .reflection_best_solution_title{
-
+    text-align: left;
+    font-weight: bold;
 }
 .reflection_best_solution_text{
     text-align: left;
