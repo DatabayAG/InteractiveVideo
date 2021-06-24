@@ -73,7 +73,7 @@ invalid_question_ids#:#Ungültige Fragen-IDs
 invalid_user_ids#:#Ungültige User-IDs
 invalid_comment_ids#:#Ungültige Kommentar-IDs
 comment_title#:#Kommentar-Titel
-send#:#Abschicken
+send#:#Überprüfen
 close#:#Schließen
 question#:#Frage
 is_anonymized#:#Kommentare ohne Namen anzeigen
