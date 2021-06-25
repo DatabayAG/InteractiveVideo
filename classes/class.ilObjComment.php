@@ -415,18 +415,23 @@ class ilObjComment
 	{
 		if(!array_key_exists($user_id, self::$user_image_cache))
 		{
-			$img_file = ilObjUser::_getPersonalPicturePath($user_id, 'xxsmall');
-			$img_file = preg_split('/\?/', $img_file);
-			$img_file = $img_file[0];
-			if(file_exists($img_file))
-			{
-				$binary = fread(fopen($img_file, "r"), filesize($img_file));
-				self::$user_image_cache[$user_id] = 'data:image/jpeg;base64,' . base64_encode($binary);
-			}
-			else if(strlen($img_file) > 0)
-			{
-				self::$user_image_cache[$user_id] = $img_file;
-			}
+            if (strlen(ilObjUser::_lookupLogin($user_id)) > 0) {
+                $img_file = ilObjUser::_getPersonalPicturePath($user_id, 'xxsmall');
+                $img_file = preg_split('/\?/', $img_file);
+                $img_file = $img_file[0];
+                if(file_exists($img_file))
+                {
+                    $binary = fread(fopen($img_file, "r"), filesize($img_file));
+                    self::$user_image_cache[$user_id] = 'data:image/jpeg;base64,' . base64_encode($binary);
+                }
+                else if(strlen($img_file) > 0)
+                {
+                    self::$user_image_cache[$user_id] = $img_file;
+                }
+            } else {
+                return null;
+            }
+
 		}
 
 		return self::$user_image_cache[$user_id];
@@ -440,7 +445,13 @@ class ilObjComment
 	{
 		if(!array_key_exists($user_id, self::$user_name_cache))
 		{
-			$user = new ilObjUser($user_id);
+            if (strlen(ilObjUser::_lookupLogin($user_id)) > 0) {
+                $user = new ilObjUser($user_id);
+            } else {
+                global $DIC;
+                $user = new ilObjUser();
+                $user->setLastname($DIC->language()->txt("deleted_user"));
+            }
 			if($user->hasPublicProfile())
 			{
 				self::$user_name_cache[$user_id] = $user->getFirstname() . ' ' . $user->getLastname();
