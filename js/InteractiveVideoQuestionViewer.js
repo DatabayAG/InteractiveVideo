@@ -215,6 +215,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	pro.addFeedbackDiv = function() {
 		$('.modal_feedback').remove()
 		$(pri.ids.question_btns_below_form).before('<div class="modal_feedback"></div>');
+		$('.question_flex_div').prepend($('<div class="best_solution_dummy_block"></div>'))
 	};
 
 	pro.addButtons = function(comment_id, player, type) {
@@ -322,7 +323,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 			}
 
 		});
-
+		$('.best_solution_dummy_block').remove();
 		$('.question_flex_div').prepend($('<div class="best_solution_block">' + il.InteractiveVideo["lang"].solution + ': </div>'))
 	}
 
