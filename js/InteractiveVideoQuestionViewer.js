@@ -13,6 +13,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 					answer_part:              '#answer_',
 					private_modal:            '#is_private_modal_',
 					question_btns_below_form: '#question_buttons_bellow_form',
+					reflection_question_btns_below_form: '#question_reflection_buttons_bellow_form',
 				},
 				classes: {
 					modal_body:     '.modal-body',
@@ -155,7 +156,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		let player_id = il.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 		let language = scope.InteractiveVideo.lang;
 
-		$(pri.classes.modal_body).append('<div class="modal_feedback"><div class="modal_reflection_footer">' + pro.createButtonButtons('close_form', language.close_text) +'</div></div>', '');
+		$(pri.classes.modal_body).append('<div class="modal_feedback"><div class="modal_reflection_footer"></div></div>', '');
 		if(parseInt(pub.QuestionObject.reflection_question_comment, 10) === 1) {
 			pro.appendSelfReflectionCommentForm(player_id);
 		} else if(parseInt(pub.QuestionObject.show_best_solution, 10) === 1) {
@@ -163,6 +164,9 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 			$(pri.classes.modal_body).append(html);
 			il.InteractiveVideoPlayerFunction.decideSolutionHandlingForReflectionQuestion(player_id);
 		}
+		let question_form = $(pri.ids.reflection_question_btns_below_form);
+		question_form.append(pro.createButtonButtons('close_form', language.close_text, 'question_action_btn', 'button'));
+		$('#question_reflection_buttons_bellow_form').prepend($(pri.ids.close_form));
 
 		pro.appendCloseButtonListener(player_id);
 		$.ajax({
