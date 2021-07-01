@@ -23,7 +23,12 @@ class ilInteractiveVideoSourceFactoryGUI
 	 * @var ilInteractiveVideoSourceGUI[]
 	 */
 	protected $sources;
-	
+
+	/**
+	 * @var array
+	 */
+	protected $ids = array();
+
 	/**
 	 * ilInteractiveVideoSourceFactoryGUI constructor.
 	 * @param ilObjInteractiveVideo $obj
@@ -45,7 +50,7 @@ class ilInteractiveVideoSourceFactoryGUI
 
 	/**
 	 * @param ilTemplate $tpl
-	 * @return ilTemplate
+	 * @return mixed
 	 */
 	public function addPlayerElements($tpl)
 	{
@@ -82,5 +87,25 @@ class ilInteractiveVideoSourceFactoryGUI
 			}
 		}
 		return $form;
+	}
+
+	protected function generateUniqueId()
+	{
+		$id = $this->generateString();
+		if(!array_key_exists($id, $this->ids))
+		{
+			$this->ids[$id] = $id;
+			return $id;
+		}
+	}
+
+	/**
+	 * @return string
+	 * @throws Exception
+	 */
+	protected function generateString()
+	{
+		$bytes = random_bytes(32);
+		return '_' . bin2hex($bytes);
 	}
 }

@@ -185,11 +185,37 @@ private#:#private
 public#:#public
 visibility#:#Visibility
 no_comment#:#No Comment-field
+no_comment_stream#:#No Comment-stream
+no_comment_stream_info#:#There will be no comment stream next to the video player, also no toolbar with filters, question work as usual.
 no_comment_info#:#There will be no comment field below the video player
+process_header#:#Process
+insert_marker#:#Insert Marker
+color#:#Color
+stroke#:#Stroke
+width#:#Width
+height#:#Height
+rotate#:#Rotate
+rectangle#:#Rectangle
+arrow#:#Arrow
+circle#:#Circle
+scale#:#Scale
+with_marker#:#with marker
+line#:#Line
+marker_for_students#:#Marker for students
+marker_for_students_info#:#Students can also add markers to the video
+delete_marker#:#Delete Marker
+delete_marker#:#Delete Marker
+text#:#Text
+font_size#:#Font Size
+is_reply_to#:#Is Reply
+reply_to#:#Reply to
+jump_to_timestamp#:#Jump to time
+insert_marker_info#:#You can move the marker with drag & drop on the video
+
 xvid_xvid_view_lp#:#View Learning Progress
 auto_resume#:#Auto resume
 auto_resume_info#:#If enabled, the video will be automatically resumed after closing a the modal question dialogue.
-fixed_modal#:#Block modal closing 
+fixed_modal#:#Block modal closing
 fixed_modal_info#:#If enabled, a modal dialogue won't be closed if a user clicks on the background.
 modal_section#:#Behaviour of Question Dialogue
 subtitle#:#Subtitle

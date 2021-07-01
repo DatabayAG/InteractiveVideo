@@ -5,14 +5,19 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 	//Done: Questions working
 	//Done: Comments working
 	//Player object exists by id
-	let pub = {}, pro = {};
+	let pub = {}, pro = {
+		onReadyCallbacks : []
+	};
 
 	pub.config = {
-		pauseCallback           : null,
-		playCallback            : null,
-		durationCallback        : null,
-		currentTimeCallback     : null,
-		setCurrentTimeCallback  : null
+		pauseCallback              : null,
+		playCallback               : null,
+		durationCallback           : null,
+		currentTimeCallback        : null,
+		setCurrentTimeCallback     : null,
+		readyCallback              : null,
+		removeNonAdventureElements : null,
+		initPlayerCallback         : null
 	}; 
 
 	pub.pause = function(player_id)
@@ -30,7 +35,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 			il.InteractiveVideoPlayerResume.checkForResumeValue(player_id);
 			il.InteractiveVideoPlayerFunction.triggerVideoStarted(player_id);
 		}
-		
+
 		pro.disableAllOtherInstances(player_id);
 
 		if (typeof pub.config[player_id].playCallback === 'function') {
@@ -72,6 +77,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		}
 		pub.play(player_id);
 		pub.pause(player_id);
+		time = parseInt(time, 10);;
 		if(time !== null)
 		{
 			il.InteractiveVideoPlayerResume.saveExternalResumeTime(player_id, time);
@@ -109,6 +115,51 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 				}
 			}
 		});
+	};
+
+	pub.readyCallback = function ()
+	{
+		if(il.InteractiveVideo.tutor_mode == 'true' || il.InteractiveVideo.tutor_mode == '1')
+		{
+			if($('#ilInteractiveVideoTutorCommentSubmit').size() === 0 && $('#ilInteractiveVideoTutorQuestionSubmit').size() === 0)
+			{
+				$( '#ilInteractiveVideo').parent().attr('class', 'col-sm-6');
+			}
+		}
+
+		$.each(pro.onReadyCallbacks, function( index, value ) {
+			if (typeof value === 'function') {
+				value();
+			}
+		});
+
+		pro.checkForResumeValue();
+	};
+
+	pub.addOnReadyFunction = function(callback)
+	{
+		pro.onReadyCallbacks.push(callback);
+	};
+
+	pub.initPlayer = function()
+	{
+		if (typeof pub.config.initPlayerCallback === 'function') {
+			pub.config.initPlayerCallback();
+		}
+	};
+
+	pro.checkForResumeValue = function(){
+		setTimeout(function(){
+			var ref_id = parseInt(il.InteractiveVideo.interactive_video_ref_id, 10);
+			var key = "InteractiveVideoResumeTime_" + ref_id;
+			if (typeof(Storage) !== "undefined") {
+				var time = parseInt(sessionStorage.getItem(key), 10);
+				if(time > 0){
+					il.InteractiveVideoPlayerAbstract.setCurrentTime(time);
+					sessionStorage.removeItem(key);
+				}
+			}
+		}, 250);
 	};
 
 	pub.protect = pro;

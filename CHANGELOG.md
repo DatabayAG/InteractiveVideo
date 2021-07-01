@@ -1,3 +1,8 @@
+# 2.5
+1. SVG marker for videos
+2. Reply to comments
+3. Changed video library to [plyr](https://github.com/sampotts/plyr)
+
 # 2.5.1
 1. Compulsory questions
 2. Automatic scrolling if show all comments is active
@@ -22,7 +27,7 @@
    * If enabled, a modal dialogue won't be closed if a user clicks on the background.
 2. Autoresume after question modal is closed
    * If enabled, the video will be automatically resumed after closing a the modal question dialogue. 
-
+    
 # 2.0.12
 1. Display task above videos
 2. Possibility to create a comment (private/public) on reflection question

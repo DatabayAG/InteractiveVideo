@@ -36,7 +36,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 
 	/**
 	 * @param ilTemplate $tpl
-	 * @return ilTemplate
+	 * @return mixed
 	 */
 	public function addPlayerElements($tpl)
 	{
@@ -64,6 +64,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 		$player->setVariable('PLAYER_ID', $player_id);
 		$player->setVariable('VIDEO_SRC', ilWACSignedPath::signFile($mob_dir . '/' . $media_item['location']));
 		$player->setVariable('VIDEO_TYPE', $media_item['format']);
+		$player->setVariable('INTERACTIVE_VIDEO_ID', $id);
 		return $player;
 	}
 

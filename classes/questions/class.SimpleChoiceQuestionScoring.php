@@ -41,6 +41,7 @@ class SimpleChoiceQuestionScoring
          */
 
 		global $ilDB;
+
 		$res = $ilDB->queryF(
 			'SELECT * FROM rep_robj_xvid_question WHERE question_id = %s',
 			array('integer'),

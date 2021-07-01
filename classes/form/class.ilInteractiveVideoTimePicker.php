@@ -82,24 +82,11 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 		$this->id = $id;
 	}
 
-	protected function appendJavascriptAndHTML()
-	{
-		/**
-		 * @var ilTemplate $tpl
-		 */
-		global $tpl;
-
-		$tpl->addCss('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/libs/bootstrap-timepicker/css/bootstrap-timepicker.css');
-		$tpl->addCss('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/templates/default/bootstrap_timepicker.css');
-		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js');
-	}
-
 	/**
 	 * @return string
 	 */
 	public function render()
 	{
-		$this->appendJavascriptAndHTML();
 		$my_tpl = new ilTemplate('tpl.time_picker.html', true, true, 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/');
 		$value = $this->getValue();
 		$my_tpl->setVariable("VALUE", $this->getTimeStringFromSeconds($value));

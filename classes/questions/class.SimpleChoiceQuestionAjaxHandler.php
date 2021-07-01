@@ -1,10 +1,10 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
-require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
+require_once dirname(__FILE__) . '/../class.ilInteractiveVideoPlugin.php';
 require_once 'Services/WebAccessChecker/classes/class.ilWACSignedPath.php';
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionScoring.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionStatistics.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestionScoring.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestion.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestionStatistics.php');
 
 /**
  * Class SimpleChoiceQuestionAjaxHandler
@@ -197,6 +197,7 @@ class SimpleChoiceQuestionAjaxHandler
          * @var $ilDB ilDBInterface
          */
 		global $ilDB, $ilUser;
+
 		$res = $ilDB->queryF('
 			SELECT * 
 			FROM  rep_robj_xvid_question question, 
@@ -208,11 +209,13 @@ class SimpleChoiceQuestionAjaxHandler
 			array('integer'), array((int)$cid)
 		);
 
-		$counter       = 0;
-		$question_data = array();
-		$question_text = '';
-		$question_type = 0;
-		$question_id   = 0;
+		$counter        = 0;
+		$question_data  = array();
+		$question_text  = '';
+		$question_type  = 0;
+		$question_id    = 0;
+		$question_image = null;
+
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$question_data[$counter]['answer']    = $row['answer'];

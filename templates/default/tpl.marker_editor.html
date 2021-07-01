@@ -1,0 +1,49 @@
+<div class="col-sm-9">
+	<div class="form-inline add_marker_selector">
+		<div>
+			<div>{TXT_ADD_MARKER}<br/>
+			<p class="small_info_text">{TXT_ADD_MARKER_INFO}</p>
+			</div>
+			<div class="marker_toolbar prototype">
+				<div class="iv_mk_text marker_toolbar_element">
+					<label for="text_changer">{TXT_TEXT}</label><br/><textarea id="text_changer" cols="50" placeholder="..."></textarea>
+				</div>
+				<div class="iv_mk_color marker_toolbar_element">
+					<label for="color_picker">{TXT_COLOR}</label><br/><input id="color_picker"  type="color"><br/>
+				</div>
+				<div class="iv_mk_color_fill marker_toolbar_element">
+					<label for="color_picker">{TXT_COLOR}</label><br/><input id="color_picker_fill"  type="color"><br/>
+				</div>
+				<div class="iv_mk_stroke marker_toolbar_element">
+					<label for="stroke_picker">{TXT_STROKE}</label><br/><input id="stroke_picker" type="number" name="stroke" min="1" max="99" step="1" value="4"><br/>
+				</div>
+				<div class="iv_mk_width marker_toolbar_element">
+					<label for="width_changer">{TXT_WIDTH}</label><br/><input id="width_changer" type="range" min="1" max="190" value="100">
+				</div>
+				<div class="iv_mk_height marker_toolbar_element">
+					<label for="height_changer">{TXT_HEIGHT}</label><br/><input id="height_changer" type="range" min="1" max="120" value="100">
+				</div>
+				<div class="iv_mk_scale marker_toolbar_element">
+					<label for="scale_changer">{TXT_SCALE}</label><br/><input id="scale_changer" type="range" min="0.1" max="1.4" value="1"  step="0.1">
+				</div>
+				<div class="iv_mk_rotate marker_toolbar_element">
+					<label for="rotate_changer">{TXT_ROTATE}</label><br/><input id="rotate_changer" type="range" min="0" max="360" value="0">
+				</div>
+				<div class="iv_mk_font_size marker_toolbar_element">
+					<label for="font_size_changer">{TXT_FONT_SIZE}</label><br/><input id="font_size_changer" type="range" min="6" max="76" value="15">
+				</div>
+			</div>
+
+			<div class="marker_button_toolbar">
+				<input type="button" class="btn btn-default btn-sm marker_btn" value="{TXT_RECTANGLE}" id="btn_rect" />
+				<input type="button" class="btn btn-default btn-sm marker_btn" value="{TXT_CIRCLE}" id="btn_ellipse" />
+				<input type="button" class="btn btn-default btn-sm marker_btn" value="{TXT_ARROW}" id="btn_arrow" />
+				<input type="button" class="btn btn-default btn-sm marker_btn" value="{TXT_LINE}" id="btn_line" />
+				<input type="button" class="btn btn-default btn-sm marker_btn" value="{TXT_TEXT}" id="btn_text" />
+			</div>
+			<div class="remove_marker prototype">
+				<input type="button" class="btn btn-default btn-sm" value="{TXT_DELETE}" id="btn_delete" />
+			</div>
+		</div>
+	</div>
+</div>

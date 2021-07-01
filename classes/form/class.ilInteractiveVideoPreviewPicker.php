@@ -11,11 +11,13 @@ class ilInteractiveVideoPreviewPicker extends ilImageFileInputGUI
 	protected $canExtractImages = true;
 
 	/**
-	 * @param string
+	 * @var string
 	 */
-	
 	protected $path_to_video;
 
+	/**
+	 * @param ilTemplate $a_tpl
+	 */
 	function insert($a_tpl)
 	{
 		parent::insert($a_tpl);
@@ -34,7 +36,7 @@ class ilInteractiveVideoPreviewPicker extends ilImageFileInputGUI
 	public function supportImageExtractionFromVideo($a_tpl)
 	{
 		global $tpl, $ilCtrl;
-		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/Form/InteractiveVideoPreviewPicker.js');
+		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/form/InteractiveVideoPreviewPicker.js');
 
 		$link = ilLinkButton::getInstance();
 		$link->setCaption(ilInteractiveVideoPlugin::getInstance()->txt('extract'), false);
@@ -51,8 +53,8 @@ class ilInteractiveVideoPreviewPicker extends ilImageFileInputGUI
 	}
 
 	/**
-	 * @param $a_tpl
-	 * @param $ilCtrl
+	 * @param ilTemplate $a_tpl
+	 * @param ilCtrl $ilCtrl
 	 */
 	protected function addModalToTemplate($a_tpl, $ilCtrl)
 	{

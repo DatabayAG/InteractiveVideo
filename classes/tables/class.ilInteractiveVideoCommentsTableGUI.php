@@ -4,7 +4,7 @@
 require_once 'Services/Table/classes/class.ilTable2GUI.php';
 require_once 'Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvancedSelectionListGUI.php';
 require_once 'Services/User/classes/class.ilUserUtil.php';
-require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
+require_once dirname(__FILE__) . '/../class.ilInteractiveVideoPlugin.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
 
 /**
@@ -18,20 +18,20 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	protected $ctrl;
 
     /**
-     * @var int 
+     * @var int
      */
 	protected $is_public = 1;
-	
+
 	protected $DIC;
-	
+
 	public function setIsPublic($public) {
 	    $this->is_public = $public;
     }
-    
+
     public function isPublic() {
 	    return $this->is_public;
     }
-	
+
 	/**
 	 * @param ilObjectGUI|ilObjInteractiveVideoGUI $a_parent_obj
 	 * @param string      $a_parent_cmd
@@ -92,7 +92,8 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			$this->addColumn($a_parent_obj->plugin->txt('visibility'), 'is_private');
 		}
 
-		$this->addColumn($this->lng->txt('actions'), '', '10%');
+		$this->addColumn($a_parent_obj->plugin->txt('is_reply_to'), 'is_reply_to', '10%');
+		$this->addColumn($this->lng->txt('actions'), 'actions', '10%');
 
 		$this->setSelectAllCheckbox('comment_id');
 		
@@ -133,7 +134,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
             $this->tpl->parseCurrentBlock();
            return;
         }
-        
+
 		foreach ($a_set as $key => $value)
 		{
 			if($key == 'comment_id')
@@ -155,10 +156,25 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 				{
 					$value = '';
 				}
+			}else if($key == 'is_reply_to')
+			{
+				if($value > 0)
+				{
+					$value = $this->lng->txt('yes');
+				}
+				else
+				{
+					$value = $this->lng->txt('no');
+				}
 			}
 			else if($key == 'type')
 			{
-				$value = $this->lng->txt($value);
+				$txt_value = $value == 1 ? 'question' : 'comment';
+				$value = $this->lng->txt($txt_value);
+				if(strlen($a_set['marker']))
+				{
+					$value .= ' ' . ilInteractiveVideoPlugin::getInstance()->txt('with_marker');
+				}
 			}
 			else if($key == 'is_tutor')
 			{

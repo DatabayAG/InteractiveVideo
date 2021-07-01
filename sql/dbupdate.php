@@ -867,6 +867,65 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_comment'))
 }
 ?>
 <#46>
+	<?php
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'video_mode'))
+	{
+	}
+	?>
+<#47>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'video_mode'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'video_mode',
+		array(
+			'type'    => 'integer',
+			'length'  => '1',
+			'notnull' => true,
+			'default' => 0));
+}
+?>
+<#48>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_comments'))
+{
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_comments', 'marker'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_comments', 'marker',
+			array(
+				'type' => 'text',
+				'length' => '4000',
+				'notnull' => false
+			));
+	}
+}
+?>
+<#49>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'marker_for_students'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'marker_for_students',
+		array(
+			'type'    => 'integer',
+			'length'  => '1',
+			'notnull' => true,
+			'default' => 0));
+}
+?>
+<#50>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_comment_stream'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'no_comment_stream',
+		array(
+			'type'    => 'integer',
+			'length'  => '1',
+			'notnull' => true,
+			'default' => 0));
+}
+?>
+
+
+<#51>
 <?php
 require_once('./Services/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php');
 $read_lp = ilDBUpdateNewObjectType::getCustomRBACOperationId('read_learning_progress');

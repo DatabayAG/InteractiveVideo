@@ -36,11 +36,10 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 		}
 		return false;
 	}
-	
 
 	/**
 	 * @param ilTemplate $tpl
-	 * @return ilTemplate
+	 * @return mixed
 	 */
 	public function addPlayerElements($tpl)
 	{
@@ -52,7 +51,8 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 	/**
 	 * @param                       $player_id
 	 * @param ilObjInteractiveVideo $obj
-	 * @return ilTemplate
+	 * @param string     $id
+	 * @return mixed
 	 */
 	public function getPlayer($player_id, $obj)
 	{
@@ -61,6 +61,7 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 		$instance->doReadVideoSource($obj->getId());
 		$player->setVariable('PLAYER_ID', $player_id);
 		$player->setVariable('SIMPLE_URL', $instance->getSimpleUrl());
+		$player->setVariable('INTERACTIVE_VIDEO_ID', $id);
 		return $player;
 	}
 

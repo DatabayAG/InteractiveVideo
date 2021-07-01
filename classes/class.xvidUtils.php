@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/Form/class.ilTextAreaInputCkeditorGUI.php';
-
+require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/form/class.ilTextAreaInputCkeditorGUI.php';
+use enshrined\svgSanitize\Sanitizer;
 /**
  * Class xvidUtils
  *
@@ -124,5 +124,25 @@ class xvidUtils
 			ilUtil::makeDirParents($path);
 		}
 		return $path .'/';
+	}
+
+	/**
+	 * @param string $svg
+	 * @return string
+	 */
+	public static function secureSvg($svg)
+	{
+		if(file_exists('./Services/MediaObjects/lib/svg-sanitizer-master/src/Sanitizer.php'))
+		{
+			require_once './Services/MediaObjects/lib/svg-sanitizer-master/src/data/AttributeInterface.php';
+			require_once './Services/MediaObjects/lib/svg-sanitizer-master/src/data/TagInterface.php';
+			require_once './Services/MediaObjects/lib/svg-sanitizer-master/src/data/AllowedTags.php';
+			require_once './Services/MediaObjects/lib/svg-sanitizer-master/src/data/AllowedAttributes.php';
+			require_once './Services/MediaObjects/lib/svg-sanitizer-master/src/Sanitizer.php';
+
+			$sanitizer = new Sanitizer();
+			$svg = $sanitizer->sanitize($svg);
+		}
+		return $svg;
 	}
 }

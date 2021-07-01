@@ -28,6 +28,15 @@ Since there are a lot of changes in ILIAS 6, there will be a new branch '6_x' wh
 * Automatic scrolling if show all comments is active
 * New Learning Progress mode
 * Table of contents
+## Important notice
+If you upgrade to the 2.x version of the InteractiveVideo you can not go back to version 1.x, because there are migration steps which alter the database schema.
+
+## Changes in version 2.5.x
+1. [SVG marker for videos](https://www.ilias.de/docu/goto_docu_wiki_wpage_4971_1357.html)
+2. [Reply to comments](https://www.ilias.de/docu/goto_docu_wiki_wpage_4967_1357.html)
+3. Changed video library to [plyr](https://github.com/sampotts/plyr)
+
+## Changes in earlier versions
 * [Complete Changelog](https://github.com/DatabayAG/InteractiveVideo/blob/master/CHANGELOG.md)
 
 ## Repositories connected to the InteractiveVideo Plugin
@@ -59,6 +68,18 @@ That's it.
 
 # What is it for?
 The InteractiveVideo Plugin for ILIAS gives you the possibility to create a video object, where your students can communicate in a asynchronous way. Please note that this is *NOT* a chat. They can leave notes on different timestamps in the video for other students to read, or only for themselves. Further a tutor can insert questions on various positions in the video for the students to answer. At the moment three questions types are supported single and multiple choice and a reflective type. 
+
+## Add SVG Marker Select Form
+![Add SVG Marker Select Form](https://databayag.github.io/InteractiveVideo/2.5.x/new_marker_feature_1.png)
+
+## Add SVG Marker Select Position
+![Add SVG Marker Select Position](https://databayag.github.io/InteractiveVideo/2.5.x/new_marker_feature_2.png)
+
+## Edit/Create Screen for Comments
+![Edit Comment Screen](https://databayag.github.io/InteractiveVideo/2.5.x/new_edit_screen_comments.png)
+
+## Marker and Replies in the question and comment table
+![Question and Comments Table](https://databayag.github.io/InteractiveVideo/2.5.x/marker_and_replies.png)
 
 ## Interactive Video Main View
 ![Main View](https://databayag.github.io/InteractiveVideo/2.0.x/1.png)

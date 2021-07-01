@@ -95,6 +95,11 @@ class ilObjComment
 	protected $is_reply_to = 0;
 
 	/**
+	 * @var string
+	 */
+	protected $marker;
+
+	/**
 	 * @var array
 	 */
 	protected static $user_name_cache = array();
@@ -148,13 +153,14 @@ class ilObjComment
 		$this->setIsPrivate($row['is_private']);
 		$this->setIsTableOfContent($row['is_table_of_content']);
 		$this->setIsReplyTo($row['is_reply_to']);
+		$this->setMarker($row['marker']);
 	}
 
 	/**
 	 * @param bool $return_next_id
 	 * @return null | int
 	 */
-	public function create($return_next_id = false)
+	public function create($return_next_id = false, $reply_to_posting = false)
 	{
         /**
          * @var $ilUser ilObjUser
@@ -163,7 +169,7 @@ class ilObjComment
 		$purify = new ilHtmlInteractiveVideoPostPurifier();
 		$text = $purify->purify($this->getCommentText());
 
-		if($this->getIsReplyTo() != 0)
+		if($this->getIsReplyTo() != 0 && !$reply_to_posting)
 		{
 			$this->removeOldReplyTo($this->getIsReplyTo());
 		}
@@ -177,13 +183,14 @@ class ilObjComment
 				'is_tutor'       	=> array('integer', (int)$this->isTutor()),
 				'is_interactive' 	=> array('integer', (int)$this->isInteractive()),
 				'comment_time'   	=> array('integer', round($this->getCommentTime(), 0)),
-				'comment_time_end'  => array('integer', round($this->getCommentTimeEnd(), 2)),
+				'comment_time_end'  => array('integer', round($this->getCommentTimeEnd(), 0)),
 				'comment_text'   	=> array('text',  $text),
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),
 				'is_private'		=> array('integer', $this->getIsPrivate()),
 				'is_table_of_content'=> array('integer', $this->getIsTableOfContent()),
-				'is_reply_to'		=> array('integer', $this->getIsReplyTo())
+				'is_reply_to'		=> array('integer', $this->getIsReplyTo()),
+				'marker'			=> array('text', $this->getMarker())
 			));
 		if($return_next_id)
 		{
@@ -225,7 +232,8 @@ class ilObjComment
 				'comment_tags'		=> array('text', $this->getCommentTags()),
 				'is_private'		=> array('integer', $this->getIsPrivate()),
 				'is_table_of_content'=> array('integer', $this->getIsTableOfContent()),
-				'is_reply_to'		=> array('integer', $this->getIsReplyTo())
+				'is_reply_to'		=> array('integer', $this->getIsReplyTo()),
+				'marker'			=> array('text', $this->getMarker())
 			),
 			array(
 				'comment_id' => array('integer', $this->getCommentId())
@@ -234,8 +242,7 @@ class ilObjComment
 	}
 
 	/**
-	 * delete
-	 * @param array $comment_ids
+	 * @param $comment_ids
 	 * @return bool
 	 */
 	public function deleteComments($comment_ids)
@@ -284,9 +291,9 @@ class ilObjComment
 
 		$query_types = array('integer','integer','integer','integer');
 		$query_data = array($this->getObjId(), 0, 1, $ilUser->getId());
-		
+
 		$where_condition = '';
-	
+
 		if(!$this->isPublic())
 		{
 			$where_condition = ' AND (user_id = %s OR is_tutor = %s OR is_interactive = %s )';
@@ -336,7 +343,10 @@ class ilObjComment
 			$temp['is_private'] 		= $row['is_private'];
 			$temp['is_table_of_content'] = $row['is_table_of_content'];
 			$temp['is_reply_to'] 		= $row['is_reply_to'];
+			$temp['marker'] 			= $row['marker'];
 			$temp['replies']			= array();
+
+			$temp['is_overlay'] = "1";
 
 			if($row['is_reply_to'] != 0)
 			{
@@ -411,6 +421,7 @@ class ilObjComment
 			$this->setIsPrivate($row['is_private']);
 			$this->setIsTableOfContent($row['is_table_of_content']);
 			$this->setIsReplyTo($row['is_reply_to']);
+			$this->setMarker($row['marker']);
 			$new_comment_id = $this->create(true);
 			if((bool)$row['is_interactive'])
 			{
@@ -425,11 +436,13 @@ class ilObjComment
 	}
 
 	/**
-	 * @param $user_id
+	 * @param int $user_id
 	 * @return string
 	 */
 	public static function getUserImageInBase64($user_id)
 	{
+		$user_id = (int) $user_id;
+
 		if(!array_key_exists($user_id, self::$user_image_cache))
 		{
 			$img_file = ilObjUser::_getPersonalPicturePath($user_id, 'xxsmall');
@@ -448,13 +461,15 @@ class ilObjComment
 
 		return self::$user_image_cache[$user_id];
 	}
-	
+
 	/**
-	 * @param $user_id
+	 * @param int $user_id
 	 * @return string
 	 */
 	public static function lookupUsername($user_id)
 	{
+		$user_id = (int) $user_id;
+
 		if(!array_key_exists($user_id, self::$user_name_cache))
 		{
 			$user = new ilObjUser($user_id);
@@ -515,7 +530,7 @@ class ilObjComment
 	 */
 	public function setObjId($obj_id)
 	{
-		$this->obj_id = $obj_id;
+		$this->obj_id = (int) $obj_id;
 	}
 
 	/**
@@ -531,7 +546,7 @@ class ilObjComment
 	 */
 	public function setCommentId($comment_id)
 	{
-		$this->comment_id = $comment_id;
+		$this->comment_id = (int) $comment_id;
 	}
 
 	/**
@@ -630,7 +645,6 @@ class ilObjComment
 		$this->comment_tags = $comment_tags;
 	}
 
-	
 	/**
 	 * @return string
 	 */
@@ -710,7 +724,7 @@ class ilObjComment
 	{
 		$this->is_anonymized = $is_anonymized;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -765,5 +779,21 @@ class ilObjComment
 	public static function getUserImageCache()
 	{
 		return self::$user_image_cache;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMarker()
+	{
+		return $this->marker;
+	}
+
+	/**
+	 * @param string $marker
+	 */
+	public function setMarker($marker)
+	{
+		$this->marker = $marker;
 	}
 }

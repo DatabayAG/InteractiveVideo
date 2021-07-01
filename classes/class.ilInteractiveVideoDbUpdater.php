@@ -40,7 +40,11 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	 */
 	public function __construct($a_db_handler = 0, $tmp_flag = false)
 	{
+		/**
+		 * @var $ilDB ilDB
+		 */
 		global $ilDB;
+
 		$this->db = $ilDB;
 		$this->collectUpdateFiles();
 		$this->iterateThroughUpdateFiles();

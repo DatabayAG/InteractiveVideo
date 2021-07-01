@@ -9,6 +9,8 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 
 	/**
 	 * ilTextAreaInputCkeditorGUI constructor.
+	 * @param string $a_title
+	 * @param string $a_postvar
 	 */
 	public function __construct($a_title = "", $a_postvar = "")
 	{

@@ -37,6 +37,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			if (player_data.comments[i].comment_time <= time && player_data.comments[i].comment_text !== null)
 			{
 				j_object.prepend(pub.buildListElement(player_id, player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name));
+				il.InteractiveVideoPlayerComments.registerReplyToListeners();
 				if(player_data.comments[i].comment_time_end > 0)
 				{
 					pub.fillCommentsTimeEndBlacklist(player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
@@ -69,8 +70,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 							'</div></div><div class="comment_inner_text">' +
 							pro.buildCommentTitleHtml(comment.comment_title)                                 +
 							pro.buildCommentTextHtml(comment.comment_text )                                  +
-							pro.buildCommentReplies(comment.replies )                                        + 
-							'</div></div>' +
+							pro.buildCommentReplies(comment.replies )                                        +
+							pro.buildReplyTo(comment.comment_id, comment)
+							+'</div></div>' +
 							pro.buildCommentTagsHtml(comment.comment_tags)                                   +
 					'</li>';
 		}
@@ -78,8 +80,45 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			value = '';
 		}
-
 		return value;
+	};
+	pro.buildReplyTo = function(id, comment)
+	{
+		if('has_no_reply_button' in comment)
+		{
+			if(comment.has_no_reply_button === true)
+			{
+				return '';
+			}
+		}
+		return '<div class="glyphicon glyphicon-share-alt flip_float_right reply_to_comment" data-reply-to-id="'+id+'" aria-hidden="true" title="' +il.InteractiveVideo.lang.reply_to_title + '"></div>';
+	};
+
+	pro.appendReplyToHiddenField = function(id)
+	{
+		$('#ilInteractiveVideoCommentsForm').append('<input type="hidden" value="' + id + '"/>');
+	};
+
+	pub.registerReplyToListeners = function()
+	{
+		var reply_object = $('.reply_to_comment');
+		reply_object.off("click");
+		reply_object.on("click", function() {
+			console.log('clicked on comment id ' + $(this).data('reply-to-id'));
+			var comment_id = 'list_item_'+ $(this).data('reply-to-id');
+			var comment_container = 'list_item_container_'+ $(this).data('reply-to-id');
+			var comment_object = $('.' + comment_id);
+			if($('#' + comment_id).length === 0)
+			{
+				comment_object.append('');
+				comment_object.append('<div id="'+comment_container+'" class="reply_to_container"><input type="text" class="reply_to_input_form" id="'+comment_id+'"/><input id="submit_comment_form" class="btn btn-default btn-sm submit_comment_form_to_reply" value="'+scope.InteractiveVideo.lang.save+'" type="submit"></div>');
+				scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReplyPosting($(this).data('reply-to-id'), $(this).data('reply-to-id'));
+			}
+			else
+			{
+				$('#' + comment_container).remove();
+			}
+		});
 	};
 
 	pub.fillCommentsTimeEndBlacklist = function (player_id, comment_time_end, comment_id)
@@ -97,16 +136,16 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		pub.addHighlightToComment(comment_id);
 	};
 
-	pub.clearCommentsWhereTimeEndEndded = function (player_id, time)
+	pub.clearCommentsWhereTimeEndEnded = function (player_id, time)
 	{
 		let timestamp, id;
 		let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 
-		for (timestamp in player_data.blacklist_time_end) 
+		for (timestamp in player_data.blacklist_time_end)
 		{
 			if(timestamp <= time)
 			{
-				for (id in player_data.blacklist_time_end[timestamp]) 
+				for (id in player_data.blacklist_time_end[timestamp])
 				{
 					pro.removeHighlightFromComment(player_data.blacklist_time_end[timestamp][id]);
 				}
@@ -168,6 +207,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				{
 					element = pub.buildListElement(player_id, player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name);
 					j_object.append(element);
+					il.InteractiveVideoPlayerComments.registerReplyToListeners();
 					if(player_data.comments[i].comment_time_end > 0 && player_data.comments[i].comment_time <= player_data.last_time)
 					{
 						pub.fillCommentsTimeEndBlacklist(player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
@@ -175,13 +215,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				}
 			}
 			player_data.is_show_all_active = true;
-			pub.clearCommentsWhereTimeEndEndded(player_id, player_data.last_time);
+			pub.clearCommentsWhereTimeEndEnded(player_id, player_data.last_time);
 		}
 		else
 		{
 			player_data.is_show_all_active = false;
 			pub.replaceCommentsAfterSeeking(player_data.last_time, player_id);
 		}
+		pub.registerReplyToListeners();
 	};
 
 	pub.rebuildCommentsViewIfShowAllIsActive = function(player_id)
@@ -229,11 +270,11 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 //Todo: fix this, this id does not exists anywhere
 		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));
 	};
-	
+
 	pro.registerTabEvent = function(player_id)
 	{
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
-		
+
 		$('.iv_tab_comments_' + player_id).on('click', function() {
 			let time = il.InteractiveVideoPlayerAbstract.currentTime(player_id);
 			let filter_element = $('#show_all_comments_' + player_id);
@@ -245,7 +286,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				pub.replaceCommentsAfterSeeking(time, player_id);
 			}
 		});
-		
+
 		$('.iv_tab_toc_' + player_id).on('click', function() {
 			pro.displayCommentsOrToc(false, player_id);
 			pub.buildToc(player_id);
@@ -277,11 +318,11 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			pro.activateTocOrCommentTab(true, player_id);
 		}
 	};
-	
+
 	pro.activateTocOrCommentTab = function(toc, player_id){
 		let comments_block = $('.iv_tab_comments_' + player_id);
 		let toc_block = $('.iv_tab_toc_' + player_id);
-		
+
 		if(toc) {
 			comments_block.removeClass('active');
 			toc_block.addClass('active');
@@ -291,7 +332,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		}
 
 	};
-	
+
 	pub.buildToc = function(player_id) {
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let j_object	= $('#ilInteractiveVideoComments_' + player_id + ' #ul_toc_' + player_id);
@@ -311,7 +352,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		pro.registerTocClickListener(player_id);
 		pub.highlightTocItem(player_id, player_data.last_time);
 	};
-	
+
 	pro.buildTocElement = function(comment, player_id, player_data) {
 		let comment_title = ' ';
 
@@ -348,9 +389,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			pro.changeArrowForTocItem(player_id);
 		});
 	};
-	
+
 	pub.highlightTocItem = function(player_id, current_time){
-		
+
 		$( ".toc_item" ).each(function( index ) {
 			let toc_time = $( this ).data('toc-time');
 			let toc_time_next = $( this ).next().data('toc-time');
@@ -419,6 +460,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.removeHighlightFromComment = function (id)
 	{
 		$('.list_item_' + id).removeClass('activeComment');
+		$('.interactive_overlay_element_' + id).remove();
 	};
 
 	pro.getCSSClassForListElement = function()
@@ -523,7 +565,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				value += pub.getCommentRepliesHtml(replies[i]);
 			}
 		}
-		return value + '</span>';
+		return value + '</div>';
 	};
 	
 	pub.getCommentRepliesHtml = function(reply)
@@ -577,7 +619,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return author_list;
 	};
 
-	pro.buildCommentUserImage = function(player_data, comment) 
+	pro.buildCommentUserImage = function(player_data, comment)
 	{
 		let image = '';
 		let user_id = comment.user_id;
@@ -600,7 +642,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return '<div class="comment_user_image">' + image + '</div>';
 	};
 	
-	pro.secondsToTimeCode = function(time) 
+	pub.secondsToTimeCode = function(time)
 	{
 		let obj = pro.convertSecondsToTimeObject(time);
 		let h = pro.fillWithZeros(obj.hours);
