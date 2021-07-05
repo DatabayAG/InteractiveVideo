@@ -9,13 +9,15 @@ require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/In
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactoryGUI.php';
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestion.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionAjaxHandler.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionScoring.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionStatistics.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilTextAreaInputCkeditorGUI.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilInteractiveVideoTimePicker.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('Form/class.ilInteractiveVideoPreviewPicker.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestion.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestionAjaxHandler.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestionScoring.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestionStatistics.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('form/class.ilTextAreaInputCkeditorGUI.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('form/class.ilInteractiveVideoTimePicker.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('form/class.ilInteractiveVideoPreviewPicker.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('form/class.ilInteractiveVideoModalExtension.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('tables/class.ilInteractiveVideoCommentsTableGUI.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilInteractiveVideoFFmpeg.php');
 
 /**
@@ -322,12 +324,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->objComment->setIsPublic($this->object->isPublic());
 		$this->objComment->setIsAnonymized($this->object->isAnonymized());
 		$this->objComment->setIsRepeat($this->object->isRepeat());
-		require_once("./Services/UIComponent/Modal/classes/class.ilModalGUI.php");
-		$modal = ilModalGUI::getInstance();
+		$modal = ilInteractiveVideoModalExtension::getInstance();
 		$modal->setId("ilQuestionModal");
 		$modal->setType(ilModalGUI::TYPE_LARGE);
 		$modal->setBody('');
-		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
+		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
 
         if($this->object->getDisableCommentStream() !== "1"){
             $video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
@@ -492,8 +493,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
 		$tpl->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
+		$tpl->addCss($plugin->getDirectory() . '/libs/npm/node_modules/plyr/dist/plyr.css');
 		$tpl->addCss($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.css');
 		$tpl->addJavaScript($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.js');
+		$tpl->addJavaScript($plugin->getDirectory() . '/libs/npm/node_modules/plyr/dist/plyr.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoQuestionViewer.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerComments.js');
 		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerFunctions.js');
@@ -1703,7 +1706,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
 		}
 		$tbl_data = $this->object->getCommentsTableDataByUserId();
-		ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilInteractiveVideoCommentsTableGUI.php');
 		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editMyComments');
 
 		$tbl->setData($tbl_data);
@@ -1994,18 +1996,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('TXT_INS_QUESTION', $plugin->txt('insert_question'));
 		$video_tpl->setVariable('TXT_INS_CHAPTER', $plugin->txt('insert_chapter'));
 
-		require_once("./Services/UIComponent/Modal/classes/class.ilModalGUI.php");
-		$modal = ilModalGUI::getInstance();
+		$modal = ilInteractiveVideoModalExtension::getInstance();
 		$modal->setId("ilQuestionModal");
 		$modal->setBody('');
-		$video_tpl->setVariable("MODAL_OVERLAY", $modal->getHTML());
+		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
 
 		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postTutorComment', '', false, false));
 
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(),true));
 
 		$tbl_data = $this->object->getCommentsTableData(true, true);
-		$plugin->includeClass('class.ilInteractiveVideoCommentsTableGUI.php');
 		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editComments');
         $tbl->setIsPublic($this->object->isPublic());
 		$tbl->setData($tbl_data);
@@ -2388,7 +2388,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment_id = new ilHiddenInputGUI('comment_id');
 		$form->addItem($comment_id);
 
-		$modal = ilModalGUI::getInstance();
+		$modal = ilInteractiveVideoModalExtension::getInstance();
 		$modal->setId('simple_question_warning');
 		$modal->setType(ilModalGUI::TYPE_MEDIUM);
 		$modal->setHeading($plugin->txt('save_without_correct'));
@@ -2413,7 +2413,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 		require_once 'Services/Form/classes/class.ilPropertyFormGUI.php';
-		$plugin->includeClass('Form/class.ilInteractiveVideoSelectionExplorerGUI.php');
+		$plugin->includeClass('form/class.ilInteractiveVideoSelectionExplorerGUI.php');
 		$this->ctrl->setParameterByClass('ilformpropertydispatchgui', 'postvar', $post_var);
 		$explorer_gui = new ilInteractiveVideoSelectionExplorerGUI(
 			array('ilpropertyformgui', 'ilformpropertydispatchgui', 'ilInteractiveVideoRepositorySelectorInputGUI'),
@@ -2421,7 +2421,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		);
 		$explorer_gui->setId($post_var);
 
-		$plugin->includeClass('Form/class.ilInteractiveVideoRepositorySelectorInputGUI.php');
+		$plugin->includeClass('form/class.ilInteractiveVideoRepositorySelectorInputGUI.php');
 		$root_ref_id = new ilInteractiveVideoRepositorySelectorInputGUI(
 			$plugin->txt($post_var),
 			$post_var, $explorer_gui, false

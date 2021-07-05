@@ -44,7 +44,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				}
 			}
 		}
-		pub.clearCommentsWhereTimeEndEndded(player_id, time);
+		pub.clearCommentsWhereTimeEndEnded(player_id, time);
 	};
 
 	pub.buildListElement = function (player_id, comment, time, username)
@@ -266,7 +266,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.preselectActualTimeInVideo = function(seconds)
 	{
-		let obj = pro.secondsToTimeCode(seconds);
+		let obj = pub.secondsToTimeCode(seconds);
 //Todo: fix this, this id does not exists anywhere
 		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));
 	};
@@ -488,7 +488,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		}
 		return 	'<time class="time" data-time="' + time + '"> ' +
 				'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + time + ', ' + player_id + '); return false;">'+
-				pro.secondsToTimeCode(display_time)  +
+				pub.secondsToTimeCode(display_time)  +
 				'</a>' +
 				'</time>' ;
 	};
@@ -511,7 +511,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			return 	'<time class="time_end"> - ' +
 					'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + display_time + ', ' + player_id + ');">'+
-					pro.secondsToTimeCode(display_time)  +
+					pub.secondsToTimeCode(display_time)  +
 					'</a>' +
 					'</time>' ;
 		}

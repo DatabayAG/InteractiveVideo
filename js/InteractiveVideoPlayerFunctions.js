@@ -39,6 +39,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		pri.utils.preselectActualTimeInVideo(current_time);
 		il.InteractiveVideoPlayerComments.buildToc(player_id);
+		player_data.last_stop_id = -1;
 		if(il.InteractiveVideoOverlayMarker.editScreen === false)
 		{
 			pri.utils.preselectActualTimeInVideo(current_time);
@@ -60,10 +61,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		scope.InteractiveVideoPlayerResume.saveResumeTime(player_id);
 		pri.utils.highlightTocItem(player_id, current_time);
-
+console.log(current_time)
 		if (!isNaN(current_time) && current_time > 0) {
 			pri.checkForCompulsoryQuestion(player_id, current_time);
-			pri.utils.clearCommentsWhereTimeEndEndded(player_id, current_time);
+			pri.utils.clearCommentsWhereTimeEndEnded(player_id, current_time);
 			for (j = player_data.stopPoints.length - 1; j >= 0; j--)
 			{
 				cueTime = parseInt(player_data.stopPoints[j], 10);
@@ -74,9 +75,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 					{
 						for (i = 0; i < Object.keys(player_data.comments).length; i++)
 						{
-							if (parseInt(player_data.comments[i].comment_time, 10) === cueTime)
+							if (parseInt(player_data.comments[i].comment_time, 10) === cueTime && player_data.last_stop_id !== j)
 							{
 								stop_video = pro.commentsObjectActions(i, current_time, player);
+								player_data.last_stop_id = j;
 							}
 							if (stop_video === 1) {
 								scope.InteractiveVideoPlayerAbstract.pause(player_id);
@@ -178,12 +180,13 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		let player_id      = pub.getPlayerIdFromPlayerObject(player);
 		let player_data    = pub.getPlayerDataObjectByPlayer(player);
 		let is_interactive = parseInt(player_data.comments[i].is_interactive, 10);
-		let is_overlay_marker = parseInt(scope.InteractiveVideo.comments[i].is_overlay, 10);
+		//Todo: fix this!
+		let is_overlay_marker = "0";//parseInt(scope.InteractiveVideo.comments[i].is_overlay, 10);
 		let comment        = player_data.comments[i];
 		let stop_video     = 0;
 		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id);
 		let language       = scope.InteractiveVideo.lang;
-
+console.log(comment)
 		if (player_data.comments[i].comment_text != null)
 		{
 			comments_div.prepend(pri.utils.buildListElement(player_id, comment, current_time, comment.user_name));

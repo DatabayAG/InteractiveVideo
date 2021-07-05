@@ -15,12 +15,39 @@ var player = null,
 
 function onYouTubeIframeAPIReady() {
 	$.each(il.InteractiveVideo, function (player_id, value) {
+
 		if (value.hasOwnProperty("player_type") && value.player_type === "ytb") {
-			var player = new YT.Player(player_id, {
+			console.log('ytb ' + player_id)
+			 player =  new Plyr('#' + player_id, {
+		});
+
+			player.on('ready', event => {
+					il.InteractiveVideoPlayerAbstract.config[player_id] = {
+						pauseCallback: (function () {
+							player.pause();
+						}),
+						playCallback: (function () {
+							player.play();
+						}),
+						durationCallback: (function () {
+							return player.getDuration
+						}),
+						currentTimeCallback: (function () {
+							return player.currentTime
+						}),
+						setCurrentTimeCallback: (function (time) {
+							player.seeked();
+						})
+					};
+					console.log('CONFIG ' + player_id)
+
+			});
+
+			/*{
 				videoId:           $('#'+player_id).attr('data-youtube-id'),
-				events:            {
+				listeners:            {
 					'onStateChange': onPlayerStateChange,
-					'onReady':       function (media) {
+					'ready':       function (media) {
 						il.InteractiveVideoPlayerAbstract.config[player_id] = {
 							pauseCallback           : (function (){player.pauseVideo(player_id);}),
 							playCallback            : (function (){player.playVideo(player_id);}),
@@ -28,6 +55,7 @@ function onYouTubeIframeAPIReady() {
 							currentTimeCallback     : (function (){return player.getCurrentTime(player_id);}),
 							setCurrentTimeCallback  : (function (time){player.seekTo(time, player_id);})
 						};
+						console.log('CONFIG ' + player_id)
 						il.InteractiveVideoPlayerFunction.appendInteractionEvents(player_id);
 						il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration(player_id));
 						il.InteractiveVideoSubtitle.initializeSubtitleTracks(player_id);
@@ -79,7 +107,7 @@ function onYouTubeIframeAPIReady() {
 				},
 				timerRate:         50,
 				enablePluginDebug: false
-			});
+			});*/
 		}
 	});
 }

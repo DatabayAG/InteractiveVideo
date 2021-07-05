@@ -935,7 +935,7 @@ if ($read_lp && $xoct_type_id) {
 	ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
 }
 ?>
-<#47>
+<#52>
 <?php
 if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'auto_resume'))
 {
@@ -948,7 +948,7 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'auto_resume'))
 	);
 }
 ?>
-<#48>
+<#53>
 <?php
 if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'fixed_modal'))
 {
@@ -961,7 +961,7 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'fixed_modal'))
 	);
 }
 ?>
-<#49>
+<#54>
 <?php
 if(!$ilDB->tableExists('rep_robj_xvid_subtitle'))
 {
@@ -998,7 +998,7 @@ if(!$ilDB->tableExists('rep_robj_xvid_subtitle'))
 	}
 }
 ?>
-<#50>
+<#55>
 <?php
 if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_toolbar'))
 {
@@ -1011,11 +1011,11 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_toolbar'))
 	);
 }
 ?>
-<#51>
+<#56>
 <?php
 $ilDB->addPrimaryKey('rep_robj_xvid_objects', array('obj_id'));
 ?>
-<#52>
+<#57>
 <?php
 if($ilDB->tableExists('rep_robj_xvid_comments'))
 {
@@ -1030,7 +1030,7 @@ if($ilDB->tableExists('rep_robj_xvid_comments'))
     }
 }
 ?>
-<#53>
+<#58>
 <?php
 if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'show_toc_first'))
 {
@@ -1043,7 +1043,7 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'show_toc_first'))
     );
 }
 ?>
-<#54>
+<#59>
 <?php
 if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'disable_comment_stream'))
 {
@@ -1056,15 +1056,15 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'disable_comment_stream'))
     );
 }
 ?>
-<#55>
+<#60>
 <?php
 $ilDB->addIndex('rep_robj_xvid_comments', ['is_interactive', 'obj_id'], 'i2');
 ?>
-<#56>
+<#61>
 <?php
 $ilDB->addIndex('rep_robj_xvid_question', ['comment_id', 'type'], 'i2');
 ?>
-<#57>
+<#62>
 <?php
 if($ilDB->tableExists('rep_robj_xvid_question'))
 {
@@ -1081,7 +1081,7 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 }
 ?>
 
-<#58>
+<#63>
 <?php
 if($ilDB->tableExists('rep_robj_xvid_question'))
 {
@@ -1096,7 +1096,7 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
     }
 }
 ?>
-<#59>
+<#64>
 <?php
 if($ilDB->tableExists('rep_robj_xvid_question'))
 {

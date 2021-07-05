@@ -6,6 +6,7 @@ $(document).ready(function () {
 	il.Util.addOnLoad(function () {
 		$.each(il.InteractiveVideo, function (player_id, value) {
 			if (value.hasOwnProperty("player_type") && value.player_type === "imo") {
+				console.log(player_id)
 				il.InteractiveVideoPlayerFunction.appendInteractionEvents(player_id);
 				var player   = null,
 					seekTime = 0,
@@ -13,9 +14,52 @@ $(document).ready(function () {
 				il.InteractiveVideo.last_stopPoint = -1;
 
 				il.InteractiveVideoSubtitle.initializeSubtitleTracks(player_id);
-				il.InteractiveVideo[player_id].player = new MediaElementPlayer(player_id, {
-
-					timerRate:         50,
+				il.InteractiveVideo[player_id].player =	 new Plyr('#' + player_id, {});
+				il.InteractiveVideo[player_id].player.on('ready', event => {
+					il.InteractiveVideoPlayerAbstract.config[player_id] = {
+						pauseCallback: (function () {
+							player = $("#" + player_id)[0];
+							player.pause();
+						}),
+						playCallback: (function () {
+							player = $("#" + player_id)[0];
+							player.play();
+						}),
+						durationCallback: (function () {
+							player = $("#" + player_id)[0];
+							return player.getDuration
+						}),
+						currentTimeCallback: (function () {
+							player = $("#" + player_id)[0];
+							console.log('Currenttime' , player.currentTime)
+							return player.currentTime
+						}),
+						setCurrentTimeCallback: (function (time) {
+							player = $("#" + player_id)[0];
+							player.seeked = time;
+						})
+					};
+					il.InteractiveVideo[player_id].player.on('play', event => {
+						il.InteractiveVideoPlayerAbstract.play(player_id);
+					});
+					il.InteractiveVideo[player_id].player.on('seeked', event => {
+						clearInterval(interval);
+						il.InteractiveVideoPlayerFunction.seekingEventHandler(player_id);
+					});
+					il.InteractiveVideo[player_id].player.on('pause', event => {
+						clearInterval(interval);
+						il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime(player_id);
+					});
+					il.InteractiveVideo[player_id].player.on('ended', event => {
+						il.InteractiveVideoPlayerAbstract.videoFinished(player_id);
+					});
+					il.InteractiveVideo[player_id].player.on('playing', event => {
+						interval = setInterval(function () {
+							il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player_id);
+						}, 500);
+					});
+				});
+				/*	timerRate:         50,
 					enablePluginDebug: false,
 					stretching: "responsive",
 
@@ -74,7 +118,7 @@ $(document).ready(function () {
 
 						}, false);
 					}
-				});
+				});*/
 			}
 
 		});
