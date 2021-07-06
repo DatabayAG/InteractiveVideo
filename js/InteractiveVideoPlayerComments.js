@@ -37,7 +37,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			if (player_data.comments[i].comment_time <= time && player_data.comments[i].comment_text !== null)
 			{
 				j_object.prepend(pub.buildListElement(player_id, player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name));
-				il.InteractiveVideoPlayerComments.registerReplyToListeners();
+				il.InteractiveVideoPlayerComments.registerReplyToListeners(player_id);
 				if(player_data.comments[i].comment_time_end > 0)
 				{
 					pub.fillCommentsTimeEndBlacklist(player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
@@ -99,20 +99,19 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		$('#ilInteractiveVideoCommentsForm').append('<input type="hidden" value="' + id + '"/>');
 	};
 
-	pub.registerReplyToListeners = function()
+	pub.registerReplyToListeners = function(player_id)
 	{
-		var reply_object = $('.reply_to_comment');
+		let reply_object = $('.reply_to_comment');
 		reply_object.off("click");
 		reply_object.on("click", function() {
-			console.log('clicked on comment id ' + $(this).data('reply-to-id'));
-			var comment_id = 'list_item_'+ $(this).data('reply-to-id');
-			var comment_container = 'list_item_container_'+ $(this).data('reply-to-id');
-			var comment_object = $('.' + comment_id);
+			let comment_id = 'list_item_'+ $(this).data('reply-to-id');
+			let comment_container = 'list_item_container_'+ $(this).data('reply-to-id');
+			let comment_object = $('.' + comment_id);
 			if($('#' + comment_id).length === 0)
 			{
 				comment_object.append('');
 				comment_object.append('<div id="'+comment_container+'" class="reply_to_container"><input type="text" class="reply_to_input_form" id="'+comment_id+'"/><input id="submit_comment_form" class="btn btn-default btn-sm submit_comment_form_to_reply" value="'+scope.InteractiveVideo.lang.save+'" type="submit"></div>');
-				scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReplyPosting($(this).data('reply-to-id'), $(this).data('reply-to-id'));
+				scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReplyPosting(player_id, $(this).data('reply-to-id'), $(this).data('reply-to-id'));
 			}
 			else
 			{
@@ -207,7 +206,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				{
 					element = pub.buildListElement(player_id, player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name);
 					j_object.append(element);
-					il.InteractiveVideoPlayerComments.registerReplyToListeners();
+					il.InteractiveVideoPlayerComments.registerReplyToListeners(player_id);
 					if(player_data.comments[i].comment_time_end > 0 && player_data.comments[i].comment_time <= player_data.last_time)
 					{
 						pub.fillCommentsTimeEndBlacklist(player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
@@ -222,7 +221,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			player_data.is_show_all_active = false;
 			pub.replaceCommentsAfterSeeking(player_data.last_time, player_id);
 		}
-		pub.registerReplyToListeners();
+		pub.registerReplyToListeners(player_id);
 	};
 
 	pub.rebuildCommentsViewIfShowAllIsActive = function(player_id)

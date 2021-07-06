@@ -61,7 +61,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 		scope.InteractiveVideoPlayerResume.saveResumeTime(player_id);
 		pri.utils.highlightTocItem(player_id, current_time);
-console.log(current_time)
 		if (!isNaN(current_time) && current_time > 0) {
 			pri.checkForCompulsoryQuestion(player_id, current_time);
 			pri.utils.clearCommentsWhereTimeEndEnded(player_id, current_time);
@@ -186,11 +185,11 @@ console.log(current_time)
 		let stop_video     = 0;
 		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id);
 		let language       = scope.InteractiveVideo.lang;
-console.log(comment)
+
 		if (player_data.comments[i].comment_text != null)
 		{
 			comments_div.prepend(pri.utils.buildListElement(player_id, comment, current_time, comment.user_name));
-			il.InteractiveVideoPlayerComments.registerReplyToListeners();
+			il.InteractiveVideoPlayerComments.registerReplyToListeners(player_id);
 			pro.addHighlightToCommentWithoutEndTime(comment, player_id);
 			if (comment.comment_time_end > 0) 
 			{
@@ -294,8 +293,8 @@ console.log(comment)
 		return (parseInt(time[0], 10) * 3600) + (parseInt(time[1], 10) * 60) + (parseInt(time[2], 10));
 	};
 
-	pro.replyWasSubmittedSuccessful = function(org_id, comment_text, is_private, comment_id) {
-		var reply = {'comment_text': comment_text, 'is_interactive': 0, 'is_private': is_private, 'user_name': scope.InteractiveVideo.username, 'comment_id': 'non_existent'};
+	pro.replyWasSubmittedSuccessful = function(player_id, org_id, comment_text, is_private, comment_id) {
+		var reply = {'comment_text': comment_text, 'is_interactive': 0, 'is_private': is_private, 'user_name': scope.InteractiveVideo[player_id].username, 'comment_id': 'non_existent'};
 		var html = scope.InteractiveVideoPlayerComments.getCommentRepliesHtml(reply);
 		$('.list_item_' + comment_id).find('.comment_replies').append(html);
 		pub.refreshMathJaxView();
@@ -323,7 +322,7 @@ console.log(comment)
 					let html = scope.InteractiveVideoPlayerComments.getCommentRepliesHtml(reply);
 					$('.list_item_' + comment_id).find('.comment_replies').append(html);
 					pub.decideSolutionHandlingForReflectionQuestion(comment_id, player_id);
-					pro.replyWasSubmittedSuccessful(org_id, comment_text, is_private, comment_id);
+					pro.replyWasSubmittedSuccessful(player_id, org_id, comment_text, is_private, comment_id);
 					$('#ilQuestionModal').modal('hide');
 					$('.reply_comment_' + org_id).remove();
 					$('.reply_comment_non_existent').remove()
@@ -654,6 +653,33 @@ console.log(comment)
 
 		}
 		console.log('No id found, there seems to be something wrong!')
+	};
+
+	pub.addAjaxFunctionForReplyPosting = function(player_id, comment_id, org_id)
+	{
+		$("#submit_comment_form").on("click", function() {
+			var actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
+			var comment_text = $('#list_item_' + comment_id).val();
+
+			if(comment_text !== '')
+			{
+				$.ajax({
+					type:     "POST",
+					url:      il.InteractiveVideo[player_id].post_comment_url,
+					data:     {
+						'comment_time':      actual_time_in_video,
+						'comment_text':      comment_text,
+						'is_private':        0,
+						'is_reply_to':       comment_id,
+						'reply_to_posting' : true
+					},
+					success:  function () {
+						pro.replyWasSubmittedSuccessful(player_id, org_id, comment_text, 0, comment_id);
+						$('#list_item_container_' + comment_id).remove();
+					}
+				});
+			}
+		});
 	};
 
 	pub.getPlayerDataObjectByPlayerId = function(player_id)

@@ -140,10 +140,10 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		pro.onReadyCallbacks.push(callback);
 	};
 
-	pub.initPlayer = function()
+	pub.initPlayer = function(player_id)
 	{
-		if (typeof pub.config.initPlayerCallback === 'function') {
-			pub.config.initPlayerCallback();
+		if (typeof pub.config[player_id].initPlayerCallback === 'function') {
+			pub.config[player_id].initPlayerCallback();
 		}
 	};
 

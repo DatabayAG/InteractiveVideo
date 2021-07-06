@@ -3,22 +3,22 @@ il.InteractiveVideoModalHelper = (function (scope) {
 
 	var pub = {}, pro = {};
 
-	pub.getCommentAndMarkerForm = function()
+	pub.getCommentAndMarkerForm = function(player_id)
 	{
 		pro.showWaitBox();
 		$.when(
 			$.ajax({
-				url:  scope.InteractiveVideo.get_comment_marker_modal,
+				url:  scope.InteractiveVideo[player_id].get_comment_marker_modal,
 				type: 'GET', dataType: 'html'
 			})
 		).then(function (html) {
 			$('#ilInteractiveVideoAjaxModal').find('.modal-body').html(html);
-			il.InteractiveVideoPlayerAbstract.initPlayer();
+			il.InteractiveVideoPlayerAbstract.initPlayer(player_id);
 			setTimeout(function(){
-				plyr.get()[1].seek(plyr.get()[0].getCurrentTime());
+				//plyr.get()[1].seek(plyr.get()[0].getCurrentTime());
 			}, 900);
 			setTimeout(function(){
-				CKEDITOR.instances.comment_text.focusManager.focus();
+				//CKEDITOR.instances.comment_text.focusManager.focus();
 				pro.addEventsToButtons('insertTutorCommentAjax', 'cancelCommentsAjax');
 			}, 480);
 			$('#ilInteractiveVideoAjaxModal').on('hidden.bs.modal', function () {
@@ -51,7 +51,7 @@ il.InteractiveVideoModalHelper = (function (scope) {
 
 	pro.showWaitBox = function()
 	{
-		il.InteractiveVideoPlayerAbstract.pause();
+		//il.InteractiveVideoPlayerAbstract.pause();
 		var modal = $('#ilInteractiveVideoAjaxModal');
 		modal.modal({backdrop: 'static', keyboard: false}, 'show');
 		modal.find('.modal-body').html('<div class="waitbox"></div>');

@@ -19,6 +19,8 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('form/class.ilInteractiveV
 ilInteractiveVideoPlugin::getInstance()->includeClass('form/class.ilInteractiveVideoModalExtension.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('tables/class.ilInteractiveVideoCommentsTableGUI.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilInteractiveVideoFFmpeg.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('../VideoSources/class.ilInteractiveVideoUniqueIds.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('form/class.ilInteractiveVideoModalExtension.php');
 
 /**
  * Class ilObjInteractiveVideoGUI
@@ -289,7 +291,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		/**
 		 * @var $tpl    ilTemplate
 		 */
-		global $tpl;
+		global $tpl, $DIC;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
 		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoUniqueIds.php';
@@ -349,23 +351,79 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		if($this->object->getDisableComment() != 1 && ! $light_version)
 		{
-			$comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $plugin->getDirectory());
-			$comments_tpl->setVariable('PLAYER_ID', $player_id);
-			$comments_tpl->setVariable('COMMENT_TIME_END', $plugin->txt('time_end'));
-			$picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end_' . $player_id);
-			$comments_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
-			$comments_tpl->setVariable('TXT_COMMENT', $plugin->txt('insert_comment'));
-			$comments_tpl->setVariable('TXT_ENDTIME_WARNING', $plugin->txt('endtime_warning'));
-			$comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $plugin->txt('no_text_warning'));
-			$comments_tpl->setVariable('TXT_IS_PRIVATE', $plugin->txt('is_private_comment'));
-
-
-			$comments_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
-			$comments_tpl->setVariable('TXT_CANCEL', $plugin->txt('cancel'));
-			$video_tpl->setVariable("COMMENTS_FORM", $comments_tpl->get());
+            if(!$this->checkPermissionBool('write') && $this->object->getDisableComment() != 1)
+            {
+                $comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $this->plugin->getDirectory());
+                $comments_tpl->setVariable('COMMENT_TIME_END', $this->plugin->txt('time_end'));
+                $picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end');
+                $comments_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
+                $comments_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
+                $comments_tpl->setVariable('TXT_ENDTIME_WARNING', $this->plugin->txt('endtime_warning'));
+                $comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $this->plugin->txt('no_text_warning'));
+                $comments_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
+                $marker_template = '';
+                if($this->object->getMarkerForStudents() == 1 || $DIC->access()->checkAccess('write', '', $this->object->getRefId()))
+                {
+                    $marker_template = $this->buildMarkerEditorTemplate()->get();
+                }
+                $comments_tpl->setVariable('MARKER_EDITOR', $marker_template);
+                $comments_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
+                $comments_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
+                $video_tpl->setVariable("COMMENTS_FORM", $comments_tpl->get());
+            }
+            else if($this->checkPermissionBool('create'))
+            {
+                $comment_button = ilLinkButton::getInstance();
+                $comment_button->setCaption($this->plugin->txt('insert_comment'), false);
+                $comment_button->setOnClick("il.InteractiveVideoModalHelper.getCommentAndMarkerForm('".$player_id."');");
+                $video_tpl->setVariable('MODAL_BUTTON_COMMENT', $comment_button->render());
+                $question_button = ilLinkButton::getInstance();
+                $question_button->setCaption($this->plugin->txt('add_question'), false);
+                $question_button->setOnClick("il.InteractiveVideoModalHelper.getQuestionCreationForModal('".$player_id."');");
+                $video_tpl->setVariable('MODAL_BUTTON_QUESTION', $question_button->render());
+            }
 		}
+
+        $this->appendQuestionModalToTemplate($video_tpl);
 		return $video_tpl;
 	}
+
+    /**
+     * @param ilTemplate $video_tpl
+     */
+    protected function appendQuestionModalToTemplate($video_tpl)
+    {
+        $modal = ilInteractiveVideoModalExtension::getInstance();
+        $modal->setId("ilQuestionModal");
+        $modal->setType(ilInteractiveVideoModalExtension::TYPE_XL);
+        $video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
+        $modal = ilInteractiveVideoModalExtension::getInstance();
+        $modal->setId("ilInteractiveVideoAjaxModal");
+        $modal->setType(ilInteractiveVideoModalExtension::TYPE_XL);
+        $video_tpl->setVariable("MODAL_INTERACTION_OVERLAY", $modal->getHTML());
+    }
+
+    protected function buildMarkerEditorTemplate()
+    {
+        $marker_tpl = new ilTemplate("tpl.marker_editor.html", true, true, $this->plugin->getDirectory());
+
+        $marker_tpl->setVariable('TXT_COLOR', $this->plugin->txt('color'));
+        $marker_tpl->setVariable('TXT_STROKE', $this->plugin->txt('stroke'));
+        $marker_tpl->setVariable('TXT_WIDTH', $this->plugin->txt('width'));
+        $marker_tpl->setVariable('TXT_HEIGHT', $this->plugin->txt('height'));
+        $marker_tpl->setVariable('TXT_ROTATE', $this->plugin->txt('rotate'));
+        $marker_tpl->setVariable('TXT_RECTANGLE', $this->plugin->txt('rectangle'));
+        $marker_tpl->setVariable('TXT_ARROW', $this->plugin->txt('arrow'));
+        $marker_tpl->setVariable('TXT_CIRCLE', $this->plugin->txt('circle'));
+        $marker_tpl->setVariable('TXT_SCALE', $this->plugin->txt('scale'));
+        $marker_tpl->setVariable('TXT_LINE', $this->plugin->txt('line'));
+        $marker_tpl->setVariable('TXT_ADD_MARKER', $this->plugin->txt('insert_marker'));
+        $marker_tpl->setVariable('TXT_ADD_MARKER_INFO', $this->plugin->txt('insert_marker_info'));
+        $marker_tpl->setVariable('TXT_DELETE', $this->plugin->txt('delete_marker'));
+        $marker_tpl->setVariable('TXT_TEXT', $this->plugin->txt('text'));
+        $marker_tpl->setVariable('TXT_FONT_SIZE', $this->plugin->txt('font_size'));
+        return $marker_tpl;
+    }
 
 	/**
 	 * @param $video_tpl ilTemplate
@@ -475,6 +533,51 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return $question->get();
 	}
 
+    /**
+     * @var array
+     */
+    protected $custom_css = [
+        '/templates/default/xvid.css',
+        '/libs/npm/node_modules/plyr/dist/plyr.css',
+        '/libs/Bootstraptoggle/bootstrap2-toggle.min.css',
+        '/libs/npm/node_modules/bootstrap-timepicker/css/bootstrap-timepicker.css'
+    ];
+
+    /**
+     * @var array
+     */
+    protected $custom_javascript = [
+         		'/libs/Bootstraptoggle/bootstrap2-toggle.min.js',
+		        '/libs/npm/node_modules/plyr/dist/plyr.min.js',
+		        '/libs/npm/node_modules/svg.js/dist/svg.min.js',
+		        '/libs/npm/node_modules/svg.draggable.js/dist/svg.draggable.min.js',
+		        '/libs/npm/node_modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js',
+		        '/js/InteractiveVideoQuestionViewer.js',
+		        '/js/InteractiveVideoPlayerComments.js',
+		        '/js/InteractiveVideoPlayerFunctions.js',
+		        '/js/InteractiveVideoPlayerAbstract.js',
+		        '/js/InteractiveVideoPlayerResume.js',
+		        '/js/InteractiveVideoSubtitle.js',
+		        '/js/InteractiveVideoOverlayMarker.js',
+		        '/js/InteractiveVideoModalHelper.js'
+    ];
+
+    /**
+     * @param ilTemplate $tpl
+     */
+    protected function addJavascriptAndCSSToTemplate($tpl)
+    {
+        foreach($this->custom_css as $file)
+        {
+            $tpl->addCss($this->plugin->getDirectory() . $file);
+        }
+
+        foreach($this->custom_javascript as $file)
+        {
+            $tpl->addJavaScript($this->plugin->getDirectory() . $file);
+        }
+    }
+
 	/**
 	 * @param      $player_id
 	 * @param      $video_type
@@ -491,18 +594,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $ilUser, $tpl;
 
 		$plugin = ilInteractiveVideoPlugin::getInstance();
-
-		$tpl->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
-		$tpl->addCss($plugin->getDirectory() . '/libs/npm/node_modules/plyr/dist/plyr.css');
-		$tpl->addCss($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.css');
-		$tpl->addJavaScript($plugin->getDirectory() . '/libs/Bootstraptoggle/bootstrap2-toggle.min.js');
-		$tpl->addJavaScript($plugin->getDirectory() . '/libs/npm/node_modules/plyr/dist/plyr.js');
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoQuestionViewer.js');
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerComments.js');
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerFunctions.js');
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerAbstract.js');
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoPlayerResume.js');
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoSubtitle.js');
+		$this->addJavascriptAndCSSToTemplate($tpl);
 		ilTextAreaInputCkeditorGUI::appendJavascriptFile();
 
 		$config_tpl = new ilTemplate("tpl.video_config.html", true, true, $plugin->getDirectory());
@@ -515,7 +607,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'getQuestionPerAjax', '', true, false));
 		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postAnswerPerAjax', '', true, false));
 		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postComment', '', true, false));
-		$this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'ref_id', $org_ref_id);
+        $config_tpl->setVariable('GET_COMMENT_MARKER_MODAL', $this->ctrl->getLinkTarget($this, 'getCommentAndMarkerForm', '', true, false));
+        $config_tpl->setVariable('GET_QUESTION_CREATION_MODAL', $this->ctrl->getLinkTarget($this, 'showTutorInsertQuestionFormAjax', '', true, false));
+        $this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'ref_id', $org_ref_id);
 		$config_tpl->setVariable('SEND_BUTTON', $plugin->txt('send'));
 		$config_tpl->setVariable('CLOSE_BUTTON', $plugin->txt('close'));
 		$config_tpl->setVariable('FEEDBACK_JUMP_TEXT', $plugin->txt('feedback_jump_text'));
@@ -597,6 +691,80 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		return $config_tpl->get();
 	}
+    public function showTutorInsertQuestionFormAjax()
+    {
+        $simple_question = new SimpleChoiceQuestionFormEditGUI($this->plugin, $this->object);
+        $form = $simple_question->initQuestionForm(true);
+        $ck = new ilTextAreaInputCkeditor($this->plugin);
+        $ck->appendCkEditorMathJaxSupportToForm($form);
+        $form->addCommandButton('insertQuestionAjax', $this->lng->txt('insert'));
+        $form->addCommandButton('editCommentsAjax', $this->lng->txt('cancel'));
+        echo $form->getHTML();
+        $this->callExit();
+    }
+
+    public function getCommentAndMarkerForm()
+    {
+        $form = $this->initCommentForm();
+
+        $form->addCommandButton('insertTutorCommentAjax', $this->lng->txt('insert'));
+        $form->addCommandButton('cancelCommentsAjax', $this->lng->txt('cancel'));
+        $my_tpl = $this->getCommentTemplate();
+        $my_tpl->setVariable('FORM',$form->getHTML());
+        echo $my_tpl->get();
+        $this->callExit();
+    }
+
+    /**
+     *
+     */
+    public function insertTutorCommentAjax()
+    {
+        $this->insertComment(1, false, true);
+    }
+    /**
+     *
+     */
+    public function cancelCommentsAjax()
+    {
+        $this->redirectToShowContentOrEditComments(true);
+    }
+
+    /**
+     * @param $ajax
+     */
+    private function redirectToShowContentOrEditComments($ajax)
+    {
+        if ($ajax) {
+            $this->ctrl->redirect($this, 'showContent');
+        } else {
+            $this->ctrl->redirect($this, 'editComments');
+        }
+    }
+
+    protected function getCommentTemplate()
+    {
+        /**
+         * @var $tpl ilTemplate
+         * @var $ilAccess ilAccessHandler
+         */
+        global $tpl, $ilAccess;
+
+        $my_tpl = new ilTemplate("tpl.comment_form.html", true, true, $this->plugin->getDirectory());
+        $object = new ilInteractiveVideoSourceFactoryGUI($this->object);
+        $object->addPlayerElements($tpl);
+
+        $marker_template = '';
+        if($this->object->getMarkerForStudents() == 1 || $ilAccess->checkAccess('write', '', $this->object->getRefId()))
+        {
+            $marker_template = $this->buildMarkerEditorTemplate()->get();
+        }
+
+        $player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
+        $my_tpl->setVariable('PLAYER', $object->getPlayer($player_id)->get() . $this->initPlayerConfig($player_id, $this->object->getSourceId(), true));
+        $my_tpl->setVariable('MARKER', $marker_template);
+        return $my_tpl;
+    }
 
 	/**
 	 * @param ilPropertyFormGUI $a_form
@@ -2032,9 +2200,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     /**
      * @param int   $is_tutor
      * @param false $is_chapter
+     * @param false $ajax
      * @throws ilTemplateException
      */
-	private function insertComment($is_tutor = 0, $is_chapter = false)
+	private function insertComment($is_tutor = 0, $is_chapter = false, $ajax = false)
 	{
 	    if($is_chapter) {
             $form = $this->initChapterForm();
@@ -2065,7 +2234,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->create();
 
 			ilUtil::sendSuccess($this->lng->txt('saved_successfully'));
-			$this->ctrl->redirect($this, 'editComments');
+            $this->redirectToShowContentOrEditComments($ajax);
 		}
 		else
 		{
