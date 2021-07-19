@@ -183,7 +183,7 @@ public#:#öffentlich
 visibility#:#Sichtbarkeit
 save_anyway#:#Trotzdem speichern
 save_without_correct#:#Sind haben keine korrekte Antwort ausgewählt
-save_without_correct_detail#:#Sie haben weder eine Reflexionsfrage, noch neutrale Antworten aktiviert, sind Sie sicher, dass Sie die Frage ohne korrekte Antwort speichern wollen?
+save_without_correct_detail#:#Sie haben weder eine Reflexionsfrage ausgewählt, noch die Option "neutrale Antworten" aktiviert. Sind Sie sicher, dass Sie die Frage ohne korrekte Antwort speichern wollen?
 no_comment#:#Kein Kommentarfeld
 no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflexionsfrage mit aktiviertem Kommentarfeld sind nach wie vor möglich.
 xvid_xvid_view_lp#:#Lernfortschritt einsehen
