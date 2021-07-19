@@ -114,7 +114,7 @@ time_end#:#End Time
 show_response_frequency#:#Show response frequencies
 show_response_frequency_info#:#After answering the question, the response frequencies of all answering options are shown as percentages beneath each answering option.
 type#:#Type
-title_of_question#:#Questiontitle
+title_of_question#:#Question Title
 endtime_warning#:#The endtime you selected is smaller than the actual time
 screen_info#:#Use this screen to create and manage questions and comments. Caution: Interactive questions will NOT be shown on this screen. In order to see them during playback, go to the tab "Content".
 show_correct_icon#:#Mark feedback visually as 'correct answer'
