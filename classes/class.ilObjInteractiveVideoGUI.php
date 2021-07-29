@@ -844,9 +844,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values["show_toc_first"]		= $this->object->getShowTocFirst();
 		$a_values["disable_comment_stream"]		= $this->object->getDisableCommentStream();
 		$source_id = $this->object->getSourceId();
-		if(array_key_exists('xvid_source_id', $_GET) && $_GET['xvid_source_id'] !== ''){
+        /*if(array_key_exists('xvid_source_id', $_GET) && $_GET['xvid_source_id'] !== ''){
 		    $source_id = ilUtil::stripSlashes($_GET['xvid_source_id']);
-        }
+        }*/
 		$a_values['source_id']			= $source_id;
 		$a_values['is_task']			= $this->object->getTaskActive();
 		$a_values['task']				= $this->object->getTask();
