@@ -623,6 +623,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			$table_data[$counter]['title']		= $row['comment_title'];
 			//	$table_data[$counter]['user_id']			= $row['user_id'];
 			$table_data[$counter]['comment_text']		= $row['comment_text'];
+			$table_data[$counter]['compulsory'] = ilInteractiveVideoPlugin::getInstance()->txt('no');
 			if($row['is_private'] == 1)
 			{
 				$table_data[$counter]['is_private'] = ilInteractiveVideoPlugin::getInstance()->txt('private');
