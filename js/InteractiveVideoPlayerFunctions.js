@@ -70,7 +70,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				if (cueTime >= player_data.last_time && cueTime <= current_time)
 				{
 					stop_video = 0;
-					if (player_data.last_stopPoint < cueTime)
+					if (player_data.last_stopPoint <= cueTime)
 					{
 						for (i = 0; i < Object.keys(player_data.comments).length; i++)
 						{
@@ -176,6 +176,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.commentsObjectActions = function(i, current_time, player)
 	{
+		console.log('DSFDSFSDF2222')
 		let player_id      = pub.getPlayerIdFromPlayerObject(player);
 		let player_data    = pub.getPlayerDataObjectByPlayer(player);
 		let is_interactive = parseInt(player_data.comments[i].is_interactive, 10);

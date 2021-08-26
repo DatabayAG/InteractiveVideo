@@ -640,9 +640,6 @@ input[type=range]:focus::-ms-fill-upper {
     width: 90% !important;
     max-width:1200px !important;
 }
-.modal-xl .modal-header{
-    display: none !important;
-}
 
 .waitbox,
 .waitbox:after {

@@ -6,9 +6,8 @@ il.InteractiveVideoMediaElementPlayer = (function (scope) {
 	pub.initPlayer = function()
 	{
 		$.each(il.InteractiveVideo, function (player_id, value) {
-			console.log(value.player_type)
+
 			if (value.hasOwnProperty("player_type") && value.player_type === "imo") {
-				console.log(player_id)
 				il.InteractiveVideoPlayerFunction.appendInteractionEvents(player_id);
 				var player   = null,
 					seekTime = 0,
@@ -33,7 +32,6 @@ il.InteractiveVideoMediaElementPlayer = (function (scope) {
 						}),
 						currentTimeCallback: (function () {
 							player = $("#" + player_id)[0];
-							console.log('Currenttime' , player.currentTime)
 							return player.currentTime
 						}),
 						setCurrentTimeCallback: (function (time) {
