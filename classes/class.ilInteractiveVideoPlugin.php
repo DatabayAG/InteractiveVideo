@@ -53,7 +53,33 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 		return self::$instance;
 	}
 
-	/**
+    protected function beforeActivation()
+    {
+        $return = parent::beforeActivation();
+
+        require_once 'Services/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php';
+        $type = 'xvid';
+        $typeId = ilDBUpdateNewObjectType::getObjectTypeId($type);
+        $readLpOpsId = ilDBUpdateNewObjectType::getCustomRBACOperationId('read_learning_progress');
+        $editLpOpsId = ilDBUpdateNewObjectType::getCustomRBACOperationId('edit_learning_progress');
+        $writeOpsId = ilDBUpdateNewObjectType::getCustomRBACOperationId('write');
+        if ($readLpOpsId && $editLpOpsId && $writeOpsId) {
+            $readLpAdded = ilDBUpdateNewObjectType::addRBACOperation($typeId, $readLpOpsId);
+            $editLpAdded = ilDBUpdateNewObjectType::addRBACOperation($typeId, $editLpOpsId);
+            if ($readLpAdded) {
+                ilDBUpdateNewObjectType::cloneOperation($type, $writeOpsId, $readLpOpsId);
+            }
+
+            if ($editLpAdded) {
+                ilDBUpdateNewObjectType::cloneOperation($type, $writeOpsId, $editLpOpsId);
+            }
+        }
+
+        return $return;
+    }
+
+
+    /**
 	 * @return string
 	 */
 	public function getPluginName()
