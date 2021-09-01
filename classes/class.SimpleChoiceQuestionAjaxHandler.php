@@ -11,11 +11,13 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestio
  */
 class SimpleChoiceQuestionAjaxHandler
 {
-	/**
-	 * @param $feedback_ref_id
-	 * @param $json
-	 * @return mixed
-	 */
+    /**
+     * @param $feedback_ref_id
+     * @param $json
+     * @return mixed
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     */
 	private function appendFeedback($feedback_ref_id, $json)
 	{
 		if($feedback_ref_id > 0)
@@ -27,16 +29,19 @@ class SimpleChoiceQuestionAjaxHandler
 		return $json;
 	}
 
-	/**
-	 * @param int $qid question_id
-	 * @return string
-	 */
+    /**
+     * @param $qid
+     * @return false|string
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     */
 	public function getFeedbackForQuestion($qid)
 	{
 		$scoring  = new SimpleChoiceQuestionScoring();
 		$score    = $scoring->getScoreForQuestionOnUserId($qid);
 		$feedback = $scoring->getFeedbackByQuestionId($qid);
 		$json     = array();
+		$correct = false;
 		if(is_array($feedback))
 		{
 			if($feedback['neutral_answer'] != 1)
@@ -89,6 +94,7 @@ class SimpleChoiceQuestionAjaxHandler
 						$json['html']          = $start_div . $feedback['feedback_correct'] .'</div>';
 						$json['is_timed']      = $feedback['is_jump_correct'];
 						$json['time']          = $feedback['jump_correct_ts'];
+						$correct = true;
 					}
 				}
 				else
@@ -110,18 +116,46 @@ class SimpleChoiceQuestionAjaxHandler
 					$json['is_timed']      = $feedback['is_jump_correct'];
 					$json['time']          = $feedback['jump_correct_ts'];
 				}
+				$json['correct'] = $correct;
 			}
 
 		$json['html'] .= '<div style="padding-top:10px;"></div>';
 		$simple                     = new SimpleChoiceQuestionStatistics();
 		$json['response_frequency'] = $simple->getResponseFrequency((int)$qid);
+
+        $json['best_solution'] = '';
+        if($feedback['show_best_solution'] == "1" && $feedback['neutral_answer'] != 1) {
+            $json['html'] .= '<div class="iv_show_best_solution"><input class="btn btn-default btn-sm" id="show_best_solution"  type="submit"/></div><div class="iv_best_solution_value"></div>';
+            $json['best_solution'] = '<div class="iv_best_solution_hidden">' . $this->getBestSolution($qid) . '</div>';
+        }
+
 		return json_encode($json);
 	}
+
+    /**
+     * @param int $qid
+     */
+	protected function getBestSolution($qid)
+    {
+        $best_solution = '';
+	    $answers = $this->getAnswersForQuestionId($qid, false);
+        foreach($answers as $answer) {
+            $best_solution .= '<div class="best_solution_answer" data-best-solution="'. $answer["answer_id"] .'" data-answer-state="'.$answer['correct'].'"></div>';
+        }
+        return $best_solution;
+    }
 
 	/**
 	 * @param $ref_id
 	 * @return string
 	 */
+    /**
+     * @param $ref_id
+     * @return string
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     * @throws ilTemplateException
+     */
 	protected function getLinkIfReadAccessForObjectByRefId($ref_id)
 	{
 		if($ref_id != null && $ref_id != 0)
@@ -149,22 +183,28 @@ class SimpleChoiceQuestionAjaxHandler
 		}
 		return '';
 	}
-	/**
-	 * @param int $cid comment_id
-	 * @return string
-	 */
+
+    /**
+     * @param $cid
+     * @return false|string
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     * @throws ilWACException
+     */
 	public function getJsonForCommentId($cid)
 	{
-		/**
-		 * @var $ilDB   ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB, $ilUser;
 		$res = $ilDB->queryF('
 			SELECT * 
 			FROM  rep_robj_xvid_question question, 
-				  rep_robj_xvid_qus_text answers 
+				  rep_robj_xvid_qus_text answers,
+				  rep_robj_xvid_comments comments 
 			WHERE question.comment_id = %s 
-			AND   question.question_id = answers.question_id',
+			AND   question.question_id = answers.question_id
+			AND   question.comment_id = comments.comment_id',
 			array('integer'), array((int)$cid)
 		);
 
@@ -192,6 +232,10 @@ class SimpleChoiceQuestionAjaxHandler
 			$repeat_question         = $row['repeat_question'];
 			$show_reflection_question_comment = $row['reflection_question_comment'];
 			$question_image          = $row['question_image'];
+			$compulsory              = $row['compulsory_question'];
+			$time                    = $row['comment_time'];
+			$show_best_solution      = $row['show_best_solution'];
+			$show_best_solution_text = $row['show_best_solution_text'];
 			#$neutral_answer         = $row['neutral_answer'];
 			$counter++;
 		}
@@ -227,7 +271,11 @@ class SimpleChoiceQuestionAjaxHandler
 		$build_json['jump_wrong_ts']           = $jump_wrong_ts;
 		$build_json['show_response_frequency'] = $show_response_frequency;
 		$build_json['reflection_question_comment'] = $show_reflection_question_comment;
+		$build_json['compulsory_question']     = $compulsory;
+		$build_json['show_best_solution']     = $show_best_solution;
+		$build_json['show_best_solution_text']     = $show_best_solution_text;
 		$build_json['repeat_question']         = $repeat_question;
+		$build_json['time']                    = $time;
 		if($question_image != null)
 		{
 			$build_json['question_image']          = ilWACSignedPath::signFile($question_image);
@@ -264,15 +312,16 @@ class SimpleChoiceQuestionAjaxHandler
 		return json_encode($build_json);
 	}
 
-	/**
-	 * @param $qid
-	 * @return string
-	 */
-	public function getJsonForQuestionId($qid)
+    /**
+     * @param      $qid
+     * @param bool $asJson
+     * @return false|string
+     */
+	public function getAnswersForQuestionId($qid, $asJson = true)
 	{
-		/**
-		 * @var $ilDB   ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF('SELECT answer_id, answer, correct FROM rep_robj_xvid_qus_text WHERE question_id = %s',
@@ -287,6 +336,9 @@ class SimpleChoiceQuestionAjaxHandler
 		{
 			$question_data[] = '';
 		}
-		return json_encode($question_data);
+		if($asJson){
+            return json_encode($question_data);
+        }
+        return $question_data;
 	}
 }

@@ -168,7 +168,7 @@ class ilInteractiveVideoSimpleUrl implements ilInteractiveVideoSource
 	 */
 	public function getClassPath()
 	{
-		return 'VideoSources/plugin/InteractiveVideoFauVideoPortal/class.ilInteractiveVideoSimpleUrl.php';
+		return 'VideoSources/core/SimpleUrl/class.ilInteractiveVideoSimpleUrl.php';
 	}
 
 	/**

@@ -34,9 +34,9 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	 */
 	protected $tabs;
 
-	/**
-	 * @var ilDB
-	 */
+    /**
+     * @var $db ilDBInterface
+     */
 	protected $db;
 
 	/**

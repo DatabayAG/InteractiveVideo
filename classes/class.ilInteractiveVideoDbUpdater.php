@@ -7,6 +7,9 @@ require_once 'Services/Component/classes/class.ilPluginDBUpdate.php';
 class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 {
 
+    /**
+     * @var $db ilDBInterface
+     */
 	protected $db;
 
 	/**

@@ -49,12 +49,16 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pub.buildListElement = function (player_id, comment, time, username)
 	{
 		let css_class, value;
+		let list_item_id = 'list_item_' + comment.comment_id;
+		let comment_not_already_rendered = $('.' + list_item_id).length;
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
-		
-		if(pro.isBuildListElementAllowed(player_data, username))
+		if(pro.isBuildListElementAllowed(player_data, username)
+			&& comment.is_table_of_content === "0"
+			&& comment_not_already_rendered === 0
+		)
 		{
 			css_class = pro.getCSSClassForListElement();
-			value =	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class + '">' +
+			value =	'<li class="' + list_item_id + ' fadeOut ' + css_class + '">' +
 				'<div class="message-inner">' +
 							pro.buildCommentUserImage(player_data, comment)                   +
 							'<div class="comment_user_data">' + pub.buildCommentUsernameHtml(username, comment.is_interactive) +
@@ -211,6 +215,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			element = '<li><a href="#">' + element + '</a></li>';
 			drop_down_list.append(element);
 		}
+		pro.registerTabEvent(player_id);
 	};
 
 	pub.fillEndTimeSelector = function(seconds)
@@ -223,6 +228,159 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let obj = pro.secondsToTimeCode(seconds);
 //Todo: fix this, this id does not exists anywhere
 		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));
+	};
+	
+	pro.registerTabEvent = function(player_id)
+	{
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+		
+		$('.iv_tab_comments_' + player_id).on('click', function() {
+			let time = il.InteractiveVideoPlayerAbstract.currentTime(player_id);
+			let filter_element = $('#show_all_comments_' + player_id);
+			pro.displayCommentsOrToc(true, player_id);
+
+			if(filter_element.prop('checked')){
+				il.InteractiveVideoPlayerComments.rebuildCommentsViewIfShowAllIsActive(player_id);
+			} else {
+				pub.replaceCommentsAfterSeeking(time, player_id);
+			}
+		});
+		
+		$('.iv_tab_toc_' + player_id).on('click', function() {
+			pro.displayCommentsOrToc(false, player_id);
+			pub.buildToc(player_id);
+		});
+
+		if(player_data.disable_comment_stream === "1" ){
+			let toolbar = $('.ivToolbar_' + player_id)
+			toolbar.css('display', 'none');
+		}
+		if(player_data.disable_comment_stream === "1" || player_data.show_toc_first === "1") {
+			pro.displayCommentsOrToc(false, player_id);
+			pub.buildToc(player_id);
+		} else {
+			pro.displayCommentsOrToc(true, player_id);
+		}
+	};
+
+	pro.displayCommentsOrToc = function(displayComments, player_id){
+		let comments_block = $('#ul_scroll_' + player_id);
+		let toc_block = $('#ul_toc_' + player_id);
+
+		if(displayComments) {
+			comments_block.css('display', 'block');
+			toc_block.css('display', 'none');
+			pro.activateTocOrCommentTab(false, player_id);
+		} else {
+			comments_block.css('display', 'none');
+			toc_block.css('display', 'block');
+			pro.activateTocOrCommentTab(true, player_id);
+		}
+	};
+	
+	pro.activateTocOrCommentTab = function(toc, player_id){
+		let comments_block = $('.iv_tab_comments_' + player_id);
+		let toc_block = $('.iv_tab_toc_' + player_id);
+		
+		if(toc) {
+			comments_block.removeClass('active');
+			toc_block.addClass('active');
+		} else {
+			toc_block.removeClass('active');
+			comments_block.addClass('active');
+		}
+
+	};
+	
+	pub.buildToc = function(player_id) {
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+		let j_object	= $('#ilInteractiveVideoComments_' + player_id + ' #ul_toc_' + player_id);
+		let element		='';
+
+		j_object.html('');
+		pri.cssIterator = 0;
+		for (let key in player_data.comments_toc) {
+			let obj = player_data.comments_toc[key];
+			if (obj.comment_text !== null)
+			{
+				element = pro.buildTocElement(obj, player_id, player_data);
+				j_object.append(element);
+			}
+		}
+
+		pro.registerTocClickListener(player_id);
+		pub.highlightTocItem(player_id, player_data.last_time);
+	};
+	
+	pro.buildTocElement = function(comment, player_id, player_data) {
+		let comment_title = ' ';
+
+		if(comment.comment_title !== '') {
+			comment_title = ' ' + comment.comment_title;
+		}
+
+		let comment_text_exists_class = 'no_description';
+		let add_span_arrow = '';
+		if(comment.comment_text != ''){
+			comment_text_exists_class = 'description_exists';
+			add_span_arrow = '<span class="toc_arrow glyphicon glyphicon-triangle-right"></span>';
+		}
+		return '<li class="toc_item toc_item_' + comment.comment_id +' ' + comment_text_exists_class + '" data-toc-time="' + comment.comment_time + '"><div class="toc-inner"><h5>' +
+			 pro.buildCommentTimeHtml(comment.comment_time, comment.is_interactive, player_id)  +
+			 '<div class="toc_title">' + comment_title + add_span_arrow + '</div></h5>' +
+			 '<div class="toc_description">' + comment.comment_text + '</div>' +
+			'</div></li>';
+	};
+
+	pro.registerTocClickListener = function(player_id) {
+		$('.toc-inner').off('click');
+		$('.toc-inner').on('click', function() {
+			if($(this).find('.toc_description').css('display') === 'block'){
+				$(this).find('.toc_description').hide();
+				$(this).find('.toc_description').removeClass('tocManualOverride');
+				$(this).parent().removeClass('tocManualOverride');
+			} else {
+				//$('.toc_description').hide();
+				$(this).find('.toc_description').show();
+				$(this).find('.toc_description').addClass('tocManualOverride');
+				$(this).parent().addClass('tocManualOverride');
+			}
+			pro.changeArrowForTocItem(player_id);
+		});
+	};
+	
+	pub.highlightTocItem = function(player_id, current_time){
+		
+		$( ".toc_item" ).each(function( index ) {
+			let toc_time = $( this ).data('toc-time');
+			let toc_time_next = $( this ).next().data('toc-time');
+			if(toc_time <= current_time
+				&& !(toc_time_next < current_time)) {
+				$('.toc_item').removeClass('activeToc');
+				$(this).addClass('activeToc');
+				$('.toc_description').hide();
+				$('.tocManualOverride').show();
+				$(this).find('.toc_description').show();
+			}
+		});
+		pro.changeArrowForTocItem(player_id);
+	};
+
+	pro.changeArrowForTocItem = function(player_id){
+
+		$( ".toc_item" ).each(function( index ) {
+			if($(this).hasClass('description_exists')){
+				let span = $(this).find('.toc_arrow');
+
+				if($(this).hasClass('activeToc') || $(this).hasClass('tocManualOverride')){
+					span.removeClass('glyphicon-triangle-right');
+					span.addClass('glyphicon-triangle-bottom');
+				} else {
+					span.addClass('glyphicon-triangle-right');
+					span.removeClass('glyphicon-triangle-bottom');
+				}
+			}
+		});
 	};
 
 	pro.isBuildListElementAllowed = function(player_data, username)
@@ -286,7 +444,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			time = Math.abs(Math.round(time) - 0.1);
 		}
-		return 	'<time class="time"> ' +
+		return 	'<time class="time" data-time="' + time + '"> ' +
 				'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + time + ', ' + player_id + '); return false;">'+
 				pro.secondsToTimeCode(display_time)  +
 				'</a>' +
@@ -360,7 +518,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 		if(replies !== undefined && replies.length > 0)
 		{
-			for (var i  = 0; i < replies.length; i++)
+			for (let i  = 0; i < replies.length; i++)
 			{
 				value += pub.getCommentRepliesHtml(replies[i]);
 			}
@@ -370,6 +528,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	
 	pub.getCommentRepliesHtml = function(reply)
 	{
+		if(reply.is_table_of_content === "1") {
+			return '';
+		}
 		return '<div class="reply_comment reply_comment_' + reply.comment_id + '">' + pub.buildCommentUsernameHtml(reply.user_name, reply.is_interactive) + ': ' + reply.comment_text + ' ' + pro.appendPrivateHtml(reply.is_private) + '</div>';
 	};
 
@@ -382,10 +543,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			private_comment = ' (' + language.private_text + ')';
 		}
-		else
-		{
-			private_comment = '';
-		}
+
 		return '<span class="private_text">'+ private_comment + '</span> ';
 	};
 

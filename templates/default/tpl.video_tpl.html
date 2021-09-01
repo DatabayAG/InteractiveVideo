@@ -1,4 +1,4 @@
-<nav class="ilToolbar navbar navbar-default yamm {LIGHT_VERSION} " role="navigation">
+<nav class="ilToolbar navbar navbar-default yamm {LIGHT_VERSION} ivToolbar_{PLAYER_ID}" role="navigation">
 	<div class="container-fluid interativeVideoNavHeader">
 		<!-- BEGIN return_link -->
 		<ul class="ilToolbarItems nav navbar-nav">
@@ -62,12 +62,23 @@
 		{COMMENTS_FORM}
 	</div>
 
-	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 {LIGHT_VERSION}">
-		<div class=ilFormHeader">
-			<h3 class="ilHeader">{TXT_COMMENTS}</h3>
-		</div>
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 {LIGHT_VERSION} iv_tab_navigation">
+		<ul class="nav nav-tabs iv-tabs">
+			<!-- BEGIN comment_stream -->
+			<li class="nav-item">
+				<a class="nav-link iv_tab iv_tab_comments_{PLAYER_ID}" href="#">{TXT_COMMENTS}</a>
+			</li>
+			<!-- END comment_stream -->
+			<!-- BEGIN toc -->
+			<li class="nav-item">
+				<a class="nav-link iv_tab iv_tab_toc_{PLAYER_ID}" href="#">{TXT_TOC}</a>
+			</li>
+			<!-- END toc -->
+		</ul>
 		<div id="ilInteractiveVideoComments_{PLAYER_ID}" class="scroll-text">
 			<ul id="ul_scroll_{PLAYER_ID}">
+			</ul>
+			<ul id="ul_toc_{PLAYER_ID}" class="ul_toc_iv">
 			</ul>
 		</div>
 	</div>

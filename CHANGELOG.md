@@ -1,3 +1,9 @@
+# 2.5.1
+1. Compulsory questions
+2. Automatic scrolling if show all comments is active
+3. New Learning Progress mode
+4. Table of contents
+
 # 2.0.25
 1. Disable toolbar setting
 

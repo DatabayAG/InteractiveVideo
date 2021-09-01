@@ -5,7 +5,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 	//Done: Questions working
 	//Done: Comments working
 	//Player object exists by id
-	var pub = {}, pro = {};
+	let pub = {}, pro = {};
 
 	pub.config = {
 		pauseCallback           : null,

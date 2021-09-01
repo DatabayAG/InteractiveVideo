@@ -70,6 +70,10 @@ class xvidUtils
 		}
 	}
 
+    /**
+     * @param $number
+     * @return string
+     */
 	protected static function fillZeroIfSmallerTen($number)
 	{
 		if($number < 10)
@@ -105,10 +109,13 @@ class xvidUtils
 	 */
 	public static function constructTextAreaFormElement($txt, $name)
 	{
-		$text_area = new ilTextAreaInputCkeditorGUI(ilInteractiveVideoPlugin::getInstance()->txt($txt), $name);
-		return $text_area;
+		return new ilTextAreaInputCkeditorGUI(ilInteractiveVideoPlugin::getInstance()->txt($txt), $name);
 	}
-	
+
+    /**
+     * @param $path
+     * @return string
+     */
 	public static function ensureFileSavePathExists($path)
 	{
 		$path = ilUtil::getWebspaceDir() . self::INTERACTIVE_VIDEO . $path;

@@ -21,9 +21,9 @@ cat_create_xvid#:#Create Interactive Video
 interactive#:#Interactive
 questions_comments_sub_tab#:#Edit
 tutor#:#Tutor
-questions_comments#:#Questions and comments
-questions_comments_new#:#Questions and public comments
-sure_delete_comments#:#Are you sure you want to delete the selected comments?
+questions_comments#:#Questions, chapters and comments
+questions_comments_new#:#Questions, chapters, public comments
+sure_delete_comments#:#Are you sure you want to delete the selected comments/questions/chapters?
 video_file#:#Video
 comment#:#Comment
 comments#:#Comments
@@ -31,9 +31,9 @@ switch_on#:#On
 switch_off#:#Off
 post#:#Post
 cancel#:#Cancel
-sure_delete_comment#:#Are you sure, you want to delete the selected comments?
+sure_delete_comment#:#Are you sure, you want to delete the selected comments/questions/chapters?
 missing_comment_text#:#Please enter a comment.
-missing_stopping_point#:#The stopping point was not trasnferred to the server. Please try again.
+missing_stopping_point#:#The stopping point was not transferred to the server. Please try again.
 invalid_comment_ids#:#Some comments could not be found.
 comments_successfully_deleted#:#The selected comments were deleted successfully.
 show_all_comments#:#Show all Comments:
@@ -58,15 +58,15 @@ answered#:#Questions answered
 question_results#:#Question Results
 user_answered#:#User Answered
 user_correct#:#User Answered Correct
-insert_question#:#Insert question
+insert_question#:#Insert Question
 insert_comment#:#Insert Comment
 my_comments#:#My Comments
 general#:#General
-repeat_question#:#Repeat Question
+repeat_question#:#Repeat question
 tags#:#Tags
-question_text#:#Question Text
-question_type#:#Question Type
-feedback_correct#:#Feedback Correct Answer
+question_text#:#Question text
+question_type#:#Question type
+feedback_correct#:#Feedback correct answer
 feedback_one_wrong#:#Feedback at least one wrong
 results_successfully_deleted#:#The selected results are deleted successfully
 sure_delete_results#:#Are you sure, you want to delete the selected results?
@@ -75,17 +75,17 @@ invalid_question_ids#:#Invalid Question-Ids
 invalid_user_ids#:#Invalid User-Ids
 invalid_comment_ids#:#Invalid Comment-Ids
 comment_title#:#Comment-Title
-send#:#Send
+send#:#Check
 close#:#Close
 question#:#Question
 is_anonymized#:#Anonymize Comments
 is_anonymized_info#:#If enabled all comments are shown without usernames 
 is_public#:#Publish All Comments
-is_public_info#:#If enabled all users are able to read all PUBLIC comments, otherwise they are only able to see own comments.
+is_public_info#:#"If enabled all users are able to read all PUBLIC comments. Otherwise they are only able to see own comments and public comments created by administrators (in the tab "Questions, chapters and comments")
 correct_answered#:#Answered correctly
 show_my_results#:#My Results
-is_jump_correct#:#Use 'Correct'-Jump Label
-is_jump_wrong#:#Use 'Wrong'-Jump Label
+is_jump_correct#:#Use 'Correct'-Jump label
+is_jump_wrong#:#Use 'Wrong'-Jump label
 limit_attempts#:#Limit attempts
 limit_attempts_info#:#If enabled the user only can answer a question once.
 is_private_comment#:#Private Comment
@@ -100,7 +100,7 @@ already_answered#:#Question already answered.
 reflection#:#Reflective question
 answers#:#Answers
 sure_update_question#:#Are you sure, you want to save the question? Existing user results will be deleted! 
-question_type_info#:#You can choose between one of three avalibale quetsion types: a single choice, a multiple choice or a self-reflexion quertion. Self-reflexion questions do not have answer options and will be marked as "passed" once they have been shown to a user at least once.
+question_type_info#:#You can choose between one of three available question types: a single choice, a multiple choice or a self-reflexion quertion. Self-reflexion questions do not have answer options and will be marked as "passed" once they have been shown to a user at least once.
 is_jump_correct_info#:#In case the question was answered correctly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
 is_jump_wrong_info#:#In case the question was answered incorrectly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
 learning_recommendation#:#Learning recommendation within the video at
@@ -111,10 +111,10 @@ status#:#Status
 is_chronologic#:#Show all comments at all times
 is_chronologic_info#:#If this option is activated, all comments for the video will be shown in chronological order at all times.
 time_end#:#End Time
-show_response_frequency#:#Show response frequencies after question is answered
-show_response_frequency_info#:#The response frequencies of all answering options are shown as percentages beneath each answering option after the question has been answered.
+show_response_frequency#:#Show response frequencies
+show_response_frequency_info#:#After answering the question, the response frequencies of all answering options are shown as percentages beneath each answering option.
 type#:#Type
-title_of_question#:#Questiontitle
+title_of_question#:#Question Title
 endtime_warning#:#The endtime you selected is smaller than the actual time
 screen_info#:#Use this screen to create and manage questions and comments. Caution: Interactive questions will NOT be shown on this screen. In order to see them during playback, go to the tab "Content".
 show_correct_icon#:#Mark feedback visually as 'correct answer'
@@ -138,21 +138,23 @@ db_update_failed#:#Database update went wrong: %s
 task_switch#:#Activate Task
 task_switch_info#:#Activate Task
 task#:#Task
-lp_mode_title_by_questions#:#Questions Answered 
+lp_mode_title_by_questions#:#Questions Correctly Answered
 lp_mode_desc_by_questions#:#The object is 'completed' if the users submitted the 'correct' answer for each question. If there is no question defined, the object is 'completed' if the user reaches the end of the video.
 lp_matrix#:#Matrix View
 lp_users#:#Users
 lp_summary#:#Summary
 lp_settings#:#Settings
+lp_mode_title_by_all_answered_questions#:#Questions Answered
+lp_mode_desc_by_all_answered_questions#:#The object is 'completed' if the users submitted an answer for each question, correct or not. If there is no question defined, the object is 'completed' if the user reaches the end of the video.
 select_at_least_one#:#Please select at least one source
 back_to#:#back to
 back_to_title#:#Do you want to go back to %s (%s)?
 save#:#Save
 at_least_one_source#:#You need to select at least one source, make sure there is at least one active source in the configuration of the Interactive Video Plugin.
-feedback_correct_obj#:#Feedback Link for Repository Object for correct answer
-feedback_correct_obj_info#:#Feedback Link for Repository Object for correct answer
-feedback_wrong_obj#:#Feedback Link for Repository Object for at least one wrong answer
-feedback_wrong_obj_info#:#Feedback Link for Repository Object for at least one wrong answer
+feedback_correct_obj#:#Feedback link for repository object for correct answer
+feedback_correct_obj_info#:#Feedback link for repository object for correct answer
+feedback_wrong_obj#:#Feedback link for repository object for at least one wrong answer
+feedback_wrong_obj_info#:#Feedback link for repository object for at least one wrong answer
 show_comment_field#:#Show comment field
 show_comment_field_info#:#Show comment field below this reflection question
 more_informations#:#More Information
@@ -169,7 +171,7 @@ neutral_questions#:#Neutral Questions
 neutral_question#:#Neutral Question
 export_comments#:#Export Comments
 export_all_comments#:#Export All Comments
-question_image#:#Question Image
+question_image#:#Question image
 extract#:#Generate Thumbnail from Video
 use_this_image#:#Use this image
 time_for_preview#:#Time: 
@@ -198,4 +200,23 @@ sure_delete_subtitle#:#Are you sure you want to remove this subtitle?
 you_need_a_short_title#:#You need to provide a short title!
 no_toolbar#:#Deactivate toolbar
 no_toolbar_info#:#No toolbar with filters will be shown
-save_without_correct_detail#:#You don't have selected a reflection question or have you selected a question without correct answers, are you sure you want to save the question?
+save_without_correct_detail#:#You have neither selected a reflective question nor enabled the option "Neutral answers". Are you sure you want to save the question without selecting a correct answer?
+is_table_of_content#:#Table of Content
+toc#:#Table of Content
+show_toc_first#:#Show Table of content first
+show_toc_first_info#:#Show table of content as first page. In order to see such a table of content chapters have to be created (in the tab "Questions, chapters and comments")
+disable_comment_stream#:#Disable comment stream
+disable_comment_stream_info#:#Disable comment stream
+insert_chapter#:#Insert Chapter
+edit_chapter#:#Edit Chapter
+comment_table_title#:#Comment / Question Text
+compulsory_question#:#Compulsory question
+compulsory#:#Compulsory
+compulsory_question_info#:#This question must be answered
+show_best_solution#:#Show solution
+solution#:#Solution
+repeat#:#Retry
+best_solution_text#:#Best solution
+best_solution_text_info#:#If a comment field is offered (see below), a user cannot view the solution until he/she has saved an answer.
+show_best_solution_info#:#After answering the question, users can display the correct solution (via button "Show solution").
+at_least_one_answer#:#Please select an answer

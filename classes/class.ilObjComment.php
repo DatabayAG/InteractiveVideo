@@ -72,6 +72,11 @@ class ilObjComment
 	/**
 	 * @var int
 	 */
+	protected $is_table_of_content = 0;
+
+	/**
+	 * @var int
+	 */
 	protected $is_public = 0;
 
 	/**
@@ -99,11 +104,22 @@ class ilObjComment
 	 */
 	protected static $user_image_cache = array();
 
+    /**
+     * @var ilDBInterface
+     */
+	protected $db;
+
 	/**
 	 * @param int $comment_id
 	 */
 	public function __construct($comment_id = 0)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
+	    global $ilDB;
+	    $this->db = $ilDB;
+
 		if($comment_id > 0)
 		{
 			$this->setCommentId($comment_id);
@@ -113,17 +129,13 @@ class ilObjComment
 
 	public function read()
 	{
-		/**
-		 * @var $ilDB ilDB
-		 */
-		global $ilDB;
 
-		$res = $ilDB->queryF(
+		$res = $this->db->queryF(
 			'SELECT * FROM rep_robj_xvid_comments WHERE comment_id = %s',
 			array('integer'),
 			array($this->getCommentId())
 		);
-		$row = $ilDB->fetchAssoc($res);
+		$row = $this->db->fetchAssoc($res);
 
 		$this->setCommentText($row['comment_text']);
 		$this->setCommentTime($row['comment_time']);
@@ -134,6 +146,7 @@ class ilObjComment
 		$this->setCommentTitle($row['comment_title']);
 		$this->setCommentTags($row['comment_tags']);
 		$this->setIsPrivate($row['is_private']);
+		$this->setIsTableOfContent($row['is_table_of_content']);
 		$this->setIsReplyTo($row['is_reply_to']);
 	}
 
@@ -143,11 +156,10 @@ class ilObjComment
 	 */
 	public function create($return_next_id = false)
 	{
-		/**
-		 * @var $ilDB   ilDB
-		 * @var $ilUser ilObjUser
-		 */
-		global $ilDB, $ilUser;
+        /**
+         * @var $ilUser ilObjUser
+         */
+		global $ilUser;
 		$purify = new ilHtmlInteractiveVideoPostPurifier();
 		$text = $purify->purify($this->getCommentText());
 
@@ -155,9 +167,9 @@ class ilObjComment
 		{
 			$this->removeOldReplyTo($this->getIsReplyTo());
 		}
-		$next_id = $ilDB->nextId('rep_robj_xvid_comments');
+		$next_id = $this->db->nextId('rep_robj_xvid_comments');
 		$this->setCommentId($next_id);
-		$ilDB->insert('rep_robj_xvid_comments',
+        $this->db->insert('rep_robj_xvid_comments',
 			array(
 				'comment_id'     	=> array('integer', $next_id),
 				'obj_id'         	=> array('integer', $this->getObjId()),
@@ -170,6 +182,7 @@ class ilObjComment
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),
 				'is_private'		=> array('integer', $this->getIsPrivate()),
+				'is_table_of_content'=> array('integer', $this->getIsTableOfContent()),
 				'is_reply_to'		=> array('integer', $this->getIsReplyTo())
 			));
 		if($return_next_id)
@@ -184,22 +197,24 @@ class ilObjComment
 	 */
 	public function removeOldReplyTo($reply_to)
 	{
-		global $ilDB, $ilUser;
-		$ilDB->manipulateF('DELETE FROM rep_robj_xvid_comments WHERE is_reply_to = %s AND user_id = %s',
+        /**
+         * @var $ilUser ilObjUser
+         */
+		global $ilUser;
+        $this->db->manipulateF('DELETE FROM rep_robj_xvid_comments WHERE is_reply_to = %s AND user_id = %s',
 			array('integer', 'integer'), array($reply_to, $ilUser->getId()));
 	}
 
 	public function update()
 	{
-		/**
-		 * @var $ilDB ilDB
-		 * @var $ilUser ilObjUser
-		 */
-		global $ilDB, $ilUser;
+        /**
+         * @var $ilUser ilObjUser
+         */
+		global $ilUser;
 		$purify = new ilHtmlInteractiveVideoPostPurifier();
 		$text = $purify->purify($this->getCommentText());
 
-		$ilDB->update('rep_robj_xvid_comments',
+        $this->db->update('rep_robj_xvid_comments',
 			array(
 				'is_interactive' 	=> array('integer', (int)$this->isInteractive()),
 				'user_id'        	=> array('integer', $ilUser->getId()),
@@ -209,6 +224,7 @@ class ilObjComment
 				'comment_title'		=> array('text', $this->getCommentTitle()),
 				'comment_tags'		=> array('text', $this->getCommentTags()),
 				'is_private'		=> array('integer', $this->getIsPrivate()),
+				'is_table_of_content'=> array('integer', $this->getIsTableOfContent()),
 				'is_reply_to'		=> array('integer', $this->getIsReplyTo())
 			),
 			array(
@@ -224,12 +240,11 @@ class ilObjComment
 	 */
 	public function deleteComments($comment_ids)
 	{
-		global $ilDB;
 
 		if(!is_array($comment_ids))
 			return false;
 
-		$ilDB->manipulate('DELETE FROM rep_robj_xvid_comments WHERE ' . $ilDB->in('comment_id', $comment_ids, false, 'integer'));
+        $this->db->manipulate('DELETE FROM rep_robj_xvid_comments WHERE ' . $this->db->in('comment_id', $comment_ids, false, 'integer'));
 	}
 
 
@@ -238,12 +253,7 @@ class ilObjComment
 	 */
 	public function getStopPoints()
 	{
-		/**
-		 * @vas $ilDB ilDB
-		 */
-		global $ilDB;
-
-		$res = $ilDB->queryF(
+		$res = $this->db->queryF(
 			'SELECT comment_time
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s
@@ -253,7 +263,7 @@ class ilObjComment
 		);
 
 		$stop_points = array();
-		while($row = $ilDB->fetchAssoc($res))
+		while($row = $this->db->fetchAssoc($res))
 		{
 			$stop_points[] = $row['comment_time'];
 		}
@@ -261,13 +271,14 @@ class ilObjComment
 		return $stop_points;
 	}
 
-	/**
-	 * @return array
-	 */
-	public function getContentComments()
+    /**
+     * @param false $toc
+     * @return array
+     */
+	public function getContentComments($toc = false)
 	{
 		/**
-		 * @var $ilDB ilDB
+		 * @var $ilDB
 		 */
 		global $ilDB, $ilUser;
 
@@ -283,7 +294,7 @@ class ilObjComment
 			$query_data = array_merge($query_data, array($ilUser->getId(), 1, 1));
 		}
 		
-		$res = $ilDB->queryF(
+		$res = $this->db->queryF(
 			'SELECT *
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s 
@@ -297,7 +308,7 @@ class ilObjComment
 		$comments = array();
 		$is_reply_to = array();
 		$i = 0;
-		while($row = $ilDB->fetchAssoc($res))
+		while($row = $this->db->fetchAssoc($res))
 		{
 			$temp = array();
 			$temp['comment_id'] = $row['comment_id'];
@@ -323,6 +334,7 @@ class ilObjComment
 			$temp['comment_tags'] 		= $row['comment_tags'];
 			$temp['is_interactive'] 	= $row['is_interactive'];
 			$temp['is_private'] 		= $row['is_private'];
+			$temp['is_table_of_content'] = $row['is_table_of_content'];
 			$temp['is_reply_to'] 		= $row['is_reply_to'];
 			$temp['replies']			= array();
 
@@ -332,7 +344,12 @@ class ilObjComment
 			}
 			else
 			{
-				$comments[$i] = $temp;
+			    if($toc === false) {
+                    $comments[$i] = $temp;
+                } elseif($toc === true && $temp['is_table_of_content'] === "1"){
+                    $comments[$i] = $temp;
+                }
+
 				$i++;
 			}
 		}
@@ -370,9 +387,8 @@ class ilObjComment
 	 */
 	public function cloneTutorComments($old_id, $new_id)
 	{
-		global $ilDB;
 		$questions_array = array();
-		$res = $ilDB->queryF(
+		$res = $this->db->queryF(
 			'SELECT *
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s
@@ -381,7 +397,7 @@ class ilObjComment
 			array('integer'),
 			array($old_id)
 		);
-		while($row = $ilDB->fetchAssoc($res))
+		while($row = $this->db->fetchAssoc($res))
 		{
 			$this->setObjId($new_id);
 			$this->setCommentText($row['comment_text']);
@@ -393,6 +409,7 @@ class ilObjComment
 			$this->setCommentTitle($row['comment_title']);
 			$this->setCommentTags($row['comment_tags']);
 			$this->setIsPrivate($row['is_private']);
+			$this->setIsTableOfContent($row['is_table_of_content']);
 			$this->setIsReplyTo($row['is_reply_to']);
 			$new_comment_id = $this->create(true);
 			if((bool)$row['is_interactive'])
@@ -477,7 +494,7 @@ class ilObjComment
         global $ilDB;
 
         $title = $question_id;
-        
+
         $res = $ilDB->queryF(
             'SELECT * FROM rep_robj_xvid_comments
                     INNER JOIN rep_robj_xvid_question 
@@ -486,7 +503,7 @@ class ilObjComment
             array('integer'),
             array($question_id)
         );
-        
+
         while($row = $ilDB->fetchAssoc($res))
         {
             $title = $row['comment_title'];
@@ -494,7 +511,7 @@ class ilObjComment
 
         return $title;
     }
-	
+
 	################## SETTER & GETTER ##################
 	/**
 	 * @return int
@@ -657,7 +674,21 @@ class ilObjComment
 		$this->is_private = $is_private;
 	}
 
-	
+    /**
+     * @return int
+     */
+    public function getIsTableOfContent()
+    {
+        return $this->is_table_of_content;
+    }
+
+    /**
+     * @param int $is_table_of_content
+     */
+    public function setIsTableOfContent($is_table_of_content)
+    {
+        $this->is_table_of_content = $is_table_of_content;
+    }
 	
 	/**
 	 * @return int

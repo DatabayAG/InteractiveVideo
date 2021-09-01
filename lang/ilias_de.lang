@@ -22,16 +22,16 @@ root_create_xvid#:#Neues Interaktives Video anlegen
 cat_create_xvid#:#Neues Interaktives Video anlegen
 interactive#:#Interaktive
 tutor#:#Tutor
-questions_comments#:#Fragen und Kommentare
-questions_comments_new#:#Fragen und öffentliche Kommentare
+questions_comments#:#Fragen, Kapitel und Kommentare
+questions_comments_new#:#Fragen, Kapitel und öffentliche Kommentare
 questions_comments_sub_tab#:#Verwalten
-sure_delete_comments#:#Sind Sie sicher, dass Sie die gewählten Kommentare löschen möchten?
+sure_delete_comments#:#Sind Sie sicher, dass Sie die gewählten Kommentare/Fragen/Kapitel löschen möchten?
 video_file#:#Video
 comment#:#Kommentar
 comments#:#Kommentare
 post#:#Posten
 cancel#:#Abbrechen
-sure_delete_comment#:#Sind Sie sicher, dass Sie den gewählten Kommentar löschen möchten?
+sure_delete_comment#:#Sind Sie sicher, dass Sie den gewählten Kommentare/Fragen/Kapitel löschen möchten?
 missing_comment_text#:#Bitte geben Sie einen Kommentar ein.
 missing_stopping_point#:#Der Haltepunkt wurde nicht zum Server übertragen. Bitte versuchen Sie es erneut.
 invalid_comment_ids#:#Einige Kommentare konnten nicht gefunden werden. 
@@ -73,13 +73,13 @@ invalid_question_ids#:#Ungültige Fragen-IDs
 invalid_user_ids#:#Ungültige User-IDs
 invalid_comment_ids#:#Ungültige Kommentar-IDs
 comment_title#:#Kommentar-Titel
-send#:#Abschicken
+send#:#Überprüfen
 close#:#Schließen
 question#:#Frage
 is_anonymized#:#Kommentare ohne Namen anzeigen
 is_anonymized_info#:#Wenn aktiviert, werden alle Kommentare ohne Benutzernamen angezeigt.
 is_public#:#Alle Kommentare veröffentlichen
-is_public_info#:#Wenn aktiviert, können alle Benutzer alle ÖFFENTLICHE Kommentare lesen. Im anderen Fall sehen Sie nur ihre eigenen Kommentare
+is_public_info#:#Wenn aktiviert, können alle Benutzer alle ÖFFENTLICHE Kommentare lesen. Im anderen Fall sehen Sie nur ihre eigenen Kommentare und öffentliche Kommentare, welche von Administratoren erstellt wurden (im Tab "Fragen, Kapitel und Kommentare").
 correct_answered#:#Richtig beantwortet
 show_my_results#:#Meine Ergebnisse
 is_jump_correct#:#"Richtig"-Sprungmarke verwenden
@@ -109,8 +109,8 @@ status#:#Status
 is_chronologic#:#Alle Kommentare von Beginn an zeigen
 is_chronologic_info#:#Wenn diese Option aktiviert wird, wird die Option 'Alle Kommentare' vorausgewählt und es werden alle Kommentare des gesamten Videos von Beginn an in chronologischer Reihenfolge angezeigt.
 time_end#:#Ende der Passage
-show_response_frequency#:#Zeige Antworthäufigkeiten nach dem Antworten an
-show_response_frequency_info#:#Nachdem die Frage beantwortet wurde, wird unter jeder Antwortoption die relative Häufigkeit in Prozent angezeigt
+show_response_frequency#:#Zeige Antworthäufigkeiten
+show_response_frequency_info#:#Nachdem die Frage beantwortet wurde, wird unter jeder Antwortoption die relative Antworthäufigkeit in Prozent angezeigt
 type#:#Typ
 title_of_question#:#Titel der Frage
 endtime_warning#:#Das Ende der Passage darf nicht kleiner sein als die aktuelle Zeit im Video
@@ -136,12 +136,14 @@ db_update_failed#:#Datenbank-Update schlug fehl: %s
 task_switch#:#Aufgabenstellung aktivieren
 task_switch_info#:#Aufgabenstellung aktivieren
 task#:#Aufgabenstellung
-lp_mode_title_by_questions#:#Fragen beantwortet 
-lp_mode_desc_by_questions#:#Das Objekt gilt als 'Bearbeitet', wenn für alle definierten Fragen eine 'richtige' Antwort gewählt wurde. Falls keine Fragen konfiguriert wurden, gilt das Objekt beim Erreichen der Endposition des Videos als 'Bearbeitet'.
+lp_mode_title_by_questions#:#Fragen korrekt beantwortet
+lp_mode_desc_by_questions#:#Das Objekt gilt als 'Bearbeitet', wenn für alle definierten Fragen eine 'richtige' Antwort gewählt und die Endposition des Videos erreicht wurde. Falls keine Fragen konfiguriert wurden, gilt das Objekt beim Erreichen der Endposition des Videos als 'Bearbeitet'.
 lp_users#:#Benutzer
 lp_matrix#:#Matrixansicht
 lp_summary#:#Zusammenfassung
 lp_settings#:#Einstellungen
+lp_mode_title_by_all_answered_questions#:#Fragen beantwortet
+lp_mode_desc_by_all_answered_questions#:#Das Objekt gilt als 'Bearbeitet', wenn für alle definierten Fragen eine Antwort gewählt wurde, unabhängig von der Korrektheit. Falls keine Fragen konfiguriert wurden, gilt das Objekt beim Erreichen der Endposition des Videos als 'Bearbeitet'.
 select_at_least_one#:#Bitte wählen Sie mindestens eine Quelle aus.
 back_to#:#zurück zu
 back_to_title#:#Wollen Sie zum Urprungsobjekt %s (%s) zurückkehren?
@@ -181,7 +183,7 @@ public#:#öffentlich
 visibility#:#Sichtbarkeit
 save_anyway#:#Trotzdem speichern
 save_without_correct#:#Sind haben keine korrekte Antwort ausgewählt
-save_without_correct_detail#:#Sie haben weder eine Reflexionsfrage, noch neutrale Antworten aktiviert, sind Sie sicher, dass Sie die Frage ohne korrekte Antwort speichern wollen?
+save_without_correct_detail#:#Sie haben weder eine Reflexionsfrage ausgewählt, noch die Option "neutrale Antworten" aktiviert. Sind Sie sicher, dass Sie die Frage ohne korrekte Antwort speichern wollen?
 no_comment#:#Kein Kommentarfeld
 no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflexionsfrage mit aktiviertem Kommentarfeld sind nach wie vor möglich.
 xvid_xvid_view_lp#:#Lernfortschritt einsehen
@@ -198,4 +200,22 @@ sure_delete_subtitle#:#Sind Sie sicher das Sie diesen Untertitel löschen wollen
 you_need_a_short_title#:#Sie müssen einen Kurztitel eintragen!
 no_toolbar#:#Toolbar deaktivieren
 no_toolbar_info#:#Es wird keine Toolbar mit Filtern angezeigt
-
+is_table_of_content#:#Inhaltsverzeichnis
+toc#:#Inhaltsverzeichnis
+show_toc_first#:#Zeige Inhaltsverzeichnis als erstes
+show_toc_first_info#:#Zeige das Inhaltsverzeichnis zuerst an. Damit ein Inhaltsverzeichnis angezeigt wird, müssen zuerst Kapitel erstellt werden (im Tab "Fragen, Kapitel und Kommentare")
+disable_comment_stream#:#Deaktiviere Kommentarstream
+disable_comment_stream_info#:#Deaktiviere Kommentarstream
+insert_chapter#:#Kapitel einfügen
+edit_chapter#:#Kapitel editieren
+comment_table_title#:#Kommentar / Fragentext
+compulsory_question#:#Verpflichtende Frage
+compulsory#:#Verpflichtend
+compulsory_question_info#:#Diese Frage muss beantwortet werden, bevor das Video weiter geschaut werden kann
+show_best_solution#:#Lösung zeigen
+solution#:#Lösung
+repeat#:#Wiederholen
+best_solution_text#:#Bestmögliche Lösung
+best_solution_text_info#:#Wenn ein Kommentarfeld angeboten wird (siehe unten), kann sich ein Nutzer die Lösung erst anzeigen lassen, wenn er/sie eine Antwort gespeichert hat.
+show_best_solution_info#:#Nachdem die Frage beantwortet wurde, können sich Nutzer die richtige Lösung anzeigen lassen (über Button «Lösung zeigen»).
+at_least_one_answer#:#Bitte wählen Sie eine Antwort aus

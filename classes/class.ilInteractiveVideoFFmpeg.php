@@ -38,14 +38,16 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		}
 	}
 
-	/**
-	 * @param        $a_file
-	 * @param        $a_target_filename
-	 * @param string $a_target_dir
-	 * @param int    $a_sec
-	 * @param bool   $return_json
-	 * @return string
-	 */
+    /**
+     * @param        $a_file
+     * @param string $a_target_filename
+     * @param string $a_target_dir
+     * @param int    $a_sec
+     * @param bool   $return_json
+     * @return false|string
+     * @throws ilFFmpegException
+     * @throws ilWACException
+     */
 	static function extractImageWrapper($a_file, $a_target_filename = '', $a_target_dir = '', $a_sec = 1, $return_json = false)
 	{
 		$json_container = array();

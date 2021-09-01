@@ -101,6 +101,16 @@ class SimpleChoiceQuestion
 	/**
 	 * @var int
 	 */
+	protected $show_best_solution = 0;
+
+	/**
+	 * @var string
+	 */
+	protected $show_best_solution_text = '';
+
+	/**
+	 * @var int
+	 */
 	protected $feedback_correct_id;
 
 	/**
@@ -122,6 +132,11 @@ class SimpleChoiceQuestion
 	 * @var string
 	 */
 	protected $question_image = '';
+
+    /**
+     * @var int 
+     */
+	protected $compulsory_question = 0;
 
 	/**
 	 * @var string
@@ -148,9 +163,9 @@ class SimpleChoiceQuestion
 	 */
 	public function read()
 	{
-		/**
-		 * @var $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 		$res = $ilDB->queryF('
 				SELECT * 
@@ -172,7 +187,10 @@ class SimpleChoiceQuestion
 			$this->setIsJumpWrong($row['is_jump_wrong']);
 			$this->setShowWrongIcon($row['show_wrong_icon']);
 			$this->setJumpWrongTs($row['jump_wrong_ts']);
+			$this->setCompulsoryQuestion($row['compulsory_question']);
 			$this->setShowResponseFrequency($row['show_response_frequency']);
+			$this->setShowBestSolution($row['show_best_solution']);
+			$this->setShowBestSolutionText($row['show_best_solution_text']);
 			$this->setFeedbackCorrectId($row['feedback_correct_ref_id']);
 			$this->setFeedbackWrongId($row['feedback_wrong_ref_id']);
 			$this->setRepeatQuestion($row['repeat_question']);
@@ -189,9 +207,9 @@ class SimpleChoiceQuestion
 	 */
 	public function readQuestionById($qid)
 	{
-		/**
-		 * @var $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 		$res = $ilDB->queryF('
 				SELECT * 
@@ -230,6 +248,9 @@ class SimpleChoiceQuestion
 	 */
 	public static function isLimitAttemptsEnabled($question_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF('SELECT limit_attempts FROM ' . self::TABLE_NAME_QUESTION . ' WHERE question_id = %s',
@@ -246,6 +267,9 @@ class SimpleChoiceQuestion
 	 */
 	public static function isRepeatQuestionEnabled($comment_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 		$res = $ilDB->queryF('SELECT repeat_question FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
 			array('integer'), array($comment_id));
@@ -261,10 +285,9 @@ class SimpleChoiceQuestion
 	 */
 	public static function existUserAnswer($comment_id)
 	{
-		/**
-		 * $ilUser ilUser
-		 * $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilUser, $ilDB;
 
 		$res = $ilDB->queryF('
@@ -341,11 +364,10 @@ class SimpleChoiceQuestion
     }
 
     /**
-     * @param $obj_id
-     * @param $user_id
-     * @return bool
+     * @param int $obj_id
+     * @return array<int, int>
      */
-    public function getUserWithAnsweredQuestion($obj_id, $user_id)
+    public function getUsersWithAllAnsweredQuestionsMap($obj_id)
     {
         /**
          * $ilDB ilDB
@@ -353,19 +375,68 @@ class SimpleChoiceQuestion
         global $ilDB;
 
         $res = $ilDB->queryF('
-			SELECT * FROM ' . self::TABLE_NAME_ANSWERS . ' ans
+            SELECT
+                rep_robj_xvid_answers.user_id, COUNT(DISTINCT(rep_robj_xvid_answers.answer_id))
+            FROM rep_robj_xvid_answers
+            INNER JOIN rep_robj_xvid_question
+                ON rep_robj_xvid_question.question_id = rep_robj_xvid_answers.question_id
+                AND rep_robj_xvid_question.type != %s
+            INNER JOIN rep_robj_xvid_comments
+                ON rep_robj_xvid_comments.comment_id = rep_robj_xvid_question.comment_id
+                AND rep_robj_xvid_comments.is_interactive = %s
+            WHERE rep_robj_xvid_comments.obj_id = %s
+            GROUP BY rep_robj_xvid_answers.user_id
+            HAVING COUNT(DISTINCT(rep_robj_xvid_answers.question_id)) = (
+                SELECT COUNT(rep_robj_xvid_question.question_id)
+                FROM rep_robj_xvid_comments
+                INNER JOIN rep_robj_xvid_question
+                    ON rep_robj_xvid_question.comment_id = rep_robj_xvid_comments.comment_id
+                    AND rep_robj_xvid_question.type != %s
+                WHERE rep_robj_xvid_comments.is_interactive = %s AND rep_robj_xvid_comments.obj_id = %s
+            );
+            ',
+            ['integer', 'integer', 'integer', 'integer', 'integer', 'integer'],
+            [2, 1, $obj_id, 2, 1, $obj_id]
+        );
+
+        $usrIds = [];
+        while ($row = $ilDB->fetchAssoc($res)) {
+            $usrIds[$row['user_id']] = $row['user_id'];
+        }
+
+        return $usrIds;
+    }
+
+    /**
+     * @param $obj_id
+     * @param $user_id
+     * @return int
+     */
+    public function getNumberOfAnsweredQuestions($obj_id, $user_id)
+    {
+        /**
+         * $ilDB ilDB
+         */
+        global $ilDB;
+
+        $res = $ilDB->queryF('
+			SELECT COUNT(DISTINCT(ans.question_id)) cnt FROM ' . self::TABLE_NAME_ANSWERS . ' ans
 			INNER JOIN ' . self::TABLE_NAME_QUESTION . ' qst on ans.question_id = qst.question_id 
 			INNER JOIN ' . self::TABLE_NAME_COMMENTS . ' comment on qst.comment_id = comment.comment_id
 			WHERE obj_id = %s 
 			AND ans.user_id = %s
 			',
-			array('integer', 'integer'), array($obj_id, $user_id));
+			['integer', 'integer'],
+            [$obj_id, $user_id]
+        );
 
-        if($ilDB->numRows($res) > 0)
-        {
-            return true;
+        $row = $ilDB->fetchAssoc($res);
+
+        if (is_array($row) && isset($row['cnt'])) {
+            return (int) $row['cnt'];
         }
-        return false;
+
+        return 0;
     }
 
 	/**
@@ -374,10 +445,9 @@ class SimpleChoiceQuestion
 	 */
 	public static function existUserAnswerForQuestionId($question_id)
 	{
-		/**
-		 * $ilUser ilUser
-		 * $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilUser, $ilDB;
 
 		$res = $ilDB->queryF('
@@ -399,9 +469,9 @@ class SimpleChoiceQuestion
 	 */
 	private function readAnswerDefinitions()
 	{
-		/**
-		 * $ilDB ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF('
@@ -439,6 +509,9 @@ class SimpleChoiceQuestion
 	 */
 	public function cloneQuestionObject($old_comment_id, $new_comment_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$_POST['answer'] = array();
@@ -480,7 +553,10 @@ class SimpleChoiceQuestion
 			$this->setIsJumpWrong($row['is_jump_wrong']);
 			$this->setShowWrongIcon($row['show_wrong_icon']);
 			$this->setJumpWrongTs($row['jump_wrong_ts']);
+			$this->setCompulsoryQuestion($row['compulsory_question']);
 			$this->setShowResponseFrequency($row['show_response_frequency']);
+			$this->setShowBestSolution($row['show_best_solution']);
+			$this->setShowBestSolutionText($row['show_best_solution_text']);
 			$this->setFeedbackCorrectId($row['feedback_correct_ref_id']);
 			$this->setFeedbackWrongId($row['feedback_wrong_ref_id']);
 			$this->setRepeatQuestion($row['repeat_question']);
@@ -498,6 +574,9 @@ class SimpleChoiceQuestion
 	 */
 	public function getQuestionIdByCommentId($comment_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF('SELECT question_id FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
@@ -512,10 +591,9 @@ class SimpleChoiceQuestion
 	 */
 	public function create()
 	{
-		/**
-		 * @var $ilDB   ilDB
-		 * @var $ilUser ilObjUser
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 		$question_id = $ilDB->nextId(self::TABLE_NAME_QUESTION);
 		$ilDB->insert(self::TABLE_NAME_QUESTION,
@@ -533,7 +611,10 @@ class SimpleChoiceQuestion
 				'show_wrong_icon'    => array('integer', $this->getShowWrongIcon()),
 				'is_jump_wrong'      => array('integer', $this->getIsJumpWrong()),
 				'jump_wrong_ts'      => array('integer', $this->getJumpWrongTs()),
+				'compulsory_question' => array('integer', $this->getCompulsoryQuestion()),
 				'show_response_frequency' => array('integer', $this->getShowResponseFrequency()),
+				'show_best_solution' => array('integer', $this->getShowBestSolution()),
+				'show_best_solution_text' => array('text', $this->getShowBestSolutionText()),
 				'feedback_correct_ref_id' => array('integer', $this->getFeedbackCorrectId()),
 				'feedback_wrong_ref_id' => array('integer', $this->getFeedbackWrongId()),
 				'repeat_question'    => array('integer', $this->getRepeatQuestion()),
@@ -581,20 +662,23 @@ class SimpleChoiceQuestion
 	/**
 	 * @param      $oid
 	 * @param null $a_user_id
-	 * @return int|array
+	 * @return int|array<int, int>
 	 */
 	public function getAllUsersWithCompletelyCorrectAnswers($oid, $a_user_id = null)
 	{
-		$user_ids = array();
-		/**
-		 * $ilDB ilDB
-		 */
+		$user_ids = [];
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 		$res = $ilDB->queryF(
-			'SELECT sum(points) as points, rep_robj_xvid_score.user_id as usr_id FROM rep_robj_xvid_comments 
-		LEFT JOIN rep_robj_xvid_question ON rep_robj_xvid_question.comment_id = rep_robj_xvid_comments.comment_id
-        LEFT JOIN rep_robj_xvid_answers ON rep_robj_xvid_answers.question_id = rep_robj_xvid_question.question_id
-		LEFT JOIN rep_robj_xvid_score ON rep_robj_xvid_answers.user_id = rep_robj_xvid_score.user_id AND rep_robj_xvid_answers.question_id = rep_robj_xvid_score.question_id
+			'
+        SELECT SUM(points) points, rep_robj_xvid_score.user_id usr_id
+        FROM rep_robj_xvid_comments 
+		INNER JOIN rep_robj_xvid_question
+		    ON rep_robj_xvid_question.comment_id = rep_robj_xvid_comments.comment_id
+		INNER JOIN rep_robj_xvid_score
+		    ON rep_robj_xvid_score.question_id = rep_robj_xvid_question.question_id
 		WHERE rep_robj_xvid_comments.obj_id = %s 
         AND is_interactive = 1
         AND neutral_answer = 0
@@ -605,7 +689,7 @@ class SimpleChoiceQuestion
 		);
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$user_ids[$row['usr_id']] = $row['points'];
+			$user_ids[$row['usr_id']] = (int) $row['points'];
 		}
 		
 		if($a_user_id != null && array_key_exists($a_user_id, $user_ids))
@@ -617,7 +701,6 @@ class SimpleChoiceQuestion
 			return 0;
 		}
 		return $user_ids;
-
 	}
 	
 	/**
@@ -812,6 +895,22 @@ class SimpleChoiceQuestion
 		$this->show_response_frequency = $show_response_frequency;
 	}
 
+    /**
+     * @return int
+     */
+    public function getShowBestSolution()
+    {
+        return $this->show_best_solution;
+    }
+
+    /**
+     * @param int $show_best_solution
+     */
+    public function setShowBestSolution($show_best_solution)
+    {
+        $this->show_best_solution = $show_best_solution;
+    }
+    
 	/**
 	 * @return int
 	 */
@@ -881,9 +980,9 @@ class SimpleChoiceQuestion
 	 */
 	public function existQuestionForCommentId($comment_id)
 	{
-		/**
-		 * @var $ilDB   ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 
 		global $ilDB;
 		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
@@ -902,9 +1001,9 @@ class SimpleChoiceQuestion
 	 */
 	public function getCommentTitleByCommentId($cid)
 	{
-		/**
-		 * @var $ilDB   ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 		$res   = $ilDB->queryF(
 			'SELECT comment_title FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE comment_id = %s',
@@ -929,6 +1028,9 @@ class SimpleChoiceQuestion
 	 */
 	public function getAllNonRepeatAnsweredQuestion($user_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 		$res     = $ilDB->queryF('
 			SELECT comments.comment_id  comment 
@@ -950,12 +1052,49 @@ class SimpleChoiceQuestion
 		return $results;
 	}
 
+    /**
+     * @param int $obj_id
+     * @return array
+     */
+	public static function getAllCompulsoryQuestions($obj_id)
+	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
+		global $ilDB;
+		$res     = $ilDB->queryF('
+			SELECT comments.comment_time, questions.question_id, comments.comment_id, points 
+			FROM ' . self::TABLE_NAME_COMMENTS . ' comments, 
+				' . self::TABLE_NAME_QUESTION . '  questions 
+			LEFT JOIN rep_robj_xvid_score ON questions.question_id = rep_robj_xvid_score.question_id
+			WHERE comments.comment_id = questions.comment_id 
+			AND questions.compulsory_question = 1
+			AND comments.obj_id = %s',
+			array('integer'),
+			array((int)$obj_id)
+		);
+		$results = array();
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$results[$row['question_id']] = [
+			    'time'          => $row['comment_time'],
+                'question_id'   => $row['question_id'],
+			    'comment_id'    => $row['comment_id'],
+			    'answered'      => $row['points'] != null ? true : false
+            ];
+		}
+		return $results;
+	}
+
 	/**
 	 * @param int $user_id
 	 * @return array
 	 */
 	public function getAllRepeatCorrectlyAnsweredQuestion($user_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 		$res     = $ilDB->queryF('
 			SELECT comments.comment_id  comment 
@@ -984,6 +1123,9 @@ class SimpleChoiceQuestion
 	 */
 	public function deleteUserResults($user_ids, $obj_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		if(!is_array($user_ids))
@@ -1008,6 +1150,9 @@ class SimpleChoiceQuestion
 	 */
 	public function getInteractiveQuestionIdsByObjId($obj_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF('
@@ -1033,6 +1178,9 @@ class SimpleChoiceQuestion
 	 */
 	public function getInteractiveNotNeutralQuestionIdsByObjId($obj_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF('
@@ -1057,6 +1205,9 @@ class SimpleChoiceQuestion
 	 */
 	public function deleteQuestionsResults($question_ids)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		if(!is_array($question_ids))
@@ -1077,9 +1228,9 @@ class SimpleChoiceQuestion
 	 */
 	public function getQuestionTextQuestionId($qid)
 	{
-		/**
-		 * @var $ilDB   ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 
 		global $ilDB;
 		$res = $ilDB->queryF(
@@ -1098,10 +1249,9 @@ class SimpleChoiceQuestion
 	 */
 	public function saveAnswer($qid, $answers)
 	{
-		/**
-		 * $ilDB ilDB
-		 * 
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB, $ilUser;
 
 		$usr_id = $ilUser->getId();
@@ -1169,9 +1319,9 @@ class SimpleChoiceQuestion
 	 */
 	public function getTypeByQuestionId($qid)
 	{
-		/**
-		 * @var $ilDB   ilDB
-		 */
+        /**
+         * @var $ilDB ilDBInterface
+         */
 
 		global $ilDB;
 		$res = $ilDB->queryF(
@@ -1189,6 +1339,9 @@ class SimpleChoiceQuestion
 	 */
 	public function removeAnswer($qid)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB, $ilUser;
 		$usr_id = $ilUser->getId();
 		$ilDB->queryF('DELETE FROM ' . self::TABLE_NAME_ANSWERS . ' WHERE question_id = %s AND user_id = %s',
@@ -1201,6 +1354,9 @@ class SimpleChoiceQuestion
 	 */
 	public function removeScore($qid)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB, $ilUser;
 		$usr_id = $ilUser->getId();
 		$ilDB->queryF('DELETE FROM ' . self::TABLE_NAME_SCORE . ' WHERE question_id = %s AND user_id = %s',
@@ -1212,6 +1368,9 @@ class SimpleChoiceQuestion
 	 */
 	public function deleteQuestionsIdByCommentId($comment_id)
 	{
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$res = $ilDB->queryF('SELECT question_id FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
@@ -1236,7 +1395,9 @@ class SimpleChoiceQuestion
 		{
 			return;
 		}
-
+        /**
+         * @var $ilDB ilDBInterface
+         */
 		global $ilDB;
 
 		$ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_QUESTION . ' WHERE ' . $ilDB->in('question_id', $question_ids, false, 'integer'));
@@ -1343,4 +1504,38 @@ class SimpleChoiceQuestion
 	{
 		$this->question_image = $question_image;
 	}
+
+    /**
+     * @return int
+     */
+    public function getCompulsoryQuestion()
+    {
+        return $this->compulsory_question;
+    }
+
+    /**
+     * @param int $compulsory_question
+     */
+    public function setCompulsoryQuestion($compulsory_question)
+    {
+        $this->compulsory_question = $compulsory_question;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShowBestSolutionText() : string
+    {
+        return $this->show_best_solution_text;
+    }
+
+    /**
+     * @param string|null $show_best_solution_text
+     */
+    public function setShowBestSolutionText(?string $show_best_solution_text) : void
+    {
+        $this->show_best_solution_text = $show_best_solution_text;
+    }
+
+
 } 
