@@ -1,7 +1,7 @@
 - [InteractiveVideo](#interactivevideo)
   * [ILIAS compatibility](#ilias-compatibility)
   * [Important notice](#important-notice)
-  * [Changes in Version 2.5.1](#changes-in-version-251)
+  * [Changes in Version 2.6.0](#changes-in-version-260)
   * [Repositories connected to the InteractiveVideo Plugin](#repositories-connected-to-the-interactivevideo-plugin)
   * [Installation Instructions](#installation-instructions)
     + [Workaround patch for making the Interactive Videos work with the Web Access Checker](#workaround-patch-for-making-the-interactive-videos-work-with-the-web-access-checker)
