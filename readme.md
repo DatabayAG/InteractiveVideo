@@ -23,7 +23,7 @@ ILIAS Interactive Video Plugin
 ## ILIAS compatibility
 Since there are a lot of changes in ILIAS 6, there will be a new branch '6_x' which is compatible with ILIAS 6, for older ILIAS versions you can still use the master branch.
 
-## Changes in Version 2.5.1
+## Changes in Version 2.6.0
 * Compulsory questions
 * Automatic scrolling if show all comments is active
 * New Learning Progress mode
