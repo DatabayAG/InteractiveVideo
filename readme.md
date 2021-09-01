@@ -21,8 +21,9 @@
 ILIAS Interactive Video Plugin
 
 ## ILIAS compatibility
-The 2.x version of the InteractiveVideo Plugin is only compatible with ILIAS versions 5.1.x and higher. If you looking for an version compatible with ILIAS 5.0.x please use the release_1 branch. 
 If you are looking for a ILIAS 6 or ILIAS 7 compatible version of the plugin, please use the 6_x branch.
+
+The 2.x version of the InteractiveVideo Plugin is only compatible with ILIAS versions 5.1.x and higher. If you looking for an version compatible with ILIAS 5.0.x please use the release_1 branch.
 
 ## Important notice
 If you upgrade to the 2.x version of the InteractiveVideo you can not go back to version 1.x, because there are migration steps which alter the database schema.
