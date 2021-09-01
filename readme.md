@@ -33,6 +33,7 @@ Since there are a lot of changes in ILIAS 6, there will be a new branch '6_x' wh
 ## Repositories connected to the InteractiveVideo Plugin
 * [COPage Plugin for InteractiveVideo References in LearningModules](https://github.com/DatabayAG/InteractiveVideoReference)
 * [Video Source Plugin for Vimeo](https://github.com/DatabayAG/InteractiveVideoVimeo)
+* [Video Source Plugin for Opencast](https://github.com/DatabayAG/InteractiveVideoOpenCast)
 * [Video Source Plugin for FAU Video Platform](https://github.com/ilifau/InteractiveVideoFauVideoPortal)
 
 ## Installation Instructions
