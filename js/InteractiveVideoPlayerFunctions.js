@@ -295,6 +295,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pub.decideSolutionHandlingForReflectionQuestion = function(comment_id, player_id) {
 		let question = il.InteractiveVideoQuestionViewer.QuestionObject;
 		if(question.show_best_solution === "1" && question.show_best_solution_text.length >= 0){
+			$('.iv_show_best_solution_reflection').remove();
+			$('#reflection_solution').remove();
 			let reflection_solution = '<input id="reflection_solution" class="btn btn-default btn-sm" value="' +  il.InteractiveVideo.lang.show_best_solution + '" '+ 'type="submit">';
 			let best_solution_element = '<div class="iv_show_best_solution_reflection iv_best_solution_hidden">' +
 				'<div class="reflection_best_solution_title">' + il.InteractiveVideo.lang.solution + ': </div>' +
