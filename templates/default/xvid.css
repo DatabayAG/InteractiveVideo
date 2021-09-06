@@ -633,3 +633,11 @@ li.toc_item > div > h5 > time {
 .best_solution_answer_view, .best_solution_answer_view input {
     cursor: default !important;
 }
+
+.best_solution_answer_view input*:hover, .best_solution_answer_view input*:focus {
+    all:unset!important;
+}
+
+.answer_label_disable{
+    cursor: default;
+}
