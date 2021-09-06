@@ -239,7 +239,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			let filter_element = $('#show_all_comments_' + player_id);
 			pro.displayCommentsOrToc(true, player_id);
 
-			if(filter_element.prop('checked')){
+			if(filter_element.prop('checked') || player_data.is_show_all_active === true){
 				il.InteractiveVideoPlayerComments.rebuildCommentsViewIfShowAllIsActive(player_id);
 			} else {
 				pub.replaceCommentsAfterSeeking(time, player_id);
