@@ -158,7 +158,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 
 		$(pri.classes.modal_body).append('<div class="modal_feedback"><div class="modal_reflection_footer"></div></div>', '');
 		if(parseInt(pub.QuestionObject.reflection_question_comment, 10) === 1) {
-			pro.appendSelfReflectionCommentForm(player_id);
+			pro.appendSelfReflectionCommentForm(player_id, player);
 		} else if(parseInt(pub.QuestionObject.show_best_solution, 10) === 1) {
 			let html = '<div id="question_reflection_buttons_bellow_form"></div>';
 			$(pri.classes.modal_body).append(html);
@@ -180,7 +180,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		});
 	};
 	
-	pro.appendSelfReflectionCommentForm = function(player_id)
+	pro.appendSelfReflectionCommentForm = function(player_id, player)
 	{
 		let comment_id = 'text_reflection_comment_'+ pub.comment_id ;
 		let footer = $('.modal_reflection_footer');
@@ -199,7 +199,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		}
 		CKEDITOR.replace(comment_id);
 		feedback.prepend(language.add_comment);
-		scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReflectionCommentPosting(pub.comment_id, pub.QuestionObject.reply_original_id, player_id);
+		scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReflectionCommentPosting(pub.comment_id, pub.QuestionObject.reply_original_id, player_id, player);
 	};
 
 	pro.addToLocalIgnoreArrayIfNonRepeatable = function(player_id){
@@ -277,25 +277,21 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 			$('.question_repeat_btn').off('click');
 			$('.question_repeat_btn').on('click', function () {
 				let time = parseInt(pub.QuestionObject.time, 10);
-
-				//$(pri.ids.modal).modal('hide');
 				pro.removeQuestionLock();
 				pub.getQuestionPerAjax(comment_id, player, false);
-				//il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(time - 1, player_id);
 			});
 		}
 	}
 
-	pub.showBestSolutionForReflectionIsClicked = function(player_id) {
+	pub.showBestSolutionForReflectionIsClicked = function(comment_id, player_id, player) {
 		$('#show_best_solution').prop("disabled", true)
 		if(pub.QuestionObject.limit_attempts === "0"){
 			$('#question_reflection_buttons_bellow_form').append(pro.createButtonButtons('repeat_question', scope.InteractiveVideo.lang.repeat, 'question_repeat_btn', 'button'))
 			$('#repeat_question').off('click');
 			$('#repeat_question').on('click', function () {
 				let time = parseInt(pub.QuestionObject.time, 10);
-
-				$(pri.ids.modal).modal('hide');
-				il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(time - 1, player_id);
+				pro.removeQuestionLock();
+				pub.getQuestionPerAjax(comment_id, player, false);
 			});
 		}
 	}
