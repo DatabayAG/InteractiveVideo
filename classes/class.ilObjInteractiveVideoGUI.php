@@ -2316,7 +2316,21 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$section_header->setTitle($plugin->txt('feedback'));
 		$form->addItem($section_header);
 
-		// Feedback correct
+        $show_best_solution = new ilCheckboxInputGUI($plugin->txt('show_best_solution'), 'show_best_solution');
+        $show_best_solution->setInfo($plugin->txt('show_best_solution_info'));
+
+        $show_best_solution_text = xvidUtils::constructTextAreaFormElement('best_solution_text', 'show_best_solution_text');
+        $show_best_solution_text->setInfo($plugin->txt('best_solution_text_info'));
+        $show_best_solution->addSubItem($show_best_solution_text);
+
+        $form->addItem($show_best_solution);
+
+        $show_response_frequency = new ilCheckboxInputGUI($plugin->txt('show_response_frequency'), 'show_response_frequency');
+        $show_response_frequency->setInfo($plugin->txt('show_response_frequency_info'));
+        $form->addItem($show_response_frequency);
+
+
+        // Feedback correct
 		$feedback_correct = xvidUtils::constructTextAreaFormElement('feedback_correct', 'feedback_correct');
 		$show_correct_icon = new ilCheckboxInputGUI($plugin->txt('show_correct_icon'), 'show_correct_icon');
 		$show_correct_icon->setInfo($plugin->txt('show_correct_icon_info'));
@@ -2359,19 +2373,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$feedback_one_wrong->addSubItem($is_jump_wrong);
 		$this->appendRepositorySelector($feedback_one_wrong, 'feedback_wrong_obj');
 		$form->addItem($feedback_one_wrong);
-
-        $show_best_solution = new ilCheckboxInputGUI($plugin->txt('show_best_solution'), 'show_best_solution');
-        $show_best_solution->setInfo($plugin->txt('show_best_solution_info'));
-
-        $show_best_solution_text = xvidUtils::constructTextAreaFormElement('best_solution_text', 'show_best_solution_text');
-        $show_best_solution_text->setInfo($plugin->txt('best_solution_text_info'));
-        $show_best_solution->addSubItem($show_best_solution_text);
-
-        $form->addItem($show_best_solution);
-
-		$show_response_frequency = new ilCheckboxInputGUI($plugin->txt('show_response_frequency'), 'show_response_frequency');
-		$show_response_frequency->setInfo($plugin->txt('show_response_frequency_info'));
-		$form->addItem($show_response_frequency);
 
 		$show_comment_field = new ilCheckboxInputGUI($plugin->txt('show_comment_field'), 'show_comment_field');
 		$show_comment_field->setInfo($plugin->txt('show_comment_field_info'));
