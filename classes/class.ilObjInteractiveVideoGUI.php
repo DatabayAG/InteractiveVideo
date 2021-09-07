@@ -2418,7 +2418,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function initQuestionForm()
 	{
 		$plugin = ilInteractiveVideoPlugin::getInstance();
+        $simple_question = new SimpleChoiceQuestionFormEditGUI($this->plugin, $this->object);
+        $form = $simple_question->initQuestionForm(true);
+        return $form;
 
+        //Todo fix form creation
 		$form = new ilPropertyFormGUI();
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertQuestion'));
 		$form->setTitle($plugin->txt('insert_question'));
