@@ -28,12 +28,12 @@ il.InteractiveVideoModalHelper = (function (scope) {
 		});
 	};
 
-	pub.getQuestionCreationForModal = function()
+	pub.getQuestionCreationForModal = function(player_id)
 	{
 		pro.showWaitBox();
 		$.when(
 			$.ajax({
-				url:  scope.InteractiveVideo.get_question_creation_modal,
+				url:  scope.InteractiveVideo[player_id].get_question_creation_modal,
 				type: 'GET', dataType: 'html'
 			})
 		).then(function (html) {
@@ -43,7 +43,7 @@ il.InteractiveVideoModalHelper = (function (scope) {
 			}, 380);
 			setTimeout(function(){
 				$('#comment_time').val(
-					il.InteractiveVideoPlayerComments.secondsToTimeCode(plyr.get()[0].getCurrentTime()));
+					il.InteractiveVideoPlayerComments.secondsToTimeCode(scope.InteractiveVideo[player_id].player.getCurrentTime));
 			}, 400);
 			InteractiveVideoQuestionCreator.Init();
 		});

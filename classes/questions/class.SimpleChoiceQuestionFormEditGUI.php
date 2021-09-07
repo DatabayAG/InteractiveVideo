@@ -50,7 +50,7 @@ class SimpleChoiceQuestionFormEditGUI
 	public function initQuestionForm($ajax = false)
 	{
 		$form = new ilPropertyFormGUI();
-		$form->setFormAction($this->ctrl->getFormAction($this, 'insertQuestion'));
+		$form->setFormAction($this->ctrl->getFormAction(new ilObjInteractiveVideoGUI(), 'insertQuestion'));
 		$this->appendGeneralSettingsToQuestionForm($form, $ajax);
 
 		$this->appendQuestionSettingsToQuestionForm($form);
@@ -85,13 +85,6 @@ class SimpleChoiceQuestionFormEditGUI
 		if(!$ajax)
 		{
 			$form->setTitle($this->plugin->txt('insert_question'));
-			/**
-			 * $tpl ilTemplate
-			 */
-			global $tpl;
-
-			$tpl->addJavaScript($this->plugin->getDirectory() . '/js/jquery.InteractiveVideoQuestionCreator.js');
-			$tpl->addCss($this->plugin->getDirectory() . '/templates/default/xvid.css');
 		}
 
 		$section_header = new ilFormSectionHeaderGUI();

@@ -154,6 +154,10 @@ InteractiveVideoQuestionCreator = (function () {
 	};
 
 	pub.Init = function () {
+		if(IVQuestionCreator.JSON.length === 0)
+		{
+			InteractiveVideoQuestionCreator.appendEmptyJSON();
+		}
 		let question_form = $('#addQuestion');
 		$('#is_interactive').parent().parent().parent().parent().append(question_form);
 		pro.createQuestionForm();
@@ -221,10 +225,6 @@ $( document ).ready(function() {
 
 	$('#addQuestion').show();
 
-	if(IVQuestionCreator.JSON.length === 0)
-	{
-		InteractiveVideoQuestionCreator.appendEmptyJSON();
-	}
 	InteractiveVideoQuestionCreator.Init();
 	$('.question_type').val(IVQuestionCreator.type);
 	InteractiveVideoQuestionCreator.protect.showHideFormElementsPointsForNeutralAnswers();

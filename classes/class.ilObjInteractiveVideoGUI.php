@@ -21,6 +21,7 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('tables/class.ilInteractiv
 ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilInteractiveVideoFFmpeg.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('../VideoSources/class.ilInteractiveVideoUniqueIds.php');
 ilInteractiveVideoPlugin::getInstance()->includeClass('form/class.ilInteractiveVideoModalExtension.php');
+ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestionFormEditGUI.php');
 
 /**
  * Class ilObjInteractiveVideoGUI
@@ -293,8 +294,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $DIC;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
+        $tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoQuestionCreator.js');
 
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoUniqueIds.php';
+        require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoUniqueIds.php';
 		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $plugin->getDirectory());
 
@@ -697,8 +699,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $form = $simple_question->initQuestionForm(true);
         $ck = new ilTextAreaInputCkeditor($this->plugin);
         $ck->appendCkEditorMathJaxSupportToForm($form);
-        $form->addCommandButton('insertQuestionAjax', $this->lng->txt('insert'));
-        $form->addCommandButton('editCommentsAjax', $this->lng->txt('cancel'));
+        $form->addCommandButton('insertQuestion', $this->lng->txt('insert'));
+        $form->addCommandButton('editComments', $this->lng->txt('cancel'));
         echo $form->getHTML();
         $this->callExit();
     }
