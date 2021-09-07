@@ -486,7 +486,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			time = Math.abs(Math.round(time) - 0.1);
 		}
 		return 	'<time class="time" data-time="' + time + '"> ' +
-				'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + time + ', ' + player_id + '); return false;">'+
+				'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + time + ', \'' + player_id + '\'); return false;">'+
 				pub.secondsToTimeCode(display_time)  +
 				'</a>' +
 				'</time>' ;
