@@ -49,6 +49,8 @@ class SimpleChoiceQuestionFormEditGUI
 	 */
 	public function initQuestionForm($ajax = false)
 	{
+	    global $tpl;
+	    $tpl->addOnLoadCode('InteractiveVideoQuestionCreator.registerCreator();');
 		$form = new ilPropertyFormGUI();
 		$form->setFormAction($this->ctrl->getFormAction(new ilObjInteractiveVideoGUI(), 'insertQuestion'));
 		$this->appendGeneralSettingsToQuestionForm($form, $ajax);
@@ -212,7 +214,7 @@ class SimpleChoiceQuestionFormEditGUI
 		}
 		$is_jump_correct->addSubItem($jump_correct_ts);
 		$feedback_correct->addSubItem($is_jump_correct);
-		$this->appendRepositorySelector($feedback_correct, 'feedback_correct_obj');
+		//$this->appendRepositorySelector($feedback_correct, 'feedback_correct_obj');
 		$form->addItem($feedback_correct);
 	}
 

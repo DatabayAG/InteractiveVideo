@@ -15,27 +15,23 @@ il.InteractiveVideoMediaElementPlayer = (function (scope) {
 				il.InteractiveVideo.last_stopPoint = -1;
 
 				il.InteractiveVideoSubtitle.initializeSubtitleTracks(player_id);
-				il.InteractiveVideo[player_id].player =	 new Plyr('#' + player_id, {});
+				player =  new Plyr('#' + player_id, {});
+				il.InteractiveVideo[player_id].player =	player
 				il.InteractiveVideo[player_id].player.on('ready', event => {
 					il.InteractiveVideoPlayerAbstract.config[player_id] = {
 						pauseCallback: (function () {
-							player = $("#" + player_id)[0];
 							player.pause();
 						}),
 						playCallback: (function () {
-							player = $("#" + player_id)[0];
 							player.play();
 						}),
 						durationCallback: (function () {
-							player = $("#" + player_id)[0];
-							return player.getDuration
+							return player.duration
 						}),
 						currentTimeCallback: (function () {
-							player = $("#" + player_id)[0];
 							return player.currentTime
 						}),
 						setCurrentTimeCallback: (function (time) {
-							player = $("#" + player_id)[0];
 							player.seeked = time;
 						}),
 						initPlayerCallback         : il.InteractiveVideoMediaElementPlayer.initPlayer

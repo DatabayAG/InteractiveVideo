@@ -216,16 +216,14 @@ InteractiveVideoQuestionCreator = (function () {
 		IVQuestionCreator.type = 0;
 	};
 
+	pub.registerCreator = function() {
+		$('#addQuestion').show();
+		InteractiveVideoQuestionCreator.Init();
+		$('.question_type').val(IVQuestionCreator.type);
+		InteractiveVideoQuestionCreator.protect.showHideFormElementsPointsForNeutralAnswers();
+	}
+
 	pub.protect = pro;
 	return pub;
 
 }());
-
-$( document ).ready(function() {
-
-	$('#addQuestion').show();
-
-	InteractiveVideoQuestionCreator.Init();
-	$('.question_type').val(IVQuestionCreator.type);
-	InteractiveVideoQuestionCreator.protect.showHideFormElementsPointsForNeutralAnswers();
-});

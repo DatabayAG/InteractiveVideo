@@ -2510,7 +2510,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$is_jump_correct->addSubItem($jump_correct_ts);
 		$feedback_correct->addSubItem($is_jump_correct);
-		$this->appendRepositorySelector($feedback_correct, 'feedback_correct_obj');
+		//$this->appendRepositorySelector($feedback_correct, 'feedback_correct_obj');
 		$form->addItem($feedback_correct);
 
 		// Feedback wrong

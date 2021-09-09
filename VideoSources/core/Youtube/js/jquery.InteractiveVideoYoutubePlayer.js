@@ -26,7 +26,7 @@ il.InteractiveVideoYoutubePlayer = (function (scope) {
 							player.play();
 						}),
 						durationCallback: (function () {;
-							return player.getDuration
+							return player.duration
 						}),
 						currentTimeCallback: (function () {
 							return player.currentTime

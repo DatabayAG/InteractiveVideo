@@ -43,7 +43,7 @@ il.InteractiveVideoModalHelper = (function (scope) {
 			}, 380);
 			setTimeout(function(){
 				$('#comment_time').val(
-					il.InteractiveVideoPlayerComments.secondsToTimeCode(scope.InteractiveVideo[player_id].player.getCurrentTime));
+					il.InteractiveVideoPlayerComments.secondsToTimeCode(scope.InteractiveVideo[player_id].player.currentTime));
 			}, 400);
 			InteractiveVideoQuestionCreator.Init();
 		});
@@ -65,7 +65,7 @@ il.InteractiveVideoModalHelper = (function (scope) {
 
 	pro.applyEventToButton = function(button){
 		$('[name=cmd\\[' + button + '\\]]').on('click', function(){
-			var time = parseInt(plyr.get()[0].getCurrentTime(), 10);
+			var time = parseInt(plyr.get()[0].currentTime(), 10);
 			var ref_id = parseInt(il.InteractiveVideo.interactive_video_ref_id, 10);
 			if(time > 0 && ref_id > 0)
 			{
