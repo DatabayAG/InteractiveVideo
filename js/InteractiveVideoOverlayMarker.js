@@ -102,15 +102,16 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	{
 		var svg = '<svg id="ilInteractiveVideoOverlay" viewBox="0 0 300 150" preserveAspectRatio="none"></svg>';
 		var overlay_count = $(pri.ids.ilInteractiveVideoOverlay).size();
+		console.log('count', overlay_count)
 		if(overlay_count === 1){
-			if($('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').size()){
+			if($('#ilInteractiveVideoAjaxModal .ilInteractiveVideoPlayerContainer').size()){
 				setTimeout(function(){
 					$('#ilInteractiveVideoOverlay').remove();
-					$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').prepend(svg);
+					$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').parent().prepend(svg);
 				}, 30);
 			}
 		}else if(overlay_count === 0){
-			$('#ilInteractiveVideoTag').parent().prepend(svg);
+			$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').parent().prepend(svg);
 		}else{
 			console.log('Something totally went wrong.')
 		}

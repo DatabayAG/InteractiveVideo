@@ -14,6 +14,8 @@ il.InteractiveVideoModalHelper = (function (scope) {
 		).then(function (html) {
 			$('#ilInteractiveVideoAjaxModal').find('.modal-body').html(html);
 			il.InteractiveVideoPlayerAbstract.initPlayer(player_id);
+			il.InteractiveVideoOverlayMarker.checkForOverlay()
+			il.InteractiveVideoOverlayMarker.attachListener();
 			setTimeout(function(){
 				//plyr.get()[1].seek(plyr.get()[0].getCurrentTime());
 			}, 900);
