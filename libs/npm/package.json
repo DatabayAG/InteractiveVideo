@@ -6,7 +6,7 @@
   "dependencies": {
     "bootstrap-timepicker": "^0.5.2",
     "plyr": "^3.6.8",
-    "svg.draggable.js": "^3.0.0",
+    "svg.draggable.js": "2.0.0",
     "svg.js": "^2.7.1"
   }
 }
