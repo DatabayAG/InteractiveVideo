@@ -100,11 +100,10 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 	pub.checkForOverlay = function()
 	{
-		var svg = '<svg id="ilInteractiveVideoOverlay" viewBox="0 0 300 150" preserveAspectRatio="none"></svg>';
+		var svg = '<svg id="ilInteractiveVideoOverlay" viewBox="0 0 300 150" preserveAspectRatio="xMinYMin meet"></svg>';
 		var overlay_count = $(pri.ids.ilInteractiveVideoOverlay).size();
-		console.log('count', overlay_count)
 		if(overlay_count === 1){
-			if($('#ilInteractiveVideoAjaxModal .ilInteractiveVideoPlayerContainer').size()){
+			if($('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').size()){
 				setTimeout(function(){
 					$('#ilInteractiveVideoOverlay').remove();
 					$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').parent().prepend(svg);

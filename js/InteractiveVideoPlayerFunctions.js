@@ -176,12 +176,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.commentsObjectActions = function(i, current_time, player)
 	{
-		console.log('DSFDSFSDF2222')
 		let player_id      = pub.getPlayerIdFromPlayerObject(player);
 		let player_data    = pub.getPlayerDataObjectByPlayer(player);
 		let is_interactive = parseInt(player_data.comments[i].is_interactive, 10);
-		//Todo: fix this!
-		let is_overlay_marker = "0";//parseInt(scope.InteractiveVideo.comments[i].is_overlay, 10);
+		let is_overlay_marker = parseInt(player_data.comments[i].is_overlay, 10);
 		let comment        = player_data.comments[i];
 		let stop_video     = 0;
 		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id);
@@ -208,9 +206,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 
 		if(is_overlay_marker === 1) {
-			var marker = '<g class=interactive_overlay_element_'+comment.comment_id +'>' + comment.marker + '</g>';
-
-			$('#ilInteractiveVideoOverlay').html($('#ilInteractiveVideoOverlay').html() + marker);
+			if($('.interactive_overlay_element_' + comment.comment_id).size() === 0){
+				var marker = '<g class=interactive_overlay_element_' + comment.comment_id +'>' + comment.marker + '</g>';
+				$('#ilInteractiveVideoOverlay').html($('#ilInteractiveVideoOverlay').html() + marker);
+			}
 		}
 		return stop_video;
 	};

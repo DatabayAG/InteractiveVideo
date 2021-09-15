@@ -217,6 +217,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 						$this->$cmd();
 						break;
 					case 'getQuestionPerAjax':
+					case 'insertTutorCommentAjax':
 					case 'postAnswerPerAjax':
 						$this->checkPermission('read');
 						$this->$cmd();
@@ -1753,6 +1754,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 **/
 		$frm_id = new ilHiddenInputGUI('comment_id');
 		$form->addItem($frm_id);
+		$fake_marker = new ilHiddenInputGUI('fake_marker');
+		$form->addItem($fake_marker);
 
 		return $form;
 	}
@@ -2232,7 +2235,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$comment_time_end	= $form->getInput('comment_time_end');
 			$this->objComment->setCommentTimeEnd($comment_time_end);
 			$this->objComment->setIsTutor($is_tutor);
-
+            $fake_marker	= $form->getInput('fake_marker');
+            $this->objComment->setMarker($fake_marker);
 			$this->objComment->create();
 
 			ilUtil::sendSuccess($this->lng->txt('saved_successfully'));
