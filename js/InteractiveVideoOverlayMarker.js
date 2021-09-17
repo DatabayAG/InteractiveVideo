@@ -65,6 +65,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	pub.checkForEditScreen = function()
 	{
 		var obj = $(pri.ids.faker_marker);
+		console.log('check')
 		if(obj.length >= 1)
 		{
 			if(obj.val().length > 0)
@@ -72,7 +73,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 				var element = obj.val();
 				pro.removeButtons();
-				il.InteractiveVideoPlayerAbstract.addOnReadyFunction(
+				$(document).ready(
 					(function ()
 						{
 							$('.ilInteractiveVideo').prepend('<div class="play_overlay_jump_to_time"><div onclick="il.InteractiveVideoOverlayMarker.jumpToTimeAndRemoveOverlay();" class="play_overlay_jump_to_time_text">'+il.InteractiveVideo.lang.jump_to_text+'</div></div>');
@@ -161,7 +162,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		var svg = SVG(pri.strings.ilInteractiveVideoOverlay);
 		var marker = svg.select(type + '.magic_marker');
 		var id = pro.getUniqueId();
-		console.log('found', type, proto)
 		marker.id(id);
 		$(obj).css('cssText', 'pointer-events : all !important');
 
@@ -295,7 +295,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		});
 
 		$(pri.ids.btn_delete).on("click", function() {
-			$(pri.ids.faker_marker).html('');
+			$(pri.ids.faker_marker).val('');
 			pub.resetForm();
 		});
 

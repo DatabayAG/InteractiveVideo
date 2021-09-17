@@ -2103,6 +2103,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setInteractive(0);
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
             $this->objComment->setIsTableOfContent((int)$form->getInput('is_table_of_content'));
+            $this->objComment->setMarker($form->getInput('fake_marker'));
 
 			$this->objComment->setCommentTime($comment_time);
 			$this->objComment->setCommentTimeEnd($comment_time_end);
