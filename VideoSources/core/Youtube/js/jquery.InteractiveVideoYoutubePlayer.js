@@ -1,4 +1,4 @@
-il.InteractiveVideoYoutubePlayer  = (function (scope) {
+il.InteractiveVideoYoutubePlayer = (function (scope) {
 	'use strict';
 
 	var pub = {}, pro = {};
