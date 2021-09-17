@@ -32,7 +32,7 @@ il.InteractiveVideoYoutubePlayer = (function (scope) {
 							return player.currentTime
 						}),
 						setCurrentTimeCallback: (function (time) {
-							player.seeked = time;
+							player.currentTime = time;
 						}),
 						initPlayerCallback         : il.InteractiveVideoYoutubePlayer.initPlayer
 					};

@@ -76,7 +76,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		}
 		pub.play(player_id);
 		pub.pause(player_id);
-		time = parseInt(time, 10);;
+		time = parseInt(time, 10);
 		if(time !== null)
 		{
 			il.InteractiveVideoPlayerResume.saveExternalResumeTime(player_id, time);
@@ -116,7 +116,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		});
 	};
 
-	pub.readyCallback = function ()
+	pub.readyCallback = function (player_id)
 	{
 		if(il.InteractiveVideo.tutor_mode == 'true' || il.InteractiveVideo.tutor_mode == '1')
 		{
@@ -131,8 +131,6 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 				value();
 			}
 		});
-
-		pro.checkForResumeValue();
 	};
 
 	pub.addOnReadyFunction = function(callback)
@@ -145,20 +143,6 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		if (typeof pub.config[player_id].initPlayerCallback === 'function') {
 			pub.config[player_id].initPlayerCallback();
 		}
-	};
-
-	pro.checkForResumeValue = function(){
-		setTimeout(function(){
-			var ref_id = parseInt(il.InteractiveVideo.interactive_video_ref_id, 10);
-			var key = "InteractiveVideoResumeTime_" + ref_id;
-			if (typeof(Storage) !== "undefined") {
-				var time = parseInt(sessionStorage.getItem(key), 10);
-				if(time > 0){
-					il.InteractiveVideoPlayerAbstract.setCurrentTime(time);
-					sessionStorage.removeItem(key);
-				}
-			}
-		}, 250);
 	};
 
 	pub.protect = pro;

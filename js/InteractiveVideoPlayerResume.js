@@ -10,11 +10,9 @@ il.InteractiveVideoPlayerResume = (function (scope) {
 	pub.checkForResumeValue = function (player_id) {
 		setTimeout(function () {
 			let key = pri.getStorageKey(player_id);
-
 			if (pro.IsStorageAvailable()) {
 				let saved_time = parseFloat(pri.storage_media.getItem(key));
 				let duration   = scope.InteractiveVideoPlayerAbstract.duration(player_id);
-
 				if ( ! isNaN(saved_time) || ! saved_time >= duration || ! saved_time < 0) {
 					scope.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(saved_time, player_id);
 					pro.removeExistingKey(player_id);

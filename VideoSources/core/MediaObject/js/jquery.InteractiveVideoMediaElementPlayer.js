@@ -32,7 +32,7 @@ il.InteractiveVideoMediaElementPlayer = (function (scope) {
 							return player.currentTime
 						}),
 						setCurrentTimeCallback: (function (time) {
-							player.seeked = time;
+							player.currentTime = time;
 						}),
 						initPlayerCallback         : il.InteractiveVideoMediaElementPlayer.initPlayer
 					};
