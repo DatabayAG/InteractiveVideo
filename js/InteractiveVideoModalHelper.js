@@ -30,6 +30,33 @@ il.InteractiveVideoModalHelper = (function (scope) {
 		});
 	};
 
+	pub.getChapterForm = function(player_id)
+	{
+		pro.showWaitBox();
+		$.when(
+			$.ajax({
+				url:  scope.InteractiveVideo[player_id].get_chapter_modal,
+				type: 'GET', dataType: 'html'
+			})
+		).then(function (html) {
+			$('#ilInteractiveVideoAjaxModal').find('.modal-body').html(html);
+			il.InteractiveVideoPlayerAbstract.initPlayer(player_id);
+			il.InteractiveVideoOverlayMarker.checkForOverlay()
+			il.InteractiveVideoOverlayMarker.attachListener();
+			setTimeout(function(){
+				//plyr.get()[1].seek(plyr.get()[0].getCurrentTime());
+			}, 900);
+			setTimeout(function(){
+				//CKEDITOR.instances.comment_text.focusManager.focus();
+				pro.addEventsToButtons('insertTutorCommentAjax', 'cancelCommentsAjax');
+			}, 480);
+			$('#ilInteractiveVideoAjaxModal').on('hidden.bs.modal', function () {
+				$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').remove();
+				il.InteractiveVideoOverlayMarker.checkForOverlay();
+			})
+		});
+	};
+
 	pub.getQuestionCreationForModal = function(player_id)
 	{
 		pro.showWaitBox();

@@ -384,6 +384,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $question_button->setCaption($this->plugin->txt('add_question'), false);
                 $question_button->setOnClick("il.InteractiveVideoModalHelper.getQuestionCreationForModal('".$player_id."');");
                 $video_tpl->setVariable('MODAL_BUTTON_QUESTION', $question_button->render());
+                $question_button = ilLinkButton::getInstance();
+                $question_button->setCaption($this->plugin->txt('insert_chapter'), false);
+                $question_button->setOnClick("il.InteractiveVideoModalHelper.getChapterForm('".$player_id."');");
+                $video_tpl->setVariable('MODAL_BUTTON_CHAPTER', $question_button->render());
             }
 		}
 
@@ -611,6 +615,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postAnswerPerAjax', '', true, false));
 		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postComment', '', true, false));
         $config_tpl->setVariable('GET_COMMENT_MARKER_MODAL', $this->ctrl->getLinkTarget($this, 'getCommentAndMarkerForm', '', true, false));
+        $config_tpl->setVariable('GET_CHAPTER_MODAL', $this->ctrl->getLinkTarget($this, 'getChapterForm', '', true, false));
         $config_tpl->setVariable('GET_QUESTION_CREATION_MODAL', $this->ctrl->getLinkTarget($this, 'showTutorInsertQuestionFormAjax', '', true, false));
         $this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'ref_id', $org_ref_id);
 		$config_tpl->setVariable('SEND_BUTTON', $plugin->txt('send'));
@@ -715,6 +720,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $my_tpl = $this->getCommentTemplate();
         $my_tpl->setVariable('FORM',$form->getHTML());
         echo $my_tpl->get();
+        $this->callExit();
+    }
+
+    public function getChapterForm()
+    {
+        $form = $this->initChapterForm();
+
+        $form->addCommandButton('insertTutorChapter', $this->lng->txt('insert'));
+        $form->addCommandButton('cancelCommentsAjax', $this->lng->txt('cancel'));
+        echo $form->getHTML();
         $this->callExit();
     }
 
@@ -1852,7 +1867,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addCommandButton('insertTutorComment', $this->lng->txt('insert'));
 		$form->addCommandButton('cancelComments', $this->lng->txt('cancel'));
 
-		$tpl->setContent($form->getHTML());
+        $my_tpl = $this->getCommentTemplate();
+        $my_tpl->setVariable('FORM',$form->getHTML());
+        $tpl->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
+        $tpl->setContent($my_tpl->get());
 	}
 
 	public function cancelComments()
@@ -2317,7 +2335,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addCommandButton('updateComment', $this->lng->txt('save'));
 		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
 
-		$tpl->setContent($form->getHTML());
+        $my_tpl = $this->getCommentTemplate();
+        $my_tpl->setVariable('FORM',$form->getHTML());
+        $tpl->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
+		$tpl->setContent($my_tpl->get());
 	}
 
 	/**
@@ -2377,6 +2398,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['comment_tags']		= $comment_data['comment_tags'];
 		$values['is_private']		= $comment_data['is_private'];
 		$values['is_table_of_content'] = $comment_data['is_table_of_content'];
+		$values['is_reply_to']      = $comment_data['is_table_of_content'];
+		$values['is_table_of_content'] = $comment_data['is_table_of_content'];
+		$values['fake_marker']      = $comment_data['marker'];
 
 		return $values;
 	}

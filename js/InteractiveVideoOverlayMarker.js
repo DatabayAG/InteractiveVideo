@@ -130,7 +130,8 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 	pub.initialiseExistingMarker = function()
 	{
-		var obj = $('.magic_marker');
+		//jQuery("object").contents().find("stop")
+		var obj = $('#fake_marker').val();
 		var type, proto;
 		if($(obj).is('rect'))
 		{
@@ -160,8 +161,9 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		var svg = SVG(pri.strings.ilInteractiveVideoOverlay);
 		var marker = svg.select(type + '.magic_marker');
 		var id = pro.getUniqueId();
+		console.log('found', type, proto)
 		marker.id(id);
-		obj.css('cssText', 'pointer-events : all !important');
+		$(obj).css('cssText', 'pointer-events : all !important');
 
 		marker.draggable().on('dragend', function(e){
 			pro.replaceFakeMarkerAfterAttributeChange();
