@@ -36,6 +36,7 @@ il.InteractiveVideoYoutubePlayer = (function (scope) {
 						}),
 						initPlayerCallback         : il.InteractiveVideoYoutubePlayer.initPlayer
 					};
+					il.InteractiveVideoPlayerAbstract.readyCallback(player_id);
 					il.InteractiveVideo[player_id].player.on('play', event => {
 						il.InteractiveVideoPlayerAbstract.play(player_id);
 					});

@@ -131,6 +131,8 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 				value();
 			}
 		});
+
+		pro.moveMarkerOverlayIntoPlayer(player_id);
 	};
 
 	pub.addOnReadyFunction = function(callback)
@@ -144,6 +146,10 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 			pub.config[player_id].initPlayerCallback();
 		}
 	};
+
+	pro.moveMarkerOverlayIntoPlayer = function(player_id) {
+		$("#ilInteractiveVideoOverlay").prependTo($('#' + player_id).parent('.plyr__video-wrapper'));
+	}
 
 	pub.protect = pro;
 	return pub;
