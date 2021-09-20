@@ -116,7 +116,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		});
 	};
 
-	pub.readyCallback = function (player_id)
+	pub.readyCallback = function (player_id, prependElement)
 	{
 		if(il.InteractiveVideo.tutor_mode == 'true' || il.InteractiveVideo.tutor_mode == '1')
 		{
@@ -132,7 +132,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 			}
 		});
 
-		pro.moveMarkerOverlayIntoPlayer(player_id);
+		pro.moveMarkerOverlayIntoPlayer(player_id, prependElement);
 	};
 
 	pub.addOnReadyFunction = function(callback)
@@ -147,8 +147,8 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		}
 	};
 
-	pro.moveMarkerOverlayIntoPlayer = function(player_id) {
-		$("#ilInteractiveVideoOverlay").prependTo($('#' + player_id).parent('.plyr__video-wrapper'));
+	pro.moveMarkerOverlayIntoPlayer = function(player_id, prependElement) {
+		$("#ilInteractiveVideoOverlay").prependTo($(prependElement).parent('.plyr__video-wrapper'));
 	}
 
 	pub.protect = pro;

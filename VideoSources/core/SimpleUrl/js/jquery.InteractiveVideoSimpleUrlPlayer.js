@@ -36,7 +36,7 @@ il.InteractiveVideoSimpleUrlPlayer = (function (scope) {
 						}),
 						initPlayerCallback         : il.InteractiveVideoMediaElementPlayer.initPlayer
 					};
-					il.InteractiveVideoPlayerAbstract.readyCallback(player_id);
+					il.InteractiveVideoPlayerAbstract.readyCallback(player_id, '#' + player_id);
 					il.InteractiveVideo[player_id].player.on('play', event => {
 						il.InteractiveVideoPlayerAbstract.play(player_id);
 					});
