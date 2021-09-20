@@ -2241,6 +2241,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			$this->objComment->setObjId($this->object->getId());
 			$this->objComment->setCommentText($form->getInput('comment_text'));
+			$this->objComment->setIsTableOfContent($is_chapter);
 			$this->objComment->setInteractive(0);
 
 			// $this->objComment->setCommentTags((string)$form->getInput('comment_tags'));

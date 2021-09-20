@@ -627,6 +627,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
             $table_data[$counter]['type']       = $type;
 			$table_data[$counter]['marker'] = $row['marker'];
 			$table_data[$counter]['is_reply_to'] = $row['is_reply_to'];
+			$table_data[$counter]['is_table_of_content'] = $row['is_table_of_content'];
 
             $counter++;
         }

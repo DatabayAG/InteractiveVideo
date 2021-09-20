@@ -169,8 +169,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			}
 			else if($key == 'type')
 			{
-				$txt_value = $value == 1 ? 'question' : 'comment';
-				$value = $this->lng->txt($txt_value);
+                $value = $this->lng->txt($value);
 				if(strlen($a_set['marker']))
 				{
 					$value .= ' ' . ilInteractiveVideoPlugin::getInstance()->txt('with_marker');
