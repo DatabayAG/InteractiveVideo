@@ -147,6 +147,14 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		}
 	};
 
+	pub.isFullScreen = function(player_id){
+		return il.InteractiveVideo[player_id].player.fullscreen.active;
+	}
+
+	pub.exitFullScreen = function(player_id){
+		return il.InteractiveVideo[player_id].player.fullscreen.exit();
+	}
+
 	pro.moveMarkerOverlayIntoPlayer = function(player_id, prependElement) {
 		$("#ilInteractiveVideoOverlay").prependTo($(prependElement).parent('.plyr__video-wrapper'));
 	}

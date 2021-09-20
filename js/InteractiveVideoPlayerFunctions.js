@@ -80,6 +80,9 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 								player_data.last_stop_id = j;
 							}
 							if (stop_video === 1) {
+								if(scope.InteractiveVideoPlayerAbstract.isFullScreen(player_id)){
+									scope.InteractiveVideoPlayerAbstract.exitFullScreen(player_id)
+								}
 								scope.InteractiveVideoPlayerAbstract.pause(player_id);
 								stop_video = 0;
 							}
