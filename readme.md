@@ -23,16 +23,17 @@ ILIAS Interactive Video Plugin
 ## ILIAS compatibility
 Since there are a lot of changes in ILIAS 6, there will be a new branch '6_x' which is compatible with ILIAS 6, for older ILIAS versions you can still use the master branch.
 
-## Changes in version 3.0
+## Changes in version 3.0.0
 1. [SVG marker for videos](https://www.ilias.de/docu/goto_docu_wiki_wpage_4971_1357.html)
 2. [Reply to comments](https://www.ilias.de/docu/goto_docu_wiki_wpage_4967_1357.html)
 3. Changed video library to [plyr](https://github.com/sampotts/plyr)
 
 ## Changes in Version 2.5.1
 * Compulsory questions
+* Table of contents
 * Automatic scrolling if show all comments is active
 * New Learning Progress mode
-* Table of contents
+
 ## Important notice
 If you upgrade to the 2.x version of the InteractiveVideo you can not go back to version 1.x, because there are migration steps which alter the database schema.
 
@@ -51,7 +52,7 @@ If you upgrade to the 2.x version of the InteractiveVideo you can not go back to
 4. Search the **InteractiveVideo** plugin in the list of plugin and choose **Activate** from the **Actions** drop down.
 
 ### Workaround patch for making the Interactive Videos work with the Web Access Checker
-Simply insert the following line into the file 'Services/MediaObjects/classes/class.ilObjMediaObject.php' at round about line number 1511, which should read like this in the original:
+Simply insert the following line into the file 'Services/MediaObjects/classes/class.ilObjMediaObject.php' at round about line number 1445, which should read like this in the original:
 
 	case "mep":
 		$obj_id = $id;

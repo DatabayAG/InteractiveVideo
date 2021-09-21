@@ -1,13 +1,13 @@
-# 3.0
+# 3.0.0
 1. SVG marker for videos
 2. Reply to comments
 3. Changed video library to [plyr](https://github.com/sampotts/plyr)
 
 # 2.5.1
 1. Compulsory questions
-2. Automatic scrolling if show all comments is active
-3. New Learning Progress mode
-4. Table of contents
+2. Table of contents
+3. Automatic scrolling if show all comments is active
+4. New Learning Progress mode
 
 # 2.0.25
 1. Disable toolbar setting
