@@ -1,4 +1,4 @@
-# 2.5
+# 3.0
 1. SVG marker for videos
 2. Reply to comments
 3. Changed video library to [plyr](https://github.com/sampotts/plyr)

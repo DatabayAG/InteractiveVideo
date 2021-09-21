@@ -23,6 +23,11 @@ ILIAS Interactive Video Plugin
 ## ILIAS compatibility
 Since there are a lot of changes in ILIAS 6, there will be a new branch '6_x' which is compatible with ILIAS 6, for older ILIAS versions you can still use the master branch.
 
+## Changes in version 3.0
+1. [SVG marker for videos](https://www.ilias.de/docu/goto_docu_wiki_wpage_4971_1357.html)
+2. [Reply to comments](https://www.ilias.de/docu/goto_docu_wiki_wpage_4967_1357.html)
+3. Changed video library to [plyr](https://github.com/sampotts/plyr)
+
 ## Changes in Version 2.5.1
 * Compulsory questions
 * Automatic scrolling if show all comments is active
@@ -30,11 +35,6 @@ Since there are a lot of changes in ILIAS 6, there will be a new branch '6_x' wh
 * Table of contents
 ## Important notice
 If you upgrade to the 2.x version of the InteractiveVideo you can not go back to version 1.x, because there are migration steps which alter the database schema.
-
-## Changes in version 2.5.x
-1. [SVG marker for videos](https://www.ilias.de/docu/goto_docu_wiki_wpage_4971_1357.html)
-2. [Reply to comments](https://www.ilias.de/docu/goto_docu_wiki_wpage_4967_1357.html)
-3. Changed video library to [plyr](https://github.com/sampotts/plyr)
 
 ## Changes in earlier versions
 * [Complete Changelog](https://github.com/DatabayAG/InteractiveVideo/blob/master/CHANGELOG.md)
