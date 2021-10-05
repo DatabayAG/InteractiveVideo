@@ -1255,7 +1255,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 
 		require_once 'Services/Tracking/classes/class.ilLearningProgressAccess.php';
-		$a = $this->object;
 		if(! $this->object instanceof ilObjRootFolder) {
             if(ilLearningProgressAccess::checkAccess($this->object->getRefId(), true))
             {

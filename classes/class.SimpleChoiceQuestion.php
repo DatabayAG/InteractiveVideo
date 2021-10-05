@@ -1524,7 +1524,7 @@ class SimpleChoiceQuestion
     /**
      * @return string
      */
-    public function getShowBestSolutionText() : string
+    public function getShowBestSolutionText()
     {
         return $this->show_best_solution_text;
     }
