@@ -122,6 +122,10 @@ class SimpleChoiceQuestionFormEditGUI
 		$limit_attempts->setInfo($this->plugin->txt('limit_attempts_info'));
 		$form->addItem($limit_attempts);
 
+        $compulsory_question = new ilCheckboxInputGUI($plugin->txt('compulsory_question'), 'compulsory_question');
+        $compulsory_question->setInfo($plugin->txt('compulsory_question_info'));
+        $form->addItem($compulsory_question);
+
         $show_best_solution = new ilCheckboxInputGUI($plugin->txt('show_best_solution'), 'show_best_solution');
         $show_best_solution->setInfo($plugin->txt('show_best_solution_info'));
 
@@ -338,7 +342,8 @@ class SimpleChoiceQuestionFormEditGUI
 		$question->setVariable('CORRECT_SOLUTION', 	$this->plugin->txt('correct_solution'));
 		if($question_id > 0)
 		{
-			$question->setVariable('JSON', $ajax_object->getJsonForCommentId((int)$_GET['comment_id']));
+            $ajax_question_object = json_decode($ajax_object->getJsonForCommentId((int)$_GET['comment_id']));
+			$question->setVariable('JSON', json_encode($ajax_question_object->answers));
 			$question->setVariable('QUESTION_TYPE', $simple_choice->getTypeByQuestionId($question_id));
 			$question->setVariable('QUESTION_TEXT', $simple_choice->getQuestionTextQuestionId($question_id));
 		}
