@@ -50,10 +50,16 @@ class SimpleChoiceQuestionFormEditGUI
 	public function initQuestionForm($ajax = false)
 	{
 	    global $tpl;
+        $plugin = ilInteractiveVideoPlugin::getInstance();
+
+        $tpl->addJavaScript($plugin->getDirectory() .  '/libs/npm/node_modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js');
+        $tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoQuestionCreator.js');
+        $tpl->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
+        $tpl->addCss($plugin->getDirectory() . 'libs/npm/node_modules/bootstrap-timepicker/css/bootstrap-timepicker.css');
 	    $tpl->addOnLoadCode('InteractiveVideoQuestionCreator.registerCreator();');
 		$form = new ilPropertyFormGUI();
 		$form->setFormAction($this->ctrl->getFormAction(new ilObjInteractiveVideoGUI(), 'insertQuestion'));
-		$this->appendGeneralSettingsToQuestionForm($form, $ajax);
+		$this->appendGeneralSettingsToQuestionForm($form, $plugin, $ajax);
 
 		$this->appendQuestionSettingsToQuestionForm($form);
 
@@ -82,7 +88,7 @@ class SimpleChoiceQuestionFormEditGUI
 	 * @param ilPropertyFormGUI $form
 	 * @param bool $ajax
 	 */
-	protected function appendGeneralSettingsToQuestionForm($form, $ajax = false)
+	protected function appendGeneralSettingsToQuestionForm($form, $plugin, $ajax = false)
 	{
 		if(!$ajax)
 		{
@@ -115,6 +121,15 @@ class SimpleChoiceQuestionFormEditGUI
 		$limit_attempts = new ilCheckboxInputGUI($this->plugin->txt('limit_attempts'), 'limit_attempts');
 		$limit_attempts->setInfo($this->plugin->txt('limit_attempts_info'));
 		$form->addItem($limit_attempts);
+
+        $show_best_solution = new ilCheckboxInputGUI($plugin->txt('show_best_solution'), 'show_best_solution');
+        $show_best_solution->setInfo($plugin->txt('show_best_solution_info'));
+
+        $show_best_solution_text = xvidUtils::constructTextAreaFormElement('best_solution_text', 'show_best_solution_text');
+        $show_best_solution_text->setInfo($plugin->txt('best_solution_text_info'));
+        $show_best_solution->addSubItem($show_best_solution_text);
+
+        $form->addItem($show_best_solution);
 
 		$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($this->plugin->txt('question'));
@@ -323,14 +338,14 @@ class SimpleChoiceQuestionFormEditGUI
 		$question->setVariable('CORRECT_SOLUTION', 	$this->plugin->txt('correct_solution'));
 		if($question_id > 0)
 		{
-			$question->setVariable('JSON', $ajax_object->getJsonForQuestionId($question_id));
+			$question->setVariable('JSON', $ajax_object->getJsonForCommentId((int)$_GET['comment_id']));
 			$question->setVariable('QUESTION_TYPE', $simple_choice->getTypeByQuestionId($question_id));
 			$question->setVariable('QUESTION_TEXT', $simple_choice->getQuestionTextQuestionId($question_id));
 		}
 		else
 		{
 			$answers = array();
-			if(is_array($_POST) && array_key_exists('answer', $_POST) && sizeof($_POST['answer'] > 0))
+			if(is_array($_POST) && array_key_exists('answer', $_POST) && sizeof($_POST['answer'])  > 0)
 			{
 				$post_answers = ilUtil::stripSlashesRecursive($_POST['answer']);
 				foreach($post_answers as $key => $value)
