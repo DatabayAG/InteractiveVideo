@@ -144,8 +144,6 @@ lp_matrix#:#Vista matrice
 lp_users#:#Utenti
 lp_summary#:#Riepilogo
 lp_settings#:#Impostazioni
-lp_mode_title_by_all_answered_questions#:#Domande con risposta
-lp_mode_desc_by_all_answered_questions#:#L'oggetto è 'completato' se gli utenti hanno inviato una risposta per ogni domanda, corretta o meno. Se non è definita alcuna domanda, l'oggetto viene "completato" se l'utente raggiunge la fine del video.
 select_at_least_one#:#Seleziona almeno una sorgente
 back_to#:#torna a
 back_to_title#:#Vuoi tornare a %s (%s)?
@@ -200,23 +198,3 @@ sure_delete_subtitle#:#Sei sicuro di voler rimuovere questo sottotitolo?
 you_need_a_short_title#:#Devi fornire un titolo breve!
 no_toolbar#:#Disattiva barra degli strumenti
 no_toolbar_info#:#Non verrà mostrata alcuna barra degli strumenti con filtri
-save_without_correct_detail#:#Non hai né selezionato una domanda riflessiva né abilitato l'opzione "Risposte neutre". Sei sicuro di voler salvare la domanda senza selezionare una risposta corretta?
-is_table_of_content#:#Tabella dei contenuti
-toc#:#Tabella dei contenuti
-show_toc_first#:#Mostra prima la tabella dei contenuti
-show_toc_first_info#:#Mostra la Tabella dei contenuti come prima pagina. Per visualizzare tale sommario è necessario creare dei capitoli (nella scheda "Domande, capitoli e commenti")
-disable_comment_stream#:#Disabilita il flusso di commenti
-disable_comment_stream_info#:#Disabilita il flusso di commenti
-insert_chapter#:#Inserisci capitolo
-edit_chapter#:#Modifica capitolo
-comment_table_title#:#Commento / Testo della domanda
-compulsory_question#:#Domanda obbligatoria
-compulsory#:#Obbligatoria
-compulsory_question_info#:#Questa domanda deve essere risposta
-show_best_solution#:#Mostra soluzione
-solution#:#Soluzione
-repeat#:#Riprova
-best_solution_text#:#Soluzione migliore
-best_solution_text_info#:#Se viene offerto un campo di commento (vedi sotto), un utente non può visualizzare la soluzione finché non ha salvato una risposta.
-show_best_solution_info#:#Dopo aver risposto alla domanda, gli utenti possono visualizzare la soluzione corretta (tramite il pulsante "Mostra soluzione").
-at_least_one_answer#:#Seleziona una risposta
