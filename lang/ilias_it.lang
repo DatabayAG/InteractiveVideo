@@ -1,0 +1,200 @@
+<!-- language file start -->
+obj_xvid#:#Video interattivo
+objs_xvid#:#Video interattivi
+obj_xvid_duplicate#:#Copia
+objs_xvid_duplicate#:#Copia video interattivi
+xvid_add#:#Aggiungi video interattivo
+xvid_new#:#Aggiungi nuovo video interattivo
+xvid_read#:#L'utente può leggere i video interattivi
+xvid_copy#:#L'utente può copiare i video interattivi
+xvid_write#:#L'utente può modificare i video interattivi
+xvid_delete#:#L'utente può spostare o eliminare i video interattivi
+xvid_edit_permission#:#L'utente può modificare i permessi
+xvid_visible#:#Il video interattivo è visibile
+xvid_read_learning_progress#:#L'utente può vedere i progressi didattici degli altri utenti
+reset#:#Reset
+crs_create_xvid#:#Crea video interattivo
+grp_create_xvid#:#Crea video interattivo
+fold_create_xvid#:#Crea video interattivo
+root_create_xvid#:#Crea video interattivo
+cat_create_xvid#:#Crea video interattivo
+interactive#:#Interattivo
+questions_comments_sub_tab#:#Modifica
+tutor#:#Tutor
+questions_comments#:#Domande, capitoli e commenti
+questions_comments_new#:#Domande, capitoli e commenti pubblici
+sure_delete_comments#:#Sei sicuro di voler eliminare i commenti/domande/capitoli selezionati?
+video_file#:#Video
+comment#:#Commento
+comments#:#Commenti
+switch_on#:#On
+switch_off#:#Off
+post#:#Conferma
+cancel#:#Indietro
+sure_delete_comment#:#Sei sicuro di voler eliminare i commenti/domande/capitoli selezionati?
+missing_comment_text#:#Inserisci un commento.
+missing_stopping_point#:#Il punto di blocco non è stato trasferito al server. Per favore riprova.
+invalid_comment_ids#:#Alcuni commenti non sono stati trovati.
+comments_successfully_deleted#:#I commenti selezionati sono stati eliminati con successo.
+show_all_comments#:#Mostra tutti i commenti:
+author_filter#:#Filtra per autore
+edit_comment#:#Modifica commento
+correct_solution#:#Corretto
+add_question#:#Aggiungi domanda
+single_choice#:#Scelta singola
+multiple_choice#:#Scelta multipla
+user#:#Utente
+correct#:#Corretto
+questions#:#Domande
+correct#:#Domande corrette
+questions#:#Domande
+results#:#Risultati
+user_results#:#Risultati utente
+single_choice#:#Scelta singola
+multiple_choice#:#Scelta multipla
+answer_text#:#Risposta
+percentage#:#Percentuale complessiva
+answered#:#Domande con risposta
+question_results#:#Risultati delle domande
+user_answered#:#L'utente ha risposto
+user_correct#:#L'utente ha risposto correttamente
+insert_question#:#Inserisci domanda
+insert_comment#:#Inserisci commento
+my_comments#:#I miei commenti
+general#:#Generale
+repeat_question#:#Ripeti la domanda
+tags#:#Tag
+question_text#:#Testo della domanda
+question_type#:#Tipo di domanda
+feedback_correct#:#Feedback risposta corretta
+feedback_one_wrong#:#Feedback per almeno un errore
+results_successfully_deleted#:#I risultati selezionati sono stati eliminati con successo
+sure_delete_results#:#Sei sicuro di voler eliminare i risultati selezionati?
+comments_successfully_deleted#:#I commenti selezionati sono stati eliminati con successo
+invalid_question_ids#:#ID domanda non validi
+invalid_user_ids#:#ID utente non validi
+invalid_comment_ids#:#ID commento non validi
+comment_title#:#Titolo
+send#:#Verifica
+close#:#Chiudi
+question#:#Domanda
+is_anonymized#:#Rendi i commenti anonimi
+is_anonymized_info#:#Se abilitato tutti i commenti vengono mostrati senza nomi utente
+is_public#:#Pubblica tutti i commenti
+is_public_info#:#Se abilitato tutti gli utenti possono leggere tutti i commenti PUBBLICI. Altrimenti possono vedere solo i propri commenti e i commenti pubblici creati dagli amministratori (nella scheda "Domande, capitoli e commenti")
+correct_answered#:#Risposto correttamente
+show_my_results#:#I miei risultati
+is_jump_correct#:#Usa etichetta "Corretto"
+is_jump_wrong#:#Usa etichetta "Sbagliato"
+limit_attempts#:#Limita i tentativi
+limit_attempts_info#:#Se abilitato, l'utente può rispondere a una domanda solo una volta.
+is_private_comment#:#Commento privato
+feedback_jump_text#:#Salta a
+repeat_question_info#:#La domanda verrà nuovamente visualizzata ad ogni riproduzione del video. Se l'opzione "Salta domande con risposta corretta" è stata attivata nelle opzioni video, la domanda verrà mostrata fino alla risposta corretta.
+sum#:#Corretto
+answered#:#Risposto
+csv_export#:#Export CSV
+complete_question_results#:#Panoramica completa dei risultati delle domande
+feedback#:#Feedback
+already_answered#:#Domanda già risposta.
+reflection#:#Domanda riflessiva
+answers#:#Risposte
+sure_update_question#:#Sei sicuro di voler salvare la domanda? I risultati utente esistenti verranno eliminati! 
+question_type_info#:#Puoi scegliere tra uno dei tre tipi di domande disponibili: a scelta singola, a risposta multipla o riflessiva. Le domande riflessive non hanno opzioni di risposta e saranno contrassegnate come "superate" una volta che sono state mostrate a un utente almeno una volta.
+is_jump_correct_info#:#Nel caso in cui la risposta alla domanda sia stata corretta, è possibile selezionare un'etichetta per saltare (time stamp) all'interno del video utilizzando un pulsante. Questo pulsante verrà mostrato insieme al testo di feedback.
+is_jump_wrong_info#:#Nel caso in cui alla domanda sia stata data una risposta errata, è possibile selezionare un'etichetta per saltare (time stamp) all'interno del video utilizzando un pulsante. Questo pulsante verrà mostrato insieme al testo di feedback.
+learning_recommendation#:#Raccomandazione di apprendimento all'interno del video a
+is_repeat#:#Salta le domande con risposta corretta
+is_repeat_info#:#Se questa opzione è attivata, le domande a cui è già stata data una risposta corretta verranno saltate quando gli utenti guarderanno di nuovo il video.
+offline#:#Offline
+status#:#Stato
+is_chronologic#:#Mostra tutti i commenti in ogni momento
+is_chronologic_info#:#Se questa opzione è attivata, tutti i commenti per il video verranno sempre mostrati in ordine cronologico.
+time_end#:#Ora di fine
+show_response_frequency#:#Mostra frequenze di risposta
+show_response_frequency_info#:#Dopo aver risposto alla domanda, le frequenze di risposta di tutte le opzioni di risposta vengono mostrate come percentuali sotto ciascuna opzione di risposta.
+type#:#Tipo
+title_of_question#:#Titolo della domanda
+endtime_warning#:#L'ora di fine selezionata è inferiore all'ora effettiva
+screen_info#:#Utilizzare questa schermata per creare e gestire domande e commenti. Attenzione: le domande interattive NON verranno mostrate in questa schermata. Per vederli durante la riproduzione, vai alla scheda "Contenuto".
+show_correct_icon#:#Contrassegna visivamente il feedback come "risposta corretta"
+show_correct_icon_info#:#Se attivato, il feedback verrà visualizzato con uno sfondo verde e un'icona per 'risposta corretta'
+show_wrong_icon#:#Contrassegna visivamente il feedback come "risposta sbagliata"
+show_wrong_icon_info#:#Se attivato, il feedback verrà visualizzato con uno sfondo rosso e un'icona per 'risposta errata'
+no_text_warning#:#Devi inserire un testo
+grp_create_xvid#:#Crea video interattivo
+crs_create_xvid#:#Crea video interattivo
+cat_create_xvid#:#Crea video interattivo
+root_create_xvid#:#Crea video interattivo
+fold_create_xvid#:#Crea video interattivo
+rbac_create_xvid#:#Crea video interattivo
+source#:#Sorgente
+installed_version#:#Versione database installata: %s, versione database file %s
+source_does_not_exist#:#La sorgente non esiste più o è stata disabilitata nell'amministrazione
+update_db#:#Aggiorna il database
+db_up_to_date#:#Database aggiornato
+db_update_worked#:#Database aggiornato con successo
+db_update_failed#:#L'aggiornamento del database è andato storto: %s
+task_switch#:#Attiva attività
+task_switch_info#:#Attiva attività
+task#:#Attività
+lp_mode_title_by_questions#:#Domande a cui è stata data una risposta corretta
+lp_mode_desc_by_questions#:#L'oggetto è 'completato' se gli utenti hanno inviato la risposta 'corretta' per ogni domanda. Se non è definita alcuna domanda, l'oggetto viene "completato" se l'utente raggiunge la fine del video.
+lp_matrix#:#Vista matrice
+lp_users#:#Utenti
+lp_summary#:#Riepilogo
+lp_settings#:#Impostazioni
+select_at_least_one#:#Seleziona almeno una sorgente
+back_to#:#torna a
+back_to_title#:#Vuoi tornare a %s (%s)?
+save#:#Save
+at_least_one_source#:#Devi selezionare almeno una sorgente, assicurati che ci sia almeno una sorgente attiva nella configurazione del Plugin Video Interattivo.
+feedback_correct_obj#:#Link di feedback per l'oggetto del repository per la risposta corretta
+feedback_correct_obj_info#:#Link di feedback per l'oggetto del repository per la risposta corretta
+feedback_wrong_obj#:#Link di feedback per l'oggetto del repository per almeno una risposta errata
+feedback_wrong_obj_info#:#Link di feedback per l'oggetto del repository per almeno una risposta errata
+show_comment_field#:#Mostra campo commento
+show_comment_field_info#:#Mostra il campo dei commenti sotto questa domanda di riflessione
+more_informations#:#Maggiori informazioni
+neutral_type#:#Valutazione
+with_correct#:#Con risposte corrette
+neutral#:#Risposte neutre
+neutral_type_info#:#Se viene selezionata l'opzione Risposte neutre, non esiste una soluzione corretta
+feedback_neutral#:#Feedback
+feedback_jump_neutral_info#:#Nel caso in cui sia stata data una risposta alla domanda, è possibile selezionare un'etichetta per saltare (timestamp) all'interno del video utilizzando un pulsante. Questo pulsante verrà mostrato insieme al testo di feedback.
+feedback_jump_neutral#:#Usa etichetta di salto
+feedback_repository_neutral#:#Link di feedback per l'oggetto del repository
+feedback_repository_neutral_info#:#Link di feedback per l'oggetto del repository
+neutral_questions#:#Domande neutre
+neutral_question#:#Domanda neutra
+export_comments#:#Esporta commenti
+export_all_comments#:#Esporta tutti i commenti
+question_image#:#Domanda immagine
+extract#:#Genera thumbnail dal video
+use_this_image#:#Usa questa immagine
+time_for_preview#:#Tempo: 
+comment_title_info#:#Il titolo è sempre visibile nella schermata dei commenti.
+correct_answer#:#Corretto
+wrong_answer#:#Sbagliato
+neutral_answer#:#-
+not_answered#:#Non risposto
+save_anyway#:#Salva comunque
+private#:#privato
+public#:#pubblico
+visibility#:#Visibilità
+no_comment#:#Nessun campo di commento
+no_comment_info#:#Non ci sarà nessun campo di commento sotto il video player
+xvid_xvid_view_lp#:#Visualizza i progressi di apprendimento
+auto_resume#:#Ripristino automatico
+auto_resume_info#:#Se abilitato, il video verrà ripreso automaticamente dopo aver chiuso una finestra di dialogo della domanda modale.
+fixed_modal#:#Blocco chiusura modale 
+fixed_modal_info#:#Se abilitato, un dialogo modale non verrà chiuso se un utente fa clic sullo sfondo.
+modal_section#:#Dialogo sul comportamento delle domande
+subtitle#:#Sottotitolo
+short_title#:#Titolo breve
+long_title#:#Titolo
+subtitle_removed#:#Sottotitolo rimosso
+sure_delete_subtitle#:#Sei sicuro di voler rimuovere questo sottotitolo?
+you_need_a_short_title#:#Devi fornire un titolo breve!
+no_toolbar#:#Disattiva barra degli strumenti
+no_toolbar_info#:#Non verrà mostrata alcuna barra degli strumenti con filtri
