@@ -924,3 +924,25 @@ li.toc_item > div > h5 > time {
 .best_solution_answer_view, .best_solution_answer_view input {
     cursor: default !important;
 }
+
+.play_overlay_jump_to_time{
+    width: 100%;
+    height: 100%;
+    background-color:rgba(0, 0, 0, 0.5);
+    position: absolute;
+    z-index: 231;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.play_overlay_jump_to_time_text{
+    border: 5px solid white;
+    border-radius: 15px;
+    font-size: xx-large;
+    padding: 15px;
+    font-weight: bolder;
+    color: white;
+    cursor: pointer;
+
+}
+

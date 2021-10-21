@@ -30,12 +30,11 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 	pub.play = function(player_id)
 	{
 		let player_config = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
-		if (player_config.first_play_action) {
+		if (player_config.first_play_action && scope.InteractiveVideo[player_id].edit_mode === false) {
 			player_config.first_play_action = false;
 			il.InteractiveVideoPlayerResume.checkForResumeValue(player_id);
 			il.InteractiveVideoPlayerFunction.triggerVideoStarted(player_id);
 		}
-
 		pro.disableAllOtherInstances(player_id);
 
 		if (typeof pub.config[player_id].playCallback === 'function') {
@@ -71,10 +70,22 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.jumpToTimeInVideo = function (time, player_id)
 	{
+		pro.jumpToTimeInVideoAction(time, player_id);
+		pub.play(player_id);
+	};
+
+	pub.jumpToTimeInVideoEditScreen = function (time, player_id)
+	{
+		scope.InteractiveVideo[player_id].edit_mode = true;
+		pro.jumpToTimeInVideoAction(time, player_id);
+	};
+
+	pro.jumpToTimeInVideoAction = function (time, player_id)
+	{
 		if(typeof player_id === "object") {
 			player_id = $(player_id).attr('id');
 		}
-		pub.play(player_id);
+		//pub.play(player_id);
 		pub.pause(player_id);
 		time = parseInt(time, 10);
 		if(time !== null)
@@ -83,8 +94,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 			pub.setCurrentTime(time, player_id);
 			scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id).last_stopPoint = time;
 		}
-		pub.play(player_id);
-	};
+	}
 
 	pub.resumeVideo = function (player_id)
 	{

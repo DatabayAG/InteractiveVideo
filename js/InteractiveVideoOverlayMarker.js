@@ -56,8 +56,9 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		actual_marker : null
 	};
 	
-	pub.jumpToTimeAndRemoveOverlay = function()
+	pub.jumpToTimeAndRemoveOverlay = function(event)
 	{
+		event.preventDefault()
 		il.InteractiveVideoOverlayMarker.jumpToTimeInVideoForMarker();
 		$('.play_overlay_jump_to_time').remove();
 	};
@@ -65,7 +66,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	pub.checkForEditScreen = function()
 	{
 		var obj = $(pri.ids.faker_marker);
-		console.log('check')
 		if(obj.length >= 1)
 		{
 			if(obj.val().length > 0)
@@ -76,7 +76,8 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 				$(document).ready(
 					(function ()
 						{
-							$('.ilInteractiveVideo').prepend('<div class="play_overlay_jump_to_time"><div onclick="il.InteractiveVideoOverlayMarker.jumpToTimeAndRemoveOverlay();" class="play_overlay_jump_to_time_text">'+il.InteractiveVideo.lang.jump_to_text+'</div></div>');
+							$('.ilInteractiveVideo').before('<div class="play_overlay_jump_to_time" id="play_overlay_jump_to_time"><div class="play_overlay_jump_to_time_text">'+il.InteractiveVideo.lang.jump_to_text+'</div></div>');
+							document.getElementById("play_overlay_jump_to_time").addEventListener("click", il.InteractiveVideoOverlayMarker.jumpToTimeAndRemoveOverlay);
 							$(pri.ids.ilInteractiveVideoOverlay).html(element);
 							$(pri.classes.add_marker_selector).show( 'fast' );
 							pub.editScreen = true;
@@ -95,8 +96,10 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 	pub.jumpToTimeInVideoForMarker = function()
 	{
-		var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($(pri.ids.comment_time).val());
-		il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
+		let sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($(pri.ids.comment_time).val());
+		let player_id = $('.ilInteractiveVideo').attr('id');
+		il.InteractiveVideoPlayerAbstract.jumpToTimeInVideoEditScreen(sec, player_id);
+
 	};
 
 	pub.checkForOverlay = function()
@@ -176,7 +179,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		{
 			$(pri.classes.remove_marker).removeClass('prototype');
 		}
-		console.log(marker, $(obj), type)
 		pro.setValuesFromElement();
 	};
 

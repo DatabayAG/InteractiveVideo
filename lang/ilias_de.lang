@@ -219,7 +219,6 @@ best_solution_text#:#Bestmögliche Lösung
 best_solution_text_info#:#Wenn ein Kommentarfeld angeboten wird (siehe unten), kann sich ein Nutzer die Lösung erst anzeigen lassen, wenn er/sie eine Antwort gespeichert hat.
 show_best_solution_info#:#Nachdem die Frage beantwortet wurde, können sich Nutzer die richtige Lösung anzeigen lassen (über Button «Lösung zeigen»).
 at_least_one_answer#:#Bitte wählen Sie eine Antwort aus
-
 no_comment_stream#:#Kein Kommentar-Stream
 no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflektionsfragen mit aktiviertem Kommentarfeld sind nach wie vor möglich.
 no_comment_stream_info#:#Es wird kein Kommentar-Stream nebem dem Video angezeigt, somit auf keine Toolbar mit Filtern, Frage funktionieren weiter wie gewohnt.
