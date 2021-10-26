@@ -17,7 +17,9 @@ il.InteractiveVideoModalHelper = (function (scope) {
 			il.InteractiveVideoOverlayMarker.checkForOverlay()
 			il.InteractiveVideoOverlayMarker.attachListener();
 			setTimeout(function(){
-				//plyr.get()[1].seek(plyr.get()[0].getCurrentTime());
+				let time = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
+				time = scope.InteractiveVideoPlayerComments.secondsToTimeCode(time);
+				$('#comment_time').timepicker('setTime', time);
 			}, 900);
 			setTimeout(function(){
 				//CKEDITOR.instances.comment_text.focusManager.focus();
