@@ -377,14 +377,15 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		$('#comment_time_end_chk_' + player_id).prop( 'checked', false );
 		$('.end_time_selector_' + player_id).hide( 'fast' );
 		$('.alert-warning_' + player_id).addClass('ilNoDisplay');
-		CKEDITOR.instances.comment_text.setData('');
+		CKEDITOR.instances['comment_text_' + player_id].setData('');
 		$('#is_private').prop( 'checked', false );
 		$('#comment_time_end_chk').prop( 'checked', false );
 		$('.end_time_selector').hide( 'fast' );
 		$('.alert-warning').addClass('ilNoDisplay');
 		$('.iv_svg_marker').remove();
 		$('#add_marker_chk').prop( 'checked', false );
-		$('.add_marker_selector').hide( 'fast' );
+		//$('.add_marker_selector').hide( 'fast' );
+		il.InteractiveVideoOverlayMarker.resetForm();
 	};
 
 	pro.addPausePlayerOnClick = function(player_id)

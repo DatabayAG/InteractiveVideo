@@ -296,7 +296,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $DIC;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
         $tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoQuestionCreator.js');
-
+        $tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoOverlayMarker.js');
+        $tpl->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
         require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoUniqueIds.php';
 		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $plugin->getDirectory());
@@ -357,6 +358,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             if(!$this->checkPermissionBool('write') && $this->object->getDisableComment() != 1)
             {
                 $comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $this->plugin->getDirectory());
+                $comments_tpl->setVariable('PLAYER_ID', $player_id);
                 $comments_tpl->setVariable('COMMENT_TIME_END', $this->plugin->txt('time_end'));
                 $picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end');
                 $comments_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
@@ -841,6 +843,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$fixed_modal = $a_form->getInput('fixed_modal');
 		$this->object->setFixedModal((int)$fixed_modal);
 
+        $marker_for_students = $a_form->getInput('marker_for_students');
+        $this->object->setMarkerForStudents((int)$marker_for_students);
+
 		$factory = new ilInteractiveVideoSourceFactory();
 		$source = $factory->getVideoSourceObject($a_form->getInput('source_id'));
 		$source->doUpdateVideoSource($this->obj_id);
@@ -980,6 +985,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $show_toc_first->setInfo($plugin->txt('show_toc_first_info'));
 		$a_form->addItem($show_toc_first);
 
+        $marker_for_students = new ilCheckboxInputGUI($this->plugin->txt('marker_for_students'), 'marker_for_students');
+        $marker_for_students->setInfo($this->plugin->txt('marker_for_students_info'));
+        $a_form->addItem($marker_for_students);
+
         $disable_comment_stream = new ilCheckboxInputGUI($plugin->txt('disable_comment_stream'), 'disable_comment_stream');
         $disable_comment_stream->setInfo($plugin->txt('disable_comment_stream_info'));
         $a_form->addItem($disable_comment_stream);
@@ -1042,6 +1051,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values['task']				= $this->object->getTask();
 		$a_values['auto_resume']		= $this->object->isAutoResumeAfterQuestion();
 		$a_values['fixed_modal']		= $this->object->isFixedModal();
+        $a_values["marker_for_students"]= $this->object->getMarkerForStudents();
 	}
 
 	public function editProperties()
@@ -1620,9 +1630,32 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			$comment->setIsPrivate($is_private );
 		}
+
+        if(strlen($_POST['marker']) > 0)
+        {
+            $marker = $this->cleanMarker($_POST['marker']);
+            $comment->setMarker($marker);
+            if($comment->getCommentTimeEnd() == 0)
+            {
+                $comment->setCommentTimeEnd($comment->getCommentTime() + 3 );
+            }
+        }
 		$comment->create();
 		$this->callExit();
 	}
+
+    /**
+     * @param $marker
+     * @return null|string|string[]
+     */
+    protected function cleanMarker($marker)
+    {
+        $marker = '<svg>'.trim($marker).'</svg>';
+        $marker = xvidUtils::secureSvg($marker);
+        $marker = preg_replace( "/\r|\n|\t|<svg>|<\/svg>/", "", $marker );
+        $marker = '<svg>'.trim($marker).'</svg>';
+        return $marker;
+    }
 
 	/**
 	 *
