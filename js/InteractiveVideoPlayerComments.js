@@ -351,7 +351,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	
 	pub.highlightTocItem = function(player_id, current_time){
 		
-		$( ".toc_item" ).each(function( index ) {
+		$( "#ul_toc_" + player_id + " .toc_item" ).each(function( index ) {
 			let toc_time = $( this ).data('toc-time');
 			let toc_time_next = $( this ).next().data('toc-time');
 			if(toc_time <= current_time
