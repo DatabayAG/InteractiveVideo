@@ -64,7 +64,7 @@ class ilInteractiveVideoSourceFactoryGUI
 	protected function sourceDoesNotExistsAnymore()
 	{
 		ilUtil::sendFailure(ilInteractiveVideoPlugin::getInstance()->txt('source_does_not_exist'), true);
-		ilUtil::redirect('ilias.php?baseClass=ilPersonalDesktopGUI');
+		ilUtil::redirect('ilias.php?baseClass=ilDashboardGUI');
 	}
 
 	/**
