@@ -2706,7 +2706,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$question->setShowResponseFrequency((int)$form->getInput('show_response_frequency'));
 		$question->setShowBestSolution((int)$form->getInput('show_best_solution'));
-		$question->setShowBestSolutionText(ilUtil::stripSlashes($form->getInput('show_best_solution_text')));
+		$question->setShowBestSolutionText(ilUtil::stripSlashes($form->getInput('show_best_solution_text'), false));
 		$question->setRepeatQuestion((int)$form->getInput('repeat_question'));
 		$question->setCompulsoryQuestion((int)$form->getInput('compulsory_question'));
 		$question->setReflectionQuestionComment((int)$form->getInput('show_comment_field'));
