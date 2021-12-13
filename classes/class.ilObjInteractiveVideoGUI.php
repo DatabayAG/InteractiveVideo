@@ -2997,7 +2997,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$simple = new SimpleChoiceQuestionStatistics();
 		$tbl_data = $simple->getPointsForUsers($this->obj_id);
-		ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionsTableGUI.php');
+		ilInteractiveVideoPlugin::getInstance()->includeClass('tables/class.SimpleChoiceQuestionsTableGUI.php');
 		$tbl = new SimpleChoiceQuestionsTableGUI($this, 'showResults');
 
 		$tbl->setData($tbl_data);
@@ -3022,7 +3022,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$simple = new SimpleChoiceQuestionScoring();
 		$tbl_data = $simple->getMyPoints($this->obj_id);
-		ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionsUserTableGUI.php');
+		ilInteractiveVideoPlugin::getInstance()->includeClass('tables/class.SimpleChoiceQuestionsUserTableGUI.php');
 		$tbl = new SimpleChoiceQuestionsUserTableGUI($this, 'showMyResults');
 		$tbl->setData($tbl_data);
 		$tpl->setContent($tbl->getHTML());
@@ -3043,7 +3043,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('showCompleteOverviewOverAllResults');
-		ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionsCompleteUserTableGUI.php');
+		ilInteractiveVideoPlugin::getInstance()->includeClass('tables/class.SimpleChoiceQuestionsCompleteUserTableGUI.php');
 		$simple = new SimpleChoiceQuestionStatistics();
 		$data = $simple->getScoreForAllQuestionsAndAllUser($this->obj_id);
 		$tbl = new SimpleChoiceQuestionsCompleteUserTableGUI($this, 'showCompleteResults', $data['question']);
@@ -3135,7 +3135,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$simple = new SimpleChoiceQuestionStatistics();
 		$tbl_data = $simple->getQuestionsOverview($this->obj_id);
-		ilInteractiveVideoPlugin::getInstance()->includeClass('class.SimpleChoiceQuestionsOverviewTableGUI.php');
+		ilInteractiveVideoPlugin::getInstance()->includeClass('tables/class.SimpleChoiceQuestionsOverviewTableGUI.php');
 		$tbl = new SimpleChoiceQuestionsOverviewTableGUI($this, 'showQuestionsResults');
 
 		$tbl->setData($tbl_data);
@@ -3379,7 +3379,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$csvoutput = "";
 		foreach ($csv as $row)
 		{
-			$csvoutput .= join($row, $separator) . "\n";
+			$csvoutput .= join($separator, $row) . "\n";
 		}
 		ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
 	}
