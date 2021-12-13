@@ -5,14 +5,13 @@ il.InteractiveVideoModalHelper = (function (scope) {
 
 	pub.getCommentAndMarkerForm = function(player_id)
 	{
-		pro.showWaitBox();
+		pro.showWaitBox(player_id);
 		$.when(
 			$.ajax({
 				url:  scope.InteractiveVideo[player_id].get_comment_marker_modal,
 				type: 'GET', dataType: 'html'
 			})
 		).then(function (html) {
-			il.InteractiveVideoPlayerAbstract.pause(player_id)
 			$('#ilInteractiveVideoAjaxModal').find('.modal-body').html(html);
 			il.InteractiveVideoPlayerAbstract.initPlayer(player_id);
 			il.InteractiveVideoOverlayMarker.checkForOverlay()
@@ -35,7 +34,7 @@ il.InteractiveVideoModalHelper = (function (scope) {
 
 	pub.getChapterForm = function(player_id)
 	{
-		pro.showWaitBox();
+		pro.showWaitBox(player_id);
 		$.when(
 			$.ajax({
 				url:  scope.InteractiveVideo[player_id].get_chapter_modal,
@@ -47,8 +46,10 @@ il.InteractiveVideoModalHelper = (function (scope) {
 			il.InteractiveVideoOverlayMarker.checkForOverlay()
 			il.InteractiveVideoOverlayMarker.attachListener();
 			setTimeout(function(){
-				//plyr.get()[1].seek(plyr.get()[0].getCurrentTime());
-			}, 900);
+				let time = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
+				time = scope.InteractiveVideoPlayerComments.secondsToTimeCode(time);
+				$('#comment_time').timepicker('setTime', time);
+			}, 200);
 			setTimeout(function(){
 				//CKEDITOR.instances.comment_text.focusManager.focus();
 				pro.addEventsToButtons('insertTutorCommentAjax', 'cancelCommentsAjax');
@@ -62,7 +63,7 @@ il.InteractiveVideoModalHelper = (function (scope) {
 
 	pub.getQuestionCreationForModal = function(player_id)
 	{
-		pro.showWaitBox();
+		pro.showWaitBox(player_id);
 		$.when(
 			$.ajax({
 				url:  scope.InteractiveVideo[player_id].get_question_creation_modal,
@@ -81,9 +82,9 @@ il.InteractiveVideoModalHelper = (function (scope) {
 		});
 	};
 
-	pro.showWaitBox = function()
+	pro.showWaitBox = function(player_id)
 	{
-		//il.InteractiveVideoPlayerAbstract.pause();
+		il.InteractiveVideoPlayerAbstract.pause(player_id)
 		var modal = $('#ilInteractiveVideoAjaxModal');
 		modal.modal({backdrop: 'static', keyboard: false}, 'show');
 		modal.find('.modal-body').html('<div class="waitbox"></div>');
