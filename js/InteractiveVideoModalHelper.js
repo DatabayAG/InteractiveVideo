@@ -12,6 +12,7 @@ il.InteractiveVideoModalHelper = (function (scope) {
 				type: 'GET', dataType: 'html'
 			})
 		).then(function (html) {
+			il.InteractiveVideoPlayerAbstract.pause(player_id)
 			$('#ilInteractiveVideoAjaxModal').find('.modal-body').html(html);
 			il.InteractiveVideoPlayerAbstract.initPlayer(player_id);
 			il.InteractiveVideoOverlayMarker.checkForOverlay()
@@ -20,7 +21,7 @@ il.InteractiveVideoModalHelper = (function (scope) {
 				let time = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
 				time = scope.InteractiveVideoPlayerComments.secondsToTimeCode(time);
 				$('#comment_time').timepicker('setTime', time);
-			}, 900);
+			}, 200);
 			setTimeout(function(){
 				//CKEDITOR.instances.comment_text.focusManager.focus();
 				pro.addEventsToButtons('insertTutorCommentAjax', 'cancelCommentsAjax');
