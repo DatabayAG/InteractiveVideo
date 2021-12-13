@@ -569,10 +569,15 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	
 	pub.getCommentRepliesHtml = function(reply)
 	{
+		let name = reply.user_name;
+		if(name !== "") {
+			name = pub.buildCommentUsernameHtml(name , reply.is_interactive) + ': ';
+		}
 		if(reply.is_table_of_content === "1") {
 			return '';
 		}
-		return '<div class="reply_comment reply_comment_' + reply.comment_id + '">' + pub.buildCommentUsernameHtml(reply.user_name, reply.is_interactive) + ': ' + reply.comment_text + ' ' + pro.appendPrivateHtml(reply.is_private) + '</div>';
+
+		return '<div class="reply_comment reply_comment_' + reply.comment_id + '">' + name + reply.comment_text + ' ' + pro.appendPrivateHtml(reply.is_private) + '</div>';
 	};
 
 	pro.appendPrivateHtml = function (is_private)
