@@ -76,7 +76,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.jumpToTimeInVideoEditScreen = function (time, player_id)
 	{
-		scope.InteractiveVideo[player_id].edit_mode = true;
+		il.InteractiveVideo[player_id].edit_mode = true;
 		pro.jumpToTimeInVideoAction(time, player_id);
 	};
 
@@ -166,7 +166,9 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 	}
 
 	pro.moveMarkerOverlayIntoPlayer = function(player_id, prependElement) {
-		$("#ilInteractiveVideoOverlay").prependTo($(prependElement).parent('.plyr__video-wrapper'));
+		if($('#ilInteractiveVideoAjaxModal').css('display') === 'none') {
+			$("#ilInteractiveVideoOverlay").prependTo($(prependElement).parent('.plyr__video-wrapper'));
+		}
 	}
 
 	pub.protect = pro;

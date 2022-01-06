@@ -106,15 +106,22 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	{
 		var svg = '<svg id="ilInteractiveVideoOverlay" viewBox="0 0 300 150" preserveAspectRatio="xMinYMin meet"></svg>';
 		var overlay_count = $(pri.ids.ilInteractiveVideoOverlay).size();
+		var modal_visibility = $('#ilInteractiveVideoAjaxModal').css('display');
 		if(overlay_count === 1){
-			if($('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').size()){
-				setTimeout(function(){
-					$('#ilInteractiveVideoOverlay').remove();
-					$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').parent().prepend(svg);
-				}, 30);
+			$('#ilInteractiveVideoOverlay').remove();
+			if(modal_visibility === 'block') {
+					$('#ilInteractiveVideoAjaxModal .plyr__poster').parent().prepend(svg);
+			} else {
+				$('.ilInteractiveVideoPlayerContainer .plyr').prepend(svg);
 			}
 		}else if(overlay_count === 0){
-			$('#ilInteractiveVideoAjaxModal .ilInteractiveVideo').parent().prepend(svg);
+			$('#ilInteractiveVideoOverlay').remove();
+			if(modal_visibility === 'block') {
+				$('#ilInteractiveVideoAjaxModal .plyr__poster').parent().prepend(svg);
+			} else {
+				$('.ilInteractiveVideoPlayerContainer .plyr').prepend(svg);
+			}
+
 		}else{
 			console.log('Something totally went wrong.')
 		}
@@ -305,6 +312,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 	pro.replaceFakeMarkerAfterAttributeChange = function()
 	{
+		console.log('move', $(pri.ids.ilInteractiveVideoOverlay).html() )
 		$(pri.ids.faker_marker).val($(pri.ids.ilInteractiveVideoOverlay).html());
 	};
 

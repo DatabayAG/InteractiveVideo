@@ -455,10 +455,11 @@ body.cke_editable{
 #ilInteractiveVideo{
     position: relative;
 }
-#ilInteractiveVideoOverlay{
+#ilInteractiveVideoOverlay, #ilInteractiveVideoOverlayModal{
     top:0;
 }
-#ilInteractiveVideoOverlay {
+#ilInteractiveVideoOverlay, #ilInteractiveVideoOverlayModal {
+    left: 0;
     position: absolute;
     width: 100%;
     height: 100%;
