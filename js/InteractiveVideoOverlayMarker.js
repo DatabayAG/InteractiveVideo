@@ -119,7 +119,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			if(modal_visibility === 'block') {
 				$('#ilInteractiveVideoAjaxModal .plyr__poster').parent().prepend(svg);
 			} else {
-				$('.ilInteractiveVideoPlayerContainer .plyr').prepend(svg);
+				$('.plyr').prepend(svg);
 			}
 
 		}else{
