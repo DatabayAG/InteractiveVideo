@@ -2290,7 +2290,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTimeEnd($comment_time_end);
 			$this->objComment->setIsTutor($is_tutor);
             $fake_marker	= $form->getInput('fake_marker');
-            $this->objComment->setMarker($fake_marker);
+            if(strlen($fake_marker) > 0)
+            {
+                $this->objComment->setMarker($fake_marker);
+                if( $this->objComment->getCommentTimeEnd() == 0)
+                {
+                    $this->objComment->setCommentTimeEnd( $this->objComment->getCommentTime() + 3 );
+                }
+            }
 			$this->objComment->create();
 
 			ilUtil::sendSuccess($this->lng->txt('saved_successfully'));
