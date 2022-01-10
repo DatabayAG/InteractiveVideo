@@ -15,7 +15,7 @@ il.InteractiveVideoYoutubePlayer = (function (scope) {
 				il.InteractiveVideo.last_stopPoint = -1;
 
 				il.InteractiveVideoSubtitle.initializeSubtitleTracks(player_id);
-				player =  new Plyr('#' + player_id, {});
+				player =  new Plyr('#' + player_id, plyr_global_config);
 				il.InteractiveVideo[player_id].player =	player;
 				il.InteractiveVideo[player_id].player.on('ready', event => {
 					il.InteractiveVideoPlayerAbstract.config[player_id] = {
