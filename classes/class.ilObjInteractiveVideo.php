@@ -600,7 +600,24 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				$table_data[$counter]['comment_time']		= $row['comment_time'];
 				$table_data[$counter]['comment_time_end']	= $row['comment_time_end'];
 			}
+            $user_name = ilObjUser::_lookupName($row['user_id']);
+            $email = ilObjUser::_lookupEmail($row['user_id']);
+
+            if ($this->isAnonymized() || !strlen($user_name['firstname'])) {
+                $login = '';
+                $first_name = '';
+                $surname = '';
+                $email = '';
+            } else {
+                $login = $user_name['login'];
+                $first_name = $user_name['firstname'];
+                $surname = $user_name['lastname'];
+            }
 			$table_data[$counter]['user_id']			= $row['user_id'];
+			$table_data[$counter]['user_user_name']		= $login;
+			$table_data[$counter]['user_first_name']	= $first_name;
+			$table_data[$counter]['user_surname']		= $surname;
+			$table_data[$counter]['user_email']			= $email;
 			$table_data[$counter]['title']				= $row['comment_title'];
 			$table_data[$counter]['comment_text']		= $row['comment_text'];
 			if($strip_tags){

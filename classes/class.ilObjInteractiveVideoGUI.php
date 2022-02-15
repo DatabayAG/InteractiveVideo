@@ -3448,6 +3448,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($head_row, $lng->txt('time'));
 		array_push($head_row, $plugin->txt('time_end') );
 		array_push($head_row, $plugin->txt('user') );
+		array_push($head_row, $this->lng->txt('login') );
+		array_push($head_row, $this->lng->txt('firstname') );
+		array_push($head_row, $this->lng->txt('lastname') );
+		array_push($head_row, $this->lng->txt('email') );
 		array_push($head_row, $plugin->txt('comment_title'));
 		array_push($head_row, $plugin->txt('comment'));
 		array_push($head_row, $plugin->txt('tutor'));
