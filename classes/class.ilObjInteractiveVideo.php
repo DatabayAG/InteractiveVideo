@@ -31,6 +31,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     /** @var int */
     const LP_MODE_BY_ANSWERED_QUESTIONS = 100;
 
+    const LAYOUT_SIMILAR = 101;
+    const LAYOUT_BIG_VIDEO = 102;
+    const LAYOUT_VERY_BIG_VIDEO = 103;
+
 	/** @var int */
 	protected $learning_progress_mode = self::LP_MODE_DEACTIVATED;
 
@@ -109,6 +113,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	protected $no_comment_stream = 0;
 
+    /**
+     * @var int
+     */
+    protected $layout_width = self::LAYOUT_BIG_VIDEO;
+
 
 	/**
 	 * @param $src_id
@@ -163,6 +172,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->setNoCommentStream($row['no_comment_stream']);
 		$this->setVideoMode($row['video_mode']);
 		$this->setMarkerForStudents($row['marker_for_students']);
+        $this->setLayoutWidth($row['layout_width']);
 
 		$this->getVideoSourceObject($row['source_id']);
 		$this->setLearningProgressMode($row['lp_mode']);
@@ -321,6 +331,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$fixed_modal	= $this->fixed_modal;
 						$show_toc_first	= $this->show_toc_first;
 						$disable_comment_stream	= $this->disable_comment_stream;
+                        $layout_width   = $this->layout_width;
 						$no_comment_stream  = $this->no_comment_stream;
 						$video_mode			= $this->video_mode;
 						$marker_for_students= $this->marker_for_students;
@@ -346,6 +357,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$fixed_modal	= (int)$_POST['fixed_modal'];
 						$show_toc_first	= (int)$_POST['show_toc_first'];
 						$disable_comment_stream	= (int)$_POST['disable_comment_stream'];
+                        $layout_width   = (int)$_POST['layout_width'];
 						$no_comment_stream	= (int)$_POST['no_comment_stream'];
 						$video_mode			= (int)$_POST['video_mode'];
 						$marker_for_students= (int)$_POST['marker_for_students'];
@@ -369,6 +381,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 							'no_toolbar'     => array('integer', $no_toolbar),
 							'show_toc_first' => array('integer', $show_toc_first),
 							'disable_comment_stream' => array('integer', $disable_comment_stream),
+							'layout_width' => array('integer', $layout_width),
 							'no_comment_stream'   => array('integer', $no_comment_stream),
 							'video_mode'          => array('integer', $video_mode),
 							'marker_for_students' => array('integer', $marker_for_students)
@@ -434,7 +447,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 					'no_toolbar'		=> array('integer', $this->getDisableToolbar()),
 		            'no_comment_stream'		=> array('integer', $this->getNoCommentStream()),
 					'video_mode'			=> array('integer', $this->getVideoMode()),
-					'marker_for_students'	=> array('integer', $this->getMarkerForStudents())
+					'marker_for_students'	=> array('integer', $this->getMarkerForStudents()),
+					'layout_width'	=> array('integer', $this->getLayoutWidth())
 					),
 			array('obj_id' => array('integer', $this->getId())));
 	}
@@ -510,6 +524,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				'task'                => array('text', $this->getTask()),
 				'lp_mode'             => array('integer', $this->getLearningProgressMode()),
 				'video_mode'          => array('integer', $this->getVideoMode()),
+				'layout_width'          => array('integer', $this->getLayoutWidth()),
 				'marker_for_students' => array('integer', $this->getMarkerForStudents())
 			)
 		);
@@ -1545,4 +1560,37 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	{
 		$this->marker_for_students = $marker_for_students;
 	}
+
+    /**
+     * @return int
+     */
+    public function getLayoutWidth()
+    {
+        return $this->layout_width;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLayoutWidthTransformed()
+    {
+        $value = '2:1';
+        switch($this->layout_width){
+            case 101: $value='1:1';
+                break;
+            case 102: $value='2:1';
+                break;
+            case 103: $value='1:0';
+                break;
+        }
+        return $value;
+    }
+
+    /**
+     * @param int $layout_width
+     */
+    public function setLayoutWidth($layout_width)
+    {
+        $this->layout_width = $layout_width;
+    }
 }

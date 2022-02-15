@@ -30,6 +30,15 @@
 			<ul class="ilToolbarItems nav navbar-nav">
 				<li>
 					<div class="dropdown">
+						<button class="btn btn-default dropdown-toggle dropdownMenuLayoutInteraktiveVideo_{PLAYER_ID}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							{LAYOUT_FILTER}
+							<span class="caret"></span>
+						</button>
+						<ul id="dropdownMenuLayoutInteraktiveList_{PLAYER_ID}" class="dropdown-menu" aria-labelledby="dropdownMenuInteraktiveVideo"></ul>
+					</div>
+				</li>
+				<li>
+					<div class="dropdown">
 						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuInteraktiveVideo_{PLAYER_ID}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 							{AUTHOR_FILTER}
 							<span class="caret"></span>
@@ -49,7 +58,7 @@
 	</div>
 </nav>
 <div class="row">
-	<div class="col-xs-12 {IV_BOOTSTRAP_CLASS_IF_NOT_LIGHT_VERSION}">
+	<div class="col-xs-12 {IV_BOOTSTRAP_CLASS_IF_NOT_LIGHT_VERSION} player_element_{PLAYER_ID}">
 		<!-- BEGIN task_description -->
 		<div class=ilFormHeader">
 			<h3 class="ilHeader" id="task_interaction_{PLAYER_ID}"><span id="task_icon_{PLAYER_ID}" class="task_icon arrow_down"></span><span class="task_text">{TASK_TEXT}</span></h3>
@@ -69,7 +78,7 @@
 		</div>
 	</div>
 
-	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 {LIGHT_VERSION} iv_tab_navigation">
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 {LIGHT_VERSION} iv_tab_navigation comment_element_{PLAYER_ID}">
 		<ul class="nav nav-tabs iv-tabs">
 			<!-- BEGIN comment_stream -->
 			<li class="nav-item">

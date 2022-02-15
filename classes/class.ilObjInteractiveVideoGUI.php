@@ -349,6 +349,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($this->object->getDisableToolbar() == "0"){
 			$video_tpl->setVariable('SHOW_ALL_COMMENTS', $plugin->txt('show_all_comments'));
 			$video_tpl->setVariable('AUTHOR_FILTER', $plugin->txt('author_filter'));
+			$video_tpl->setVariable('LAYOUT_FILTER', $plugin->txt('layout_filter'));
 		}
 
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(), false));
@@ -633,6 +634,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('PRIVATE_TEXT', $plugin->txt('is_private_comment'));
 		$config_tpl->setVariable('RESET_TEXT', $plugin->txt('reset'));
 		$config_tpl->setVariable('AUTHOR_FILTER', $plugin->txt('author_filter'));
+		$config_tpl->setVariable('LAYOUT_FILTER', $plugin->txt('layout_filter'));
 		$config_tpl->setVariable('SWITCH_ON', $plugin->txt('switch_on'));
 		$config_tpl->setVariable('SWITCH_OFF', $plugin->txt('switch_off'));
 		$config_tpl->setVariable('SAVE', $plugin->txt('save'));
@@ -646,6 +648,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('FIXED_MODAL', $this->object->isFixedModal());
 		$config_tpl->setVariable('SHOW_TOC_FIRST', $this->object->getShowTocFirst());
 		$config_tpl->setVariable('DISABLE_COMMENT_STREAM', $this->object->getDisableCommentStream());
+		$config_tpl->setVariable('LAYOUT_WIDTH', $this->object->getLayoutWidthTransformed());
 		$config_tpl->setVariable('HAS_TRACKS', $this->getSubtitleDataAndFilesForJson());
 		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
@@ -846,6 +849,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $marker_for_students = $a_form->getInput('marker_for_students');
         $this->object->setMarkerForStudents((int)$marker_for_students);
 
+        $layout_width = $a_form->getInput('layout_width');
+        $this->object->setLayoutWidth((int)$layout_width);
+
 		$factory = new ilInteractiveVideoSourceFactory();
 		$source = $factory->getVideoSourceObject($a_form->getInput('source_id'));
 		$source->doUpdateVideoSource($this->obj_id);
@@ -957,6 +963,32 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$description_switch->addSubItem($description);
 		$a_form->addItem($description_switch);
 
+        $section = new ilFormSectionHeaderGUI();
+        $section->setTitle($plugin->txt('display'));
+        $a_form->addItem($section);
+
+        $no_toolbar = new ilCheckboxInputGUI($plugin->txt('no_toolbar'), 'no_toolbar');
+        $no_toolbar->setInfo($plugin->txt('no_toolbar_info'));
+        $a_form->addItem($no_toolbar);
+
+        $show_toc_first = new ilCheckboxInputGUI($plugin->txt('show_toc_first'), 'show_toc_first');
+        $show_toc_first->setInfo($plugin->txt('show_toc_first_info'));
+        $a_form->addItem($show_toc_first);
+
+        $disable_comment_stream = new ilCheckboxInputGUI($plugin->txt('disable_comment_stream'), 'disable_comment_stream');
+        $disable_comment_stream->setInfo($plugin->txt('disable_comment_stream_info'));
+        $a_form->addItem($disable_comment_stream);
+
+        $display_width = new ilSelectInputGUI($plugin->txt('display_width'), 'layout_width');
+        $display_width->setInfo($plugin->txt('display_width_info'));
+        $display_width->setOptions(
+            [
+                ilObjInteractiveVideo::LAYOUT_BIG_VIDEO  => $this->plugin->txt('bigVideo'),
+                ilObjInteractiveVideo::LAYOUT_VERY_BIG_VIDEO  => $this->plugin->txt('veryBigVideo'),
+                ilObjInteractiveVideo::LAYOUT_SIMILAR => $this->plugin->txt('similarSize')
+            ]);
+        $a_form->addItem($display_width);
+
 		$section = new ilFormSectionHeaderGUI();
 		$section->setTitle($plugin->txt('comments'));
 		$a_form->addItem($section);
@@ -977,21 +1009,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$no_comment->setInfo($plugin->txt('no_comment_info'));
 		$a_form->addItem($no_comment);
 
-		$no_toolbar = new ilCheckboxInputGUI($plugin->txt('no_toolbar'), 'no_toolbar');
-		$no_toolbar->setInfo($plugin->txt('no_toolbar_info'));
-		$a_form->addItem($no_toolbar);
-
-		$show_toc_first = new ilCheckboxInputGUI($plugin->txt('show_toc_first'), 'show_toc_first');
-        $show_toc_first->setInfo($plugin->txt('show_toc_first_info'));
-		$a_form->addItem($show_toc_first);
-
         $marker_for_students = new ilCheckboxInputGUI($this->plugin->txt('marker_for_students'), 'marker_for_students');
         $marker_for_students->setInfo($this->plugin->txt('marker_for_students_info'));
         $a_form->addItem($marker_for_students);
-
-        $disable_comment_stream = new ilCheckboxInputGUI($plugin->txt('disable_comment_stream'), 'disable_comment_stream');
-        $disable_comment_stream->setInfo($plugin->txt('disable_comment_stream_info'));
-        $a_form->addItem($disable_comment_stream);
 
 		$section = new ilFormSectionHeaderGUI();
 		$section->setTitle($plugin->txt('questions'));
@@ -1052,6 +1072,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values['auto_resume']		= $this->object->isAutoResumeAfterQuestion();
 		$a_values['fixed_modal']		= $this->object->isFixedModal();
         $a_values["marker_for_students"]= $this->object->getMarkerForStudents();
+        $a_values["layout_width"]       = $this->object->getLayoutWidth();
 	}
 
 	public function editProperties()

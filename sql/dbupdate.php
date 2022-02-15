@@ -1170,3 +1170,18 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
     }
 }
 ?>
+<#79>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_objects'))
+{
+    if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'layout_width'))
+    {
+        $ilDB->addTableColumn('rep_robj_xvid_objects', 'layout_width',
+            array(
+                'type'    => 'integer',
+                'length'  => '4',
+                'notnull' => true,
+                'default' => 0));
+    }
+}
+?>

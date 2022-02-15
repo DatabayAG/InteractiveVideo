@@ -135,15 +135,22 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.appendInteractionEvents = function(player_id)
 	{
+		pro.setInitialLayoutValue(player_id);
 		pro.addAjaxFunctionForCommentPosting(player_id);
 		pub.addShowAllCommentsChange(player_id);
 		pro.addTaskInteraction(player_id);
 		pro.addPausePlayerOnClick(player_id);
 		pro.addCommentTimeChanged(player_id);
 		pro.addBootStrapToggle(player_id);
-		pro.addDropDownEvent(player_id);
+		pro.addDropDownEvents(player_id);
 		pro.addModalInteractionToBackLinkButton();
 		pro.resetCommentFormOnClick(player_id);
+	};
+
+	pro.setInitialLayoutValue = function(player_id){
+		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
+		let width = player_data.layout_width
+		pro.selectLayoutValue(player_id, width);
 	};
 	
 	pro.addTaskInteraction = function(player_id)
@@ -480,10 +487,24 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 	};
 
-	pro.addDropDownEvent = function(player_id)
+	pro.setLayoutValue = function(value, player_id) {
+		if (value === '1:1') {
+			$('.player_element_' + player_id).css('width', '50%')
+			$('.comment_element_' + player_id).css('width', '50%')
+		} else if (value === '2:1') {
+			$('.player_element_' + player_id).css('width', '70%')
+			$('.comment_element_' + player_id).css('width', '30%')
+		} else if (value === '1:0') {
+			$('.player_element_' + player_id).css('width', '100%')
+			$('.comment_element_' + player_id).css('width', '100%')
+		}
+	}
+
+	pro.addDropDownEvents = function(player_id)
 	{
 		let language = scope.InteractiveVideo.lang;
 		pri.utils.loadAllUserWithCommentsIntoFilterList(player_id);
+		pri.utils.loadAllLayoutStyles(player_id);
 
 		$('#dropdownMenuInteraktiveList_' + player_id + ' a').click(function(){
 			let value = $(this).html();
@@ -508,7 +529,28 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				player_data.is_show_all_active = show_all_active_temp;
 			}
 		});
+
+		$('#dropdownMenuLayoutInteraktiveList_' + player_id + ' a').click(function(){
+			let value = $(this).html();
+			pro.selectLayoutValue(player_id, value);
+		});
 	};
+
+	pro.selectLayoutValue = function(player_id, value)
+	{
+		let language = scope.InteractiveVideo.lang;
+		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
+		if(value === language.reset_text)
+		{
+			value = player_data.layout_width
+			$('.dropdownMenuLayoutInteraktiveVideo_' + player_id).removeClass('btn-primary').html(language.layout_filter);
+		}
+		else
+		{
+			$('.dropdownMenuLayoutInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.layout_filter + ' ' + value);
+		}
+		pro.setLayoutValue(value, player_id);
+	}
 
 	pro.registerListenerFunction = function()
 	{

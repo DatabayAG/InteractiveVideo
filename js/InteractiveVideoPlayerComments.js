@@ -258,6 +258,26 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		pro.registerTabEvent(player_id);
 	};
 
+	pub.loadAllLayoutStyles = function(player_id)
+	{
+		let element;
+		let drop_down_list = $('#dropdownMenuLayoutInteraktiveList_' + player_id);
+		let language = scope.InteractiveVideo.lang;
+		let reset_elem = '<li><a href="#">' + language.reset_text + '</a></li><li role="separator" class="divider"></li>';
+		let layout_list = [];
+		layout_list['1:1'] = '1:1';
+		layout_list['2:1'] = '2:1';
+		layout_list['1:0'] = '1:0';
+		drop_down_list.html('');
+		drop_down_list.append(reset_elem);
+		for ( element in layout_list)
+		{
+			element = '<li><a href="#">' + element + '</a></li>';
+			drop_down_list.append(element);
+		}
+		//Todo Event selection
+	};
+
 	pub.fillEndTimeSelector = function(seconds)
 	{
 

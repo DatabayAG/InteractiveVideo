@@ -947,6 +947,12 @@ li.toc_item > div > h5 > time {
     font-weight: bolder;
     color: white;
     cursor: pointer;
-
+}
+.seventy{
+    width : 70% !important;
+    background-color: blue;
+}
+.thirty{
+    width: 30%;
 }
 
