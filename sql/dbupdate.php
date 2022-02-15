@@ -1067,7 +1067,11 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_toolbar'))
 ?>
 <#70>
 <?php
-$ilDB->addPrimaryKey('rep_robj_xvid_objects', array('obj_id'));
+try {
+    $ilDB->addPrimaryKey('rep_robj_xvid_objects', array('obj_id'));
+} catch (Exception $e) {
+
+}
 ?>
 <#71>
 <?php
