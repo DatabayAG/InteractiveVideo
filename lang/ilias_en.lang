@@ -36,7 +36,7 @@ missing_comment_text#:#Please enter a comment.
 missing_stopping_point#:#The stopping point was not transferred to the server. Please try again.
 invalid_comment_ids#:#Some comments could not be found.
 comments_successfully_deleted#:#The selected comments were deleted successfully.
-show_all_comments#:#Show all Comments:
+show_all_comments#:#Show comments at all times:
 author_filter#:#Filter by author
 edit_comment#:#Edit comment
 correct_solution#:#Correct
