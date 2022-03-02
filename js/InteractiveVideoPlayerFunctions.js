@@ -233,7 +233,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				'is_interactive'   : '0',
 				'is_private'       : is_private,
 				'is_table_of_content' : '0',
-				'marker'              : marker,
+				'marker'              : '<svg>' + marker + '</svg>',
+				'is_overlay'       : 1,
 				'has_no_reply_button' : true
 
 			};
@@ -553,6 +554,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pub.jumpToTimeInVideoFromCommentTime = function()
 	{
 		var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($('#comment_time').val());
+		//Needs Player id
 		il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
 	};
 
