@@ -57,7 +57,6 @@ il.InteractiveVideoYoutubePlayer = (function (scope) {
 				});
 
 			}
-
 		});
 	};
 	pub.protect = pro;

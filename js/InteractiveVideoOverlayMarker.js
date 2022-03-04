@@ -103,7 +103,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		let sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($(pri.ids.comment_time).val());
 		let player_id = $('.ilInteractiveVideo').attr('id');
 		if(typeof player_id === 'undefined') {
-			player_id = $('.editCommentScreen').data('edit-comment-player-id');
+			player_id = $('.editCommentScreen').data('edit-comment-player');
 			if(typeof player_id === 'undefined') {
 				player_id = $('.iv_metadata').data('plyr-player-id');
 			}
