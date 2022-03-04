@@ -90,6 +90,11 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		{
 			$(pri.classes.remove_marker).remove();
 		}
+		if($('#comment_time').val() != '0:00:00'){
+			$('.ilInteractiveVideo').before('<div class="play_overlay_jump_to_time" id="play_overlay_jump_to_time"><div class="play_overlay_jump_to_time_text">'+il.InteractiveVideo.lang.jump_to_text+'</div></div>');
+			document.getElementById("play_overlay_jump_to_time").addEventListener("click", il.InteractiveVideoOverlayMarker.jumpToTimeAndRemoveOverlay);
+
+		}
 		pub.attachListener();
 	};
 
