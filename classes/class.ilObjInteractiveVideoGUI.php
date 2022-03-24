@@ -361,7 +361,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $this->plugin->getDirectory());
                 $comments_tpl->setVariable('PLAYER_ID', $player_id);
                 $comments_tpl->setVariable('COMMENT_TIME_END', $this->plugin->txt('time_end'));
-                $picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end');
+                $picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end_' . $player_id);
                 $comments_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
                 $comments_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
                 $comments_tpl->setVariable('TXT_ENDTIME_WARNING', $this->plugin->txt('endtime_warning'));
@@ -787,6 +787,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
         $my_tpl->setVariable('PLAYER', $object->getPlayer($player_id)->get() . $this->initPlayerConfig($player_id, $this->object->getSourceId(), true));
         $my_tpl->setVariable('MARKER', $marker_template);
+        $my_tpl->setVariable('PLAYER_ID', $player_id);
         return $my_tpl;
     }
 

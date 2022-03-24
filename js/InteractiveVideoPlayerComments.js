@@ -285,9 +285,10 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.preselectActualTimeInVideo = function(seconds)
 	{
-		let obj = pub.secondsToTimeCode(seconds);
-//Todo: fix this, this id does not exists anywhere
-		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));
+		let time = pub.secondsToTimeCode(seconds);
+		let end_time = pub.secondsToTimeCode(seconds + 3);
+		pro.preselectValueOfTimeSelection(end_time, $('#comment_time_end'));
+		pro.preselectValueOfTimeSelection(time, $('#comment_time'));
 	};
 
 	pro.registerTabEvent = function(player_id)
@@ -529,7 +530,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		if(display_time > 0)
 		{
 			return 	'<time class="time_end"> - ' +
-					'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + display_time + ', ' + player_id + ');">'+
+					'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + display_time + ', \'' + player_id + '\');">'+
 					pub.secondsToTimeCode(display_time)  +
 					'</a>' +
 					'</time>' ;
@@ -707,11 +708,11 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return obj;
 	};
 
-	pro.preselectValueOfEndTimeSelection = function(time, element)
+	pro.preselectValueOfTimeSelection = function(time, element)
 	{
 		element.val(time);
-		if($('#comment_time_end').size() > 0) {
-			$('#comment_time_end').timepicker('setTime', time);
+		if(element.size() > 0) {
+			element.timepicker('setTime', time);
 		}
 	};
 	

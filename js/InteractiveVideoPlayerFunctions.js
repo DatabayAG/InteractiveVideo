@@ -240,7 +240,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				'is_interactive'   : '0',
 				'is_private'       : is_private,
 				'is_table_of_content' : '0',
-				'marker'              : marker,
+				'marker'              : '<svg>' + marker + '</svg>',
+				'is_overlay'       : 1,
 				'has_no_reply_button' : true
 
 			};
@@ -278,7 +279,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			let text_instance = 'comment_text_' + player_id;
 			let comment_text = CKEDITOR.instances[text_instance].getData();
 			let is_private = $('#is_private_' + player_id).prop("checked");
-			let end_time = 0;
+			let end_time = actual_time_in_video + 3;
 			if( $('#comment_time_end_chk_' + player_id).prop( "checked" ))
 			{
 				time = $('#comment_time_end_' + player_id).val();
@@ -595,6 +596,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pub.jumpToTimeInVideoFromCommentTime = function()
 	{
 		var sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($('#comment_time').val());
+		//Needs Player id
 		il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(sec);
 	};
 
