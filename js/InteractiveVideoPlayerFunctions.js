@@ -489,15 +489,21 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	};
 
 	pro.setLayoutValue = function(value, player_id) {
+		$('.player_element_' + player_id).removeClass('video_fifty')
+		$('.player_element_' + player_id).removeClass('video_seventy')
+		$('.player_element_' + player_id).removeClass('video_hundred')
+		$('.comment_element_' + player_id).removeClass('content_fifty')
+		$('.comment_element_' + player_id).removeClass('content_thirty')
+		$('.comment_element_' + player_id).removeClass('content_hundred')
 		if (value === '1:1') {
-			$('.player_element_' + player_id).css('width', '50%')
-			$('.comment_element_' + player_id).css('width', '50%')
+			$('.player_element_' + player_id).addClass('video_fifty')
+			$('.comment_element_' + player_id).addClass('content_fifty')
 		} else if (value === '2:1') {
-			$('.player_element_' + player_id).css('width', '70%')
-			$('.comment_element_' + player_id).css('width', '30%')
+			$('.player_element_' + player_id).addClass('video_seventy')
+			$('.comment_element_' + player_id).addClass('content_thirty')
 		} else if (value === '1:0') {
-			$('.player_element_' + player_id).css('width', '100%')
-			$('.comment_element_' + player_id).css('width', '100%')
+			$('.player_element_' + player_id).addClass('video_hundred')
+			$('.comment_element_' + player_id).addClass('content_hundred')
 		}
 	}
 
