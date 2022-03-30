@@ -550,11 +550,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		if(value === language.reset_text)
 		{
 			value = player_data.layout_width
-			$('.dropdownMenuLayoutInteraktiveVideo_' + player_id).removeClass('btn-primary').html(language.layout_filter);
+			$('.dropdownMenuLayoutInteraktiveVideo_' + player_id).removeClass('btn-primary').html(language.layout_filter + ' <span class="caret"></span>');
 		}
 		else
 		{
-			$('.dropdownMenuLayoutInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.layout_filter + ' ' + value);
+			$('.dropdownMenuLayoutInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.layout_filter + ' ' + value + ' <span class="caret"></span>');
 		}
 		pro.setLayoutValue(value, player_id);
 	}
