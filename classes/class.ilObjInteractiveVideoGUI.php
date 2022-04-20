@@ -643,6 +643,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('AT_LEAST_ONE_ANSWER', $plugin->txt('at_least_one_answer'));
         $config_tpl->setVariable('REPLY_TO_TEXT',  $plugin->txt('reply_to'));
         $config_tpl->setVariable('JUMP_TO_TIME',  $plugin->txt('jump_to_timestamp'));
+        $config_tpl->setVariable('SIMILAR_SIZE',  $plugin->txt('similarSize'));
+        $config_tpl->setVariable('BIG_VIDEO',  $plugin->txt('bigVideo'));
+        $config_tpl->setVariable('VERY_LARGE',  $plugin->txt('veryBigVideo'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
 		$config_tpl->setVariable('AUTO_RESUME_AFTER_QUESTION', $this->object->isAutoResumeAfterQuestion());
 		$config_tpl->setVariable('FIXED_MODAL', $this->object->isFixedModal());

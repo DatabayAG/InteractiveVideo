@@ -265,9 +265,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let language = scope.InteractiveVideo.lang;
 		let reset_elem = '<li><a href="#">' + language.reset_text + '</a></li><li role="separator" class="divider"></li>';
 		let layout_list = [];
-		layout_list['1:1'] = '1:1';
-		layout_list['2:1'] = '2:1';
-		layout_list['1:0'] = '1:0';
+		layout_list['1:1'] = language.similarSize;
+		layout_list['2:1'] = language.bigVideo;
+		layout_list['1:0'] = language.veryBigVideo;
 		drop_down_list.html('');
 		drop_down_list.append(reset_elem);
 		for ( element in layout_list)
