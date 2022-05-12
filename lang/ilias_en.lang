@@ -247,10 +247,10 @@ best_solution_text#:#Best solution
 best_solution_text_info#:#If a comment field is offered (see below), a user cannot view the solution until he/she has saved an answer.
 show_best_solution_info#:#After answering the question, users can display the correct solution (via button "Show solution").
 at_least_one_answer#:#Please select an answer
-display#:#Display
+display#:#View
 display_width#:#Width video- & comments colum
 display_width_info#:#- Gleich gross: 1:1 Die beiden Spalten sind gleich breit. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/> - Video gross: 2:1 Das Video ist deutlich breiter als die Kommentarepalte, (Verhältnis = 2:1). Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/> - Video sehr gross: Untereinander Das Video füllt die volle Fensterbreite aus. Die Kommentarepalte wird darunter angezeigt. In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/>
-similarSize#:#Similar size 1:1
-bigVideo#:#Big video: 2:1
-veryBigVideo#:#Very big video
+similarSize#:#Medium
+bigVideo#:#Large
+veryBigVideo#:#Very large
 layout_filter#:#Layout

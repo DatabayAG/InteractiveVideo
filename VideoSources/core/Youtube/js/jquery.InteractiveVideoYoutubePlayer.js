@@ -13,8 +13,6 @@ il.InteractiveVideoYoutubePlayer = (function (scope) {
 					seekTime = 0,
 					interval = null;
 				il.InteractiveVideo.last_stopPoint = -1;
-
-				il.InteractiveVideoSubtitle.initializeSubtitleTracks(player_id);
 				player =  new Plyr('#' + player_id, plyr_global_config);
 				il.InteractiveVideo[player_id].player =	player;
 				il.InteractiveVideo[player_id].player.on('ready', event => {
@@ -25,7 +23,7 @@ il.InteractiveVideoYoutubePlayer = (function (scope) {
 						playCallback: (function () {
 							player.play();
 						}),
-						durationCallback: (function () {;
+						durationCallback: (function () {
 							return player.duration
 						}),
 						currentTimeCallback: (function () {
@@ -59,7 +57,6 @@ il.InteractiveVideoYoutubePlayer = (function (scope) {
 				});
 
 			}
-
 		});
 	};
 	pub.protect = pro;

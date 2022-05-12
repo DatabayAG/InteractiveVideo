@@ -85,8 +85,13 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		if(typeof player_id === "object") {
 			player_id = $(player_id).attr('id');
 		}
-		//pub.play(player_id);
-		pub.pause(player_id);
+		if(il.InteractiveVideo[player_id].player_type === 'ytb') {
+			pub.play(player_id);
+			pub.pause(player_id);
+		} else {
+			pub.pause(player_id);
+		}
+
 		time = parseInt(time, 10);
 		if(time !== null)
 		{

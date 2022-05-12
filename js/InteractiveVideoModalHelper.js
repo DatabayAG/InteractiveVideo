@@ -12,9 +12,15 @@ il.InteractiveVideoModalHelper = (function (scope) {
 				type: 'GET', dataType: 'html'
 			})
 		).then(function (html) {
+			$('#' + player_id).remove();
+			$('.iv_metadata').remove();
 			$('#ilInteractiveVideoAjaxModal').find('.modal-body').html(html);
 			il.InteractiveVideoPlayerAbstract.initPlayer(player_id);
 			il.InteractiveVideoOverlayMarker.checkForOverlay()
+			$('#ilInteractiveVideoOverlay').before('<div class="play_overlay_jump_to_time" id="play_overlay_jump_to_time"><div class="play_overlay_jump_to_time_text">'+il.InteractiveVideo.lang.jump_to_text+'</div></div>');
+			$('.play_overlay_jump_to_time').on('click', function(){
+				il.InteractiveVideoOverlayMarker.jumpToTimeAndRemoveOverlay()
+			});
 			il.InteractiveVideoOverlayMarker.attachListener();
 			setTimeout(function(){
 				let time = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
@@ -88,6 +94,7 @@ il.InteractiveVideoModalHelper = (function (scope) {
 		var modal = $('#ilInteractiveVideoAjaxModal');
 		modal.modal({backdrop: 'static', keyboard: false}, 'show');
 		modal.find('.modal-body').html('<div class="waitbox"></div>');
+		modal.find('.modal-header .close').remove();
 	};
 
 	pro.addEventsToButtons = function(btn_one, btn_two)

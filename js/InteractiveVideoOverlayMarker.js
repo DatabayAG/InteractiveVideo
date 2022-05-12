@@ -58,9 +58,8 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	
 	pub.jumpToTimeAndRemoveOverlay = function(event)
 	{
-		event.preventDefault()
-		il.InteractiveVideoOverlayMarker.jumpToTimeInVideoForMarker();
 		$('.play_overlay_jump_to_time').remove();
+		il.InteractiveVideoOverlayMarker.jumpToTimeInVideoForMarker();
 	};
 
 	pub.checkForEditScreen = function()
@@ -70,17 +69,17 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		{
 			if(obj.val().length > 0)
 			{
-
 				var element = obj.val();
 				pro.removeButtons();
 				$(document).ready(
 					(function ()
 						{
-							$('.ilInteractiveVideo').before('<div class="play_overlay_jump_to_time" id="play_overlay_jump_to_time"><div class="play_overlay_jump_to_time_text">'+il.InteractiveVideo.lang.jump_to_text+'</div></div>');
-							document.getElementById("play_overlay_jump_to_time").addEventListener("click", il.InteractiveVideoOverlayMarker.jumpToTimeAndRemoveOverlay);
 							$(pri.ids.ilInteractiveVideoOverlay).html(element);
 							$(pri.classes.add_marker_selector).show( 'fast' );
 							pub.editScreen = true;
+							$('#ilInteractiveVideoOverlay').before('<div class="play_overlay_jump_to_time" id="play_overlay_jump_to_time"><div class="play_overlay_jump_to_time_text">'+il.InteractiveVideo.lang.jump_to_text+'</div></div>');
+							document.getElementById("play_overlay_jump_to_time").addEventListener("click", il.InteractiveVideoOverlayMarker.jumpToTimeAndRemoveOverlay);
+
 							il.InteractiveVideoOverlayMarker.initialiseExistingMarker();
 						}
 					)
@@ -91,6 +90,11 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		{
 			$(pri.classes.remove_marker).remove();
 		}
+		if($('#comment_time').length > 0 && $('#comment_time').val() != '0:00:00'){
+			$('.ilInteractiveVideo').before('<div class="play_overlay_jump_to_time" id="play_overlay_jump_to_time"><div class="play_overlay_jump_to_time_text">'+il.InteractiveVideo.lang.jump_to_text+'</div></div>');
+			document.getElementById("play_overlay_jump_to_time").addEventListener("click", il.InteractiveVideoOverlayMarker.jumpToTimeAndRemoveOverlay);
+
+		}
 		pub.attachListener();
 	};
 
@@ -98,8 +102,13 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	{
 		let sec = il.InteractiveVideoPlayerFunction.getSecondsFromTime($(pri.ids.comment_time).val());
 		let player_id = $('.ilInteractiveVideo').attr('id');
+		if(typeof player_id === 'undefined') {
+			player_id = $('.editCommentScreen').data('edit-comment-player');
+			if(typeof player_id === 'undefined') {
+				player_id = $('.iv_metadata').data('plyr-player-id');
+			}
+		}
 		il.InteractiveVideoPlayerAbstract.jumpToTimeInVideoEditScreen(sec, player_id);
-
 	};
 
 	pub.checkForOverlay = function()
@@ -220,6 +229,10 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		{
 			pub.resetForm();
 		});
+		$('.modal-header .close').click(function()
+		{
+			pub.resetForm();
+		});
 
 		$(pri.ids.ilInteractiveVideoCommentSubmit).click(function()
 		{
@@ -312,7 +325,6 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 
 	pro.replaceFakeMarkerAfterAttributeChange = function()
 	{
-		console.log('move', $(pri.ids.ilInteractiveVideoOverlay).html() )
 		$(pri.ids.faker_marker).val($(pri.ids.ilInteractiveVideoOverlay).html());
 	};
 

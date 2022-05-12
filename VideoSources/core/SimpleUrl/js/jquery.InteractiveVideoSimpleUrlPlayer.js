@@ -1,4 +1,4 @@
-il.InteractiveVideoSimpleUrlPlayer = (function (scope) {
+il.InteractiveVideoSimplePlayer = (function (scope) {
 	'use strict';
 
 	var pub = {}, pro = {};
@@ -34,9 +34,9 @@ il.InteractiveVideoSimpleUrlPlayer = (function (scope) {
 						setCurrentTimeCallback: (function (time) {
 							player.currentTime = time;
 						}),
-						initPlayerCallback         : il.InteractiveVideoMediaElementPlayer.initPlayer
+						initPlayerCallback         : il.InteractiveVideoSimplePlayer.initPlayer
 					};
-					il.InteractiveVideoPlayerAbstract.readyCallback(player_id, '#' + player_id);
+					il.InteractiveVideoPlayerAbstract.readyCallback(player_id, '.plyr__poster');
 					il.InteractiveVideo[player_id].player.on('play', event => {
 						il.InteractiveVideoPlayerAbstract.play(player_id);
 					});
@@ -57,8 +57,8 @@ il.InteractiveVideoSimpleUrlPlayer = (function (scope) {
 						}, 500);
 					});
 				});
-			}
 
+			}
 		});
 	};
 	pub.protect = pro;
@@ -67,6 +67,6 @@ il.InteractiveVideoSimpleUrlPlayer = (function (scope) {
 }(il));
 (function ($) {
 	il.Util.addOnLoad(function () {
-		il.InteractiveVideoSimpleUrlPlayer.initPlayer();
+		il.InteractiveVideoSimplePlayer.initPlayer();
 	});
 })(jQuery);

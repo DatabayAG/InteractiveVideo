@@ -955,4 +955,26 @@ li.toc_item > div > h5 > time {
 .thirty{
     width: 30%;
 }
+@media (min-width: 768px) {
+    .video_fifty{
+        width: 50% !important;
+    }
+    .content_fifty{
+        width: 50% !important;
+    }
+    .video_seventy{
+        width: 70% !important;
+    }
+    .content_thirty{
+        width:30% !important;
+    }
+    .video_hundred{
+        width: 100% !important;
+    }
+    .content_hundred{
+        width:100% !important;
+    }
+}
+
+
 

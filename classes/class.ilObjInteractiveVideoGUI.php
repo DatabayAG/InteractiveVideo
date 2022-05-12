@@ -361,7 +361,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $this->plugin->getDirectory());
                 $comments_tpl->setVariable('PLAYER_ID', $player_id);
                 $comments_tpl->setVariable('COMMENT_TIME_END', $this->plugin->txt('time_end'));
-                $picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end');
+                $picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end_' . $player_id);
                 $comments_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
                 $comments_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
                 $comments_tpl->setVariable('TXT_ENDTIME_WARNING', $this->plugin->txt('endtime_warning'));
@@ -643,6 +643,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('AT_LEAST_ONE_ANSWER', $plugin->txt('at_least_one_answer'));
         $config_tpl->setVariable('REPLY_TO_TEXT',  $plugin->txt('reply_to'));
         $config_tpl->setVariable('JUMP_TO_TIME',  $plugin->txt('jump_to_timestamp'));
+        $config_tpl->setVariable('SIMILAR_SIZE',  $plugin->txt('similarSize'));
+        $config_tpl->setVariable('BIG_VIDEO',  $plugin->txt('bigVideo'));
+        $config_tpl->setVariable('VERY_LARGE',  $plugin->txt('veryBigVideo'));
 		$config_tpl->setVariable('IS_CHRONOLOGIC_VALUE', $this->object->isChronologic());
 		$config_tpl->setVariable('AUTO_RESUME_AFTER_QUESTION', $this->object->isAutoResumeAfterQuestion());
 		$config_tpl->setVariable('FIXED_MODAL', $this->object->isFixedModal());
@@ -787,6 +790,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
         $my_tpl->setVariable('PLAYER', $object->getPlayer($player_id)->get() . $this->initPlayerConfig($player_id, $this->object->getSourceId(), true));
         $my_tpl->setVariable('MARKER', $marker_template);
+        $my_tpl->setVariable('PLAYER_ID', $player_id);
         return $my_tpl;
     }
 
@@ -1063,9 +1067,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values["show_toc_first"]		= $this->object->getShowTocFirst();
 		$a_values["disable_comment_stream"]		= $this->object->getDisableCommentStream();
 		$source_id = $this->object->getSourceId();
-		if(array_key_exists('xvid_source_id', $_GET) && $_GET['xvid_source_id'] !== ''){
-		    $source_id = ilUtil::stripSlashes($_GET['xvid_source_id']);
+        if($source_id === 'opc' || $source_id === '') {
+            if(array_key_exists('xvid_source_id', $_GET) && $_GET['xvid_source_id'] !== ''){
+                $source_id = ilUtil::stripSlashes($_GET['xvid_source_id']);
+            }
         }
+
 		$a_values['source_id']			= $source_id;
 		$a_values['is_task']			= $this->object->getTaskActive();
 		$a_values['task']				= $this->object->getTask();

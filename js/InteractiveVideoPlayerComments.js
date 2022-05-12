@@ -265,9 +265,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let language = scope.InteractiveVideo.lang;
 		let reset_elem = '<li><a href="#">' + language.reset_text + '</a></li><li role="separator" class="divider"></li>';
 		let layout_list = [];
-		layout_list['1:1'] = '1:1';
-		layout_list['2:1'] = '2:1';
-		layout_list['1:0'] = '1:0';
+		layout_list['1:1'] = language.similarSize;
+		layout_list['2:1'] = language.bigVideo;
+		layout_list['1:0'] = language.veryBigVideo;
 		drop_down_list.html('');
 		drop_down_list.append(reset_elem);
 		for ( element in layout_list)
@@ -285,9 +285,10 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.preselectActualTimeInVideo = function(seconds)
 	{
-		let obj = pub.secondsToTimeCode(seconds);
-//Todo: fix this, this id does not exists anywhere
-		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));
+		let time = pub.secondsToTimeCode(seconds);
+		let end_time = pub.secondsToTimeCode(seconds + 3);
+		pro.preselectValueOfTimeSelection(end_time, $('#comment_time_end'));
+		pro.preselectValueOfTimeSelection(time, $('#comment_time'));
 	};
 
 	pro.registerTabEvent = function(player_id)
@@ -529,7 +530,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		if(display_time > 0)
 		{
 			return 	'<time class="time_end"> - ' +
-					'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + display_time + ', ' + player_id + ');">'+
+					'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + display_time + ', \'' + player_id + '\');">'+
 					pub.secondsToTimeCode(display_time)  +
 					'</a>' +
 					'</time>' ;
@@ -707,11 +708,11 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return obj;
 	};
 
-	pro.preselectValueOfEndTimeSelection = function(time, element)
+	pro.preselectValueOfTimeSelection = function(time, element)
 	{
 		element.val(time);
-		if($('#comment_time_end').size() > 0) {
-			$('#comment_time_end').timepicker('setTime', time);
+		if(element.size() > 0) {
+			element.timepicker('setTime', time);
 		}
 	};
 	
