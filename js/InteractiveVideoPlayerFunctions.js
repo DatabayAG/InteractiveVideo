@@ -226,9 +226,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.postAndAppendFakeCommentToStream = function(actual_time_in_video, comment_text, is_private, end_time, marker, player_id) {
 		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
-		let fake_id = Math.random() * 10000000;
+		let fake_id = parseInt(Math.random() * 10000000, 10);
 
 		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id);
+		il.InteractiveVideoPlayerComments.fillCommentsTimeEndBlacklist(player_id, end_time, fake_id);
 		let tmp_obj =
 			{
 				'comment_id'       : fake_id,
