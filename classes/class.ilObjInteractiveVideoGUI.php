@@ -379,18 +379,21 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             }
             else if($this->checkPermissionBool('create'))
             {
-                $comment_button = ilLinkButton::getInstance();
-                $comment_button->setCaption($this->plugin->txt('insert_comment'), false);
-                $comment_button->setOnClick("il.InteractiveVideoModalHelper.getCommentAndMarkerForm('".$player_id."');");
-                $video_tpl->setVariable('MODAL_BUTTON_COMMENT', $comment_button->render());
-                $question_button = ilLinkButton::getInstance();
-                $question_button->setCaption($this->plugin->txt('add_question'), false);
-                $question_button->setOnClick("il.InteractiveVideoModalHelper.getQuestionCreationForModal('".$player_id."');");
-                $video_tpl->setVariable('MODAL_BUTTON_QUESTION', $question_button->render());
-                $question_button = ilLinkButton::getInstance();
-                $question_button->setCaption($this->plugin->txt('insert_chapter'), false);
-                $question_button->setOnClick("il.InteractiveVideoModalHelper.getChapterForm('".$player_id."');");
-                $video_tpl->setVariable('MODAL_BUTTON_CHAPTER', $question_button->render());
+                $comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $this->plugin->getDirectory());
+                $comments_tpl->setVariable('PLAYER_ID', $player_id);
+                $comments_tpl->setVariable('COMMENT_TIME_END', $this->plugin->txt('time_end'));
+                $picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end_' . $player_id);
+                $comments_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
+                $comments_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
+                $comments_tpl->setVariable('TXT_ENDTIME_WARNING', $this->plugin->txt('endtime_warning'));
+                $comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $this->plugin->txt('no_text_warning'));
+                $comments_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
+                $marker_template = '';
+                $marker_template = $this->buildMarkerEditorTemplate()->get();
+                $comments_tpl->setVariable('MARKER_EDITOR', $marker_template);
+                $comments_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
+                $comments_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
+                $video_tpl->setVariable("COMMENTS_FORM", $comments_tpl->get());
             }
 		}
 
