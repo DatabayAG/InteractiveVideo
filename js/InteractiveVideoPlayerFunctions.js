@@ -77,9 +77,9 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 							if (parseInt(player_data.comments[i].comment_time, 10) === cueTime && player_data.last_stop_id !== j)
 							{
 								stop_video = pro.commentsObjectActions(i, current_time, player);
-								player_data.last_stop_id = j;
 							}
 							if (stop_video === 1) {
+								player_data.last_stop_id = j;
 								if(scope.InteractiveVideoPlayerAbstract.isFullScreen(player_id)){
 									scope.InteractiveVideoPlayerAbstract.exitFullScreen(player_id)
 								}
