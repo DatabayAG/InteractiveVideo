@@ -29,7 +29,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let i;
 		let j_object = $("#ul_scroll_" + player_id);
-
+		$('#ilInteractiveVideoOverlay').html('');
 		j_object.html('');
 		pub.resetCommentsTimeEndBlacklist(player_id);
 		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
@@ -37,6 +37,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			if (player_data.comments[i].comment_time <= time && player_data.comments[i].comment_text !== null)
 			{
 				j_object.prepend(pub.buildListElement(player_id, player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name));
+				il.InteractiveVideoPlayerFunction.insertMarker( player_data.comments[i]);
 				il.InteractiveVideoPlayerComments.registerReplyToListeners(player_id);
 				if(player_data.comments[i].comment_time_end > 0)
 				{
@@ -171,6 +172,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 					)
 				{
 					pub.addHighlightToComment(player_data.comments[i].comment_id);
+					il.InteractiveVideoPlayerFunction.insertMarker( player_data.comments[i]);
+					il.InteractiveVideoPlayerFunction.fillCommentsTimeEndBlacklist(player_data.current_player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
 				}
 			}
 		}

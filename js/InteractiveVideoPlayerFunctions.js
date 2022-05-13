@@ -184,6 +184,13 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 	};
 
+	pub.insertMarker = function(comment) {
+		if ($('.interactive_overlay_element_' + comment.comment_id).size() === 0) {
+			var marker = '<g class=interactive_overlay_element_' + comment.comment_id + '>' + comment.marker + '</g>';
+			$('#ilInteractiveVideoOverlay').html($('#ilInteractiveVideoOverlay').html() + marker);
+		}
+	}
+
 	pro.commentsObjectActions = function(i, current_time, player)
 	{
 		let player_id      = pub.getPlayerIdFromPlayerObject(player);
@@ -216,10 +223,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 
 		if(is_overlay_marker === 1) {
-			if($('.interactive_overlay_element_' + comment.comment_id).size() === 0){
-				var marker = '<g class=interactive_overlay_element_' + comment.comment_id +'>' + comment.marker + '</g>';
-				$('#ilInteractiveVideoOverlay').html($('#ilInteractiveVideoOverlay').html() + marker);
-			}
+			pub.insertMarker(comment);
 		}
 		return stop_video;
 	};
