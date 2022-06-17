@@ -377,7 +377,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $comments_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
                 $video_tpl->setVariable("COMMENTS_FORM", $comments_tpl->get());
             }
-            else if($this->checkPermissionBool('create'))
+            else if($this->checkPermissionBool('write'))
             {
                 $comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $this->plugin->getDirectory());
                 $comments_tpl->setVariable('PLAYER_ID', $player_id);
