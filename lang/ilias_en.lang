@@ -12,6 +12,7 @@ xvid_delete#:#User can move or delete Interactive Video
 xvid_edit_permission#:#User can change permission settings
 xvid_visible#:#Interactive Video is visible
 xvid_read_learning_progress#:#User can view learning progress of other users
+xvid_edit_learning_progress#:#User can edit learning progress settings
 reset#:#Reset
 crs_create_xvid#:#Create Interactive Video
 grp_create_xvid#:#Create Interactive Video
