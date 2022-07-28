@@ -60,7 +60,7 @@ question_results#:#Question Results
 user_answered#:#User Answered
 user_correct#:#User Answered Correct
 insert_question#:#Insert Question
-insert_comment#:#Insert Comment
+insert_comment#:#Insert Comment/Marker
 my_comments#:#My Comments
 general#:#General
 repeat_question#:#Repeat question
