@@ -37,7 +37,7 @@ missing_comment_text#:#Please enter a comment.
 missing_stopping_point#:#The stopping point was not transferred to the server. Please try again.
 invalid_comment_ids#:#Some comments could not be found.
 comments_successfully_deleted#:#The selected comments were deleted successfully.
-show_all_comments#:#Show comments at all times:
+show_all_comments#:#Show only comments up to the playhead:
 author_filter#:#Filter by author
 edit_comment#:#Edit comment
 correct_solution#:#Correct
@@ -82,7 +82,7 @@ question#:#Question
 is_anonymized#:#Anonymize Comments
 is_anonymized_info#:#If enabled all comments are shown without usernames 
 is_public#:#Publish All Comments
-is_public_info#:#"If enabled all users are able to read all PUBLIC comments. Otherwise they are only able to see own comments and public comments created by administrators (in the tab "Questions, chapters and comments")
+is_public_info#:#If enabled all users are able to read all PUBLIC comments. Otherwise they are only able to see own comments and public comments created by administrators (in the tab "Questions, chapters and comments")
 correct_answered#:#Answered correctly
 show_my_results#:#My Results
 is_jump_correct#:#Use 'Correct'-Jump label
@@ -109,8 +109,10 @@ is_repeat#:#Skip correctly answered questions
 is_repeat_info#:#If this option is activated, questions that have already been answered correctly will be skipped when users watch the video again.
 offline#:#Offline
 status#:#Status
-is_chronologic#:#Show all comments at all times
-is_chronologic_info#:#If this option is activated, all comments for the video will be shown in chronological order at all times.
+is_chronologic#:#Show only comments up to the playhead
+is_chronologic_settings#:#Show all comments at all times
+is_chronologic_settings_info#:#If enabled, only comments prior to the current playback position are displayed. When playing the video, the newly appearing comments are displayed continuously and at the very top. When the toolbar is enabled, users can change their own view.
+is_chronologic_info#:#If enabled, only comments prior to the current playback position are displayed. When playing the video, the newly appearing comments are displayed continuously and at the very top. When the toolbar is enabled, users can change their own view.
 time_end#:#End Time
 show_response_frequency#:#Show response frequencies
 show_response_frequency_info#:#After answering the question, the response frequencies of all answering options are shown as percentages beneath each answering option.

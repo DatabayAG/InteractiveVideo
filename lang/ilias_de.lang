@@ -14,7 +14,7 @@ xvid_visible#:#Interaktives Video ist sichtbar
 xvid_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
 xvid_edit_learning_progress#:#Benutzer kann Lernfortschritt Einstellungen bearbeiten
 reset#:#Zurücksetzen
-show_all_comments#:#Kommentare zu jeder Zeit anzeigen:
+show_all_comments#:#Nur Kommentare bis zur Abspielposition zeigen:
 author_filter#:#Autorenfilter
 crs_create_xvid#:#Neues Interaktives Video anlegen
 grp_create_xvid#:#Neues Interaktives Video anlegen
@@ -107,8 +107,10 @@ is_repeat#:#Korrekt beantwortete Fragen überspringen
 is_repeat_info#:#Wenn diese Option aktiviert ist, werden bereits korrekt beantwortete Fragen beim wiederholten Abspielen übersprungen.
 offline#:#Offline
 status#:#Status
-is_chronologic#:#Alle Kommentare von Beginn an zeigen
-is_chronologic_info#:#Wenn diese Option aktiviert wird, wird die Option 'Alle Kommentare' vorausgewählt und es werden alle Kommentare des gesamten Videos von Beginn an in chronologischer Reihenfolge angezeigt.
+is_chronologic#:#Nur Kommentare bis zur Abspielposition zeigen
+is_chronologic_settings#:#Alle Kommentare von Beginn an zeigen
+is_chronologic_settings_info#:#Wenn diese Option aktiviert wird, wird die Option 'Alle Kommentare' vorausgewählt und es werden alle Kommentare des gesamten Videos von Beginn an in chronologischer Reihenfolge angezeigt.
+is_chronologic_info#:#Wenn aktiviert, werden nur jene Kommentare angezeigt, die vor der aktuellen Abspielposition liegen. Beim Abspielen des Videos werden die neu erscheinenden Kommentare fortlaufend und jeweils zuoberst eingeblendet. Bei aktivierter Toolbar können Benutzer die eigene Ansicht ändern.
 time_end#:#Ende der Passage
 show_response_frequency#:#Zeige Antworthäufigkeiten
 show_response_frequency_info#:#Nachdem die Frage beantwortet wurde, wird unter jeder Antwortoption die relative Antworthäufigkeit in Prozent angezeigt
