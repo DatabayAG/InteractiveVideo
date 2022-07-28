@@ -203,7 +203,7 @@ scale#:#Scale
 with_marker#:#with marker
 line#:#Line
 marker_for_students#:#Marker for students
-marker_for_students_info#:#Students can also add markers to the video
+marker_for_students_info#:#If enabled, students can add markers to the video. Administrators can always add markers (in tabs "Content" or "Questions, chapters and comments")
 delete_marker#:#Delete Marker
 delete_marker#:#Delete Marker
 text#:#Text
