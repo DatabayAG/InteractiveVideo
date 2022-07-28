@@ -2474,7 +2474,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['is_table_of_content'] = $comment_data['is_table_of_content'];
 		$values['is_reply_to']      = $comment_data['is_table_of_content'];
 		$values['is_table_of_content'] = $comment_data['is_table_of_content'];
-		$values['fake_marker']      = $comment_data['marker'];
+		$values['fake_marker']      = strip_tags($comment_data['marker'], ['rect', 'ellipse', 'path', 'line', 'text']);
 
 		return $values;
 	}
