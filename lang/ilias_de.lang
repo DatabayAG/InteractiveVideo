@@ -250,7 +250,10 @@ insert_marker_info#:#Sie können den Marker per Drag & Drop auf dem Video versch
 display#:#Darstellung
 display_width#:#Breite Video- & Kommentarspalte
 display_width_info#:#- Gleich gross: 1:1 Die beiden Spalten sind gleich breit. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/> - Video gross: 2:1 Das Video ist deutlich breiter als die Kommentarepalte, (Verhältnis = 2:1). Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/> - Video sehr gross: Untereinander Das Video füllt die volle Fensterbreite aus. Die Kommentarepalte wird darunter angezeigt. In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/>
-similarSize#:#Mittel
-BigVideo#:#Groß
-veryBigVideo#:#VSehr groß
+similarSize#:#Gleich gross
+similarSize_info#:#Die beiden Spalten sind gleich breit. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
+BigVideo#:#Video gross
+BigVideo_info#:#Das Video ist deutlich breiter als die Kommentarepalte. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
+veryBigVideo#:#Video sehr gross
+veryBigVideo_info#:#Das Video füllt die volle Fensterbreite aus. Die Kommentarepalte wird darunter angezeigt. In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
 layout_filter#:#Layout

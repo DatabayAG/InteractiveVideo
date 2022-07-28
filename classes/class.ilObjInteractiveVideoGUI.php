@@ -987,15 +987,27 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $disable_comment_stream->setInfo($plugin->txt('disable_comment_stream_info'));
         $a_form->addItem($disable_comment_stream);
 
-        $display_width = new ilSelectInputGUI($plugin->txt('display_width'), 'layout_width');
-        $display_width->setInfo($plugin->txt('display_width_info'));
-        $display_width->setOptions(
-            [
-                ilObjInteractiveVideo::LAYOUT_BIG_VIDEO  => $this->plugin->txt('bigVideo'),
-                ilObjInteractiveVideo::LAYOUT_VERY_BIG_VIDEO  => $this->plugin->txt('veryBigVideo'),
-                ilObjInteractiveVideo::LAYOUT_SIMILAR => $this->plugin->txt('similarSize')
-            ]);
-        $a_form->addItem($display_width);
+        $display_width_group = new ilRadioGroupInputGUI($plugin->txt('display_width'), 'layout_width');
+        $opt = new ilRadioOption(
+            $plugin->txt('bigVideo'),
+            ilObjInteractiveVideo::LAYOUT_BIG_VIDEO,
+            $plugin->txt('bigVideo_info')
+        );
+        $display_width_group->addOption($opt);
+        $opt = new ilRadioOption(
+            $plugin->txt('veryBigVideo'),
+            ilObjInteractiveVideo::LAYOUT_VERY_BIG_VIDEO,
+            $plugin->txt('veryBigVideo_info')
+        );
+        $display_width_group->addOption($opt);
+        $opt = new ilRadioOption(
+            $plugin->txt('similarSize'),
+            ilObjInteractiveVideo::LAYOUT_SIMILAR,
+            $plugin->txt('similarSize_info')
+        );
+        $display_width_group->addOption($opt);
+
+        $a_form->addItem($display_width_group);
 
 		$section = new ilFormSectionHeaderGUI();
 		$section->setTitle($plugin->txt('comments'));

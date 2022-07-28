@@ -31,9 +31,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     /** @var int */
     const LP_MODE_BY_ANSWERED_QUESTIONS = 100;
 
-    const LAYOUT_SIMILAR = 101;
-    const LAYOUT_BIG_VIDEO = 102;
-    const LAYOUT_VERY_BIG_VIDEO = 103;
+    const LAYOUT_SIMILAR = 0;
+    const LAYOUT_BIG_VIDEO = 1;
+    const LAYOUT_VERY_BIG_VIDEO = 2;
 
 	/** @var int */
 	protected $learning_progress_mode = self::LP_MODE_DEACTIVATED;
@@ -1576,11 +1576,17 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     {
         $value = '2:1';
         switch($this->layout_width){
-            case 101: $value='1:1';
+            case 0:
+            case 101:
+                $value='1:1';
                 break;
-            case 102: $value='2:1';
+            case 1:
+            case 102:
+                $value='2:1';
                 break;
-            case 103: $value='1:0';
+            case 2:
+            case 103:
+                $value='1:0';
                 break;
         }
         return $value;
