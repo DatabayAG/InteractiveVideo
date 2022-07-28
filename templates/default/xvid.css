@@ -488,7 +488,6 @@ body.cke_editable{
     cursor: pointer;
 }
 .marker_toolbar{
-    margin: 10px;
     padding: 10px;
     background-color: #ffffff;
 }
@@ -974,6 +973,9 @@ li.toc_item > div > h5 > time {
     .content_hundred{
         width:100% !important;
     }
+}
+#stroke_picker, #color_picker, #color_picker_fill{
+    width: 10%;
 }
 
 
