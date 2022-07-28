@@ -746,6 +746,20 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		return scope.InteractiveVideo[player_id];
 	};
 
+	pub.refreshTimerInEditScreen = function(player_id, interval){
+		il.InteractiveVideo[player_id].player.on('playing', event => {
+			interval = setInterval(function () {
+				let time = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
+				let end_time = time + 3;
+				time = scope.InteractiveVideoPlayerComments.secondsToTimeCode(time);
+				end_time = scope.InteractiveVideoPlayerComments.secondsToTimeCode(end_time);
+				$('#comment_time').timepicker('setTime', time);
+				$('#comment_time_end').timepicker('setTime', end_time);
+				il.InteractiveVideoPlayerFunction.refreshTimerInEditScreen(player_id, interval);
+			}, 500);
+		});
+	}
+
 	pub.protect = pro;
 	return pub;
 

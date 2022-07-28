@@ -794,6 +794,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $my_tpl->setVariable('PLAYER', $object->getPlayer($player_id)->get() . $this->initPlayerConfig($player_id, $this->object->getSourceId(), true));
         $my_tpl->setVariable('MARKER', $marker_template);
         $my_tpl->setVariable('PLAYER_ID', $player_id);
+        $tpl->addOnLoadCode('il.InteractiveVideoPlayerFunction.refreshTimerInEditScreen("'.$player_id.'");');
         return $my_tpl;
     }
 
