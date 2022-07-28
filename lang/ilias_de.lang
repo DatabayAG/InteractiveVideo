@@ -243,7 +243,7 @@ text#:#Text
 font_size#:#Schriftgröße
 is_reply_to#:#Antwort
 reply_to#:#Antworten
-jump_to_timestamp#:#Springe zum Zeitpunkt
+jump_to_timestamp#:#Springe zum Zeitpunkt <b\> Bitte zweimal auf das Video klicken um zum richtigen Zeitpunkt zu springen.
 insert_marker_info#:#Sie können den Marker per Drag & Drop auf dem Video verschieben.
 display#:#Darstellung
 display_width#:#Breite Video- & Kommentarspalte
