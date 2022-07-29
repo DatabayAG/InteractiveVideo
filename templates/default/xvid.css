@@ -735,6 +735,10 @@ input[type=range]:focus::-ms-fill-upper {
     pointer-events: none;
 }
 
+.scroll-text ul.ul_toc_iv li.activeToc:after{
+    border: 2px solid rgba(0,0,0,1) !important;
+}
+
 .iv_tab_navigation .active{
     background-color: white !important;
 }
