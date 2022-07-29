@@ -1185,3 +1185,13 @@ if($ilDB->tableExists('rep_robj_xvid_objects'))
     }
 }
 ?>
+<#80>
+<?php
+require_once('./Services/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php');
+$read_lp = ilDBUpdateNewObjectType::getCustomRBACOperationId('copy');
+$xoct_type_id = ilDBUpdateNewObjectType::getObjectTypeId('xvid');
+
+if ($read_lp && $xoct_type_id) {
+    ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
+}
+?>

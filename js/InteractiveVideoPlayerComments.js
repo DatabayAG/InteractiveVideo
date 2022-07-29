@@ -397,8 +397,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	};
 
 	pro.registerTocClickListener = function(player_id) {
-		$('.toc-inner').off('click');
-		$('.toc-inner').on('click', function() {
+		$('.description_exists').off('click');
+		$('.description_exists').on('click', function() {
 			if($(this).find('.toc_description').css('display') === 'block'){
 				$(this).find('.toc_description').hide();
 				$(this).find('.toc_description').removeClass('tocManualOverride');
