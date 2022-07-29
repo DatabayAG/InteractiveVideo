@@ -239,7 +239,7 @@ scale#:#Skalieren
 with_marker#:#mit Marker
 line#:#Linie
 marker_for_students#:#Maker für Studierende
-marker_for_students_info#:#Wenn aktiviert, können Studierenden Marker zu einem Video hinzufügen. Administratoren können immer Marker hinzufügen (in den Tabs "Inhalt" und "Fragen, Kapitel und Kommentare".
+marker_for_students_info#:#Wenn aktiviert, können Studierenden Marker zu einem Video hinzufügen. Administratoren können immer Marker hinzufügen (in den Tabs "Inhalt" und "Fragen, Kapitel und Kommentare", das ist allerdings nur möglich wenn Studierende auch Kommentare schreiben können, also die Option "Kein Kommentarfeld" nicht aktiviert ist.
 delete_marker#:#Marker Löschen
 text#:#Text
 font_size#:#Schriftgröße
