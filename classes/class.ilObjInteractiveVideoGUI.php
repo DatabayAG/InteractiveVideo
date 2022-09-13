@@ -989,6 +989,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         $display_width_group = new ilRadioGroupInputGUI($plugin->txt('display_width'), 'layout_width');
         $opt = new ilRadioOption(
+            $plugin->txt('similarSize'),
+            ilObjInteractiveVideo::LAYOUT_SIMILAR,
+            $plugin->txt('similarSize_info')
+        );
+        $display_width_group->addOption($opt);
+        $opt = new ilRadioOption(
             $plugin->txt('bigVideo'),
             ilObjInteractiveVideo::LAYOUT_BIG_VIDEO,
             $plugin->txt('bigVideo_info')
@@ -998,12 +1004,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $plugin->txt('veryBigVideo'),
             ilObjInteractiveVideo::LAYOUT_VERY_BIG_VIDEO,
             $plugin->txt('veryBigVideo_info')
-        );
-        $display_width_group->addOption($opt);
-        $opt = new ilRadioOption(
-            $plugin->txt('similarSize'),
-            ilObjInteractiveVideo::LAYOUT_SIMILAR,
-            $plugin->txt('similarSize_info')
         );
         $display_width_group->addOption($opt);
 

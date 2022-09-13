@@ -108,7 +108,7 @@ is_repeat_info#:#Wenn diese Option aktiviert ist, werden bereits korrekt beantwo
 offline#:#Offline
 status#:#Status
 is_chronologic#:#Nur Kommentare bis zur Abspielposition zeigen
-is_chronologic_settings#:#Alle Kommentare von Beginn an zeigen
+is_chronologic_settings#:#Nur Kommentare bis zur Abspielposition zeigen
 is_chronologic_settings_info#:#Wenn diese Option aktiviert wird, wird die Option 'Alle Kommentare' vorausgewählt und es werden alle Kommentare des gesamten Videos von Beginn an in chronologischer Reihenfolge angezeigt.
 is_chronologic_info#:#Wenn aktiviert, werden nur jene Kommentare angezeigt, die vor der aktuellen Abspielposition liegen. Beim Abspielen des Videos werden die neu erscheinenden Kommentare fortlaufend und jeweils zuoberst eingeblendet. Bei aktivierter Toolbar können Benutzer die eigene Ansicht ändern.
 time_end#:#Ende der Passage
