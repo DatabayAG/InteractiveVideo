@@ -104,7 +104,7 @@ is_jump_correct_info#:#Sie können hier eine Sprungmarke zu einer relevanten Ste
 is_jump_wrong_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage falsch beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblendet.
 learning_recommendation#:#Lernempfehlung an folgender Stelle im Video
 is_repeat#:#Korrekt beantwortete Fragen überspringen
-is_repeat_info#:#Wenn diese Option aktiviert ist, werden bereits korrekt beantwortete Fragen beim wiederholten Abspielen übersprungen.
+is_repeat_info#:#Wenn aktiviert, werden bereits korrekt beantwortete Fragen beim wiederholten Abspielen übersprungen.
 offline#:#Offline
 status#:#Status
 is_chronologic#:#Nur Kommentare bis zur Abspielposition zeigen
@@ -137,7 +137,7 @@ db_up_to_date#:#Datenbank aktuell
 db_update_worked#:#Datenbank erfolgreich aktualisiert
 db_update_failed#:#Datenbank-Update schlug fehl: %s
 task_switch#:#Aufgabenstellung aktivieren
-task_switch_info#:#Aufgabenstellung aktivieren
+task_switch_info#:#Blendet oberhalb des Videos eine beliebige Aufgabenstellung ein.
 task#:#Aufgabenstellung
 lp_mode_title_by_questions#:#Fragen korrekt beantwortet
 lp_mode_desc_by_questions#:#Das Objekt gilt als 'Bearbeitet', wenn für alle definierten Fragen eine 'richtige' Antwort gewählt und die Endposition des Videos erreicht wurde. Falls keine Fragen konfiguriert wurden, gilt das Objekt beim Erreichen der Endposition des Videos als 'Bearbeitet'.
@@ -192,8 +192,8 @@ no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommenta
 xvid_xvid_view_lp#:#Lernfortschritt einsehen
 auto_resume#:#Fortsetzen
 auto_resume_info#:#Wenn aktiviert, wird das Video beim Schließen des Fragen-Dialogs automatisch fortgesetzt.
-fixed_modal#:#Modal schließen blockieren
-fixed_modal_info#:#Wenn aktiviert, wird ein Modal-Dialog beim Klick eines Benutzers auf den Hintergrund nicht geschlossen.
+fixed_modal#:#Frage schließen blockieren
+fixed_modal_info#:#Wenn aktiviert, wird eine angezeigte Frage beim Klick eines Benutzers auf den Hintergrund nicht geschlossen.
 modal_section#:#Verhalten des Fragendialoges
 subtitle#:#Untertitel
 short_title#:#Kürzel
@@ -206,8 +206,8 @@ no_toolbar_info#:#Es wird keine Toolbar mit Filtern angezeigt
 is_table_of_content#:#Inhaltsverzeichnis
 toc#:#Inhaltsverzeichnis
 show_toc_first#:#Zeige Inhaltsverzeichnis als erstes
-show_toc_first_info#:#Zeige das Inhaltsverzeichnis zuerst an. Damit ein Inhaltsverzeichnis angezeigt wird, müssen zuerst Kapitel erstellt werden (im Tab "Fragen, Kapitel und Kommentare")
-enable_comment_stream#:#Aktiviere Kommentarstream
+show_toc_first_info#:#Falls Kapitel erstellt wurden, wird das Inhaltsverzeichnis neben dem Video direkt angezeigt. Standardmässig ist das Inhaltsverzeichnis von der Kommentarspalte überdeckt und muss aktiv aufgerufen werden.
+enable_comment_stream#:#Zeigt neben dem Video die Kommentarspalte an. Darin werden die Kommentare und Fragen aufgeführt.
 enable_comment_stream_info#:#Aktiviere Kommentarstream
 insert_chapter#:#Kapitel einfügen
 edit_chapter#:#Kapitel editieren
@@ -239,13 +239,13 @@ scale#:#Skalieren
 with_marker#:#mit Marker
 line#:#Linie
 marker_for_students#:#Marker für Studierende
-marker_for_students_info#:#Wenn aktiviert, können Studierenden Marker zu einem Video hinzufügen. Administratoren können immer Marker hinzufügen (in den Tabs "Inhalt" und "Fragen, Kapitel und Kommentare", das ist allerdings nur möglich wenn Studierende auch Kommentare schreiben können, also die Option "Kein Kommentarfeld" nicht aktiviert ist.
+marker_for_students_info#:#Wenn aktiviert, können Studierende Marker in ein Video einfügen (z.B. Formen oder Texte). Die Option wird unterhalb des Kommentarfeldes angeboten.
 delete_marker#:#Marker Löschen
 text#:#Text
 font_size#:#Schriftgröße
 is_reply_to#:#Antwort
 reply_to#:#Antworten
-jump_to_timestamp#:#Springe zum Zeitpunkt <b\> Bitte zweimal auf das Video klicken um zum richtigen Zeitpunkt zu springen.
+jump_to_timestamp#:#Bitte zweimal auf das Video klicken (kein Doppelklick) um zum richtigen Zeitpunkt zu springen.
 insert_marker_info#:#Sie können den Marker per Drag & Drop auf dem Video verschieben.
 display#:#Darstellung
 display_width#:#Breite Video- & Kommentarspalte

@@ -106,7 +106,7 @@ is_jump_correct_info#:#In case the question was answered correctly, you can sele
 is_jump_wrong_info#:#In case the question was answered incorrectly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
 learning_recommendation#:#Learning recommendation within the video at
 is_repeat#:#Skip correctly answered questions
-is_repeat_info#:#If this option is activated, questions that have already been answered correctly will be skipped when users watch the video again.
+is_repeat_info#:#If enabled, questions that have already been answered correctly will be skipped when users watch the video again.
 offline#:#Offline
 status#:#Status
 is_chronologic#:#Show only comments up to the playhead
@@ -139,7 +139,7 @@ db_up_to_date#:#Database up-to-date
 db_update_worked#:#Database successfully updated
 db_update_failed#:#Database update went wrong: %s
 task_switch#:#Activate Task
-task_switch_info#:#Activate Task
+task_switch_info#:#Displays any task above the video.
 task#:#Task
 lp_mode_title_by_questions#:#Questions Correctly Answered
 lp_mode_desc_by_questions#:#The object is 'completed' if the users submitted the 'correct' answer for each question. If there is no question defined, the object is 'completed' if the user reaches the end of the video.
@@ -205,20 +205,20 @@ scale#:#Scale
 with_marker#:#with marker
 line#:#Line
 marker_for_students#:#Marker for students
-marker_for_students_info#:#If enabled, students can add markers to the video. Administrators can always add markers (in tabs "Content" or "Questions, chapters and comments"),this is only possible if students are allowed to write comments (setting "No comment-field" must be unchecked).
+marker_for_students_info#:#If enabled, students can insert markers to a video (e.g. shapes or texts). The option appears below the comment field.»
 delete_marker#:#Delete Marker
 delete_marker#:#Delete Marker
 text#:#Text
 font_size#:#Font Size
 is_reply_to#:#Is Reply
 reply_to#:#Reply to
-jump_to_timestamp#:#Jump to time (no double click) <br\>to jump to the correct time in the video.
+jump_to_timestamp#:#Click two times (no double click) to jump to the correct time.
 insert_marker_info#:#You can move the marker with drag & drop on the video
 xvid_xvid_view_lp#:#View Learning Progress
 auto_resume#:#Auto resume
 auto_resume_info#:#If enabled, the video will be automatically resumed after closing a the modal question dialogue.
-fixed_modal#:#Block modal closing
-fixed_modal_info#:#If enabled, a modal dialogue won't be closed if a user clicks on the background.
+fixed_modal#:#Block question closing
+fixed_modal_info#:#If enabled, a shown question won't be closed if a user clicks on the background.
 modal_section#:#Behaviour of Question Dialogue
 subtitle#:#Subtitle
 short_title#:#Short title
@@ -231,10 +231,10 @@ no_toolbar_info#:#No toolbar with filters will be shown
 save_without_correct_detail#:#You don't have selected a reflection question or have you selected a question without correct answers, are you sure you want to save the question?
 is_table_of_content#:#Table of Content
 toc#:#Table of Content
-show_toc_first#:#Show Table of content first
-show_toc_first_info#:#Show table of content as first page. In order to see such a table of content chapters have to be created (in the tab "Questions, chapters and comments")
-enable_comment_stream#:#Enable comment stream
-enable_comment_stream_info#:#Enable comment stream
+show_toc_first#:#Show table of content first
+show_toc_first_info#:#Shows table of content as first page if chapters have been created. By default, the table of content is covered by the comment column and must be actively opened.
+enable_comment_stream#:#Show comments column
+enable_comment_stream_info#:#Shows the comments column next to the video. It lists the comments and questions.
 insert_chapter#:#Insert Chapter
 edit_chapter#:#Edit Chapter
 comment_table_title#:#Comment / Question Text
