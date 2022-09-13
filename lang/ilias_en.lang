@@ -233,8 +233,8 @@ is_table_of_content#:#Table of Content
 toc#:#Table of Content
 show_toc_first#:#Show Table of content first
 show_toc_first_info#:#Show table of content as first page. In order to see such a table of content chapters have to be created (in the tab "Questions, chapters and comments")
-disable_comment_stream#:#Disable comment stream
-disable_comment_stream_info#:#Disable comment stream
+enable_comment_stream#:#Enable comment stream
+enable_comment_stream_info#:#Enable comment stream
 insert_chapter#:#Insert Chapter
 edit_chapter#:#Edit Chapter
 comment_table_title#:#Comment / Question Text

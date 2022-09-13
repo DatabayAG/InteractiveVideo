@@ -207,8 +207,8 @@ is_table_of_content#:#Inhaltsverzeichnis
 toc#:#Inhaltsverzeichnis
 show_toc_first#:#Zeige Inhaltsverzeichnis als erstes
 show_toc_first_info#:#Zeige das Inhaltsverzeichnis zuerst an. Damit ein Inhaltsverzeichnis angezeigt wird, müssen zuerst Kapitel erstellt werden (im Tab "Fragen, Kapitel und Kommentare")
-disable_comment_stream#:#Deaktiviere Kommentarstream
-disable_comment_stream_info#:#Deaktiviere Kommentarstream
+enable_comment_stream#:#Aktiviere Kommentarstream
+enable_comment_stream_info#:#Aktiviere Kommentarstream
 insert_chapter#:#Kapitel einfügen
 edit_chapter#:#Kapitel editieren
 comment_table_title#:#Kommentar / Fragentext

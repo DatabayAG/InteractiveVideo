@@ -336,7 +336,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$modal->setBody('');
 		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
 
-        if($this->object->getDisableCommentStream() !== "1"){
+        if($this->object->getEnableCommentStream() !== "1"){
             $video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
         }
         if($this->object->doesTocCommentExists()){
@@ -653,7 +653,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('AUTO_RESUME_AFTER_QUESTION', $this->object->isAutoResumeAfterQuestion());
 		$config_tpl->setVariable('FIXED_MODAL', $this->object->isFixedModal());
 		$config_tpl->setVariable('SHOW_TOC_FIRST', $this->object->getShowTocFirst());
-		$config_tpl->setVariable('DISABLE_COMMENT_STREAM', $this->object->getDisableCommentStream());
+		$config_tpl->setVariable('ENABLE_COMMENT_STREAM', $this->object->getEnableCommentStream());
 		$config_tpl->setVariable('LAYOUT_WIDTH', $this->object->getLayoutWidthTransformed());
 		$config_tpl->setVariable('HAS_TRACKS', $this->getSubtitleDataAndFilesForJson());
 		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
@@ -845,8 +845,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $show_toc_first = $a_form->getInput('show_toc_first');
 		$this->object->setShowTocFirst((int)$show_toc_first);
 
-        $disable_comment_stream = $a_form->getInput('disable_comment_stream');
-		$this->object->setDisableCommentStream((int)$disable_comment_stream);
+        $enable_comment_stream = $a_form->getInput('enable_comment_stream');
+		$this->object->setEnableCommentStream((int)$enable_comment_stream);
 
 		$auto_resume = $a_form->getInput('auto_resume');
 		$this->object->setAutoResumeAfterQuestion((int)$auto_resume);
@@ -983,9 +983,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $show_toc_first->setInfo($plugin->txt('show_toc_first_info'));
         $a_form->addItem($show_toc_first);
 
-        $disable_comment_stream = new ilCheckboxInputGUI($plugin->txt('disable_comment_stream'), 'disable_comment_stream');
-        $disable_comment_stream->setInfo($plugin->txt('disable_comment_stream_info'));
-        $a_form->addItem($disable_comment_stream);
+        $enable_comment_stream = new ilCheckboxInputGUI($plugin->txt('enable_comment_stream'), 'enable_comment_stream');
+        $enable_comment_stream->setInfo($plugin->txt('enable_comment_stream_info'));
+        $a_form->addItem($enable_comment_stream);
 
         $display_width_group = new ilRadioGroupInputGUI($plugin->txt('display_width'), 'layout_width');
         $opt = new ilRadioOption(
@@ -1081,7 +1081,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values["no_comment"]			= $this->object->getDisableComment();
 		$a_values["no_toolbar"]			= $this->object->getDisableToolbar();
 		$a_values["show_toc_first"]		= $this->object->getShowTocFirst();
-		$a_values["disable_comment_stream"]		= $this->object->getDisableCommentStream();
+		$a_values["enable_comment_stream"]		= $this->object->getEnableCommentStream();
 		$source_id = $this->object->getSourceId();
         if($source_id === 'opc' || $source_id === '') {
             if(array_key_exists('xvid_source_id', $_GET) && $_GET['xvid_source_id'] !== ''){
