@@ -315,7 +315,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			pub.buildToc(player_id);
 		});
 
-		if(player_data.enable_comment_stream === "0" ){
+		if(player_data.enable_comment_stream === "1" ){
 			let toolbar = $('.ivToolbar_' + player_id)
 			toolbar.css('display', 'none');
 		}
