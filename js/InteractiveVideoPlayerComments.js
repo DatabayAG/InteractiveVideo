@@ -270,15 +270,15 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let layout_list = [];
 		layout_list['1:1'] = language.similarSize;
 		layout_list['2:1'] = language.bigVideo;
-		layout_list['1:0'] = language.veryBigVideo;
+		layout_list['stacked'] = language.veryBigVideo;
 		drop_down_list.html('');
 		drop_down_list.append(reset_elem);
-		for ( element in layout_list)
-		{
-			element = '<li><a href="#">' + element + '</a></li>';
+		Object.keys(layout_list).forEach(key => {
+			console.log(key, layout_list[key]);
+			element = '<li><a href="#">' + layout_list[key] + '</a></li>';
 			drop_down_list.append(element);
-		}
-		//Todo Event selection
+		});
+
 	};
 
 	pub.fillEndTimeSelector = function(seconds)

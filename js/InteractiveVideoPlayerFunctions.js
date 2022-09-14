@@ -559,6 +559,24 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 		else
 		{
+			console.log('start', value)
+			if(value !== '1:1'){
+				value = value.split(':');
+				if(value.length == 3) {
+					value = value[1] + ':' + value[2];
+					value = value.trim();
+				} else if(value.length == 2) {
+					console.log(2, value)
+					if(value[1] !== '1') {
+						value = '1:0';
+					}
+					console.log(3, value)
+				} else {
+					value = '1:1';
+				}
+				console.log(value)
+			}
+
 			$('.dropdownMenuLayoutInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.layout_filter + ' ' + value + ' <span class="caret"></span>');
 		}
 		pro.setLayoutValue(value, player_id);
