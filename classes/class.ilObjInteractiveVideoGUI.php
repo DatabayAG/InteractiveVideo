@@ -336,7 +336,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$modal->setBody('');
 		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
 
-        if($this->object->getEnableCommentStream() !== "1"){
+        if($this->object->getEnableCommentStream() !== "0"){
             $video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
         }
         if($this->object->doesTocCommentExists()){
@@ -656,6 +656,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('ENABLE_COMMENT_STREAM', $this->object->getEnableCommentStream());
 		$config_tpl->setVariable('LAYOUT_WIDTH', $this->object->getLayoutWidthTransformed());
 		$config_tpl->setVariable('HAS_TRACKS', $this->getSubtitleDataAndFilesForJson());
+		$config_tpl->setVariable('NO_TOOLBAR', $this->object->getDisableToolbar());
 		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))

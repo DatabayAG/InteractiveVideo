@@ -559,24 +559,21 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 		else
 		{
-			console.log('start', value)
 			if(value !== '1:1'){
 				value = value.split(':');
+				console.log(value)
 				if(value.length == 3) {
 					value = value[1] + ':' + value[2];
 					value = value.trim();
-				} else if(value.length == 2) {
-					console.log(2, value)
-					if(value[1] !== '1') {
-						value = '1:0';
-					}
-					console.log(3, value)
-				} else {
-					value = '1:1';
+				} else if (value.length == 2) {
+					value = value[0] + ':' + value[1];
+					value = value.trim();
 				}
 				console.log(value)
-			}
-
+				if(value !== '1:1' && value !== '2:1') {
+					value = '1:0';
+				}
+				}
 			$('.dropdownMenuLayoutInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.layout_filter + ' ' + value + ' <span class="caret"></span>');
 		}
 		pro.setLayoutValue(value, player_id);

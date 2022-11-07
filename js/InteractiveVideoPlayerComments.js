@@ -274,7 +274,6 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		drop_down_list.html('');
 		drop_down_list.append(reset_elem);
 		Object.keys(layout_list).forEach(key => {
-			console.log(key, layout_list[key]);
 			element = '<li><a href="#">' + layout_list[key] + '</a></li>';
 			drop_down_list.append(element);
 		});
@@ -315,7 +314,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			pub.buildToc(player_id);
 		});
 
-		if(player_data.enable_comment_stream === "1" ){
+		if(player_data.no_toolbar === "1" ){
 			let toolbar = $('.ivToolbar_' + player_id)
 			toolbar.css('display', 'none');
 		}
