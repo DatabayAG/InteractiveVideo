@@ -93,7 +93,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	public $import_comment = array();
 
 	/** @var int */
-	protected $disable_comment = 0;
+	protected $enable_comment = 1;
 
 	/** @var int */
 	protected $enable_toolbar = 1;
@@ -163,7 +163,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->setSourceId($row['source_id']);
 		$this->setTaskActive($row['is_task']);
 		$this->setTask($row['task']);
-		$this->setDisableComment($row['no_comment']);
+		$this->setEnableComment($row['enable_comment']);
 		$this->setEnableToolbar($row['show_toolbar']);
 		$this->setAutoResumeAfterQuestion($row['auto_resume']);
 		$this->setFixedModal($row['fixed_modal']);
@@ -325,7 +325,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$source_id		= $this->source_id;
 						$is_task		= $this->task_active;
 						$task			= $this->task;
-						$no_comment		= $this->disable_comment;
+						$enable_comment = $this->enable_comment;
 						$show_toolbar	= $this->enable_toolbar;
 						$auto_resume	= $this->auto_resume_after_question;
 						$fixed_modal	= $this->fixed_modal;
@@ -351,7 +351,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$source_id		= ilUtil::stripSlashes($_POST['source_id']);
 						$is_task		= (int)$_POST['is_task'];
 						$task			= ilUtil::stripSlashes($_POST['task']);
-						$no_comment		= (int)$_POST['no_comment'];
+						$enable_comment	= (int)$_POST['enable_comment'];
 						$show_toolbar		= (int)$_POST['show_toolbar'];
 						$auto_resume	= (int)$_POST['auto_resume'];
 						$fixed_modal	= (int)$_POST['fixed_modal'];
@@ -377,7 +377,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 							'auto_resume'    => array('integer',$auto_resume ),
 							'fixed_modal'    => array('integer',$fixed_modal ),
 							'task'           => array('text', $task),
-							'no_comment'     => array('integer', $no_comment),
+							'enable_comment'     => array('integer', 1),
 							'show_toolbar'     => array('integer', $show_toolbar),
 							'show_toc_first' => array('integer', $show_toc_first),
 							'disable_comment_stream' => array('integer', 1),
@@ -443,7 +443,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                   'show_toc_first'    => array('integer', $this->getShowTocFirst()),
                   'disable_comment_stream'    => array('integer', $this->getEnableCommentStream()),
                   'lp_mode'			=> array('integer', $this->getLearningProgressMode()),
-                  'no_comment'		=> array('integer', $this->getDisableComment()),
+                  'enable_comment'		=> array('integer', $this->getEnableComment()),
                   'show_toolbar'		=> array('integer', $this->getEnableToolbar()),
                   'no_comment_stream'		=> array('integer', $this->getNoCommentStream()),
                   'video_mode'			=> array('integer', $this->getVideoMode()),
@@ -508,7 +508,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                 'is_repeat' => array('integer', $this->isRepeat()),
                 'is_chronologic' => array('integer', $this->isChronologic()),
                 'is_public'     => array('integer', $this->isPublic()),
-                'no_comment'     => array('integer', $this->getDisableComment()),
+                'enable_comment'     => array('integer', $this->getEnableComment()),
                 'show_toolbar'     => array('integer', $this->getEnableToolbar()),
                 'source_id'     => array('text', $this->getSourceId()),
                 'is_task'     => array('integer', $this->getTaskActive()),
@@ -1327,17 +1327,17 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	/**
 	 * @return int
 	 */
-	public function getDisableComment()
+	public function getEnableComment()
 	{
-		return $this->disable_comment;
+		return $this->enable_comment;
 	}
 
 	/**
-	 * @param int $disable_comment
+	 * @param int $enable_comment
 	 */
-	public function setDisableComment($disable_comment)
+	public function setEnableComment($enable_comment)
 	{
-		$this->disable_comment = $disable_comment;
+		$this->enable_comment = $enable_comment;
 	}
 
     /**

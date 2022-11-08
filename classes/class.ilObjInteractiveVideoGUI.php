@@ -354,9 +354,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(), false));
 
-		if($this->object->getDisableComment() != 1 && ! $light_version)
+		if($this->object->getEnableComment() == 1 && ! $light_version)
 		{
-            if(!$this->checkPermissionBool('write') && $this->object->getDisableComment() != 1)
+            if(!$this->checkPermissionBool('write') && $this->object->getEnableComment() != 1)
             {
                 $comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $this->plugin->getDirectory());
                 $comments_tpl->setVariable('PLAYER_ID', $player_id);
@@ -838,8 +838,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_chronologic = $a_form->getInput('is_chronologic');
 		$this->object->setIsChronologic((int)$is_chronologic);
 
-		$no_comment = $a_form->getInput('no_comment');
-		$this->object->setDisableComment((int)$no_comment);
+		$enable_comment = $a_form->getInput('enable_comment');
+		$this->object->setEnableComment((int)$enable_comment);
 
 		$show_toolbar = $a_form->getInput('show_toolbar');
 		$this->object->setEnableToolbar((int)$show_toolbar);
@@ -1027,9 +1027,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$chronology->setInfo($plugin->txt('is_chronologic_settings_info'));
 		$a_form->addItem($chronology);
 
-		$no_comment = new ilCheckboxInputGUI($plugin->txt('no_comment'), 'no_comment');
-		$no_comment->setInfo($plugin->txt('no_comment_info'));
-		$a_form->addItem($no_comment);
+		$enable_comment = new ilCheckboxInputGUI($plugin->txt('enable_comment'), 'enable_comment');
+		$enable_comment->setInfo($plugin->txt('enable_comment_info'));
+		$a_form->addItem($enable_comment);
 
         $marker_for_students = new ilCheckboxInputGUI($this->plugin->txt('marker_for_students'), 'marker_for_students');
         $marker_for_students->setInfo($this->plugin->txt('marker_for_students_info'));
@@ -1080,7 +1080,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values['is_public']			= $this->object->isPublic();
 		$a_values["is_online"]			= $this->object->isOnline();
 		$a_values["is_chronologic"]		= $this->object->isChronologic();
-		$a_values["no_comment"]			= $this->object->getDisableComment();
+		$a_values["enable_comment"]			= $this->object->getEnableComment();
 		$a_values["show_toolbar"]			= $this->object->getEnableToolbar();
 		$a_values["show_toc_first"]		= $this->object->getShowTocFirst();
 		$a_values["enable_comment_stream"]		= $this->object->getEnableCommentStream();

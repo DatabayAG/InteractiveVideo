@@ -187,8 +187,8 @@ visibility#:#Sichtbarkeit
 save_anyway#:#Trotzdem speichern
 save_without_correct#:#Sind haben keine korrekte Antwort ausgewählt
 save_without_correct_detail#:#Sie haben weder eine Reflexionsfrage, noch neutrale Antworten aktiviert, sind Sie sicher, dass Sie die Frage ohne korrekte Antwort speichern wollen?
-no_comment#:#Kein Kommentarfeld
-no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflexionsfrage mit aktiviertem Kommentarfeld sind nach wie vor möglich.
+enable_comment#:#Zeige Kommentarfeld
+enable_comment_info#:#Blendet unter dem Video ein Kommentarfeld ein. Muss aktiviert sein, wenn Studierende Marker hinzufügen können sollen (siehe unten).
 xvid_xvid_view_lp#:#Lernfortschritt einsehen
 auto_resume#:#Fortsetzen
 auto_resume_info#:#Wenn aktiviert, wird das Video beim Schließen des Fragen-Dialogs automatisch fortgesetzt.

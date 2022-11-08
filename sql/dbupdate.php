@@ -1202,3 +1202,22 @@ if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_toolbar'))
     $ilDB->renameTableColumn('rep_robj_xvid_objects', 'no_toolbar', 'show_toolbar');
 }
 ?>
+<#82>
+<?php
+if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_comment'))
+{
+    $ilDB->dropTableColumn('rep_robj_xvid_objects', 'no_comment');
+}
+?>
+<#83>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'enable_comment'))
+{
+    $ilDB->addTableColumn('rep_robj_xvid_objects', 'enable_comment',
+        array(
+            'type'    => 'integer',
+            'length'  => '1',
+            'notnull' => true,
+            'default' => 1));
+}
+?>
