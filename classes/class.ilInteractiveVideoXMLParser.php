@@ -223,7 +223,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 				$this->cdata = '';
 				break;
 			case 'noToolbar':
-				$this->xvid_obj->setDisableToolbar(trim($this->cdata));
+				$this->xvid_obj->setEnableToolbar(trim($this->cdata));
 				$this->cdata = '';
 				break;
 			case 'noCommentStream':

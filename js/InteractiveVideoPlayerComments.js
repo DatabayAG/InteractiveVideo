@@ -173,7 +173,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				{
 					pub.addHighlightToComment(player_data.comments[i].comment_id);
 					il.InteractiveVideoPlayerFunction.insertMarker( player_data.comments[i]);
-					il.InteractiveVideoPlayerFunction.fillCommentsTimeEndBlacklist(player_data.current_player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
+					il.InteractiveVideoPlayerComments.fillCommentsTimeEndBlacklist(player_data.current_player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
 				}
 			}
 		}
@@ -197,11 +197,10 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let i;
 		let j_object	= $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id);
 		let element		='';
-
 		j_object.html('');
 		pri.cssIterator = 0;
 
-		if(on)
+		if(on === false || on === '0')
 		{
 			for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 			{
@@ -216,12 +215,13 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 					}
 				}
 			}
-			player_data.is_show_all_active = true;
+			player_data.show_only_until_playhead = false;
 			pub.clearCommentsWhereTimeEndEnded(player_id, player_data.last_time);
 		}
 		else
 		{
-			player_data.is_show_all_active = false;
+			console.log('OFF')
+			player_data.show_only_until_playhead = true;
 			pub.replaceCommentsAfterSeeking(player_data.last_time, player_id);
 		}
 		pub.registerReplyToListeners(player_id);
@@ -232,12 +232,12 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let j_object, position, height;
 
-		if(player_data.is_show_all_active === true)
+		if(player_data.show_only_until_playhead === false)
 		{
 			j_object = $('#ilInteractiveVideoComments_' + player_id);
 			position = j_object.scrollTop();
 			height   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id).find('li').first().height();
-			player_data.is_show_all_active = false;
+			player_data.show_only_until_playhead = true;
 			pub.displayAllCommentsAndDeactivateCommentStream(true, player_id);
 			j_object.scrollTop(position + height);
 		}
@@ -314,7 +314,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			pub.buildToc(player_id);
 		});
 
-		if(player_data.no_toolbar === "1" ){
+		if(player_data.show_toolbar === "0" ){
 			let toolbar = $('.ivToolbar_' + player_id)
 			toolbar.css('display', 'none');
 		}
@@ -450,16 +450,13 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	{
 		let value = false;
 
-		if(player_data.is_show_all_active === false)
-		{
-			if(player_data.filter_by_user === false ||
-					(   player_data.filter_by_user !== false &&
-						player_data.filter_by_user === username
-					)
+		if(player_data.filter_by_user === false ||
+				(   player_data.filter_by_user !== false &&
+					player_data.filter_by_user === username
 				)
-			{
-				value = true;
-			}
+			)
+		{
+			value = true;
 		}
 
 		return value;

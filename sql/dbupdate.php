@@ -1195,3 +1195,10 @@ if ($read_lp && $xoct_type_id) {
     ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
 }
 ?>
+<#81>
+<?php
+if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_toolbar'))
+{
+    $ilDB->renameTableColumn('rep_robj_xvid_objects', 'no_toolbar', 'show_toolbar');
+}
+?>

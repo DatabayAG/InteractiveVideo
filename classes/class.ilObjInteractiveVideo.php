@@ -96,7 +96,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	protected $disable_comment = 0;
 
 	/** @var int */
-	protected $disable_toolbar = 0;
+	protected $enable_toolbar = 1;
 
     /** @var int */
 	protected $show_toc_first = 0;
@@ -164,7 +164,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->setTaskActive($row['is_task']);
 		$this->setTask($row['task']);
 		$this->setDisableComment($row['no_comment']);
-		$this->setDisableToolbar($row['no_toolbar']);
+		$this->setEnableToolbar($row['show_toolbar']);
 		$this->setAutoResumeAfterQuestion($row['auto_resume']);
 		$this->setFixedModal($row['fixed_modal']);
 		$this->setShowTocFirst($row['show_toc_first']);
@@ -326,7 +326,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$is_task		= $this->task_active;
 						$task			= $this->task;
 						$no_comment		= $this->disable_comment;
-						$no_toolbar		= $this->disable_toolbar;
+						$show_toolbar	= $this->enable_toolbar;
 						$auto_resume	= $this->auto_resume_after_question;
 						$fixed_modal	= $this->fixed_modal;
 						$show_toc_first	= $this->show_toc_first;
@@ -342,7 +342,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$repeat			= (int)$_POST['is_repeat'];
 						$chronologic	= $_POST['is_chronologic'];
                         if( $chronologic === null ){
-                            $chronologic = 1;
+                            $chronologic = 0;
                         } else {
                             $chronologic	= (int) $_POST['is_chronologic'];
                         }
@@ -352,7 +352,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$is_task		= (int)$_POST['is_task'];
 						$task			= ilUtil::stripSlashes($_POST['task']);
 						$no_comment		= (int)$_POST['no_comment'];
-						$no_toolbar		= (int)$_POST['no_toolbar'];
+						$show_toolbar		= (int)$_POST['show_toolbar'];
 						$auto_resume	= (int)$_POST['auto_resume'];
 						$fixed_modal	= (int)$_POST['fixed_modal'];
 						$show_toc_first	= (int)$_POST['show_toc_first'];
@@ -378,7 +378,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 							'fixed_modal'    => array('integer',$fixed_modal ),
 							'task'           => array('text', $task),
 							'no_comment'     => array('integer', $no_comment),
-							'no_toolbar'     => array('integer', $no_toolbar),
+							'show_toolbar'     => array('integer', $show_toolbar),
 							'show_toc_first' => array('integer', $show_toc_first),
 							'disable_comment_stream' => array('integer', 1),
 							'layout_width' => array('integer', $layout_width),
@@ -444,7 +444,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                   'disable_comment_stream'    => array('integer', $this->getEnableCommentStream()),
                   'lp_mode'			=> array('integer', $this->getLearningProgressMode()),
                   'no_comment'		=> array('integer', $this->getDisableComment()),
-                  'no_toolbar'		=> array('integer', $this->getDisableToolbar()),
+                  'show_toolbar'		=> array('integer', $this->getEnableToolbar()),
                   'no_comment_stream'		=> array('integer', $this->getNoCommentStream()),
                   'video_mode'			=> array('integer', $this->getVideoMode()),
                   'marker_for_students'	=> array('integer', $this->getMarkerForStudents()),
@@ -509,7 +509,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                 'is_chronologic' => array('integer', $this->isChronologic()),
                 'is_public'     => array('integer', $this->isPublic()),
                 'no_comment'     => array('integer', $this->getDisableComment()),
-                'no_toolbar'     => array('integer', $this->getDisableToolbar()),
+                'show_toolbar'     => array('integer', $this->getEnableToolbar()),
                 'source_id'     => array('text', $this->getSourceId()),
                 'is_task'     => array('integer', $this->getTaskActive()),
                 'task'     => array('text', $this->getTask()),
@@ -1517,17 +1517,17 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	/**
 	 * @return int
 	 */
-	public function getDisableToolbar()
+	public function getEnableToolbar()
 	{
-		return $this->disable_toolbar;
+		return $this->enable_toolbar;
 	}
 
 	/**
-	 * @param int $disable_toolbar
+	 * @param int $enable_toolbar
 	 */
-	public function setDisableToolbar($disable_toolbar)
+	public function setEnableToolbar($enable_toolbar)
 	{
-		$this->disable_toolbar = $disable_toolbar;
+		$this->enable_toolbar = $enable_toolbar;
 	}
 	/**
 	 * @return int

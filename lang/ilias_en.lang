@@ -111,8 +111,8 @@ offline#:#Offline
 status#:#Status
 is_chronologic#:#Show only comments up to the playhead
 is_chronologic_settings#:#Show only comments up to the playhead
-is_chronologic_settings_info#:#If enabled, only comments prior to the current playback position are displayed. When playing the video, the newly appearing comments are displayed continuously and at the very top. When the toolbar is enabled, users can change their own view.
-is_chronologic_info#:#If enabled, only comments prior to the current playback position are displayed. When playing the video, the newly appearing comments are displayed continuously and at the very top. When the toolbar is enabled, users can change their own view.
+is_chronologic_settings_info#:#If enabled, only comments prior to the current playhead position are displayed. When playing the video, the newly appearing comments are displayed continuously and at the very top. Users can change their view in the toolbar.
+is_chronologic_info#:#If enabled, only comments prior to the current playhead position are displayed. When playing the video, the newly appearing comments are displayed continuously and at the very top. Users can change their view in the toolbar.
 time_end#:#End Time
 show_response_frequency#:#Show response frequencies
 show_response_frequency_info#:#After answering the question, the response frequencies of all answering options are shown as percentages beneath each answering option.
@@ -226,8 +226,8 @@ long_title#:#Title
 subtitle_removed#:#Subtitle removed
 sure_delete_subtitle#:#Are you sure you want to remove this subtitle?
 you_need_a_short_title#:#You need to provide a short title!
-no_toolbar#:#Deactivate toolbar
-no_toolbar_info#:#No toolbar with filters will be shown
+show_toolbar#:#Show Toolbar
+show_toolbar_info#:#Displays the toolbar in the upper right corner of the user's screen with the following options: video size setting, author filter, show only comments up to the playhead.
 save_without_correct_detail#:#You don't have selected a reflection question or have you selected a question without correct answers, are you sure you want to save the question?
 is_table_of_content#:#Table of Content
 toc#:#Table of Content

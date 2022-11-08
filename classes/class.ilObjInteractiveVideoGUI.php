@@ -346,7 +346,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($light_version) {
             $video_tpl->setVariable('LIGHT_VERSION', 'iv_light_version');
         }
-		if($this->object->getDisableToolbar() == "0"){
+		if($this->object->getEnableToolbar() == "1"){
 			$video_tpl->setVariable('SHOW_ALL_COMMENTS', $plugin->txt('show_all_comments'));
 			$video_tpl->setVariable('AUTHOR_FILTER', $plugin->txt('author_filter'));
 			$video_tpl->setVariable('LAYOUT_FILTER', $plugin->txt('layout_filter'));
@@ -656,7 +656,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('ENABLE_COMMENT_STREAM', $this->object->getEnableCommentStream());
 		$config_tpl->setVariable('LAYOUT_WIDTH', $this->object->getLayoutWidthTransformed());
 		$config_tpl->setVariable('HAS_TRACKS', $this->getSubtitleDataAndFilesForJson());
-		$config_tpl->setVariable('NO_TOOLBAR', $this->object->getDisableToolbar());
+		$config_tpl->setVariable('SHOW_TOOLBAR', $this->object->getEnableToolbar());
+		$config_tpl->setVariable('SHOW_ONLY_UNTIL_PLAYHEAD', $this->object->isChronologic());
 		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
@@ -840,8 +841,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$no_comment = $a_form->getInput('no_comment');
 		$this->object->setDisableComment((int)$no_comment);
 
-		$no_toolbar = $a_form->getInput('no_toolbar');
-		$this->object->setDisableToolbar((int)$no_toolbar);
+		$show_toolbar = $a_form->getInput('show_toolbar');
+		$this->object->setEnableToolbar((int)$show_toolbar);
 
         $show_toc_first = $a_form->getInput('show_toc_first');
 		$this->object->setShowTocFirst((int)$show_toc_first);
@@ -976,9 +977,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $section->setTitle($plugin->txt('display'));
         $a_form->addItem($section);
 
-        $no_toolbar = new ilCheckboxInputGUI($plugin->txt('no_toolbar'), 'no_toolbar');
-        $no_toolbar->setInfo($plugin->txt('no_toolbar_info'));
-        $a_form->addItem($no_toolbar);
+        $show_toolbar = new ilCheckboxInputGUI($plugin->txt('show_toolbar'), 'show_toolbar');
+        $show_toolbar->setInfo($plugin->txt('show_toolbar_info'));
+        $a_form->addItem($show_toolbar);
 
         $show_toc_first = new ilCheckboxInputGUI($plugin->txt('show_toc_first'), 'show_toc_first');
         $show_toc_first->setInfo($plugin->txt('show_toc_first_info'));
@@ -1080,7 +1081,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values["is_online"]			= $this->object->isOnline();
 		$a_values["is_chronologic"]		= $this->object->isChronologic();
 		$a_values["no_comment"]			= $this->object->getDisableComment();
-		$a_values["no_toolbar"]			= $this->object->getDisableToolbar();
+		$a_values["show_toolbar"]			= $this->object->getEnableToolbar();
 		$a_values["show_toc_first"]		= $this->object->getShowTocFirst();
 		$a_values["enable_comment_stream"]		= $this->object->getEnableCommentStream();
 		$source_id = $this->object->getSourceId();

@@ -109,8 +109,8 @@ offline#:#Offline
 status#:#Status
 is_chronologic#:#Nur Kommentare bis zur Abspielposition zeigen
 is_chronologic_settings#:#Nur Kommentare bis zur Abspielposition zeigen
-is_chronologic_settings_info#:#Wenn diese Option aktiviert wird, wird die Option 'Alle Kommentare' vorausgewählt und es werden alle Kommentare des gesamten Videos von Beginn an in chronologischer Reihenfolge angezeigt.
-is_chronologic_info#:#Wenn aktiviert, werden nur jene Kommentare angezeigt, die vor der aktuellen Abspielposition liegen. Beim Abspielen des Videos werden die neu erscheinenden Kommentare fortlaufend und jeweils zuoberst eingeblendet. Bei aktivierter Toolbar können Benutzer die eigene Ansicht ändern.
+is_chronologic_settings_info#:#Wenn aktiviert, werden nur jene Kommentare angezeigt, die vor der aktuellen Abspielposition liegen. Beim Abspielen des Videos werden die neu erscheinenden Kommentare fortlaufend und jeweils zuoberst eingeblendet. In der Toolbar können Benutzer die eigene Ansicht ändern.
+is_chronologic_info#:#Wenn aktiviert, werden nur jene Kommentare angezeigt, die vor der aktuellen Abspielposition liegen. Beim Abspielen des Videos werden die neu erscheinenden Kommentare fortlaufend und jeweils zuoberst eingeblendet. In der Toolbar können Benutzer die eigene Ansicht ändern.
 time_end#:#Ende der Passage
 show_response_frequency#:#Zeige Antworthäufigkeiten
 show_response_frequency_info#:#Nachdem die Frage beantwortet wurde, wird unter jeder Antwortoption die relative Antworthäufigkeit in Prozent angezeigt
@@ -201,8 +201,8 @@ long_title#:#Titel
 subtitle_removed#:#Untertitel gelöscht
 sure_delete_subtitle#:#Sind Sie sicher das Sie diesen Untertitel löschen wollen?
 you_need_a_short_title#:#Sie müssen einen Kurztitel eintragen!
-no_toolbar#:#Toolbar deaktivieren
-no_toolbar_info#:#Es wird keine Toolbar mit Filtern angezeigt
+show_toolbar#:#Zeige Toolbar
+show_toolbar_info#:#Zeigt beim Benutzer oben rechts die Toolbar mit folgenden Möglichkeiten ein: Einstellung Videogrösse, Autorenfilter, Nur Kommentare bis zur Abspielposition zeigen.»
 is_table_of_content#:#Inhaltsverzeichnis
 toc#:#Inhaltsverzeichnis
 show_toc_first#:#Zeige Inhaltsverzeichnis als erstes
