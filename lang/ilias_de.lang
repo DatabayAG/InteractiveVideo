@@ -207,7 +207,7 @@ is_table_of_content#:#Inhaltsverzeichnis
 toc#:#Inhaltsverzeichnis
 show_toc_first#:#Zeige Inhaltsverzeichnis als erstes
 show_toc_first_info#:#Falls Kapitel erstellt wurden, wird das Inhaltsverzeichnis neben dem Video direkt angezeigt. Standardmässig ist das Inhaltsverzeichnis von der Kommentarspalte überdeckt und muss aktiv aufgerufen werden.
-enable_comment_stream#:#Aktiviere Kommentarstream
+enable_comment_stream#:#Zeige Kommentarspalte
 enable_comment_stream_info#:#Zeigt neben dem Video die Kommentarspalte an. Darin werden die Kommentare und Fragen aufgeführt.
 insert_chapter#:#Kapitel einfügen
 edit_chapter#:#Kapitel editieren
@@ -234,7 +234,7 @@ height#:#Höhe
 rotate#:#Drehen
 rectangle#:#Rechteck
 arrow#:#Pfeil
-circle#:#Kreis
+circle#:#Kreis#Aktiviere Kommentarstream
 scale#:#Skalieren
 with_marker#:#mit Marker
 line#:#Linie
