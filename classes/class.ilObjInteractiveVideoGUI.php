@@ -336,7 +336,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$modal->setBody('');
 		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
 
-        if($this->object->getDisableCommentStream() !== "1"){
+        if($this->object->getEnableCommentStream() !== "0"){
             $video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
         }
         if($this->object->doesTocCommentExists()){
@@ -346,7 +346,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($light_version) {
             $video_tpl->setVariable('LIGHT_VERSION', 'iv_light_version');
         }
-		if($this->object->getDisableToolbar() == "0"){
+		if($this->object->getEnableToolbar() == "1"){
 			$video_tpl->setVariable('SHOW_ALL_COMMENTS', $plugin->txt('show_all_comments'));
 			$video_tpl->setVariable('AUTHOR_FILTER', $plugin->txt('author_filter'));
 			$video_tpl->setVariable('LAYOUT_FILTER', $plugin->txt('layout_filter'));
@@ -354,9 +354,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(), false));
 
-		if($this->object->getDisableComment() != 1 && ! $light_version)
+		if($this->object->getEnableComment() == 1 && ! $light_version)
 		{
-            if(!$this->checkPermissionBool('write') && $this->object->getDisableComment() != 1)
+            if(!$this->checkPermissionBool('write') && $this->object->getEnableComment() != 1)
             {
                 $comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $this->plugin->getDirectory());
                 $comments_tpl->setVariable('PLAYER_ID', $player_id);
@@ -653,9 +653,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('AUTO_RESUME_AFTER_QUESTION', $this->object->isAutoResumeAfterQuestion());
 		$config_tpl->setVariable('FIXED_MODAL', $this->object->isFixedModal());
 		$config_tpl->setVariable('SHOW_TOC_FIRST', $this->object->getShowTocFirst());
-		$config_tpl->setVariable('DISABLE_COMMENT_STREAM', $this->object->getDisableCommentStream());
+		$config_tpl->setVariable('ENABLE_COMMENT_STREAM', $this->object->getEnableCommentStream());
 		$config_tpl->setVariable('LAYOUT_WIDTH', $this->object->getLayoutWidthTransformed());
 		$config_tpl->setVariable('HAS_TRACKS', $this->getSubtitleDataAndFilesForJson());
+		$config_tpl->setVariable('SHOW_TOOLBAR', $this->object->getEnableToolbar());
+		$config_tpl->setVariable('SHOW_ONLY_UNTIL_PLAYHEAD', $this->object->isChronologic());
 		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
@@ -794,6 +796,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $my_tpl->setVariable('PLAYER', $object->getPlayer($player_id)->get() . $this->initPlayerConfig($player_id, $this->object->getSourceId(), true));
         $my_tpl->setVariable('MARKER', $marker_template);
         $my_tpl->setVariable('PLAYER_ID', $player_id);
+        $tpl->addOnLoadCode('il.InteractiveVideoPlayerFunction.refreshTimerInEditScreen("'.$player_id.'");');
         return $my_tpl;
     }
 
@@ -835,17 +838,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_chronologic = $a_form->getInput('is_chronologic');
 		$this->object->setIsChronologic((int)$is_chronologic);
 
-		$no_comment = $a_form->getInput('no_comment');
-		$this->object->setDisableComment((int)$no_comment);
+		$enable_comment = $a_form->getInput('enable_comment');
+		$this->object->setEnableComment((int)$enable_comment);
 
-		$no_toolbar = $a_form->getInput('no_toolbar');
-		$this->object->setDisableToolbar((int)$no_toolbar);
+		$show_toolbar = $a_form->getInput('show_toolbar');
+		$this->object->setEnableToolbar((int)$show_toolbar);
 
         $show_toc_first = $a_form->getInput('show_toc_first');
 		$this->object->setShowTocFirst((int)$show_toc_first);
 
-        $disable_comment_stream = $a_form->getInput('disable_comment_stream');
-		$this->object->setDisableCommentStream((int)$disable_comment_stream);
+        $enable_comment_stream = $a_form->getInput('enable_comment_stream');
+		$this->object->setEnableCommentStream((int)$enable_comment_stream);
 
 		$auto_resume = $a_form->getInput('auto_resume');
 		$this->object->setAutoResumeAfterQuestion((int)$auto_resume);
@@ -974,27 +977,39 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $section->setTitle($plugin->txt('display'));
         $a_form->addItem($section);
 
-        $no_toolbar = new ilCheckboxInputGUI($plugin->txt('no_toolbar'), 'no_toolbar');
-        $no_toolbar->setInfo($plugin->txt('no_toolbar_info'));
-        $a_form->addItem($no_toolbar);
+        $show_toolbar = new ilCheckboxInputGUI($plugin->txt('show_toolbar'), 'show_toolbar');
+        $show_toolbar->setInfo($plugin->txt('show_toolbar_info'));
+        $a_form->addItem($show_toolbar);
 
         $show_toc_first = new ilCheckboxInputGUI($plugin->txt('show_toc_first'), 'show_toc_first');
         $show_toc_first->setInfo($plugin->txt('show_toc_first_info'));
         $a_form->addItem($show_toc_first);
 
-        $disable_comment_stream = new ilCheckboxInputGUI($plugin->txt('disable_comment_stream'), 'disable_comment_stream');
-        $disable_comment_stream->setInfo($plugin->txt('disable_comment_stream_info'));
-        $a_form->addItem($disable_comment_stream);
+        $enable_comment_stream = new ilCheckboxInputGUI($plugin->txt('enable_comment_stream'), 'enable_comment_stream');
+        $enable_comment_stream->setInfo($plugin->txt('enable_comment_stream_info'));
+        $a_form->addItem($enable_comment_stream);
 
-        $display_width = new ilSelectInputGUI($plugin->txt('display_width'), 'layout_width');
-        $display_width->setInfo($plugin->txt('display_width_info'));
-        $display_width->setOptions(
-            [
-                ilObjInteractiveVideo::LAYOUT_BIG_VIDEO  => $this->plugin->txt('bigVideo'),
-                ilObjInteractiveVideo::LAYOUT_VERY_BIG_VIDEO  => $this->plugin->txt('veryBigVideo'),
-                ilObjInteractiveVideo::LAYOUT_SIMILAR => $this->plugin->txt('similarSize')
-            ]);
-        $a_form->addItem($display_width);
+        $display_width_group = new ilRadioGroupInputGUI($plugin->txt('display_width'), 'layout_width');
+        $opt = new ilRadioOption(
+            $plugin->txt('similarSize'),
+            ilObjInteractiveVideo::LAYOUT_SIMILAR,
+            $plugin->txt('similarSize_info')
+        );
+        $display_width_group->addOption($opt);
+        $opt = new ilRadioOption(
+            $plugin->txt('bigVideo'),
+            ilObjInteractiveVideo::LAYOUT_BIG_VIDEO,
+            $plugin->txt('bigVideo_info')
+        );
+        $display_width_group->addOption($opt);
+        $opt = new ilRadioOption(
+            $plugin->txt('veryBigVideo'),
+            ilObjInteractiveVideo::LAYOUT_VERY_BIG_VIDEO,
+            $plugin->txt('veryBigVideo_info')
+        );
+        $display_width_group->addOption($opt);
+
+        $a_form->addItem($display_width_group);
 
 		$section = new ilFormSectionHeaderGUI();
 		$section->setTitle($plugin->txt('comments'));
@@ -1008,13 +1023,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_public->setInfo($plugin->txt('is_public_info'));
 		$a_form->addItem($is_public);
 
-		$chronology = new ilCheckboxInputGUI($plugin->txt('is_chronologic'), 'is_chronologic');
-		$chronology->setInfo($plugin->txt('is_chronologic_info'));
+		$chronology = new ilCheckboxInputGUI($plugin->txt('is_chronologic_settings'), 'is_chronologic');
+		$chronology->setInfo($plugin->txt('is_chronologic_settings_info'));
 		$a_form->addItem($chronology);
 
-		$no_comment = new ilCheckboxInputGUI($plugin->txt('no_comment'), 'no_comment');
-		$no_comment->setInfo($plugin->txt('no_comment_info'));
-		$a_form->addItem($no_comment);
+		$enable_comment = new ilCheckboxInputGUI($plugin->txt('enable_comment'), 'enable_comment');
+		$enable_comment->setInfo($plugin->txt('enable_comment_info'));
+		$a_form->addItem($enable_comment);
 
         $marker_for_students = new ilCheckboxInputGUI($this->plugin->txt('marker_for_students'), 'marker_for_students');
         $marker_for_students->setInfo($this->plugin->txt('marker_for_students_info'));
@@ -1065,10 +1080,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values['is_public']			= $this->object->isPublic();
 		$a_values["is_online"]			= $this->object->isOnline();
 		$a_values["is_chronologic"]		= $this->object->isChronologic();
-		$a_values["no_comment"]			= $this->object->getDisableComment();
-		$a_values["no_toolbar"]			= $this->object->getDisableToolbar();
+		$a_values["enable_comment"]			= $this->object->getEnableComment();
+		$a_values["show_toolbar"]			= $this->object->getEnableToolbar();
 		$a_values["show_toc_first"]		= $this->object->getShowTocFirst();
-		$a_values["disable_comment_stream"]		= $this->object->getDisableCommentStream();
+		$a_values["enable_comment_stream"]		= $this->object->getEnableCommentStream();
 		$source_id = $this->object->getSourceId();
         if($source_id === 'opc' || $source_id === '') {
             if(array_key_exists('xvid_source_id', $_GET) && $_GET['xvid_source_id'] !== ''){
@@ -2474,7 +2489,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['is_table_of_content'] = $comment_data['is_table_of_content'];
 		$values['is_reply_to']      = $comment_data['is_table_of_content'];
 		$values['is_table_of_content'] = $comment_data['is_table_of_content'];
-		$values['fake_marker']      = $comment_data['marker'];
+		$values['fake_marker']      = strip_tags($comment_data['marker'], ['rect', 'ellipse', 'path', 'line', 'text']);
 
 		return $values;
 	}
@@ -3489,6 +3504,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($head_row, $plugin->txt('interactive'));
 		array_push($head_row, $plugin->txt('compulsory'));
 		array_push($head_row, $plugin->txt('type'));
+		array_push($head_row, 'Marker');
+		array_push($head_row, $plugin->txt('reply_to'));
+		array_push($head_row, $plugin->txt('toc'));
 
 		array_push($csv, ilUtil::processCSVRow($head_row, TRUE, $separator) );
 		foreach ($data as $key => $row)

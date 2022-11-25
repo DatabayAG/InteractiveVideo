@@ -28,7 +28,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			player_data.last_time = current_time;
 		}
 
-		if(player_data.is_show_all_active === false)
+		if(player_data.show_only_until_playhead === true)
 		{
 			pri.utils.replaceCommentsAfterSeeking(current_time, player_id);
 		}
@@ -100,10 +100,9 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	{
 		let scrollHeight = 0;
 		let j_obj_scroll_div	= $('#ilInteractiveVideoComments_' + player_id);
-		let current_time      = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
-		let show_all          = scope.InteractiveVideo[player_id].is_show_all_active;
-
-		if(show_all) {
+		let current_time        = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
+		let show_until_playhead = scope.InteractiveVideo[player_id].show_only_until_playhead;
+		if(show_until_playhead === true || show_until_playhead === '1') {
 			if(pri.last_current_time !== current_time){
 
 				$('#ul_scroll_' + player_id + ' li').each(function() {
@@ -233,7 +232,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		let fake_id = parseInt(Math.random() * 10000000, 10);
 
 		let comments_div   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id);
-		il.InteractiveVideoPlayerComments.fillCommentsTimeEndBlacklist(player_id, end_time, fake_id);
+		pri.utils.fillCommentsTimeEndBlacklist(player_id, end_time, fake_id);
 		let tmp_obj =
 			{
 				'comment_id'       : fake_id,
@@ -433,11 +432,12 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	{
 		let filter_element = $('#show_all_comments_' + player_id);
 		if(filter_element.length >= 1){
+
 			filter_element.change(function() {
 				pri.utils.displayAllCommentsAndDeactivateCommentStream($(this).prop('checked'), player_id);
 			});
 		} else{
-			let show_all = (pub.getPlayerDataObjectByPlayerId(player_id).is_chronologic === '1');
+			let show_all = (pub.getPlayerDataObjectByPlayerId(player_id).show_only_until_playhead === '1');
 			pri.utils.displayAllCommentsAndDeactivateCommentStream(show_all, player_id);
 		}
 
@@ -474,7 +474,12 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pro.addBootStrapToggle = function(player_id)
 	{
 		let language = scope.InteractiveVideo.lang;
-
+		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
+		let show_all_active = player_data.show_only_until_playhead;
+		if(show_all_active === '0' || show_all_active === false) {
+			player_data.show_only_until_playhead = false;
+			pri.utils.displayAllCommentsAndDeactivateCommentStream(false, player_id);
+		}
 		$('#show_all_comments_' + player_id).bootstrapToggle({
 			on: language.switch_on,
 			off: language.switch_off,
@@ -487,7 +492,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	
 	pro.isChronologicViewDeactivatedShowAllComments = function(player_id)
 	{
-		if(pub.getPlayerDataObjectByPlayerId(player_id).is_chronologic === '1')
+		if(pub.getPlayerDataObjectByPlayerId(player_id).show_only_until_playhead === '1' ||
+			pub.getPlayerDataObjectByPlayerId(player_id).show_only_until_playhead === true)
 		{
 			$('#show_all_comments_' + player_id).click();
 		}
@@ -521,7 +527,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		$('#dropdownMenuInteraktiveList_' + player_id + ' a').click(function(){
 			let value = $(this).html();
 			let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
-			let show_all_active_temp = player_data.is_show_all_active;
+			let show_all_active_temp = player_data.show_only_until_playhead;
 
 			if(value === language.reset_text)
 			{
@@ -534,11 +540,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				$('#dropdownMenuInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.author_filter + ' ' + value);
 			}
 
-			if(scope.InteractiveVideoPlayerAbstract.currentTime(player_id) > 0 || player_data.is_show_all_active === true)
+			if(scope.InteractiveVideoPlayerAbstract.currentTime(player_id) > 0 || player_data.show_only_until_playhead === false)
 			{
-				player_data.is_show_all_active = false;
+				player_data.show_only_until_playhead = true;
 				scope.InteractiveVideoPlayerComments.displayAllCommentsAndDeactivateCommentStream(show_all_active_temp, player_id);
-				player_data.is_show_all_active = show_all_active_temp;
+				player_data.show_only_until_playhead = show_all_active_temp;
 			}
 		});
 
@@ -559,6 +565,19 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		}
 		else
 		{
+			if(value !== '1:1'){
+				value = value.split(':');
+				if(value.length == 3) {
+					value = value[1] + ':' + value[2];
+					value = value.trim();
+				} else if (value.length == 2) {
+					value = value[0] + ':' + value[1];
+					value = value.trim();
+				}
+				if(value !== '1:1' && value !== '2:1') {
+					value = '1:0';
+				}
+				}
 			$('.dropdownMenuLayoutInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.layout_filter + ' ' + value + ' <span class="caret"></span>');
 		}
 		pro.setLayoutValue(value, player_id);
@@ -745,6 +764,20 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	{
 		return scope.InteractiveVideo[player_id];
 	};
+
+	pub.refreshTimerInEditScreen = function(player_id, interval){
+		il.InteractiveVideo[player_id].player.on('playing', event => {
+			interval = setInterval(function () {
+				let time = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
+				let end_time = time + 3;
+				time = scope.InteractiveVideoPlayerComments.secondsToTimeCode(time);
+				end_time = scope.InteractiveVideoPlayerComments.secondsToTimeCode(end_time);
+				$('#comment_time').timepicker('setTime', time);
+				$('#comment_time_end').timepicker('setTime', end_time);
+				il.InteractiveVideoPlayerFunction.refreshTimerInEditScreen(player_id, interval);
+			}, 500);
+		});
+	}
 
 	pub.protect = pro;
 	return pub;

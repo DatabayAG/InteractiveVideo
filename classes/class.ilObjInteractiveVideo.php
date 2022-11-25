@@ -31,9 +31,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     /** @var int */
     const LP_MODE_BY_ANSWERED_QUESTIONS = 100;
 
-    const LAYOUT_SIMILAR = 101;
-    const LAYOUT_BIG_VIDEO = 102;
-    const LAYOUT_VERY_BIG_VIDEO = 103;
+    const LAYOUT_SIMILAR = 0;
+    const LAYOUT_BIG_VIDEO = 1;
+    const LAYOUT_VERY_BIG_VIDEO = 2;
 
 	/** @var int */
 	protected $learning_progress_mode = self::LP_MODE_DEACTIVATED;
@@ -93,16 +93,16 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	public $import_comment = array();
 
 	/** @var int */
-	protected $disable_comment = 0;
+	protected $enable_comment = 1;
 
 	/** @var int */
-	protected $disable_toolbar = 0;
+	protected $enable_toolbar = 1;
 
     /** @var int */
 	protected $show_toc_first = 0;
 
     /** @var int */
-	protected $disable_comment_stream = 0;
+	protected $enable_comment_stream = 1;
 	/**
 	 * @var int
 	 */
@@ -163,12 +163,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->setSourceId($row['source_id']);
 		$this->setTaskActive($row['is_task']);
 		$this->setTask($row['task']);
-		$this->setDisableComment($row['no_comment']);
-		$this->setDisableToolbar($row['no_toolbar']);
+		$this->setEnableComment($row['enable_comment']);
+		$this->setEnableToolbar($row['show_toolbar']);
 		$this->setAutoResumeAfterQuestion($row['auto_resume']);
 		$this->setFixedModal($row['fixed_modal']);
 		$this->setShowTocFirst($row['show_toc_first']);
-		$this->setDisableCommentStream($row['disable_comment_stream']);
+		$this->setEnableCommentStream($row['disable_comment_stream']);
 		$this->setNoCommentStream($row['no_comment_stream']);
 		$this->setVideoMode($row['video_mode']);
 		$this->setMarkerForStudents($row['marker_for_students']);
@@ -325,12 +325,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$source_id		= $this->source_id;
 						$is_task		= $this->task_active;
 						$task			= $this->task;
-						$no_comment		= $this->disable_comment;
-						$no_toolbar		= $this->disable_toolbar;
+						$enable_comment = $this->enable_comment;
+						$show_toolbar	= $this->enable_toolbar;
 						$auto_resume	= $this->auto_resume_after_question;
 						$fixed_modal	= $this->fixed_modal;
 						$show_toc_first	= $this->show_toc_first;
-						$disable_comment_stream	= $this->disable_comment_stream;
+						$disable_comment_stream	= $this->enable_comment_stream;
                         $layout_width   = $this->layout_width;
 						$no_comment_stream  = $this->no_comment_stream;
 						$video_mode			= $this->video_mode;
@@ -342,7 +342,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$repeat			= (int)$_POST['is_repeat'];
 						$chronologic	= $_POST['is_chronologic'];
                         if( $chronologic === null ){
-                            $chronologic = 1;
+                            $chronologic = 0;
                         } else {
                             $chronologic	= (int) $_POST['is_chronologic'];
                         }
@@ -351,12 +351,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$source_id		= ilUtil::stripSlashes($_POST['source_id']);
 						$is_task		= (int)$_POST['is_task'];
 						$task			= ilUtil::stripSlashes($_POST['task']);
-						$no_comment		= (int)$_POST['no_comment'];
-						$no_toolbar		= (int)$_POST['no_toolbar'];
+						$enable_comment	= (int)$_POST['enable_comment'];
+						$show_toolbar		= (int)$_POST['show_toolbar'];
 						$auto_resume	= (int)$_POST['auto_resume'];
 						$fixed_modal	= (int)$_POST['fixed_modal'];
 						$show_toc_first	= (int)$_POST['show_toc_first'];
-						$disable_comment_stream	= (int)$_POST['disable_comment_stream'];
+						$enable_comment_stream	= (int)$_POST['enable_comment_stream'];
                         $layout_width   = (int)$_POST['layout_width'];
 						$no_comment_stream	= (int)$_POST['no_comment_stream'];
 						$video_mode			= (int)$_POST['video_mode'];
@@ -377,10 +377,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 							'auto_resume'    => array('integer',$auto_resume ),
 							'fixed_modal'    => array('integer',$fixed_modal ),
 							'task'           => array('text', $task),
-							'no_comment'     => array('integer', $no_comment),
-							'no_toolbar'     => array('integer', $no_toolbar),
+							'enable_comment'     => array('integer', 1),
+							'show_toolbar'     => array('integer', $show_toolbar),
 							'show_toc_first' => array('integer', $show_toc_first),
-							'disable_comment_stream' => array('integer', $disable_comment_stream),
+							'disable_comment_stream' => array('integer', 1),
 							'layout_width' => array('integer', $layout_width),
 							'no_comment_stream'   => array('integer', $no_comment_stream),
 							'video_mode'          => array('integer', $video_mode),
@@ -430,25 +430,25 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		}
 
 		$ilDB->update(self::TABLE_NAME_OBJECTS ,
-			array(	'is_anonymized'		=>array('integer',	$this->isAnonymized()),
-					'is_repeat'			=>array('integer',	$this->isRepeat()),
-					'is_public'			=>array('integer',	$this->isPublic()),
-					'is_chronologic'	=>array('integer',	$this->isChronologic()),
-					'is_online'			=>array('integer',	$this->isOnline()),
-					'source_id'			=>array('text',		$this->getSourceId()),
-					'is_task'			=> array('integer', $this->getTaskActive()),
-					'task'				=> array('text',	$this->getTask()),
-					'auto_resume'       => array('integer', $this->isAutoResumeAfterQuestion()),
-					'fixed_modal'       => array('integer', $this->isFixedModal()),
-					'show_toc_first'    => array('integer', $this->getShowTocFirst()),
-					'disable_comment_stream'    => array('integer', $this->getDisableCommentStream()),
-					'lp_mode'			=> array('integer', $this->getLearningProgressMode()),
-					'no_comment'		=> array('integer', $this->getDisableComment()),
-					'no_toolbar'		=> array('integer', $this->getDisableToolbar()),
-		            'no_comment_stream'		=> array('integer', $this->getNoCommentStream()),
-					'video_mode'			=> array('integer', $this->getVideoMode()),
-					'marker_for_students'	=> array('integer', $this->getMarkerForStudents()),
-					'layout_width'	=> array('integer', $this->getLayoutWidth())
+			array('is_anonymized'		=>array('integer',	$this->isAnonymized()),
+                  'is_repeat'			=>array('integer',	$this->isRepeat()),
+                  'is_public'			=>array('integer',	$this->isPublic()),
+                  'is_chronologic'	=>array('integer',	$this->isChronologic()),
+                  'is_online'			=>array('integer',	$this->isOnline()),
+                  'source_id'			=>array('text',		$this->getSourceId()),
+                  'is_task'			=> array('integer', $this->getTaskActive()),
+                  'task'				=> array('text',	$this->getTask()),
+                  'auto_resume'       => array('integer', $this->isAutoResumeAfterQuestion()),
+                  'fixed_modal'       => array('integer', $this->isFixedModal()),
+                  'show_toc_first'    => array('integer', $this->getShowTocFirst()),
+                  'disable_comment_stream'    => array('integer', $this->getEnableCommentStream()),
+                  'lp_mode'			=> array('integer', $this->getLearningProgressMode()),
+                  'enable_comment'		=> array('integer', $this->getEnableComment()),
+                  'show_toolbar'		=> array('integer', $this->getEnableToolbar()),
+                  'no_comment_stream'		=> array('integer', $this->getNoCommentStream()),
+                  'video_mode'			=> array('integer', $this->getVideoMode()),
+                  'marker_for_students'	=> array('integer', $this->getMarkerForStudents()),
+                  'layout_width'	=> array('integer', $this->getLayoutWidth())
 					),
 			array('obj_id' => array('integer', $this->getId())));
 	}
@@ -503,29 +503,29 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$ilDB->insert(
 			self::TABLE_NAME_OBJECTS ,
 			array(
-				'obj_id'        => array('integer', $new_obj->getId()),
-				'is_anonymized' => array('integer', $this->isAnonymized()),
-				'is_repeat' => array('integer', $this->isRepeat()),
-				'is_chronologic' => array('integer', $this->isChronologic()),
-				'is_public'     => array('integer', $this->isPublic()),
-				'no_comment'     => array('integer', $this->getDisableComment()),
-				'no_toolbar'     => array('integer', $this->getDisableToolbar()),
-				'source_id'     => array('text', $this->getSourceId()),
-				'is_task'     => array('integer', $this->getTaskActive()),
-				'task'     => array('text', $this->getTask()),
-				'auto_resume'     => array('integer', $this->isAutoResumeAfterQuestion()),
-				'fixed_modal'     => array('integer', $this->isFixedModal()),
-				'show_toc_first'  => array('integer', $this->getShowTocFirst()),
-				'disable_comment_stream'  => array('integer', $this->getDisableCommentStream()),
-				'lp_mode' => array('integer', $this->getLearningProgressMode()),
-				'no_comment_stream'   => array('integer', $this->getNoCommentStream()),
-				'source_id'           => array('text', $this->getSourceId()),
-				'is_task'             => array('integer', $this->getTaskActive()),
-				'task'                => array('text', $this->getTask()),
-				'lp_mode'             => array('integer', $this->getLearningProgressMode()),
-				'video_mode'          => array('integer', $this->getVideoMode()),
-				'layout_width'          => array('integer', $this->getLayoutWidth()),
-				'marker_for_students' => array('integer', $this->getMarkerForStudents())
+                'obj_id'        => array('integer', $new_obj->getId()),
+                'is_anonymized' => array('integer', $this->isAnonymized()),
+                'is_repeat' => array('integer', $this->isRepeat()),
+                'is_chronologic' => array('integer', $this->isChronologic()),
+                'is_public'     => array('integer', $this->isPublic()),
+                'enable_comment'     => array('integer', $this->getEnableComment()),
+                'show_toolbar'     => array('integer', $this->getEnableToolbar()),
+                'source_id'     => array('text', $this->getSourceId()),
+                'is_task'     => array('integer', $this->getTaskActive()),
+                'task'     => array('text', $this->getTask()),
+                'auto_resume'     => array('integer', $this->isAutoResumeAfterQuestion()),
+                'fixed_modal'     => array('integer', $this->isFixedModal()),
+                'show_toc_first'  => array('integer', $this->getShowTocFirst()),
+                'disable_comment_stream'  => array('integer', $this->getEnableCommentStream()),
+                'lp_mode' => array('integer', $this->getLearningProgressMode()),
+                'no_comment_stream'   => array('integer', $this->getNoCommentStream()),
+                'source_id'           => array('text', $this->getSourceId()),
+                'is_task'             => array('integer', $this->getTaskActive()),
+                'task'                => array('text', $this->getTask()),
+                'lp_mode'             => array('integer', $this->getLearningProgressMode()),
+                'video_mode'          => array('integer', $this->getVideoMode()),
+                'layout_width'          => array('integer', $this->getLayoutWidth()),
+                'marker_for_students' => array('integer', $this->getMarkerForStudents())
 			)
 		);
 
@@ -1327,17 +1327,17 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	/**
 	 * @return int
 	 */
-	public function getDisableComment()
+	public function getEnableComment()
 	{
-		return $this->disable_comment;
+		return $this->enable_comment;
 	}
 
 	/**
-	 * @param int $disable_comment
+	 * @param int $enable_comment
 	 */
-	public function setDisableComment($disable_comment)
+	public function setEnableComment($enable_comment)
 	{
-		$this->disable_comment = $disable_comment;
+		$this->enable_comment = $enable_comment;
 	}
 
     /**
@@ -1501,33 +1501,33 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     /**
      * @return int
      */
-    public function getDisableCommentStream()
+    public function getEnableCommentStream()
     {
-        return $this->disable_comment_stream;
+        return $this->enable_comment_stream;
     }
 
     /**
-     * @param int $disable_comment_stream
+     * @param int $enable_comment_stream
      */
-    public function setDisableCommentStream($disable_comment_stream)
+    public function setEnableCommentStream($enable_comment_stream)
     {
-        $this->disable_comment_stream = $disable_comment_stream;
+        $this->enable_comment_stream = $enable_comment_stream;
     }
 
 	/**
 	 * @return int
 	 */
-	public function getDisableToolbar()
+	public function getEnableToolbar()
 	{
-		return $this->disable_toolbar;
+		return $this->enable_toolbar;
 	}
 
 	/**
-	 * @param int $disable_toolbar
+	 * @param int $enable_toolbar
 	 */
-	public function setDisableToolbar($disable_toolbar)
+	public function setEnableToolbar($enable_toolbar)
 	{
-		$this->disable_toolbar = $disable_toolbar;
+		$this->enable_toolbar = $enable_toolbar;
 	}
 	/**
 	 * @return int
@@ -1576,11 +1576,17 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     {
         $value = '2:1';
         switch($this->layout_width){
-            case 101: $value='1:1';
+            case 0:
+            case 101:
+                $value='1:1';
                 break;
-            case 102: $value='2:1';
+            case 1:
+            case 102:
+                $value='2:1';
                 break;
-            case 103: $value='1:0';
+            case 2:
+            case 103:
+                $value='1:0';
                 break;
         }
         return $value;

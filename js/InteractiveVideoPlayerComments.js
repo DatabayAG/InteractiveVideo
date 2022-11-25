@@ -124,7 +124,6 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pub.fillCommentsTimeEndBlacklist = function (player_id, comment_time_end, comment_id)
 	{
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
-
 		if(player_data.blacklist_time_end[comment_time_end] === undefined)
 		{
 			player_data.blacklist_time_end[comment_time_end] = [comment_id];
@@ -159,6 +158,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pub.clearAndRemarkCommentsAfterSeeking = function (time, player)
 	{
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+		let player_id = scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 		let i ;
 
 		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
@@ -173,7 +173,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				{
 					pub.addHighlightToComment(player_data.comments[i].comment_id);
 					il.InteractiveVideoPlayerFunction.insertMarker( player_data.comments[i]);
-					il.InteractiveVideoPlayerFunction.fillCommentsTimeEndBlacklist(player_data.current_player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
+					il.InteractiveVideoPlayerComments.fillCommentsTimeEndBlacklist(player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
 				}
 			}
 		}
@@ -197,11 +197,10 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let i;
 		let j_object	= $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id);
 		let element		='';
-
 		j_object.html('');
 		pri.cssIterator = 0;
 
-		if(on)
+		if(on === false || on === '0')
 		{
 			for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 			{
@@ -216,12 +215,13 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 					}
 				}
 			}
-			player_data.is_show_all_active = true;
+			player_data.show_only_until_playhead = false;
 			pub.clearCommentsWhereTimeEndEnded(player_id, player_data.last_time);
 		}
 		else
 		{
-			player_data.is_show_all_active = false;
+			console.log('OFF')
+			player_data.show_only_until_playhead = true;
 			pub.replaceCommentsAfterSeeking(player_data.last_time, player_id);
 		}
 		pub.registerReplyToListeners(player_id);
@@ -232,12 +232,12 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let j_object, position, height;
 
-		if(player_data.is_show_all_active === true)
+		if(player_data.show_only_until_playhead === false)
 		{
 			j_object = $('#ilInteractiveVideoComments_' + player_id);
 			position = j_object.scrollTop();
 			height   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id).find('li').first().height();
-			player_data.is_show_all_active = false;
+			player_data.show_only_until_playhead = true;
 			pub.displayAllCommentsAndDeactivateCommentStream(true, player_id);
 			j_object.scrollTop(position + height);
 		}
@@ -270,15 +270,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let layout_list = [];
 		layout_list['1:1'] = language.similarSize;
 		layout_list['2:1'] = language.bigVideo;
-		layout_list['1:0'] = language.veryBigVideo;
+		layout_list['stacked'] = language.veryBigVideo;
 		drop_down_list.html('');
 		drop_down_list.append(reset_elem);
-		for ( element in layout_list)
-		{
-			element = '<li><a href="#">' + element + '</a></li>';
+		Object.keys(layout_list).forEach(key => {
+			element = '<li><a href="#">' + layout_list[key] + '</a></li>';
 			drop_down_list.append(element);
-		}
-		//Todo Event selection
+		});
+
 	};
 
 	pub.fillEndTimeSelector = function(seconds)
@@ -315,11 +314,11 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			pub.buildToc(player_id);
 		});
 
-		if(player_data.disable_comment_stream === "1" ){
+		if(player_data.show_toolbar === "0" ){
 			let toolbar = $('.ivToolbar_' + player_id)
 			toolbar.css('display', 'none');
 		}
-		if(player_data.disable_comment_stream === "1" || player_data.show_toc_first === "1") {
+		if(player_data.enable_comment_stream === "0" || player_data.show_toc_first === "1") {
 			pro.displayCommentsOrToc(false, player_id);
 			pub.buildToc(player_id);
 		} else {
@@ -397,8 +396,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	};
 
 	pro.registerTocClickListener = function(player_id) {
-		$('.toc-inner').off('click');
-		$('.toc-inner').on('click', function() {
+		$('.description_exists').off('click');
+		$('.description_exists').on('click', function() {
 			if($(this).find('.toc_description').css('display') === 'block'){
 				$(this).find('.toc_description').hide();
 				$(this).find('.toc_description').removeClass('tocManualOverride');
@@ -451,16 +450,13 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	{
 		let value = false;
 
-		if(player_data.is_show_all_active === false)
-		{
-			if(player_data.filter_by_user === false ||
-					(   player_data.filter_by_user !== false &&
-						player_data.filter_by_user === username
-					)
+		if(player_data.filter_by_user === false ||
+				(   player_data.filter_by_user !== false &&
+					player_data.filter_by_user === username
 				)
-			{
-				value = true;
-			}
+			)
+		{
+			value = true;
 		}
 
 		return value;
