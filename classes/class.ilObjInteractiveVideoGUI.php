@@ -356,7 +356,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		if($this->object->getEnableComment() == 1 && ! $light_version)
 		{
-            if(!$this->checkPermissionBool('write') && $this->object->getEnableComment() != 1)
+            if(!$this->checkPermissionBool('write'))
             {
                 $comments_tpl = new ilTemplate("tpl.comments_form.html", true, true, $this->plugin->getDirectory());
                 $comments_tpl->setVariable('PLAYER_ID', $player_id);
@@ -1029,6 +1029,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$enable_comment = new ilCheckboxInputGUI($plugin->txt('enable_comment'), 'enable_comment');
 		$enable_comment->setInfo($plugin->txt('enable_comment_info'));
+        $enable_comment->setValue(1);
 		$a_form->addItem($enable_comment);
 
         $marker_for_students = new ilCheckboxInputGUI($this->plugin->txt('marker_for_students'), 'marker_for_students');
