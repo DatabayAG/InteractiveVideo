@@ -254,6 +254,6 @@ similarSize#:#Gleich gross: 1:1
 similarSize_info#:#Die beiden Spalten sind gleich breit. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
 BigVideo#:#Video gross: 2:1
 BigVideo_info#:#Das Video ist deutlich breiter als die Kommentarepalte. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
-veryBigVideo#:#Video sehr gross: <br/>Untereinander
+veryBigVideo#:#Video sehr gross: Untereinander
 veryBigVideo_info#:#Das Video füllt die volle Fensterbreite aus. Die Kommentarepalte wird darunter angezeigt. In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
 layout_filter#:#Layout
