@@ -640,10 +640,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			$table_data[$counter]['user_surname']		= $surname;
 			$table_data[$counter]['user_email']			= $email;
 			$table_data[$counter]['title']				= $row['comment_title'];
-			$table_data[$counter]['comment_text']		= $row['comment_text'];
+
 			if($strip_tags){
 				$table_data[$counter]['comment_text'] = strip_tags($row['comment_text']);
-			}
+			} else {
+                $table_data[$counter]['comment_text']		= $row['comment_text'];
+            }
 			if($replace_settings_with_text )
 			{
 				$table_data[$counter]['is_tutor']			= xvidUtils::yesNoString($row['is_tutor']);
