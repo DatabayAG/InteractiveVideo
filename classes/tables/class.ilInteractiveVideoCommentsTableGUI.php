@@ -81,14 +81,14 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		if($ilAccess->checkAccess('write', '', $a_parent_obj->object->getRefId()) && $a_parent_cmd == 'editComments')
 		{
 			$this->addColumn($a_parent_obj->plugin->txt('type'), 'type');
-            $this->addColumn($a_parent_obj->plugin->txt('compulsory'), 'compulsory', '10%');
+            //$this->addColumn($a_parent_obj->plugin->txt('compulsory'), 'compulsory', '10%');
 			//$this->addColumn($a_parent_obj->plugin->txt('tutor'), 'is_tutor');
 			
 //			$this->addCommandButton('showTutorInsertCommentForm', $this->lng->txt('insert'));
 		}
 		else
 		{
-            $this->addColumn($a_parent_obj->plugin->txt('compulsory'), 'compulsory', '10%');
+            //$this->addColumn($a_parent_obj->plugin->txt('compulsory'), 'compulsory', '10%');
 			$this->addColumn($a_parent_obj->plugin->txt('visibility'), 'is_private');
 		}
 
