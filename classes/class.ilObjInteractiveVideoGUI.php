@@ -3457,7 +3457,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($head_row, $plugin->txt('time_end') );
 		array_push($head_row, $plugin->txt('comment_title'));
 		array_push($head_row, $plugin->txt('comment'));
-		array_push($head_row, $plugin->txt('visibility'));
+        array_push($head_row, $plugin->txt('visibility'));
+		array_push($head_row, $plugin->txt('reply_to'));
+
 		array_push($csv, ilUtil::processCSVRow($head_row, TRUE, $separator) );
 		foreach ($data as $key => $row)
 		{
