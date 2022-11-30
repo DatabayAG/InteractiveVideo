@@ -2,7 +2,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	'use strict';
 
 	let pub = {}, pro = {}, pri = {
-		last_current_time : 0
+		last_current_time : 0,
+		time_refresher : true
 	};
 
 	pri.utils = scope.InteractiveVideoPlayerComments;
@@ -768,15 +769,27 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pub.refreshTimerInEditScreen = function(player_id, interval){
 		il.InteractiveVideo[player_id].player.on('playing', event => {
 			interval = setInterval(function () {
-				let time = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
-				let end_time = time + 3;
-				time = scope.InteractiveVideoPlayerComments.secondsToTimeCode(time);
-				end_time = scope.InteractiveVideoPlayerComments.secondsToTimeCode(end_time);
-				$('#comment_time').timepicker('setTime', time);
-				$('#comment_time_end').timepicker('setTime', end_time);
-				il.InteractiveVideoPlayerFunction.refreshTimerInEditScreen(player_id, interval);
+				if(pri.time_refresher){
+					let time = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
+					let end_time = time + 3;
+					time = scope.InteractiveVideoPlayerComments.secondsToTimeCode(time);
+					end_time = scope.InteractiveVideoPlayerComments.secondsToTimeCode(end_time);
+					$('#comment_time').timepicker('setTime', time);
+					$('#comment_time_end').timepicker('setTime', end_time);
+					il.InteractiveVideoPlayerFunction.refreshTimerInEditScreen(player_id, interval);
+					console.log('Yes')
+				} else {
+					console.log('No')
+				}
+
 			}, 500);
+
 		});
+
+		$('#comment_time_end, #comment_time').click(function() {
+			pri.time_refresher = false;
+		});
+
 	}
 
 	pub.protect = pro;
