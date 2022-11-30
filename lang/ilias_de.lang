@@ -257,3 +257,6 @@ BigVideo_info#:#Das Video ist deutlich breiter als die Kommentarepalte. Wechselt
 veryBigVideo#:#Video sehr gross: Untereinander
 veryBigVideo_info#:#Das Video füllt die volle Fensterbreite aus. Die Kommentarepalte wird darunter angezeigt. In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
 layout_filter#:#Layout
+beta#:#Beta
+activate_marker#:#Marker aktivieren
+activate_marker_info#:#Marker aktivieren

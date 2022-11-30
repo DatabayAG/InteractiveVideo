@@ -192,24 +192,36 @@ class ilInteractiveVideoSourceFactory
 		/**
 		 * @var $ilDB   ilDB
 		 */
-		global $ilDB;
+		global $ilDB, $DIC;
 
 		$this->readSourceSettings();
 		$flip = array_keys($settings['settings']);
 		$mapping = $settings['mappings'];
-
+        $db_settings = new ilSetting('xvid');
 		$ilDB->manipulate('
 		DELETE FROM ' . self::TABLE_NAME  . ' 
 		WHERE 	' . $ilDB->in('plugin_name', $flip, false, 'text'));
 
 		foreach($settings['settings'] as $key => $value)
 		{
-			$ilDB->insert(self::TABLE_NAME, array('plugin_name'		=> array('text', $key), 
-													'is_activated'	=> array('integer', $value), 
-													'plugin_id'		=> array('text', $mapping[$key]['id']),
-													'db_update'		=> array('text', $this->sources_settings[$key]['db_update']),
-													'class_path'	=> array('text', $mapping[$key]['path'])
-			));
+            if(strlen($key) > 0
+                && array_key_exists($key, $mapping)
+                && array_key_exists('id', $mapping[$key]))
+            {
+                $ilDB->insert(self::TABLE_NAME, array('plugin_name'		=> array('text', $key),
+                    'is_activated'	=> array('integer', $value),
+                    'plugin_id'		=> array('text', $mapping[$key]['id']),
+                    'db_update'		=> array('text', $this->sources_settings[$key]['db_update']),
+                    'class_path'	=> array('text', $mapping[$key]['path'])
+                ));
+            } else if($key === 'activate_marker'){
+                if((int) $value === 1){
+                    $db_settings->set('xvid_activate_marker', 1);
+                } else {
+                    $db_settings->delete('xvid_activate_marker');
+                }
+            }
+
 		}
 	}
 }

@@ -118,6 +118,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      */
     protected $layout_width = self::LAYOUT_BIG_VIDEO;
 
+    /**
+     * @var bool
+     */
+    protected $marker_active = false;
 
 	/**
 	 * @param $src_id
@@ -177,6 +181,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->getVideoSourceObject($row['source_id']);
 		$this->setLearningProgressMode($row['lp_mode']);
 
+        $db_settings = new ilSetting(('xvid'));
+        if((int) $db_settings->get('xvid_activate_marker') === 1)
+        {
+            $this->marker_active = true;
+        }
 		parent::doRead();
 	}
 
@@ -1601,4 +1610,14 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     {
         $this->layout_width = $layout_width;
     }
+
+    /**
+     * @return bool
+     */
+    public function isMarkerActive(): bool
+    {
+        return $this->marker_active;
+    }
+
+
 }

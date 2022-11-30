@@ -296,8 +296,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $DIC;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
         $tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoQuestionCreator.js');
-        $tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoOverlayMarker.js');
-        $tpl->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
+        if($this->object->isMarkerActive()){
+            $tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoOverlayMarker.js');
+            $tpl->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
+        }
         require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoUniqueIds.php';
 		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $plugin->getDirectory());
@@ -368,7 +370,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $this->plugin->txt('no_text_warning'));
                 $comments_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
                 $marker_template = '';
-                if($this->object->getMarkerForStudents() == 1 || $DIC->access()->checkAccess('write', '', $this->object->getRefId()))
+                if( $this->object->isMarkerActive() &&
+                    $this->object->getMarkerForStudents() == 1 || $DIC->access()->checkAccess('write', '', $this->object->getRefId()))
                 {
                     $marker_template = $this->buildMarkerEditorTemplate()->get();
                 }
@@ -389,7 +392,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $this->plugin->txt('no_text_warning'));
                 $comments_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
                 $marker_template = '';
-                $marker_template = $this->buildMarkerEditorTemplate()->get();
+                if( $this->object->isMarkerActive() ){
+                    $marker_template = $this->buildMarkerEditorTemplate()->get();
+                }
+
                 $comments_tpl->setVariable('MARKER_EDITOR', $marker_template);
                 $comments_tpl->setVariable('TXT_POST', $this->lng->txt('save'));
                 $comments_tpl->setVariable('TXT_CANCEL', $this->plugin->txt('cancel'));
@@ -1950,7 +1956,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         $my_tpl = $this->getCommentTemplate();
         $my_tpl->setVariable('FORM',$form->getHTML());
-        $tpl->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
+        if($this->object->isMarkerActive()){
+            $tpl->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
+        }
+
         $tpl->setContent($my_tpl->get());
 	}
 
@@ -2427,7 +2436,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         $my_tpl = $this->getCommentTemplate();
         $my_tpl->setVariable('FORM',$form->getHTML());
-        $tpl->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
+
+        if($this->object->isMarkerActive()){
+            $tpl->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
+        }
 		$tpl->setContent($my_tpl->get());
 	}
 

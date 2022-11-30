@@ -258,3 +258,6 @@ veryBigVideo_info#:#The video fills the full width of the window. The comments c
 veryBigVideo#:#Video very large: Stacked
 bigVideo_info#:#The video is much wider than the comment column. Switches to a one-column layout (one below the other) on very small screens. Users can adjust their view in the toolbar.
 layout_filter#:#Layout
+beta#:#Beta
+activate_marker#:#Activate marker
+activate_marker_info#:#Activate marker
