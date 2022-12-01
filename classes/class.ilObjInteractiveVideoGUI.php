@@ -1038,9 +1038,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $enable_comment->setValue(1);
 		$a_form->addItem($enable_comment);
 
-        $marker_for_students = new ilCheckboxInputGUI($this->plugin->txt('marker_for_students'), 'marker_for_students');
-        $marker_for_students->setInfo($this->plugin->txt('marker_for_students_info'));
-        $a_form->addItem($marker_for_students);
+        if($this->object->isMarkerActive()) {
+            $marker_for_students = new ilCheckboxInputGUI($this->plugin->txt('marker_for_students'), 'marker_for_students');
+            $marker_for_students->setInfo($this->plugin->txt('marker_for_students_info'));
+            $a_form->addItem($marker_for_students);
+        }
 
 		$section = new ilFormSectionHeaderGUI();
 		$section->setTitle($plugin->txt('questions'));
