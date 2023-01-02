@@ -59,6 +59,7 @@ user_answered#:#Beantwortet von Nutzern
 user_correct#:#Richtig beantwortet von Nutzern
 insert_question#:#Frage hinzufügen
 insert_comment#:#Kommentar/Marker hinzufügen
+insert_comment_only#:#Kommentar hinzufügen
 my_comments#:#Meine Kommentare
 general#:#Allgemein
 repeat_question#:#Frage wiederholen
@@ -234,7 +235,7 @@ height#:#Höhe
 rotate#:#Drehen
 rectangle#:#Rechteck
 arrow#:#Pfeil
-circle#:#Kreis#Aktiviere Kommentarstream
+circle#:#Kreis
 scale#:#Skalieren
 with_marker#:#mit Marker
 line#:#Linie

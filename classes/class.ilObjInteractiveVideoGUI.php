@@ -792,17 +792,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $object = new ilInteractiveVideoSourceFactoryGUI($this->object);
         $object->addPlayerElements($tpl);
 
-        $marker_template = '';
-        if($this->object->getMarkerForStudents() == 1 || $ilAccess->checkAccess('write', '', $this->object->getRefId()))
-        {
-            $marker_template = $this->buildMarkerEditorTemplate()->get();
+        if($this->object->isMarkerActive()) {
+            $marker_template = '';
+            if($this->object->getMarkerForStudents() == 1 || $ilAccess->checkAccess('write', '', $this->object->getRefId()))
+            {
+                $marker_template = $this->buildMarkerEditorTemplate()->get();
+            }
+
+            $player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
+            $my_tpl->setVariable('PLAYER', $object->getPlayer($player_id)->get() . $this->initPlayerConfig($player_id, $this->object->getSourceId(), true));
+            $my_tpl->setVariable('MARKER', $marker_template);
+            $my_tpl->setVariable('PLAYER_ID', $player_id);
+            $tpl->addOnLoadCode('il.InteractiveVideoPlayerFunction.refreshTimerInEditScreen("'.$player_id.'");');
         }
 
-        $player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
-        $my_tpl->setVariable('PLAYER', $object->getPlayer($player_id)->get() . $this->initPlayerConfig($player_id, $this->object->getSourceId(), true));
-        $my_tpl->setVariable('MARKER', $marker_template);
-        $my_tpl->setVariable('PLAYER_ID', $player_id);
-        $tpl->addOnLoadCode('il.InteractiveVideoPlayerFunction.refreshTimerInEditScreen("'.$player_id.'");');
         return $my_tpl;
     }
 
@@ -2275,7 +2278,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->objComment->setObjId($this->object->getId());
 
 
-		$video_tpl->setVariable('TXT_INS_COMMENT', $plugin->txt('insert_comment'));
+        if($this->object->isMarkerActive()) {
+            $video_tpl->setVariable('TXT_INS_COMMENT', $plugin->txt('insert_comment'));
+        } else {
+            $video_tpl->setVariable('TXT_INS_COMMENT', $plugin->txt('insert_comment_only'));
+        }
+
 		$video_tpl->setVariable('PLAYER_ID', $player_id);
 		$video_tpl->setVariable('TXT_INS_QUESTION', $plugin->txt('insert_question'));
 		$video_tpl->setVariable('TXT_INS_CHAPTER', $plugin->txt('insert_chapter'));
