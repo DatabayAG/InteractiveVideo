@@ -365,7 +365,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $comments_tpl->setVariable('COMMENT_TIME_END', $this->plugin->txt('time_end'));
                 $picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end_' . $player_id);
                 $comments_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
-                $comments_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
+                if($this->object->isMarkerActive()) {
+                    $comments_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
+                } else {
+                    $comments_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment_only'));
+                }
                 $comments_tpl->setVariable('TXT_ENDTIME_WARNING', $this->plugin->txt('endtime_warning'));
                 $comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $this->plugin->txt('no_text_warning'));
                 $comments_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
@@ -387,7 +391,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $comments_tpl->setVariable('COMMENT_TIME_END', $this->plugin->txt('time_end'));
                 $picker = new ilInteractiveVideoTimePicker('comment_time_end', 'comment_time_end_' . $player_id);
                 $comments_tpl->setVariable('COMMENT_TIME_END_PICKER', $picker->render());
-                $comments_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
+
+                if($this->object->isMarkerActive()) {
+                    $comments_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment'));
+                } else {
+                    $comments_tpl->setVariable('TXT_COMMENT', $this->plugin->txt('insert_comment_only'));
+                }
                 $comments_tpl->setVariable('TXT_ENDTIME_WARNING', $this->plugin->txt('endtime_warning'));
                 $comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $this->plugin->txt('no_text_warning'));
                 $comments_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
@@ -648,6 +657,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('SWITCH_OFF', $plugin->txt('switch_off'));
 		$config_tpl->setVariable('SAVE', $plugin->txt('save'));
 		$config_tpl->setVariable('ADD_COMMENT', $plugin->txt('insert_comment'));
+        if($this->object->isMarkerActive()) {
+            $config_tpl->setVariable('ADD_COMMENT', $plugin->txt('insert_comment'));
+        } else {
+            $config_tpl->setVariable('ADD_COMMENT', $plugin->txt('insert_comment_only'));
+        }
 		$config_tpl->setVariable('SHOW_BEST_SOLUTION', $plugin->txt('show_best_solution'));
 		$config_tpl->setVariable('AT_LEAST_ONE_ANSWER', $plugin->txt('at_least_one_answer'));
         $config_tpl->setVariable('REPLY_TO_TEXT',  $plugin->txt('reply_to'));
@@ -1808,7 +1822,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$form = new ilPropertyFormGUI();
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
-		$form->setTitle($plugin->txt('insert_comment'));
+        if($this->object->isMarkerActive()) {
+            $form->setTitle($plugin->txt('insert_comment'));
+        } else {
+            $form->setTitle($plugin->txt('insert_comment_only'));
+        }
 		$this->appendCkEditorMathJaxSupportToForm($form);
 		$section_header = new ilFormSectionHeaderGUI();
 		$section_header->setTitle($plugin->txt('general'));
