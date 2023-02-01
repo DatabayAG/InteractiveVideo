@@ -25,11 +25,6 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 		return array
 		(
 			array(
-				'permission' => 'visible',
-				'cmd'        => 'showContent',
-				'default'    => true
-			),
-			array(
 				'permission' => 'read',
 				'cmd'        => 'showContent',
 				'default'    => true
