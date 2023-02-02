@@ -220,7 +220,6 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		}
 		else
 		{
-			console.log('OFF')
 			player_data.show_only_until_playhead = true;
 			pub.replaceCommentsAfterSeeking(player_data.last_time, player_id);
 		}

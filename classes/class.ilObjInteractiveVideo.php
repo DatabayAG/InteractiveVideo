@@ -352,7 +352,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						$is_task		= (int)$_POST['is_task'];
 						$task			= ilUtil::stripSlashes($_POST['task']);
 						$enable_comment	= (int)$_POST['enable_comment'];
-						$show_toolbar		= (int)$_POST['show_toolbar'];
+                        $show_toolbar = 1;
+                        if(array_key_exists('show_toolbar', $_POST))
+                        {
+                            $show_toolbar		= (int)$_POST['show_toolbar'];
+                        }
+
 						$auto_resume	= (int)$_POST['auto_resume'];
 						$fixed_modal	= (int)$_POST['fixed_modal'];
 						$show_toc_first	= (int)$_POST['show_toc_first'];
