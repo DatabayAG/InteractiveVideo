@@ -663,14 +663,14 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			if($replace_settings_with_text )
 			{
 				$table_data[$counter]['is_tutor']			= xvidUtils::yesNoString($row['is_tutor']);
-				//$table_data[$counter]['is_interactive']		= xvidUtils::yesNoString($row['is_interactive']);
-                $table_data[$counter]['compulsory']         = xvidUtils::yesNoString($row['compulsory_question']);
+				$table_data[$counter]['is_interactive']		= xvidUtils::yesNoString($row['is_interactive']);
+                //$table_data[$counter]['compulsory']         = xvidUtils::yesNoString($row['compulsory_question']);
 			}
 			else
 			{
 				$table_data[$counter]['is_tutor']			= $row['is_tutor'];
-				//$table_data[$counter]['is_interactive']		= $row['is_interactive'];
-                $table_data[$counter]['compulsory']         = $row['compulsory_question'] ? '1' : '0';
+				$table_data[$counter]['is_interactive']		= $row['is_interactive'];
+                //$table_data[$counter]['compulsory']         = $row['compulsory_question'] ? '1' : '0';
 			}
 			$type = 'comment';
 			if($row['is_interactive'] == "1") {
