@@ -42,7 +42,7 @@
     margin-bottom: 5px;
     margin-left: 40px;
     position: relative;
-    margin-right: 40px;
+    margin-right: 0px;
 }
 .scroll-text ul li .message-inner {
     background: #fff;
@@ -789,7 +789,7 @@ li.toc_item > div > h5 > time {
 }
 .toc_title{
     display: inline-block;
-    width: 82%;
+    width: 92%;
     padding-top: 3px;
     padding-bottom: 1px;
 }

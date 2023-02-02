@@ -59,6 +59,7 @@ user_answered#:#Beantwortet von Nutzern
 user_correct#:#Richtig beantwortet von Nutzern
 insert_question#:#Frage hinzufügen
 insert_comment#:#Kommentar/Marker hinzufügen
+insert_comment_only#:#Kommentar hinzufügen
 my_comments#:#Meine Kommentare
 general#:#Allgemein
 repeat_question#:#Frage wiederholen
@@ -202,13 +203,13 @@ subtitle_removed#:#Untertitel gelöscht
 sure_delete_subtitle#:#Sind Sie sicher das Sie diesen Untertitel löschen wollen?
 you_need_a_short_title#:#Sie müssen einen Kurztitel eintragen!
 show_toolbar#:#Zeige Toolbar
-show_toolbar_info#:#Zeigt beim Benutzer oben rechts die Toolbar mit folgenden Möglichkeiten ein: Einstellung Videogrösse, Autorenfilter, Nur Kommentare bis zur Abspielposition zeigen.»
+show_toolbar_info#:#Zeigt beim Benutzer oben rechts die Toolbar mit folgenden Möglichkeiten an: Einstellung Videogrösse, Autorenfilter, Nur Kommentare bis zur Abspielposition zeigen.
 is_table_of_content#:#Inhaltsverzeichnis
 toc#:#Inhaltsverzeichnis
 show_toc_first#:#Zeige Inhaltsverzeichnis als erstes
 show_toc_first_info#:#Falls Kapitel erstellt wurden, wird das Inhaltsverzeichnis neben dem Video direkt angezeigt. Standardmässig ist das Inhaltsverzeichnis von der Kommentarspalte überdeckt und muss aktiv aufgerufen werden.
-enable_comment_stream#:#Zeigt neben dem Video die Kommentarspalte an. Darin werden die Kommentare und Fragen aufgeführt.
-enable_comment_stream_info#:#Aktiviere Kommentarstream
+enable_comment_stream#:#Zeige Kommentarspalte
+enable_comment_stream_info#:#Zeigt neben dem Video die Kommentarspalte an. Darin werden die Kommentare und Fragen aufgeführt.
 insert_chapter#:#Kapitel einfügen
 edit_chapter#:#Kapitel editieren
 comment_table_title#:#Kommentar / Fragentext
@@ -254,6 +255,9 @@ similarSize#:#Gleich gross: 1:1
 similarSize_info#:#Die beiden Spalten sind gleich breit. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
 BigVideo#:#Video gross: 2:1
 BigVideo_info#:#Das Video ist deutlich breiter als die Kommentarepalte. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
-veryBigVideo#:#Video sehr gross: <br/>Untereinander
+veryBigVideo#:#Video sehr gross: Untereinander
 veryBigVideo_info#:#Das Video füllt die volle Fensterbreite aus. Die Kommentarepalte wird darunter angezeigt. In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
 layout_filter#:#Layout
+beta#:#Beta
+activate_marker#:#Marker aktivieren
+activate_marker_info#:#Marker aktivieren

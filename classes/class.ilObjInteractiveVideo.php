@@ -118,6 +118,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      */
     protected $layout_width = self::LAYOUT_BIG_VIDEO;
 
+    /**
+     * @var bool
+     */
+    protected $marker_active = false;
 
 	/**
 	 * @param $src_id
@@ -177,6 +181,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->getVideoSourceObject($row['source_id']);
 		$this->setLearningProgressMode($row['lp_mode']);
 
+        $db_settings = new ilSetting(('xvid'));
+        if((int) $db_settings->get('xvid_activate_marker') === 1)
+        {
+            $this->marker_active = true;
+        }
 		parent::doRead();
 	}
 
@@ -645,20 +654,22 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			$table_data[$counter]['user_surname']		= $surname;
 			$table_data[$counter]['user_email']			= $email;
 			$table_data[$counter]['title']				= $row['comment_title'];
-			$table_data[$counter]['comment_text']		= $row['comment_text'];
+
 			if($strip_tags){
 				$table_data[$counter]['comment_text'] = strip_tags($row['comment_text']);
-			}
+			} else {
+                $table_data[$counter]['comment_text']		= $row['comment_text'];
+            }
 			if($replace_settings_with_text )
 			{
 				$table_data[$counter]['is_tutor']			= xvidUtils::yesNoString($row['is_tutor']);
-				$table_data[$counter]['is_interactive']		= xvidUtils::yesNoString($row['is_interactive']);
+				//$table_data[$counter]['is_interactive']		= xvidUtils::yesNoString($row['is_interactive']);
                 $table_data[$counter]['compulsory']         = xvidUtils::yesNoString($row['compulsory_question']);
 			}
 			else
 			{
 				$table_data[$counter]['is_tutor']			= $row['is_tutor'];
-				$table_data[$counter]['is_interactive']		= $row['is_interactive'];
+				//$table_data[$counter]['is_interactive']		= $row['is_interactive'];
                 $table_data[$counter]['compulsory']         = $row['compulsory_question'] ? '1' : '0';
 			}
 			$type = 'comment';
@@ -670,7 +681,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
             $table_data[$counter]['type']       = $type;
 			$table_data[$counter]['marker'] = $row['marker'];
 			$table_data[$counter]['is_reply_to'] = $row['is_reply_to'];
-			$table_data[$counter]['is_table_of_content'] = $row['is_table_of_content'];
+			//$table_data[$counter]['is_table_of_content'] = $row['is_table_of_content'];
 
             $counter++;
         }
@@ -1604,4 +1615,14 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     {
         $this->layout_width = $layout_width;
     }
+
+    /**
+     * @return bool
+     */
+    public function isMarkerActive(): bool
+    {
+        return $this->marker_active;
+    }
+
+
 }
