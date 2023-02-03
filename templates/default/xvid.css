@@ -763,11 +763,18 @@ input[type=range]:focus::-ms-fill-upper {
     cursor: pointer;
     border: 1px solid white;
     padding-left: 5px;
-    padding-bottom: 5px;
+    padding-bottom: 0px;
 }
 
+.toc-inner h5 {
+    margin-bottom: 0px;
+}
 .toc_arrow{
-    float: right
+    float: right;
+}
+
+.toc_title .toc_arrow{
+    top: -5px;
 }
 
 .compulsory_question{
@@ -786,12 +793,14 @@ input[type=range]:focus::-ms-fill-upper {
 
 li.toc_item > div > h5 > time {
     padding-right: 20px;
+    vertical-align: top;
 }
 .toc_title{
     display: inline-block;
-    width: 92%;
-    padding-top: 3px;
+    width: 82%;
+    padding-left: 1%;
     padding-bottom: 1px;
+    vertical-align: top;
 }
 .description_exists:hover{
     background-color:#dce2eb;
