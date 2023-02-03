@@ -288,8 +288,11 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	{
 		let time = pub.secondsToTimeCode(seconds);
 		let end_time = pub.secondsToTimeCode(seconds + 3);
-		pro.preselectValueOfTimeSelection(end_time, $('#comment_time_end'));
-		pro.preselectValueOfTimeSelection(time, $('#comment_time'));
+		if(il.InteractiveVideoPlayerFunction.shouldTimerGetRefreshed()) {
+			pro.preselectValueOfTimeSelection(end_time, $('#comment_time_end'));
+			pro.preselectValueOfTimeSelection(time, $('#comment_time'));
+		}
+
 	};
 
 	pro.registerTabEvent = function(player_id)

@@ -777,11 +777,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 					$('#comment_time').timepicker('setTime', time);
 					$('#comment_time_end').timepicker('setTime', end_time);
 					il.InteractiveVideoPlayerFunction.refreshTimerInEditScreen(player_id, interval);
-					console.log('Yes')
-				} else {
-					console.log('No')
 				}
-
 			}, 500);
 
 		});
@@ -790,6 +786,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			pri.time_refresher = false;
 		});
 
+	}
+
+	pub.shouldTimerGetRefreshed = function(){
+		return pri.time_refresher;
 	}
 
 	pub.protect = pro;
