@@ -237,7 +237,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		pro.showResponseFrequency(feedback.response_frequency);
 		modal.html(feedback.html);
 		if (parseInt(feedback.is_timed, 10) === 1) {
-			modal.append('<div class="learning_recommendation"><br/>' + language.learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', language.feedback_button_text + ' ' + il.InteractiveVideoPlayerComments.protect.secondsToTimeCode(feedback.time)) + '</div>', '');
+			modal.append('<div class="learning_recommendation"><br/>' + language.learning_recommendation_text + ': ' + pro.createButtonButtons('jumpToTimeInVideo', language.feedback_button_text + ' ' + il.InteractiveVideoPlayerComments.secondsToTimeCode(feedback.time)) + '</div>', '');
 			let player_id = scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 			$(pri.ids.time_string).on('click', function () {
 				$(pri.ids.modal).modal('hide');
