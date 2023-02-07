@@ -216,6 +216,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		if (is_interactive === 1 && $.inArray(comment.comment_id, player_data.ignore_questions) === -1) {
 			stop_video = 1;
 			il.InteractiveVideoQuestionViewer.getQuestionPerAjax(comment.comment_id, player, true);
+			il.InteractiveVideoPlayerAbstract.setCurrentTime(parseInt(current_time, 10) + 1, player_id);
 		}
 		else if (is_interactive === 1)
 		{
