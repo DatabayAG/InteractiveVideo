@@ -59,10 +59,14 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			&& comment_not_already_rendered === 0
 		)
 		{
+			let usr_image = '';
+			if(player_data.anon_comments === "0"){
+				usr_image = pro.buildCommentUserImage(player_data, comment);
+			}
 			css_class = pro.getCSSClassForListElement();
 			value =	'<li class="' + list_item_id + ' fadeOut ' + css_class + '">' +
 				'<div class="message-inner">' +
-							pro.buildCommentUserImage(player_data, comment)                   +
+							usr_image  +
 							'<div class="comment_user_data">' + pub.buildCommentUsernameHtml(username, comment.is_interactive) +
 							pro.appendPrivateHtml(comment.is_private) +
 							'<div class="comment_time">' +
