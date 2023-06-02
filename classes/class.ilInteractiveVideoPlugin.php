@@ -1,7 +1,6 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 
-require_once 'Services/Repository/classes/class.ilRepositoryObjectPlugin.php';
 require_once 'Services/Component/classes/class.ilPluginAdmin.php';
 
 /**
@@ -66,12 +65,12 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 	/**
 	 * @return string
 	 */
-	public function getPluginName()
+    public function getPluginName(): string
 	{
 		return self::PNAME;
 	}
 
-    protected function uninstallCustom()
+    protected function uninstallCustom(): void
     {
         /** @var $ilDB ilDBInterface */
         global $ilDB;
@@ -183,7 +182,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 		return version_compare(ILIAS_VERSION_NUMERIC, '5.2.0', '>=');
 	}
 
-	public function allowCopy()
+    public function allowCopy(): bool
 	{
 		return true;
 	}

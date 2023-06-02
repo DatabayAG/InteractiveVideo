@@ -67,11 +67,11 @@ class ilInteractiveVideoSimpleUrlXMLParser extends ilInteractiveVideoXMLParser
 	/**
 	 * @param $xmlParser
 	 */
-	public function setHandlers($xmlParser)
-	{
-		xml_set_object($xmlParser, $this);
-		xml_set_element_handler($xmlParser, 'handlerBeginTag', 'handlerEndTag');
-		xml_set_character_data_handler($xmlParser, 'handlerCharacterData');
-	}
+    public function setHandlers($a_xml_parser): void
+    {
+        xml_set_object($a_xml_parser, $this);
+        xml_set_element_handler($a_xml_parser, 'handlerBeginTag', 'handlerEndTag');
+        xml_set_character_data_handler($a_xml_parser, 'handlerCharacterData');
+    }
 
 }

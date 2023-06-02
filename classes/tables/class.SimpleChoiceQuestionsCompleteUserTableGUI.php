@@ -14,7 +14,7 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI
 	/**
 	 * @var ilCtrl
 	 */
-	protected $ctrl;
+    protected ilCtrl $ctrl;
 
 	/**
 	 * SimpleChoiceQuestionsCompleteUserTableGUI constructor.
@@ -52,9 +52,9 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI
 	 * @param string $column
 	 * @return bool
 	 */
-	public function numericOrdering($column)
+    public function numericOrdering(string $a_field): bool
 	{
-		if('question_id' == $column)
+		if('question_id' == $a_field)
 		{
 			return true;
 		}
@@ -66,7 +66,7 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI
 	 * @param array $a_set
 	 * @internal param array $row
 	 */
-	protected function fillRow($a_set)
+    protected function fillRow(array $a_set): void
 	{
 		global $lng;
 		$current_selection_list = new ilAdvancedSelectionListGUI();

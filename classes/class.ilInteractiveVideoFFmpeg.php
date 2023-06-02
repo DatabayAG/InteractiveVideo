@@ -15,7 +15,12 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 	 * @return string
 	 * @throws ilFFmpegException
 	 */
-	static function extractImage($a_file, $a_target_filename, $a_target_dir = '', $a_sec = 1)
+    public static function extractImage(
+        string $a_file,
+        string $a_target_filename,
+        string $a_target_dir = "",
+        int $a_sec = 1
+    ): string
 	{
 		$spi = pathinfo($a_file);
 		$target_dir = ($a_target_dir != '') ? $a_target_dir : $spi['dirname'];

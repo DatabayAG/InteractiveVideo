@@ -10,10 +10,10 @@ require_once 'Services/UIComponent/Explorer2/classes/class.ilExplorerSelectInput
  */
 class ilInteractiveVideoRepositorySelectorInputGUI extends ilExplorerSelectInputGUI
 {
-	/**
-	 * @var ilInteractiveVideoReferenceSelectionExplorerGUI
-	 */
-	protected $explorer_gui;
+    /**
+     * @var ilExplorerBaseGUI
+     */
+    protected ilExplorerBaseGUI $explorer_gui;
 
 	/**
 	 * {@inheritdoc}
@@ -30,7 +30,7 @@ class ilInteractiveVideoRepositorySelectorInputGUI extends ilExplorerSelectInput
 	/**
 	 * @inheritdoc
 	 */
-	function setValue($a_value)
+    public function setValue($a_value): void
 	{
 		if ($this->explorer_gui) {
 			if (is_array($a_value)) {
@@ -50,7 +50,7 @@ class ilInteractiveVideoRepositorySelectorInputGUI extends ilExplorerSelectInput
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getTitleForNodeId($a_id)
+    public function getTitleForNodeId($a_id): string
 	{
 		return ilObject::_lookupTitle(ilObject::_lookupObjId($a_id));
 	}

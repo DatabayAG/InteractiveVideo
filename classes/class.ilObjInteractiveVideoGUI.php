@@ -1,9 +1,5 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
-require_once 'Services/Repository/classes/class.ilObjectPluginGUI.php';
-require_once 'Services/Dashboard/interfaces/interface.ilDesktopItemHandling.php';
-require_once 'Services/Form/classes/class.ilPropertyFormGUI.php';
-require_once 'Services/UIComponent/Button/classes/class.ilLinkButton.php';
 require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactoryGUI.php';
@@ -35,16 +31,16 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleCho
 class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopItemHandling
 {
 	/** @var ilCtrl */
-	protected $ctrl;
+    protected ilCtrl $ctrl;
 
 	/** @var ilObjInteractiveVideo $object */
-	public $object;
+    protected ?ilObject $object = null;
 	
 	/** @var $objComment ilObjComment */
 	public $objComment;
 
 	/** @var ilPlugin */
-	public $plugin;
+    protected ?ilPlugin $plugin = null;
 
 	/**
 	 * @param ilInteractiveVideoPlugin $plugin
@@ -83,7 +79,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 * Functions that must be overwritten
 	 */
-	public function getType()
+    public function getType(): string
 	{
 		return 'xvid';
 	}
@@ -91,7 +87,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 * Cmd that will be redirected to after creation of a new object.
 	 */
-	public function getAfterCreationCmd()
+    public function getAfterCreationCmd(): string
 	{
 		return 'editProperties';
 	}
@@ -99,7 +95,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 * @return string
 	 */
-	public function getStandardCmd()
+    public function getStandardCmd(): string
 	{
 		return 'showContent';
 	}
@@ -108,7 +104,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @param string $cmd
 	 * @throws ilException
 	 */
-	public function performCommand($cmd)
+    public function performCommand(string $cmd): void
 	{
 		/**
 		 * @var $ilTabs ilTabsGUI

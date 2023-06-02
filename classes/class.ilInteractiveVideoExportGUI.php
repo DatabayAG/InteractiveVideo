@@ -8,7 +8,7 @@ class ilInteractiveVideoExportGUI extends ilExportGUI
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function buildExportTableGUI()
+    protected function buildExportTableGUI(): ilExportTableGUI
 	{
 		/**
 		 * @var $ilCtrl ilCtrl
@@ -27,7 +27,7 @@ class ilInteractiveVideoExportGUI extends ilExportGUI
 	/**
 	 * Download file
 	 */
-	public function download()
+    public function download(): void
 	{
 		if(isset($_GET['file']) && $_GET['file'])
 		{

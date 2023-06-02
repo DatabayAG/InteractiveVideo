@@ -5,8 +5,9 @@ require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/In
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilInteractiveVideoDbUpdater.php';
 
 /**
- * Class ilInteractiveVideoConfigGUI
+ * @ilCtrl_IsCalledBy ilInteractiveVideoConfigGUI: ilObjComponentSettingsGUI
  */
+
 class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 {
 	/**
@@ -73,7 +74,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	/**
 	 * {@inheritdoc}
 	 */
-	public function performCommand($cmd)
+    public function performCommand(string $cmd): void
 	{
 		switch($cmd)
 		{

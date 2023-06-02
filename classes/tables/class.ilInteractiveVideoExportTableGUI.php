@@ -27,7 +27,7 @@ class ilInteractiveVideoExportTableGUI extends ilExportTableGUI
 	/**
 	 * 
 	 */
-	protected function initMultiCommands()
+    protected function initMultiCommands(): void
 	{
 		$this->addMultiCommand('confirmDeletion', $this->lng->txt('delete'));
 	}

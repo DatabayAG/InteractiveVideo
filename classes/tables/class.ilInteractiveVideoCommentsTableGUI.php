@@ -15,7 +15,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	/**
 	 * @var ilCtrl
 	 */
-	protected $ctrl;
+    protected ilCtrl $ctrl;
 
     /**
      * @var int
@@ -113,7 +113,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	 * @param string $column
 	 * @return bool
 	 */
-	public function numericOrdering($column)
+    public function numericOrdering(string $a_field): bool
 	{
 		if('comment_time' == $column || 'comment_time_end' ==  $column )
 		{
@@ -126,7 +126,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	/**
 	 * @param array $a_set
 	 */
-	protected function fillRow($a_set)
+    protected function fillRow(array $a_set): void
 	{
         if($this->isPublic() == 0 && $this->DIC->user()->getId() != $a_set['user_id'] && !$a_set['is_interactive']) {
             $this->tpl->setCurrentBlock('no_row');

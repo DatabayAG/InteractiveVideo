@@ -11,7 +11,7 @@ class ilInteractiveVideoModalExtension extends ilModalGUI
 	 *
 	 * @return string html
 	 */
-	function getHTML()
+    public function getHTML(): string
 	{
 		$tpl = new ilTemplate("tpl.modal.html", true, true, "Services/UIComponent/Modal");
 
@@ -55,7 +55,7 @@ class ilInteractiveVideoModalExtension extends ilModalGUI
 	 *
 	 * @return ilModalGUI panel instance
 	 */
-	static function getInstance()
+    public static function getInstance(): self
 	{
 		return new ilInteractiveVideoModalExtension();
 	}

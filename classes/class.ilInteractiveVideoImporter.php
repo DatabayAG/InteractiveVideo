@@ -18,7 +18,7 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 	 */
 	protected $xml_file;
 
-	public function init()
+    public function init(): void
 	{
 		$this->qti_path = $this->getImportDirectory().'/Plugins/xvid/set_1/expDir_1';
 		$this->xml_file = $this->getImportDirectory().'/Plugins/xvid/set_1/export.xml';
@@ -34,7 +34,12 @@ class ilInteractiveVideoImporter extends ilXmlImporter
      * @throws ilObjectNotFoundException
      * @throws ilSaxParserException
      */
-	public function importXmlRepresentation($a_entity, $a_id, $a_xml, $a_mapping)
+    public function importXmlRepresentation(
+        string $a_entity,
+        string $a_id,
+        string $a_xml,
+        ilImportMapping $a_mapping
+    ): void
 	{
         /**
          * @var $ilDB ilDBInterface

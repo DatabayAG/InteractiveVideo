@@ -62,7 +62,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function isPercentageAvailable($a_obj_id)
+    protected function isPercentageAvailable(int $a_obj_id): bool
 	{
 		if($this->isLearningProgressDeactivated())
 		{
@@ -75,7 +75,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	/**
 	 * {@inheritdoc}
 	 */
-	public function searchFilterListener($a_ref_id, $a_data)
+    public function searchFilterListener(int $a_ref_id, array $a_data): bool
 	{
 		$status = parent::searchFilterListener($a_ref_id, $a_data);
 
@@ -93,7 +93,10 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function getSelectableUserColumns($a_in_course = false, $a_in_group = false)
+    protected function getSelectableUserColumns(
+        int $a_in_course = 0,
+        int $a_in_group = 0
+    ): array
 	{
 		$columns = parent::getSelectableUserColumns($a_in_course, $a_in_group);
 
@@ -109,7 +112,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	/**
 	 * {@inheritdoc}
 	 */
-	function getSelectableColumns()
+    public function getSelectableColumns(): array
 	{
 		$columns = parent::getSelectableColumns();
 
@@ -133,7 +136,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	/**
 	 * {@inheritdoc}
 	 */
-	public function initFilter($a_split_learning_resources = false, $a_include_no_status_filter = true)
+    public function initFilter(): void
 	{
 		$this->filter = array();
 	}
@@ -141,7 +144,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function fillRow($data)
+    protected function fillRow(array $a_set): void
 	{
 		/**
 		 * @var $lng    ilLanguage

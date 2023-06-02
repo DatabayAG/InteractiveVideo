@@ -27,17 +27,17 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
     /**
      * @var ilLanguage
      */
-    public $lng;
+    protected ilLanguage $lng;
 
     /**
-     * @var ilCtrl
+     * @var ilCtrlInterface|ilCtrl
      */
-    public $ctrl;
+    protected ilCtrlInterface $ctrl;
 
     /**
-     * @var ilTemplate
+     * @var ilGlobalTemplateInterface|mixed
      */
-    public $tpl;
+    protected ilGlobalTemplateInterface $tpl;
 
     /**
      * @var ilInteractiveVideoPlugin
@@ -75,7 +75,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
     /**
      * @return int
      */
-    public function getObjId()
+    public function getObjId(): int
     {
         return $this->object->getId();
     }

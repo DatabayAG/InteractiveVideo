@@ -10,7 +10,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
     /**
      * @var $db ilDBInterface
      */
-	protected $db;
+    protected \ilDBInterface $db;
 
 	/**
 	 * @var array
@@ -92,7 +92,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	/**
 	 * @return int
 	 */
-	public function getCurrentVersion()
+    public function getCurrentVersion(): int
 	{
 		$res = $this->db->queryF(
 			'SELECT db_update FROM rep_robj_xvid_sources WHERE plugin_id = %s',
@@ -107,7 +107,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	 * @param $a_version
 	 * @return bool
 	 */
-	function setCurrentVersion($a_version)
+    public function setCurrentVersion(int $a_version): void
 	{
 		$this->db->update('rep_robj_xvid_sources',
 			array(
@@ -117,7 +117,6 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 				'plugin_id' => array('text', $this->plugin_id)
 			)
 		);
-		return true;
 	}
 	/**
 	 * @return bool
@@ -131,7 +130,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	 * @param $a_version
 	 * @return string
 	 */
-	function getFileForStep($a_version)
+    public function getFileForStep(int $a_version /* doesn't matter */): string
 	{
 		return $this->LAST_UPDATE_FILE;
 	}
@@ -180,7 +179,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	/**
 	 * @return bool
 	 */
-	function loadXMLInfo()
+    public function loadXMLInfo(): bool
 	{
 		return true;
 	}

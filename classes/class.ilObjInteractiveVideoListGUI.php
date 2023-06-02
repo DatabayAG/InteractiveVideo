@@ -1,8 +1,6 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 
-require_once 'Services/Repository/classes/class.ilObjectPluginListGUI.php';
-
 /**
  * Class ilObjInteractiveVideoListGUI
  * @author Nadia Ahmad <nahmad@databay.de>
@@ -12,7 +10,7 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 	/**
 	 * @return string
 	 */
-	public function getGuiClass()
+    public function getGuiClass(): string
 	{
 		return 'ilObjInteractiveVideoGUI';
 	}
@@ -20,7 +18,7 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 	/**
 	 * @return array
 	 */
-	public function initCommands()
+    public function initCommands(): array
 	{
 		return array
 		(
@@ -55,7 +53,7 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 	 * @param string $a_item
 	 * @return array
 	 */
-	public function getProperties($a_item = '')
+    public function getProperties(): array
 	{
 		$props = array();
 

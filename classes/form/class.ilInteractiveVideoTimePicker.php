@@ -13,12 +13,12 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 	/**
 	 * @var string
 	 */
-	protected $title;
+    protected string $title = "";
 
 	/**
 	 * @var string
 	 */
-	protected $info;
+    protected string $info = "";
 
 	/**
 	 * @var string
@@ -41,7 +41,7 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 	/**
 	 * @return bool
 	 */
-	public function checkInput()
+    public function checkInput(): bool
 	{
 		if(!is_array($_POST[$this->getPostVar()]))
 		{
