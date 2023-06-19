@@ -1,9 +1,5 @@
 <?php
 
-require_once './Services/Component/classes/class.ilPluginConfigGUI.php';
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilInteractiveVideoDbUpdater.php';
-
 /**
  * @ilCtrl_IsCalledBy ilInteractiveVideoConfigGUI: ilObjComponentSettingsGUI
  */
@@ -116,7 +112,10 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		$form = new ilPropertyFormGUI();
 		$db_updater = new ilInteractiveVideoDbUpdater();
 
-		$source = ilUtil::stripSlashes($_GET['video_source']);
+        $source = '';
+        if($_GET['video_source']){
+            $source = ilUtil::stripSlashes($_GET['video_source']);
+        }
 		$form->setFormAction($this->ctrl->getFormAction($this, 'showConfigurationForm'));
 		$mapping = array();
 

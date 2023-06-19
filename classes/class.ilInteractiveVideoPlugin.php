@@ -49,17 +49,30 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 	 */
 	public static function getInstance()
 	{
-		if(null === self::$instance)
-		{
-			return self::$instance = ilPluginAdmin::getPluginObject(
-				self::CTYPE,
-				self::CNAME,
-				self::SLOT_ID,
-				self::PNAME
-			);
-		}
+        if (self::$instance instanceof self) {
+            return self::$instance;
+        }
 
-		return self::$instance;
+        global $DIC;
+
+        /** @var ilComponentRepository $component_repository */
+        if(!isset($DIC['component.repository'])) {
+           $component =  new InitComponentService();
+           $component->init($DIC);
+        }
+        $component_repository = $DIC['component.repository'];
+        /** @var ilComponentFactory $component_factory */
+        $component_factory = $DIC['component.factory'];
+
+        $plugin_info = $component_repository->getComponentByTypeAndName(
+            self::CTYPE,
+            self::CNAME
+        )->getPluginSlotById(self::SLOT_ID)->getPluginByName(self::PNAME);
+
+        self::$instance = $component_factory->getPlugin($plugin_info->getId());
+
+        return self::$instance;
+
 	}
 
 	/**
@@ -72,8 +85,9 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 
     protected function uninstallCustom(): void
     {
+        global $DIC;
         /** @var $ilDB ilDBInterface */
-        global $ilDB;
+        $ilDB = $DIC->database();
 
         $drop_table_list = array(
             'rep_robj_xvid_answers',

@@ -126,7 +126,7 @@ if($ilDB->tableColumnExists('rep_robj_xvid_comments', 'mob_id'))
 <?php
 if($ilDB->tableColumnExists('rep_robj_xvid_comments', 'obj_id'))
 {
-	$ilDB->addIndex('rep_robj_xvid_comments', array('obj_id'), 'i1');
+	#$ilDB->addIndex('rep_robj_xvid_comments', array('obj_id'), 'i1');
 }
 ?>
 <#7>
@@ -402,6 +402,7 @@ if($ilDB->tableExists('rep_robj_xvid_comments'))
 <?php
 if($ilDB->tableExists('rep_robj_xvid_question'))
 {
+    $comment_ids = [];
 	if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'repeat_question'))
 	{
 		$ilDB->addTableColumn('rep_robj_xvid_question', 'repeat_question',

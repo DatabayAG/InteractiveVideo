@@ -1,6 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../class.ilInteractiveVideoPlugin.php';
-ilInteractiveVideoPlugin::getInstance()->includeClass('form/class.ilTextAreaInputCkeditor.php');
 
 class SimpleChoiceQuestionFormEditGUI
 {

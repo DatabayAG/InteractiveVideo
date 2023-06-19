@@ -1,0 +1,20 @@
+{
+  "require": {
+    "php": ">=7.4 <8.1",
+    "ext-json": "*",
+    "ext-dom": "*"
+  },
+  "autoload": {
+    "psr-4" : { "ILIAS\\Plugin\\InteractiveVideo\\\\" : "./classes" },
+    "classmap": ["./classes"],
+    "exclude-from-classmap": []
+  },
+  "require-dev": {
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "classmap-authoritative": true,
+    "allow-plugins": {}
+  }
+}
+

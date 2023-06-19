@@ -1,23 +1,5 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
-require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactoryGUI.php';
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestion.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestionAjaxHandler.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestionScoring.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestionStatistics.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('form/class.ilTextAreaInputCkeditorGUI.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('form/class.ilInteractiveVideoTimePicker.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('form/class.ilInteractiveVideoPreviewPicker.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('form/class.ilInteractiveVideoModalExtension.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('tables/class.ilInteractiveVideoCommentsTableGUI.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilInteractiveVideoFFmpeg.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('../VideoSources/class.ilInteractiveVideoUniqueIds.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('form/class.ilInteractiveVideoModalExtension.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestionFormEditGUI.php');
 
 /**
  * Class ilObjInteractiveVideoGUI
@@ -824,93 +806,93 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @param ilPropertyFormGUI $a_form
 	 * @return bool
 	 */
-	protected function validateCustom(ilPropertyFormGUI $a_form)
+    protected function validateCustom(ilPropertyFormGUI $form): bool
 	{
-		return parent::validateCustom($a_form);
+		return parent::validateCustom($form);
 	}
 
 	/**
-	 * @param ilPropertyFormGUI $a_form
+	 * @param ilPropertyFormGUI $form
 	 */
-	protected function updateCustom(ilPropertyFormGUI $a_form)
+    protected function updateCustom(ilPropertyFormGUI $form): void
 	{
 		$factory = new ilInteractiveVideoSourceFactoryGUI($this->object);
-		$factory->checkForm($a_form);
+		$factory->checkForm($form);
 
-		$is_task = $a_form->getInput('is_task');
+		$is_task = $form->getInput('is_task');
 		$this->object->setTaskActive((int)$is_task);
 
-		$task = $a_form->getInput('task');
+		$task = $form->getInput('task');
 		$this->object->setTask(ilUtil::stripSlashes($task, false));
 
-		$is_anonymized = $a_form->getInput('is_anonymized');
+		$is_anonymized = $form->getInput('is_anonymized');
 		$this->object->setIsAnonymized((int)$is_anonymized);
 
-		$is_repeat = $a_form->getInput('is_repeat');
+		$is_repeat = $form->getInput('is_repeat');
 		$this->object->setIsRepeat((int)$is_repeat);
 
-		$is_public = $a_form->getInput('is_public');
+		$is_public = $form->getInput('is_public');
 		$this->object->setIsPublic((int)$is_public);
 
-		$is_online = $a_form->getInput('is_online');
+		$is_online = $form->getInput('is_online');
 		$this->object->setOnline((int)$is_online);
 
-		$is_chronologic = $a_form->getInput('is_chronologic');
+		$is_chronologic = $form->getInput('is_chronologic');
 		$this->object->setIsChronologic((int)$is_chronologic);
 
-		$enable_comment = $a_form->getInput('enable_comment');
+		$enable_comment = $form->getInput('enable_comment');
 		$this->object->setEnableComment((int)$enable_comment);
 
-		$show_toolbar = $a_form->getInput('show_toolbar');
+		$show_toolbar = $form->getInput('show_toolbar');
 		$this->object->setEnableToolbar((int)$show_toolbar);
 
-        $show_toc_first = $a_form->getInput('show_toc_first');
+        $show_toc_first = $form->getInput('show_toc_first');
 		$this->object->setShowTocFirst((int)$show_toc_first);
 
-        $enable_comment_stream = $a_form->getInput('enable_comment_stream');
+        $enable_comment_stream = $form->getInput('enable_comment_stream');
 		$this->object->setEnableCommentStream((int)$enable_comment_stream);
 
-		$auto_resume = $a_form->getInput('auto_resume');
+		$auto_resume = $form->getInput('auto_resume');
 		$this->object->setAutoResumeAfterQuestion((int)$auto_resume);
 
-		$fixed_modal = $a_form->getInput('fixed_modal');
+		$fixed_modal = $form->getInput('fixed_modal');
 		$this->object->setFixedModal((int)$fixed_modal);
 
-        $marker_for_students = $a_form->getInput('marker_for_students');
+        $marker_for_students = $form->getInput('marker_for_students');
         $this->object->setMarkerForStudents((int)$marker_for_students);
 
-        $layout_width = $a_form->getInput('layout_width');
+        $layout_width = $form->getInput('layout_width');
         $this->object->setLayoutWidth((int)$layout_width);
 
 		$factory = new ilInteractiveVideoSourceFactory();
-		$source = $factory->getVideoSourceObject($a_form->getInput('source_id'));
+		$source = $factory->getVideoSourceObject($form->getInput('source_id'));
 		$source->doUpdateVideoSource($this->obj_id);
 
-		$source_id = $a_form->getInput('source_id');
+		$source_id = $form->getInput('source_id');
 		$this->object->setSourceId(ilUtil::stripSlashes($source_id));
 
 		$this->object->update();
 
-		parent::updateCustom($a_form);
+		parent::updateCustom($form);
 	}
 
 	/**
 	 * @param string $type
 	 * @return array
 	 */
-	protected function initCreationForms($type)
+    protected function initCreationForms(string $new_type): array
 	{
 		if(ilInteractiveVideoPlugin::getInstance()->isCoreMin52())
 		{
 			$form_array =  array(
-				self::CFORM_NEW => $this->initCreateForm($type),
-				self::CFORM_IMPORT => $this->initImportForm($type)
+				self::CFORM_NEW => $this->initCreateForm($new_type),
+				self::CFORM_IMPORT => $this->initImportForm($new_type)
 			);
 		}
 		else
 		{
 			$form_array =  array(
-				self::CFORM_NEW => $this->initCreateForm($type)
+				self::CFORM_NEW => $this->initCreateForm($new_type)
 			);
 		}
 		return $form_array;
@@ -920,7 +902,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @param string $type
 	 * @return ilPropertyFormGUI
 	 */
-	public function initCreateForm($type)
+    protected function initCreateForm(string $new_type): ilPropertyFormGUI
 	{
 		$form = parent::initCreateForm($type);
 
@@ -936,7 +918,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      * @param ilPropertyFormGUI $a_form
      * @throws ilTemplateException
      */
-	protected function initEditCustomForm(ilPropertyFormGUI $a_form)
+    protected function initEditCustomForm(ilPropertyFormGUI $a_form): void
 	{
 		/**
 		 * @var $ilTabs ilTabsGUI
@@ -1084,7 +1066,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 * @param array $a_values
 	 */
-	protected function getEditFormCustomValues(array &$a_values)
+    protected function getEditFormCustomValues(array &$a_values): void
 	{
 		$factory = new ilInteractiveVideoSourceFactory();
 		$sources = $factory->getVideoSources();
@@ -1354,7 +1336,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**ilMediaPoolPresentationGUI
 	 * @return ilPropertyFormGUI
 	 */
-	public function initEditForm()
+    protected function initEditForm(): ilPropertyFormGUI
 	{
 		$form = parent::initEditForm();
 		$this->initEditCustomForm($form);
@@ -1364,7 +1346,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 * Overwriting this method is necessary to handle creation problems with the api
 	 */
-	public function save()
+    public function save(): void
 	{
 		$this->saveObject();
 	}
@@ -1372,7 +1354,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 * Overwriting this method is necessary to handle creation problems with the api
 	 */
-	public function saveObject()
+    public function saveObject(): void
 	{
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
@@ -1436,7 +1418,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 * @see ilDesktopItemHandling::addToDesk()
 	 */
-	public function addToDeskObject()
+    public function addToDeskObject(): void
 	{
 		/**
 		 * @var $ilSetting ilSetting
@@ -1458,7 +1440,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 * @see ilDesktopItemHandling::removeFromDesk()
 	 */
-	public function removeFromDeskObject()
+    public function removeFromDeskObject(): void
 	{
 		/**
 		 * @var $ilSetting ilSetting
@@ -1482,12 +1464,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @param int    $a_sub_id
 	 * @return ilObjectListGUI|ilObjInteractiveVideoListGUI
 	 */
-	protected function initHeaderAction($a_sub_type = null, $a_sub_id = null)
+    protected function initHeaderAction(?string $sub_type = null, ?int $sub_id = null): ?ilObjectListGUI
 	{
         return parent::initHeaderAction();
 	}
 
-	protected function setTabs()
+    protected function setTabs(): void
 	{
 		/**
 		 * @var $ilTabs   ilTabsGUI
@@ -3570,7 +3552,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 * @param $a_target
 	 */
-	public static function _goto($a_target)
+    public static function _goto(string $a_target): void
 	{
 		/**
 		 * @var $ilCtrl ilCtrl
