@@ -80,6 +80,9 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 			case 'loadDbUpdates':
 				$this->loadDbUpdates();
 				break;
+           case 'loadLanguages':
+				$this->loadLanguages();
+				break;
 			case 'showConfigurationForm':
 			default:
 				$this->showConfigurationForm();
@@ -168,6 +171,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		{
 			$form->addCommandButton('loadDbUpdates', $this->plugin_object->txt('update_db'));
 		}
+        $form->addCommandButton('loadLanguages', $this->plugin_object->txt('refresh_language'));
 		$form->addCommandButton('saveConfigurationForm', $this->lng->txt('save'));
 
 		return $form;
@@ -247,6 +251,20 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		$db_updater->applyPluginUpdates();
 		$this->showConfigurationForm();
 	}
+
+    protected function loadLanguages()
+    {
+        global $DIC;
+
+        $component_repository = $DIC["component.repository"];
+        foreach ($component_repository->getPlugins() as $plugin) {
+            if($plugin->getId() === 'xvid') {
+                $xvid_instance = $plugin;
+            }
+        }
+        $language = new ilInteractiveVideoLanguageHandler($xvid_instance);
+        $language->updateLanguages();
+    }
 
 	/**
 	 * @param ilPropertyFormGUI $form
