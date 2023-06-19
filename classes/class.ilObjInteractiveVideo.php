@@ -1,11 +1,6 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 
-require_once dirname(__FILE__) . '/class.ilInteractiveVideoPlugin.php';
-ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleChoiceQuestion.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjComment.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('../VideoSources/class.ilInteractiveVideoSourceFactory.php');
 
 /**
  * Class ilObjInteractiveVideo
@@ -142,7 +137,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return $this->video_source_object;
 	}
 
-	protected function doRead()
+    protected function doRead(): void
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -285,7 +280,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * @param bool $a_clone_mode
      * @throws ilException
      */
-	protected function doCreate($a_clone_mode = false)
+    protected function doCreate(bool $clone_mode = false): void
 	{
 		/**
 		 * @var $ilLog ilLog
@@ -424,7 +419,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	/**
 	 *
 	 */
-	protected function doUpdate()
+    protected function doUpdate(): void
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -467,7 +462,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	/**
 	 *
 	 */
-	public function beforeDelete()
+    protected function beforeDelete(): bool
 	{
         if (((!$this->referenced) || ($this->countReferences() == 1)) && $this->video_source_object !== null ) {
             $this->getVideoSourceObject($this->getSourceId());
@@ -487,7 +482,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	/**
 	 *
 	 */
-	protected function doDelete()
+    protected function doDelete(): void
 	{
 		parent::doDelete();
 	}
@@ -497,7 +492,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 * @param integer $a_target_id
 	 * @param integer $a_copy_id
 	 */
-	protected function doCloneObject($new_obj, $a_target_id, $a_copy_id = null)
+    protected function doCloneObject(ilObject2 $new_obj, int $a_target_id, ?int $a_copy_id = null): void
 	{
 		parent::doCloneObject($new_obj, $a_target_id, $a_copy_id);
 
@@ -550,7 +545,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 * @return bool
 	 * @throws ilException
 	 */
-	protected function beforeCreate()
+    protected function beforeCreate(): bool
 	{
 		return true;
 	}
@@ -558,7 +553,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	/**
 	 * @return bool
 	 */
-	protected function beforeCloneObject()
+    protected function beforeCloneObject(): bool
 	{
 		return true;
 	}
@@ -566,7 +561,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	/**
 	 *
 	 */
-	protected function initType()
+    protected function initType(): void
 	{
 		$this->setType('xvid');
 	}
@@ -1145,7 +1140,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * Get all user ids with LP status completed
      * @return array
      */
-    public function getLPCompleted()
+    public function getLPCompleted(): array
     {
         if (in_array($this->getLearningProgressMode(), [self::LP_MODE_DEACTIVATED])) {
             return [];
@@ -1177,7 +1172,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * Get all user ids with LP status not attempted
      * @return array
      */
-    public function getLPNotAttempted()
+    public function getLPNotAttempted(): array
     {
         return [];
     }
@@ -1186,7 +1181,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * Get all user ids with LP status failed
      * @return array
      */
-    public function getLPFailed()
+    public function getLPFailed(): array
     {
         if(in_array($this->getLearningProgressMode(), array(self::LP_MODE_DEACTIVATED)))
         {
@@ -1200,7 +1195,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * Get all user ids with LP status in progress
      * @return array
      */
-    public function getLPInProgress()
+    public function getLPInProgress(): array
     {
         if (in_array($this->getLearningProgressMode(), [self::LP_MODE_DEACTIVATED])) {
             return [];
@@ -1234,7 +1229,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * @param int $a_user_id
      * @return int
      */
-    public function getLPStatusForUser($a_user_id)
+    public function getLPStatusForUser(int $a_user_id): int
     {
         $status = ilLPStatus::LP_STATUS_NOT_ATTEMPTED_NUM;
 

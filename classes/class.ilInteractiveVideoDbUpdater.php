@@ -7,9 +7,6 @@ require_once 'Services/Component/classes/class.ilPluginDBUpdate.php';
 class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 {
 
-    /**
-     * @var $db ilDBInterface
-     */
     protected \ilDBInterface $db;
 
 	/**
@@ -32,6 +29,8 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	 */
 	protected $plugin_id;
 
+    protected $tpl;
+
 	/** @noinspection PhpMissingParentConstructorInspection */
 	/**
 	 * ilInteractiveVideoDbUpdater constructor.
@@ -40,14 +39,15 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	 */
 	public function __construct($a_db_handler = 0, $tmp_flag = false)
 	{
-		/**
-		 * @var $ilDB ilDB
-		 */
-		global $ilDB;
+		global $DIC;
 
-		$this->db = $ilDB;
+        $this->tpl = $DIC->ui()->mainTemplate();
+		$this->db = $DIC->database();
 		$this->collectUpdateFiles();
 		$this->iterateThroughUpdateFiles();
+        $class_map = require ILIAS_ABSOLUTE_PATH . '/libs/composer/vendor/composer/autoload_classmap.php';
+        $this->ctrl_structure_iterator = new ilCtrlArrayIterator($class_map);
+
 	}
 
 	
@@ -168,11 +168,11 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 		}
 		if($overall_success)
 		{
-			ilUtil::sendSuccess(ilInteractiveVideoPlugin::getInstance()->txt('db_update_worked'));
+            $this->tpl->setOnScreenMessage("success", sprintf(ilInteractiveVideoPlugin::getInstance()->txt('db_update_worked'), $error), true);
 		}
 		else
 		{
-			ilUtil::sendFailure(sprintf(ilInteractiveVideoPlugin::getInstance()->txt('db_update_failed'), $error));
+            $this->tpl->setOnScreenMessage("failure", sprintf(ilInteractiveVideoPlugin::getInstance()->txt('db_update_failed'), $error), true);
 		}
 	}
 

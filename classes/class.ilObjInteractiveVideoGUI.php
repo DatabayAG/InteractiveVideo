@@ -904,7 +904,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
     protected function initCreateForm(string $new_type): ilPropertyFormGUI
 	{
-		$form = parent::initCreateForm($type);
+		$form = parent::initCreateForm($new_type);
 
 		$form = $this->appendFormsFromFactory($form);
 
@@ -1587,7 +1587,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
 	public function ensurePermission($permission)
 	{
-		return $this->checkPermission($permission);
+		$this->checkPermission($permission);
 	}
 
     /**
@@ -1603,7 +1603,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 		}
 		// Since all $permissions returned false, this checkPermission() will lead to general behaviour of redirecting and sending failure
-		return $this->checkPermission($permission);
+		$this->checkPermission($permission);
 	}
 
 	/**
