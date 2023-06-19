@@ -288,9 +288,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		 */
 		global $ilLog, $ilDB;
 
-		if(! $a_clone_mode)
+		if(! $clone_mode)
 		{
-			$post_src_id = ilUtil::stripSlashes($_POST['source_id']);
+			$post_src_id = ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['source_id']);
 			$from_post = false;
 			if(($post_src_id == null || $post_src_id == '') && $this->source_id != null)
 			{
@@ -349,9 +349,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                         }
 
                         $online			= (int)$_POST['is_online'];
-						$source_id		= ilUtil::stripSlashes($_POST['source_id']);
+						$source_id		= ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['source_id']);
 						$is_task		= (int)$_POST['is_task'];
-						$task			= ilUtil::stripSlashes($_POST['task']);
+						$task			= ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['task']);
 						$enable_comment	= (int)$_POST['enable_comment'];
                         $show_toolbar = 1;
                         if(array_key_exists('show_toolbar', $_POST))

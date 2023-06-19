@@ -42,8 +42,6 @@ class ilInteractiveVideoExporter extends ilXmlExporter
         string $a_id
     ): string
 	{
-		ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjInteractiveVideo.php');
-
 		$ref_id = current(ilObject::_getAllReferences($a_id));
 		$this->obj_id		= $a_id;
 		$this->object		= new ilObjInteractiveVideo($ref_id);

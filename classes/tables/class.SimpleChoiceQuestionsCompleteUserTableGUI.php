@@ -1,11 +1,6 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 
-require_once 'Services/Table/classes/class.ilTable2GUI.php';
-require_once 'Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvancedSelectionListGUI.php';
-require_once dirname(__FILE__) . '/../class.ilInteractiveVideoPlugin.php';
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
-
 /**
  * Class SimpleChoiceQuestionsCompleteUserTableGUI
  */

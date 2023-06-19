@@ -953,7 +953,7 @@ class SimpleChoiceQuestion
 		{
 			$this->setType(self::REFLECTION);
 		}
-		$question_text = ilUtil::stripSlashes($_POST['question_text']);
+		$question_text = ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['question_text']);
 
 		if($question_text === '')
 		{

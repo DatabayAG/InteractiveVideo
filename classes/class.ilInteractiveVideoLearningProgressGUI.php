@@ -220,7 +220,6 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         $this->addLearningProgressSubTabs();
         $ilTabs->activateSubTab('lp_users');
 
-        $this->gui->getPluginInstance()->includeClass('tables/class.ilInteractiveVideoLPUsersTableGUI.php');
         $table = new ilInteractiveVideoLPUsersTableGUI($this, 'showLPUsers', $this->object->getId(),
             $this->object->getRefId(), false);
         $this->tpl->setContent(implode('<br />', array($table->getHTML(), $this->__getLegendHTML())));
@@ -241,7 +240,6 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         $this->addLearningProgressSubTabs();
         $ilTabs->activateSubTab('lp_summary');
 
-        $this->gui->getPluginInstance()->includeClass('tables/class.ilInteractiveVideoLPSummaryTableGUI.php');
         $table = new ilInteractiveVideoLPSummaryTableGUI($this, 'showLPSummary', $this->object->getRefId(),
             $this->gui->getPluginInstance());
         $this->tpl->setContent(implode('<br />', array($table->getHTML(), $this->__getLegendHTML())));
@@ -264,19 +262,16 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
             $this->ctrl->redirect($this->gui, $this->gui->getStandardCmd());
         }
 
-        include_once('./Services/InfoScreen/classes/class.ilInfoScreenGUI.php');
         $cloned_controller = clone $this;
         $cloned_controller->object = null;
         $info = new ilInfoScreenGUI($cloned_controller);
         $info->setFormAction($this->ctrl->getFormAction($this, 'editUser'));
         $info->addSection($this->lng->txt('trac_learning_progress'));
-        include_once("./Services/Tracking/classes/class.ilLearningProgressBaseGUI.php");
         $status = ilLearningProgressBaseGUI::__readStatus($this->object->getId(), $ilUser->getId());
         $status_path = ilLearningProgressBaseGUI::_getImagePathForStatus($status);
         $status_text = ilLearningProgressBaseGUI::_getStatusText($status);
         $info->addProperty($this->lng->txt('trac_status'),
             ilUtil::img($status_path, $status_text) . " " . $status_text);
-        include_once 'Services/Tracking/classes/class.ilLPMarks.php';
         if (strlen($mark = ilLPMarks::_lookupMark($ilUser->getId(), $this->object->getId()))) {
             $info->addProperty($this->lng->txt('trac_mark'), $mark);
         }
@@ -311,7 +306,6 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
             return $this->showLPUsers();
         }
 
-        include_once('./Services/InfoScreen/classes/class.ilInfoScreenGUI.php');
         $cloned_controller = clone $this;
         $cloned_controller->object = null;
         $info = new ilInfoScreenGUI($cloned_controller);
@@ -325,7 +319,6 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         if (!$form instanceof ilPropertyFormGUI) {
             $form = $this->getLPMarksForm($user);
 
-            include_once 'Services/Tracking/classes/class.ilLPMarks.php';
             $marks = new ilLPMarks($this->object->getId(), $user->getId());
 
             $form->setValuesByArray(array(
@@ -378,7 +371,6 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 
         $form = $this->getLPMarksForm($user);
         if ($form->checkInput()) {
-            include_once 'Services/Tracking/classes/class.ilLPMarks.php';
             $marks = new ilLPMarks($this->object->getId(), $user->getId());
             $marks->setMark($form->getInput('mark'));
             $marks->setComment($form->getInput('comment'));

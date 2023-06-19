@@ -117,7 +117,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 
         $source = '';
         if($_GET['video_source']){
-            $source = ilUtil::stripSlashes($_GET['video_source']);
+            $source = ilInteractiveVideoPlugin::stripSlashesWrapping($_GET['video_source']);
         }
 		$form->setFormAction($this->ctrl->getFormAction($this, 'showConfigurationForm'));
 		$mapping = array();
@@ -277,7 +277,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		{
 			if($value->getPostVar() != 'path_mapping')
 			{
-				$class = ilUtil::stripSlashes($value->getPostVar());
+				$class = ilInteractiveVideoPlugin::stripSlashesWrapping($value->getPostVar());
 				$setting = (int) $_POST[$class];
 				$settings[$class] = $setting;
 				if($setting == 1)

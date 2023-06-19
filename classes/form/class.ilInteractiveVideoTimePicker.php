@@ -45,7 +45,7 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 	{
 		if(!is_array($_POST[$this->getPostVar()]))
 		{
-			$_POST[$this->getPostVar()] = $this->getSecondsFromString(ilUtil::stripSlashes($_POST[$this->getPostVar()]));
+			$_POST[$this->getPostVar()] = $this->getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($_POST[$this->getPostVar()]));
 		}
 		return $this->checkSubItemsInput();
 	}

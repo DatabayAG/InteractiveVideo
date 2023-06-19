@@ -305,7 +305,6 @@ class SimpleChoiceQuestionFormEditGUI
 	 */
 	protected function appendRepositorySelector($form, $post_var)
 	{
-		$this->plugin->includeClass('form/class.ilInteractiveVideoSelectionExplorerGUI.php');
 		$this->ctrl->setParameterByClass('ilformpropertydispatchgui', 'postvar', $post_var);
 		$explorer_gui = new ilInteractiveVideoSelectionExplorerGUI(
 			array('ilpropertyformgui', 'ilformpropertydispatchgui', 'ilInteractiveVideoRepositorySelectorInputGUI'),
@@ -313,7 +312,6 @@ class SimpleChoiceQuestionFormEditGUI
 		);
 		$explorer_gui->setId($post_var);
 
-		$this->plugin->includeClass('form/class.ilInteractiveVideoRepositorySelectorInputGUI.php');
 		$root_ref_id = new ilInteractiveVideoRepositorySelectorInputGUI(
 			$this->plugin->txt($post_var),
 			$post_var, $explorer_gui, false

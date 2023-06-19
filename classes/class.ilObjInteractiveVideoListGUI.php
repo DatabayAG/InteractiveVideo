@@ -56,8 +56,6 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
     public function getProperties(): array
 	{
 		$props = array();
-
-		$this->plugin->includeClass('class.ilObjInteractiveVideoAccess.php');
 		if(!ilObjInteractiveVideoAccess::checkOnline($this->obj_id))
 		{
 			$props[] = array(

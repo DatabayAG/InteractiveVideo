@@ -39,8 +39,6 @@ class ilHtmlInteractiveVideoPostPurifier extends ilHtmlPurifierAbstractLibWrappe
 	*/
 	protected function getPurifierConfigInstance() : HTMLPurifier_Config
 	{
-		include_once 'Services/AdvancedEditing/classes/class.ilObjAdvancedEditing.php';
-		
 		$config = HTMLPurifier_Config::createDefault();
 		$config->set('HTML.DefinitionID', 'ilias interactivevideo post');
 		$config->set('HTML.DefinitionRev', 1);

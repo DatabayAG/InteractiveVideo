@@ -118,10 +118,10 @@ class xvidUtils
      */
 	public static function ensureFileSavePathExists($path)
 	{
-		$path = ilUtil::getWebspaceDir() . self::INTERACTIVE_VIDEO . $path;
+		$path = ilFileUtils::getWebspaceDir() . self::INTERACTIVE_VIDEO . $path;
 		if( ! is_dir($path))
 		{
-			ilUtil::makeDirParents($path);
+            ilFileUtils::makeDirParents($path);
 		}
 		return $path .'/';
 	}

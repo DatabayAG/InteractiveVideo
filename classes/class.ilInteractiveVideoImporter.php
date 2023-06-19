@@ -1,8 +1,5 @@
 <?php
-require_once './Services/Export/classes/class.ilXmlImporter.php';
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilObjInteractiveVideo.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('class.ilInteractiveVideoXMLParser.php');
-ilInteractiveVideoPlugin::getInstance()->includeClass('../VideoSources/class.ilInteractiveVideoSourceFactory.php');
+
 /**
  * Class ilInteractiveVideoImporter
  */
@@ -96,7 +93,7 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 							array(
 								'answer_id'   => array('integer',	$answer_id),
 								'question_id' => array('integer',	(int) $question_id),
-								'answer'      => array('text', 		ilUtil::stripSlashes($answer['text'])),
+								'answer'      => array('text', 		ilInteractiveVideoPlugin::stripSlashesWrapping($answer['text'])),
 								'correct'     => array('integer',	(int) $answer['correct'])
 							));
 					}
