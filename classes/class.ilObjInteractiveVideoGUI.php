@@ -1321,8 +1321,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function fillDataForSubtitles($name, $value, $data)
 	{
-		$name  = ilUtil::stripSlashesRecursive($name);
-		$value = ilUtil::stripSlashesRecursive($value);
+		$name  = ilArrayUtil::stripSlashesRecursive($name);
+		$value = ilArrayUtil::stripSlashesRecursive($value);
 
 		$cut             = substr($name, 2);
 		$cut             = preg_replace('/_vtt$/', '.vtt', $cut);
@@ -3304,13 +3304,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		if(SimpleChoiceQuestion::isLimitAttemptsEnabled((int)$_POST['qid']) == false)
 		{
-			$answer = is_array($_POST['answer']) ? ilUtil::stripSlashesRecursive($_POST['answer']) : array();
+			$answer = is_array($_POST['answer']) ? ilArrayUtil::stripSlashesRecursive($_POST['answer']) : array();
 			$simple_choice = new SimpleChoiceQuestion();
 			$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
 		}
 		else if(SimpleChoiceQuestion::existUserAnswerForQuestionId((int)$_POST['qid']) == false)
 		{
-			$answer = is_array($_POST['answer']) ? ilUtil::stripSlashesRecursive($_POST['answer']) : array();
+			$answer = is_array($_POST['answer']) ? ilArrayUtil::stripSlashesRecursive($_POST['answer']) : array();
 			$simple_choice = new SimpleChoiceQuestion();
 			$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
 		}

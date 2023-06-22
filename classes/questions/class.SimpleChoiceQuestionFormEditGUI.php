@@ -348,7 +348,7 @@ class SimpleChoiceQuestionFormEditGUI
 			$answers = array();
 			if(is_array($_POST) && array_key_exists('answer', $_POST) && sizeof($_POST['answer'])  > 0)
 			{
-				$post_answers = ilUtil::stripSlashesRecursive($_POST['answer']);
+				$post_answers = ilArrayUtil::stripSlashesRecursive($_POST['answer']);
 				foreach($post_answers as $key => $value)
 				{
 					$correct = 0;

@@ -629,11 +629,11 @@ class SimpleChoiceQuestion
 			));
 		if(is_array($_POST['answer']) && count($_POST['answer']) > 0 && $_POST['question_type'] != self::REFLECTION)
 		{
-			foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
+			foreach(ilArrayUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
 			{
 				$answer_id = $ilDB->nextId(self::TABLE_NAME_QUESTION_TEXT);
 				if($value == null){$value = ' ';}
-				if(is_array($_POST['correct']) && array_key_exists($key, ilUtil::stripSlashesRecursive($_POST['correct'])))
+				if(is_array($_POST['correct']) && array_key_exists($key, ilArrayUtil::stripSlashesRecursive($_POST['correct'])))
 				{
 					$correct = 1;
 				}
@@ -961,9 +961,9 @@ class SimpleChoiceQuestion
 		}
 		if($this->getType() != self::REFLECTION)
 		{
-			foreach(ilUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
+			foreach(ilArrayUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
 			{
-				if(is_array($_POST['correct']) && array_key_exists($key, ilUtil::stripSlashesRecursive($_POST['correct'])))
+				if(is_array($_POST['correct']) && array_key_exists($key, ilArrayUtil::stripSlashesRecursive($_POST['correct'])))
 				{
 					$correct += 1;
 				}
