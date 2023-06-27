@@ -339,10 +339,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 					let html = scope.InteractiveVideoPlayerComments.getCommentRepliesHtml(reply);
 					$('.list_item_' + comment_id).find('.comment_replies').append(html);
 					pub.decideSolutionHandlingForReflectionQuestion(comment_id, player_id);
-					pro.replyWasSubmittedSuccessful(player_id, org_id, comment_text, is_private, comment_id);
-					$('#ilQuestionModal').modal('hide');
-					$('.reply_comment_' + org_id).remove();
 					$('.reply_comment_non_existent').remove()
+					pro.replyWasSubmittedSuccessful(player_id, org_id, comment_text, is_private, comment_id);
+					//$('#ilQuestionModal').modal('hide');
+					$('.reply_comment_' + org_id).remove();
 				}
 			});
 		});

@@ -1,6 +1,8 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 
+use ILIAS\DI\Exceptions\Exception;
+
 require_once 'Services/Repository/classes/class.ilObjectPlugin.php';
 require_once 'Services/Tracking/interfaces/interface.ilLPStatusPlugin.php';
 require_once 'Services/Tracking/classes/class.ilLPStatus.php';
