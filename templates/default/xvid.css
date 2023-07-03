@@ -798,9 +798,15 @@ li.toc_item > div > h5 > time {
 .toc_title{
     display: inline-block;
     width: 82%;
-    padding-left: 1%;
-    padding-bottom: 1px;
+    padding-top: 0px;
+    padding-bottom: 6px;
     vertical-align: top;
+}
+@media (max-width: 1485px) {
+    .toc_title{
+       padding-top: 4px;
+       padding-bottom: 6px;
+    }
 }
 .description_exists:hover{
     background-color:#dce2eb;
