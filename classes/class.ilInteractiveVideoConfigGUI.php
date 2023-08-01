@@ -222,7 +222,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 			}
 			catch(ilException $e)
 			{
-				ilUtil::sendFailure($this->lng->txt('form_input_not_valid'));
+                $this->tpl->setOnScreenMessage("failure", $this->lng->txt('trac_updatform_input_not_valide_edit_user'), true);
 			}
 		}
 
@@ -244,7 +244,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 			}
 			catch(ilException $e)
 			{
-				ilUtil::sendFailure($this->lng->txt('form_input_not_valid'));
+                $this->tpl->setOnScreenMessage("failure", $this->lng->txt('form_input_not_valid'), true);
 			}
 		}
 		$db_updater = new ilInteractiveVideoDbUpdater();
@@ -296,7 +296,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		}
 		else
 		{
-			ilUtil::sendFailure(ilInteractiveVideoPlugin::getInstance()->txt('select_at_least_one'), true);
+            $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_at_least_one'), true);
 		}
 	}
 }

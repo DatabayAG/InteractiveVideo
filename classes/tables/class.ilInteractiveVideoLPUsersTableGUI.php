@@ -153,9 +153,9 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 
 		foreach ($this->getSelectedColumns() as $c)
 		{
-			if($c == 'status' && $data[$c] != ilLPStatus::LP_STATUS_COMPLETED_NUM)
+			if($c == 'status' && $a_set[$c] != ilLPStatus::LP_STATUS_COMPLETED_NUM)
 			{
-				$timing = $this->showTimingsWarning($this->ref_id, $data["usr_id"]);
+				$timing = $this->showTimingsWarning($this->ref_id, $a_set["usr_id"]);
 				if($timing)
 				{
 					if($timing !== true)
@@ -174,7 +174,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 			}
 
 			// #7694
-			if($c == 'login' && !$data["active"])
+			if($c == 'login' && !$a_set["active"])
 			{
 				$this->tpl->setCurrentBlock('inactive_bl');
 				$this->tpl->setVariable('TXT_INACTIVE', $lng->txt("inactive"));
@@ -182,19 +182,19 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 			}
 
 			$this->tpl->setCurrentBlock("user_field");
-			$val = $this->parseValue($c, $data[$c], "user");
+			$val = $this->parseValue($c, $a_set[$c], "user");
 			$this->tpl->setVariable("VAL_UF", $val);
 			$this->tpl->parseCurrentBlock();
 		}
 
-		$this->getParentObject()->ctrl->setParameter($this->getParentObject(), "user_id", $data["usr_id"]);
+		$this->getParentObject()->getCtrl()->setParameter($this->getParentObject(), "user_id", $a_set["usr_id"]);
 		if(!$this->getPrintMode())
 		{
 			$this->tpl->setCurrentBlock("item_command");
-			$this->tpl->setVariable("HREF_COMMAND", $this->getParentObject()->ctrl->getLinkTarget($this->getParentObject(), "editUser"));
+			$this->tpl->setVariable("HREF_COMMAND", $this->getParentObject()->getCtrl()->getLinkTarget($this->getParentObject(), "editUser"));
 			$this->tpl->setVariable("TXT_COMMAND", $lng->txt('edit'));
 			$this->tpl->parseCurrentBlock();
 		}
-		$this->getParentObject()->ctrl->setParameter($this->getParentObject(), "user_id", '');
+		$this->getParentObject()->getCtrl()->setParameter($this->getParentObject(), "user_id", '');
 	}
 }

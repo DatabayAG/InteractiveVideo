@@ -183,7 +183,8 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
             $this->object->setLearningProgressMode($new_mode);
             $this->object->update();
 
-            ilUtil::sendSuccess($this->lng->txt('trac_settings_saved'), true);
+            $this->tpl->setOnScreenMessage("success", $this->lng->txt('trac_settings_saved'), true);
+
             if ($mode_changed) {
                 $this->ctrl->redirect($this, 'refreshStatusAndShowLPSettings');
             }
@@ -240,8 +241,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         $this->addLearningProgressSubTabs();
         $ilTabs->activateSubTab('lp_summary');
 
-        $table = new ilInteractiveVideoLPSummaryTableGUI($this, 'showLPSummary', $this->object->getRefId(),
-            $this->gui->getPluginInstance());
+        $table = new ilInteractiveVideoLPSummaryTableGUI($this, 'showLPSummary', $this->object->getRefId());
         $this->tpl->setContent(implode('<br />', array($table->getHTML(), $this->__getLegendHTML())));
     }
 
@@ -375,11 +375,15 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
             $marks->setMark($form->getInput('mark'));
             $marks->setComment($form->getInput('comment'));
             $marks->update();
-            ilUtil::sendSuccess($this->lng->txt('trac_update_edit_user'));
+            $this->tpl->setOnScreenMessage("success", $this->lng->txt('trac_update_edit_user'), true);
             return $this->showLPUsers();
         }
 
         $form->setValuesByPost();
         $this->editUser($form);
+    }
+
+    public function getCtrl() {
+        return $this->ctrl;
     }
 }

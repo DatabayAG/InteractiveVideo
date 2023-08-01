@@ -123,7 +123,7 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 		 */
 		global $lng;
 
-		$this->tpl->setVariable("ICON", ilObject::_getIcon("", "tiny", $a_set["type"]));
+		$this->tpl->setVariable("ICON", ilObject::_getIcon(0, "tiny", $a_set["type"]));
 		$this->tpl->setVariable("ICON_ALT", $lng->txt($a_set["type"]));
 		$this->tpl->setVariable("TITLE", $a_set["title"]);
 
