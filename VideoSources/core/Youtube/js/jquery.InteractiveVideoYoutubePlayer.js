@@ -63,8 +63,6 @@ il.InteractiveVideoYoutubePlayer = (function (scope) {
 	return pub;
 
 }(il));
-(function ($) {
-	il.Util.addOnLoad(function () {
-		il.InteractiveVideoYoutubePlayer.initPlayer();
-	});
-})(jQuery);
+document.addEventListener('DOMContentLoaded', function () {
+	il.InteractiveVideoYoutubePlayer.initPlayer();
+})

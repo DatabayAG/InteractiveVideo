@@ -1,12 +1,17 @@
 <!-- BEGIN mathjax_enabled -->
 <script type="text/javascript">
-	CKEDITOR.config.mathJaxLib = "{MATH_JAX_CONFIG}";
-	CKEDITOR.config.customConfig = 'otherConfig.js'
+    document.addEventListener('DOMContentLoaded', function () {
+        CKEDITOR.config.mathJaxLib = "{MATH_JAX_CONFIG}";
+        CKEDITOR.config.customConfig = 'otherConfig.js'
+    })
+
 </script>
 <!-- END mathjax_enabled -->
 <!-- BEGIN small_editor -->
 <script type="text/javascript">
-CKEDITOR.config.width = '100%';
-CKEDITOR.config.height = '50px';
+    document.addEventListener('DOMContentLoaded', function () {
+        CKEDITOR.config.width = '100%';
+        CKEDITOR.config.height = '50px';
+    })
 </script>
 <!-- END small_editor -->

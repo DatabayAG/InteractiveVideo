@@ -4,10 +4,13 @@
 </div>
 
 <script type="text/javascript">
-	$('#' + "{ID}").timepicker({
-		'showSeconds' : true,
-		'secondStep' : 1,
-		'minuteStep' : 1,
-		'showMeridian' : false
-	});
+	document.addEventListener('DOMContentLoaded', function () {
+		$('#' + "{ID}").timepicker({
+			'showSeconds' : true,
+			'secondStep' : 1,
+			'minuteStep' : 1,
+			'showMeridian' : false
+		});
+	})
+
 </script>

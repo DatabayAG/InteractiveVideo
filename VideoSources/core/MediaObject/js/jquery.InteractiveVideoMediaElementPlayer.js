@@ -65,8 +65,6 @@ il.InteractiveVideoMediaElementPlayer = (function (scope) {
 	return pub;
 
 }(il));
-(function ($) {
-	il.Util.addOnLoad(function () {
-		il.InteractiveVideoMediaElementPlayer.initPlayer();
-	});
-})(jQuery);
+document.addEventListener('DOMContentLoaded', function () {
+	il.InteractiveVideoMediaElementPlayer.initPlayer();
+})

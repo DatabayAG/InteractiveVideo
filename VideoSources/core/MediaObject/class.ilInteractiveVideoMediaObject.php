@@ -150,7 +150,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 
 		if(file_exists($new_file['tmp_name']))
 		{
-			ilUtil::moveUploadedFile($new_file['tmp_name'], $file_name, $file);
+			ilFileUtils::moveUploadedFile($new_file['tmp_name'], $file_name, $file);
 		}
 
 		// get mime type
@@ -165,7 +165,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		$mob->setDescription($format);
 		$media_item->setHAlign("Left");
 
-		ilUtil::renameExecutables($mob_dir);
+        ilFileUtils::renameExecutables($mob_dir);
 
 		$mob->update();
 

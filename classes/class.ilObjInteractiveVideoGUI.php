@@ -271,10 +271,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $DIC;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
-        $tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoQuestionCreator.js');
+        $DIC->ui()->mainTemplate()->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoQuestionCreator.js');
         if($this->object->isMarkerActive()){
-            $tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoOverlayMarker.js');
-            $tpl->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
+            $DIC->ui()->mainTemplate()->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoOverlayMarker.js');
+            $DIC->ui()->mainTemplate()->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
         }
         require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoUniqueIds.php';
 		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
@@ -475,11 +475,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		/**
 		 * $tpl ilTemplate
 		 */
-		global $tpl;
+		global $tpl, $DIC;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
-		$tpl->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoQuestionCreator.js');
-		$tpl->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
+        $DIC->ui()->mainTemplate()->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoQuestionCreator.js');
+        $DIC->ui()->mainTemplate()->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
 		$simple_choice = new SimpleChoiceQuestion();
         $ajax_object   = new SimpleChoiceQuestionAjaxHandler();
 		$question_id = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
@@ -567,7 +567,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     ];
 
     /**
-     * @param ilTemplate $tpl
+     * @param $tpl
+     * @return void
      */
     protected function addJavascriptAndCSSToTemplate($tpl)
     {
@@ -595,10 +596,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * $ilUser ilObjUser
 		 * $tpl ilTemplate
 		 */
-		global $ilUser, $tpl;
+		global $ilUser, $tpl, $DIC;
 
 		$plugin = ilInteractiveVideoPlugin::getInstance();
-		$this->addJavascriptAndCSSToTemplate($tpl);
+		$this->addJavascriptAndCSSToTemplate($DIC->ui()->mainTemplate());
 		ilTextAreaInputCkeditorGUI::appendJavascriptFile();
 
 		$config_tpl = new ilTemplate("tpl.video_config.html", true, true, $plugin->getDirectory());

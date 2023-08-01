@@ -4,7 +4,9 @@
 		<div class="col-sm-12">
 			<textarea id="comment_text_{PLAYER_ID}" class="form-control" rows="" wrap="virtual" name="comment_text"></textarea>
 			<script>
-				CKEDITOR.replace('comment_text_{PLAYER_ID}');
+				document.addEventListener('DOMContentLoaded', function () {
+					CKEDITOR.replace('comment_text_{PLAYER_ID}');
+				});
 			</script>
 			<input type="hidden" name="comment_time" id="comment_time_{PLAYER_ID}" value="">
 			<div class="ilNoDisplay alert alert-warning" id="no_text_warning_{PLAYER_ID}">{TXT_NO_TEXT_WARNING}</div>
