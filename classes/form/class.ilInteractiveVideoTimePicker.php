@@ -25,6 +25,8 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 	 */
 	protected $id;
 
+    protected $dic;
+
 	/**
 	 * ilInteractiveVideoTimePicker constructor.
 	 * @param string $a_title
@@ -32,6 +34,8 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 	 */
 	public function __construct($a_title = "", $a_id = "")
 	{
+        global $DIC;
+        $this->dic = $DIC;
 		parent::__construct($a_title, $a_id);
 		$this->setTitle($a_title);
 		$this->setId($a_id);
@@ -43,10 +47,10 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 	 */
     public function checkInput(): bool
 	{
-		if(!is_array($_POST[$this->getPostVar()]))
-		{
-			$_POST[$this->getPostVar()] = $this->getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($_POST[$this->getPostVar()]));
-		}
+        $post = $this->dic->http()->wrapper()->post()->retrieve($this->getPostVar(), $this->dic->refinery()->kindlyTo()->string());
+		if($this->dic->http()->wrapper()->post()->has($this->getPostVar())){
+            $post = $this->dic->http()->wrapper()->post()->retrieve($this->getPostVar(), $this->dic->refinery()->kindlyTo()->string());
+        }
 		return $this->checkSubItemsInput();
 	}
 
