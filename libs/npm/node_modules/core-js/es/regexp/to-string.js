@@ -1,5 +1,5 @@
+'use strict';
 require('../../modules/es.regexp.to-string');
+var uncurryThis = require('../../internals/function-uncurry-this');
 
-module.exports = function toString(it) {
-  return RegExp.prototype.toString.call(it);
-};
+module.exports = uncurryThis(/./.toString);

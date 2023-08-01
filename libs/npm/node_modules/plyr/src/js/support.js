@@ -24,10 +24,9 @@ const support = {
 
   // Check for support
   // Basic functionality vs full UI
-  check(type, provider, playsinline) {
-    const canPlayInline = browser.isIPhone && playsinline && support.playsinline;
+  check(type, provider) {
     const api = support[type] || provider !== 'html5';
-    const ui = api && support.rangeInput && (type !== 'video' || !browser.isIPhone || canPlayInline);
+    const ui = api && support.rangeInput;
 
     return {
       api,
@@ -38,6 +37,9 @@ const support = {
   // Picture-in-picture support
   // Safari & Chrome only currently
   pip: (() => {
+    // While iPhone's support picture-in-picture for some apps, seemingly Safari isn't one of them
+    // It will throw the following error when trying to enter picture-in-picture
+    // `NotSupportedError: The Picture-in-Picture mode is not supported.`
     if (browser.isIPhone) {
       return false;
     }
@@ -88,7 +90,7 @@ const support = {
 
     try {
       return Boolean(type && this.media.canPlayType(type).replace(/no/, ''));
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   },

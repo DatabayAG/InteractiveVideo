@@ -13,7 +13,7 @@ const babel = require('rollup-plugin-babel');
 const commonjs = require('rollup-plugin-commonjs');
 const resolve = require('rollup-plugin-node-resolve');
 // CSS
-const sass = require('gulp-sass');
+const sass = require('gulp-sass')(require('sass'));
 const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
@@ -118,7 +118,7 @@ Object.entries(build.js).forEach(([filename, entry]) => {
                       },
                     ],
                   ],
-                  plugins: ['@babel/plugin-proposal-class-properties'],
+                  plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-optional-chaining'],
                   babelrc: false,
                   exclude: [/\/core-js\//],
                 }),

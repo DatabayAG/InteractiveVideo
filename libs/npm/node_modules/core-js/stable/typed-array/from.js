@@ -1,1 +1,4 @@
-require('../../modules/es.typed-array.from');
+'use strict';
+var parent = require('../../es/typed-array/from');
+
+module.exports = parent;

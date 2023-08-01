@@ -1,1 +1,4 @@
-require('../../modules/es.typed-array.every');
+'use strict';
+var parent = require('../../es/typed-array/every');
+
+module.exports = parent;

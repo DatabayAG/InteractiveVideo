@@ -1,1 +1,4 @@
-require('../../modules/es.typed-array.fill');
+'use strict';
+var parent = require('../../es/typed-array/fill');
+
+module.exports = parent;

@@ -1,1 +1,4 @@
-require('../../modules/es.typed-array.iterator');
+'use strict';
+var parent = require('../../es/typed-array/keys');
+
+module.exports = parent;

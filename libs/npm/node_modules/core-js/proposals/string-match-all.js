@@ -1,2 +1,3 @@
-// TODO: Remove from `core-js@4`
+'use strict';
+// https://github.com/tc39/proposal-string-matchall
 require('../modules/esnext.string.match-all');

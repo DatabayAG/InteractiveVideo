@@ -1,2 +1,3 @@
+'use strict';
 // TODO: Remove from `core-js@4`
-require('./es.string.match-all');
+require('../modules/es.string.match-all');

@@ -1,3 +1,5 @@
+'use strict';
+require('../../modules/es.object.to-string');
 require('../../modules/web.dom-collections.for-each');
 require('../../modules/web.dom-collections.iterator');
 var ArrayIterators = require('../../modules/es.array.iterator');

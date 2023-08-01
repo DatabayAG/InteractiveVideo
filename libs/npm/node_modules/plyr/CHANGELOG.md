@@ -1,3 +1,99 @@
+# Changelog
+
+### v3.7.8
+
+- Feat: Minor demo style tweaks
+- Fix: Minor style fixes related to backgrounds and border radii (🚨 Requires a SCSS/CSS update 🚨)
+
+### v3.7.7
+
+- Fix (Accessibility): Don’t set tabindex on parent container
+- Fix (Accessibility): Add `role="timer"` to time elements
+- Fix (Accessibility): Leverage native `:focus-visible` in CSS, instead of a custom solution (🚨 Requires a SCSS/CSS update 🚨)
+
+### v3.7.6
+
+- Fix: Revert postinstall script
+
+### v3.7.5
+
+- Fix: Replace `pnpm` with `npm` in scripts to fix build issues
+
+### v3.7.4
+
+- Fix: Fixed event key with space (thanks @royeden!)
+- Fix: Changing Vimeo function call from `setVolume` to `setMuted` to fix iOS issue (issue #2624) (thanks @HandreMelo and Andre Fernandes Cristofolini Melo!)
+- Fix: Call preview-thumbnails listeners() function on load (thanks @mogzol!)
+- Fix: Fullscreen improvements for iOS & iPadOS
+- Feat: Remove need for iOS-specific styling (please update [volume.scss](https://github.com/sampotts/plyr/blob/master/src/sass/components/volume.scss))
+
+### v3.7.3
+
+- Fix: force nowrap in progress tooltips (related: #2549) (thanks @raad-altaie!)
+- Feat(i18n): Make captions autodetect text direction (#2540) (thanks @ebraminio!)
+- Fix: fixed menu border radius bug (#2548) (thanks @raad-altaie!)
+- Chore: navigator.platform is deprecated (#2530) (thanks @stamat!)
+- Feat: Added configurable property to elements for re-use (#2489) (thanks @NoirHusky!)
+- Docs: Replace example video ID with one that still works (#2518) (thanks @luvejo!)
+- Fix: Improve accessibility on control buttons with aria-pressed (#2523) (thanks @emilkarl!)
+- Fix: Fix for calc() in newer Dart Sass versions (#2519) (thanks @ckhicks!)
+- Fix: simplify logic for isFunction assertion method
+- Chore: update types to include string for controls
+- Chore: upgrade packages
+- Chore: use `.node-version` instead of `.nvmrc`
+
+### v3.7.2
+
+- Fix: Add `@babel/plugin-proposal-optional-chaining` to transform optional chaining in build output
+
+### v3.7.1
+
+- Feat: Minor styling improvements to the preview thumbnails (🚨 Requires a SCSS/CSS update 🚨)
+- Fix: Fix invalid CSS @charset rule in Sass files (thanks @Hashen110!)
+- Chore: Replace deprecated KeyboardEvent `keyCode` references to use `key` instead (thanks @Hashen110!)
+- Various other code clean up and typo fixes (thanks @Hashen110!)
+
+## v3.7.0
+
+- Feat: Add markers support (🚨 Requires a SCSS/CSS update 🚨) (thanks @ForeverSc and @fengshuo!)
+- Feat: Add support for MediaMetadata (thanks @Hashen110!)
+- Fix: Pass this context to captions.setup (fixes #2352) (thanks @WilliamMHerring, @willherring and @zenyr!)
+- Fix: Modify vimeo parseHash to use non-named capture groups (fixes #2396) (thanks @fekle!)
+- Fix: Replace deprecated String.prototype.substr() (thanks @CommanderRoot!)
+- Docs: Update speed option default to match the source (thanks @ozgurg!)
+- Docs: SASS → Sass (thanks @toastal!)
+
+### v3.6.12
+
+- Fix: remove division logic from ads.scss (fixes #2370)
+
+### v3.6.11
+
+- Fix: Replace `list.slash` added in 3.6.10 with `calc`
+- Chore: Package upgrades
+- Chore: Sass clean up
+- Chore: Improvements to style linting
+
+### v3.6.10
+
+- Fix: Use `list.slash` instead of deprecated syntax
+- Chore: Clean up demo
+
+### v3.6.9
+
+- Fix: Sass issue with division (thanks @ROL4ND909 and @le0pard)
+- Fix: Captions when switching sources (thanks @zexingguo)
+- Fix: Icons loading within iframes (thanks @ajgagnon)
+- Chore: Update TypeScript types (thanks @Jackie1210 and @AntLevin)
+- Fix: iOS fullscreen centering (thanks @hemratna)
+- Feat: Added getter and setter for preview thumbnails (thanks @Benny739)
+- Fix: Change fullscreen element to player rootnode (thanks @Walter van den Houten)
+- Fix: Fixed errors when Plyr instance is destroyed before constructor setTimeout() functions execute (thanks @emilis-ideait)
+- Fix: Invalid CSS selector syntax (thanks @BjornBrandewallNaviga)
+- Fix: Video height issues
+- Feat: Improve support for Vimeo private videos (thanks @Frosch)
+- Fix: YouTube duration issues (thanks @liesahead)
+
 ### v3.6.8
 
 - Typings: add FullscreenOptions.container to typing files (thanks @MeguminSama!)
@@ -46,7 +142,7 @@
 - Fix "A `ReferenceError: _classCallCheck is not defined` error has occurred." error (thanks @hex-ci)
 - Fix issue with CSS custom property check (thanks @syedhusain-appspace)
 - Fix for slow loading videos not autoplaying (thanks @DanielHuntleySBG)
-- Fix for betwork requests are not cancelled after the player is destroyed (thanks @DanielHuntleySBG)
+- Fix for network requests are not cancelled after the player is destroyed (thanks @DanielHuntleySBG)
 - Added option to disable custom controls for YouTube and Vimeo
 
 ### v3.6.2
@@ -91,7 +187,7 @@
 ### v3.5.8
 
 - Added `flex-direction` property to fix some issues introduced in v3.5.7 when using custom CSS
-- Cleaned up the organisation of some of the SCSS files (should not effect CSS output)
+- Cleaned up the organization of some of the SCSS files (should not effect CSS output)
 - Added `referrerPolicy` option for Vimeo to prevent an issue present in the demo site
 - Remove all Vimeo controls for Pro & Premium accounts
 - Improve thumbnail size calculations when size is set per css (thanks @ydylla)
@@ -106,7 +202,7 @@
 - Accessibility tweak for the play button (thanks @lunika)
 - Fix for ads configuration (thanks @SoftCreatR)
 - Fix handling listener return value (thanks @taion)
-- Added localisation key for PIP (picture-in-picture) (thanks @lmislm)
+- Added localization key for PIP (picture-in-picture) (thanks @lmislm)
 - Preserve viewBox attribute in SVG sprite symbols (thanks @bseib)
 - Fix being unable to unmute autoplayed video on iOS (thanks @sumanbh)
 - Fixed Plyr container not resizing responsively (thanks @shravan2x)
@@ -140,7 +236,7 @@ _Note:_ This update contains CSS changes.
 ### v3.5.4
 
 - Added: Set download URL via new setter
-- Improvement: The order of the `controls` option now effects the order in the DOM - i.e. you can re-order the controls - Note: this may break any custom CSS you have setup. Please see the changes in the PR to the default SASS
+- Improvement: The order of the `controls` option now effects the order in the DOM - i.e. you can re-order the controls - Note: this may break any custom CSS you have setup. Please see the changes in the PR to the default Sass
 - Fixed issue with empty controls and preview thumbs
 - Fixed issue with setGutter call (from Sentry)
 - Fixed issue with initial selected speed not working
@@ -503,7 +599,7 @@ This is a massive release. A _mostly_ complete rewrite in ES6. What started out 
 
 ### Other stuff
 
-- Now using SASS exclusively. Sorry, LESS folk it just made sense to maintain one method as SASS is what the cool kids use. It may come back if we work out an automated way to convert the SASS
+- Now using Sass exclusively. Sorry, LESS folk it just made sense to maintain one method as Sass is what the cool kids use. It may come back if we work out an automated way to convert the Sass
 - Moved to ES6. All the rage these days. You'll need to look at polyfills. The demo uses [polyfill.io](https://polyfill.io)
 - Added basic looping support
 - Added an aspect ratio option for those that can't leave the 90s and want 4:3
@@ -563,10 +659,10 @@ Because we're using the fancy new ES6 syntax, you will need to polyfill for vint
 
 - Vimeo controls fix (fixes #697)
 - SVG4everybody compatibility fix
-- Allow Plyr.setup event listeners to be set up as separate event listeners (https://github.com/sampotts/plyr/pull/703)
-- Added title to the layer html template (for custom controls) (https://github.com/sampotts/plyr/pull/649)
-- Target is null bug fix (https://github.com/sampotts/plyr/pull/617)
-- fix #684 memory leaks issues after destroy (https://github.com/sampotts/plyr/pull/700)
+- Allow Plyr.setup event listeners to be set up as separate event listeners (<https://github.com/sampotts/plyr/pull/703>)
+- Added title to the layer html template (for custom controls) (<https://github.com/sampotts/plyr/pull/649>)
+- Target is null bug fix (<https://github.com/sampotts/plyr/pull/617>)
+- fix #684 memory leaks issues after destroy (<https://github.com/sampotts/plyr/pull/700>)
 
 ### v2.0.16
 
@@ -586,8 +682,8 @@ Because we're using the fancy new ES6 syntax, you will need to polyfill for vint
 
 ### v2.0.12
 
-- Ability to set custom `blankUrl` for source changes (https://github.com/sampotts/plyr/pull/504)
-- Ability to set caption button listener (https://github.com/sampotts/plyr/pull/468)
+- Ability to set custom `blankUrl` for source changes (<https://github.com/sampotts/plyr/pull/504>)
+- Ability to set caption button listener (<https://github.com/sampotts/plyr/pull/468>)
 
 ### v2.0.11
 
@@ -736,7 +832,7 @@ And some other changes and bug fixes:
 
 ## v1.7.0
 
-- SASS cleanup (fixes #265)
+- Sass cleanup (fixes #265)
 - Docs tidy up to help quick start (fixes #253)
 - Fix for issues with data attribute options passing (fixes #257)
 - **_(Important)_** Removed the requirement for a wrapper div to setup Plyr and removed the dependency on the `plyr` classname as a JS hook. By default it will now look for `<video>`, `<audio>` and `[data-type]` elements. If you are just calling `setup()` with a `<div class="plyr">` you may want to give it a good test after upgrading. You can probably remove the wrapper div. The reason behind this is to make setup easier for newcomers and prevent the styling being used on unsupported players (because the plyr classname was used as a CSS and JS hook - which isn't ideal)
@@ -858,7 +954,7 @@ And some other changes and bug fixes:
 ### v1.5.18
 
 - Added 'ready' event for initial setup complete or source change occurs
-- Fixed SASS stylesheet references to transparentize
+- Fixed Sass stylesheet references to transparentize
 - Added default font stack to controls
 - Docs fixes inc controls HTML (fixes #180)
 
@@ -895,7 +991,7 @@ And some other changes and bug fixes:
 
 - iOS embed bug fixes (fixes #166)
 - Hide IE/Edge <input type='range'> tooltip (since we have a styled one) (fixes #160)
-- SASS bug fix for default values (fixes #158)
+- Sass bug fix for default values (fixes #158)
 
 ### v1.5.9
 
@@ -917,7 +1013,7 @@ And some other changes and bug fixes:
 ### v1.5.6
 
 - Seek tooltip (option for tooltips changed, please check docs)
-- SASS compile error fixes (fixes #148)
+- Sass compile error fixes (fixes #148)
 - Fullscreen fixes for controls not always hiding/showing (fixes #149)
 - Screen reader icon fixes (title was being read twice due to the tooltip/hidden label)
 
@@ -994,7 +1090,7 @@ And some other changes and bug fixes:
 
 ### v1.2.6
 
-- SASS updates and fixes (cheers @ChristianPV)
+- Sass updates and fixes (cheers @ChristianPV)
 
 ### v1.2.5
 
@@ -1109,7 +1205,7 @@ And some other changes and bug fixes:
 
 ### v1.0.26
 
-- Fixes for SASS (cheers @brunowego)
+- Fixes for Sass (cheers @brunowego)
 - Indentation reset to 4 spaces
 
 ### v1.0.25
@@ -1154,7 +1250,7 @@ And some other changes and bug fixes:
 
 ### v1.0.17
 
-- SASS support added (thanks to @brunowego)
+- Sass support added (thanks to @brunowego)
 - Docs completely separated to avoid any confusion
 - New gulp tasks (will add more documentation for this)
 

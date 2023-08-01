@@ -1,1 +1,4 @@
-require('../../modules/es.typed-array.reduce');
+'use strict';
+var parent = require('../../es/typed-array/reduce');
+
+module.exports = parent;

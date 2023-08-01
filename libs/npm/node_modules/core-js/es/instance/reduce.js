@@ -1,8 +1,10 @@
-var reduce = require('../array/virtual/reduce');
+'use strict';
+var isPrototypeOf = require('../../internals/object-is-prototype-of');
+var method = require('../array/virtual/reduce');
 
 var ArrayPrototype = Array.prototype;
 
 module.exports = function (it) {
   var own = it.reduce;
-  return it === ArrayPrototype || (it instanceof Array && own === ArrayPrototype.reduce) ? reduce : own;
+  return it === ArrayPrototype || (isPrototypeOf(ArrayPrototype, it) && own === ArrayPrototype.reduce) ? method : own;
 };

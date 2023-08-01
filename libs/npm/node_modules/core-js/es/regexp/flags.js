@@ -1,6 +1,5 @@
+'use strict';
 require('../../modules/es.regexp.flags');
-var flags = require('../../internals/regexp-flags');
+var getRegExpFlags = require('../../internals/regexp-get-flags');
 
-module.exports = function (it) {
-  return flags.call(it);
-};
+module.exports = getRegExpFlags;
