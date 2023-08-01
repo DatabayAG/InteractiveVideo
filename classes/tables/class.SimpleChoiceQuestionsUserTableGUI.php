@@ -29,14 +29,14 @@ class SimpleChoiceQuestionsUserTableGUI extends ilTable2GUI
 	
 		$this->setFormAction($this->ctrl->getFormAction($a_parent_obj, $a_parent_cmd));
 	
-		$this->setTitle($a_parent_obj->plugin->txt('user_results'));
-		$this->setRowTemplate('tpl.row_questions_user.html', $a_parent_obj->plugin->getDirectory());
+		$this->setTitle($a_parent_obj->getPluginInstance()->txt('user_results'));
+		$this->setRowTemplate('tpl.row_questions_user.html', $a_parent_obj->getPluginInstance()->getDirectory());
 		$this->addColumn('', 'question_id',  '1px', true);
 	
 		$this->addColumn($this->lng->txt('question'), 'title');
 		#$this->addColumn($a_parent_obj->plugin->txt('answered'), 'answered');
-		$this->addColumn($a_parent_obj->plugin->txt('neutral_question'), 'neutral_question');
-		$this->addColumn($a_parent_obj->plugin->txt('correct_answered'), 'correct_answered');
+		$this->addColumn($a_parent_obj->getPluginInstance()->txt('neutral_question'), 'neutral_question');
+		$this->addColumn($a_parent_obj->getPluginInstance()->txt('correct_answered'), 'correct_answered');
 		
 		$this->setShowRowsSelector(false);
 		

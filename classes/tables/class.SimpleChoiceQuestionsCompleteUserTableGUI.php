@@ -26,19 +26,19 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI
 
 		$this->ctrl = $ilCtrl;
 
-		$this->setId('xvid_questions_' . $a_parent_obj->object->getId());
+		$this->setId('xvid_questions_' . $a_parent_obj->getObject()->getId());
 		parent::__construct($a_parent_obj, $a_parent_cmd);
 		$this->setFormAction($this->ctrl->getFormAction($a_parent_obj, $a_parent_cmd));
-		$this->setTitle($a_parent_obj->plugin->txt('complete_question_results'));
-		$this->setRowTemplate('tpl.dynamic_question_row.html', $a_parent_obj->plugin->getDirectory());
-		$this->addCommandButton('completeCsvExport', $a_parent_obj->plugin->txt('csv_export'));
+		$this->setTitle($a_parent_obj->getPluginInstance()->txt('complete_question_results'));
+		$this->setRowTemplate('tpl.dynamic_question_row.html', $a_parent_obj->getPluginInstance()->getDirectory());
+		$this->addCommandButton('completeCsvExport', $a_parent_obj->getPluginInstance()->txt('csv_export'));
 		$this->addColumn($lng->txt('name'));
 		foreach($colum_head as $key => $value)
 		{
 			$this->addColumn($value);
 		}
-		$this->addColumn($a_parent_obj->plugin->txt('answered'));
-		$this->addColumn($a_parent_obj->plugin->txt('sum'));
+		$this->addColumn($a_parent_obj->getPluginInstance()->txt('answered'));
+		$this->addColumn($a_parent_obj->getPluginInstance()->txt('sum'));
 		$this->setShowRowsSelector(false);
 
 	}
