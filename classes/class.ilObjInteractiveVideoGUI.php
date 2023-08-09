@@ -2790,10 +2790,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 			// calculate seconds
 			$comment_time = $form->getInput('comment_time');
-			$this->objComment->setCommentTime($comment_time);
+            $start_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time));
+            $this->objComment->setCommentTime($start_time);
 			$comment_time_end = $form->getInput('comment_time_end');
-			$this->objComment->setCommentTimeEnd($comment_time_end);
+            $end_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time_end));
+            $this->objComment->setCommentTimeEnd($end_time);
 			$this->objComment->setIsTutor(1);
+            $this->objComment->setMarker('');
 			$this->objComment->create();
 
 			$this->performQuestionRefresh($this->objComment->getCommentId(), $form);
@@ -2909,7 +2912,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment_id = (int)$_POST['comment_id'];
 		$form_values = array();
 
-		if(!$chk =  SimpleChoiceQuestion::existAnswer($comment_id))
+		if(!$chk =  SimpleChoiceQuestion::answerExists($comment_id))
 		{
 			$this->updateQuestion();
 		}
@@ -2961,8 +2964,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
 
 			// calculate seconds
-			$this->objComment->setCommentTime($form->getInput('comment_time'));
-			$this->objComment->setCommentTimeEnd($form->getInput('comment_time_end'));
+            $comment_time = $form->getInput('comment_time');
+            $start_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time));
+            $this->objComment->setCommentTime($start_time);
+            $comment_time_end = $form->getInput('comment_time_end');
+            $end_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time_end));
+            $this->objComment->setCommentTimeEnd($end_time);
+
 			$this->objComment->update();
 
 			$this->performQuestionRefresh($comment_id, $form);

@@ -12,26 +12,12 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 	 * @var 
 	 */
 	protected $xvid_obj;
+	protected bool $inAnswerTag = false;
 
-	/**
-	 * @var bool
-	 */
-	protected $inAnswerTag = false;
-
-	/**
-	 * @var string
-	 */
 	protected $video_src_id;
 
-	/**
-	 * @var int
-	 */
-	protected $comments = 0;
-
-	/**
-	 * @var int
-	 */
-	protected $questions = 0;
+	protected int $comments = 0;
+	protected int $questions = 0;
 
     /**
      * ilInteractiveVideoSimpleChoiceQuestionsXMLParser constructor.

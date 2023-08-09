@@ -9,8 +9,8 @@ class ilObjComment
 	protected int $comment_id;
 	protected int $user_id;
     protected bool $is_tutor = false;
-    protected float $comment_time = 0;
-	protected float $comment_time_end = 0;
+    protected int $comment_time = 0;
+	protected int $comment_time_end = 0;
 	protected string $comment_text = '';
 	protected bool $is_interactive = false;
 	protected string $comment_title = '';
@@ -428,12 +428,12 @@ class ilObjComment
 		$this->comment_text = $comment_text;
 	}
 
-	public function getCommentTime() : float
+	public function getCommentTime() : int
 	{
 		return $this->comment_time;
 	}
 
-	public function setCommentTime(float $comment_time)
+	public function setCommentTime(int $comment_time)
 	{
 		$this->comment_time = $comment_time;
 	}
@@ -528,12 +528,12 @@ class ilObjComment
 		$this->is_repeat = $is_repeat;
 	}
 
-	public function getCommentTimeEnd() : float
+	public function getCommentTimeEnd() : int
 	{
 		return $this->comment_time_end;
 	}
 
-	public function setCommentTimeEnd(float $comment_time_end)
+	public function setCommentTimeEnd(int $comment_time_end)
 	{
 		$this->comment_time_end = $comment_time_end;
 	}

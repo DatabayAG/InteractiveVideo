@@ -10,146 +10,40 @@ class SimpleChoiceQuestion
 	const TABLE_NAME_COMMENTS		= 'rep_robj_xvid_comments';
 	const TABLE_NAME_SCORE			= 'rep_robj_xvid_score';
 	const TABLE_NAME_ANSWERS		= 'rep_robj_xvid_answers';
-
 	const SINGLE_CHOICE = 0;
 	const MULTIPLE_CHOICE = 1;
 	const REFLECTION = 2;
-
 	const CORRECT_ANSWERS = 0;
 	const NEUTRAL_ANSWERS = 1;
+	protected int $obj_id;
+	protected int $comment_id;
+	protected int $question_id;
+	protected string $question_text;
+	protected int $type;
+	protected string $feedback_correct;
+	protected string $feedback_one_wrong;
+	protected int $limit_attempts = 0;
+	protected int $is_jump_correct = 0;
+	protected int $show_correct_icon = 1;
+	protected int $show_wrong_icon = 1;
+	protected int $jump_correct_ts = 0;
+	protected int $is_jump_wrong = 0;
+	protected int $jump_wrong_ts = 0;
+	protected int $repeat_question = 0;
+	protected int $show_response_frequency = 0;
 
-	/**
-	 * @var integer
-	 */
-	protected $obj_id;
-
-	/**
-	 * @var integer
-	 */
-	protected $comment_id;
-
-	/**
-	 * @var integer
-	 */
-	protected $question_id;
-
-	/**
-	 * @var string
-	 */
-	protected $question_text;
-
-	/**
-	 * @var integer
-	 */
-	protected $type;
-	/**
-	 * @var string
-	 */
-	protected $feedback_correct;
-	/**
-	 * @var string
-	 */
-	protected $feedback_one_wrong;
-
-	/**
-	 * @var int
-	 */
-	protected $limit_attempts = 0;
-
-	/**
-	 * @var int
-	 */
-	protected $is_jump_correct = 0;
-
-	/**
-	 * @var int
-	 */
-	protected $show_correct_icon = 1;
-
-	/**
-	 * @var int
-	 */
-	protected $show_wrong_icon = 1;
-
-	/**
-	 * @var int
-	 */
-	protected $jump_correct_ts = 0;
-
-	/**
-	 * @var int
-	 */
-	protected $is_jump_wrong = 0;
-
-	/**
-	 * @var int
-	 */
-	protected $jump_wrong_ts = 0;
-
-	/**
-	 * @var int
-	 */
-	protected $repeat_question = 0;
-	
-	/**
-	 * @var int
-	 */
-	protected $show_response_frequency = 0;
-
-	/**
-	 * @var int
-	 */
-	protected $show_best_solution = 0;
-
-	/**
-	 * @var string
-	 */
-	protected $show_best_solution_text = '';
-
-	/**
-	 * @var int
-	 */
-	protected $feedback_correct_id;
-
-	/**
-	 * @var int
-	 */
-	protected $feedback_wrong_id;
-
-	/**
-	 * @var int
-	 */
-	protected $reflection_question_comment = 0;
-
-	/**
-	 * @var int
-	 */
-	protected $neutral_answer = 0;
-
-	/**
-	 * @var string
-	 */
-	protected $question_image = '';
-
-    /**
-     * @var int
-     */
-	protected $compulsory_question = 0;
-
-	/**
-	 * @var string
-	 */
-	public $import_question_image = '';
-	
-	
-	public $import_answers = array();
-	
-	/**
-	 * @param int $comment_id
-	 */
-	public function __construct($comment_id = 0)
+	protected int $show_best_solution = 0;
+	protected string $show_best_solution_text = '';
+	protected int $feedback_correct_id;
+	protected int $feedback_wrong_id;
+	protected int $reflection_question_comment = 0;
+	protected int $neutral_answer = 0;
+	protected string $question_image = '';
+	protected int $compulsory_question = 0;
+	public string $import_question_image = '';
+	public array $import_answers = [];
+	public function __construct(int $comment_id = 0)
 	{
-		$comment_id = (int) $comment_id;
 		if($comment_id > 0)
 		{
 			$this->setCommentId($comment_id);
@@ -157,9 +51,6 @@ class SimpleChoiceQuestion
 		}
 	}
 
-	/**
-	 *
-	 */
 	public function read()
 	{
         /**
@@ -228,28 +119,18 @@ class SimpleChoiceQuestion
 //		$this->readAnswerDefinitions();
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getCommentId()
-	{
+	public function getCommentId() : int
+    {
 		return $this->comment_id;
 	}
 
-	/**
-	 * @param int $comment_id
-	 */
-	public function setCommentId($comment_id)
+	public function setCommentId(int $comment_id)
 	{
 		$this->comment_id = $comment_id;
 	}
 
-	/**
-	 * @param $question_id
-	 * @return bool
-	 */
-	public static function isLimitAttemptsEnabled($question_id)
-	{
+	public static function isLimitAttemptsEnabled(int $question_id) : bool
+    {
         /**
          * @var $ilDB ilDBInterface
          */
@@ -263,12 +144,8 @@ class SimpleChoiceQuestion
 
 	}
 
-	/**
-	 * @param $comment_id
-	 * @return bool
-	 */
-	public static function isRepeatQuestionEnabled($comment_id)
-	{
+	public static function isRepeatQuestionEnabled(int $comment_id) : bool
+    {
         /**
          * @var $ilDB ilDBInterface
          */
@@ -282,12 +159,8 @@ class SimpleChoiceQuestion
 		return (bool)$row['repeat_question'];
 	}
 
-	/**
-	 * @param $comment_id
-	 * @return bool
-	 */
-	public static function existUserAnswer($comment_id)
-	{
+	public static function existUserAnswer(int $comment_id) : bool
+    {
         /**
          * @var $ilDB ilDBInterface
          */
@@ -308,12 +181,8 @@ class SimpleChoiceQuestion
 		return false;
 	}
 
-	/**
-	 * @param $comment_id
-	 * @return bool
-	 */
-	public static function existAnswer($comment_id)
-	{
+	public static function answerExists(int $comment_id) : bool
+    {
 		/**
 		 * @var $ilUser ilObjUser
 		 * @var $ilDB ilDB
@@ -335,10 +204,9 @@ class SimpleChoiceQuestion
 	}
 
     /**
-     * @param int $obj_id
      * @return int[]
      */
-    public function getUsersWithAnsweredQuestion($obj_id)
+    public function getUsersWithAnsweredQuestion(int $obj_id) : array
     {
         /**
          * $ilDB ilDB
@@ -367,10 +235,9 @@ class SimpleChoiceQuestion
     }
 
     /**
-     * @param int $obj_id
      * @return array<int, int>
      */
-    public function getUsersWithAllAnsweredQuestionsMap($obj_id)
+    public function getUsersWithAllAnsweredQuestionsMap(int $obj_id) : array
     {
         /**
          * $ilDB ilDB
@@ -409,13 +276,7 @@ class SimpleChoiceQuestion
 
         return $usrIds;
     }
-
-    /**
-     * @param $obj_id
-     * @param $user_id
-     * @return int
-     */
-    public function getNumberOfAnsweredQuestions($obj_id, $user_id)
+    public function getNumberOfAnsweredQuestions(int $obj_id, int $user_id) : int
     {
         /**
          * $ilDB ilDB
@@ -442,12 +303,8 @@ class SimpleChoiceQuestion
         return 0;
     }
 
-	/**
-	 * @param $question_id
-	 * @return bool
-	 */
-	public static function existUserAnswerForQuestionId($question_id)
-	{
+	public static function existUserAnswerForQuestionId(int $question_id) : bool
+    {
         /**
          * @var $ilDB ilDBInterface
          */
@@ -467,9 +324,6 @@ class SimpleChoiceQuestion
 		return false;
 	}
 
-	/**
-	 *
-	 */
 	private function readAnswerDefinitions()
 	{
         /**
@@ -490,27 +344,17 @@ class SimpleChoiceQuestion
 		}
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getQuestionId()
-	{
+	public function getQuestionId() : int
+    {
 		return $this->question_id;
 	}
 
-	/**
-	 * @param int $question_id
-	 */
-	public function setQuestionId($question_id)
+	public function setQuestionId(int $question_id)
 	{
 		$this->question_id = $question_id;
 	}
 
-	/**
-	 * @param $old_comment_id
-	 * @param $new_comment_id
-	 */
-	public function cloneQuestionObject($old_comment_id, $new_comment_id)
+	public function cloneQuestionObject(int $old_comment_id, int $new_comment_id)
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -572,12 +416,8 @@ class SimpleChoiceQuestion
 		}
 	}
 
-	/**
-	 * @param $comment_id
-	 * @return int
-	 */
-	public function getQuestionIdByCommentId($comment_id)
-	{
+	public function getQuestionIdByCommentId(int $comment_id) : int
+    {
         /**
          * @var $ilDB ilDBInterface
          */
@@ -590,11 +430,8 @@ class SimpleChoiceQuestion
 		return $row['question_id'];
 	}
 
-	/**
-	 *
-	 */
-	public function create()
-	{
+	public function create() : int
+    {
         /**
          * @var $ilDB ilDBInterface
          */
@@ -665,11 +502,9 @@ class SimpleChoiceQuestion
 	}
 
 	/**
-	 * @param      $oid
-	 * @param null $a_user_id
 	 * @return int|array<int, int>
 	 */
-	public function getAllUsersWithCompletelyCorrectAnswers($oid, $a_user_id = null)
+	public function getAllUsersWithCompletelyCorrectAnswers(int $oid, ?int $a_user_id = null)
 	{
 		$user_ids = [];
         /**
@@ -709,11 +544,8 @@ class SimpleChoiceQuestion
 		return $user_ids;
 	}
 	
-	/**
-	 * @return int
-	 */
-	public function getType()
-	{
+	public function getType() : int
+    {
 		return $this->type;
 	}
 
