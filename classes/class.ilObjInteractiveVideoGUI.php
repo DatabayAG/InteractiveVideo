@@ -2364,6 +2364,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 {
                     $this->objComment->setCommentTimeEnd( $this->objComment->getCommentTime() + 3 );
                 }
+            } else {
+                $this->objComment->setMarker('');
             }
 			$this->objComment->create();
             $this->tpl->setOnScreenMessage("success", $this->lng->txt('saved_successfully'));
@@ -2852,7 +2854,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 			else
 			{
-				$comment_id = (int)$_GET['comment_id'] ? (int)$_GET['comment_id'] : (int)$_POST['comment_id'];
+				$comment_id = (int)$_GET['comment_id'] ?: (int) $_POST['comment_id'];
 			}
 		}
 
@@ -3545,10 +3547,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
 	}
 #endregion
-	/**
-	 * @param $a_target
-	 */
-    public static function _goto(string $a_target): void
+    public static function _goto(array $a_target): void
 	{
 		/**
 		 * @var $ilCtrl ilCtrl

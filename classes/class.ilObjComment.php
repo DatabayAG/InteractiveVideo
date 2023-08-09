@@ -3,121 +3,31 @@
 require_once 'Services/User/classes/class.ilUserUtil.php';
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilHtmlInteractiveVideoPostPurifier.php';
 
-/**
- * Class ilObjComment
- * @author Nadia Ahmad <nahmad@databay.de>
- */
 class ilObjComment
 {
-	/**
-	 * @var integer
-	 */
-	protected $obj_id;
+	protected int $obj_id;
+	protected int $comment_id;
+	protected int $user_id;
+    protected bool $is_tutor = false;
+    protected float $comment_time = 0;
+	protected float $comment_time_end = 0;
+	protected string $comment_text = '';
+	protected bool $is_interactive = false;
+	protected string $comment_title = '';
+	protected string $comment_tags = '';
+	protected array $comments = array();
+	protected int $is_private = 0;
+    protected int $is_table_of_content = 0;
+    protected int $is_public = 0;
+	protected int $is_anonymized = 0;
+    protected int $is_repeat = 0;
+	protected int $is_reply_to = 0;
+	protected string $marker;
+	protected static array $user_name_cache = array();
+	protected static array $user_image_cache = array();
+	protected ilDBInterface $db;
 
-	/**
-	 * @var integer
-	 */
-	protected $comment_id;
-
-	/**
-	 * @var integer
-	 */
-	protected $user_id;
-
-	/**
-	 * @var bool
-	 */
-	protected $is_tutor = false;
-
-	/**
-	 * @var float $comment_time in seconds
-	 */
-	protected $comment_time = 0;
-
-	/**
-	 * @var float $comment_time in seconds
-	 */
-	protected $comment_time_end = 0;
-
-	/**
-	 * @var string
-	 */
-	protected $comment_text = '';
-
-	/**
-	 * @var bool
-	 */
-	protected $is_interactive = false;
-
-	/**
-	 * @var string
-	 */
-	protected $comment_title = '';
-
-	/**
-	 * @var string
-	 */
-	protected $comment_tags = '';
-
-	/**
-	 * @var array
-	 */
-	protected $comments = array();
-
-	/**
-	 * @var int
-	 */
-	protected $is_private = 0;
-
-	/**
-	 * @var int
-	 */
-	protected $is_table_of_content = 0;
-
-	/**
-	 * @var int
-	 */
-	protected $is_public = 0;
-
-	/**
-	 * @var int
-	 */
-	protected $is_anonymized = 0;
-
-	/**
-	 * @var int
-	 */
-	protected $is_repeat = 0;
-
-	/**
-	 * @var int
-	 */
-	protected $is_reply_to = 0;
-
-	/**
-	 * @var string
-	 */
-	protected $marker;
-
-	/**
-	 * @var array
-	 */
-	protected static $user_name_cache = array();
-
-	/**
-	 * @var array
-	 */
-	protected static $user_image_cache = array();
-
-    /**
-     * @var ilDBInterface
-     */
-	protected $db;
-
-	/**
-	 * @param int $comment_id
-	 */
-	public function __construct($comment_id = 0)
+	public function __construct(int $comment_id = 0)
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -156,12 +66,8 @@ class ilObjComment
 		$this->setMarker($row['marker']);
 	}
 
-	/**
-	 * @param bool $return_next_id
-	 * @return null | int
-	 */
-	public function create($return_next_id = false, $reply_to_posting = false)
-	{
+	public function create($return_next_id = false, $reply_to_posting = false) 
+    {
         /**
          * @var $ilUser ilObjUser
          */
@@ -198,11 +104,7 @@ class ilObjComment
 		}
 	}
 
-	/**
-	 * delete
-	 * @param int $reply_to
-	 */
-	public function removeOldReplyTo($reply_to)
+	public function removeOldReplyTo(int $reply_to)
 	{
         /**
          * @var $ilUser ilObjUser
@@ -241,25 +143,18 @@ class ilObjComment
 		);
 	}
 
-	/**
-	 * @param $comment_ids
-	 * @return bool
-	 */
-	public function deleteComments($comment_ids)
-	{
+	public function deleteComments(array $comment_ids) : bool
+    {
 
-		if(!is_array($comment_ids))
-			return false;
-
+		if(!is_array($comment_ids)){
+            return false;
+        }
         $this->db->manipulate('DELETE FROM rep_robj_xvid_comments WHERE ' . $this->db->in('comment_id', $comment_ids, false, 'integer'));
-	}
+	    return true;
+    }
 
-
-	/**
-	 * @return array
-	 */
-	public function getStopPoints()
-	{
+	public function getStopPoints() : array
+    {
 		$res = $this->db->queryF(
 			'SELECT comment_time
 			FROM rep_robj_xvid_comments
@@ -278,12 +173,8 @@ class ilObjComment
 		return $stop_points;
 	}
 
-    /**
-     * @param false $toc
-     * @return array
-     */
-	public function getContentComments($toc = false)
-	{
+	public function getContentComments(bool $toc = false) : array
+    {
 		/**
 		 * @var $ilDB
 		 */
@@ -372,13 +263,8 @@ class ilObjComment
 		return $comments;
 	}
 
-	/**
-	 * @param $is_reply_to
-	 * @param $comments
-	 * @return array
-	 */
-	protected function sortInReplies($is_reply_to, $comments)
-	{
+	protected function sortInReplies($is_reply_to, $comments) : array
+    {
 		foreach($is_reply_to as $value)
 		{
 			foreach($comments as $key => $comment)
@@ -391,11 +277,8 @@ class ilObjComment
 		}
 		return $comments;
 	}
-	/**
-	 * @param int $old_id
-	 * @param int $new_id
-	 */
-	public function cloneTutorComments($old_id, $new_id)
+
+	public function cloneTutorComments(int $old_id, int $new_id)
 	{
 		$questions_array = array();
 		$res = $this->db->queryF(
@@ -435,12 +318,8 @@ class ilObjComment
 		}
 	}
 
-	/**
-	 * @param int $user_id
-	 * @return string
-	 */
-	public static function getUserImageInBase64($user_id)
-	{
+	public static function getUserImageInBase64(int $user_id) : string
+    {
 		$user_id = (int) $user_id;
 
 		if(!array_key_exists($user_id, self::$user_image_cache))
@@ -462,12 +341,8 @@ class ilObjComment
 		return self::$user_image_cache[$user_id];
 	}
 
-	/**
-	 * @param int $user_id
-	 * @return string
-	 */
-	public static function lookupUsername($user_id)
-	{
+	public static function lookupUsername(int $user_id) : string
+    {
 		$user_id = (int) $user_id;
 
 		if(!array_key_exists($user_id, self::$user_name_cache))
@@ -486,11 +361,7 @@ class ilObjComment
 		return self::$user_name_cache[$user_id];
 	}
 
-    /**
-     * @param int $question_id
-     * @return string
-     */
-	public static function getCommentTitleByQuestionId($question_id)
+	public static function getCommentTitleByQuestionId(int $question_id) : string
     {
         /**
          * @vas $ilDB ilDB
@@ -517,282 +388,177 @@ class ilObjComment
     }
 
 	################## SETTER & GETTER ##################
-	/**
-	 * @return int
-	 */
-	public function getObjId()
-	{
+	public function getObjId() : int
+    {
 		return $this->obj_id;
 	}
 
-	/**
-	 * @param int $obj_id
-	 */
-	public function setObjId($obj_id)
+	public function setObjId(int $obj_id)
 	{
 		$this->obj_id = (int) $obj_id;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getCommentId()
-	{
+	public function getCommentId() : int
+    {
 		return $this->comment_id;
 	}
 
-	/**
-	 * @param int $comment_id
-	 */
-	public function setCommentId($comment_id)
+	public function setCommentId(int $comment_id)
 	{
 		$this->comment_id = (int) $comment_id;
 	}
 
-	/**
-	 * @return boolean
-	 */
-	public function isInteractive()
-	{
+	public function isInteractive() : bool
+    {
 		return $this->is_interactive;
 	}
 
-	/**
-	 * @param boolean $is_interactive
-	 */
-	public function setInteractive($is_interactive)
+	public function setInteractive(bool $is_interactive)
 	{
 		$this->is_interactive = $is_interactive;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getCommentText()
-	{
+	public function getCommentText() : string
+    {
 		return $this->comment_text;
 	}
 
-	/**
-	 * @param string $comment_text
-	 */
-	public function setCommentText($comment_text)
+	public function setCommentText(string $comment_text)
 	{
 		$this->comment_text = $comment_text;
 	}
 
-	/**
-	 * @return float
-	 */
-	public function getCommentTime()
+	public function getCommentTime() : float
 	{
 		return $this->comment_time;
 	}
 
-	/**
-	 * @param float $comment_time
-	 */
-	public function setCommentTime($comment_time)
+	public function setCommentTime(float $comment_time)
 	{
 		$this->comment_time = $comment_time;
 	}
 
-	/**
-	 * @return boolean
-	 */
-	public function isTutor()
-	{
+	public function isTutor() : bool
+    {
 		return $this->is_tutor;
 	}
 
-	/**
-	 * @param boolean $is_tutor
-	 */
-	public function setIsTutor($is_tutor)
+	public function setIsTutor(bool $is_tutor)
 	{
 		$this->is_tutor = $is_tutor;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getUserId()
-	{
+	public function getUserId() : int
+    {
 		return $this->user_id;
 	}
 
-	/**
-	 * @param int $user_id
-	 */
-	public function setUserId($user_id)
+	public function setUserId(int $user_id)
 	{
 		$this->user_id = $user_id;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getCommentTags()
-	{
+	public function getCommentTags() : string
+    {
 		return $this->comment_tags;
 	}
 
-	/**
-	 * @param string $comment_tags
-	 */
-	public function setCommentTags($comment_tags)
+	public function setCommentTags(string $comment_tags)
 	{
 		$this->comment_tags = $comment_tags;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getCommentTitle()
-	{
+    public function getCommentTitle() : string
+    {
 		return $this->comment_title;
 	}
 
-	/**
-	 * @param string $comment_title
-	 */
-	public function setCommentTitle($comment_title)
+	public function setCommentTitle(string $comment_title)
 	{
 		$this->comment_title = $comment_title;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getIsPrivate()
-	{
+	public function getIsPrivate() : int
+    {
 		return $this->is_private;
 	}
 
-	/**
-	 * @param int $is_private
-	 */
-	public function setIsPrivate($is_private)
+	public function setIsPrivate(int $is_private)
 	{
 		$this->is_private = $is_private;
 	}
 
-    /**
-     * @return int
-     */
-    public function getIsTableOfContent()
+    public function getIsTableOfContent() : int
     {
         return $this->is_table_of_content;
     }
 
-    /**
-     * @param int $is_table_of_content
-     */
-    public function setIsTableOfContent($is_table_of_content)
+    public function setIsTableOfContent(int $is_table_of_content)
     {
         $this->is_table_of_content = $is_table_of_content;
     }
 	
-	/**
-	 * @return int
-	 */
-	public function isPublic()
-	{
+	public function isPublic() : int
+    {
 		return $this->is_public;
 	}
 
-	/**
-	 * @param int $is_public
-	 */
-	public function setIsPublic($is_public)
+	public function setIsPublic(int $is_public)
 	{
 		$this->is_public = $is_public;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function isAnonymized()
-	{
+	public function isAnonymized() : int
+    {
 		return $this->is_anonymized;
 	}
 
-	/**
-	 * @param int $is_anonymized
-	 */
-	public function setIsAnonymized($is_anonymized)
+	public function setIsAnonymized(int $is_anonymized)
 	{
 		$this->is_anonymized = $is_anonymized;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function isRepeat()
-	{
+	public function isRepeat() : int
+    {
 		return $this->is_repeat;
 	}
 
-	/**
-	 * @param int $is_repeat
-	 */
-	public function setIsRepeat($is_repeat)
+	public function setIsRepeat(int $is_repeat)
 	{
 		$this->is_repeat = $is_repeat;
 	}
 
-	/**
-	 * @return float
-	 */
-	public function getCommentTimeEnd()
+	public function getCommentTimeEnd() : float
 	{
 		return $this->comment_time_end;
 	}
 
-	/**
-	 * @param float $comment_time_end
-	 */
-	public function setCommentTimeEnd($comment_time_end)
+	public function setCommentTimeEnd(float $comment_time_end)
 	{
 		$this->comment_time_end = $comment_time_end;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getIsReplyTo()
-	{
+	public function getIsReplyTo() : int
+    {
 		return $this->is_reply_to;
 	}
 
-	/**
-	 * @param int $is_reply_to
-	 */
-	public function setIsReplyTo($is_reply_to)
+	public function setIsReplyTo(int $is_reply_to)
 	{
 		$this->is_reply_to = $is_reply_to;
 	}
 
-	/**
-	 * @return array
-	 */
-	public static function getUserImageCache()
-	{
+	public static function getUserImageCache() : array
+    {
 		return self::$user_image_cache;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getMarker()
-	{
+	public function getMarker() : string
+    {
 		return $this->marker;
 	}
 
-	/**
-	 * @param string $marker
-	 */
-	public function setMarker($marker)
+	public function setMarker(string $marker)
 	{
 		$this->marker = $marker;
 	}
