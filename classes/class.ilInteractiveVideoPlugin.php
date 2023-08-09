@@ -9,40 +9,14 @@ require_once 'Services/Component/classes/class.ilPluginAdmin.php';
  */
 class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 {
-	/**
-	 * @var int
-	 */
 	const CLASSIC_MODE = 0;
-
-	/**
-	 * @var int
-	 */
 	const ADVENTURE_MODE = 1;
-
-	/**
-	 * @var string
-	 */
 	const CTYPE = 'Services';
-
-	/**
-	 * @var string
-	 */
 	const CNAME = 'Repository';
-
-	/**
-	 * @var string
-	 */
 	const SLOT_ID = 'robj';
-
-	/**
-	 * @var string
-	 */
 	const PNAME = 'InteractiveVideo';
 
-	/**
-	 * @var ilInteractiveVideoPlugin|null
-	 */
-	private static $instance = null;
+	private static ?ilInteractiveVideoPlugin $instance = null;
 
 	/**
 	 * @return ilInteractiveVideoPlugin | ilPlugin
@@ -75,9 +49,6 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 
 	}
 
-	/**
-	 * @return string
-	 */
     public function getPluginName(): string
 	{
 		return self::PNAME;
@@ -140,11 +111,8 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
         return $this->language_handler;
     }
 
-	/**
-	 * @return bool
-	 */
-	public function isCoreMin52()
-	{
+	public function isCoreMin52() : bool
+    {
 		return version_compare(ILIAS_VERSION_NUMERIC, '5.2.0', '>=');
 	}
 

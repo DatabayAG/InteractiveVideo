@@ -66,7 +66,7 @@ class ilObjComment
 		$this->setMarker($row['marker']);
 	}
 
-	public function create($return_next_id = false, $reply_to_posting = false) 
+	public function create($return_next_id = false, $reply_to_posting = false)
     {
         /**
          * @var $ilUser ilObjUser
