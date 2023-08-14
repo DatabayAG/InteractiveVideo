@@ -1,8 +1,4 @@
 <?php
-/* Copyright (c) 1998-2013 ILIAS open source, Extended GPL, see docs/LICENSE */
-
-require_once 'Services/Tracking/classes/repository_statistics/class.ilTrSummaryTableGUI.php';
-
 /**
  * Class ilInteractiveVideoLPSummaryTableGUI
  */

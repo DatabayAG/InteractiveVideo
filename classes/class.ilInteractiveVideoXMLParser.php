@@ -1,8 +1,4 @@
 <?php
-require_once 'Services/Xml/classes/class.ilSaxParser.php';
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilInteractiveVideoSimpleChoiceQuestionsXMLParser.php';
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoSourceFactory.php';
-
 /**
  * Class ilInteractiveVideoXMLParser
  */

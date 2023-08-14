@@ -1,5 +1,4 @@
 <?php
-require_once './Services/Form/classes/class.ilSubEnabledFormPropertyGUI.php';
 /**
  * Class ilInteractiveVideoTimePicker
  */

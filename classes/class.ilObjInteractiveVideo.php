@@ -1149,8 +1149,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         if (in_array($this->getLearningProgressMode(), [self::LP_MODE_DEACTIVATED])) {
             return $status;
         }
-
-        require_once 'Services/Tracking/classes/class.ilChangeEvent.php';
         if (ilChangeEvent::hasAccessed($this->getId(), $a_user_id)) {
             $status = ilLPStatus::LP_STATUS_IN_PROGRESS_NUM;
         }
@@ -1321,10 +1319,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	{
 		global $DIC;
 
-		require_once "./Services/Tracking/classes/status/class.ilLPStatusEvent.php";
-		require_once "./Services/Tracking/classes/class.ilLPStatusWrapper.php";
-		require_once "./Services/Tracking/classes/class.ilLearningProgress.php";
-
 		ilLPStatusWrapper::_updateStatus(
 			$this->getId(),
             $DIC->user()->getId()
@@ -1336,10 +1330,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      */
     public function refreshLearningProgress(array $usrIds = [])
     {
-        require_once "./Services/Tracking/classes/status/class.ilLPStatusEvent.php";
-        require_once "./Services/Tracking/classes/class.ilLPStatusWrapper.php";
-        require_once "./Services/Tracking/classes/class.ilLearningProgress.php";
-
         ilLPStatusWrapper::_refreshStatus(
             $this->getId(),
             empty($usrIds) ? null : $usrIds
@@ -1349,8 +1339,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	public function trackReadEvent()
 	{
         global $DIC;
-
-        require_once 'Services/Tracking/classes/class.ilChangeEvent.php';
         ilChangeEvent::_recordReadEvent($this->getType(), $this->getRefId(), $this->getId(), $DIC->user()->getId());
 	}
 

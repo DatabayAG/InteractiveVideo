@@ -78,7 +78,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			$this->addColumn($a_parent_obj->getPluginInstance()->txt('type'), 'type');
             //$this->addColumn($a_parent_obj->plugin->txt('compulsory'), 'compulsory', '10%');
 			//$this->addColumn($a_parent_obj->plugin->txt('tutor'), 'is_tutor');
-			
+
 //			$this->addCommandButton('showTutorInsertCommentForm', $this->lng->txt('insert'));
 		}
 		else

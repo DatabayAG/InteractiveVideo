@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Services/UIComponent/Modal/classes/class.ilModalGUI.php';
-
 class ilInteractiveVideoModalExtension extends ilModalGUI
 {
 	const TYPE_XL = 'xlarge';

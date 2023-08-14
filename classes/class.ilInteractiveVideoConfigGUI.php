@@ -110,8 +110,6 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	 */
 	protected function getConfigurationForm()
 	{
-		require_once 'Services/Form/classes/class.ilPropertyFormGUI.php';
-
 		$form = new ilPropertyFormGUI();
 		$db_updater = new ilInteractiveVideoDbUpdater();
 

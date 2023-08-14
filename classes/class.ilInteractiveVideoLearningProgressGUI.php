@@ -1,11 +1,4 @@
 <?php
-/* Copyright (c) 1998-2017 ILIAS open source, Extended GPL, see docs/LICENSE */
-
-require_once 'Services/Tracking/classes/class.ilLPStatusFactory.php';
-require_once 'Services/Tracking/classes/class.ilLPObjSettings.php';
-require_once 'Services/Tracking/classes/class.ilLearningProgressBaseGUI.php';
-require_once 'Services/Tracking/classes/class.ilOnlineTracking.php';
-
 /**
  * Class ilObjComment
  * @author Michael Jansen <mjansen@databay.de>
@@ -336,7 +329,6 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
      */
     protected function getLPMarksForm(ilObjUser $user)
     {
-        require_once 'Services/Form/classes/class.ilPropertyFormGUI.php';
         $form = new ilPropertyFormGUI();
         $this->ctrl->setParameter($this, 'user_id', $user->getId());
         $form->setFormAction($this->ctrl->getFormAction($this, 'editUser'));

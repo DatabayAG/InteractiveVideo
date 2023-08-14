@@ -103,7 +103,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			case 'ilmdeditorgui':
 				$this->checkPermission('write');
-				require_once 'Services/MetaData/classes/class.ilMDEditorGUI.php';
 				$md_gui = new ilMDEditorGUI($this->object->getId(), 0, $this->object->getType());
 				$md_gui->addObserver($this->object, 'MDUpdateListener', 'General');
 				$ilTabs->setTabActive('meta_data');
@@ -122,14 +121,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				break;
 
 			case 'ilpublicuserprofilegui':
-				require_once 'Services/User/classes/class.ilPublicUserProfileGUI.php';
 				$profile_gui = new ilPublicUserProfileGUI((int)$_GET['user']);
 				$profile_gui->setBackUrl($this->ctrl->getLinkTarget($this, 'showContent'));
 				$this->tpl->setContent($this->ctrl->forwardCommand($profile_gui));
 				break;
 
 			case 'ilcommonactiondispatchergui':
-				require_once 'Services/Object/classes/class.ilCommonActionDispatcherGUI.php';
 				$gui = ilCommonActionDispatcherGUI::getInstanceFromAjaxCall();
 				$this->ctrl->forwardCommand($gui);
 				break;
@@ -211,8 +208,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                             $dir = rtrim($dir,'GUI');
 						    $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $class . '.php';
                             if(file_exists($path)){
-                                require_once $path;
-						        global $DIC;
+                                global $DIC;
 						        $class = new $class($DIC);
                                 if(method_exists($class, $cmd))
                                 {
@@ -276,7 +272,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $DIC->ui()->mainTemplate()->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoOverlayMarker.js');
             $DIC->ui()->mainTemplate()->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
         }
-        require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoUniqueIds.php';
 		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
 		$video_tpl = new ilTemplate("tpl.video_tpl.html", true, true, $plugin->getDirectory());
 
@@ -1260,8 +1255,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('addSubtitle');
-
-		require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
 		$confirm = new ilConfirmationGUI();
 		$confirm->setFormAction($this->ctrl->getFormAction($this, 'removeSubtitle'));
 		$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_delete_subtitle'));
@@ -1502,8 +1495,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$ilTabs->addTab('editComments', ilInteractiveVideoPlugin::getInstance()->txt('questions_comments'), $this->ctrl->getLinkTarget($this, 'editMyComments'));
 		}
-
-		require_once 'Services/Tracking/classes/class.ilLearningProgressAccess.php';
 		$a = $this->object;
 		if(! $this->object instanceof ilObjRootFolder) {
             if(ilLearningProgressAccess::checkAccess($this->object->getRefId(), true))
@@ -1726,8 +1717,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
             $this->ctrl->redirect($this, 'editComments');
 		}
-
-		require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
 		$confirm = new ilConfirmationGUI();
 		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteComment'));
 		$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_delete_comment'));
@@ -2059,8 +2048,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
             $this->ctrl->redirect($this, 'editMyComments');
 		}
-
-		require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
 		$confirm = new ilConfirmationGUI();
 		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteMyComment'));
 		$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_delete_comment'));
@@ -2266,8 +2253,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$object = new ilInteractiveVideoSourceFactoryGUI($this->object);
 		$object->addPlayerElements($tpl);
-
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/class.ilInteractiveVideoUniqueIds.php';
 		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
 		$video_tpl->setVariable('VIDEO_PLAYER', $object->getPlayer($player_id)->get());
 
@@ -2918,7 +2903,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		else
 		{
-			require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
 			$confirm = new ilConfirmationGUI();
 			$confirm->setFormAction($this->ctrl->getFormAction($this, 'updateQuestion'));
 			$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_update_question'));
@@ -3155,8 +3139,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->showResults();
 			return;
 		}
-
-		require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
 		$confirm = new ilConfirmationGUI();
 		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteUserResults'));
 		$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_delete_results'));
@@ -3244,8 +3226,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->showQuestionsResults();
 			return;
 		}
-
-		require_once 'Services/Utilities/classes/class.ilConfirmationGUI.php';
 		$confirm = new ilConfirmationGUI();
 		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteQuestionsResults'));
 		$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_delete_results'));

@@ -1,6 +1,4 @@
 <?php
-require_once 'Services/Form/classes/class.ilTextAreaInputGUI.php';
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilHtmlInteractiveVideoPostPurifier.php';
 /**
  * Class ilTextAreaInputCkeditorGUI
  */

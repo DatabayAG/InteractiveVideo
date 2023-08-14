@@ -1,7 +1,4 @@
 <?php
-require_once 'Services/MediaObjects/classes/class.ilFFmpeg.php';
-require_once 'Services/WebAccessChecker/classes/class.ilWACSignedPath.php';
-
 /**
  * Class ilInteractiveVideoFFmpeg
  */
@@ -38,7 +35,6 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		}
 		else
 		{
-			require_once './Services/MediaObjects/exceptions/class.ilFFmpegException.php';
 			throw new ilFFmpegException('It was not possible to extract an image from '.basename($a_file).'.');
 		}
 	}
