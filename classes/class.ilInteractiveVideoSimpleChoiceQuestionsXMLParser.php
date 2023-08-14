@@ -10,6 +10,9 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 	protected $xvid_obj;
 	protected bool $inAnswerTag = false;
 
+	/**
+	 * @var mixed|null
+	 */
 	protected $video_src_id;
 
 	protected int $comments = 0;
@@ -33,7 +36,7 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 	 * @param $tagName
 	 * @param $tagAttributes
 	 */
-	public function handlerBeginTag($xmlParser, $tagName, $tagAttributes)
+	public function handlerBeginTag($xmlParser, $tagName, $tagAttributes): void
 	{
 		switch($tagName)
 		{
@@ -101,7 +104,7 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 	 * @param $xmlParser
 	 * @param $tagName
 	 */
-	public function handlerEndTag($xmlParser, $tagName)
+	public function handlerEndTag($xmlParser, $tagName): void
 	{
 		switch($tagName)
 		{
@@ -204,7 +207,7 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 		xml_set_character_data_handler($a_xml_parser, 'handlerCharacterData');
 	}
 
-	public function handlerCharacterData($xmlParser, $charData)
+	public function handlerCharacterData($xmlParser, $charData): void
 	{
 		if($charData != "\n")
 		{

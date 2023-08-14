@@ -58,7 +58,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
     /**
      *
      */
-    public function executeCommand()
+    public function executeCommand(): void
     {
         $cmd = $this->ctrl->getCmd();
         $this->$cmd();
@@ -73,7 +73,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         return $this->object->getId();
     }
 
-    private function addLearningProgressSubTabs()
+    private function addLearningProgressSubTabs(): void
     {
         /**
          * @var $ilTabs ilTabsGUI
@@ -100,7 +100,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
     /**
      * @param ilPropertyFormGUI|null $form
      */
-    public function showLPSettings(ilPropertyFormGUI $form = null)
+    public function showLPSettings(ilPropertyFormGUI $form = null): void
     {
         /**
          * @var $ilTabs ilTabsGUI
@@ -124,7 +124,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
      *
      * @return ilPropertyFormGUI $form
      */
-    public function getLearningProgressSettingsForm()
+    public function getLearningProgressSettingsForm(): \ilPropertyFormGUI
     {
         $form = new ilPropertyFormGUI();
         $form->setTitle($this->lng->txt('tracking_settings'));
@@ -161,7 +161,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
     /**
      * Save learning progress settings
      */
-    public function saveLearningProgressSettings()
+    public function saveLearningProgressSettings(): void
     {
         $this->gui->ensureAtLeastOnePermission(array('write', 'read_learning_progress'));
 
@@ -192,7 +192,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
     /**
      * 
      */
-    public function refreshStatusAndShowLPSettings()
+    public function refreshStatusAndShowLPSettings(): void
     {
         $this->object->refreshLearningProgress();
 
@@ -202,7 +202,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
     /**
      *
      */
-    public function showLPUsers()
+    public function showLPUsers(): void
     {
         /**
          * @var $ilTabs ilTabsGUI
@@ -222,7 +222,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
     /**
      *
      */
-    public function showLPSummary()
+    public function showLPSummary(): void
     {
         /**
          * @var $ilTabs ilTabsGUI
@@ -238,7 +238,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         $this->tpl->setContent(implode('<br />', array($table->getHTML(), $this->__getLegendHTML())));
     }
 
-    public function showLPUserDetails()
+    public function showLPUserDetails(): void
     {
         /**
          * @var $ilTabs ilTabsGUI
@@ -276,7 +276,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
     }
 
     /**
-     * @param ilPropertyFormGUI $form
+     * @param \ilPropertyFormGUI|null $form
      */
     public function editUser(ilPropertyFormGUI $form = null)
     {
@@ -325,9 +325,8 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 
     /**
      * @param ilObjUser $user
-     * @return ilPropertyFormGUI
      */
-    protected function getLPMarksForm(ilObjUser $user)
+    protected function getLPMarksForm(ilObjUser $user): \ilPropertyFormGUI
     {
         $form = new ilPropertyFormGUI();
         $this->ctrl->setParameter($this, 'user_id', $user->getId());
@@ -375,7 +374,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         $this->editUser($form);
     }
 
-    public function getCtrl() {
+    public function getCtrl(): \ilCtrlInterface {
         return $this->ctrl;
     }
 }

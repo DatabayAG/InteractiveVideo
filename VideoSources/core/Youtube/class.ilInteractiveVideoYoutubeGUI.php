@@ -65,7 +65,7 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 		$instance = new ilInteractiveVideoYoutube();
 		$player->setVariable('PLAYER_ID', $player_id);
 		$player->setVariable('YOUTUBE_ID', $instance->doReadVideoSource($obj->getId()));
-		$player->setVariable('INTERACTIVE_VIDEO_ID', $id);
+		$player->setVariable('INTERACTIVE_VIDEO_ID', $obj->getId());
 		return $player;
 	}
 

@@ -43,7 +43,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 	 * @param ilObjInteractiveVideo $xvid_obj
 	 * @param                      $xmlFile
 	 */
-	public function __construct($xvid_obj, $xmlFile)
+	public function __construct($xvid_obj, ?string $xmlFile)
 	{
 		$this->xvid_obj			= $xvid_obj;
 		$this->inSettingsTag	= false;
@@ -265,7 +265,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 	/**
 	 * @param $xmlParser
 	 */
-    public function setHandlers($a_xml_parser): void
+    public function setHandlers($a_xml_parser) : void
 	{
 		xml_set_object($a_xml_parser, $this);
 		xml_set_element_handler($a_xml_parser, 'handlerBeginTag', 'handlerEndTag');

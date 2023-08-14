@@ -10,7 +10,7 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 	 * @param string $a_title
 	 * @param string $a_postvar
 	 */
-	public function __construct($a_title = "", $a_postvar = "")
+	public function __construct(string $a_title = "", string $a_postvar = "")
 	{
 		parent::__construct($a_title, $a_postvar);
 		$this->setType("textarea");
@@ -37,7 +37,7 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 		$a_tpl->parseCurrentBlock();
 	}
 	
-	public static function appendJavascriptFile()
+	public static function appendJavascriptFile(): void
 	{
 		/**
 		 * @var $tpl ilTemplate

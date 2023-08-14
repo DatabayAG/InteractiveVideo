@@ -38,7 +38,7 @@ class ilObjComment
 		}
 	}
 
-	public function read()
+	public function read(): void
 	{
 
 		$res = $this->db->queryF(
@@ -100,7 +100,7 @@ class ilObjComment
 		}
 	}
 
-	public function removeOldReplyTo(int $reply_to)
+	public function removeOldReplyTo(int $reply_to): void
 	{
         /**
          * @var $ilUser ilObjUser
@@ -110,7 +110,7 @@ class ilObjComment
 			array('integer', 'integer'), array($reply_to, $ilUser->getId()));
 	}
 
-	public function update()
+	public function update(): void
 	{
         /**
          * @var $ilUser ilObjUser
@@ -149,6 +149,9 @@ class ilObjComment
 	    return true;
     }
 
+	/**
+	 * @return mixed[]
+	 */
 	public function getStopPoints() : array
     {
 		$res = $this->db->queryF(
@@ -169,6 +172,9 @@ class ilObjComment
 		return $stop_points;
 	}
 
+	/**
+	 * @return mixed[]
+	 */
 	public function getContentComments(bool $toc = false) : array
     {
 		/**
@@ -259,6 +265,9 @@ class ilObjComment
 		return $comments;
 	}
 
+	/**
+	 * @return mixed[]
+	 */
 	protected function sortInReplies($is_reply_to, $comments) : array
     {
 		foreach($is_reply_to as $value)
@@ -274,7 +283,7 @@ class ilObjComment
 		return $comments;
 	}
 
-	public function cloneTutorComments(int $old_id, int $new_id)
+	public function cloneTutorComments(int $old_id, int $new_id): void
 	{
 		$questions_array = array();
 		$res = $this->db->queryF(
@@ -389,7 +398,7 @@ class ilObjComment
 		return $this->obj_id;
 	}
 
-	public function setObjId(int $obj_id)
+	public function setObjId(int $obj_id): void
 	{
 		$this->obj_id = (int) $obj_id;
 	}
@@ -399,7 +408,7 @@ class ilObjComment
 		return $this->comment_id;
 	}
 
-	public function setCommentId(int $comment_id)
+	public function setCommentId(int $comment_id): void
 	{
 		$this->comment_id = (int) $comment_id;
 	}
@@ -409,7 +418,7 @@ class ilObjComment
 		return $this->is_interactive;
 	}
 
-	public function setInteractive(bool $is_interactive)
+	public function setInteractive(bool $is_interactive): void
 	{
 		$this->is_interactive = $is_interactive;
 	}
@@ -419,7 +428,7 @@ class ilObjComment
 		return $this->comment_text;
 	}
 
-	public function setCommentText(string $comment_text)
+	public function setCommentText(string $comment_text): void
 	{
 		$this->comment_text = $comment_text;
 	}
@@ -429,7 +438,7 @@ class ilObjComment
 		return $this->comment_time;
 	}
 
-	public function setCommentTime(int $comment_time)
+	public function setCommentTime(int $comment_time): void
 	{
 		$this->comment_time = $comment_time;
 	}
@@ -439,7 +448,7 @@ class ilObjComment
 		return $this->is_tutor;
 	}
 
-	public function setIsTutor(bool $is_tutor)
+	public function setIsTutor(bool $is_tutor): void
 	{
 		$this->is_tutor = $is_tutor;
 	}
@@ -449,7 +458,7 @@ class ilObjComment
 		return $this->user_id;
 	}
 
-	public function setUserId(int $user_id)
+	public function setUserId(int $user_id): void
 	{
 		$this->user_id = $user_id;
 	}
@@ -459,7 +468,7 @@ class ilObjComment
 		return $this->comment_tags;
 	}
 
-	public function setCommentTags(string $comment_tags)
+	public function setCommentTags(string $comment_tags): void
 	{
 		$this->comment_tags = $comment_tags;
 	}
@@ -469,7 +478,7 @@ class ilObjComment
 		return $this->comment_title;
 	}
 
-	public function setCommentTitle(string $comment_title)
+	public function setCommentTitle(string $comment_title): void
 	{
 		$this->comment_title = $comment_title;
 	}
@@ -479,7 +488,7 @@ class ilObjComment
 		return $this->is_private;
 	}
 
-	public function setIsPrivate(int $is_private)
+	public function setIsPrivate(int $is_private): void
 	{
 		$this->is_private = $is_private;
 	}
@@ -489,7 +498,7 @@ class ilObjComment
         return $this->is_table_of_content;
     }
 
-    public function setIsTableOfContent(int $is_table_of_content)
+    public function setIsTableOfContent(int $is_table_of_content): void
     {
         $this->is_table_of_content = $is_table_of_content;
     }
@@ -499,7 +508,7 @@ class ilObjComment
 		return $this->is_public;
 	}
 
-	public function setIsPublic(int $is_public)
+	public function setIsPublic(int $is_public): void
 	{
 		$this->is_public = $is_public;
 	}
@@ -509,7 +518,7 @@ class ilObjComment
 		return $this->is_anonymized;
 	}
 
-	public function setIsAnonymized(int $is_anonymized)
+	public function setIsAnonymized(int $is_anonymized): void
 	{
 		$this->is_anonymized = $is_anonymized;
 	}
@@ -519,7 +528,7 @@ class ilObjComment
 		return $this->is_repeat;
 	}
 
-	public function setIsRepeat(int $is_repeat)
+	public function setIsRepeat(int $is_repeat): void
 	{
 		$this->is_repeat = $is_repeat;
 	}
@@ -529,7 +538,7 @@ class ilObjComment
 		return $this->comment_time_end;
 	}
 
-	public function setCommentTimeEnd(int $comment_time_end)
+	public function setCommentTimeEnd(int $comment_time_end): void
 	{
 		$this->comment_time_end = $comment_time_end;
 	}
@@ -539,11 +548,14 @@ class ilObjComment
 		return $this->is_reply_to;
 	}
 
-	public function setIsReplyTo(int $is_reply_to)
+	public function setIsReplyTo(int $is_reply_to): void
 	{
 		$this->is_reply_to = $is_reply_to;
 	}
 
+	/**
+	 * @return mixed[]
+	 */
 	public static function getUserImageCache() : array
     {
 		return self::$user_image_cache;
@@ -554,7 +566,7 @@ class ilObjComment
 		return $this->marker;
 	}
 
-	public function setMarker(string $marker)
+	public function setMarker(string $marker): void
 	{
 		$this->marker = $marker;
 	}

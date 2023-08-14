@@ -27,7 +27,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	protected int $is_chronologic = 0;
 	protected int $is_public = 0;
 	protected string $source_id;
-	protected ?ilInteractiveVideoSource $video_source_object;
+	protected ?ilInteractiveVideoSource $video_source_object = null;
 	protected $video_source_import_object;
 	protected int $task_active = 0;
 	protected string $task;
@@ -148,7 +148,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 * @param $data_short
 	 * @param $data_long
 	 */
-	public function saveSubtitleData($data_short, $data_long)
+	public function saveSubtitleData($data_short, $data_long): void
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -184,7 +184,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	/**
 	 * @param $filename
 	 */
-	public function removeSubtitleData($filename)
+	public function removeSubtitleData($filename): void
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -195,6 +195,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			array('integer', 'text'), array($this->getId(), $filename));
 	}
 
+	/**
+	 * @return array<int|string, array{s: mixed, l: mixed}>
+	 */
 	public function getSubtitleData() : array
     {
         /**
@@ -415,11 +418,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	}
 
 	/**
-	 * @param ilObjInteractiveVideo $new_obj
-	 * @param integer $a_target_id
-	 * @param integer $a_copy_id
-	 */
-    protected function doCloneObject(ilObject2 $new_obj, int $a_target_id, ?int $a_copy_id = null): void
+				 * @param ilObjInteractiveVideo $new_obj
+				 * @param integer $a_target_id
+				 * @param int|null $a_copy_id
+				 */
+				protected function doCloneObject(ilObject2 $new_obj, int $a_target_id, ?int $a_copy_id = null): void
 	{
 		parent::doCloneObject($new_obj, $a_target_id, $a_copy_id);
 
@@ -504,13 +507,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	}
 
     /**
-     * @param bool $replace_with_text
-     * @param bool $empty_string_if_null
-     * @param bool $replace_settings_with_text
-     * @param bool $strip_tags
-     * @return array
-     */
-	public function getCommentsTableData($replace_with_text = false, $empty_string_if_null = false, $replace_settings_with_text = false, $strip_tags = false) : array
+	 * @return array
+	 */
+	public function getCommentsTableData(bool $replace_with_text = false, bool $empty_string_if_null = false, bool $replace_settings_with_text = false, bool $strip_tags = false) : array
     {
         /**
          * @var $ilDB ilDBInterface
@@ -609,9 +608,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     }
 
     /**
-     * @return array
-     */
-	public function getCommentsTableDataByUserId()
+	 * @return array<int, array{comment_id: mixed, comment_time: string, comment_time_end: string, title: mixed, comment_text: mixed, is_private: string, is_reply_to: mixed}>
+	 */
+	public function getCommentsTableDataByUserId(): array
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -672,10 +671,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         return $ilDB->fetchAssoc($res);
 	}
 
-    /**
-     * @return bool
-     */
-    public function doesTocCommentExists()
+    public function doesTocCommentExists(): bool
     {
         global $ilDB;
 
@@ -693,9 +689,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 	/**
 	 * @param $comment_id
-	 * @return mixed
+	 * @return array<string, mixed>
 	 */
-	public function getQuestionDataById($comment_id)
+	public function getQuestionDataById($comment_id): array
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -713,9 +709,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 	/**
 	 * @param $comment_id
-	 * @return array
+	 * @return array<string, mixed>
 	 */
-	public function getCommentTextById($comment_id)
+	public function getCommentTextById($comment_id): array
 	{
 		/**
 		 * @var $ilDB ilDBInterface
@@ -732,10 +728,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 	/**
 	 * @param      $obj_id
-	 * @param bool $with_user_id
-	 * @return array
+	 * @return array<int|string, mixed>
 	 */
-	public function getCommentIdsByObjId($obj_id, $with_user_id = true)
+	public function getCommentIdsByObjId($obj_id, bool $with_user_id = true): array
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -786,7 +781,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 * @param $obj_id
 	 * @param $usr_id
 	 */
-	public function saveVideoStarted($obj_id, $usr_id)
+	public function saveVideoStarted($obj_id, $usr_id): void
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -810,7 +805,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 * @param $obj_id
 	 * @param $usr_id
 	 */
-	public function saveVideoFinished($obj_id, $usr_id)
+	public function saveVideoFinished($obj_id, $usr_id): void
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -845,9 +840,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	/**
 	 * @param $obj_id
 	 * @param $usr_id
-	 * @return bool
 	 */
-	public function doesLearningProgressEntryExists($obj_id, $usr_id)
+	public function doesLearningProgressEntryExists($obj_id, $usr_id): bool
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -869,7 +863,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 * @param $obj_id
 	 * @return array()
 	 */
-	public function getAllStartedAndFinishedUsers($obj_id)
+	public function getAllStartedAndFinishedUsers($obj_id): array
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -887,11 +881,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return $usr_ids;
 	}
 
-	/**
-	 * @param int $usr_id
-	 * @return bool
-	 */
-	public function hasUserStartedAndFinishedVideo($usr_id)
+	public function hasUserStartedAndFinishedVideo(int $usr_id): bool
 	{
 		$res = $this->db->queryF('SELECT * FROM ' . self::TABLE_NAME_LP . ' WHERE obj_id = %s AND usr_id = %s AND started = 1 AND ended = 1',
 			array('integer', 'integer'),array($this->getId(), $usr_id));
@@ -904,131 +894,84 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return true;
 	}
 
-	################## SETTER & GETTER ##################
-
-	/**
-	 * @return int
-	 */
-	public function isAnonymized()
+	public function isAnonymized(): int
 	{
 		return $this->is_anonymized;
 	}
 
-	/**
-	 * @param int $is_anonymized
-	 */
-	public function setIsAnonymized($is_anonymized)
+	public function setIsAnonymized(int $is_anonymized): void
 	{
 		$this->is_anonymized = $is_anonymized;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function isRepeat()
+	public function isRepeat(): int
 	{
 		return $this->is_repeat;
 	}
 
-	/**
-	 * @param int $is_repeat
-	 */
-	public function setIsRepeat($is_repeat)
+	public function setIsRepeat(int $is_repeat): void
 	{
 		$this->is_repeat = $is_repeat;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function isChronologic()
+	public function isChronologic(): int
 	{
 		return $this->is_chronologic;
 	}
 
-	/**
-	 * @param int $is_chronologic
-	 */
-	public function setIsChronologic($is_chronologic)
+	public function setIsChronologic(int $is_chronologic): void
 	{
 		$this->is_chronologic = $is_chronologic;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function isPublic()
+	public function isPublic(): int
 	{
 		return $this->is_public;
 	}
 
-	/**
-	 * @param int $is_public
-	 */
-	public function setIsPublic($is_public)
+	public function setIsPublic(int $is_public): void
 	{
 		$this->is_public = $is_public;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getSourceId()
+	public function getSourceId(): string
 	{
 		return $this->source_id;
 	}
 
-	/**
-	 * @param string $source_id
-	 */
-	public function setSourceId($source_id)
+	public function setSourceId(string $source_id): void
 	{
 		$this->source_id = $source_id;
 	}
 	/**
 	 * @param $status
 	 */
-	public function setOnline($status)
+	public function setOnline($status): void
 	{
 		$this->is_online = (bool)$status;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function isOnline()
+	public function isOnline(): bool
 	{
 		return (bool)$this->is_online;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getTaskActive()
+	public function getTaskActive(): int
 	{
 		return $this->task_active;
 	}
 
-	/**
-	 * @param int $task_active
-	 */
-	public function setTaskActive($task_active)
+	public function setTaskActive(int $task_active): void
 	{
 		$this->task_active = $task_active;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getTask()
+	public function getTask(): string
 	{
 		return $this->task;
 	}
 
-	/**
-	 * @param string $task
-	 */
-	public function setTask($task)
+	public function setTask(string $task): void
 	{
 		$this->task = $task;
 	}
@@ -1044,7 +987,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	/**
 	 * @param mixed $video_source_import_object
 	 */
-	public function setVideoSourceImportObject($video_source_import_object)
+	public function setVideoSourceImportObject($video_source_import_object): void
 	{
 		$this->video_source_import_object = $video_source_import_object;
 	}
@@ -1121,9 +1064,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                 self::LP_MODE_BY_QUESTIONS,
             ]
         )) {
-            $users = array_unique(array_values(array_map(static function (array $event) {
-                return $event['usr_id'];
-            }, ilChangeEvent::_lookupReadEvents($this->getId()))));
+            $users = array_unique(array_values(array_map(static fn(array $event) => $event['usr_id'], ilChangeEvent::_lookupReadEvents($this->getId()))));
 
             $simple = new SimpleChoiceQuestion();
             $users = array_unique(array_merge($users, $simple->getUsersWithAnsweredQuestion($this->getId())));
@@ -1182,11 +1123,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         return $status;
     }
 
-    /**
-     * @param int $usrId
-     * @return int
-     */
-    public function getPercentageForUser($usrId)
+    public function getPercentageForUser(int $usrId): int
     {
         $percentage = 0;
         $simple = new SimpleChoiceQuestion();
@@ -1219,26 +1156,20 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         return (int) $percentage;
     }
 
-	/**
-	 * @param int $learning_progress_mode
-	 */
-	public function setLearningProgressMode($learning_progress_mode)
+	public function setLearningProgressMode(int $learning_progress_mode): void
 	{
 		$this->learning_progress_mode = $learning_progress_mode;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getLearningProgressMode()
+	public function getLearningProgressMode(): int
 	{
 		return $this->learning_progress_mode;
 	}
 
 	/**
-	 * @return array
+	 * @return int[]
 	 */
-	public function getLPValidModes()
+	public function getLPValidModes(): array
 	{
 		return array(
 			self::LP_MODE_DEACTIVATED,
@@ -1249,35 +1180,27 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 	/**
 	 * @param $lp_mode
-	 * @return bool
 	 */
-	public function isCoreLPMode($lp_mode)
+	public function isCoreLPMode($lp_mode): bool
 	{
 		return in_array($lp_mode, array_keys(ilLPObjSettings::getClassMap()));
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getEnableComment()
+	public function getEnableComment(): int
 	{
 		return $this->enable_comment;
 	}
 
-	/**
-	 * @param int $enable_comment
-	 */
-	public function setEnableComment($enable_comment)
+	public function setEnableComment(int $enable_comment): void
 	{
 		$this->enable_comment = $enable_comment;
 	}
 
     /**
-     * @param $lp_mode
-     * @return string
-     * @throws ilException
-     */
-    public function getInternalLabelForLPMode($lp_mode)
+				 * @param $lp_mode
+				 * @throws ilException
+				 */
+				public function getInternalLabelForLPMode($lp_mode): string
     {
         switch ($lp_mode) {
             case self::LP_MODE_BY_QUESTIONS:
@@ -1291,31 +1214,22 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
         throw new ilException(sprintf('The LP mode "%s" is unknown!', $lp_mode));
     }
-	/**
-	 * @return int
-	 */
-	public function getNoCommentStream()
+	public function getNoCommentStream(): int
 	{
 		return $this->no_comment_stream;
 	}
 
-	/**
-	 * @param int $no_comment_stream
-	 */
-	public function setNoCommentStream($no_comment_stream)
+	public function setNoCommentStream(int $no_comment_stream): void
 	{
 		$this->no_comment_stream = $no_comment_stream;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getDefaultMode()
+	public function getDefaultMode(): int
 	{
 		return self::LP_MODE_DEACTIVATED;
 	}
 
-	public function updateLearningProgressForActor()
+	public function updateLearningProgressForActor(): void
 	{
 		global $DIC;
 
@@ -1328,7 +1242,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     /**
      * @param array $usrIds
      */
-    public function refreshLearningProgress(array $usrIds = [])
+    public function refreshLearningProgress(array $usrIds = []): void
     {
         ilLPStatusWrapper::_refreshStatus(
             $this->getId(),
@@ -1336,19 +1250,13 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         );
     }
 
-	public function trackReadEvent()
+	public function trackReadEvent(): void
 	{
         global $DIC;
         ilChangeEvent::_recordReadEvent($this->getType(), $this->getRefId(), $this->getId(), $DIC->user()->getId());
 	}
 
-	/**
-	 * @param int $comment_id
-	 * @param SimpleChoiceQuestion $question
-	 * @param array $a_upload
-	 * @return bool
-	 */
-	public function uploadImage($comment_id, $question, array $a_upload)
+	public function uploadImage(int $comment_id, \SimpleChoiceQuestion $question, array $a_upload): bool
 	{
 		if(!$this->id)
 		{
@@ -1372,129 +1280,81 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return false;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function isAutoResumeAfterQuestion()
+	public function isAutoResumeAfterQuestion(): bool
 	{
 		return $this->auto_resume_after_question;
 	}
 
-	/**
-	 * @param bool $auto_resume_after_question
-	 */
-	public function setAutoResumeAfterQuestion($auto_resume_after_question)
+	public function setAutoResumeAfterQuestion(bool $auto_resume_after_question): void
 	{
 		$this->auto_resume_after_question = $auto_resume_after_question;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function isFixedModal()
+	public function isFixedModal(): bool
 	{
 		return $this->fixed_modal;
 	}
 
-	/**
-	 * @param bool $fixed_modal
-	 */
-	public function setFixedModal($fixed_modal)
+	public function setFixedModal(bool $fixed_modal): void
 	{
 		$this->fixed_modal = $fixed_modal;
 	}
 
-    /**
-     * @return int
-     */
-    public function getShowTocFirst()
+    public function getShowTocFirst(): int
     {
         return $this->show_toc_first;
     }
 
-    /**
-     * @param int $show_toc_first
-     */
-    public function setShowTocFirst($show_toc_first)
+    public function setShowTocFirst(int $show_toc_first): void
     {
         $this->show_toc_first = $show_toc_first;
     }
 
-    /**
-     * @return int
-     */
-    public function getEnableCommentStream()
+    public function getEnableCommentStream(): int
     {
         return $this->enable_comment_stream;
     }
 
-    /**
-     * @param int $enable_comment_stream
-     */
-    public function setEnableCommentStream($enable_comment_stream)
+    public function setEnableCommentStream(int $enable_comment_stream): void
     {
         $this->enable_comment_stream = $enable_comment_stream;
     }
 
-	/**
-	 * @return int
-	 */
-	public function getEnableToolbar()
+	public function getEnableToolbar(): int
 	{
 		return $this->enable_toolbar;
 	}
 
-	/**
-	 * @param int $enable_toolbar
-	 */
-	public function setEnableToolbar($enable_toolbar)
+	public function setEnableToolbar(int $enable_toolbar): void
 	{
 		$this->enable_toolbar = $enable_toolbar;
 	}
-	/**
-	 * @return int
-	 */
-	public function getVideoMode()
+	public function getVideoMode(): int
 	{
 		return $this->video_mode;
 	}
 
-	/**
-	 * @param int $video_mode
-	 */
-	public function setVideoMode($video_mode)
+	public function setVideoMode(int $video_mode): void
 	{
 		$this->video_mode = $video_mode;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getMarkerForStudents()
+	public function getMarkerForStudents(): int
 	{
 		return $this->marker_for_students;
 	}
 
-	/**
-	 * @param int $marker_for_students
-	 */
-	public function setMarkerForStudents($marker_for_students)
+	public function setMarkerForStudents(int $marker_for_students): void
 	{
 		$this->marker_for_students = $marker_for_students;
 	}
 
-    /**
-     * @return int
-     */
-    public function getLayoutWidth()
+    public function getLayoutWidth(): int
     {
         return $this->layout_width;
     }
 
-    /**
-     * @return string
-     */
-    public function getLayoutWidthTransformed()
+    public function getLayoutWidthTransformed(): string
     {
         $value = '2:1';
         switch($this->layout_width){
@@ -1514,10 +1374,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         return $value;
     }
 
-    /**
-     * @param int $layout_width
-     */
-    public function setLayoutWidth($layout_width)
+    public function setLayoutWidth(int $layout_width): void
     {
         $this->layout_width = $layout_width;
     }

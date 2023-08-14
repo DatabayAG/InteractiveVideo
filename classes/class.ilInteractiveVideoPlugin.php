@@ -17,7 +17,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 	/**
 	 * @return ilInteractiveVideoPlugin | ilPlugin
 	 */
-	public static function getInstance()
+	public static function getInstance(): \ilPlugin
 	{
         if (self::$instance instanceof self) {
             return self::$instance;

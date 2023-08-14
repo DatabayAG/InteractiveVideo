@@ -7,7 +7,7 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function parseTitle($a_obj_id, $action, $a_user_id = false)
+	protected function parseTitle($a_obj_id, $action, $a_user_id = false): void
 	{
 		/**
 		 * @var $lng ilLanguage
@@ -67,9 +67,10 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 	}
 
 	/**
-	 * {@inheritdoc}
-	 */
-    protected function getSelectableUserColumns(
+				 * {@inheritdoc}
+				 * @return mixed[]
+				 */
+				protected function getSelectableUserColumns(
         int $a_in_course = 0,
         int $a_in_group = 0
     ): array
@@ -86,9 +87,10 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 	}
 
 	/**
-	 * {@inheritdoc}
-	 */
-    public function getSelectableColumns(): array
+				 * {@inheritdoc}
+				 * @return mixed[]
+				 */
+				public function getSelectableColumns(): array
 	{
 		$columns = parent::getSelectableColumns();
 
@@ -101,10 +103,7 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 		return $columns;
 	}
 
-	/**
-	 * @return bool
-	 */
-	protected function isLearningProgressDeactivated()
+	protected function isLearningProgressDeactivated(): bool
 	{
 		return in_array($this->parent_obj->object->getLearningProgressMode(), array(ilObjInteractiveVideo::LP_MODE_DEACTIVATED));
 	}

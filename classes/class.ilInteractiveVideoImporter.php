@@ -106,12 +106,12 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 	/**
 	 * @param $xml_file
 	 */
-	private function setXmlFile($xml_file)
+	private function setXmlFile(string $xml_file): void
 	{
 		$this->xml_file = $xml_file;
 	}
 
-	public function getXmlFile()
+	public function getXmlFile(): string
 	{
 		return $this->xml_file;
 	}

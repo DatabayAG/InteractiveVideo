@@ -14,7 +14,7 @@ class ilInteractiveVideoRepositorySelectorInputGUI extends ilExplorerSelectInput
 	/**
 	 * {@inheritdoc}
 	 */
-	public function __construct($title, $a_postvar, $a_explorer_gui, $a_multi = false)
+	public function __construct(string $title, string $a_postvar, $a_explorer_gui, bool $a_multi = false)
 	{
 		$this->explorer_gui = $a_explorer_gui;
 		$this->explorer_gui->setSelectMode($a_postvar.'_sel', $a_multi);

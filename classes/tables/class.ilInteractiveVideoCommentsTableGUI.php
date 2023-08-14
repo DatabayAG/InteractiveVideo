@@ -19,19 +19,18 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 
 	protected $DIC;
 
-	public function setIsPublic($public) {
+	public function setIsPublic(int $public): void {
 	    $this->is_public = $public;
     }
 
-    public function isPublic() {
+    public function isPublic(): int {
 	    return $this->is_public;
     }
 
 	/**
-	 * @param ilObjectGUI|ilObjInteractiveVideoGUI $a_parent_obj
-	 * @param string      $a_parent_cmd
+	 * @param \ilObjectGUI|\ilObjInteractiveVideoGUI|null $a_parent_obj
 	 */
-	public function __construct($a_parent_obj, $a_parent_cmd)
+	public function __construct(?object $a_parent_obj, string $a_parent_cmd)
 	{
 		/**
 		 * @var $ilCtrl ilCtrl
@@ -195,7 +194,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		else
 		{
 			$link_target =  $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editComment' : 'editMyComment');
-            if($a_set['is_table_of_content'] === "1") {
+            if(isset($a_set['is_table_of_content']) && $a_set['is_table_of_content'] === "1") {
                 $link_target =  $this->ctrl->getLinkTarget($this->parent_obj,'editChapter');
             }
 		}

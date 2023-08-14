@@ -816,20 +816,22 @@ class SimpleChoiceQuestion
 	 * @param $comment_id
 	 * @return int
 	 */
-	public function existQuestionForCommentId($comment_id)
+	public function existQuestionForCommentId($comment_id) : ?int
 	{
         /**
          * @var $ilDB ilDBInterface
          */
 
 		global $ilDB;
-
+        $question_id = null;
 		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
 			array('integer'), array($comment_id));
 
 		$row = $ilDB->fetchAssoc($res);
+        if(isset($row['question_id']) && $row['question_id'] > 0 ) {
+            $question_id = (int)$row['question_id'];
+        }
 
-		$question_id = (int)$row['question_id'];
 
 		return $question_id;
 	}

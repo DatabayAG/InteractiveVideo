@@ -12,7 +12,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	 * @param        $a_ref_id
 	 * @param bool   $a_print_view
 	 */
-	function __construct($a_parent_obj, $a_parent_cmd, $a_obj_id, $a_ref_id, $a_print_view = false)
+	function __construct(?object $a_parent_obj, string $a_parent_cmd, int $a_obj_id, int $a_ref_id, $a_print_view = false)
 	{
 		parent::__construct($a_parent_obj, $a_parent_cmd, $a_obj_id, $a_ref_id, true); 
 		$this->setPrintMode($a_print_view);
@@ -26,7 +26,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function parseTitle($a_obj_id, $action, $a_user_id = false)
+	protected function parseTitle($a_obj_id, $action, $a_user_id = false): void
 	{
 		/**
 		 * @var $lng ilLanguage
@@ -86,9 +86,10 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	}
 
 	/**
-	 * {@inheritdoc}
-	 */
-    protected function getSelectableUserColumns(
+				 * {@inheritdoc}
+				 * @return mixed[]
+				 */
+				protected function getSelectableUserColumns(
         int $a_in_course = 0,
         int $a_in_group = 0
     ): array
@@ -105,9 +106,10 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	}
 
 	/**
-	 * {@inheritdoc}
-	 */
-    public function getSelectableColumns(): array
+				 * {@inheritdoc}
+				 * @return mixed[]
+				 */
+				public function getSelectableColumns(): array
 	{
 		$columns = parent::getSelectableColumns();
 
@@ -120,10 +122,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 		return $columns;
 	}
 
-	/**
-	 * @return bool
-	 */
-	protected function isLearningProgressDeactivated()
+	protected function isLearningProgressDeactivated(): bool
 	{
 		return in_array($this->parent_obj->object->getLearningProgressMode(), array(ilObjInteractiveVideo::LP_MODE_DEACTIVATED));
 	}

@@ -31,7 +31,7 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 	 * @param string $a_title
 	 * @param string $a_id
 	 */
-	public function __construct($a_title = "", $a_id = "")
+	public function __construct(string $a_title = "", string $a_id = "")
 	{
         global $DIC;
         $this->dic = $DIC;
@@ -56,39 +56,27 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 	/**
 	 * @param $a_value
 	 */
-	public function setValue($a_value)
+	public function setValue(string $a_value): void
 	{
 		$this->value = $a_value;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getValue()
+	public function getValue(): ?string
 	{
 		return $this->value;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getId()
+	public function getId(): string
 	{
 		return $this->id;
 	}
 
-	/**
-	 * @param string $id
-	 */
-	public function setId($id)
+	public function setId(string $id): void
 	{
 		$this->id = $id;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function render()
+	public function render(): string
 	{
 		$my_tpl = new ilTemplate('tpl.time_picker.html', true, true, 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/');
 		$value = $this->getValue();
@@ -98,10 +86,7 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 		return $my_tpl->get();
 	}
 
-	/**
-	 * @param ilTemplate $a_tpl
-	 */
-	public function insert($a_tpl)
+	public function insert(\ilTemplate $a_tpl): void
 	{
 		$a_tpl->setCurrentBlock("prop_generic");
 		$a_tpl->setVariable("PROP_GENERIC", $this->render());
@@ -111,7 +96,7 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 	/**
 	 * @param $a_values
 	 */
-	public function setValueByArray($a_values)
+	public function setValueByArray($a_values): void
 	{
 		if ($this->getPostVar() && isset($a_values[$this->getPostVar()]))
 		{
@@ -123,11 +108,7 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 		}
 	}
 
-	/**
-	 * @param string $comment_time
-	 * @return int
-	 */
-	public static function getSecondsFromString($comment_time)
+	public static function getSecondsFromString(string $comment_time): int
 	{
 		$seconds = 0;
 		$comment_time = preg_split('/:/', $comment_time);
@@ -142,7 +123,7 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 	 * @param $seconds
 	 * @return false|string
 	 */
-	public static function getTimeStringFromSeconds($seconds)
+	public static function getTimeStringFromSeconds($seconds): string
 	{
 		return gmdate('H:i:s', $seconds);
 	}

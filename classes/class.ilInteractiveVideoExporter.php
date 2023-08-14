@@ -54,7 +54,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		return $this->xml_writer->xmlDumpMem();
 	}
 
-	public function exportXMLMetaData()
+	public function exportXMLMetaData(): void
 	{
 		$md2xml = new ilMD2XML($this->object->getId(), 0, $this->object->getType());
 		$md2xml->setExportMode(true);
@@ -67,6 +67,9 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 
 	}
 
+    /**
+     * @return array<string, array{namespace: string, uses_dataset: bool, min: string, max: string}>
+     */
     public function getValidSchemaVersions(string $a_entity): array
 	{
 		return array(
@@ -80,7 +83,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		);
 	}
 
-	public function exportPagesXML()
+	public function exportPagesXML(): void
 	{
 		$attr         = array();
 		$attr["Type"] = "ilInteractiveVideo";
@@ -96,7 +99,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		$this->xml_writer->xmlEndTag("ContentObject");
 	}
 
-	private function exportXMLSettings()
+	private function exportXMLSettings(): void
 	{
 		$src_id = (string)$this->object->getSourceId();
 		$this->xml_writer->xmlStartTag('Settings', array('video_source_id' => $src_id));
@@ -125,7 +128,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		$this->xml_writer->xmlEndTag('Settings');
 	}
 
-	private function exportVideoSourceObject()
+	private function exportVideoSourceObject(): void
 	{
 		$src_id = (string)$this->object->getSourceId();
 		$this->xml_writer->xmlStartTag('VideoSource', array('source_id' => $src_id));
@@ -135,7 +138,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		$this->xml_writer->xmlEndTag('VideoSource');
 	}
 
-	private function exportQuestions()
+	private function exportQuestions(): void
 	{
 		/**
 		 * @var $ilDB   ilDB

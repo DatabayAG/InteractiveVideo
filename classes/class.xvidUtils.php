@@ -44,11 +44,9 @@ class xvidUtils
 
 	/**
 	 * @param      $seconds
-	 * @param bool $text_instead_of_null_string
-	 * @param bool $empty_string_instead_of_null
 	 * @return string
 	 */
-	public static function getTimeStringFromSeconds($seconds, $text_instead_of_null_string = false, $empty_string_instead_of_null = false)
+	public static function getTimeStringFromSeconds($seconds, bool $text_instead_of_null_string = false, bool $empty_string_instead_of_null = false)
 	{
 		$s = $seconds % 60;
 		$m = (($seconds - $s) / 60) % 60;
@@ -103,18 +101,16 @@ class xvidUtils
 	/**
 	 * @param $txt
 	 * @param $name
-	 * @return ilTextAreaInputGUI
 	 */
-	public static function constructTextAreaFormElement($txt, $name)
+	public static function constructTextAreaFormElement(string $txt, $name): \ilTextAreaInputCkeditorGUI
 	{
 		return new ilTextAreaInputCkeditorGUI(ilInteractiveVideoPlugin::getInstance()->txt($txt), $name);
 	}
 
     /**
-     * @param $path
-     * @return string
-     */
-	public static function ensureFileSavePathExists($path)
+	 * @param $path
+	 */
+	public static function ensureFileSavePathExists($path): string
 	{
 		$path = ilFileUtils::getWebspaceDir() . self::INTERACTIVE_VIDEO . $path;
 		if( ! is_dir($path))
@@ -124,11 +120,7 @@ class xvidUtils
 		return $path .'/';
 	}
 
-	/**
-	 * @param string $svg
-	 * @return string
-	 */
-	public static function secureSvg($svg)
+	public static function secureSvg(string $svg): string
 	{
 		if(file_exists('./Services/MediaObjects/lib/svg-sanitizer-master/src/Sanitizer.php'))
 		{
