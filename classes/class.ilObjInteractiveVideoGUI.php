@@ -228,10 +228,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	public function showContent(): void
 	{
-		/**
-		 * @var $tpl    ilTemplate
-		 * @var $ilTabs ilTabsGUI
-		 */
 		global $tpl, $ilTabs;
 		$ilTabs->activateTab('content');
 
@@ -527,7 +523,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         '/templates/default/xvid.css',
         '/libs/npm/node_modules/plyr/dist/plyr.css',
         '/libs/Bootstraptoggle/bootstrap2-toggle.min.css',
-        '/libs/npm/node_modules/bootstrap-timepicker/css/bootstrap-timepicker.css'
+        '/libs/npm/node_modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css'
     ];
 
     /**
@@ -549,10 +545,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		        '/js/InteractiveVideoModalHelper.js'
     ];
 
-    /**
-				 * @param $tpl
-				 */
-				protected function addJavascriptAndCSSToTemplate($tpl): void
+    protected function addJavascriptAndCSSToTemplate($tpl): void
     {
         foreach($this->custom_css as $file)
         {
@@ -1886,7 +1879,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$form->addCommandButton('insertTutorChapter', $this->lng->txt('insert'));
 		$form->addCommandButton('cancelComments', $this->lng->txt('cancel'));
-
+        $this->addJavascriptAndCSSToTemplate($tpl);
 		$tpl->setContent($form->getHTML());
 	}
 
@@ -1916,7 +1909,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         if($this->object->isMarkerActive()){
             $tpl->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
         }
-
+        $this->addJavascriptAndCSSToTemplate($tpl);
         $tpl->setContent($my_tpl->get());
 	}
 
@@ -2709,6 +2702,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$form->addCommandButton('insertQuestion', $this->lng->txt('insert'));
 		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
+        $this->addJavascriptAndCSSToTemplate($tpl);
 		$tpl->setContent($form->getHTML());
 	}
 
