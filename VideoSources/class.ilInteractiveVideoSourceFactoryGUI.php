@@ -68,7 +68,8 @@ class ilInteractiveVideoSourceFactoryGUI
 
 	protected function sourceDoesNotExistsAnymore()
 	{
-		ilUtil::sendFailure(ilInteractiveVideoPlugin::getInstance()->txt('source_does_not_exist'), true);
+        global $DIC;
+        $DIC->ui()->mainTemplate()->setOnScreenMessage("failure", $DIC->language()->txt("source_does_not_exist"), true);
 		ilUtil::redirect('ilias.php?baseClass=ilDashboardGUI');
 	}
 

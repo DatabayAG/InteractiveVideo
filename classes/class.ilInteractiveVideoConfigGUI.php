@@ -169,7 +169,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		{
 			$form->addCommandButton('loadDbUpdates', $this->plugin_object->txt('update_db'));
 		}
-        $form->addCommandButton('loadLanguages', $this->plugin_object->txt('refresh_language'));
+        $form->addCommandButton('loadLanguages', $this->lng->txt('refresh_languages'));
 		$form->addCommandButton('saveConfigurationForm', $this->lng->txt('save'));
 
 		return $form;
@@ -262,6 +262,8 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
         }
         $language = new ilInteractiveVideoLanguageHandler($xvid_instance);
         $language->updateLanguages();
+        $DIC->ui()->mainTemplate()->setOnScreenMessage("info", $DIC->language()->txt("cmps_refresh_lng"), true);
+        $this->showConfigurationForm();
     }
 
 	/**
