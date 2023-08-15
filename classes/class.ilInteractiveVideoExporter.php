@@ -4,6 +4,7 @@
  */
 class ilInteractiveVideoExporter extends ilXmlExporter
 {
+    public const OBJ_TYPE = 'xvid';
 	/**
 	 * @var ilXmlWriter
 	 */
@@ -72,15 +73,15 @@ class ilInteractiveVideoExporter extends ilXmlExporter
      */
     public function getValidSchemaVersions(string $a_entity): array
 	{
-		return array(
-			'5.2.0' => array(
-				'namespace'    => 'http://www.ilias.de/',
-				#'xsd_file'     => 'xtsf_5_1.xsd',
-				'uses_dataset' => false,
-				'min'          => '5.2.0',
-				'max'          => '5.2.999'
-			)
-		);
+        return [
+            '5.2.0' => [
+                'namespace' => 'http://www.ilias.de/Modules/ContentPage/' . self::OBJ_TYPE . '/5_4',
+                'xsd_file' => 'ilias_' . self::OBJ_TYPE . '_5_2.xsd',
+                'uses_dataset' => false,
+                'min' => '5.2.0',
+                'max' => '',
+            ],
+        ];
 	}
 
 	public function exportPagesXML(): void

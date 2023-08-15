@@ -3366,7 +3366,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		array_push($head_row, $plugin->txt('answered') );
 		array_push($head_row, $plugin->txt('sum'));
-		array_push($csv, ilUtil::processCSVRow($head_row, TRUE, $separator) );
+		array_push($csv, ilCSVUtil::processCSVRow($head_row, TRUE, $separator) );
 		$ignore_colum = array('name','answerd', 'sum');
 		foreach ($data['users'] as $key => $row)
 		{
@@ -3383,7 +3383,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					array_push($csvrow, '');
 				}
 			}
-			array_push($csv, ilUtil::processCSVRow($csvrow, TRUE, $separator));
+			array_push($csv, ilCSVUtil::processCSVRow($csvrow, TRUE, $separator));
 		}
 		$csvoutput = "";
 		foreach ($csv as $row)
@@ -3415,7 +3415,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         array_push($head_row, $plugin->txt('visibility'));
 		array_push($head_row, $plugin->txt('reply_to'));
 
-		array_push($csv, ilUtil::processCSVRow($head_row, TRUE, $separator) );
+		array_push($csv, ilCSVUtil::processCSVRow($head_row, TRUE, $separator) );
 		foreach ($data as $key => $row)
 		{
 			$csvrow = array();
@@ -3423,7 +3423,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			{
 				array_push($csvrow, trim($value, '"'));
 			}
-			array_push($csv, ilUtil::processCSVRow($csvrow, TRUE, $separator));
+			array_push($csv, ilCSVUtil::processCSVRow($csvrow, TRUE, $separator));
 		}
 		$csvoutput = "";
 		foreach ($csv as $row)
@@ -3466,7 +3466,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($head_row, $plugin->txt('reply_to'));
 		//array_push($head_row, $plugin->txt('toc'));
 
-		array_push($csv, ilUtil::processCSVRow($head_row, TRUE, $separator) );
+		array_push($csv, ilCSVUtil::processCSVRow($head_row, TRUE, $separator) );
 
 		foreach ($data as $key => $row)
 		{
@@ -3475,7 +3475,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			{
 				array_push($csvrow, trim($value, '"'));
 			}
-			array_push($csv, ilUtil::processCSVRow($csvrow, TRUE, $separator));
+			array_push($csv, ilCSVUtil::processCSVRow($csvrow, TRUE, $separator));
 		}
 		$csvoutput = "";
 		foreach ($csv as $row)

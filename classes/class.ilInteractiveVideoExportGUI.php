@@ -27,10 +27,7 @@ class ilInteractiveVideoExportGUI extends ilExportGUI
 	 */
     public function download(): void
 	{
-		if(isset($_GET['file']) && $_GET['file'])
-		{
-			$_POST['file'] = array($_GET['file']);
-		}
+		
 		parent::download();
 	}
 }
