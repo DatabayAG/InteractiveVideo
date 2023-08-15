@@ -27,7 +27,7 @@ class ilInteractiveVideoExportGUI extends ilExportGUI
 	 */
     public function download(): void
 	{
-		
+
 		parent::download();
 	}
 }
