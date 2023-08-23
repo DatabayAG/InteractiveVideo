@@ -77,6 +77,7 @@ class ilObjComment
 		}
 		$next_id = $this->db->nextId('rep_robj_xvid_comments');
 		$this->setCommentId($next_id);
+        $this->setMarker('');
         $this->db->insert('rep_robj_xvid_comments',
 			array(
 				'comment_id'     	=> array('integer', $next_id),
