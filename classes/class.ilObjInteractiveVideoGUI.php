@@ -26,7 +26,7 @@ ilInteractiveVideoPlugin::getInstance()->includeClass('questions/class.SimpleCho
 /**
  * Class ilObjInteractiveVideoGUI
  * @author               Nadia Ahmad <nahmad@databay.de>
- * @ilCtrl_isCalledBy    ilObjInteractiveVideoGUI: ilRepositoryGUI, ilAdministrationGUI, ilObjPluginDispatchGUI, ilContainerPageGUI
+ * @ilCtrl_isCalledBy    ilObjInteractiveVideoGUI: ilRepositoryGUI, ilAdministrationGUI, ilObjPluginDispatchGUI, ilContainerPageGUI, ilPageEditorServerAdapterGUI
  * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilPermissionGUI, ilInfoScreenGUI, ilObjectCopyGUI, ilRepositorySearchGUI, ilPublicUserProfileGUI, ilCommonActionDispatcherGUI, ilMDEditorGUI
  * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilInteractiveVideoLearningProgressGUI
  * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilPropertyFormGUI
