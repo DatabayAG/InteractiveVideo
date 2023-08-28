@@ -332,7 +332,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	{
 		$mob = new ilObjMediaObject($this->doReadVideoSource($obj_id));
 		$mob->exportXML($xml_writer);
-		ilUtil::makeDirParents($export_path . '/objects');
+		ilFileUtils::makeDirParents($export_path . '/objects');
 		$mob->exportFiles($export_path);
 	}
 

@@ -193,7 +193,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 						if(file_exists($path))
 						{
 							$export_path = $this->export_dir . '/' . $qid . '/';
-							ilUtil::makeDirParents($export_path);
+                            ilFileUtils::makeDirParents($export_path);
 							copy($path, $export_path . basename($path));
 						}
 						$this->xml_writer->xmlElement('QuestionImage', array('qid' => $qid, 'file' => '/Plugins/xvid/set_1/expDir_1/' . $qid . '/' . basename($path)));
