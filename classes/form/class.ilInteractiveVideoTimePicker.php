@@ -46,10 +46,14 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 	 */
     public function checkInput(): bool
 	{
-        $post = $this->dic->http()->wrapper()->post()->retrieve($this->getPostVar(), $this->dic->refinery()->kindlyTo()->string());
-		if($this->dic->http()->wrapper()->post()->has($this->getPostVar())){
+        if($this->dic->http()->wrapper()->post()->has($this->getPostVar()))
+        {
             $post = $this->dic->http()->wrapper()->post()->retrieve($this->getPostVar(), $this->dic->refinery()->kindlyTo()->string());
+            if($this->dic->http()->wrapper()->post()->has($this->getPostVar())){
+                $post = $this->dic->http()->wrapper()->post()->retrieve($this->getPostVar(), $this->dic->refinery()->kindlyTo()->string());
+            }
         }
+
 		return $this->checkSubItemsInput();
 	}
 

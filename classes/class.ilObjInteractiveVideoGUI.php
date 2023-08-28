@@ -2853,13 +2853,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		else
 		{
+            $form = $this->initQuestionForm();
+            $form->checkInput();
 			$confirm = new ilConfirmationGUI();
 			$confirm->setFormAction($this->ctrl->getFormAction($this, 'updateQuestion'));
 			$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_update_question'));
 
 			$confirm->setCancel($this->lng->txt('cancel'), 'editComments');
 			$confirm->setConfirm($this->lng->txt('update'), 'updateQuestion');
-			foreach($_POST as $key=>$value)
+            global $DIC;
+            $form = $DIC->http()->request()->getParsedBody();
+            foreach($form as $key=>$value)
 			{
 				//@todo .... very quick ... very dirty ....
 				if($key != 'cmd')
@@ -2878,57 +2882,59 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
 	public function updateQuestion(): void
 	{
+        global $DIC;
 		$form = $this->initQuestionForm();
-		if(isset($_POST['form_values']))
+		if($DIC->http()->wrapper()->post()->has('form_values'))
 		{
 			//@todo .... very quick ... very wtf ....
-			$_POST = unserialize($_POST['form_values']);
+			$post = unserialize($_POST['form_values']);
 			$_FILES = unserialize($_REQUEST['form_files']);
 		}
 
-		if($form->checkInput())
+		if(is_array($post))
 		{
-			$comment_id = $form->getInput('comment_id');
+			$comment_id = $post['comment_id'];
 			if($comment_id > 0)
 			{
 				$this->objComment = new ilObjComment($comment_id);
 			}
-			$this->objComment->setCommentText($form->getInput('question_text'));
-			$this->objComment->setInteractive((int)$form->getInput('is_interactive'));
-			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
+			$this->objComment->setCommentText($post['question_text']);
+			$this->objComment->setInteractive((int)$post['is_interactive']);
+			$this->objComment->setCommentTitle((string)$post['comment_title']);
 
 			// calculate seconds
-            $comment_time = $form->getInput('comment_time');
+            $comment_time = $post['comment_time'];
             $start_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time));
             $this->objComment->setCommentTime($start_time);
-            $comment_time_end = $form->getInput('comment_time_end');
+            $comment_time_end = $post['comment_time_end'];
             $end_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time_end));
             $this->objComment->setCommentTimeEnd($end_time);
 
 			$this->objComment->update();
 
-			$this->performQuestionRefresh($comment_id, $form);
+			$this->performQuestionRefresh($comment_id, $post);
 
             $this->tpl->setOnScreenMessage("success", $this->lng->txt('saved_successfully'));
 			$this->editComments();
 		}
-		else
-		{
-			$form->setValuesByPost();
-			$this->editQuestion($form);
-		}
+
 	}
 
 	/**
 	 * @param $comment_id
 	 */
-	private function performQuestionRefresh($comment_id, \ilPropertyFormGUI $form): void
+	private function performQuestionRefresh($comment_id, $form): void
 	{
         global $DIC;
 		$question    = new SimpleChoiceQuestion($comment_id);
 		#$question_id = $question->existQuestionForCommentId($comment_id);
 		$question->setCommentId($comment_id);
-		$question->setType((int)$form->getInput('question_type'));
+        if(is_array($form)) {
+            $question->setType((int)$form['question_type']);
+        } else {
+            $question->setType((int)$form->getInput('question_type'));
+        }
+
 		if(is_array($_FILES) && count($_FILES) > 0 && array_key_exists('question_image', $_FILES))
 		{
 			$this->object->uploadImage($comment_id, $question, $_FILES['question_image']);
@@ -2945,29 +2951,56 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$question->setQuestionImage(null);
 		}
 
-		$question->setQuestionText(ilInteractiveVideoPlugin::stripSlashesWrapping($form->getInput('question_text'), false));
-		$question->setFeedbackCorrect(ilInteractiveVideoPlugin::stripSlashesWrapping($form->getInput('feedback_correct'), false));
-		$question->setFeedbackOneWrong(ilInteractiveVideoPlugin::stripSlashesWrapping($form->getInput('feedback_one_wrong'), false));
+        if(is_array($form)) {
+            $question->setQuestionText(ilInteractiveVideoPlugin::stripSlashesWrapping($form['question_text']));
+            $question->setFeedbackCorrect(ilInteractiveVideoPlugin::stripSlashesWrapping($form['feedback_correct']));
+            $question->setFeedbackOneWrong(ilInteractiveVideoPlugin::stripSlashesWrapping($form['feedback_one_wrong']));
 
-		$question->setLimitAttempts((int)$form->getInput('limit_attempts'));
-		$question->setIsJumpCorrect((int)$form->getInput('is_jump_correct'));
-		$question->setShowCorrectIcon((int)$form->getInput('show_correct_icon'));
-		$question->setFeedbackCorrectId((int)$form->getInput('feedback_correct_obj'));
-		$question->setFeedbackWrongId((int)$form->getInput('feedback_wrong_obj'));
+            $question->setLimitAttempts((int)$form['limit_attempts']);
+            $question->setIsJumpCorrect((int)$form['is_jump_correct']);
+            $question->setShowCorrectIcon((int)$form['show_correct_icon']);
+            $question->setFeedbackCorrectId((int)$form['feedback_correct_obj']);
+            $question->setFeedbackWrongId((int)$form['feedback_wrong_obj']);
 
-		$question->setJumpCorrectTs((int) $form->getInput('jump_correct_ts'));
+            $question->setJumpCorrectTs((int) $form['jump_correct_ts']);
 
-		$question->setIsJumpWrong((int)$form->getInput('is_jump_wrong'));
-		$question->setShowWrongIcon((int)$form->getInput('show_wrong_icon'));
-		$question->setJumpWrongTs((int)$form->getInput('jump_wrong_ts'));
+            $question->setIsJumpWrong((int)$form['is_jump_wrong']);
+            $question->setShowWrongIcon((int)$form['show_wrong_icon']);
+            $question->setJumpWrongTs((int)$form['jump_wrong_ts']);
 
-		$question->setShowResponseFrequency((int)$form->getInput('show_response_frequency'));
-		$question->setShowBestSolution((int)$form->getInput('show_best_solution'));
-		$question->setShowBestSolutionText(ilInteractiveVideoPlugin::stripSlashesWrapping($form->getInput('show_best_solution_text'), false));
-		$question->setRepeatQuestion((int)$form->getInput('repeat_question'));
-		$question->setCompulsoryQuestion((int)$form->getInput('compulsory_question'));
-		$question->setReflectionQuestionComment((int)$form->getInput('show_comment_field'));
-		$question->setNeutralAnswer((int)$form->getInput('neutral_type'));
+            $question->setShowResponseFrequency((int)$form['show_response_frequency']);
+            $question->setShowBestSolution((int)$form['show_best_solution']);
+            $question->setShowBestSolutionText(ilInteractiveVideoPlugin::stripSlashesWrapping($form['show_best_solution_text']));
+            $question->setRepeatQuestion((int)$form['repeat_question']);
+            $question->setCompulsoryQuestion((int)$form['compulsory_question']);
+            $question->setReflectionQuestionComment((int)$form['show_comment_field']);
+            $question->setNeutralAnswer((int)$form['neutral_type']);
+        } else {
+            $question->setQuestionText(ilInteractiveVideoPlugin::stripSlashesWrapping($form->getInput('question_text'), false));
+            $question->setFeedbackCorrect(ilInteractiveVideoPlugin::stripSlashesWrapping($form->getInput('feedback_correct'), false));
+            $question->setFeedbackOneWrong(ilInteractiveVideoPlugin::stripSlashesWrapping($form->getInput('feedback_one_wrong'), false));
+
+            $question->setLimitAttempts((int)$form->getInput('limit_attempts'));
+            $question->setIsJumpCorrect((int)$form->getInput('is_jump_correct'));
+            $question->setShowCorrectIcon((int)$form->getInput('show_correct_icon'));
+            $question->setFeedbackCorrectId((int)$form->getInput('feedback_correct_obj'));
+            $question->setFeedbackWrongId((int)$form->getInput('feedback_wrong_obj'));
+
+            $question->setJumpCorrectTs((int) $form->getInput('jump_correct_ts'));
+
+            $question->setIsJumpWrong((int)$form->getInput('is_jump_wrong'));
+            $question->setShowWrongIcon((int)$form->getInput('show_wrong_icon'));
+            $question->setJumpWrongTs((int)$form->getInput('jump_wrong_ts'));
+
+            $question->setShowResponseFrequency((int)$form->getInput('show_response_frequency'));
+            $question->setShowBestSolution((int)$form->getInput('show_best_solution'));
+            $question->setShowBestSolutionText(ilInteractiveVideoPlugin::stripSlashesWrapping($form->getInput('show_best_solution_text'), false));
+            $question->setRepeatQuestion((int)$form->getInput('repeat_question'));
+            $question->setCompulsoryQuestion((int)$form->getInput('compulsory_question'));
+            $question->setReflectionQuestionComment((int)$form->getInput('show_comment_field'));
+            $question->setNeutralAnswer((int)$form->getInput('neutral_type'));
+        }
+
 		$question->deleteQuestionsIdByCommentId($comment_id);
 		$question->create();
 
