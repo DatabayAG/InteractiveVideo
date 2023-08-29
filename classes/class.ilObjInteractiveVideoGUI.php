@@ -2974,7 +2974,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $question->setCompulsoryQuestion((int)$this->getValueFromFormOrArray('compulsory_question', $form));
         $question->setReflectionQuestionComment((int)$this->getValueFromFormOrArray('show_comment_field', $form));
         $question->setNeutralAnswer((int)$this->getValueFromFormOrArray('neutral_type', $form));
-        
+
         $question->deleteQuestionsIdByCommentId($comment_id);
         $qid = $question->create();
 
@@ -2986,10 +2986,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             if(array_key_exists($key, $form)){
                 return $form[$key];
             }
-            return '';
         } elseif($form instanceof ilPropertyFormGUI) {
             return $form->getInput($key);
         }
+        return '';
     }
 
     /**
