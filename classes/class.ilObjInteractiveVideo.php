@@ -697,6 +697,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
          * @var $ilDB ilDBInterface
          */
 		global $ilDB;
+        $data = [];
 
 		$res = 	$ilDB->queryF('SELECT * FROM  ' . self::TABLE_NAME_QUESTIONS. ' WHERE comment_id = %s',
 			array('integer'), array($comment_id));

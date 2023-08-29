@@ -464,40 +464,7 @@ class SimpleChoiceQuestion
 				'neutral_answer' => array('integer', $this->getNeutralAnswer()),
 				'question_image' => array('text', $this->getQuestionImage()),
 			));
-		if(is_array($_POST['answer']) && count($_POST['answer']) > 0 && $_POST['question_type'] != self::REFLECTION)
-		{
-			foreach(ilArrayUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
-			{
-				$answer_id = $ilDB->nextId(self::TABLE_NAME_QUESTION_TEXT);
-				if($value == null){$value = ' ';}
-				if(is_array($_POST['correct']) && array_key_exists($key, ilArrayUtil::stripSlashesRecursive($_POST['correct'])))
-				{
-					$correct = 1;
-				}
-				else
-				{
-					$correct = 0;
-				}
-				$ilDB->insert(self::TABLE_NAME_QUESTION_TEXT,
-					array(
-						'answer_id'   => array('integer', $answer_id),
-						'question_id' => array('integer', $question_id),
-						'answer'      => array('text', $value),
-						'correct'     => array('integer', $correct)
-					));
-			}
-		}
-		else if($_POST['question_type'] == self::REFLECTION)
-		{
-			$answer_id = $ilDB->nextId(self::TABLE_NAME_QUESTION_TEXT);
-			$ilDB->insert(self::TABLE_NAME_QUESTION_TEXT,
-				array(
-					'answer_id'   => array('integer', $answer_id),
-					'question_id' => array('integer', $question_id),
-					'answer'      => array('text', ' '),
-					'correct'     => array('integer', 1)
-				));
-		}
+		$this->editAnswersForQuestion($question_id);
 		return $question_id;
 	}
 
@@ -1383,6 +1350,47 @@ class SimpleChoiceQuestion
     public function setShowBestSolutionText(?string $show_best_solution_text) : void
     {
         $this->show_best_solution_text = $show_best_solution_text;
+    }
+
+    public function editAnswersForQuestion($question_id){
+        global $DIC;
+
+        $post = $DIC->http()->request()->getParsedBody();
+
+        if(is_array($post['answer']) && count($post['answer']) > 0 && $post['question_type'] != self::REFLECTION)
+        {
+            foreach(ilArrayUtil::stripSlashesRecursive($post['answer']) as $key => $value)
+            {
+                $answer_id = $DIC->database()->nextId(self::TABLE_NAME_QUESTION_TEXT);
+                if($value == null){$value = ' ';}
+                if(is_array($post['correct']) && array_key_exists($key, ilArrayUtil::stripSlashesRecursive($post['correct'])))
+                {
+                    $correct = 1;
+                }
+                else
+                {
+                    $correct = 0;
+                }
+                $DIC->database()->insert(self::TABLE_NAME_QUESTION_TEXT,
+                    array(
+                        'answer_id'   => array('integer', $answer_id),
+                        'question_id' => array('integer', $question_id),
+                        'answer'      => array('text', $value),
+                        'correct'     => array('integer', $correct)
+                    ));
+            }
+        }
+        else if($_POST['question_type'] == self::REFLECTION)
+        {
+            $answer_id = $DIC->database()->nextId(self::TABLE_NAME_QUESTION_TEXT);
+            $DIC->database()->insert(self::TABLE_NAME_QUESTION_TEXT,
+                array(
+                    'answer_id'   => array('integer', $answer_id),
+                    'question_id' => array('integer', $question_id),
+                    'answer'      => array('text', ' '),
+                    'correct'     => array('integer', 1)
+                ));
+        }
     }
 
 

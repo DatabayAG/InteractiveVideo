@@ -157,7 +157,7 @@ class SimpleChoiceQuestionFormEditGUI
 		$question_text->setRequired(true);
 		$form->addItem($question_text);
 
-		$this->appendImageUploadForm($this->plugin, $form);
+		#$this->appendImageUploadForm($this->plugin, $form);
 
 		$neutral_type         = new ilSelectInputGUI($this->plugin->txt('neutral_type'), 'neutral_type');
 		$neutral_type_options = array(
@@ -180,17 +180,33 @@ class SimpleChoiceQuestionFormEditGUI
 	 */
 	protected function appendImageUploadForm($plugin, $form)
 	{
+        global $DIC;
+
+        $comment_id_post = $DIC->http()->wrapper()->post()->has('comment_id');
+        if($comment_id_post) {
+            $comment_id_post = $DIC->http()->wrapper()->post()->retrieve('comment_id', $DIC->refinery()->kindlyTo()->int());
+        }
+        $comment_id_get = $DIC->http()->wrapper()->query()->has('comment_id');
+        if($comment_id_get) {
+            $comment_id_get = $DIC->http()->wrapper()->query()->retrieve('comment_id', $DIC->refinery()->kindlyTo()->int());
+        }
 		$image_upload  = new ilInteractiveVideoPreviewPicker($plugin->txt('question_image'), 'question_image');
-		if(isset($_GET['comment_id']) || isset($_POST['comment_id']))
+		if($comment_id_post || $comment_id_get)
 		{
-			$comment_id = (int)$_GET['comment_id'] ? (int)$_GET['comment_id'] : (int)$_POST['comment_id'];
+            if(is_int($comment_id_post)) {
+                $comment_id = $comment_id_post;
+            } elseif(is_int($comment_id_get)) {
+                $comment_id = $comment_id_get;
+            }
 			if($comment_id != 0)
 			{
 				$question_data = $this->object->getQuestionDataById((int)$comment_id);
-				if(array_key_exists('question_data', $question_data) && array_key_exists('question_image', $question_data['question_data']) )
+				if(array_key_exists('question_data', $question_data))
 				{
-					$image_upload->setValue($question_data['question_data']['question_image']);
-					$image_upload->setImage($question_data['question_data']['question_image']);
+                    if($question_data['question_data'] != null && array_key_exists('question_image', $question_data['question_data'])){
+                        $image_upload->setValue($question_data['question_data']['question_image']);
+                        $image_upload->setImage($question_data['question_data']['question_image']);
+                    }
 				}
 			}
 		}
