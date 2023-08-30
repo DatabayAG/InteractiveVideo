@@ -3429,7 +3429,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ajax_object   = new SimpleChoiceQuestionAjaxHandler();
         $post = $this->http->wrapper()->post();
         $qid = null;
-        if($post->has('time'))
+        if($post->has('qid'))
         {
             $qid = $post->retrieve('qid', $this->refinery->kindlyTo()->int());
         }
