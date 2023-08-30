@@ -2929,11 +2929,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         global $DIC;
 		$question    = new SimpleChoiceQuestion($comment_id);
 		$question->setCommentId($comment_id);
-        if(is_array($form)) {
-            $question->setType((int)$form['question_type']);
-        } else {
-            $question->setType((int)$form->getInput('question_type'));
-        }
+
+        $question->setType((int)$this->getValueFromFormOrArray('question_type', $form));
 
 		if(is_array($_FILES) && count($_FILES) > 0 && array_key_exists('question_image', $_FILES))
 		{
