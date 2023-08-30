@@ -1,6 +1,8 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 
+use ILIAS\HTTP\Services;
+
 /**
  * Class ilObjInteractiveVideoGUI
  * @author               Nadia Ahmad <nahmad@databay.de>
@@ -22,14 +24,37 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public $objComment;
 
 	/** @var \ilPlugin|null */
-				protected ?ilPlugin $plugin = null;
+    protected ?ilPlugin $plugin = null;
 
+    protected Services $http;
+
+    public function __construct(
+        int $a_ref_id = 0,
+        int $a_id_type = self::REPOSITORY_NODE_ID,
+        int $a_parent_node_id = 0
+    ) {
+        /** @var \ILIAS\DI\Container $DIC */
+        global $DIC;
+        $this->http = $DIC->http();
+
+        parent::__construct($a_ref_id, $a_id_type, $a_parent_node_id);
+    }
 	protected function appendImageUploadForm(\ilInteractiveVideoPlugin $plugin, \ilPropertyFormGUI $form): void
 	{
 		$image_upload  = new ilInteractiveVideoPreviewPicker($plugin->txt('question_image'), 'question_image');
-		if(isset($_GET['comment_id']) || isset($_POST['comment_id']))
+
+        $post = $this->http->wrapper()->post();
+        $get = $this->http->wrapper()->query();
+        if($post->has('comment_id') || $get->has('comment_id')) {
+            $comment_id = $post->retrieve('comment_id', $this->refinery->kindlyTo()->int());
+            if($comment_id === 0) {
+                $comment_id = $get->retrieve('comment_id', $this->refinery->kindlyTo()->int());
+            }
+        }
+
+
+        if($comment_id > 0)
 		{
-			$comment_id = (int)$_GET['comment_id'] ? (int)$_GET['comment_id'] : (int)$_POST['comment_id'];
 			if($comment_id != 0)
 			{
 				$question_data = $this->object->getQuestionDataById((int)$comment_id);
@@ -482,14 +507,24 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		else
 		{
-			$answers = array();
-			if(is_array($_POST) && array_key_exists('answer', $_POST) && is_array($_POST['answer']) && sizeof($_POST['answer']) > 0)
+            $answers = [];
+			$answers_array = [];
+			$answers_correct = [];
+            $post = $this->http->wrapper()->post();
+            if($post->has('answer'))
+            {
+                $answers_array = $post->retrieve('answer', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string()));
+            }
+            if($post->has('correct'))
+            {
+                $answers_correct = $post->retrieve('correct', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
+            }
+			if(sizeof($answers_array) > 0)
 			{
-				$post_answers = ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['answer']);
-				foreach($post_answers as $key => $value)
+				foreach($answers_array as $key => $value)
 				{
 					$correct = 0;
-					if(is_array($_POST['correct']) && array_key_exists($key, $_POST['correct']))
+					if(array_key_exists($key, $answers_correct))
 					{
 						$correct = 1;
 					}
@@ -1203,18 +1238,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function removeSubtitle(): void{
 
-		$filename = ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['remove_subtitle_file']);
-		$file = ilFileUtils::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/' . $filename;
+        $post = $this->http->wrapper()->post();
+        if($post->has('remove_subtitle_file'))
+        {
+            $filename = $post->retrieve('remove_subtitle_file', $this->refinery->kindlyTo()->string());
+            $file = ilFileUtils::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/' . $filename;
+            if(file_exists($file)) {
+                unlink($file);
+                $this->object->removeSubtitleData($filename);
 
-		if(file_exists($file)) {
-			unlink($file);
-			$this->object->removeSubtitleData($filename);
+                $this->tpl->setOnScreenMessage("success", $this->plugin->txt('subtitle_removed'), true);
+                $this->ctrl->redirect($this, 'addSubtitle');
 
-            $this->tpl->setOnScreenMessage("success", $this->plugin->txt('subtitle_removed'), true);
-			$this->ctrl->redirect($this, 'addSubtitle');
-
-		}
-
+            }
+        }
 	}
 
 	/**
@@ -1579,46 +1616,47 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $ilUser ilObjUser
 		 */
 		global $ilUser;
+        $post = $this->http->wrapper()->post();
+        if($post->has('comment_text')) {
+            $comment_text = $post->retrieve('comment_text', $this->refinery->kindlyTo()->string());
+            if(!strlen(trim(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_text)))){
+                $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('missing_comment_text'));
+                $this->showContent();
+                return;
+            }
+        }
 
-		if(
-			!isset($_POST['comment_text']) ||
-			!is_string($_POST['comment_text']) ||
-			!strlen(trim(ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['comment_text'])))
-		)
-		{
-            $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('missing_comment_text'));
-			$this->showContent();
-			return;
-		}
+        if($post->has('comment_time')) {
+            $comment_time = $post->retrieve('comment_time', $this->refinery->kindlyTo()->string());
+            if(!strlen(trim(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time)))){
+                $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('missing_stopping_point'));
+                $this->showContent();
+                return;
+            }
+        }
 
-		if(!isset($_POST['comment_time']) || !strlen(trim(ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['comment_time']))))
-		{
-            $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('missing_stopping_point'));
-			$this->showContent();
-			return;
-		}
-
-		if(isset($_POST['comment_time_end']))
-		{
-			$seconds_end = (int) $_POST['comment_time_end'];
-		}
-		else
-		{
-			$seconds_end = 0;
-		}
+        if($post->has('comment_time_end')) {
+            $seconds_end = $post->retrieve('comment_time_end', $this->refinery->kindlyTo()->string());
+        } else {
+            $seconds_end = 0;
+        }
 
 		$comment = new ilObjComment();
 		$comment->setObjId($this->object->getId());
 		$comment->setUserId($ilUser->getId());
-		$comment->setCommentText(trim($_POST['comment_text']));
-		$comment->setCommentTime((float)$_POST['comment_time']);
-		$comment->setIsTableOfContent((int)$_POST['is_table_of_content']);
+		$comment->setCommentText(trim($comment_text));
+		$comment->setCommentTime($comment_time);
+        if($post->has('is_table_of_content')) {
+            $is_table_of_content = $post->retrieve('is_table_of_content', $this->refinery->kindlyTo()->int());
+        } else {
+            $is_table_of_content = 0;
+        }
+		$comment->setIsTableOfContent($is_table_of_content);
 		$comment->setCommentTimeEnd($seconds_end);
 
-		if(array_key_exists('is_reply_to', $_POST))
-		{
-			$comment->setIsReplyTo((int) $_POST['is_reply_to']);
-		}
+        if($post->has('is_reply_to')) {
+            $comment->setIsReplyTo($post->retrieve('is_reply_to', $this->refinery->kindlyTo()->int()));
+        }
 
 		if($ilUser->getId() == ANONYMOUS_USER_ID)
 		{
@@ -1628,18 +1666,25 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		else
 		{
 			$is_private = 0;
-			if( $_POST['is_private'] == "true" )
-			{
-				$is_private = 1;
-			}
+            if($post->has('is_private')) {
+                $private = $post->retrieve('is_private', $this->refinery->kindlyTo()->int());
+                if($private === 1) {
+                    $is_private = 1;
+                }
+            }
 
 			$comment->setIsPrivate($is_private );
 		}
 
-        if(strlen($_POST['marker']) > 0)
+        if($post->has('marker')) {
+            $marker = $post->retrieve('marker', $this->refinery->kindlyTo()->string());
+        } else {
+            $marker = '';
+        }
+        if($marker > 0)
         {
-            $marker = $this->cleanMarker($_POST['marker']);
-            $comment->setMarker($marker);
+            $marker_clean = $this->cleanMarker($marker);
+            $comment->setMarker($marker_clean);
             if($comment->getCommentTimeEnd() == 0)
             {
                 $comment->setCommentTimeEnd($comment->getCommentTime() + 3 );
@@ -1650,10 +1695,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
     /**
-				 * @param $marker
-				 * @return string|string[]
-				 */
-				protected function cleanMarker($marker): string
+     * @param $marker
+     * @return string|string[]
+     */
+    protected function cleanMarker($marker): string
     {
         $marker = '<svg>'.trim($marker).'</svg>';
         $marker = xvidUtils::secureSvg($marker);
@@ -1677,7 +1722,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->setSubTabs('editComments');
 		$ilTabs->activateSubTab('editComments');
 
-		if(!isset($_POST['comment_id']) || !is_array($_POST['comment_id']) || !count($_POST['comment_id']))
+        $post = $this->http->wrapper()->post();
+        $post_ids = [];
+        if($post->has('comment_id')) {
+            $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+        }
+
+
+        if(!count($post_ids))
 		{
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
             $this->ctrl->redirect($this, 'editComments');
@@ -1687,8 +1739,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_delete_comment'));
 		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteComment');
 		$confirm->setCancel($this->lng->txt('cancel'), 'editComments');
-
-		$post_ids = $_POST['comment_id'];
 
 		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
 		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
@@ -1716,20 +1766,22 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	public function deleteComment(): void
 	{
-		if(!isset($_POST['comment_id']) || !is_array($_POST['comment_id']) || !count($_POST['comment_id']))
-		{
+        $post = $this->http->wrapper()->post();
+        $post_ids = [];
+        if($post->has('comment_id')) {
+            $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+        }
+		if(!count($post_ids)) {
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'));
 			$this->editComments();
 			return;
 		}
 
-		$post_ids = $_POST['comment_id'];
-
 		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
 		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
 		if(is_array($wrong_comment_ids) && (count($wrong_comment_ids) == 0))
 		{
-			$this->object->deleteComments($_POST['comment_id']);
+			$this->object->deleteComments($post_ids);
             $this->tpl->setOnScreenMessage("success", ilInteractiveVideoPlugin::getInstance()->txt('comments_successfully_deleted'));
 		}
 		else
@@ -1749,8 +1801,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $ilUser;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
-
+        $post = $this->http->wrapper()->post();
 		$form = new ilPropertyFormGUI();
+
 		$form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
         if($this->object->isMarkerActive()) {
             $form->setTitle($plugin->txt('insert_comment'));
@@ -1769,9 +1822,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		#$time->setShowTime(true);
 		#$time->setShowSeconds(true);
 
-		if(isset($_POST['comment_time']))
+		if($post->has('comment_time'))
 		{
-			$seconds = $_POST['comment_time'];
+			$seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->int());
 			$time->setValueByArray(array('comment_time' => (int)$seconds));
 		}
 		$form->addItem($time);
@@ -1780,11 +1833,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		#$time_end->setShowTime(true);
 		#$time_end->setShowSeconds(true);
 
-		if(isset($_POST['comment_time_end']))
+        if($post->has('comment_time_end'))
 		{
-			$seconds = $_POST['comment_time_end'];
-			$time_end->setValueByArray(array('comment_time_end' => (int)$seconds));
-		}
+            $seconds = $post->retrieve('comment_time_end', $this->refinery->kindlyTo()->int());
+            $time->setValueByArray(array('comment_time_end' => (int)$seconds));
+        }
 		$form->addItem($time_end);
 
 		if($ilUser->getId() != ANONYMOUS_USER_ID)
@@ -1819,6 +1872,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     {
         $plugin = ilInteractiveVideoPlugin::getInstance();
 
+        $post = $this->http->wrapper()->post();
         $form = new ilPropertyFormGUI();
         $form->setFormAction($this->ctrl->getFormAction($this, 'insertComment'));
         $form->setTitle($plugin->txt('insert_chapter'));
@@ -1835,9 +1889,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         #$time->setShowTime(true);
         #$time->setShowSeconds(true);
 
-        if(isset($_POST['comment_time']))
-        {
-            $seconds = $_POST['comment_time'];
+        if($post->has('comment_time')) {
+            $seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->int());
             $time->setValueByArray(array('comment_time' => (int)$seconds));
         }
         $form->addItem($time);
@@ -2000,22 +2053,26 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $ilTabs;
 
+        $post = $this->http->wrapper()->post();
 		$ilTabs->activateTab('editComments');
 		$this->setSubTabs('editComments');
 		$ilTabs->activateSubTab('editMyComments');
 
-		if(!isset($_POST['comment_id']) || !is_array($_POST['comment_id']) || !count($_POST['comment_id']))
-		{
-            $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
-            $this->ctrl->redirect($this, 'editMyComments');
-		}
+        $post = $this->http->wrapper()->post();
+        $post_ids = [];
+        if($post->has('comment_id')) {
+            $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+            if(!count($post_ids)) {
+                $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
+                $this->ctrl->redirect($this, 'editMyComments');
+            }
+        }
+
 		$confirm = new ilConfirmationGUI();
 		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteMyComment'));
 		$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_delete_comment'));
 		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteMyComment');
 		$confirm->setCancel($this->lng->txt('cancel'), 'editMyComments');
-
-		$post_ids = $_POST['comment_id'];
 
 		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
 		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
@@ -2048,14 +2105,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
-		if(!isset($_POST['comment_id']) || !is_array($_POST['comment_id']) || !count($_POST['comment_id']))
-		{
-            $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'));
-			$this->editMyComments();
-			return;
-		}
+        $post = $this->http->wrapper()->post();
+        $post_ids = [];
+        if($post->has('comment_id')) {
+            $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+            if(!count($post_ids)) {
+                $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
+                $this->ctrl->redirect($this, 'editMyComments');
+            }
+        }
 
-		$post_ids = $_POST['comment_id'];
 		$comments = $this->object->getCommentIdsByObjId($this->obj_id);
 		$comment_ids = array_keys($comments);
 		$user_ids = array_unique($comments);
@@ -2069,7 +2128,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
 		if(is_array($wrong_comment_ids) && (count($wrong_comment_ids) == 0))
 		{
-			$this->object->deleteComments($_POST['comment_id']);
+			$this->object->deleteComments($post_ids);
             $this->tpl->setOnScreenMessage("success", $plugin->txt('comments_successfully_deleted'));
 		}
 		else
@@ -2086,19 +2145,26 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $ilUser;
 
-		if(
-			!isset($_POST['comment_text']) ||
-			!is_string($_POST['comment_text']) ||
-			!strlen(trim(ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['comment_text'])))
-		)
-		{
+        $post = $this->http->wrapper()->post();
+        $comment_text = '';
+        if($post->has('comment_text')) {
+            $comment_text = $post->retrieve('comment_text', $this->refinery->kindlyTo()->string());
+        }
+		if(	!strlen(trim(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_text)))) {
             $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('missing_comment_text'));
 			$this->editComments();
 			return;
 		}
 
-		if(!isset($_POST['comment_time']) || !strlen(trim(ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['comment_time']))))
-		{
+        $comment_time = null;
+        if($post->has('comment_time')) {
+            $comment_time = $post->retrieve('comment_time', $this->refinery->kindlyTo()->float());
+        }
+        $comment_time_end = null;
+        if($post->has('comment_time_end')) {
+            $comment_time_end = $post->retrieve('comment_time_end', $this->refinery->kindlyTo()->float());
+        }
+		if(!strlen(trim(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time)))) {
             $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('missing_stopping_point'));
 			$this->editComments();
 			return;
@@ -2107,9 +2173,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment = new ilObjComment();
 		$comment->setObjId($this->object->getId());
 		$comment->setUserId($ilUser->getId());
-		$comment->setCommentText(trim(ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['comment_text'])));
-		$comment->setCommentTime((float)$_POST['comment_time']);
-		$comment->setCommentTimeEnd((float)$_POST['comment_time_end']);
+		$comment->setCommentText(trim(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_text)));
+		$comment->setCommentTime((float)$comment_time);
+		$comment->setCommentTimeEnd((float)$comment_time_end);
 		$comment->setIsTutor(true);
 		$comment->create();
 
@@ -2427,18 +2493,21 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	private function getCommentFormValues(int $comment_id = 0)
 	{
-	    $values = array();
-		if($comment_id == 0)
-		{
-			if(!isset($_GET['comment_id']) && !isset($_POST['comment_id']))
-			{
-                $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('no_comment_id_given'), true);
-				return $this->showContent();
-			}
-			else
-			{
-				$comment_id = (int)$_GET['comment_id'] ? (int)$_GET['comment_id'] : (int)$_POST['comment_id'] ;
-			}
+	    $values = [];
+        $post = $this->http->wrapper()->post();
+        $get = $this->http->wrapper()->query();
+		if($comment_id === 0) {
+            if($post->has('comment_id') || $get->has('comment_id')) {
+                $comment_id = $post->retrieve('comment_id', $this->refinery->kindlyTo()->int());
+                if($comment_id === 0) {
+                    $comment_id = $get->retrieve('comment_id', $$this->refinery->kindlyTo()->int());
+                }
+
+                if($comment_id) {
+                    $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('no_comment_id_given'), true);
+                    return $this->showContent();
+                }
+            }
 		}
 
 		$comment_data				= $this->object->getCommentDataById($comment_id);
@@ -2460,18 +2529,21 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	private function getChapterFomValues(int $comment_id = 0)
 	{
-		if($comment_id == 0)
-		{
-			if(!isset($_GET['comment_id']) && !isset($_POST['comment_id']))
-			{
-                $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('no_comment_id_given'), true);
-				return $this->showContent();
-			}
-			else
-			{
-				$comment_id = (int)$_GET['comment_id'] ? (int)$_GET['comment_id'] : (int)$_POST['comment_id'] ;
-			}
-		}
+        $post = $this->http->wrapper()->post();
+        $get = $this->http->wrapper()->query();
+        if($comment_id === 0) {
+            if($post->has('comment_id') || $get->has('comment_id')) {
+                $comment_id = $post->retrieve('comment_id', $this->refinery->kindlyTo()->int());
+                if($comment_id === 0) {
+                    $comment_id = $get->retrieve('comment_id', $$this->refinery->kindlyTo()->int());
+                }
+
+                if($comment_id) {
+                    $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('no_comment_id_given'), true);
+                    return $this->showContent();
+                }
+            }
+        }
 
 		$comment_data				= $this->object->getCommentDataById($comment_id);
 		$values['comment_id']		= $comment_data['comment_id'];
@@ -2516,9 +2588,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$time = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'comment_time');
 
-		if(isset($_POST['comment_time']))
+		if($post->has('comment_time'))
 		{
-			$seconds = $_POST['comment_time'];
+            $seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->int());
 			$time->setValueByArray(array('comment_time' => (int)$seconds));
 		}
 		$form->addItem($time);
@@ -2581,9 +2653,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$jump_correct_ts = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'jump_correct_ts');
 
-		if(isset($_POST['jump_correct_ts']))
+		if($post->has('jump_correct_ts'))
 		{
-			$seconds = $_POST['jump_correct_ts'];
+			$seconds = $post->retrieve('jump_correct_ts', $this->refinery->kindlyTo()->int());
 			$time->setValueByArray(array('jump_correct_ts' => (int)$seconds));
 		}
 		$is_jump_correct->addSubItem($jump_correct_ts);
@@ -2603,11 +2675,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$is_jump_wrong->setInfo($plugin->txt('is_jump_wrong_info'));
 		$jump_wrong_ts = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'jump_wrong_ts');
 
-		if(isset($_POST['jump_wrong_ts']))
-		{
-			$seconds = $_POST['jump_wrong_ts'];
-			$time->setValueByArray(array('jump_correct_ts' => (int)$seconds));
-		}
+        if($post->has('jump_wrong_ts'))
+        {
+            $seconds = $post->retrieve('jump_wrong_ts', $this->refinery->kindlyTo()->int());
+            $time->setValueByArray(array('jump_wrong_ts' => (int)$seconds));
+        }
 		$is_jump_wrong->addSubItem($jump_wrong_ts);
 		$feedback_one_wrong->addSubItem($is_jump_wrong);
 		$this->appendRepositorySelector($feedback_one_wrong, 'feedback_wrong_obj');
@@ -2783,17 +2855,21 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 	    $values = array();
 
-		if($comment_id == 0)
+        $post = $this->http->wrapper()->post();
+        $get = $this->http->wrapper()->query();
+        if($comment_id == 0)
 		{
-			if(!isset($_GET['comment_id']) && !isset($_POST['comment_id']))
-			{
-                $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('no_comment_id_given'), true);
-				return $this->editComments();
-			}
-			else
-			{
-				$comment_id = (int)$_GET['comment_id'] ?: (int) $_POST['comment_id'];
-			}
+            if($post->has('comment_id') || $get->has('comment_id')) {
+                $comment_id = $post->retrieve('comment_id', $this->refinery->kindlyTo()->int());
+                if($comment_id === 0) {
+                    $comment_id = $get->retrieve('comment_id', $$this->refinery->kindlyTo()->int());
+                }
+
+                if($comment_id) {
+                    $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('no_comment_id_given'), true);
+                    return $this->editComments();
+                }
+            }
 		}
 
 		$comment_data				= $this->object->getCommentDataById((int)$comment_id);
@@ -2844,10 +2920,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $ilTabs;
 		$ilTabs->activateTab('editComments');
 
-		$comment_id = (int)$_POST['comment_id'];
+        $post = $this->http->wrapper()->post();
+
+        if($post->has('comment_id')) {
+            $comment_id = $post->retrieve('comment_id', $this->refinery->kindlyTo()->int());
+        }
 		$form_values = array();
 
-		if(!$chk =  SimpleChoiceQuestion::answerExists($comment_id))
+		if($comment_id > 0 && !$chk =  SimpleChoiceQuestion::answerExists($comment_id))
 		{
 			$this->updateQuestion();
 		}
@@ -3100,8 +3180,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('showResults');
-
-		if(!isset($_POST['user_id']) || !is_array($_POST['user_id']) || !count($_POST['user_id']))
+        $post = $this->http->wrapper()->post();
+        $user_ids = [];
+        if($post->has('user_id')) {
+            $user_ids = $post->retrieve('user_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+        }
+		if(!count($user_ids))
 		{
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'));
 			$this->showResults();
@@ -3113,28 +3197,29 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteUserResults');
 		$confirm->setCancel($this->lng->txt('cancel'), 'showResults');
 
-		$user_ids = $_POST['user_id'];
-
 		foreach($user_ids as $user_id)
 		{
 			$login = ilObjUser::_lookupName($user_id);
 
 			$confirm->addItem('user_id[]', $user_id, $login['firstname'].' '.$login['lastname']);
 		}
-
 		$tpl->setContent($confirm->getHTML());
 	}
 
 	public function deleteUserResults(): void
 	{
-		if(!isset($_POST['user_id']) || !is_array($_POST['user_id']) || !count($_POST['user_id']))
+        $post = $this->http->wrapper()->post();
+        $user_ids = [];
+        if($post->has('user_id')) {
+            $user_ids = $post->retrieve('user_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+        }
+		if(!count($user_ids))
 		{
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'));
 			$this->showResults();
 			return;
 		}
 
-		$user_ids = $_POST['user_id'];
 
 		if(is_array($user_ids) && (count($user_ids) > 0))
 		{
@@ -3186,9 +3271,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$ilTabs->activateTab('editComments');
 		$ilTabs->activateSubTab('showQuestionsResults');
+        $post = $this->http->wrapper()->post();
+        $question_ids = [];
+        if($post->has('question_id')) {
+            $question_ids = $post->retrieve('question_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+        }
 
-
-		if(!isset($_POST['question_id']) || !is_array($_POST['question_id']) || !count($_POST['question_id']))
+		if(!count($question_ids))
 		{
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'));
 			$this->showQuestionsResults();
@@ -3199,8 +3288,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_delete_results'));
 		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteQuestionsResults');
 		$confirm->setCancel($this->lng->txt('cancel'), 'showQuestionsResults');
-
-		$question_ids = $_POST['question_id'];
 
 		foreach($question_ids as $question_id)
 		{
@@ -3216,16 +3303,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
 	public function deleteQuestionsResults(): void
 	{
-		if(!isset($_POST['question_id']) || !is_array($_POST['question_id']) || !count($_POST['question_id']))
+        $post = $this->http->wrapper()->post();
+        $question_ids = [];
+        if($post->has('question_id')) {
+            $question_ids = $post->retrieve('question_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+        }
+		if(!count($question_ids))
 		{
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'));
 			$this->showQuestionsResults();
 			return;
 		}
 
-		$question_ids = $_POST['question_id'];
-
-		if(is_array($question_ids) && (count($question_ids) > 0))
+		if((count($question_ids) > 0))
 		{
 			$simple = new SimpleChoiceQuestion();
 			$simple->deleteQuestionsResults($question_ids);
@@ -3267,17 +3357,26 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
 	public function postAnswerPerAjax(): void
 	{
-		if(SimpleChoiceQuestion::isLimitAttemptsEnabled((int)$_POST['qid']) == false)
+        $post = $this->http->wrapper()->post();
+
+		if( $post->has('qid'))
 		{
-			$answer = is_array($_POST['answer']) ? ilArrayUtil::stripSlashesRecursive($_POST['answer']) : array();
-			$simple_choice = new SimpleChoiceQuestion();
-			$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
-		}
-		else if(SimpleChoiceQuestion::existUserAnswerForQuestionId((int)$_POST['qid']) == false)
-		{
-			$answer = is_array($_POST['answer']) ? ilArrayUtil::stripSlashesRecursive($_POST['answer']) : array();
-			$simple_choice = new SimpleChoiceQuestion();
-			$simple_choice->saveAnswer((int) $_POST['qid'], $answer);
+            $qid = $post->retrieve('qid', $this->refinery->kindlyTo()->int());
+            if(!SimpleChoiceQuestion::isLimitAttemptsEnabled($qid)){
+                if($post->has('answer')) {
+                    $answer = [];
+                    $answer = $post->retrieve('answer', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->string()]));
+                    $simple_choice = new SimpleChoiceQuestion();
+                    $simple_choice->saveAnswer($qid, $answer);
+                }
+            }
+            if(SimpleChoiceQuestion::existUserAnswerForQuestionId((int)$qid) == false)
+            {
+                $answer = [];
+                $answer = $post->retrieve('answer', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->string()]));
+                $simple_choice = new SimpleChoiceQuestion();
+                $simple_choice->saveAnswer($qid, $answer);
+            }
 		}
 
 		$this->object->refreshLearningProgress([$this->user->getId()]);
@@ -3292,10 +3391,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function generateThumbnailsFromSourcePerAjax(): void
 	{
 		$tpl_json = ilInteractiveVideoPlugin::getInstance()->getTemplate('default/tpl.show_question.html', false, false);
+        $post = $this->http->wrapper()->post();
 
-		if(array_key_exists('time', $_POST))
+		if($post->has('time'))
 		{
-			$time = ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['time']);
+			$time = $post->retrieve('time', $this->refinery->kindlyTo()->string());
 		}
 		else
 		{
@@ -3327,7 +3427,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$tpl_json = ilInteractiveVideoPlugin::getInstance()->getTemplate('default/tpl.show_question.html', false, false);
 		$ajax_object   = new SimpleChoiceQuestionAjaxHandler();
-		$feedback      = $ajax_object->getFeedbackForQuestion($_POST['qid']);
+        $post = $this->http->wrapper()->post();
+        $qid = null;
+        if($post->has('time'))
+        {
+            $qid = $post->retrieve('qid', $this->refinery->kindlyTo()->int());
+        }
+		$feedback      = $ajax_object->getFeedbackForQuestion($qid);
 		$tpl_json->setVariable('JSON', $feedback);
 		$tpl_json->show("DEFAULT", false, true );
 	}
