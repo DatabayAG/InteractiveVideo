@@ -758,7 +758,6 @@ input[type=range]:focus::-ms-fill-upper {
 .toc_description{
     display: none;
     padding-top: 6px;
-    background-color:green;
 }
 
 .toc_item{
