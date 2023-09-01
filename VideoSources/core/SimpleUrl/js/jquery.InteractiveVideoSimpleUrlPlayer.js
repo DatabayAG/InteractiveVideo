@@ -1,85 +1,72 @@
-$( document ).ready(function() {
+il.InteractiveVideoSimplePlayer = (function (scope) {
+	'use strict';
 
-});
+	var pub = {}, pro = {};
 
-(function ($) {
-	il.Util.addOnLoad(function () {
+	pub.initPlayer = function()
+	{
 		$.each(il.InteractiveVideo, function (player_id, value) {
+
 			if (value.hasOwnProperty("player_type") && value.player_type === "surl") {
 				il.InteractiveVideoPlayerFunction.appendInteractionEvents(player_id);
 				var player   = null,
 					seekTime = 0,
 					interval = null;
 				il.InteractiveVideo.last_stopPoint = -1;
+
 				il.InteractiveVideoSubtitle.initializeSubtitleTracks(player_id);
-
-				il.InteractiveVideo[player_id].player = new MediaElementPlayer("#" + player_id, {
-
-					timerRate:         50,
-					enablePluginDebug: false,
-
-					success: function (media) {
-
-						media.addEventListener('loadeddata', function () {
-							player = $("video#" + player_id)[0];
-
-							il.InteractiveVideoPlayerAbstract.config[player_id] = {
-								pauseCallback:          (function () {
-									player.pause(player_id);
-								}),
-								playCallback:           (function () {
-									player.play(player_id);
-								}),
-								durationCallback:       (function () {
-									return player.duration;
-								}),
-								currentTimeCallback:    (function () {
-									return player.currentTime;
-								}),
-								setCurrentTimeCallback: (function (time) {
-									player.setCurrentTime(time, player_id);
-								})
-							};
-
-							il.InteractiveVideoPlayerComments.fillEndTimeSelector(il.InteractiveVideoPlayerAbstract.duration(player_id));
-						}, false);
-
-						media.addEventListener('loadedmetadata', function () {
-							if (seekTime > 0) {
-								media.currentTime = seekTime;
-								seekTime = 0;
-							}
-							//Workaround for subtitle layout error with medialementjs
-							$('.mejs-captions-layer.mejs-layer').css({'width' :'100%'})
-						}, false);
-
-						media.addEventListener('play', function () {
-							il.InteractiveVideoPlayerAbstract.play(player_id);
-						}, false);
-
-						media.addEventListener('seeked', function () {
-							clearInterval(interval);
-							il.InteractiveVideoPlayerFunction.seekingEventHandler(player_id);
-						}, false);
-
-						media.addEventListener('pause', function () {
-							clearInterval(interval);
-							il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime(player_id);
-						}, false);
-
-						media.addEventListener('ended', function () {
-							il.InteractiveVideoPlayerAbstract.videoFinished(player_id);
-						}, false);
-
-						media.addEventListener('playing', function () {
-							interval = setInterval(function () {
-								il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player_id);
-							}, 500);
-
-						}, false);
-					}
+				player =  new Plyr('#' + player_id, plyr_global_config);
+				il.InteractiveVideo[player_id].player =	player
+				il.InteractiveVideo[player_id].player.on('ready', event => {
+					il.InteractiveVideoPlayerAbstract.config[player_id] = {
+						pauseCallback: (function () {
+							player.pause();
+						}),
+						playCallback: (function () {
+							player.play();
+						}),
+						durationCallback: (function () {
+							return player.duration
+						}),
+						currentTimeCallback: (function () {
+							return player.currentTime
+						}),
+						setCurrentTimeCallback: (function (time) {
+							player.currentTime = time;
+						}),
+						initPlayerCallback         : il.InteractiveVideoSimplePlayer.initPlayer
+					};
+					il.InteractiveVideoPlayerAbstract.readyCallback(player_id, '.plyr__poster');
+					il.InteractiveVideo[player_id].player.on('play', event => {
+						il.InteractiveVideoPlayerAbstract.play(player_id);
+					});
+					il.InteractiveVideo[player_id].player.on('seeked', event => {
+						clearInterval(interval);
+						il.InteractiveVideoPlayerFunction.seekingEventHandler(player_id);
+					});
+					il.InteractiveVideo[player_id].player.on('pause', event => {
+						clearInterval(interval);
+						il.InteractiveVideo.last_time = il.InteractiveVideoPlayerAbstract.currentTime(player_id);
+					});
+					il.InteractiveVideo[player_id].player.on('ended', event => {
+						il.InteractiveVideoPlayerAbstract.videoFinished(player_id);
+					});
+					il.InteractiveVideo[player_id].player.on('playing', event => {
+						interval = setInterval(function () {
+							il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player_id);
+						}, 500);
+					});
 				});
+
 			}
 		});
+	};
+	pub.protect = pro;
+	return pub;
+
+}(il));
+(function ($) {
+	il.Util.addOnLoad(function () {
+		il.InteractiveVideoSimplePlayer.initPlayer();
 	});
 })(jQuery);

@@ -29,7 +29,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let i;
 		let j_object = $("#ul_scroll_" + player_id);
-
+		$('#ilInteractiveVideoOverlay').html('');
 		j_object.html('');
 		pub.resetCommentsTimeEndBlacklist(player_id);
 		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
@@ -37,26 +37,36 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			if (player_data.comments[i].comment_time <= time && player_data.comments[i].comment_text !== null)
 			{
 				j_object.prepend(pub.buildListElement(player_id, player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name));
+				il.InteractiveVideoPlayerFunction.insertMarker( player_data.comments[i]);
+				il.InteractiveVideoPlayerComments.registerReplyToListeners(player_id);
 				if(player_data.comments[i].comment_time_end > 0)
 				{
 					pub.fillCommentsTimeEndBlacklist(player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
 				}
 			}
 		}
-		pub.clearCommentsWhereTimeEndEndded(player_id, time);
+		pub.clearCommentsWhereTimeEndEnded(player_id, time);
 	};
 
 	pub.buildListElement = function (player_id, comment, time, username)
 	{
 		let css_class, value;
+		let list_item_id = 'list_item_' + comment.comment_id;
+		let comment_not_already_rendered = $('.' + list_item_id).length;
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
-		
-		if(pro.isBuildListElementAllowed(player_data, username))
+		if(pro.isBuildListElementAllowed(player_data, username)
+			&& comment.is_table_of_content === "0"
+			&& comment_not_already_rendered === 0
+		)
 		{
+			let usr_image = '';
+			if(player_data.anon_comments === "0"){
+				usr_image = pro.buildCommentUserImage(player_data, comment);
+			}
 			css_class = pro.getCSSClassForListElement();
-			value =	'<li class="list_item_' + comment.comment_id + ' fadeOut ' + css_class + '">' +
+			value =	'<li class="' + list_item_id + ' fadeOut ' + css_class + '">' +
 				'<div class="message-inner">' +
-							pro.buildCommentUserImage(player_data, comment)                   +
+							usr_image  +
 							'<div class="comment_user_data">' + pub.buildCommentUsernameHtml(username, comment.is_interactive) +
 							pro.appendPrivateHtml(comment.is_private) +
 							'<div class="comment_time">' +
@@ -65,8 +75,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 							'</div></div><div class="comment_inner_text">' +
 							pro.buildCommentTitleHtml(comment.comment_title)                                 +
 							pro.buildCommentTextHtml(comment.comment_text )                                  +
-							pro.buildCommentReplies(comment.replies )                                        + 
-							'</div></div>' +
+							pro.buildCommentReplies(comment.replies )                                        +
+							pro.buildReplyTo(comment.comment_id, comment)
+							+'</div></div>' +
 							pro.buildCommentTagsHtml(comment.comment_tags)                                   +
 					'</li>';
 		}
@@ -74,14 +85,49 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			value = '';
 		}
-
 		return value;
+	};
+	pro.buildReplyTo = function(id, comment)
+	{
+		if('has_no_reply_button' in comment)
+		{
+			if(comment.has_no_reply_button === true)
+			{
+				return '';
+			}
+		}
+		return '<div class="glyphicon glyphicon-share-alt flip_float_right reply_to_comment" data-reply-to-id="'+id+'" aria-hidden="true" title="' +il.InteractiveVideo.lang.reply_to_title + '"></div>';
+	};
+
+	pro.appendReplyToHiddenField = function(id)
+	{
+		$('#ilInteractiveVideoCommentsForm').append('<input type="hidden" value="' + id + '"/>');
+	};
+
+	pub.registerReplyToListeners = function(player_id)
+	{
+		let reply_object = $('.reply_to_comment');
+		reply_object.off("click");
+		reply_object.on("click", function() {
+			let comment_id = 'list_item_'+ $(this).data('reply-to-id');
+			let comment_container = 'list_item_container_'+ $(this).data('reply-to-id');
+			let comment_object = $('.' + comment_id);
+			if($('#' + comment_id).length === 0)
+			{
+				comment_object.append('');
+				comment_object.append('<div id="'+comment_container+'" class="reply_to_container"><input type="text" class="reply_to_input_form" id="'+comment_id+'"/><input id="submit_comment_form" class="btn btn-default btn-sm submit_comment_form_to_reply" value="'+scope.InteractiveVideo.lang.save+'" type="submit"></div>');
+				scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReplyPosting(player_id, $(this).data('reply-to-id'), $(this).data('reply-to-id'));
+			}
+			else
+			{
+				$('#' + comment_container).remove();
+			}
+		});
 	};
 
 	pub.fillCommentsTimeEndBlacklist = function (player_id, comment_time_end, comment_id)
 	{
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
-
 		if(player_data.blacklist_time_end[comment_time_end] === undefined)
 		{
 			player_data.blacklist_time_end[comment_time_end] = [comment_id];
@@ -93,16 +139,16 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		pub.addHighlightToComment(comment_id);
 	};
 
-	pub.clearCommentsWhereTimeEndEndded = function (player_id, time)
+	pub.clearCommentsWhereTimeEndEnded = function (player_id, time)
 	{
 		let timestamp, id;
 		let player_data = il.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 
-		for (timestamp in player_data.blacklist_time_end) 
+		for (timestamp in player_data.blacklist_time_end)
 		{
 			if(timestamp <= time)
 			{
-				for (id in player_data.blacklist_time_end[timestamp]) 
+				for (id in player_data.blacklist_time_end[timestamp])
 				{
 					pro.removeHighlightFromComment(player_data.blacklist_time_end[timestamp][id]);
 				}
@@ -116,6 +162,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pub.clearAndRemarkCommentsAfterSeeking = function (time, player)
 	{
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayer(player);
+		let player_id = scope.InteractiveVideoPlayerFunction.getPlayerIdFromPlayerObject(player);
 		let i ;
 
 		for (i  = 0; i < Object.keys(player_data.comments).length; i++)
@@ -129,6 +176,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 					)
 				{
 					pub.addHighlightToComment(player_data.comments[i].comment_id);
+					il.InteractiveVideoPlayerFunction.insertMarker( player_data.comments[i]);
+					il.InteractiveVideoPlayerComments.fillCommentsTimeEndBlacklist(player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
 				}
 			}
 		}
@@ -152,11 +201,10 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let i;
 		let j_object	= $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id);
 		let element		='';
-
 		j_object.html('');
 		pri.cssIterator = 0;
 
-		if(on)
+		if(on === false || on === '0')
 		{
 			for (i  = 0; i < Object.keys(player_data.comments).length; i++)
 			{
@@ -164,20 +212,22 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 				{
 					element = pub.buildListElement(player_id, player_data.comments[i], player_data.comments[i].comment_time, player_data.comments[i].user_name);
 					j_object.append(element);
+					il.InteractiveVideoPlayerComments.registerReplyToListeners(player_id);
 					if(player_data.comments[i].comment_time_end > 0 && player_data.comments[i].comment_time <= player_data.last_time)
 					{
 						pub.fillCommentsTimeEndBlacklist(player_id, player_data.comments[i].comment_time_end, player_data.comments[i].comment_id);
 					}
 				}
 			}
-			player_data.is_show_all_active = true;
-			pub.clearCommentsWhereTimeEndEndded(player_id, player_data.last_time);
+			player_data.show_only_until_playhead = false;
+			pub.clearCommentsWhereTimeEndEnded(player_id, player_data.last_time);
 		}
 		else
 		{
-			player_data.is_show_all_active = false;
+			player_data.show_only_until_playhead = true;
 			pub.replaceCommentsAfterSeeking(player_data.last_time, player_id);
 		}
+		pub.registerReplyToListeners(player_id);
 	};
 
 	pub.rebuildCommentsViewIfShowAllIsActive = function(player_id)
@@ -185,13 +235,13 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		let j_object, position, height;
 
-		if(player_data.is_show_all_active === true)
+		if(player_data.show_only_until_playhead === false)
 		{
 			j_object = $('#ilInteractiveVideoComments_' + player_id);
 			position = j_object.scrollTop();
 			height   = $('#ilInteractiveVideoComments_' + player_id + ' #ul_scroll_' + player_id).find('li').first().height();
-			player_data.is_show_all_active = false;
-			pub.displayAllCommentsAndDeactivateCommentStream(true, player_id);
+			player_data.show_only_until_playhead = true;
+			pub.displayAllCommentsAndDeactivateCommentStream(false, player_id);
 			j_object.scrollTop(position + height);
 		}
 	};
@@ -211,6 +261,26 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			element = '<li><a href="#">' + element + '</a></li>';
 			drop_down_list.append(element);
 		}
+		pro.registerTabEvent(player_id);
+	};
+
+	pub.loadAllLayoutStyles = function(player_id)
+	{
+		let element;
+		let drop_down_list = $('#dropdownMenuLayoutInteraktiveList_' + player_id);
+		let language = scope.InteractiveVideo.lang;
+		let reset_elem = '<li><a href="#">' + language.reset_text + '</a></li><li role="separator" class="divider"></li>';
+		let layout_list = [];
+		layout_list['1:1'] = language.similarSize;
+		layout_list['2:1'] = language.bigVideo;
+		layout_list['stacked'] = language.veryBigVideo;
+		drop_down_list.html('');
+		drop_down_list.append(reset_elem);
+		Object.keys(layout_list).forEach(key => {
+			element = '<li><a href="#">' + layout_list[key] + '</a></li>';
+			drop_down_list.append(element);
+		});
+
 	};
 
 	pub.fillEndTimeSelector = function(seconds)
@@ -220,25 +290,178 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pub.preselectActualTimeInVideo = function(seconds)
 	{
-		let obj = pro.secondsToTimeCode(seconds);
-//Todo: fix this, this id does not exists anywhere
-		pro.preselectValueOfEndTimeSelection(obj, $('#comment_time_end'));
+		let time = pub.secondsToTimeCode(seconds);
+		let end_time = pub.secondsToTimeCode(seconds + 3);
+		if(il.InteractiveVideoPlayerFunction.shouldTimerGetRefreshed()) {
+			pro.preselectValueOfTimeSelection(end_time, $('#comment_time_end'));
+			pro.preselectValueOfTimeSelection(time, $('#comment_time'));
+		}
+
+	};
+
+	pro.registerTabEvent = function(player_id)
+	{
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+
+		$('.iv_tab_comments_' + player_id).on('click', function() {
+			let time = il.InteractiveVideoPlayerAbstract.currentTime(player_id);
+			let filter_element = $('#show_all_comments_' + player_id);
+			pro.displayCommentsOrToc(true, player_id);
+			if(player_data.show_only_until_playhead === false){
+				il.InteractiveVideoPlayerComments.rebuildCommentsViewIfShowAllIsActive(player_id);
+			} else {
+				pub.replaceCommentsAfterSeeking(time, player_id);
+			}
+		});
+
+		$('.iv_tab_toc_' + player_id).on('click', function() {
+			pro.displayCommentsOrToc(false, player_id);
+			pub.buildToc(player_id);
+		});
+
+		if(player_data.show_toolbar === "0" ){
+			let toolbar = $('.ivToolbar_' + player_id)
+			toolbar.css('display', 'none');
+		}
+		if(player_data.enable_comment_stream === "0" || player_data.show_toc_first === "1") {
+			pro.displayCommentsOrToc(false, player_id);
+			pub.buildToc(player_id);
+		} else {
+			pro.displayCommentsOrToc(true, player_id);
+		}
+	};
+
+	pro.displayCommentsOrToc = function(displayComments, player_id){
+		let comments_block = $('#ul_scroll_' + player_id);
+		let toc_block = $('#ul_toc_' + player_id);
+
+		if(displayComments) {
+			comments_block.css('display', 'block');
+			toc_block.css('display', 'none');
+			pro.activateTocOrCommentTab(false, player_id);
+		} else {
+			comments_block.css('display', 'none');
+			toc_block.css('display', 'block');
+			pro.activateTocOrCommentTab(true, player_id);
+		}
+	};
+
+	pro.activateTocOrCommentTab = function(toc, player_id){
+		let comments_block = $('.iv_tab_comments_' + player_id);
+		let toc_block = $('.iv_tab_toc_' + player_id);
+
+		if(toc) {
+			comments_block.removeClass('active');
+			toc_block.addClass('active');
+		} else {
+			toc_block.removeClass('active');
+			comments_block.addClass('active');
+		}
+
+	};
+
+	pub.buildToc = function(player_id) {
+		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+		let j_object	= $('#ilInteractiveVideoComments_' + player_id + ' #ul_toc_' + player_id);
+		let element		='';
+
+		j_object.html('');
+		pri.cssIterator = 0;
+		for (let key in player_data.comments_toc) {
+			let obj = player_data.comments_toc[key];
+			if (obj.comment_text !== null)
+			{
+				element = pro.buildTocElement(obj, player_id, player_data);
+				j_object.append(element);
+			}
+		}
+
+		pro.registerTocClickListener(player_id);
+		pub.highlightTocItem(player_id, player_data.last_time);
+	};
+
+	pro.buildTocElement = function(comment, player_id, player_data) {
+		let comment_title = ' ';
+
+		if(comment.comment_title !== '') {
+			comment_title = ' ' + comment.comment_title;
+		}
+
+		let comment_text_exists_class = 'no_description';
+		let add_span_arrow = '';
+		if(comment.comment_text != ''){
+			comment_text_exists_class = 'description_exists';
+			add_span_arrow = '<span class="toc_arrow glyphicon glyphicon-triangle-right"></span>';
+		}
+		return '<li class="toc_item toc_item_' + comment.comment_id +' ' + comment_text_exists_class + '" data-toc-time="' + comment.comment_time + '"><div class="toc-inner"><h5>' +
+			 pro.buildCommentTimeHtml(comment.comment_time, comment.is_interactive, player_id)  +
+			 '<div class="toc_title">' + comment_title + add_span_arrow + '</div></h5>' +
+			 '<div class="toc_description">' + comment.comment_text + '</div>' +
+			'</div></li>';
+	};
+
+	pro.registerTocClickListener = function(player_id) {
+		$('.description_exists').off('click');
+		$('.description_exists').on('click', function() {
+			if($(this).find('.toc_description').css('display') === 'block'){
+				$(this).find('.toc_description').hide();
+				$(this).find('.toc_description').removeClass('tocManualOverride');
+				$(this).parent().removeClass('tocManualOverride');
+			} else {
+				//$('.toc_description').hide();
+				$(this).find('.toc_description').show();
+				$(this).find('.toc_description').addClass('tocManualOverride');
+				$(this).parent().addClass('tocManualOverride');
+			}
+			pro.changeArrowForTocItem(player_id);
+		});
+	};
+
+	pub.highlightTocItem = function(player_id, current_time){
+
+		$( ".toc_item" ).each(function( index ) {
+			let toc_time = $( this ).data('toc-time');
+			let toc_time_next = $( this ).next().data('toc-time');
+			if(toc_time <= current_time
+				&& !(toc_time_next < current_time)) {
+				$('.toc_item').removeClass('activeToc');
+				$(this).addClass('activeToc');
+				$('.toc_description').hide();
+				$('.tocManualOverride').show();
+				$(this).find('.toc_description').show();
+			}
+		});
+		pro.changeArrowForTocItem(player_id);
+	};
+
+	pro.changeArrowForTocItem = function(player_id){
+
+		$( ".toc_item" ).each(function( index ) {
+			if($(this).hasClass('description_exists')){
+				let span = $(this).find('.toc_arrow');
+
+				if($(this).hasClass('activeToc') || $(this).hasClass('tocManualOverride')){
+					span.removeClass('glyphicon-triangle-right');
+					span.addClass('glyphicon-triangle-bottom');
+				} else {
+					span.addClass('glyphicon-triangle-right');
+					span.removeClass('glyphicon-triangle-bottom');
+				}
+			}
+		});
 	};
 
 	pro.isBuildListElementAllowed = function(player_data, username)
 	{
 		let value = false;
 
-		if(player_data.is_show_all_active === false)
-		{
-			if(player_data.filter_by_user === false ||
-					(   player_data.filter_by_user !== false &&
-						player_data.filter_by_user === username
-					)
+		if(player_data.filter_by_user === false ||
+				(   player_data.filter_by_user !== false &&
+					player_data.filter_by_user === username
 				)
-			{
-				value = true;
-			}
+			)
+		{
+			value = true;
 		}
 
 		return value;
@@ -261,6 +484,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.removeHighlightFromComment = function (id)
 	{
 		$('.list_item_' + id).removeClass('activeComment');
+		$('.interactive_overlay_element_' + id).remove();
 	};
 
 	pro.getCSSClassForListElement = function()
@@ -286,9 +510,9 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			time = Math.abs(Math.round(time) - 0.1);
 		}
-		return 	'<time class="time"> ' +
-				'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + time + ', ' + player_id + '); return false;">'+
-				pro.secondsToTimeCode(display_time)  +
+		return 	'<time class="time" data-time="' + time + '"> ' +
+				'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + time + ', \'' + player_id + '\'); return false;">'+
+				pub.secondsToTimeCode(display_time)  +
 				'</a>' +
 				'</time>' ;
 	};
@@ -310,8 +534,8 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		if(display_time > 0)
 		{
 			return 	'<time class="time_end"> - ' +
-					'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + display_time + ', ' + player_id + ');">'+
-					pro.secondsToTimeCode(display_time)  +
+					'<a onClick="il.InteractiveVideoPlayerAbstract.jumpToTimeInVideo(' + display_time + ', \'' + player_id + '\');">'+
+					pub.secondsToTimeCode(display_time)  +
 					'</a>' +
 					'</time>' ;
 		}
@@ -360,17 +584,25 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 		if(replies !== undefined && replies.length > 0)
 		{
-			for (var i  = 0; i < replies.length; i++)
+			for (let i  = 0; i < replies.length; i++)
 			{
 				value += pub.getCommentRepliesHtml(replies[i]);
 			}
 		}
-		return value + '</span>';
+		return value + '</div>';
 	};
 	
 	pub.getCommentRepliesHtml = function(reply)
 	{
-		return '<div class="reply_comment reply_comment_' + reply.comment_id + '">' + pub.buildCommentUsernameHtml(reply.user_name, reply.is_interactive) + ': ' + reply.comment_text + ' ' + pro.appendPrivateHtml(reply.is_private) + '</div>';
+		let name = reply.user_name;
+		if(name !== "") {
+			name = pub.buildCommentUsernameHtml(name , reply.is_interactive) + ': ';
+		}
+		if(reply.is_table_of_content === "1") {
+			return '';
+		}
+
+		return '<div class="reply_comment reply_comment_' + reply.comment_id + '">' + name + reply.comment_text + ' ' + pro.appendPrivateHtml(reply.is_private) + '</div>';
 	};
 
 	pro.appendPrivateHtml = function (is_private)
@@ -382,10 +614,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			private_comment = ' (' + language.private_text + ')';
 		}
-		else
-		{
-			private_comment = '';
-		}
+
 		return '<span class="private_text">'+ private_comment + '</span> ';
 	};
 
@@ -419,7 +648,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return author_list;
 	};
 
-	pro.buildCommentUserImage = function(player_data, comment) 
+	pro.buildCommentUserImage = function(player_data, comment)
 	{
 		let image = '';
 		let user_id = comment.user_id;
@@ -442,7 +671,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return '<div class="comment_user_image">' + image + '</div>';
 	};
 	
-	pro.secondsToTimeCode = function(time) 
+	pub.secondsToTimeCode = function(time)
 	{
 		let obj = pro.convertSecondsToTimeObject(time);
 		let h = pro.fillWithZeros(obj.hours);
@@ -483,11 +712,11 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		return obj;
 	};
 
-	pro.preselectValueOfEndTimeSelection = function(time, element)
+	pro.preselectValueOfTimeSelection = function(time, element)
 	{
 		element.val(time);
-		if($('#comment_time_end').size() > 0) {
-			$('#comment_time_end').timepicker('setTime', time);
+		if(element.size() > 0) {
+			element.timepicker('setTime', time);
 		}
 	};
 	

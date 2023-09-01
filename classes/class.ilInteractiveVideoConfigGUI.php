@@ -34,9 +34,9 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	 */
 	protected $tabs;
 
-	/**
-	 * @var ilDB
-	 */
+    /**
+     * @var $db ilDBInterface
+     */
 	protected $db;
 
 	/**
@@ -49,7 +49,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	 */
 	protected $active_tab;
 
-	/**
+    /**
 	 *
 	 */
 	public function __construct()
@@ -60,11 +60,11 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		 * @var ilCtrl       $ilCtrl
 		 * @var ilTabsGUI	$ilTabs
 		 */
-		global $lng, $tpl, $ilCtrl, $ilTabs;
+		global $ilTabs, $DIC;
 
-		$this->lng					= $lng;
-		$this->tpl					= $tpl;
-		$this->ctrl					= $ilCtrl;
+		$this->lng					= $DIC->language();
+		$this->tpl					= $DIC->ui()->mainTemplate();
+		$this->ctrl					= $DIC->ctrl();
 		$this->tabs					= $ilTabs;
 		$this->video_source_factory	= new ilInteractiveVideoSourceFactory();
 		$this->active_tab			= 'settings';
@@ -151,6 +151,18 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		$hidden = new ilHiddenInputGUI('path_mapping');
 		$hidden->setValue(json_encode($mapping));
 		$form->addItem($hidden);
+        $section = new ilFormSectionHeaderGUI();
+        $section->setTitle($this->plugin_object->txt('beta'));
+        $form->addItem($section);
+        $marker_feature = new ilCheckboxInputGUI($this->plugin_object->txt('activate_marker'),'activate_marker');
+        $db_settings = new ilSetting(('xvid'));
+
+        if((int) $db_settings->get('xvid_activate_marker') === 1)
+        {
+            $marker_feature->setChecked(true);
+        }
+        $marker_feature->setInfo($this->plugin_object->txt('activate_marker_info'));
+        $form->addItem($marker_feature);
 
 		if($db_updater->isNewerVersionFound())
 		{

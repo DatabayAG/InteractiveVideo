@@ -45,7 +45,7 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 
 	/**
 	 * @param ilTemplate $tpl
-	 * @return ilTemplate
+	 * @return mixed
 	 */
 	public function addPlayerElements($tpl)
 	{
@@ -56,7 +56,8 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	/**
 	 * @param                       $player_id
 	 * @param ilObjInteractiveVideo $obj
-	 * @return ilTemplate
+	 * @param string     $id
+	 * @return mixed
 	 */
 	public function getPlayer($player_id, $obj)
 	{
@@ -64,6 +65,7 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 		$instance = new ilInteractiveVideoYoutube();
 		$player->setVariable('PLAYER_ID', $player_id);
 		$player->setVariable('YOUTUBE_ID', $instance->doReadVideoSource($obj->getId()));
+		$player->setVariable('INTERACTIVE_VIDEO_ID', $id);
 		return $player;
 	}
 

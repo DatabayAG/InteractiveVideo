@@ -38,14 +38,16 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		}
 	}
 
-	/**
-	 * @param        $a_file
-	 * @param        $a_target_filename
-	 * @param string $a_target_dir
-	 * @param int    $a_sec
-	 * @param bool   $return_json
-	 * @return string
-	 */
+    /**
+     * @param        $a_file
+     * @param string $a_target_filename
+     * @param string $a_target_dir
+     * @param int    $a_sec
+     * @param bool   $return_json
+     * @return false|string
+     * @throws ilFFmpegException
+     * @throws ilWACException
+     */
 	static function extractImageWrapper($a_file, $a_target_filename = '', $a_target_dir = '', $a_sec = 1, $return_json = false)
 	{
 		$json_container = array();
@@ -131,6 +133,12 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		return self::fillZeroIfSmallerTen($seconds) . '.' . $milliseconds;
 	}
 
+	/**
+	 * @param int $comment_id
+	 * @param int $id
+	 * @param string $path_org
+	 * @return string
+	 */
 	public static function moveSelectedImage($comment_id, $id, $path_org)
 	{
 		$file_extension	= pathinfo($path_org, PATHINFO_EXTENSION);
@@ -160,6 +168,9 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		}
 	}
 
+	/**
+	 * @param string $path_to_file
+	 */
 	public static function removeSelectedImage($path_to_file)
 	{
 		if(file_exists($path_to_file))
@@ -167,7 +178,11 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 			unlink($path_to_file);
 		}
 	}
-	
+
+	/**
+	 * @param int $number
+	 * @return string
+	 */
 	protected static function fillZeroIfSmallerTen($number)
 	{
 		if($number < 10)

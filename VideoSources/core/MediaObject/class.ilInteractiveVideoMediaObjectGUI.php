@@ -36,7 +36,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 
 	/**
 	 * @param ilTemplate $tpl
-	 * @return ilTemplate
+	 * @return mixed
 	 */
 	public function addPlayerElements($tpl)
 	{
@@ -55,7 +55,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	{
 		require_once 'Services/WebAccessChecker/classes/class.ilWACSignedPath.php';
 		$player = new ilTemplate(self::PATH . 'tpl/tpl.video.html', false, false);
-		ilObjMediaObjectGUI::includePresentationJS($player);
+		ilObjMediaObjectGUI::includePresentationJS();
 		$media_object = new ilInteractiveVideoMediaObject();
 		$mob_id     = $media_object->doReadVideoSource($obj->getId());
 		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
@@ -64,6 +64,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 		$player->setVariable('PLAYER_ID', $player_id);
 		$player->setVariable('VIDEO_SRC', ilWACSignedPath::signFile($mob_dir . '/' . $media_item['location']));
 		$player->setVariable('VIDEO_TYPE', $media_item['format']);
+		$player->setVariable('INTERACTIVE_VIDEO_ID', $id);
 		return $player;
 	}
 

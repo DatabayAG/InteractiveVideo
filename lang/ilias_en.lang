@@ -22,9 +22,9 @@ cat_create_xvid#:#Create Interactive Video
 interactive#:#Interactive
 questions_comments_sub_tab#:#Edit
 tutor#:#Tutor
-questions_comments#:#Questions and comments
-questions_comments_new#:#Questions and public comments
-sure_delete_comments#:#Are you sure you want to delete the selected comments?
+questions_comments#:#Questions, chapters and comments
+questions_comments_new#:#Questions, chapters, public comments
+sure_delete_comments#:#Are you sure you want to delete the selected comments/questions/chapters?
 video_file#:#Video
 comment#:#Comment
 comments#:#Comments
@@ -32,12 +32,12 @@ switch_on#:#On
 switch_off#:#Off
 post#:#Post
 cancel#:#Cancel
-sure_delete_comment#:#Are you sure, you want to delete the selected comments?
+sure_delete_comment#:#Are you sure, you want to delete the selected comments/questions/chapters?
 missing_comment_text#:#Please enter a comment.
 missing_stopping_point#:#The stopping point was not transferred to the server. Please try again.
 invalid_comment_ids#:#Some comments could not be found.
 comments_successfully_deleted#:#The selected comments were deleted successfully.
-show_all_comments#:#Show all Comments:
+show_all_comments#:#Show only comments up to the playhead:
 author_filter#:#Filter by author
 edit_comment#:#Edit comment
 correct_solution#:#Correct
@@ -59,15 +59,16 @@ answered#:#Questions answered
 question_results#:#Question Results
 user_answered#:#User Answered
 user_correct#:#User Answered Correct
-insert_question#:#Insert question
-insert_comment#:#Insert Comment
+insert_question#:#Insert Question
+insert_comment#:#Insert Comment/Marker
+insert_comment_only#:#Insert Comment
 my_comments#:#My Comments
 general#:#General
-repeat_question#:#Repeat Question
+repeat_question#:#Repeat question
 tags#:#Tags
-question_text#:#Question Text
-question_type#:#Question Type
-feedback_correct#:#Feedback Correct Answer
+question_text#:#Question text
+question_type#:#Question type
+feedback_correct#:#Feedback correct answer
 feedback_one_wrong#:#Feedback at least one wrong
 results_successfully_deleted#:#The selected results are deleted successfully
 sure_delete_results#:#Are you sure, you want to delete the selected results?
@@ -76,17 +77,17 @@ invalid_question_ids#:#Invalid Question-Ids
 invalid_user_ids#:#Invalid User-Ids
 invalid_comment_ids#:#Invalid Comment-Ids
 comment_title#:#Comment-Title
-send#:#Send
+send#:#Check
 close#:#Close
 question#:#Question
 is_anonymized#:#Anonymize Comments
 is_anonymized_info#:#If enabled all comments are shown without usernames 
 is_public#:#Publish All Comments
-is_public_info#:#If enabled all users are able to read all PUBLIC comments, otherwise they are only able to see own comments.
+is_public_info#:#If enabled all users are able to read all PUBLIC comments. Otherwise they are only able to see own comments and public comments created by administrators (in the tab "Questions, chapters and comments")
 correct_answered#:#Answered correctly
 show_my_results#:#My Results
-is_jump_correct#:#Use 'Correct'-Jump Label
-is_jump_wrong#:#Use 'Wrong'-Jump Label
+is_jump_correct#:#Use 'Correct'-Jump label
+is_jump_wrong#:#Use 'Wrong'-Jump label
 limit_attempts#:#Limit attempts
 limit_attempts_info#:#If enabled the user only can answer a question once.
 is_private_comment#:#Private Comment
@@ -106,14 +107,16 @@ is_jump_correct_info#:#In case the question was answered correctly, you can sele
 is_jump_wrong_info#:#In case the question was answered incorrectly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
 learning_recommendation#:#Learning recommendation within the video at
 is_repeat#:#Skip correctly answered questions
-is_repeat_info#:#If this option is activated, questions that have already been answered correctly will be skipped when users watches the video again.
+is_repeat_info#:#If enabled, questions that have already been answered correctly will be skipped when users watch the video again.
 offline#:#Offline
 status#:#Status
-is_chronologic#:#Show all comments at all times
-is_chronologic_info#:#If this option is activated, all comments for the video will be shown in chronological order at all times.
+is_chronologic#:#Show only comments up to the playhead
+is_chronologic_settings#:#Show only comments up to the playhead
+is_chronologic_settings_info#:#If enabled, only comments prior to the current playhead position are displayed. When playing the video, the newly appearing comments are displayed continuously and at the very top. Users can change their view in the toolbar.
+is_chronologic_info#:#If enabled, only comments prior to the current playhead position are displayed. When playing the video, the newly appearing comments are displayed continuously and at the very top. Users can change their view in the toolbar.
 time_end#:#End Time
-show_response_frequency#:#Show response frequencies after question is answered
-show_response_frequency_info#:#The response frequencies of all answering options are shown as percentages beneath each answering option after the question has been answered.
+show_response_frequency#:#Show response frequencies
+show_response_frequency_info#:#After answering the question, the response frequencies of all answering options are shown as percentages beneath each answering option.
 type#:#Type
 title_of_question#:#Questiontitle
 endtime_warning#:#The endtime you selected is smaller than the actual time
@@ -137,23 +140,25 @@ db_up_to_date#:#Database up-to-date
 db_update_worked#:#Database successfully updated
 db_update_failed#:#Database update went wrong: %s
 task_switch#:#Activate Task
-task_switch_info#:#Activate Task
+task_switch_info#:#Displays any task above the video.
 task#:#Task
-lp_mode_title_by_questions#:#Questions Answered 
+lp_mode_title_by_questions#:#Questions Correctly Answered
 lp_mode_desc_by_questions#:#The object is 'completed' if the users submitted the 'correct' answer for each question. If there is no question defined, the object is 'completed' if the user reaches the end of the video.
 lp_matrix#:#Matrix View
 lp_users#:#Users
 lp_summary#:#Summary
 lp_settings#:#Settings
+lp_mode_title_by_all_answered_questions#:#Questions Answered
+lp_mode_desc_by_all_answered_questions#:#The object is 'completed' if the users submitted an answer for each question, correct or not. If there is no question defined, the object is 'completed' if the user reaches the end of the video.
 select_at_least_one#:#Please select at least one source
 back_to#:#back to
 back_to_title#:#Do you want to go back to %s (%s)?
 save#:#Save
 at_least_one_source#:#You need to select at least one source, make sure there is at least one active source in the configuration of the Interactive Video Plugin.
-feedback_correct_obj#:#Feedback Link for Repository Object for correct answer
-feedback_correct_obj_info#:#Feedback Link for Repository Object for correct answer
-feedback_wrong_obj#:#Feedback Link for Repository Object for at least one wrong answer
-feedback_wrong_obj_info#:#Feedback Link for Repository Object for at least one wrong answer
+feedback_correct_obj#:#Feedback link for repository object for correct answer
+feedback_correct_obj_info#:#Feedback link for repository object for correct answer
+feedback_wrong_obj#:#Feedback link for repository object for at least one wrong answer
+feedback_wrong_obj_info#:#Feedback link for repository object for at least one wrong answer
 show_comment_field#:#Show comment field
 show_comment_field_info#:#Show comment field below this reflection question
 more_informations#:#More Information
@@ -170,7 +175,7 @@ neutral_questions#:#Neutral Questions
 neutral_question#:#Neutral Question
 export_comments#:#Export Comments
 export_all_comments#:#Export All Comments
-question_image#:#Question Image
+question_image#:#Question image
 extract#:#Generate Thumbnail from Video
 use_this_image#:#Use this image
 time_for_preview#:#Time: 
@@ -183,13 +188,38 @@ save_anyway#:#Save Anyway
 private#:#private
 public#:#public
 visibility#:#Visibility
-no_comment#:#No Comment-field
-no_comment_info#:#There will be no comment field below the video player
+enable_comment#:#Show comment field
+no_comment_stream#:#No Comment-stream
+no_comment_stream_info#:#There will be no comment stream next to the video player, also no toolbar with filters, question work as usual.
+enable_comment_info#:#Shows a comment field below the video. Must be enabled if students should be able to add markers (see below).
+process_header#:#Process
+insert_marker#:#Insert Marker
+color#:#Color
+stroke#:#Stroke
+width#:#Width
+height#:#Height
+rotate#:#Rotate
+rectangle#:#Rectangle
+arrow#:#Arrow
+circle#:#Circle
+scale#:#Scale
+with_marker#:#with marker
+line#:#Line
+marker_for_students#:#Marker for students
+marker_for_students_info#:#If enabled, students can insert markers to a video (e.g. shapes or texts). The option appears below the comment field.»
+delete_marker#:#Delete Marker
+delete_marker#:#Delete Marker
+text#:#Text
+font_size#:#Font Size
+is_reply_to#:#Is Reply
+reply_to#:#Reply to
+jump_to_timestamp#:#Click two times (no double click) to jump to the correct time.
+insert_marker_info#:#You can move the marker with drag & drop on the video
 xvid_xvid_view_lp#:#View Learning Progress
 auto_resume#:#Auto resume
 auto_resume_info#:#If enabled, the video will be automatically resumed after closing a the modal question dialogue.
-fixed_modal#:#Block modal closing 
-fixed_modal_info#:#If enabled, a modal dialogue won't be closed if a user clicks on the background.
+fixed_modal#:#Block question closing
+fixed_modal_info#:#If enabled, a shown question won't be closed if a user clicks on the background.
 modal_section#:#Behaviour of Question Dialogue
 subtitle#:#Subtitle
 short_title#:#Short title
@@ -197,5 +227,40 @@ long_title#:#Title
 subtitle_removed#:#Subtitle removed
 sure_delete_subtitle#:#Are you sure you want to remove this subtitle?
 you_need_a_short_title#:#You need to provide a short title!
+show_toolbar#:#Show Toolbar
+show_toolbar_info#:#Displays the toolbar in the upper right corner of the user's screen with the following options: video size setting, author filter, show only comments up to the playhead.
+save_without_correct_detail#:#You don't have selected a reflection question or have you selected a question without correct answers, are you sure you want to save the question?
+is_table_of_content#:#Table of Content
+toc#:#Table of Content
+show_toc_first#:#Show table of content first
+show_toc_first_info#:#Shows table of content as first page if chapters have been created. By default, the table of content is covered by the comment column and must be actively opened.
+enable_comment_stream#:#Show comments column
+enable_comment_stream_info#:#Shows the comments column next to the video. It lists the comments and questions.
+insert_chapter#:#Insert Chapter
+edit_chapter#:#Edit Chapter
+comment_table_title#:#Comment / Question Text
+compulsory_question#:#Compulsory question
+compulsory#:#Compulsory
+compulsory_question_info#:#This question must be answered
+show_best_solution#:#Show solution
+solution#:#Solution
+repeat#:#Retry
+best_solution_text#:#Best solution
+best_solution_text_info#:#If a comment field is offered (see below), a user cannot view the solution until he/she has saved an answer.
+show_best_solution_info#:#After answering the question, users can display the correct solution (via button "Show solution").
+at_least_one_answer#:#Please select an answer
+display#:#View
+display_width#:#Width video- & comments column
+display_width_info#:#- Gleich gross: 1:1 Die beiden Spalten sind gleich breit. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/> - Video gross: 2:1 Das Video ist deutlich breiter als die Kommentarepalte, (Verhältnis = 2:1). Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/> - Video sehr gross: Untereinander Das Video füllt die volle Fensterbreite aus. Die Kommentarepalte wird darunter angezeigt. In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/>
+similarSize#:#Same size: 1:1
+similarSize_info#:#The two columns have the same width. Switches to a one-column layout (one below the other) on very small screens. Users can adjust their view in the toolbar
+bigVideo#:#Video large: 2:1
+veryBigVideo_info#:#The video fills the full width of the window. The comments column is displayed underneath. Users can adjust their view in the toolbar.
+veryBigVideo#:#Video very large: Stacked
+bigVideo_info#:#The video is much wider than the comment column. Switches to a one-column layout (one below the other) on very small screens. Users can adjust their view in the toolbar.
+layout_filter#:#Layout
+beta#:#Beta
+activate_marker#:#Activate marker
+activate_marker_info#:#Activate marker
 no_toolbar#:#Deactivate toolbar
 no_toolbar_info#:#No toolbar with filters will be shown

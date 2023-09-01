@@ -1,0 +1,211 @@
+<?php
+/* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
+
+require_once 'Services/Table/classes/class.ilTable2GUI.php';
+require_once 'Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvancedSelectionListGUI.php';
+require_once 'Services/User/classes/class.ilUserUtil.php';
+require_once dirname(__FILE__) . '/../class.ilInteractiveVideoPlugin.php';
+ilInteractiveVideoPlugin::getInstance()->includeClass('class.xvidUtils.php');
+
+/**
+ * Class ilInteractiveVideoCommentsTableGUI
+ */
+class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
+{
+	/**
+	 * @var ilCtrl
+	 */
+	protected $ctrl;
+
+    /**
+     * @var int
+     */
+	protected $is_public = 1;
+
+	protected $DIC;
+
+	public function setIsPublic($public) {
+	    $this->is_public = $public;
+    }
+
+    public function isPublic() {
+	    return $this->is_public;
+    }
+
+	/**
+	 * @param ilObjectGUI|ilObjInteractiveVideoGUI $a_parent_obj
+	 * @param string      $a_parent_cmd
+	 */
+	public function __construct($a_parent_obj, $a_parent_cmd)
+	{
+		/**
+		 * @var $ilCtrl ilCtrl
+		 * @var ilToolbarGUI $ilToolbar 
+		 */
+		global $ilCtrl, $ilAccess, $ilToolbar, $DIC;
+		$this->ctrl = $ilCtrl;
+		$this->DIC = $DIC;
+
+		$this->setId('xvid_comments_' . $a_parent_obj->object->getId());
+		parent::__construct($a_parent_obj, $a_parent_cmd);
+		if($a_parent_cmd === "editMyComments"){
+            $ilToolbar->addButton(
+                $a_parent_obj->plugin->txt('export_comments'),
+                $ilCtrl->getLinkTarget($a_parent_obj, 'exportMyComments')
+            );
+        }
+
+		$this->setFormAction($this->ctrl->getFormAction($a_parent_obj, $a_parent_cmd));
+		$this->setDefaultOrderDirection('ASC');
+		$this->setDefaultOrderField('comment_time');
+
+		$title = $a_parent_obj->plugin->txt('questions_comments_new');
+		if($a_parent_cmd == 'editMyComments')
+		{
+			$title = $a_parent_obj->plugin->txt('my_comments');
+		}
+		
+		$this->setTitle($title);
+		$this->setRowTemplate('tpl.row_comments.html', $a_parent_obj->plugin->getDirectory());
+
+		$this->addColumn('', 'comment_id',  '1px', true);
+
+		$this->addColumn($this->lng->txt('time'), 'comment_time');
+		$this->addColumn($a_parent_obj->plugin->txt('time_end'), 'comment_time_end');
+		if($a_parent_cmd == 'editComments')
+		{
+			$this->addColumn($this->lng->txt('user'), 'user_id');
+		}
+		$this->addColumn($this->lng->txt('title'), 'title');
+		$this->addColumn($a_parent_obj->plugin->txt('comment_table_title'), 'comment_text');
+		if($ilAccess->checkAccess('write', '', $a_parent_obj->object->getRefId()) && $a_parent_cmd == 'editComments')
+		{
+			$this->addColumn($a_parent_obj->plugin->txt('type'), 'type');
+            //$this->addColumn($a_parent_obj->plugin->txt('compulsory'), 'compulsory', '10%');
+			//$this->addColumn($a_parent_obj->plugin->txt('tutor'), 'is_tutor');
+			
+//			$this->addCommandButton('showTutorInsertCommentForm', $this->lng->txt('insert'));
+		}
+		else
+		{
+            //$this->addColumn($a_parent_obj->plugin->txt('compulsory'), 'compulsory', '10%');
+			$this->addColumn($a_parent_obj->plugin->txt('visibility'), 'is_private');
+		}
+
+		$this->addColumn($a_parent_obj->plugin->txt('is_reply_to'), 'is_reply_to', '10%');
+		$this->addColumn($this->lng->txt('actions'), 'actions', '10%');
+
+		$this->setSelectAllCheckbox('comment_id');
+		
+		if($a_parent_cmd == 'editComments')
+		{
+			$this->addMultiCommand('confirmDeleteComment', $this->lng->txt('delete'));
+		}
+		else if($a_parent_cmd == 'editMyComments')
+		{
+			$this->addMultiCommand('confirmDeleteMyComment', $this->lng->txt('delete'));
+		}
+		
+		$this->setShowRowsSelector(true);
+	}
+
+	/**
+	 * @param string $column
+	 * @return bool
+	 */
+	public function numericOrdering($column)
+	{
+		if('comment_time' == $column || 'comment_time_end' ==  $column )
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param array $a_set
+	 */
+	protected function fillRow($a_set)
+	{
+        if($this->isPublic() == 0 && $this->DIC->user()->getId() != $a_set['user_id'] && !$a_set['is_interactive']) {
+            $this->tpl->setCurrentBlock('no_row');
+            $this->tpl->setVariable('VAL_SPACE', '-');
+            $this->tpl->parseCurrentBlock();
+           return;
+        }
+
+		foreach ($a_set as $key => $value)
+		{
+			if($key == 'comment_id')
+			{
+				$value = ilUtil::formCheckbox(0, 'comment_id[]', $value);
+			}
+			else if($key == 'user_id')
+			{
+				$value = ilUserUtil::getNamePresentation($value);
+			}
+			else if($key == 'comment_time')
+			{
+				#$time = xvidUtils::timespanArray($value);
+				#$value = $time['h'].':'.$time['m'].':'.$time['s'];
+			}
+			else if($key == 'comment_time_end')
+			{
+				if($value == '00:00:00')
+				{
+					$value = '';
+				}
+			}else if($key == 'is_reply_to')
+			{
+				if($value > 0)
+				{
+					$value = $this->lng->txt('yes');
+				}
+				else
+				{
+					$value = $this->lng->txt('no');
+				}
+			}
+			else if($key == 'type')
+			{
+                $value = $this->lng->txt($value);
+				if(strlen($a_set['marker']))
+				{
+					$value .= ' ' . ilInteractiveVideoPlugin::getInstance()->txt('with_marker');
+				}
+			}
+			else if($key == 'is_tutor')
+			{
+				continue;
+			}
+			else if($key == 'compulsory')
+			{
+				$value = xvidUtils::yesNoString($value);
+			}
+
+			$this->tpl->setVariable('VAL_'.strtoupper($key), $value);
+		}
+
+		$current_selection_list = new ilAdvancedSelectionListGUI();
+		$current_selection_list->setListTitle($this->lng->txt('actions'));
+		$current_selection_list->setId('act_' . $a_set['comment_id']);
+
+		$this->ctrl->setParameter($this->parent_obj, 'comment_id', $a_set['comment_id']);
+		
+		if($a_set['is_interactive'] == 1)
+		{
+			$link_target =  $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editQuestion' : 'editComment');
+		}	
+		else
+		{
+			$link_target =  $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editComment' : 'editMyComment');
+            if($a_set['is_table_of_content'] === "1") {
+                $link_target =  $this->ctrl->getLinkTarget($this->parent_obj,'editChapter');
+            }
+		}
+		
+		$current_selection_list->addItem($this->lng->txt('edit'), '', $link_target);
+		$this->tpl->setVariable('VAL_ACTIONS', $current_selection_list->getHTML());
+	}
+}

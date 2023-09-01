@@ -868,6 +868,119 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_comment'))
 ?>
 <#46>
 <?php
+// Empty step
+?>
+<#47>
+<?php
+// Empty step
+?>
+<#48>
+<?php
+// Empty step
+?>
+<#49>
+<?php
+// Empty step
+?>
+<#50>
+<?php
+// Empty step
+?>
+<#51>
+<?php
+// Empty step
+?>
+<#52>
+<?php
+// Empty step
+?>
+<#53>
+<?php
+// Empty step
+?>
+<#54>
+<?php
+// Empty step
+?>
+<#55>
+<?php
+// Empty step
+?>
+<#56>
+<?php
+// Empty step
+?>
+<#57>
+<?php
+// Empty step
+?>
+<#58>
+<?php
+// Empty step
+?>
+<#59>
+<?php
+// Empty step
+?>
+<#60>
+	<?php
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'video_mode'))
+	{
+	}
+	?>
+<#61>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'video_mode'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'video_mode',
+		array(
+			'type'    => 'integer',
+			'length'  => '1',
+			'notnull' => true,
+			'default' => 0));
+}
+?>
+<#62>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_comments'))
+{
+	if(!$ilDB->tableColumnExists('rep_robj_xvid_comments', 'marker'))
+	{
+		$ilDB->addTableColumn('rep_robj_xvid_comments', 'marker',
+			array(
+				'type' => 'text',
+				'length' => '4000',
+				'notnull' => false
+			));
+	}
+}
+?>
+<#63>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'marker_for_students'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'marker_for_students',
+		array(
+			'type'    => 'integer',
+			'length'  => '1',
+			'notnull' => true,
+			'default' => 0));
+}
+?>
+<#64>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_comment_stream'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'no_comment_stream',
+		array(
+			'type'    => 'integer',
+			'length'  => '1',
+			'notnull' => true,
+			'default' => 0));
+}
+?>
+<#65>
+<?php
 require_once('./Services/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php');
 $read_lp = ilDBUpdateNewObjectType::getCustomRBACOperationId('read_learning_progress');
 $xoct_type_id = ilDBUpdateNewObjectType::getObjectTypeId('xvid');
@@ -876,7 +989,7 @@ if ($read_lp && $xoct_type_id) {
 	ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
 }
 ?>
-<#47>
+<#66>
 <?php
 if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'auto_resume'))
 {
@@ -889,7 +1002,7 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'auto_resume'))
 	);
 }
 ?>
-<#48>
+<#67>
 <?php
 if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'fixed_modal'))
 {
@@ -902,7 +1015,7 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'fixed_modal'))
 	);
 }
 ?>
-<#49>
+<#68>
 <?php
 if(!$ilDB->tableExists('rep_robj_xvid_subtitle'))
 {
@@ -939,7 +1052,7 @@ if(!$ilDB->tableExists('rep_robj_xvid_subtitle'))
 	}
 }
 ?>
-<#50>
+<#69>
 <?php
 if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_toolbar'))
 {
@@ -952,7 +1065,159 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_toolbar'))
 	);
 }
 ?>
-<#51>
+<#70>
 <?php
-$ilDB->addPrimaryKey('rep_robj_xvid_objects', array('obj_id'));
+try {
+    $ilDB->addPrimaryKey('rep_robj_xvid_objects', array('obj_id'));
+} catch (Exception $e) {
+
+}
+?>
+<#71>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_comments'))
+{
+    if(!$ilDB->tableColumnExists('rep_robj_xvid_comments', 'is_table_of_content'))
+    {
+        $ilDB->addTableColumn('rep_robj_xvid_comments', 'is_table_of_content',
+            array(
+                'type'    => 'integer',
+                'length'  => '1',
+                'notnull' => true,
+                'default' => 0));
+    }
+}
+?>
+<#72>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'show_toc_first'))
+{
+    $ilDB->addTableColumn('rep_robj_xvid_objects', 'show_toc_first',
+        array(
+            'type'    => 'integer',
+            'length'  => 1,
+            'notnull' => true,
+            'default' => 0)
+    );
+}
+?>
+<#73>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'disable_comment_stream'))
+{
+    $ilDB->addTableColumn('rep_robj_xvid_objects', 'disable_comment_stream',
+        array(
+            'type'    => 'integer',
+            'length'  => 1,
+            'notnull' => true,
+            'default' => 0)
+    );
+}
+?>
+<#74>
+<?php
+$ilDB->addIndex('rep_robj_xvid_comments', ['is_interactive', 'obj_id'], 'i2');
+?>
+<#75>
+<?php
+$ilDB->addIndex('rep_robj_xvid_question', ['comment_id', 'type'], 'i2');
+?>
+<#76>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_question'))
+{
+    if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'compulsory_question'))
+    {
+        $ilDB->addTableColumn('rep_robj_xvid_question', 'compulsory_question',
+            array(
+                'type'    => 'integer',
+                'length'  => '1',
+                'notnull' => false,
+                'default' => null
+            ));
+    }
+}
+?>
+
+<#77>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_question'))
+{
+    if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'show_best_solution'))
+    {
+        $ilDB->addTableColumn('rep_robj_xvid_question', 'show_best_solution',
+            array(
+                'type'    => 'integer',
+                'length'  => '1',
+                'notnull' => true,
+                'default' => 0));
+    }
+}
+?>
+<#78>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_question'))
+{
+    if(!$ilDB->tableColumnExists('rep_robj_xvid_question', 'show_best_solution_text'))
+    {
+        $ilDB->addTableColumn('rep_robj_xvid_question', 'show_best_solution_text',
+            array(
+                'type'    => 'text',
+                'length'  => '4000',
+                'notnull' => false,
+                'default' => null
+            ));
+    }
+}
+?>
+<#79>
+<?php
+if($ilDB->tableExists('rep_robj_xvid_objects'))
+{
+    if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'layout_width'))
+    {
+        $ilDB->addTableColumn('rep_robj_xvid_objects', 'layout_width',
+            array(
+                'type'    => 'integer',
+                'length'  => '4',
+                'notnull' => true,
+                'default' => 0));
+    }
+}
+?>
+<#80>
+<?php
+require_once('./Services/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php');
+$read_lp = ilDBUpdateNewObjectType::getCustomRBACOperationId('copy');
+$xoct_type_id = ilDBUpdateNewObjectType::getObjectTypeId('xvid');
+
+if ($read_lp && $xoct_type_id) {
+    ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
+}
+?>
+<#81>
+<?php
+if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_toolbar'))
+{
+    $ilDB->renameTableColumn('rep_robj_xvid_objects', 'no_toolbar', 'show_toolbar');
+}
+?>
+<#82>
+<?php
+if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_comment'))
+{
+    $ilDB->dropTableColumn('rep_robj_xvid_objects', 'no_comment');
+}
+?>
+<#83>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'enable_comment'))
+{
+    $ilDB->addTableColumn('rep_robj_xvid_objects', 'enable_comment',
+        array(
+            'type'    => 'integer',
+            'length'  => '1',
+            'notnull' => true,
+            'default' => 1));
+}
 ?>

@@ -1,7 +1,7 @@
 <?php
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilInteractiveVideoXMLParser.php';
 require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.ilObjComment.php';
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/class.SimpleChoiceQuestion.php';
+require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/classes/questions/class.SimpleChoiceQuestion.php';
 
 /**
  * Class ilInteractiveVideoSimpleChoiceQuestionsXMLParser
@@ -33,10 +33,11 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 	 */
 	protected $questions = 0;
 
-	/**
-	 * @param ilObjInteractiveVideo $xvid_obj
-	 * @param                      $xmlFile
-	 */
+    /**
+     * ilInteractiveVideoSimpleChoiceQuestionsXMLParser constructor.
+     * @param ilObjInteractiveVideo $xvid_obj
+     * @param $xmlFile
+     */
 	public function __construct($xvid_obj, $xmlFile)
 	{
 		$this->xvid_obj = $xvid_obj;

@@ -6,16 +6,17 @@ il.InteractiveVideoSubtitle = (function (scope) {
 	};
 
 	pub.initializeSubtitleTracks = function(player_id){
-		$.each(il.InteractiveVideo[player_id].tracks.flat, function (key, value) {
+		$.each(il.InteractiveVideo[player_id].tracks, function (top_key, top_value) {
+			$.each(top_value, function (key, value) {
+				let track = document.createElement('track');
+				track.kind    = pri.subtitles;
+				track.label   = value.label;
+				track.src     = value.src;
+				track.srclang = value.srclang;
 
-			let track = document.createElement('track');
-			track.kind    = pri.subtitles;
-			track.label   = value.label;
-			track.src     = value.src;
-			track.srclang = value.srclang;
+				$("#" + player_id).append(track);
 
-			$("#" + player_id).append(track);
-
+			});
 		});
 	};
 	
