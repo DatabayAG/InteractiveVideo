@@ -757,6 +757,8 @@ input[type=range]:focus::-ms-fill-upper {
 
 .toc_description{
     display: none;
+    padding-top: 6px;
+    background-color:green;
 }
 
 .toc_item{
@@ -799,7 +801,6 @@ li.toc_item > div > h5 > time {
     display: inline-block;
     width: 82%;
     padding-top: 0px;
-    padding-bottom: 6px;
     vertical-align: top;
 }
 @media (max-width: 1485px) {
