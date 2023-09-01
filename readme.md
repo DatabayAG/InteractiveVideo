@@ -21,7 +21,9 @@
 ILIAS Interactive Video Plugin
 
 ## ILIAS compatibility
-- For ILIAS 5 and older, please use the branch release_1
+- If you are looking for a ILIAS 6 or ILIAS 7 compatible version of the plugin, please use the master branch.
+- If you are looking for a ILIAS 5.2-5.4 compatible version, please use the release_2 branch.
+- For even older ILIAS versions, please use the release_1 branch.
  
 ## Changes in version 3.0.0
 1. [Reply to comments](https://www.ilias.de/docu/goto_docu_wiki_wpage_4967_1357.html)
