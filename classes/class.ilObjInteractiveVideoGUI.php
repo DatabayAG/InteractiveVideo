@@ -142,9 +142,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				break;
 
 			case 'ilpublicuserprofilegui':
-				$profile_gui = new ilPublicUserProfileGUI((int)$_GET['user']);
-				$profile_gui->setBackUrl($this->ctrl->getLinkTarget($this, 'showContent'));
-				$this->tpl->setContent($this->ctrl->forwardCommand($profile_gui));
+                $get = $this->http->wrapper()->query();
+                if($get->has('user')){
+                    $user_id = $get->retrieve('user', $this->refinery->kindlyTo()->int());
+                    $profile_gui = new ilPublicUserProfileGUI($user_id);
+                    $profile_gui->setBackUrl($this->ctrl->getLinkTarget($this, 'showContent'));
+                    $this->tpl->setContent($this->ctrl->forwardCommand($profile_gui));
+                }
 				break;
 
 			case 'ilcommonactiondispatchergui':
@@ -224,13 +228,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 						}
 						else
 						{
-						    $class = ilInteractiveVideoPlugin::stripSlashesWrapping($_GET['xvid_plugin_ctrl']);
-						    $dir = ltrim($class,'il');
+                            $get = $this->http->wrapper()->query();
+                            if($get->has('xvid_plugin_ctrl')){
+                                $xvid_plugin_ctrl = $get->retrieve('xvid_plugin_ctrl', $this->refinery->kindlyTo()->string());
+                                $xvid_plugin_ctrl = ilInteractiveVideoPlugin::stripSlashesWrapping($xvid_plugin_ctrl);
+                            }
+						    $dir = ltrim($xvid_plugin_ctrl,'il');
                             $dir = rtrim($dir,'GUI');
-						    $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $class . '.php';
+						    $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $xvid_plugin_ctrl . '.php';
                             if(file_exists($path)){
                                 global $DIC;
-						        $class = new $class($DIC);
+						        $class = new $xvid_plugin_ctrl($DIC);
                                 if(method_exists($class, $cmd))
                                 {
                                     $class->{$cmd}();
@@ -445,11 +453,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $lng, $ilObjDataCache;
 
-		$ref_id = (int) $_GET['xvid_referrer_ref_id'];
-		$link = urldecode($_GET['xvid_referrer']);
+        $get = $this->http->wrapper()->query();
+        if($get->has('xvid_referrer_ref_id')){
+            $xvid_referrer_ref_id = $get->retrieve('xvid_referrer_ref_id', $this->refinery->kindlyTo()->int());
+        }
+
+        if($get->has('xvid_referrer')){
+            $xvid_referrer = $get->retrieve('xvid_referrer', $this->refinery->kindlyTo()->string());
+            $xvid_referrer = ilInteractiveVideoPlugin::stripSlashesWrapping($xvid_referrer);
+        }
+		$ref_id = (int) $xvid_referrer_ref_id;
+		$link = urldecode($xvid_referrer);
 		$url = parse_url(ILIAS_HTTP_PATH);
 		$link = $url['scheme'] . '://' . $url['host'] . (isset($url['port']) ?  ':' . $url['port'] : '') . $link;
-		if($ref_id !== 0)
+		if($ref_id > 0)
 		{
 			$obj_id		= $ilObjDataCache->lookupObjId($ref_id);
 			$title		= $ilObjDataCache->lookupTitle($obj_id);
@@ -486,8 +503,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $DIC->ui()->mainTemplate()->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
 		$simple_choice = new SimpleChoiceQuestion();
         $ajax_object   = new SimpleChoiceQuestionAjaxHandler();
-		$question_id = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
-		$question = new ilTemplate("tpl.simple_questions.html", true, true, $plugin->getDirectory());
+        $get = $this->http->wrapper()->query();
+        $question_id = 0;
+        if($get->has('comment_id')){
+            $comment_id = $get->retrieve('comment_id', $this->refinery->kindlyTo()->int());
+            $question_id = $simple_choice->existQuestionForCommentId($comment_id);
+            $question = new ilTemplate("tpl.simple_questions.html", true, true, $plugin->getDirectory());
+        }
 
 		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
@@ -612,7 +634,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$config_tpl = new ilTemplate("tpl.video_config.html", true, true, $plugin->getDirectory());
 		$config_tpl->setVariable('PLAYER_ID', $player_id);
-		$org_ref_id = (int) $_GET['ref_id'];
+        $get = $this->http->wrapper()->query();
+        if($get->has('ref_id')){
+            $org_ref_id = $get->retrieve('ref_id', $this->refinery->kindlyTo()->int());
+        }
 		$this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'ref_id', $this->ref_id);
 		$config_tpl->setVariable('PLAYER_TYPE', $video_type);
 		$config_tpl->setVariable('VIDEO_FINISHED_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postVideoFinishedPerAjax', '', true, false));
@@ -1098,8 +1123,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values["enable_comment_stream"]		= $this->object->getEnableCommentStream();
 		$source_id = $this->object->getSourceId();
         if($source_id === 'opc' || $source_id === '') {
-            if(array_key_exists('xvid_source_id', $_GET) && $_GET['xvid_source_id'] !== ''){
-                $source_id = ilInteractiveVideoPlugin::stripSlashesWrapping($_GET['xvid_source_id']);
+            $get = $this->http->wrapper()->query();
+            if($get->has('xvid_source_id')){
+                $source_id = $get->retrieve('xvid_source_id', $this->refinery->kindlyTo()->string());
+                $source_id = ilInteractiveVideoPlugin::stripSlashesWrapping($source_id);
             }
         }
 
@@ -1115,7 +1142,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function editProperties(): void
 	{
 	    global $DIC;
-        $customJS = ilInteractiveVideoPlugin::stripSlashesWrapping($_GET['xvid_custom_js']);
+        $get = $this->http->wrapper()->query();
+        if($get->has('xvid_custom_js')){
+            $customJS = $get->retrieve('xvid_custom_js', $this->refinery->kindlyTo()->string());
+            $customJS = ilInteractiveVideoPlugin::stripSlashesWrapping($customJS);
+        }
         $DIC->ui()->mainTemplate()->addOnLoadCode('"' . $customJS . '"');
         $DIC->ui()->mainTemplate()->addOnLoadCode('console.log('. $customJS .')');
 		$this->edit();
@@ -1273,7 +1304,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$confirm->setConfirm($this->lng->txt('confirm'), 'removeSubtitle');
 		$confirm->setCancel($this->lng->txt('cancel'), 'addSubtitle');
 
-		$filename = ilInteractiveVideoPlugin::stripSlashesWrapping($_GET['remove_subtitle_file']);
+        $get = $this->http->wrapper()->query();
+        if($get->has('remove_subtitle_file')){
+            $filename = $get->retrieve('remove_subtitle_file', $this->refinery->kindlyTo()->string());
+            $filename = ilInteractiveVideoPlugin::stripSlashesWrapping($filename);
+        }
 		$confirm->addItem('remove_subtitle_file', $filename, $filename);
 		$tpl->setContent($confirm->getHTML());
 
@@ -1380,8 +1415,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			{
                 $this->tpl->setOnScreenMessage("failure", $e->getMessage(), true);
 			}
-
-			$this->ctrl->setParameterByClass('ilrepositorygui', 'ref_id', (int)$_GET['ref_id']);
+            $get = $this->http->wrapper()->query();
+            if($get->has('ref_id')){
+                $ref_id = $get->retrieve('ref_id', $this->refinery->kindlyTo()->int());
+            }
+			$this->ctrl->setParameterByClass('ilrepositorygui', 'ref_id', $ref_id);
 			$this->ctrl->redirectByClass('ilrepositorygui');
 		}
 	}
@@ -3336,16 +3374,23 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
 	public function getQuestionPerAjax(): void
 	{
+        $get = $this->http->wrapper()->query();
 		$ajax_object = new SimpleChoiceQuestionAjaxHandler();
 
-		$existUserAnswer = SimpleChoiceQuestion::existUserAnswer((int)$_GET['comment_id']);
+        if($get->has('comment_id')){
+            $comment_id = $get->retrieve('comment_id', $this->refinery->kindlyTo()->int());
+        } else {
+            $this->callExit();
+        }
 
-		$is_repeat_question = SimpleChoiceQuestion::isRepeatQuestionEnabled((int)$_GET['comment_id']);
+		$existUserAnswer = SimpleChoiceQuestion::existUserAnswer($comment_id);
+
+		$is_repeat_question = SimpleChoiceQuestion::isRepeatQuestionEnabled($comment_id);
 		$tpl_json      = ilInteractiveVideoPlugin::getInstance()->getTemplate('default/tpl.show_question.html', false, false);
 		if(($is_repeat_question == true)
 			|| ($is_repeat_question == false && $existUserAnswer == false))
 		{
-			$tpl_json->setVariable('JSON', $ajax_object->getJsonForCommentId((int)$_GET['comment_id']));
+			$tpl_json->setVariable('JSON', $ajax_object->getJsonForCommentId($comment_id));
 			$tpl_json->show("DEFAULT", false, true);
 			$this->callExit();
 		}
@@ -3620,6 +3665,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$t			= explode("_", $a_target[0]);
 		$ref_id		= (int) $t[0];
 		$class_name	= $a_target[1];
+        $get = $DIC->http()->wrapper()->query();
 
 		if ($ilAccess->checkAccess("read", "", $ref_id))
 		{
@@ -3628,7 +3674,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$ilCtrl->getCallStructure(strtolower("ilObjPluginDispatchGUI"));
 			$ilCtrl->setParameterByClass($class_name, "ref_id", $ref_id);
 			$ilCtrl->saveParameterByClass($class_name, 'xvid_referrer_ref_id');
-			$ilCtrl->setParameterByClass($class_name, 'xvid_referrer', urlencode($_GET['xvid_referrer']));
+
+            if($get->has('xvid_referrer')){
+                $xvid_referrer = $get->retrieve('xvid_referrer', $DIC->refinery->kindlyTo()->string());
+            }
+			$ilCtrl->setParameterByClass($class_name, 'xvid_referrer', urlencode($xvid_referrer));
 			$ilCtrl->redirectByClass(array("ilobjplugindispatchgui", $class_name), "");
 		}
 		else if($ilAccess->checkAccess("visible", "", $ref_id))
@@ -3638,7 +3688,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$ilCtrl->getCallStructure(strtolower("ilObjPluginDispatchGUI"));
 			$ilCtrl->setParameterByClass($class_name, "ref_id", $ref_id);
 			$ilCtrl->saveParameterByClass($class_name, 'xvid_referrer_ref_id');
-			$ilCtrl->setParameterByClass($class_name, 'xvid_referrer', urlencode($_GET['xvid_referrer']));
+            if($get->has('xvid_referrer')){
+                $xvid_referrer = $get->retrieve('xvid_referrer', $DIC->refinery->kindlyTo()->string());
+            }
+			$ilCtrl->setParameterByClass($class_name, 'xvid_referrer', urlencode($xvid_referrer));
 			$ilCtrl->redirectByClass(array("ilobjplugindispatchgui", $class_name), "infoScreen");
 		}
 		else if ($ilAccess->checkAccess("read", "", ROOT_FOLDER_ID))

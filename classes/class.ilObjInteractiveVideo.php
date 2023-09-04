@@ -289,7 +289,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 					else
 					{
                         $post = $this->http->wrapper()->post();
-                        $source_id		= ilInteractiveVideoPlugin::stripSlashesWrapping($post->retrieve('source_id', $this->refinery->kindlyTo()->string()));
+                        $source_id = ilInteractiveVideoPlugin::stripSlashesWrapping($post->retrieve('source_id', $this->refinery->kindlyTo()->string()));
                         if($post->has('is_online')) {
                             $online	= $post->retrieve('is_online', $this->refinery->kindlyTo()->int());
                         } else {
@@ -299,17 +299,16 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                         if($post->has('is_anonymized') || $post->has('video_mode') ) {
                             $anonymized		= $post->retrieve('is_anonymized', $this->refinery->kindlyTo()->int());
                             $repeat			= $post->retrieve('is_repeat', $this->refinery->kindlyTo()->int());
-                            $chronologic	= $post->retrieve('is_chronologic', $this->refinery->kindlyTo()->int());
-                            if( $chronologic === null ){
-                                $chronologic = 0;
+                            if( $post->has('is_chronologic') ){
+                                $chronologic	= $post->retrieve('is_chronologic', $this->refinery->kindlyTo()->int());
                             } else {
-                                $chronologic	= (int) $chronologic;
+                                $chronologic = 0;
                             }
 
                             $is_task		= $post->retrieve('is_task', $this->refinery->kindlyTo()->int());
                             $task			= ilInteractiveVideoPlugin::stripSlashesWrapping($post->retrieve('task', $this->refinery->kindlyTo()->string()));
                             $enable_comment	= $post->retrieve('enable_comment', $this->refinery->kindlyTo()->int());
-                            $show_toolbar = 1;
+                            $show_toolbar   = 1;
                             if($post->has('show_toolbar'))
                             {
                                 $show_toolbar		= (int)$post->retrieve('show_toolbar', $this->refinery->kindlyTo()->int());
@@ -324,13 +323,13 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                             $video_mode			    = $post->retrieve('video_mode', $this->refinery->kindlyTo()->int());
                             $marker_for_students    = $post->retrieve('marker_for_students', $this->refinery->kindlyTo()->int());
                         } else {
-                            $anonymized		= $this->is_anonymized;
-                            $repeat			= $this->is_repeat;
-                            $chronologic	= $this->is_chronologic;
-                            $is_task		= $this->task_active;
-                            $task			= '';
-                            $enable_comment	= $this->enable_comment;
-                            $show_toolbar = $this->enable_toolbar;
+                            $anonymized		        = $this->is_anonymized;
+                            $repeat			        = $this->is_repeat;
+                            $chronologic	        = $this->is_chronologic;
+                            $is_task		        = $this->task_active;
+                            $task			        = '';
+                            $enable_comment     	= $this->enable_comment;
+                            $show_toolbar           = $this->enable_toolbar;
                             $auto_resume	        = $this->auto_resume_after_question;
                             $fixed_modal	        = $this->fixed_modal;
                             $show_toc_first     	= $this->show_toc_first;
@@ -452,12 +451,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		parent::doDelete();
 	}
 
-	/**
-				 * @param ilObjInteractiveVideo $new_obj
-				 * @param integer $a_target_id
-				 * @param int|null $a_copy_id
-				 */
-				protected function doCloneObject(ilObject2 $new_obj, int $a_target_id, ?int $a_copy_id = null): void
+    /**
+     * @param ilObjInteractiveVideo $new_obj
+     * @param integer $a_target_id
+     * @param int|null $a_copy_id
+     */
+    protected function doCloneObject(ilObject2 $new_obj, int $a_target_id, ?int $a_copy_id = null): void
 	{
 		parent::doCloneObject($new_obj, $a_target_id, $a_copy_id);
 
