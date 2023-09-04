@@ -1,6 +1,8 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 
+use ILIAS\Refinery\Factory;
+use ILIAS\HTTP\Services;
 
 /**
  * Class ilObjInteractiveVideo
@@ -61,6 +63,14 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     protected int $layout_width = self::LAYOUT_BIG_VIDEO;
     protected bool $marker_active = false;
 
+    private Factory $refinery;
+    private Services $http;
+    public function __construct(int $id = 0) {
+        global $DIC;
+        parent::__construct($id);
+        $this->refinery = $DIC->refinery();
+        $this->http = $DIC->http();
+    }
 	/**
 	 * @param $src_id
 	 * @return ilInteractiveVideoSource
@@ -229,7 +239,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 		if(! $clone_mode)
 		{
-			$post_src_id = ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['source_id']);
+            $post_src_id =  ilInteractiveVideoPlugin::stripSlashesWrapping($this->http->wrapper()->post()->retrieve('source_id', $this->refinery->kindlyTo()->string()));
 			$from_post = false;
 			if(($post_src_id == null || $post_src_id == '') && $this->source_id != null)
 			{
@@ -278,34 +288,35 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 					}
 					else
 					{
-						$anonymized		= (int)$_POST['is_anonymized'];
-						$repeat			= (int)$_POST['is_repeat'];
-						$chronologic	= $_POST['is_chronologic'];
+                        $post = $this->http->wrapper()->post();
+						$anonymized		= $post->retrieve('is_anonymized', $this->refinery->kindlyTo()->int());
+						$repeat			= $post->retrieve('is_repeat', $this->refinery->kindlyTo()->int());
+						$chronologic	= $post->retrieve('is_chronologic', $this->refinery->kindlyTo()->int());
                         if( $chronologic === null ){
                             $chronologic = 0;
                         } else {
-                            $chronologic	= (int) $_POST['is_chronologic'];
+                            $chronologic	= (int) $chronologic;
                         }
 
-                        $online			= (int)$_POST['is_online'];
-						$source_id		= ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['source_id']);
-						$is_task		= (int)$_POST['is_task'];
-						$task			= ilInteractiveVideoPlugin::stripSlashesWrapping($_POST['task']);
-						$enable_comment	= (int)$_POST['enable_comment'];
+                        $online			= $post->retrieve('is_online', $this->refinery->kindlyTo()->int());
+						$source_id		= ilInteractiveVideoPlugin::stripSlashesWrapping($post->retrieve('source_id', $this->refinery->kindlyTo()->string()));
+						$is_task		= $post->retrieve('is_task', $this->refinery->kindlyTo()->int());
+						$task			= ilInteractiveVideoPlugin::stripSlashesWrapping($post->retrieve('task', $this->refinery->kindlyTo()->string()));
+						$enable_comment	= $post->retrieve('enable_comment', $this->refinery->kindlyTo()->int());
                         $show_toolbar = 1;
-                        if(array_key_exists('show_toolbar', $_POST))
+                        if($post->has('show_toolbar'))
                         {
-                            $show_toolbar		= (int)$_POST['show_toolbar'];
+                            $show_toolbar		= (int)$post->retrieve('show_toolbar', $this->refinery->kindlyTo()->int());
                         }
 
-						$auto_resume	= (int)$_POST['auto_resume'];
-						$fixed_modal	= (int)$_POST['fixed_modal'];
-						$show_toc_first	= (int)$_POST['show_toc_first'];
-						$enable_comment_stream	= (int)$_POST['enable_comment_stream'];
-                        $layout_width   = (int)$_POST['layout_width'];
-						$no_comment_stream	= (int)$_POST['no_comment_stream'];
-						$video_mode			= (int)$_POST['video_mode'];
-						$marker_for_students= (int)$_POST['marker_for_students'];
+						$auto_resume	        = $post->retrieve('auto_resume', $this->refinery->kindlyTo()->int());
+						$fixed_modal	        = $post->retrieve('fixed_modal', $this->refinery->kindlyTo()->int());
+						$show_toc_first     	= $post->retrieve('show_toc_first', $this->refinery->kindlyTo()->int());
+						$enable_comment_stream	= $post->retrieve('enable_comment_stream', $this->refinery->kindlyTo()->int());
+                        $layout_width           = $post->retrieve('layout_width', $this->refinery->kindlyTo()->int());
+						$no_comment_stream	    = $post->retrieve('no_comment_stream', $this->refinery->kindlyTo()->int());
+						$video_mode			    = $post->retrieve('video_mode', $this->refinery->kindlyTo()->int());
+						$marker_for_students    = $post->retrieve('marker_for_students', $this->refinery->kindlyTo()->int());
 					}
 
 					$ilDB->insert(
@@ -317,16 +328,16 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 							'is_chronologic' => array('integer', $chronologic),
 							'is_public'      => array('integer', 1),
 							'is_online'      => array('integer', $online),
-							'source_id'      => array('text', $source_id),
-							'is_task'        => array('integer',$is_task ),
-							'auto_resume'    => array('integer',$auto_resume ),
-							'fixed_modal'    => array('integer',$fixed_modal ),
-							'task'           => array('text', $task),
-							'enable_comment'     => array('integer', 1),
-							'show_toolbar'     => array('integer', $show_toolbar),
+							'source_id'      => array('text',    $source_id),
+							'is_task'        => array('integer', $is_task ),
+							'auto_resume'    => array('integer', $auto_resume ),
+							'fixed_modal'    => array('integer', $fixed_modal ),
+							'task'           => array('text',    $task),
+							'enable_comment' => array('integer', 1),
+							'show_toolbar'   => array('integer', $show_toolbar),
 							'show_toc_first' => array('integer', $show_toc_first),
 							'disable_comment_stream' => array('integer', 1),
-							'layout_width' => array('integer', $layout_width),
+							'layout_width'        => array('integer', $layout_width),
 							'no_comment_stream'   => array('integer', $no_comment_stream),
 							'video_mode'          => array('integer', $video_mode),
 							'marker_for_students' => array('integer', $marker_for_students)
