@@ -289,34 +289,58 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 					else
 					{
                         $post = $this->http->wrapper()->post();
-						$anonymized		= $post->retrieve('is_anonymized', $this->refinery->kindlyTo()->int());
-						$repeat			= $post->retrieve('is_repeat', $this->refinery->kindlyTo()->int());
-						$chronologic	= $post->retrieve('is_chronologic', $this->refinery->kindlyTo()->int());
-                        if( $chronologic === null ){
-                            $chronologic = 0;
+                        $source_id		= ilInteractiveVideoPlugin::stripSlashesWrapping($post->retrieve('source_id', $this->refinery->kindlyTo()->string()));
+                        if($post->has('is_online')) {
+                            $online	= $post->retrieve('is_online', $this->refinery->kindlyTo()->int());
                         } else {
-                            $chronologic	= (int) $chronologic;
+                            $online = 0;
                         }
 
-                        $online			= $post->retrieve('is_online', $this->refinery->kindlyTo()->int());
-						$source_id		= ilInteractiveVideoPlugin::stripSlashesWrapping($post->retrieve('source_id', $this->refinery->kindlyTo()->string()));
-						$is_task		= $post->retrieve('is_task', $this->refinery->kindlyTo()->int());
-						$task			= ilInteractiveVideoPlugin::stripSlashesWrapping($post->retrieve('task', $this->refinery->kindlyTo()->string()));
-						$enable_comment	= $post->retrieve('enable_comment', $this->refinery->kindlyTo()->int());
-                        $show_toolbar = 1;
-                        if($post->has('show_toolbar'))
-                        {
-                            $show_toolbar		= (int)$post->retrieve('show_toolbar', $this->refinery->kindlyTo()->int());
+                        if($post->has('is_anonymized') || $post->has('video_mode') ) {
+                            $anonymized		= $post->retrieve('is_anonymized', $this->refinery->kindlyTo()->int());
+                            $repeat			= $post->retrieve('is_repeat', $this->refinery->kindlyTo()->int());
+                            $chronologic	= $post->retrieve('is_chronologic', $this->refinery->kindlyTo()->int());
+                            if( $chronologic === null ){
+                                $chronologic = 0;
+                            } else {
+                                $chronologic	= (int) $chronologic;
+                            }
+
+                            $is_task		= $post->retrieve('is_task', $this->refinery->kindlyTo()->int());
+                            $task			= ilInteractiveVideoPlugin::stripSlashesWrapping($post->retrieve('task', $this->refinery->kindlyTo()->string()));
+                            $enable_comment	= $post->retrieve('enable_comment', $this->refinery->kindlyTo()->int());
+                            $show_toolbar = 1;
+                            if($post->has('show_toolbar'))
+                            {
+                                $show_toolbar		= (int)$post->retrieve('show_toolbar', $this->refinery->kindlyTo()->int());
+                            }
+
+                            $auto_resume	        = $post->retrieve('auto_resume', $this->refinery->kindlyTo()->int());
+                            $fixed_modal	        = $post->retrieve('fixed_modal', $this->refinery->kindlyTo()->int());
+                            $show_toc_first     	= $post->retrieve('show_toc_first', $this->refinery->kindlyTo()->int());
+                            $enable_comment_stream	= $post->retrieve('enable_comment_stream', $this->refinery->kindlyTo()->int());
+                            $layout_width           = $post->retrieve('layout_width', $this->refinery->kindlyTo()->int());
+                            $no_comment_stream	    = $post->retrieve('no_comment_stream', $this->refinery->kindlyTo()->int());
+                            $video_mode			    = $post->retrieve('video_mode', $this->refinery->kindlyTo()->int());
+                            $marker_for_students    = $post->retrieve('marker_for_students', $this->refinery->kindlyTo()->int());
+                        } else {
+                            $anonymized		= $this->is_anonymized;
+                            $repeat			= $this->is_repeat;
+                            $chronologic	= $this->is_chronologic;
+                            $is_task		= $this->task_active;
+                            $task			= '';
+                            $enable_comment	= $this->enable_comment;
+                            $show_toolbar = $this->enable_toolbar;
+                            $auto_resume	        = $this->auto_resume_after_question;
+                            $fixed_modal	        = $this->fixed_modal;
+                            $show_toc_first     	= $this->show_toc_first;
+                            $enable_comment_stream	= $this->enable_comment_stream;
+                            $layout_width           = 0;
+                            $no_comment_stream	    = $this->no_comment_stream;
+                            $video_mode			    = 0;
+                            $marker_for_students    = 0;
                         }
 
-						$auto_resume	        = $post->retrieve('auto_resume', $this->refinery->kindlyTo()->int());
-						$fixed_modal	        = $post->retrieve('fixed_modal', $this->refinery->kindlyTo()->int());
-						$show_toc_first     	= $post->retrieve('show_toc_first', $this->refinery->kindlyTo()->int());
-						$enable_comment_stream	= $post->retrieve('enable_comment_stream', $this->refinery->kindlyTo()->int());
-                        $layout_width           = $post->retrieve('layout_width', $this->refinery->kindlyTo()->int());
-						$no_comment_stream	    = $post->retrieve('no_comment_stream', $this->refinery->kindlyTo()->int());
-						$video_mode			    = $post->retrieve('video_mode', $this->refinery->kindlyTo()->int());
-						$marker_for_students    = $post->retrieve('marker_for_students', $this->refinery->kindlyTo()->int());
 					}
 
 					$ilDB->insert(
