@@ -804,7 +804,6 @@ li.toc_item > div > h5 > time {
 }
 @media (max-width: 1485px) {
     .toc_title{
-       padding-top: 4px;
        padding-bottom: 6px;
     }
 }
