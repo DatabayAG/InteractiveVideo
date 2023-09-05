@@ -1221,3 +1221,57 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'enable_comment'))
             'default' => 1));
 }
 ?>
+<#84>
+<?php
+$a =0 ;
+if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'is_chronologic'))
+{
+    if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'enable_comment'))
+    {
+        if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'show_toolbar'))
+        {
+            if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'disable_comment_stream'))
+            {
+                $query = '
+                    SELECT obj_id, is_chronologic, enable_comment, show_toolbar, disable_comment_stream
+                    FROM rep_robj_xvid_objects
+                ';
+                $res   = $ilDB->query($query);
+                while($row = $ilDB->fetchAssoc($res))
+                {
+                    $obj_id = (int) $row['obj_id'];
+                    $is_chronologic = (int) $row['is_chronologic'];
+                    if($is_chronologic === 0) {
+                        $is_chronologic = 1;
+                    } else {
+                        $is_chronologic = 0;
+                    }
+                    $enable_comment = (int) $row['enable_comment'];
+                    if($enable_comment === 0) {
+                        $enable_comment = 1;
+                    } else {
+                        $enable_comment = 0;
+                    }
+                    $show_toolbar = (int) $row['show_toolbar'];
+                    if($show_toolbar === 0) {
+                        $show_toolbar = 1;
+                    } else {
+                        $show_toolbar = 0;
+                    }
+                    $disable_comment_stream = (int) $row['disable_comment_stream'];
+                    if($disable_comment_stream === 0) {
+                        $disable_comment_stream = 1;
+                    } else {
+                        $disable_comment_stream = 0;
+                    }
+                    $ilDB->manipulateF(
+                        'UPDATE rep_robj_xvid_objects SET is_chronologic = %s, enable_comment = %s, show_toolbar = %s, disable_comment_stream = %s WHERE obj_id = %s',
+                        array('integer', 'integer', 'integer', 'integer', 'integer'),
+                        array($is_chronologic, $enable_comment, $show_toolbar, $disable_comment_stream, $obj_id)
+                    );
+                }
+            }
+        }
+    }
+}
+?>
