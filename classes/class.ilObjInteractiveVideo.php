@@ -607,7 +607,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * @param bool $strip_tags
      * @return array
      */
-	public function getCommentsTableData($replace_with_text = false, $empty_string_if_null = false, $replace_settings_with_text = false, $strip_tags = false)
+	public function getCommentsTableData($replace_with_text = false, $empty_string_if_null = false, $replace_settings_with_text = false, $strip_tags = false, $csv_export = false)
 	{
         /**
          * @var $ilDB ilDBInterface
@@ -655,12 +655,17 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
             $is_tutor                                   = $row['is_tutor'];
             $is_interactive                         	= $row['is_interactive'];
-            //$is_compulsory                            = $row['compulsory_question'] ? '1' : '0';
+            if(!$csv_export) {
+                $is_compulsory                            = $row['compulsory_question'] ? '1' : '0';
+            }
 			if($replace_settings_with_text )
 			{
                 $is_tutor			= xvidUtils::yesNoString($row['is_tutor']);
                 $is_interactive		= xvidUtils::yesNoString($row['is_interactive']);
-                //$is_compulsory    = xvidUtils::yesNoString($row['compulsory_question']);
+
+                if(!$csv_export) {
+                    $is_compulsory    = xvidUtils::yesNoString($row['compulsory_question']);
+                }
 			}
 
             $table_data[$counter]['comment_id']         = $row['cid'];
@@ -675,12 +680,16 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
             $table_data[$counter]['comment_text']       = $comment_text;
             $table_data[$counter]['is_tutor']			= $is_tutor;
             $table_data[$counter]['is_interactive']		= $is_interactive;
-             //$table_data[$counter]['compulsory']      = $is_compulsory
+
+            if(!$csv_export) {
+                $table_data[$counter]['compulsory']      = $is_compulsory;
+            }
             $table_data[$counter]['type']               = $type;
 			$table_data[$counter]['marker']             = $row['marker'];
 			$table_data[$counter]['is_reply_to']        = $row['is_reply_to'];
-			//$table_data[$counter]['is_table_of_content'] = $row['is_table_of_content'];
-
+            if(!$csv_export) {
+                $table_data[$counter]['is_table_of_content'] = $row['is_table_of_content'];
+            }
             $counter++;
         }
 

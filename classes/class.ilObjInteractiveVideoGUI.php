@@ -3527,7 +3527,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $lng;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
-		$data = $this->object->getCommentsTableData(true, false, false, true);
+		$data = $this->object->getCommentsTableData(true, false, false, true, true);
 
 		$csv = array();
 		$separator = ";";
