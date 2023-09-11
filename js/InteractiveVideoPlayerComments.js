@@ -424,11 +424,13 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			let toc_time_next = $( this ).next().data('toc-time');
 			if(toc_time <= current_time
 				&& !(toc_time_next < current_time)) {
-				$('.toc_item').removeClass('activeToc');
-				$(this).addClass('activeToc');
-				$('.toc_description').hide();
-				$('.tocManualOverride').show();
-				$(this).find('.toc_description').show();
+				if($('.ul_toc_iv').css('display') !== 'none'){
+					$('.toc_item').removeClass('activeToc');
+					$(this).addClass('activeToc');
+					$('.toc_description').hide();
+					$('.tocManualOverride').show();
+					$(this).find('.toc_description').show();
+				}
 			}
 		});
 		pro.changeArrowForTocItem(player_id);
