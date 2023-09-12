@@ -290,9 +290,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
 	protected function buildContentTemplate($light_version = false)
 	{
-		/**
-		 * @var $tpl    ilTemplate
-		 */
 		global $tpl, $DIC;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
         $tpl->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoQuestionCreator.js');
@@ -635,9 +632,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$config_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'getQuestionPerAjax', '', true, false));
 		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postAnswerPerAjax', '', true, false));
 		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postComment', '', true, false));
-        $config_tpl->setVariable('GET_COMMENT_MARKER_MODAL', $this->ctrl->getLinkTarget($this, 'getCommentAndMarkerForm', '', true, false));
-        $config_tpl->setVariable('GET_CHAPTER_MODAL', $this->ctrl->getLinkTarget($this, 'getChapterForm', '', true, false));
-        $config_tpl->setVariable('GET_QUESTION_CREATION_MODAL', $this->ctrl->getLinkTarget($this, 'showTutorInsertQuestionFormAjax', '', true, false));
+        $config_tpl->setVariable('GET_COMMENT_MARKER_MODAL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'getCommentAndMarkerForm', '', true, false));
+        $config_tpl->setVariable('GET_CHAPTER_MODAL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'getChapterForm', '', true, false));
+        $config_tpl->setVariable('GET_QUESTION_CREATION_MODAL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'showTutorInsertQuestionFormAjax', '', true, false));
         $this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'ref_id', $org_ref_id);
 		$config_tpl->setVariable('SEND_BUTTON', $plugin->txt('send'));
 		$config_tpl->setVariable('CLOSE_BUTTON', $plugin->txt('close'));
