@@ -80,7 +80,10 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 		$this->id = $id;
 	}
 
-	public function render(): string
+    /**
+     * @throws ilTemplateException
+     */
+    public function render(): string
 	{
 		$my_tpl = new ilTemplate('tpl.time_picker.html', true, true, 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/');
 		$value = $this->getValue();
@@ -90,7 +93,10 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 		return $my_tpl->get();
 	}
 
-	public function insert(ilTemplate $a_tpl): void
+    /**
+     * @throws ilTemplateException
+     */
+    public function insert(ilTemplate $a_tpl): void
 	{
 		$a_tpl->setCurrentBlock("prop_generic");
 		$a_tpl->setVariable("PROP_GENERIC", $this->render());

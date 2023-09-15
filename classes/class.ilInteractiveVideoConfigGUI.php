@@ -67,9 +67,10 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		$this->active_tab			= 'settings';
 	}
 
-	/**
-	 * {}
-	 */
+    /**
+     * {}
+     * @throws ilCtrlException
+     */
     public function performCommand(string $cmd): void
 	{
 		switch($cmd)
@@ -192,7 +193,10 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		return $form;
 	}
 
-	protected function addTabs()
+    /**
+     * @throws ilCtrlException
+     */
+    protected function addTabs()
 	{
 		$this->tabs->addSubTab('settings', $this->lng->txt('settings'),
 			$this->ctrl->getLinkTargetByClass('ilInteractiveVideoConfigGUI', 'view'));
@@ -207,10 +211,11 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		$this->tabs->setSubTabActive($this->active_tab);
 	}
 
-	/**
-	 *
-	 */
-	protected function saveConfigurationForm()
+    /**
+     * @throws ilCtrlException
+     * @throws ilCtrlException
+     */
+    protected function saveConfigurationForm()
 	{
 		$form = $this->getConfigurationForm();
 		if($form->checkInput())
@@ -230,10 +235,11 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		$this->showConfigurationForm($form);
 	}
 
-	/**
-	 *
-	 */
-	protected function loadDbUpdates()
+    /**
+     * @throws ilCtrlException
+     * @throws ilCtrlException
+     */
+    protected function loadDbUpdates()
 	{
 		$form = $this->getConfigurationForm();
 		if($form->checkInput())
@@ -245,6 +251,9 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		$this->showConfigurationForm();
 	}
 
+    /**
+     * @throws ilCtrlException
+     */
     protected function loadLanguages()
     {
         global $DIC;

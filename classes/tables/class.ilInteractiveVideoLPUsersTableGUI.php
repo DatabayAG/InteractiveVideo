@@ -135,9 +135,18 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 		$this->filter = [];
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     * @throws ilDateTimeException
+     * @throws ilTemplateException
+     * @throws ilTemplateException
+     * @throws ilTemplateException
+     * @throws ilTemplateException
+     * @throws ilTemplateException
+     * @throws ilTemplateException
+     * @throws ilTemplateException
+     * @throws ilTemplateException
+     */
     protected function fillRow(array $a_set): void
 	{
 		/**

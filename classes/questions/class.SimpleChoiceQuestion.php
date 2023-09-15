@@ -810,7 +810,7 @@ class SimpleChoiceQuestion
 			AND questions.repeat_question = %s
 			AND score.user_id = %s',
 			['integer', 'integer'],
-			[0, (int)$user_id]
+			[0, $user_id]
 		);
 		$results = [];
 		while($row = $ilDB->fetchAssoc($res))
@@ -836,7 +836,7 @@ class SimpleChoiceQuestion
 			AND questions.compulsory_question = 1
 			AND comments.obj_id = %s',
 			['integer'],
-			[(int)$obj_id]
+			[$obj_id]
 		);
 		$results = [];
 		while($row = $ilDB->fetchAssoc($res))
@@ -870,7 +870,7 @@ class SimpleChoiceQuestion
 			AND questions.repeat_question = %s
 			AND score.user_id = %s',
 			['integer', 'integer', 'integer'],
-			[1, 1, (int)$user_id]
+			[1, 1, $user_id]
 		);
 		$results = [];
 		while($row = $ilDB->fetchAssoc($res))
@@ -985,7 +985,7 @@ class SimpleChoiceQuestion
 		$res = $ilDB->queryF(
 			'SELECT question_text FROM ' . self::TABLE_NAME_QUESTION . ' WHERE question_id = %s',
 			['integer'],
-			[(int)$qid]
+			[$qid]
 		);
 		$row = $ilDB->fetchAssoc($res);
 		return $row['question_text'];

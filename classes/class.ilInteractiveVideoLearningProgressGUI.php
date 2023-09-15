@@ -73,6 +73,9 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         return $this->object->getId();
     }
 
+    /**
+     * @throws ilCtrlException
+     */
     private function addLearningProgressSubTabs(): void
     {
         /**
@@ -164,6 +167,8 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 
     /**
      * Save learning progress settings
+     * @throws ilCtrlException
+     * @throws ilCtrlException
      */
     public function saveLearningProgressSettings(): void
     {
@@ -242,6 +247,12 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         $this->tpl->setContent(implode('<br />', [$table->getHTML(), $this->__getLegendHTML()]));
     }
 
+    /**
+     * @throws ilObjectNotFoundException
+     * @throws ilCtrlException
+     * @throws ilDatabaseException
+     * @throws ilDateTimeException
+     */
     public function showLPUserDetails(): void
     {
         /**
@@ -359,6 +370,13 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         return $form;
     }
 
+    /**
+     * @throws ilObjectNotFoundException
+     * @throws ilCtrlException
+     * @throws ilDatabaseException
+     * @throws ilObjectException
+     * @throws ilDateTimeException
+     */
     public function updateLPUsers()
     {
         $this->gui->ensureAtLeastOnePermission(['write', 'read_learning_progress']);

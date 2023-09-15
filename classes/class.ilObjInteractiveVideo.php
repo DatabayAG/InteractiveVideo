@@ -210,6 +210,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return $sub_title_data;
 	}
 
+    /**
+     * @throws ilException
+     */
     protected function doCreate(bool $clone_mode = false): void
 	{
 		if(! $clone_mode)

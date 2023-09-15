@@ -108,9 +108,14 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 		return in_array($this->parent_obj->object->getLearningProgressMode(), [ilObjInteractiveVideo::LP_MODE_DEACTIVATED]);
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     * @throws ilTemplateException
+     * @throws ilTemplateException
+     * @throws ilTemplateException
+     * @throws ilTemplateException
+     * @throws ilTemplateException
+     */
     protected function fillRow(array $a_set): void
 	{
 		/**

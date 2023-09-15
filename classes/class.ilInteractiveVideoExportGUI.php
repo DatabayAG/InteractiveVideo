@@ -4,9 +4,10 @@
  */
 class ilInteractiveVideoExportGUI extends ilExportGUI
 {
-	/**
-	 * {}
-	 */
+    /**
+     * {}
+     * @throws ilCtrlException
+     */
     protected function buildExportTableGUI(): ilExportTableGUI
 	{
 		/**
