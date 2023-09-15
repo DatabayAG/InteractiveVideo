@@ -111,7 +111,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	{
 		$this->db->update('rep_robj_xvid_sources',
 			[
-				'db_update' 	=> ['integer', (int)$a_version]
+				'db_update' 	=> ['integer', $a_version]
             ],
 			[
 				'plugin_id' => ['text', $this->plugin_id]

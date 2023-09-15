@@ -257,8 +257,8 @@ class SimpleChoiceQuestionStatistics
 			{
 				if($value['answered'] > 0)
 				{
-					$results[$counter]['percentage'] = round(($value['correct'] / $value['answered']) * 100, 2);;
-				}
+					$results[$counter]['percentage'] = round(($value['correct'] / $value['answered']) * 100, 2);
+                }
 				else
 				{
 					$results[$counter]['percentage'] = 0;

@@ -94,13 +94,11 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
         int $a_usr_id
     ): bool
 	{
-		switch($a_operator)
-		{
-			case ilConditionHandler::OPERATOR_LP:
-				// Not necessary, handled in \ilConditionHandler::_checkCondition
-				require_once './Services/Tracking/classes/class.ilLPStatus.php';
-				return ilLPStatus::_hasUserCompleted($a_trigger_obj_id, $a_usr_id);
-		}
+        // Not necessary, handled in \ilConditionHandler::_checkCondition
+        if ($a_operator == ilConditionHandler::OPERATOR_LP) {
+            require_once './Services/Tracking/classes/class.ilLPStatus.php';
+            return ilLPStatus::_hasUserCompleted($a_trigger_obj_id, $a_usr_id);
+        }
 
 		return false;
 	}

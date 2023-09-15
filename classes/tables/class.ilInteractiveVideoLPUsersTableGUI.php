@@ -12,14 +12,14 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
      * @param int         $a_ref_id
      * @param bool        $a_print_view
      */
-	function __construct(?object $a_parent_obj, string $a_parent_cmd, int $a_obj_id, int $a_ref_id, $a_print_view = false)
+	function __construct(?object $a_parent_obj, string $a_parent_cmd, int $a_obj_id, int $a_ref_id, bool $a_print_view = false)
 	{
 		parent::__construct($a_parent_obj, $a_parent_cmd, $a_obj_id, $a_ref_id, true); 
 		$this->setPrintMode($a_print_view);
 		$this->setRowTemplate("tpl.object_users_props_row.html", $this->parent_obj->plugin->getDirectory());
 		if(!$a_print_view)
 		{
-			$this->addColumn($this->lng->txt("actions"), "");
+			$this->addColumn($this->lng->txt("actions"));
 		}
 	}
 

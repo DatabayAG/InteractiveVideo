@@ -134,7 +134,7 @@ class SimpleChoiceQuestionAjaxHandler
     /**
      * @param int $qid
      */
-	protected function getBestSolution($qid)
+	protected function getBestSolution(int $qid)
     {
         $best_solution = '';
 	    $answers = $this->getAnswersForQuestionId($qid, false);
@@ -189,6 +189,8 @@ class SimpleChoiceQuestionAjaxHandler
      * @return false|string
      * @throws ilDatabaseException
      * @throws ilObjectNotFoundException
+     * @throws ilSystemStyleException
+     * @throws ilTemplateException
      * @throws ilWACException
      */
 	public function getJsonForCommentId($cid)
@@ -317,7 +319,7 @@ class SimpleChoiceQuestionAjaxHandler
      * @param bool $asJson
      * @return false|string
      */
-	public function getAnswersForQuestionId($qid, $asJson = true)
+	public function getAnswersForQuestionId($qid, bool $asJson = true)
 	{
         global $ilDB;
 

@@ -21,7 +21,7 @@ class SimpleChoiceQuestionScoring
 				SELECT points FROM rep_robj_xvid_score score  
 				WHERE user_id = %s AND question_id = %s',
 			['integer', 'integer'],
-			[(int)$usr_id, (int)$qid]
+			[$usr_id, (int)$qid]
 		);
 		$score  = $ilDB->fetchAssoc($res);
 		return (int)$score['points'];

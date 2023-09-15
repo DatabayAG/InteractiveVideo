@@ -77,7 +77,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 	 */
 	protected static function parseTimeString($time)
 	{
-		if($matches = preg_split('/:/', $time))
+		if($matches = explode(':', $time))
 		{
 			if(is_array($matches) && sizeof($matches) == 3)
 			{

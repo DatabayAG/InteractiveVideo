@@ -182,7 +182,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	 * @param $source
 	 * @return ilPropertyFormGUI
 	 */
-	protected function addPluginConfigForm($form, $source)
+	protected function addPluginConfigForm(ilPropertyFormGUI $form, $source)
 	{
 		$this->active_tab = $source;
 		$form->setTitle(ilInteractiveVideoPlugin::getInstance()->txt($source));
@@ -264,7 +264,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	/**
 	 * @param ilPropertyFormGUI $form
 	 */
-	protected function saveForm($form)
+	protected function saveForm(ilPropertyFormGUI $form)
 	{
 		$settings = [];
 		$min_selected = false;

@@ -83,7 +83,7 @@ class SimpleChoiceQuestionsOverviewTableGUI extends ilTable2GUI
 		}
 		else
 		{
-			$this->tpl->setVariable('PERCENTAGE',  '');
+			$this->tpl->setVariable('PERCENTAGE');
 		}
 
 		$this->ctrl->setParameter($this->parent_obj, 'user_id', $a_set['user_id']);

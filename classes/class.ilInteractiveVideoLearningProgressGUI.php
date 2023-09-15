@@ -174,7 +174,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
             $this->addLearningProgressSubTabs();
 
             $new_mode = (int) $form->getInput('modus');
-            $old_mode = (int) $this->object->getLearningProgressMode();
+            $old_mode = $this->object->getLearningProgressMode();
             $mode_changed = ($old_mode != $new_mode);
 
             $this->object->setLearningProgressMode($new_mode);

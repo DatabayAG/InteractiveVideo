@@ -40,7 +40,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         parent::__construct($a_ref_id, $a_id_type, $a_parent_node_id);
     }
-	protected function appendImageUploadForm(\ilInteractiveVideoPlugin $plugin, ilPropertyFormGUI $form): void
+	protected function appendImageUploadForm(ilInteractiveVideoPlugin $plugin, ilPropertyFormGUI $form): void
 	{
 		$image_upload  = new ilInteractiveVideoPreviewPicker($plugin->txt('question_image'), 'question_image');
 
@@ -257,9 +257,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->addHeaderAction();
 	}
 
-	/**
-	 * @throws ilTemplateException
-	 */
+    /**
+     * @throws ilCtrlException
+     * @throws ilSystemStyleException
+     * @throws ilTemplateException
+     */
 	public function showContent(): void
 	{
 		global $tpl, $ilTabs;
@@ -271,8 +273,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
     /**
-	 * @throws ilTemplateException
-	 */
+     * @param bool $light_version
+     * @return string
+     * @throws ilCtrlException
+     * @throws ilSystemStyleException
+     * @throws ilTemplateException
+     */
 	public function getContentAsString(bool $light_version = false): string
 	{
 		$video_tpl = $this->buildContentTemplate($light_version);
@@ -351,7 +357,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$video_tpl->setVariable('LAYOUT_FILTER', $plugin->txt('layout_filter'));
 		}
 
-		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(), false));
+		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId()));
 
 		if($this->object->getEnableComment() == 1 && ! $light_version)
 		{
@@ -563,7 +569,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 			$question->setVariable('JSON', json_encode($answers));
 			$question->setVariable('QUESTION_TYPE', 0);
-			$question->setVariable('QUESTION_TEXT', '');
+			$question->setVariable('QUESTION_TEXT');
 		}
 		$lng = ilInteractiveVideoPlugin::getInstance();
 		$question->setVariable('LABEL_FEEDBACK_NEUTRAL',		json_encode($lng->txt('feedback_neutral')));
@@ -631,6 +637,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      * @throws ilCtrlException
      * @throws ilSystemStyleException
      * @throws ilTemplateException
+     * @throws ilWACException
      */
 	protected function initPlayerConfig($player_id, $video_type, bool $edit_screen = false): string
 	{
@@ -652,14 +659,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         }
 		$this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'ref_id', $this->ref_id);
 		$config_tpl->setVariable('PLAYER_TYPE', $video_type);
-		$config_tpl->setVariable('VIDEO_FINISHED_POST_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'postVideoFinishedPerAjax', '', true, false));
-		$config_tpl->setVariable('VIDEO_STARTED_POST_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'postVideoStartedPerAjax', '', true, false));
-		$config_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'getQuestionPerAjax', '', true, false));
-		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'postAnswerPerAjax', '', true, false));
-		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'postComment', '', true, false));
-        $config_tpl->setVariable('GET_COMMENT_MARKER_MODAL', $this->ctrl->getLinkTarget($this, 'getCommentAndMarkerForm', '', true, false));
-        $config_tpl->setVariable('GET_CHAPTER_MODAL', $this->ctrl->getLinkTarget($this, 'getChapterForm', '', true, false));
-        $config_tpl->setVariable('GET_QUESTION_CREATION_MODAL', $this->ctrl->getLinkTarget($this, 'showTutorInsertQuestionFormAjax', '', true, false));
+		$config_tpl->setVariable('VIDEO_FINISHED_POST_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'postVideoFinishedPerAjax', '', true));
+		$config_tpl->setVariable('VIDEO_STARTED_POST_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'postVideoStartedPerAjax', '', true));
+		$config_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'getQuestionPerAjax', '', true));
+		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'postAnswerPerAjax', '', true));
+		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'postComment', '', true));
+        $config_tpl->setVariable('GET_COMMENT_MARKER_MODAL', $this->ctrl->getLinkTarget($this, 'getCommentAndMarkerForm', '', true));
+        $config_tpl->setVariable('GET_CHAPTER_MODAL', $this->ctrl->getLinkTarget($this, 'getChapterForm', '', true));
+        $config_tpl->setVariable('GET_QUESTION_CREATION_MODAL', $this->ctrl->getLinkTarget($this, 'showTutorInsertQuestionFormAjax', '', true));
         $this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'ref_id', $org_ref_id);
 		$config_tpl->setVariable('SEND_BUTTON', $plugin->txt('send'));
 		$config_tpl->setVariable('CLOSE_BUTTON', $plugin->txt('close'));
@@ -724,7 +731,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		if($this->object->isAnonymized())
 		{
-			$config_tpl->setVariable('USERNAME', '');
+			$config_tpl->setVariable('USERNAME');
 		}
 		else
 		{
@@ -952,6 +959,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
     /**
      * @param ilPropertyFormGUI $a_form
+     * @throws ilSystemStyleException
      * @throws ilTemplateException
      */
     protected function initEditCustomForm(ilPropertyFormGUI $a_form): void
@@ -1553,7 +1561,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$a = $this->object;
 		if(! $this->object instanceof ilObjRootFolder) {
-            if(ilLearningProgressAccess::checkAccess($this->object->getRefId(), true))
+            if(ilLearningProgressAccess::checkAccess($this->object->getRefId()))
             {
                 if($this->checkPermissionBool('write') || $this->checkPermissionBool('read_learning_progress'))
                 {
@@ -1590,24 +1598,25 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $ilTabs, $ilAccess;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
-		switch($a_tab)
-		{
-			case 'editComments':
-				if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
-				{
-					$ilTabs->addSubTab('editComments', $plugin->txt('questions_comments_sub_tab'),$this->ctrl->getLinkTarget($this,'editComments'));
-				}
-				$ilTabs->addSubTab('editMyComments', $plugin->txt('my_comments'),$this->ctrl->getLinkTarget($this,'editMyComments'));
-				$ilTabs->addSubTab('showMyResults', $plugin->txt('show_my_results'), $this->ctrl->getLinkTarget($this, 'showMyResults'));
+        if ($a_tab == 'editComments') {
+            if ($ilAccess->checkAccess('write', '', $this->object->getRefId())) {
+                $ilTabs->addSubTab('editComments', $plugin->txt('questions_comments_sub_tab'),
+                    $this->ctrl->getLinkTarget($this, 'editComments'));
+            }
+            $ilTabs->addSubTab('editMyComments', $plugin->txt('my_comments'),
+                $this->ctrl->getLinkTarget($this, 'editMyComments'));
+            $ilTabs->addSubTab('showMyResults', $plugin->txt('show_my_results'),
+                $this->ctrl->getLinkTarget($this, 'showMyResults'));
 
-				if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
-				{
-					$ilTabs->addSubTab('showResults', $plugin->txt('user_results'), $this->ctrl->getLinkTarget($this, 'showResults'));
-					$ilTabs->addSubTab('showQuestionsResults', $plugin->txt('question_results'), $this->ctrl->getLinkTarget($this, 'showQuestionsResults'));
-					$ilTabs->addSubTab('showCompleteOverviewOverAllResults', $plugin->txt('complete_question_results'), $this->ctrl->getLinkTarget($this, 'showCompleteOverviewOverAllResults'));
-				}
-				break;
-		}
+            if ($ilAccess->checkAccess('write', '', $this->object->getRefId())) {
+                $ilTabs->addSubTab('showResults', $plugin->txt('user_results'),
+                    $this->ctrl->getLinkTarget($this, 'showResults'));
+                $ilTabs->addSubTab('showQuestionsResults', $plugin->txt('question_results'),
+                    $this->ctrl->getLinkTarget($this, 'showQuestionsResults'));
+                $ilTabs->addSubTab('showCompleteOverviewOverAllResults', $plugin->txt('complete_question_results'),
+                    $this->ctrl->getLinkTarget($this, 'showCompleteOverviewOverAllResults'));
+            }
+        }
 	}
 	/**
 	 * Public wrapper for permission checks
@@ -1765,7 +1774,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $post = $this->http->wrapper()->post();
         $post_ids = [];
         if($post->has('comment_id')) {
-            $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+            $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
         }
 
 
@@ -1809,7 +1818,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $post = $this->http->wrapper()->post();
         $post_ids = [];
         if($post->has('comment_id')) {
-            $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+            $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
         }
 		if(!count($post_ids)) {
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'));
@@ -1834,6 +1843,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     /**
      * @return ilPropertyFormGUI
      * @throws ilCtrlException
+     * @throws ilSystemStyleException
      * @throws ilTemplateException
      */
 	private function initCommentForm(): ilPropertyFormGUI
@@ -2045,6 +2055,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
     /**
+     * @return void|null
+     * @throws ilCtrlException
      * @throws ilTemplateException
      */
 	public function updateMyComment()
@@ -2109,7 +2121,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $post = $this->http->wrapper()->post();
         $post_ids = [];
         if($post->has('comment_id')) {
-            $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+            $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
             if(!count($post_ids)) {
                 $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
                 $this->ctrl->redirect($this, 'editMyComments');
@@ -2156,7 +2168,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $post = $this->http->wrapper()->post();
         $post_ids = [];
         if($post->has('comment_id')) {
-            $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+            $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
             if(!count($post_ids)) {
                 $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
                 $this->ctrl->redirect($this, 'editMyComments');
@@ -2232,6 +2244,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
     /**
+     * @throws ilCtrlException
      * @throws ilTemplateException
      */
 	public function updateComment(): void
@@ -2349,7 +2362,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$modal->setBody('');
 		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
 
-		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postTutorComment', '', false, false));
+		$video_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTarget($this, 'postTutorComment', ''));
 
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(),true));
 
@@ -2555,7 +2568,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             if($post->has('comment_id') || $get->has('comment_id')) {
                 $comment_id = $post->retrieve('comment_id', $this->refinery->kindlyTo()->int());
                 if($comment_id === 0) {
-                    $comment_id = $get->retrieve('comment_id', $$this->refinery->kindlyTo()->int());
+                    $comment_id = $get->retrieve('comment_id', $this->refinery->kindlyTo()->int());
                 }
 
                 if($comment_id) {
@@ -2574,7 +2587,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['comment_title']	= $comment_data['comment_title'];
 		$values['comment_tags']		= $comment_data['comment_tags'];
 		$values['is_private']		= $comment_data['is_private'];
-		$values['is_table_of_content'] = $comment_data['is_table_of_content'];
 		$values['is_reply_to']      = $comment_data['is_table_of_content'];
 		$values['is_table_of_content'] = $comment_data['is_table_of_content'];
 		$values['fake_marker']      = strip_tags($comment_data['marker'], ['rect', 'ellipse', 'path', 'line', 'text']);
@@ -2684,6 +2696,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
     /**
      * @throws ilCtrlException
+     * @throws ilSystemStyleException
      * @throws ilTemplateException
      */
 	public function insertQuestion(): void
@@ -2865,6 +2878,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
     /**
+     * @throws ilCtrlException
+     * @throws ilSystemStyleException
      * @throws ilTemplateException
      */
 	public function updateQuestion(): void
@@ -3093,7 +3108,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $post = $this->http->wrapper()->post();
         $user_ids = [];
         if($post->has('user_id')) {
-            $user_ids = $post->retrieve('user_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+            $user_ids = $post->retrieve('user_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
         }
 		if(!count($user_ids))
 		{
@@ -3121,7 +3136,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $post = $this->http->wrapper()->post();
         $user_ids = [];
         if($post->has('user_id')) {
-            $user_ids = $post->retrieve('user_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+            $user_ids = $post->retrieve('user_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
         }
 		if(!count($user_ids))
 		{
@@ -3184,7 +3199,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $post = $this->http->wrapper()->post();
         $question_ids = [];
         if($post->has('question_id')) {
-            $question_ids = $post->retrieve('question_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+            $question_ids = $post->retrieve('question_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
         }
 
 		if(!count($question_ids))
@@ -3216,7 +3231,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $post = $this->http->wrapper()->post();
         $question_ids = [];
         if($post->has('question_id')) {
-            $question_ids = $post->retrieve('question_id', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->int()]));
+            $question_ids = $post->retrieve('question_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
         }
 		if(!count($question_ids))
 		{
@@ -3266,8 +3281,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$tpl_json->show("DEFAULT", false, true);
 			$this->callExit();
 		}
-		return;
-	}
+    }
 
     /**
      *
@@ -3282,7 +3296,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             if(!SimpleChoiceQuestion::isLimitAttemptsEnabled($qid)){
                 if($post->has('answer')) {
                     $answer = [];
-                    $answer = $post->retrieve('answer', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->string()]));
+                    $answer = $post->retrieve('answer', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string()));
                     $simple_choice = new SimpleChoiceQuestion();
                     $simple_choice->saveAnswer($qid, $answer);
                 }
@@ -3290,7 +3304,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             if(SimpleChoiceQuestion::existUserAnswerForQuestionId((int)$qid) == false)
             {
                 $answer = [];
-                $answer = $post->retrieve('answer', $this->refinery->kindlyTo()->tupleOf([$this->refinery->kindlyTo()->string()]));
+                $answer = $post->retrieve('answer', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string()));
                 $simple_choice = new SimpleChoiceQuestion();
                 $simple_choice->saveAnswer($qid, $answer);
             }

@@ -486,7 +486,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $type
 	 */
-	public function setType($type)
+	public function setType(int $type)
 	{
 		$this->type = $type;
 	}
@@ -502,7 +502,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param string $question_text
 	 */
-	public function setQuestionText($question_text)
+	public function setQuestionText(string $question_text)
 	{
 		$this->question_text = $question_text;
 	}
@@ -518,7 +518,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param string $feedback_correct
 	 */
-	public function setFeedbackCorrect($feedback_correct)
+	public function setFeedbackCorrect(string $feedback_correct)
 	{
 		$this->feedback_correct = $feedback_correct;
 	}
@@ -534,7 +534,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param string $feedback_one_wrong
 	 */
-	public function setFeedbackOneWrong($feedback_one_wrong)
+	public function setFeedbackOneWrong(string $feedback_one_wrong)
 	{
 		$this->feedback_one_wrong = $feedback_one_wrong;
 	}
@@ -550,7 +550,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $limit_attempts
 	 */
-	public function setLimitAttempts($limit_attempts)
+	public function setLimitAttempts(int $limit_attempts)
 	{
 		$this->limit_attempts = $limit_attempts;
 	}
@@ -566,7 +566,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $show_correct_icon
 	 */
-	public function setShowCorrectIcon($show_correct_icon)
+	public function setShowCorrectIcon(int $show_correct_icon)
 	{
 		$this->show_correct_icon = $show_correct_icon;
 	}
@@ -582,7 +582,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $is_jump_correct
 	 */
-	public function setIsJumpCorrect($is_jump_correct)
+	public function setIsJumpCorrect(int $is_jump_correct)
 	{
 		$this->is_jump_correct = $is_jump_correct;
 	}
@@ -598,7 +598,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $jump_correct_ts
 	 */
-	public function setJumpCorrectTs($jump_correct_ts)
+	public function setJumpCorrectTs(int $jump_correct_ts)
 	{
 		$this->jump_correct_ts = $jump_correct_ts;
 	}
@@ -614,7 +614,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $show_wrong_icon
 	 */
-	public function setShowWrongIcon($show_wrong_icon)
+	public function setShowWrongIcon(int $show_wrong_icon)
 	{
 		$this->show_wrong_icon = $show_wrong_icon;
 	}
@@ -630,7 +630,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $is_jump_wrong
 	 */
-	public function setIsJumpWrong($is_jump_wrong)
+	public function setIsJumpWrong(int $is_jump_wrong)
 	{
 		$this->is_jump_wrong = $is_jump_wrong;
 	}
@@ -646,7 +646,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $jump_wrong_ts
 	 */
-	public function setJumpWrongTs($jump_wrong_ts)
+	public function setJumpWrongTs(int $jump_wrong_ts)
 	{
 		$this->jump_wrong_ts = $jump_wrong_ts;
 	}
@@ -662,7 +662,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $show_response_frequency
 	 */
-	public function setShowResponseFrequency($show_response_frequency)
+	public function setShowResponseFrequency(int $show_response_frequency)
 	{
 		$this->show_response_frequency = $show_response_frequency;
 	}
@@ -678,7 +678,7 @@ class SimpleChoiceQuestion
     /**
      * @param int $show_best_solution
      */
-    public function setShowBestSolution($show_best_solution)
+    public function setShowBestSolution(int $show_best_solution)
     {
         $this->show_best_solution = $show_best_solution;
     }
@@ -694,7 +694,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $repeat_question
 	 */
-	public function setRepeatQuestion($repeat_question)
+	public function setRepeatQuestion(int $repeat_question)
 	{
 		$this->repeat_question = $repeat_question;
 	}
@@ -796,7 +796,7 @@ class SimpleChoiceQuestion
 	 * @param int $user_id
 	 * @return array
 	 */
-	public function getAllNonRepeatAnsweredQuestion($user_id)
+	public function getAllNonRepeatAnsweredQuestion(int $user_id)
 	{
         global $ilDB;
 
@@ -824,7 +824,7 @@ class SimpleChoiceQuestion
      * @param int $obj_id
      * @return array
      */
-	public static function getAllCompulsoryQuestions($obj_id)
+	public static function getAllCompulsoryQuestions(int $obj_id)
 	{
         global $ilDB;
 		$res     = $ilDB->queryF('
@@ -845,7 +845,7 @@ class SimpleChoiceQuestion
 			    'time'          => $row['comment_time'],
                 'question_id'   => $row['question_id'],
 			    'comment_id'    => $row['comment_id'],
-			    'answered'      => $row['points'] != null ? true : false
+			    'answered'      => $row['points'] != null
             ];
 		}
 		return $results;
@@ -855,7 +855,7 @@ class SimpleChoiceQuestion
 	 * @param int $user_id
 	 * @return array
 	 */
-	public function getAllRepeatCorrectlyAnsweredQuestion($user_id)
+	public function getAllRepeatCorrectlyAnsweredQuestion(int $user_id)
 	{
         global $ilDB;
 
@@ -884,7 +884,7 @@ class SimpleChoiceQuestion
 	 * @param array $user_ids
 	 * @param int   $obj_id
 	 */
-	public function deleteUserResults($user_ids, $obj_id)
+	public function deleteUserResults(array $user_ids, int $obj_id)
 	{
         global $ilDB;
 
@@ -957,7 +957,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param array $question_ids
 	 */
-	public function deleteQuestionsResults($question_ids)
+	public function deleteQuestionsResults(array $question_ids)
 	{
         global $ilDB;
 
@@ -977,7 +977,7 @@ class SimpleChoiceQuestion
 	 * @param int $qid question_id
 	 * @return mixed
 	 */
-	public function getQuestionTextQuestionId($qid)
+	public function getQuestionTextQuestionId(int $qid)
 	{
 
         global $ilDB;
@@ -1126,7 +1126,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param array $question_ids
 	 */
-	public static function deleteQuestions($question_ids)
+	public static function deleteQuestions(array $question_ids)
 	{
 		if(!is_array($question_ids))
 		{
@@ -1154,7 +1154,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $obj_id
 	 */
-	public function setObjId($obj_id)
+	public function setObjId(int $obj_id)
 	{
 		$this->obj_id = $obj_id;
 	}
@@ -1170,7 +1170,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $feedback_correct_id
 	 */
-	public function setFeedbackCorrectId($feedback_correct_id)
+	public function setFeedbackCorrectId(int $feedback_correct_id)
 	{
 		$this->feedback_correct_id = $feedback_correct_id;
 	}
@@ -1186,7 +1186,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $feedback_wrong_id
 	 */
-	public function setFeedbackWrongId($feedback_wrong_id)
+	public function setFeedbackWrongId(int $feedback_wrong_id)
 	{
 		$this->feedback_wrong_id = $feedback_wrong_id;
 	}
@@ -1202,7 +1202,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $reflection_question_comment
 	 */
-	public function setReflectionQuestionComment($reflection_question_comment)
+	public function setReflectionQuestionComment(int $reflection_question_comment)
 	{
 		$this->reflection_question_comment = $reflection_question_comment;
 	}
@@ -1218,7 +1218,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $neutral_answer
 	 */
-	public function setNeutralAnswer($neutral_answer)
+	public function setNeutralAnswer(int $neutral_answer)
 	{
 		$this->neutral_answer = $neutral_answer;
 	}
@@ -1234,7 +1234,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param string $question_image
 	 */
-	public function setQuestionImage($question_image)
+	public function setQuestionImage(string $question_image)
 	{
 		$this->question_image = $question_image;
 	}
@@ -1250,7 +1250,7 @@ class SimpleChoiceQuestion
     /**
      * @param int $compulsory_question
      */
-    public function setCompulsoryQuestion($compulsory_question)
+    public function setCompulsoryQuestion(int $compulsory_question)
     {
         $this->compulsory_question = $compulsory_question;
     }

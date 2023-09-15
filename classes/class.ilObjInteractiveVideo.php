@@ -408,11 +408,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         return true;
 	}
 
-    protected function doDelete(): void
-	{
-		parent::doDelete();
-	}
-
     /**
      * @param ilObjInteractiveVideo $new_obj
      * @param integer $a_target_id
@@ -520,7 +515,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
             $comment_time_end = $row['comment_time_end'];
 			if($replace_with_text)
 			{
-                $comment_time		= xvidUtils::getTimeStringFromSeconds($row['comment_time'], false);
+                $comment_time		= xvidUtils::getTimeStringFromSeconds($row['comment_time']);
                 $comment_time_end	= xvidUtils::getTimeStringFromSeconds($row['comment_time_end'], $replace_with_text, $empty_string_if_null);
 			}
 
@@ -657,7 +652,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         while($row = $this->db->fetchAssoc($res))
         {
             $state = true;
-            continue;
         }
         return $state;
     }
@@ -893,7 +887,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 	public function isOnline(): bool
 	{
-		return (bool)$this->is_online;
+		return $this->is_online;
 	}
 
 	public function getTaskActive(): int

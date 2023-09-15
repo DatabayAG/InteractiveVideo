@@ -25,9 +25,9 @@ class SimpleChoiceQuestionFormEditGUI
 	/**
 	 * ilSimpleChoiceQuestionFormEditGUI constructor.
 	 * @param ilInteractiveVideoPlugin $plugin
-	 * @param ilObjInteractiveVideo $object
+	 * @param ilObjInteractiveVideo    $object
 	 */
-	public function __construct($plugin, $object)
+	public function __construct(ilInteractiveVideoPlugin $plugin, ilObjInteractiveVideo $object)
 	{
 		/**
 		 * @var ilCtrl $ctrl
@@ -48,7 +48,7 @@ class SimpleChoiceQuestionFormEditGUI
      * @throws ilSystemStyleException
      * @throws ilTemplateException
      */
-	public function initQuestionForm($ajax = false)
+	public function initQuestionForm(bool $ajax = false)
 	{
 	    global $tpl;
         $plugin = ilInteractiveVideoPlugin::getInstance();
@@ -87,9 +87,9 @@ class SimpleChoiceQuestionFormEditGUI
 
 	/**
 	 * @param ilPropertyFormGUI $form
-	 * @param bool $ajax
+	 * @param bool              $ajax
 	 */
-	protected function appendGeneralSettingsToQuestionForm($form, $plugin, $ajax = false)
+	protected function appendGeneralSettingsToQuestionForm(ilPropertyFormGUI $form, $plugin, bool $ajax = false)
 	{
 		if(!$ajax)
 		{
@@ -141,10 +141,15 @@ class SimpleChoiceQuestionFormEditGUI
 		$form->addItem($section_header);
 	}
 
-	/**
-	 * @param ilPropertyFormGUI $form
-	 */
-	protected function appendQuestionSettingsToQuestionForm($form)
+    /**
+     * @param ilPropertyFormGUI $form
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     * @throws ilSystemStyleException
+     * @throws ilTemplateException
+     * @throws ilWACException
+     */
+	protected function appendQuestionSettingsToQuestionForm(ilPropertyFormGUI $form)
 	{
 		$question_type = new ilSelectInputGUI($this->plugin->txt('question_type'), 'question_type');
 		$type_options  = [
@@ -179,9 +184,9 @@ class SimpleChoiceQuestionFormEditGUI
 
 	/**
 	 * @param ilInteractiveVideoPlugin $plugin
-	 * @param ilPropertyFormGUI $form
+	 * @param ilPropertyFormGUI        $form
 	 */
-	protected function appendImageUploadForm($plugin, $form)
+	protected function appendImageUploadForm(ilInteractiveVideoPlugin $plugin, ilPropertyFormGUI $form)
 	{
         global $DIC;
 
@@ -203,7 +208,7 @@ class SimpleChoiceQuestionFormEditGUI
             }
 			if($comment_id != 0)
 			{
-				$question_data = $this->object->getQuestionDataById((int)$comment_id);
+				$question_data = $this->object->getQuestionDataById($comment_id);
 				if(array_key_exists('question_data', $question_data))
 				{
                     if($question_data['question_data'] != null && array_key_exists('question_image', $question_data['question_data'])){
@@ -230,7 +235,7 @@ class SimpleChoiceQuestionFormEditGUI
 	/**
 	 * @param ilPropertyFormGUI $form
 	 */
-	protected function appendCorrectFeedbackToQuestionForm($form)
+	protected function appendCorrectFeedbackToQuestionForm(ilPropertyFormGUI $form)
 	{
 		$feedback_correct  = xvidUtils::constructTextAreaFormElement('feedback_correct', 'feedback_correct');
 		$show_correct_icon = new ilCheckboxInputGUI($this->plugin->txt('show_correct_icon'), 'show_correct_icon');
@@ -254,10 +259,11 @@ class SimpleChoiceQuestionFormEditGUI
 		$form->addItem($feedback_correct);
 	}
 
-	/**
-	 * @param ilPropertyFormGUI $form
-	 */
-	protected function appendFeedbackWrongToQuestionForm($form)
+    /**
+     * @param ilPropertyFormGUI $form
+     * @throws ilCtrlException
+     */
+	protected function appendFeedbackWrongToQuestionForm(ilPropertyFormGUI $form)
 	{
 		$feedback_one_wrong = xvidUtils::constructTextAreaFormElement('feedback_one_wrong', 'feedback_one_wrong');
 		$show_wrong_icon    = new ilCheckboxInputGUI($this->plugin->txt('show_wrong_icon'), 'show_wrong_icon');
@@ -284,7 +290,7 @@ class SimpleChoiceQuestionFormEditGUI
 	/**
 	 * @param ilPropertyFormGUI $form
 	 */
-	protected function appendHiddenQuestionFormValues($form)
+	protected function appendHiddenQuestionFormValues(ilPropertyFormGUI $form)
 	{
 		$is_interactive = new ilHiddenInputGUI('is_interactive');
 		$is_interactive->setValue(1);
@@ -303,7 +309,7 @@ class SimpleChoiceQuestionFormEditGUI
      * @throws ilSystemStyleException
      * @throws ilTemplateException
      */
-	protected function appendWarningModalToQuestionForm($form)
+	protected function appendWarningModalToQuestionForm(ilPropertyFormGUI $form)
 	{
 		//Todo: what to do with the modal?
 		$modal = ilModalGUI::getInstance();
@@ -389,7 +395,7 @@ class SimpleChoiceQuestionFormEditGUI
 			}
 			$question->setVariable('JSON', json_encode($answers));
 			$question->setVariable('QUESTION_TYPE', 0);
-			$question->setVariable('QUESTION_TEXT', '');
+			$question->setVariable('QUESTION_TEXT');
 		}
 		$question->setVariable('LABEL_FEEDBACK_NEUTRAL',		json_encode($this->plugin->txt('feedback_neutral')));
 		$question->setVariable('LABEL_JUMP_NEUTRAL',			json_encode($this->plugin->txt('feedback_jump_neutral')));

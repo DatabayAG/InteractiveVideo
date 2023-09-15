@@ -147,7 +147,7 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 				case "percentage_avg":
 					if((int)$a_set[$c] === 0 || !$this->isPercentageAvailable($a_set["obj_id"]))
 					{
-						$this->tpl->setVariable(strtoupper($c), "");
+						$this->tpl->setVariable(strtoupper($c));
 					}
 					break;
 				default:

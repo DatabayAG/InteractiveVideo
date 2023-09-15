@@ -54,6 +54,7 @@ class ilTextAreaInputCkeditor
 
     /**
      * @param ilTemplate $custom_tpl
+     * @throws ilSystemStyleException
      * @throws ilTemplateException
      */
 	public function appendCkEditorToTemplate($custom_tpl)
@@ -65,6 +66,7 @@ class ilTextAreaInputCkeditor
 
     /**
      * @param ilPropertyFormGUI $a_form
+     * @throws ilSystemStyleException
      * @throws ilTemplateException
      */
 	public function appendCkEditorMathJaxSupportToForm($a_form)

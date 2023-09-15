@@ -89,7 +89,7 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 						$ilDB->insert('rep_robj_xvid_qus_text',
 							[
                                 'answer_id'   => ['integer', $answer_id],
-                                'question_id' => ['integer', (int) $question_id],
+                                'question_id' => ['integer', $question_id],
                                 'answer'      => ['text', ilInteractiveVideoPlugin::stripSlashesWrapping($answer['text'])],
                                 'correct'     => ['integer', (int) $answer['correct']]
                             ]);

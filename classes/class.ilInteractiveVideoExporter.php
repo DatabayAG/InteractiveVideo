@@ -58,7 +58,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 	public function exportXMLMetaData(): void
 	{
 		$md2xml = new ilMD2XML($this->object->getId(), 0, $this->object->getType());
-		$md2xml->setExportMode(true);
+		$md2xml->setExportMode();
 		$md2xml->startExport();
 		$this->xml_writer->appendXML($md2xml->getXML());
 	}
@@ -102,27 +102,27 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 
 	private function exportXMLSettings(): void
 	{
-		$src_id = (string)$this->object->getSourceId();
+		$src_id = $this->object->getSourceId();
 		$this->xml_writer->xmlStartTag('Settings', ['video_source_id' => $src_id]);
 
-		$this->xml_writer->xmlElement('Title', null, (string)$this->object->getTitle());
-		$this->xml_writer->xmlElement('Description', null, (string)$this->object->getDescription());
+		$this->xml_writer->xmlElement('Title', null, $this->object->getTitle());
+		$this->xml_writer->xmlElement('Description', null, $this->object->getDescription());
 		$this->xml_writer->xmlElement('Online', null, (int)$this->object->isOnline());
 
-		$this->xml_writer->xmlElement('isAnonymized', null, (int)$this->object->isAnonymized());
-		$this->xml_writer->xmlElement('isRepeat', null, (int)$this->object->isRepeat());
-		$this->xml_writer->xmlElement('isChronologic', null, (int)$this->object->isChronologic());
-		$this->xml_writer->xmlElement('isPublic', null, (int)$this->object->isPublic());
-		$this->xml_writer->xmlElement('getTaskActive', null, (int)$this->object->getTaskActive());
-		$this->xml_writer->xmlElement('getTask', null, (string)$this->object->getTask());
-		$this->xml_writer->xmlElement('getLearningProgressMode', null, (int)$this->object->getLearningProgressMode());
-		$this->xml_writer->xmlElement('noComment', null, (int)$this->object->getEnableComment());
-		$this->xml_writer->xmlElement('noToolbar', null, (int)$this->object->getEnableToolbar());
-		$this->xml_writer->xmlElement('showTocFirst', null, (int)$this->object->getShowTocFirst());
+		$this->xml_writer->xmlElement('isAnonymized', null, $this->object->isAnonymized());
+		$this->xml_writer->xmlElement('isRepeat', null, $this->object->isRepeat());
+		$this->xml_writer->xmlElement('isChronologic', null, $this->object->isChronologic());
+		$this->xml_writer->xmlElement('isPublic', null, $this->object->isPublic());
+		$this->xml_writer->xmlElement('getTaskActive', null, $this->object->getTaskActive());
+		$this->xml_writer->xmlElement('getTask', null, $this->object->getTask());
+		$this->xml_writer->xmlElement('getLearningProgressMode', null, $this->object->getLearningProgressMode());
+		$this->xml_writer->xmlElement('noComment', null, $this->object->getEnableComment());
+		$this->xml_writer->xmlElement('noToolbar', null, $this->object->getEnableToolbar());
+		$this->xml_writer->xmlElement('showTocFirst', null, $this->object->getShowTocFirst());
 		$this->xml_writer->xmlElement('fixedModal', null, (int)$this->object->isFixedModal());
 		$this->xml_writer->xmlElement('autoResumeAfterQuestion', null, (int)$this->object->isAutoResumeAfterQuestion());
-		$this->xml_writer->xmlElement('studentMarker', null, (int)$this->object->getMarkerForStudents());
-		$this->xml_writer->xmlElement('noCommentStream', null, (int)$this->object->getNoCommentStream());
+		$this->xml_writer->xmlElement('studentMarker', null, $this->object->getMarkerForStudents());
+		$this->xml_writer->xmlElement('noCommentStream', null, $this->object->getNoCommentStream());
 
 		$this->exportQuestions();
 		$this->exportVideoSourceObject();
@@ -131,7 +131,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 
 	private function exportVideoSourceObject(): void
 	{
-		$src_id = (string)$this->object->getSourceId();
+		$src_id = $this->object->getSourceId();
 		$this->xml_writer->xmlStartTag('VideoSource', ['source_id' => $src_id]);
 		$this->xml_writer->xmlElement('VideoSourceObject', null, $src_id);
 		$obj = $this->object->getVideoSourceObject($src_id);

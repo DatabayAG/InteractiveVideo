@@ -46,7 +46,7 @@ class ilInteractiveVideoLanguageHandler extends ilPluginLanguage
      * @param RecursiveIteratorIterator $rii
      * @return array
      */
-    protected function exploreDirectory($rii)
+    protected function exploreDirectory(RecursiveIteratorIterator $rii)
     {
         $found_elements = [dirname(__FILE__) . '/../lang'];
         /** @var SplFileInfo $file */
