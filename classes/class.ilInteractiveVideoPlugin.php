@@ -106,11 +106,6 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
         return $this->language_handler;
     }
 
-	public function isCoreMin52() : bool
-    {
-		return version_compare(ILIAS_VERSION_NUMERIC, '5.2.0', '>=');
-	}
-
     public function allowCopy(): bool
 	{
 		return true;

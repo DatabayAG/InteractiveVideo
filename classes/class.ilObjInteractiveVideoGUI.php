@@ -927,19 +927,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
     protected function initCreationForms(string $new_type): array
 	{
-		if(ilInteractiveVideoPlugin::getInstance()->isCoreMin52())
-		{
-			$form_array =  [
+	$form_array =  [
 				self::CFORM_NEW => $this->initCreateForm($new_type),
 				self::CFORM_IMPORT => $this->initImportForm($new_type)
             ];
-		}
-		else
-		{
-			$form_array =  [
-				self::CFORM_NEW => $this->initCreateForm($new_type)
-            ];
-		}
 		return $form_array;
 	}
 
@@ -1582,10 +1573,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             }
             if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
             {
-                if(ilInteractiveVideoPlugin::getInstance()->isCoreMin52())
-                {
-                    $ilTabs->addTab('export', $this->lng->txt('export'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoExportGUI', ''));
-                }
+                $ilTabs->addTab('export', $this->lng->txt('export'), $this->ctrl->getLinkTargetByClass('ilInteractiveVideoExportGUI', ''));
             }
         }
 
