@@ -1764,11 +1764,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$is_private = 0;
             if($post->has('is_private')) {
                 $private = $post->retrieve('is_private', $this->refinery->kindlyTo()->bool());
-                if($private === true) {
-                    $is_private = 1;
-                } else {
-                    $is_private = 0;
-                }
+                $is_private = $private === true ? 1 : 0;
             }
 
 			$comment->setIsPrivate($is_private );

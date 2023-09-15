@@ -9,7 +9,7 @@ class ilTextAreaInputCkeditor
 
 	/**
 	 * ilTextAreaInputCkeditor constructor.
-	 * @param ilInteractiveVideoPlugin $plugin
+	 * @param ilInteractiveVideoPlugin|ilPlugin $plugin
 	 */
 	public function __construct($plugin)
 	{

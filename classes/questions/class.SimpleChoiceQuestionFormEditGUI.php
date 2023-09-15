@@ -24,7 +24,7 @@ class SimpleChoiceQuestionFormEditGUI
 
 	/**
 	 * ilSimpleChoiceQuestionFormEditGUI constructor.
-	 * @param ilInteractiveVideoPlugin $plugin
+	 * @param ilInteractiveVideoPlugin|ilPlugin $plugin
 	 * @param ilObjInteractiveVideo    $object
 	 */
 	public function __construct(ilInteractiveVideoPlugin $plugin, ilObjInteractiveVideo $object)
