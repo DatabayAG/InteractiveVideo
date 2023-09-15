@@ -99,6 +99,9 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 
     /**
      * @param ilPropertyFormGUI|null $form
+     * @throws ilCtrlException
+     * @throws ilException
+     * @throws ilObjectException
      */
     public function showLPSettings(ilPropertyFormGUI $form = null): void
     {
@@ -121,10 +124,11 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 
     /**
      * Init property form
-     *
      * @return ilPropertyFormGUI $form
+     * @throws ilCtrlException
+     * @throws ilException
      */
-    public function getLearningProgressSettingsForm(): \ilPropertyFormGUI
+    public function getLearningProgressSettingsForm(): ilPropertyFormGUI
     {
         $form = new ilPropertyFormGUI();
         $form->setTitle($this->lng->txt('tracking_settings'));
@@ -276,7 +280,13 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
     }
 
     /**
-     * @param \ilPropertyFormGUI|null $form
+     * @param ilPropertyFormGUI|null $form
+     * @return void|null
+     * @throws ilCtrlException
+     * @throws ilDatabaseException
+     * @throws ilDateTimeException
+     * @throws ilObjectException
+     * @throws ilObjectNotFoundException
      */
     public function editUser(ilPropertyFormGUI $form = null)
     {
@@ -325,8 +335,10 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 
     /**
      * @param ilObjUser $user
+     * @return ilPropertyFormGUI
+     * @throws ilCtrlException
      */
-    protected function getLPMarksForm(ilObjUser $user): \ilPropertyFormGUI
+    protected function getLPMarksForm(ilObjUser $user): ilPropertyFormGUI
     {
         $form = new ilPropertyFormGUI();
         $this->ctrl->setParameter($this, 'user_id', $user->getId());
@@ -374,7 +386,8 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         $this->editUser($form);
     }
 
-    public function getCtrl(): \ilCtrlInterface {
+    public function getCtrl(): ilCtrlInterface
+    {
         return $this->ctrl;
     }
 }

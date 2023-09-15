@@ -68,7 +68,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * {}
 	 */
     public function performCommand(string $cmd): void
 	{
@@ -90,9 +90,10 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		}
 	}
 
-	/**
-	 * @param ilPropertyFormGUI $form
-	 */
+    /**
+     * @param ilPropertyFormGUI|null $form
+     * @throws ilCtrlException
+     */
 	protected function showConfigurationForm(ilPropertyFormGUI $form = null)
 	{
 
@@ -105,9 +106,10 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		$this->tpl->setContent($form->getHTML());
 	}
 
-	/**
-	 * @return ilPropertyFormGUI
-	 */
+    /**
+     * @return ilPropertyFormGUI
+     * @throws ilCtrlException
+     */
 	protected function getConfigurationForm()
 	{
 		$form = new ilPropertyFormGUI();
@@ -236,15 +238,8 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		$form = $this->getConfigurationForm();
 		if($form->checkInput())
 		{
-			try
-			{
-				$this->saveForm($form);
-			}
-			catch(ilException $e)
-			{
-                $this->tpl->setOnScreenMessage("failure", $this->lng->txt('form_input_not_valid'), true);
-			}
-		}
+            $this->saveForm($form);
+        }
 		$db_updater = new ilInteractiveVideoDbUpdater();
 		$db_updater->applyPluginUpdates();
 		$this->showConfigurationForm();

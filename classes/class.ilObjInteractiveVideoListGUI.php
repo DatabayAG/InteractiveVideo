@@ -49,10 +49,9 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 		$this->setType('xvid');
 	}
 
-	/**
-	 * @param string $a_item
-	 * @return array
-	 */
+    /**
+     * @return array
+     */
     public function getProperties(): array
 	{
 		$props = [];

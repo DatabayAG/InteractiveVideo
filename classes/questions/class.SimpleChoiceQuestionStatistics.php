@@ -13,10 +13,7 @@ class SimpleChoiceQuestionStatistics
 	 */
 	public function getQuestionCountForObject($oid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF(
 			'SELECT count(question_id) count FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
@@ -28,17 +25,15 @@ class SimpleChoiceQuestionStatistics
 		return (int)$row['count'];
 	}
 
-	/**
-	 * @param int $oid
-	 * @return array
-	 */
+    /**
+     * @param int $oid
+     * @return array
+     * @throws ilWACException
+     */
 	public function getPointsForUsers($oid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
 
-		global $ilDB;
+        global $ilDB;
 
 		$questions_for_object = $this->getQuestionCountForObject($oid);
 
@@ -79,18 +74,16 @@ class SimpleChoiceQuestionStatistics
 		return $results;
 	}
 
-	/**
-	 * @param $oid
-	 * @return array
-	 */
+    /**
+     * @param $oid
+     * @return array
+     * @throws ilWACException
+     */
 	public function getScoreForAllQuestionsAndAllUser($oid)
 	{
 		$questions_list  = $this->getQuestionIdsForObject($oid);
 		$questions_count = $this->getQuestionCountForObject($oid);
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res          = $ilDB->queryF('
 			SELECT score.user_id, points,questions.question_id, neutral_answer
@@ -188,10 +181,7 @@ class SimpleChoiceQuestionStatistics
 	 */
 	public function getQuestionIdsForObject($oid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$result_set = [];
 		$res        = $ilDB->queryF(
@@ -218,10 +208,7 @@ class SimpleChoiceQuestionStatistics
 	 */
 	public function getQuestionsOverview($oid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res       = $ilDB->queryF(
 			'SELECT questions.question_id, questions.neutral_answer, score.user_id, score.points, comments.comment_id, comments.comment_title
@@ -291,10 +278,7 @@ class SimpleChoiceQuestionStatistics
 	 */
 	public function getAnsweredQuestionsFromUser($oid, $uid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF(
 			'SELECT count(score.question_id)  count FROM rep_robj_xvid_comments  comments, 
@@ -314,10 +298,7 @@ class SimpleChoiceQuestionStatistics
 	 */
 	public function getResponseFrequency($question_id)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res          = $ilDB->queryF(
 			'SELECT rep_robj_xvid_answers.answer_id, count(rep_robj_xvid_answers.answer_id) AS counter FROM rep_robj_xvid_question

@@ -27,9 +27,12 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	    return $this->is_public;
     }
 
-	/**
-	 * @param \ilObjectGUI|\ilObjInteractiveVideoGUI|null $a_parent_obj
-	 */
+    /**
+     * @param object|null $a_parent_obj
+     * @param string      $a_parent_cmd
+     * @throws ilCtrlException
+     * @throws ilException
+     */
 	public function __construct(?object $a_parent_obj, string $a_parent_cmd)
 	{
 		/**
@@ -103,10 +106,10 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$this->setShowRowsSelector(true);
 	}
 
-	/**
-	 * @param string $column
-	 * @return bool
-	 */
+    /**
+     * @param string $a_field
+     * @return bool
+     */
     public function numericOrdering(string $a_field): bool
 	{
 		if('comment_time' == $a_field || 'comment_time_end' ==  $a_field )
@@ -117,9 +120,13 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		return false;
 	}
 
-	/**
-	 * @param array $a_set
-	 */
+    /**
+     * @param array $a_set
+     * @throws JsonException
+     * @throws ilCtrlException
+     * @throws ilTemplateException
+     * @throws ilWACException
+     */
     protected function fillRow(array $a_set): void
 	{
         if($this->isPublic() == 0 && $this->DIC->user()->getId() != $a_set['user_id'] && !$a_set['is_interactive']) {

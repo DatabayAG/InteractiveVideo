@@ -17,14 +17,14 @@ if(version_compare(ILIAS_VERSION_NUMERIC, '5.4.0', '>=')) {
  */
 class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilConditionHandling, ilWACCheckingClass
 {
-	/**
-	 * @param string $a_cmd
-	 * @param string $a_permission
-	 * @param int    $a_ref_id
-	 * @param int    $a_obj_id
-	 * @param string $a_user_id
-	 * @return bool
-	 */
+    /**
+     * @param string   $cmd
+     * @param string   $permission
+     * @param int      $ref_id
+     * @param int      $obj_id
+     * @param int|null $user_id
+     * @return bool
+     */
     public function _checkAccess(string $cmd, string $permission, int $ref_id, int $obj_id, ?int $user_id = null): bool
 	{
 		/**
@@ -61,10 +61,7 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 	 */
 	public static function checkOnline($a_id)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$set = $ilDB->query('
 			SELECT is_online FROM rep_robj_xvid_objects WHERE obj_id = ' . $ilDB->quote($a_id, 'integer')
@@ -83,13 +80,13 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
         ];
 	}
 
-	/**
-	 * @param int $a_trigger_obj_id
-	 * @param type $a_operator
-	 * @param type $a_value
-	 * @param int $a_usr_id
-	 * @return bool
-	 */
+    /**
+     * @param int    $a_trigger_obj_id
+     * @param string $a_operator
+     * @param string $a_value
+     * @param int    $a_usr_id
+     * @return bool
+     */
     public static function checkCondition(
         int $a_trigger_obj_id,
         string $a_operator,
@@ -103,7 +100,6 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 				// Not necessary, handled in \ilConditionHandler::_checkCondition
 				require_once './Services/Tracking/classes/class.ilLPStatus.php';
 				return ilLPStatus::_hasUserCompleted($a_trigger_obj_id, $a_usr_id);
-				break;
 		}
 
 		return false;

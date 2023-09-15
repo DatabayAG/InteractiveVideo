@@ -12,7 +12,7 @@ class ilInteractiveVideoRepositorySelectorInputGUI extends ilExplorerSelectInput
     protected ilExplorerBaseGUI $explorer_gui;
 
 	/**
-	 * {@inheritdoc}
+	 * {}
 	 */
 	public function __construct(string $title, string $a_postvar, $a_explorer_gui, bool $a_multi = false)
 	{

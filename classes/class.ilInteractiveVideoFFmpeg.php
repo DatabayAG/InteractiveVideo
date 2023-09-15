@@ -4,14 +4,14 @@
  */
 class ilInteractiveVideoFFmpeg extends ilFFmpeg
 {
-	/**
-	 * @param string $a_file
-	 * @param string $a_target_filename
-	 * @param string $a_target_dir
-	 * @param $a_sec
-	 * @return string
-	 * @throws ilFFmpegException
-	 */
+    /**
+     * @param string $a_file
+     * @param string $a_target_filename
+     * @param string $a_target_dir
+     * @param int    $a_sec
+     * @return string
+     * @throws ilFFmpegException
+     */
     public static function extractImage(
         string $a_file,
         string $a_target_filename,
@@ -40,11 +40,15 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 	}
 
     /**
-	 * @param        $a_file
-	 * @return false|string
-	 * @throws ilFFmpegException
-	 * @throws ilWACException
-	 */
+     * @param        $a_file
+     * @param string $a_target_filename
+     * @param string $a_target_dir
+     * @param int    $a_sec
+     * @param bool   $return_json
+     * @return false|string
+     * @throws ilFFmpegException
+     * @throws ilWACException
+     */
 	static function extractImageWrapper($a_file, string $a_target_filename = '', string $a_target_dir = '', int $a_sec = 1, bool $return_json = false)
 	{
 		$json_container = [];
@@ -69,7 +73,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 
 	/**
 	 * @param $time
-	 * @return int|string
+	 * @return string
 	 */
 	protected static function parseTimeString($time)
 	{
@@ -87,11 +91,12 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		return $time;
 	}
 
-	/**
-	 * @param $hours
-	 * @param $minutes
-	 * @param $seconds
-	 */
+    /**
+     * @param $hours
+     * @param $minutes
+     * @param $seconds
+     * @return string
+     */
 	protected static function escapeHourMinutesSeconds($hours, $minutes, $seconds): string
 	{
 		$hours			= (int) $hours;
@@ -99,19 +104,21 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		return self::fillZeroIfSmallerTen($hours) . ':' . self::escapeMinutesSeconds($minutes, $seconds);
 	}
 
-	/**
-	 * @param $minutes
-	 * @param $seconds
-	 */
+    /**
+     * @param $minutes
+     * @param $seconds
+     * @return string
+     */
 	protected static function escapeMinutesSeconds($minutes, $seconds): string
 	{
 		$minutes		= (int) $minutes;
 		return self::fillZeroIfSmallerTen($minutes) . ':' . self::escapeSeconds($seconds);
 	}
 
-	/**
-	 * @param $seconds
-	 */
+    /**
+     * @param $seconds
+     * @return string
+     */
 	protected static function escapeSeconds($seconds): string
 	{
 		$milliseconds	= 0;

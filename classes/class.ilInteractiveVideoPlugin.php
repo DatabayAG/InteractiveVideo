@@ -17,7 +17,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 	/**
 	 * @return ilInteractiveVideoPlugin | ilPlugin
 	 */
-	public static function getInstance(): \ilPlugin
+	public static function getInstance(): ilPlugin
 	{
         if (self::$instance instanceof self) {
             return self::$instance;
@@ -53,7 +53,6 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
     protected function uninstallCustom(): void
     {
         global $DIC;
-        /** @var $ilDB ilDBInterface */
         $ilDB = $DIC->database();
 
         $drop_table_list = [

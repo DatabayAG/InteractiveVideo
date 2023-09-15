@@ -12,8 +12,8 @@ class xvidUtils
 
 	/**
 	 * @param $seconds
-	 * @return mixed
-	 */
+	 * @return array
+     */
 	public static function timespanArray( $seconds )
 	{
 		$time = [];
@@ -42,10 +42,12 @@ class xvidUtils
 		}
 	}
 
-	/**
-	 * @param      $seconds
-	 * @return string
-	 */
+    /**
+     * @param      $seconds
+     * @param bool $text_instead_of_null_string
+     * @param bool $empty_string_instead_of_null
+     * @return string
+     */
 	public static function getTimeStringFromSeconds($seconds, bool $text_instead_of_null_string = false, bool $empty_string_instead_of_null = false)
 	{
 		$s = $seconds % 60;
@@ -97,19 +99,21 @@ class xvidUtils
 			return $lng->txt('no');
 		}
 	}
-	
-	/**
-	 * @param $txt
-	 * @param $name
-	 */
-	public static function constructTextAreaFormElement(string $txt, $name): \ilTextAreaInputCkeditorGUI
+
+    /**
+     * @param string $txt
+     * @param        $name
+     * @return ilTextAreaInputCkeditorGUI
+     */
+	public static function constructTextAreaFormElement(string $txt, $name): ilTextAreaInputCkeditorGUI
 	{
 		return new ilTextAreaInputCkeditorGUI(ilInteractiveVideoPlugin::getInstance()->txt($txt), $name);
 	}
 
     /**
-	 * @param $path
-	 */
+     * @param $path
+     * @return string
+     */
 	public static function ensureFileSavePathExists($path): string
 	{
 		$path = ilFileUtils::getWebspaceDir() . self::INTERACTIVE_VIDEO . $path;

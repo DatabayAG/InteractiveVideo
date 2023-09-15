@@ -11,18 +11,17 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI
 	 */
     protected ilCtrl $ctrl;
 
-	/**
-	 * SimpleChoiceQuestionsCompleteUserTableGUI constructor.
-	 * @param        $a_parent_obj
-	 * @param string $a_parent_cmd
-	 * @param array  $colum_head
-	 */
+    /**
+     * SimpleChoiceQuestionsCompleteUserTableGUI constructor.
+     * @param        $a_parent_obj
+     * @param string $a_parent_cmd
+     * @param array  $colum_head
+     * @throws ilCtrlException
+     * @throws ilException
+     */
 	public function __construct($a_parent_obj, $a_parent_cmd, $colum_head)
 	{
-		/**
-		 * @var $ilCtrl ilCtrl
-		 */
-		global $ilCtrl, $lng;
+        global $ilCtrl, $lng;
 
 		$this->ctrl = $ilCtrl;
 
@@ -43,10 +42,10 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI
 
 	}
 
-	/**
-	 * @param string $column
-	 * @return bool
-	 */
+    /**
+     * @param string $a_field
+     * @return bool
+     */
     public function numericOrdering(string $a_field): bool
 	{
 		if('question_id' == $a_field)
@@ -57,10 +56,12 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI
 		return false;
 	}
 
-	/**
-	 * @param array $a_set
-	 * @internal param array $row
-	 */
+    /**
+     * @param array $a_set
+     * @throws ilCtrlException
+     * @throws ilTemplateException
+     * @internal param array $row
+     */
     protected function fillRow(array $a_set): void
 	{
 		global $lng;

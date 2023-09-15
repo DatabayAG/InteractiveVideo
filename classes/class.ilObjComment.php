@@ -25,10 +25,7 @@ class ilObjComment
 
 	public function __construct(int $comment_id = 0)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-	    global $ilDB;
+        global $ilDB;
 	    $this->db = $ilDB;
 
 		if($comment_id > 0)
@@ -142,17 +139,13 @@ class ilObjComment
 
 	public function deleteComments(array $comment_ids) : bool
     {
-
-		if(!is_array($comment_ids)){
-            return false;
-        }
         $this->db->manipulate('DELETE FROM rep_robj_xvid_comments WHERE ' . $this->db->in('comment_id', $comment_ids, false, 'integer'));
 	    return true;
     }
 
-	/**
-	 * @return mixed[]
-	 */
+    /**
+     * @return array
+     */
 	public function getStopPoints() : array
     {
 		$res = $this->db->queryF(
@@ -173,9 +166,10 @@ class ilObjComment
 		return $stop_points;
 	}
 
-	/**
-	 * @return mixed[]
-	 */
+    /**
+     * @param bool $toc
+     * @return array
+     */
 	public function getContentComments(bool $toc = false) : array
     {
 		/**
@@ -551,9 +545,9 @@ class ilObjComment
 		$this->is_reply_to = $is_reply_to;
 	}
 
-	/**
-	 * @return mixed[]
-	 */
+    /**
+     * @return array
+     */
 	public static function getUserImageCache() : array
     {
 		return self::$user_image_cache;

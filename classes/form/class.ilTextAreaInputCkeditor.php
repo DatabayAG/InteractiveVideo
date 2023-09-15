@@ -16,9 +16,11 @@ class ilTextAreaInputCkeditor
 		$this->plugin = $plugin;
 	}
 
-	/**
-	 * @return ilTemplate
-	 */
+    /**
+     * @return ilTemplate
+     * @throws ilSystemStyleException
+     * @throws ilTemplateException
+     */
 	protected function getCkEditorTemplate()
 	{
 		$ck_editor      = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $this->plugin->getDirectory());
@@ -50,9 +52,10 @@ class ilTextAreaInputCkeditor
 		return $mathJaxSetting;
 	}
 
-	/**
-	 * @param ilTemplate $custom_tpl
-	 */
+    /**
+     * @param ilTemplate $custom_tpl
+     * @throws ilTemplateException
+     */
 	public function appendCkEditorToTemplate($custom_tpl)
 	{
 		$ck_editor = $this->getCkEditorTemplate();
@@ -60,9 +63,10 @@ class ilTextAreaInputCkeditor
 		$custom_tpl->setVariable('CK_CONFIG', $ck_editor->get());
 	}
 
-	/**
-	 * @param ilPropertyFormGUI $a_form
-	 */
+    /**
+     * @param ilPropertyFormGUI $a_form
+     * @throws ilTemplateException
+     */
 	public function appendCkEditorMathJaxSupportToForm($a_form)
 	{
 		$ck_editor = $this->getCkEditorTemplate();

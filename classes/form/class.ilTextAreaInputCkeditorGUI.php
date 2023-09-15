@@ -20,7 +20,7 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 
     /**
      * @param ilTemplate $a_tpl
-     * @return int|void
+     * @return void
      * @throws ilTemplateException
      */
     public function insert(ilTemplate $a_tpl): void

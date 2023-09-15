@@ -11,16 +11,15 @@ class SimpleChoiceQuestionsUserTableGUI extends ilTable2GUI
 	 */
     protected ilCtrl $ctrl;
 
-	/**
-	 * @param ilObjectGUI $a_parent_obj
-	 * @param string      $a_parent_cmd
-	 */
+    /**
+     * @param ilObjectGUI $a_parent_obj
+     * @param string      $a_parent_cmd
+     * @throws ilCtrlException
+     * @throws ilException
+     */
 	public function __construct($a_parent_obj, $a_parent_cmd)
 	{
-		/**
-		 * @var $ilCtrl ilCtrl
-		 */
-		global $ilCtrl;
+        global $ilCtrl;
 	
 		$this->ctrl = $ilCtrl;
 	

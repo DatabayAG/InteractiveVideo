@@ -12,6 +12,8 @@ class SimpleChoiceQuestionAjaxHandler
      * @return mixed
      * @throws ilDatabaseException
      * @throws ilObjectNotFoundException
+     * @throws ilSystemStyleException
+     * @throws ilTemplateException
      */
 	private function appendFeedback($feedback_ref_id, $json)
 	{
@@ -29,6 +31,8 @@ class SimpleChoiceQuestionAjaxHandler
      * @return false|string
      * @throws ilDatabaseException
      * @throws ilObjectNotFoundException
+     * @throws ilSystemStyleException
+     * @throws ilTemplateException
      */
 	public function getFeedbackForQuestion($qid)
 	{
@@ -149,6 +153,7 @@ class SimpleChoiceQuestionAjaxHandler
      * @return string
      * @throws ilDatabaseException
      * @throws ilObjectNotFoundException
+     * @throws ilSystemStyleException
      * @throws ilTemplateException
      */
 	protected function getLinkIfReadAccessForObjectByRefId($ref_id)
@@ -188,10 +193,7 @@ class SimpleChoiceQuestionAjaxHandler
      */
 	public function getJsonForCommentId($cid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB, $ilUser;
+        global $ilDB, $ilUser;
 
 		$res = $ilDB->queryF('
 			SELECT * 
@@ -317,10 +319,7 @@ class SimpleChoiceQuestionAjaxHandler
      */
 	public function getAnswersForQuestionId($qid, $asJson = true)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF('SELECT answer_id, answer, correct FROM rep_robj_xvid_qus_text WHERE question_id = %s',
 			['integer'], [(int)$qid]);

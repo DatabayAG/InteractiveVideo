@@ -13,11 +13,8 @@ class SimpleChoiceQuestionScoring
 	 */
 	public function getScoreForQuestionOnUserId($qid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
 
-		global $ilDB, $ilUser;
+        global $ilDB, $ilUser;
 
 		$usr_id = $ilUser->getId();
 		$res    = $ilDB->queryF('
@@ -36,11 +33,8 @@ class SimpleChoiceQuestionScoring
 	 */
 	public function getFeedbackByQuestionId($qid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
 
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF(
 			'SELECT * FROM rep_robj_xvid_question WHERE question_id = %s',
@@ -57,11 +51,8 @@ class SimpleChoiceQuestionScoring
 	 */
 	public function getMyPoints($oid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
 
-		global $ilDB, $ilUser, $lng;
+        global $ilDB, $ilUser, $lng;
 
 		$res      = $ilDB->queryF('
 			SELECT * 
@@ -145,11 +136,8 @@ class SimpleChoiceQuestionScoring
 	 */
 	public function getCorrectAnswersForQuestion($qid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
 
-		global $ilDB;
+        global $ilDB;
 
 		$res      = $ilDB->queryF('
 			SELECT * 

@@ -5,7 +5,7 @@
 class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 {
 	/**
-	 * {@inheritdoc}
+	 * {}
 	 */
 	protected function parseTitle($a_obj_id, $action, $a_user_id = false): void
 	{
@@ -36,7 +36,7 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * {}
 	 */
     protected function isPercentageAvailable(int $a_obj_id): bool
 	{
@@ -66,11 +66,12 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 		return $status;
 	}
 
-	/**
-				 * {@inheritdoc}
-				 * @return mixed[]
-				 */
-				protected function getSelectableUserColumns(
+    /**
+     * @param int $a_in_course
+     * @param int $a_in_group
+     * @return array
+     */
+    protected function getSelectableUserColumns(
         int $a_in_course = 0,
         int $a_in_group = 0
     ): array
@@ -86,11 +87,10 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 		return $columns;
 	}
 
-	/**
-				 * {@inheritdoc}
-				 * @return mixed[]
-				 */
-				public function getSelectableColumns(): array
+    /**
+     * @return array
+     */
+	public function getSelectableColumns(): array
 	{
 		$columns = parent::getSelectableColumns();
 
@@ -178,7 +178,7 @@ class ilInteractiveVideoLPSummaryTableGUI extends ilTrSummaryTableGUI
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * {}
 	 */
     public function initFilter(): void
 	{

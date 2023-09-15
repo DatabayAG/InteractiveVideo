@@ -53,10 +53,7 @@ class SimpleChoiceQuestion
 
 	public function read()
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF('
 				SELECT * 
@@ -95,14 +92,11 @@ class SimpleChoiceQuestion
 
 	/**
 	 * @param $qid
-	 * @return mixed
-	 */
+	 * @return array|void
+     */
 	public function readQuestionById($qid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF('
 				SELECT * 
@@ -131,10 +125,7 @@ class SimpleChoiceQuestion
 
 	public static function isLimitAttemptsEnabled(int $question_id) : bool
     {
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF('SELECT limit_attempts FROM ' . self::TABLE_NAME_QUESTION . ' WHERE question_id = %s',
 			['integer'], [$question_id]);
@@ -146,10 +137,7 @@ class SimpleChoiceQuestion
 
 	public static function isRepeatQuestionEnabled(int $comment_id) : bool
     {
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF('SELECT repeat_question FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
 			['integer'], [$comment_id]);
@@ -161,10 +149,7 @@ class SimpleChoiceQuestion
 
 	public static function existUserAnswer(int $comment_id) : bool
     {
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilUser, $ilDB;
+        global $ilUser, $ilDB;
 
 		$res = $ilDB->queryF('
 			SELECT * FROM ' . self::TABLE_NAME_ANSWERS . ' ans
@@ -305,10 +290,7 @@ class SimpleChoiceQuestion
 
 	public static function existUserAnswerForQuestionId(int $question_id) : bool
     {
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilUser, $ilDB;
+        global $ilUser, $ilDB;
 
 		$res = $ilDB->queryF('
 			SELECT * FROM ' . self::TABLE_NAME_ANSWERS . ' 			
@@ -326,10 +308,7 @@ class SimpleChoiceQuestion
 
 	private function readAnswerDefinitions()
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF('
 				SELECT * 
@@ -356,10 +335,7 @@ class SimpleChoiceQuestion
 
 	public function cloneQuestionObject(int $old_comment_id, int $new_comment_id)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 
 		$_POST['answer'] = [];
@@ -418,10 +394,7 @@ class SimpleChoiceQuestion
 
 	public function getQuestionIdByCommentId(int $comment_id) : int
     {
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF('SELECT question_id FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
 			['integer'], [$comment_id]);
@@ -432,10 +405,7 @@ class SimpleChoiceQuestion
 
 	public function create() : int
     {
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$question_id = $ilDB->nextId(self::TABLE_NAME_QUESTION);
 		$ilDB->insert(self::TABLE_NAME_QUESTION,
@@ -474,10 +444,7 @@ class SimpleChoiceQuestion
 	public function getAllUsersWithCompletelyCorrectAnswers(int $oid, ?int $a_user_id = null)
 	{
 		$user_ids = [];
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF(
 			'
@@ -785,11 +752,8 @@ class SimpleChoiceQuestion
 	 */
 	public function existQuestionForCommentId($comment_id) : ?int
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
 
-		global $ilDB;
+        global $ilDB;
         $question_id = null;
 		$res = $ilDB->queryF('SELECT * FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
 			['integer'], [$comment_id]);
@@ -809,10 +773,7 @@ class SimpleChoiceQuestion
 	 */
 	public function getCommentTitleByCommentId($cid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res   = $ilDB->queryF(
 			'SELECT comment_title FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE comment_id = %s',
@@ -837,10 +798,7 @@ class SimpleChoiceQuestion
 	 */
 	public function getAllNonRepeatAnsweredQuestion($user_id)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res     = $ilDB->queryF('
 			SELECT comments.comment_id  comment 
@@ -868,10 +826,7 @@ class SimpleChoiceQuestion
      */
 	public static function getAllCompulsoryQuestions($obj_id)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 		$res     = $ilDB->queryF('
 			SELECT comments.comment_time, questions.question_id, comments.comment_id, points 
 			FROM ' . self::TABLE_NAME_COMMENTS . ' comments, 
@@ -902,10 +857,7 @@ class SimpleChoiceQuestion
 	 */
 	public function getAllRepeatCorrectlyAnsweredQuestion($user_id)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res     = $ilDB->queryF('
 			SELECT comments.comment_id  comment 
@@ -934,10 +886,7 @@ class SimpleChoiceQuestion
 	 */
 	public function deleteUserResults($user_ids, $obj_id)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		if(!is_array($user_ids))
 			return;
@@ -961,10 +910,7 @@ class SimpleChoiceQuestion
 	 */
 	public function getInteractiveQuestionIdsByObjId($obj_id)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF('
 			SELECT 		question_id 
@@ -989,10 +935,7 @@ class SimpleChoiceQuestion
 	 */
 	public function getInteractiveNotNeutralQuestionIdsByObjId($obj_id)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF('
 			SELECT 		question_id 
@@ -1016,10 +959,7 @@ class SimpleChoiceQuestion
 	 */
 	public function deleteQuestionsResults($question_ids)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		if(!is_array($question_ids))
 			return;
@@ -1039,11 +979,8 @@ class SimpleChoiceQuestion
 	 */
 	public function getQuestionTextQuestionId($qid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
 
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF(
 			'SELECT question_text FROM ' . self::TABLE_NAME_QUESTION . ' WHERE question_id = %s',
@@ -1061,10 +998,7 @@ class SimpleChoiceQuestion
 	 */
 	public function saveAnswer($qid, $answers)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB, $ilUser;
+        global $ilDB, $ilUser;
 
 		$usr_id = $ilUser->getId();
 		$type   = $this->getTypeByQuestionId($qid);
@@ -1131,11 +1065,8 @@ class SimpleChoiceQuestion
 	 */
 	public function getTypeByQuestionId($qid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
 
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF(
 			'SELECT * FROM ' . self::TABLE_NAME_QUESTION . ' WHERE question_id = %s',
@@ -1152,10 +1083,7 @@ class SimpleChoiceQuestion
 	 */
 	public function removeAnswer($qid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB, $ilUser;
+        global $ilDB, $ilUser;
 
 		$usr_id = $ilUser->getId();
 		$ilDB->queryF('DELETE FROM ' . self::TABLE_NAME_ANSWERS . ' WHERE question_id = %s AND user_id = %s',
@@ -1168,10 +1096,7 @@ class SimpleChoiceQuestion
 	 */
 	public function removeScore($qid)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB, $ilUser;
+        global $ilDB, $ilUser;
 
 		$usr_id = $ilUser->getId();
 		$ilDB->queryF('DELETE FROM ' . self::TABLE_NAME_SCORE . ' WHERE question_id = %s AND user_id = %s',
@@ -1183,10 +1108,7 @@ class SimpleChoiceQuestion
 	 */
 	public function deleteQuestionsIdByCommentId($comment_id)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$res = $ilDB->queryF('SELECT question_id FROM ' . self::TABLE_NAME_QUESTION . ' WHERE comment_id = %s',
 			['integer'], [$comment_id]);
@@ -1210,10 +1132,7 @@ class SimpleChoiceQuestion
 		{
 			return;
 		}
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		$ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_QUESTION . ' WHERE ' . $ilDB->in('question_id', $question_ids, false, 'integer'));
 

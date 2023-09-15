@@ -41,10 +41,13 @@ class SimpleChoiceQuestionFormEditGUI
 		$this->object = $object;
 	}
 
-	/**
-	 * @param bool $ajax
-	 * @return ilPropertyFormGUI
-	 */
+    /**
+     * @param bool $ajax
+     * @return ilPropertyFormGUI
+     * @throws ilCtrlException
+     * @throws ilSystemStyleException
+     * @throws ilTemplateException
+     */
 	public function initQuestionForm($ajax = false)
 	{
 	    global $tpl;
@@ -295,9 +298,11 @@ class SimpleChoiceQuestionFormEditGUI
 		$form->addItem($comment_id);
 	}
 
-	/**
-	 * @param ilPropertyFormGUI $form
-	 */
+    /**
+     * @param ilPropertyFormGUI $form
+     * @throws ilSystemStyleException
+     * @throws ilTemplateException
+     */
 	protected function appendWarningModalToQuestionForm($form)
 	{
 		//Todo: what to do with the modal?
@@ -315,10 +320,11 @@ class SimpleChoiceQuestionFormEditGUI
 		$form->addItem($mod);
 	}
 
-	/**
-	 * @param ilPropertyFormGUI|ilSubEnabledFormPropertyGUI $form
-	 * @param $post_var
-	 */
+    /**
+     * @param ilPropertyFormGUI|ilSubEnabledFormPropertyGUI $form
+     * @param                                               $post_var
+     * @throws ilCtrlException
+     */
 	protected function appendRepositorySelector($form, $post_var)
 	{
 		$this->ctrl->setParameterByClass('ilformpropertydispatchgui', 'postvar', $post_var);
@@ -336,9 +342,15 @@ class SimpleChoiceQuestionFormEditGUI
 		$root_ref_id->setInfo($this->plugin->txt($post_var . '_info'));
 		$form->addSubItem($root_ref_id);
 	}
-	/**
-	 * @return string
-	 */
+
+    /**
+     * @return string
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     * @throws ilSystemStyleException
+     * @throws ilTemplateException
+     * @throws ilWACException
+     */
 	public function getInteractiveForm()
 	{
 		$simple_choice = new SimpleChoiceQuestion();

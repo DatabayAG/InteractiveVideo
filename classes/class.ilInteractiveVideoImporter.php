@@ -22,11 +22,11 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 	}
 
     /**
-     * @param $a_entity
-     * @param $a_id
-     * @param $a_xml
-     * @param $a_mapping
-     * @return string|void
+     * @param string          $a_entity
+     * @param string          $a_id
+     * @param string          $a_xml
+     * @param ilImportMapping $a_mapping
+     * @return void
      * @throws ilDatabaseException
      * @throws ilObjectNotFoundException
      * @throws ilSaxParserException
@@ -38,10 +38,7 @@ class ilInteractiveVideoImporter extends ilXmlImporter
         ilImportMapping $a_mapping
     ): void
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $tree, $ilDB;
+        global $tree, $ilDB;
 
 		$this->init();
 
@@ -103,9 +100,9 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 		$a_mapping->addMapping('Plugins/xvid', 'xvid', $a_id, $this->xvid_object->getId());
 	}
 
-	/**
-	 * @param $xml_file
-	 */
+    /**
+     * @param string $xml_file
+     */
 	private function setXmlFile(string $xml_file): void
 	{
 		$this->xml_file = $xml_file;

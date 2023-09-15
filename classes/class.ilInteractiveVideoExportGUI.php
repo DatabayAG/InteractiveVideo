@@ -5,7 +5,7 @@
 class ilInteractiveVideoExportGUI extends ilExportGUI
 {
 	/**
-	 * {@inheritdoc}
+	 * {}
 	 */
     protected function buildExportTableGUI(): ilExportTableGUI
 	{

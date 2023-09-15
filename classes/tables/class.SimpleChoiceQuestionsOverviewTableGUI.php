@@ -11,16 +11,15 @@ class SimpleChoiceQuestionsOverviewTableGUI extends ilTable2GUI
 	 */
     protected ilCtrl $ctrl;
 
-	/**
-	 * @param ilObjectGUI $a_parent_obj
-	 * @param string      $a_parent_cmd
-	 */
+    /**
+     * @param ilObjectGUI $a_parent_obj
+     * @param string      $a_parent_cmd
+     * @throws ilCtrlException
+     * @throws ilException
+     */
 	public function __construct($a_parent_obj, $a_parent_cmd)
 	{
-		/**
-		 * @var $ilCtrl ilCtrl
-		 */
-		global $ilCtrl;
+        global $ilCtrl;
 
 		$this->ctrl = $ilCtrl;
 
@@ -46,10 +45,10 @@ class SimpleChoiceQuestionsOverviewTableGUI extends ilTable2GUI
 		$this->setShowRowsSelector(false);
 	}
 
-	/**
-	 * @param string $column
-	 * @return bool
-	 */
+    /**
+     * @param string $a_field
+     * @return bool
+     */
     public function numericOrdering(string $a_field): bool
 	{
 		if('question_id' == $a_field)
@@ -60,9 +59,10 @@ class SimpleChoiceQuestionsOverviewTableGUI extends ilTable2GUI
 		return false;
 	}
 
-	/**
-	 * @param array $a_set
-	 */
+    /**
+     * @param array $a_set
+     * @throws ilCtrlException
+     */
     protected function fillRow(array $a_set): void
 	{
 

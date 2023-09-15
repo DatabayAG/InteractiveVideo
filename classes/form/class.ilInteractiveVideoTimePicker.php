@@ -57,9 +57,9 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 		return $this->checkSubItemsInput();
 	}
 
-	/**
-	 * @param $a_value
-	 */
+    /**
+     * @param string $a_value
+     */
 	public function setValue(string $a_value): void
 	{
 		$this->value = $a_value;
@@ -90,7 +90,7 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 		return $my_tpl->get();
 	}
 
-	public function insert(\ilTemplate $a_tpl): void
+	public function insert(ilTemplate $a_tpl): void
 	{
 		$a_tpl->setCurrentBlock("prop_generic");
 		$a_tpl->setVariable("PROP_GENERIC", $this->render());

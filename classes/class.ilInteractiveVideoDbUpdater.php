@@ -7,7 +7,7 @@ require_once 'Services/Component/classes/class.ilPluginDBUpdate.php';
 class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 {
 
-    protected \ilDBInterface $db;
+    protected ilDBInterface $db;
 
 	/**
 	 * @var array
@@ -103,10 +103,10 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 		return (int) $row['db_update'];
 	}
 
-	/**
-	 * @param $a_version
-	 * @return bool
-	 */
+    /**
+     * @param int $a_version
+     * @return void
+     */
     public function setCurrentVersion(int $a_version): void
 	{
 		$this->db->update('rep_robj_xvid_sources',
@@ -126,10 +126,10 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 		return $this->newer_version_found;
 	}
 
-	/**
-	 * @param $a_version
-	 * @return string
-	 */
+    /**
+     * @param int $a_version
+     * @return string
+     */
     public function getFileForStep(int $a_version /* doesn't matter */): string
 	{
 		return $this->LAST_UPDATE_FILE;

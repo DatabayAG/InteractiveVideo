@@ -479,10 +479,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 */
 	public static function getQuestionIdsByCommentIds($comment_ids)
 	{
-        /**
-         * @var $ilDB ilDBInterface
-         */
-		global $ilDB;
+        global $ilDB;
 
 		if(!is_array($comment_ids))
 			return false;
@@ -581,7 +578,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	}
 
     /**
-     * @param $row
+     * @param array $row
      * @return string
      */
     private function getCommentType(array $row) : string
@@ -641,7 +638,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
     /**
      * @param $comment_id
-     * @return mixed
+     * @return array|null
      */
 	public function getCommentDataById($comment_id)
 	{
@@ -696,10 +693,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return ['text' => $row['comment_text'], 'title' => $row['comment_title']];
 	}
 
-	/**
-	 * @param      $obj_id
-	 * @return array<int|string, mixed>
-	 */
+    /**
+     * @param      $obj_id
+     * @param bool $with_user_id
+     * @return array<int|string, mixed>
+     */
 	public function getCommentIdsByObjId($obj_id, bool $with_user_id = true): array
 	{
 		$comment_ids = [];
@@ -788,10 +786,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		}
 	}
 
-	/**
-	 * @param $obj_id
-	 * @param $usr_id
-	 */
+    /**
+     * @param $obj_id
+     * @param $usr_id
+     * @return bool
+     */
 	public function doesLearningProgressEntryExists($obj_id, $usr_id): bool
 	{
 		$res = $this->db->queryF('SELECT * FROM ' . self::TABLE_NAME_LP . ' WHERE obj_id = %s AND usr_id = %s',
@@ -1119,9 +1118,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         ];
 	}
 
-	/**
-	 * @param $lp_mode
-	 */
+    /**
+     * @param $lp_mode
+     * @return bool
+     */
 	public function isCoreLPMode($lp_mode): bool
 	{
 		return in_array($lp_mode, array_keys(ilLPObjSettings::getClassMap()));
@@ -1138,19 +1138,17 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	}
 
     /**
-				 * @param $lp_mode
-				 * @throws ilException
-				 */
+     * @param $lp_mode
+     * @return string
+     * @throws ilException
+     */
 				public function getInternalLabelForLPMode($lp_mode): string
     {
         switch ($lp_mode) {
             case self::LP_MODE_BY_QUESTIONS:
                 return 'by_questions';
-                break;
-
             case self::LP_MODE_BY_ANSWERED_QUESTIONS:
                 return 'by_all_answered_questions';
-                break;
         }
 
         throw new ilException(sprintf('The LP mode "%s" is unknown!', $lp_mode));
@@ -1194,7 +1192,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         ilChangeEvent::_recordReadEvent($this->getType(), $this->getRefId(), $this->getId(), $this->user->getId());
 	}
 
-	public function uploadImage(int $comment_id, \SimpleChoiceQuestion $question, array $a_upload): bool
+	public function uploadImage(int $comment_id, SimpleChoiceQuestion $question, array $a_upload): bool
 	{
 		if(!$this->id)
 		{

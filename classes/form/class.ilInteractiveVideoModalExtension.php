@@ -4,11 +4,11 @@ class ilInteractiveVideoModalExtension extends ilModalGUI
 {
 	const TYPE_XL = 'xlarge';
 
-	/**
-	 * Get HTML
-	 *
-	 * @return string html
-	 */
+    /**
+     * Get HTML
+     * @return string html
+     * @throws ilTemplateException
+     */
     public function getHTML(): string
 	{
 		$tpl = new ilTemplate("tpl.modal.html", true, true, "Services/UIComponent/Modal");
@@ -48,11 +48,10 @@ class ilInteractiveVideoModalExtension extends ilModalGUI
 		return $tpl->get();
 	}
 
-	/**
-	 * Get instance
-	 *
-	 * @return ilModalGUI panel instance
-	 */
+    /**
+     * Get instance
+     * @return ilInteractiveVideoModalExtension panel instance
+     */
     public static function getInstance(): self
 	{
 		return new ilInteractiveVideoModalExtension();

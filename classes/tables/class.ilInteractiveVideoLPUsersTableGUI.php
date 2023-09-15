@@ -4,14 +4,14 @@
  */
 class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 {
-	/**
-	 * ilInteractiveVideoLPUsersTableGUI constructor.
-	 * @param        $a_parent_obj
-	 * @param string $a_parent_cmd
-	 * @param string $a_obj_id
-	 * @param        $a_ref_id
-	 * @param bool   $a_print_view
-	 */
+    /**
+     * ilInteractiveVideoLPUsersTableGUI constructor.
+     * @param object|null $a_parent_obj
+     * @param string      $a_parent_cmd
+     * @param int         $a_obj_id
+     * @param int         $a_ref_id
+     * @param bool        $a_print_view
+     */
 	function __construct(?object $a_parent_obj, string $a_parent_cmd, int $a_obj_id, int $a_ref_id, $a_print_view = false)
 	{
 		parent::__construct($a_parent_obj, $a_parent_cmd, $a_obj_id, $a_ref_id, true); 
@@ -24,7 +24,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * {}
 	 */
 	protected function parseTitle($a_obj_id, $action, $a_user_id = false): void
 	{
@@ -55,7 +55,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * {}
 	 */
     protected function isPercentageAvailable(int $a_obj_id): bool
 	{
@@ -85,11 +85,12 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 		return $status;
 	}
 
-	/**
-				 * {@inheritdoc}
-				 * @return mixed[]
-				 */
-				protected function getSelectableUserColumns(
+    /**
+     * @param int $a_in_course
+     * @param int $a_in_group
+     * @return array
+     */
+    protected function getSelectableUserColumns(
         int $a_in_course = 0,
         int $a_in_group = 0
     ): array
@@ -105,11 +106,10 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 		return $columns;
 	}
 
-	/**
-				 * {@inheritdoc}
-				 * @return mixed[]
-				 */
-				public function getSelectableColumns(): array
+    /**
+     * @return array
+     */
+	public function getSelectableColumns(): array
 	{
 		$columns = parent::getSelectableColumns();
 
@@ -128,7 +128,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * {}
 	 */
     public function initFilter(): void
 	{
