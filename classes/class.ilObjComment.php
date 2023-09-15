@@ -48,21 +48,21 @@ class ilObjComment
 		);
 		$row = $this->db->fetchAssoc($res);
 
-		$this->setCommentText($row['comment_text']);
-		$this->setCommentTime($row['comment_time']);
-		$this->setCommentTimeEnd($row['comment_time_end']);
+		$this->setCommentText((string) $row['comment_text']);
+		$this->setCommentTime((int) $row['comment_time']);
+		$this->setCommentTimeEnd((int) $row['comment_time_end']);
 		$this->setInteractive((bool)$row['is_interactive']);
 		$this->setIsTutor((bool)$row['is_tutor']);
-		$this->setUserId($row['user_id']);
-		$this->setCommentTitle($row['comment_title']);
-		$this->setCommentTags($row['comment_tags']);
-		$this->setIsPrivate($row['is_private']);
-		$this->setIsTableOfContent($row['is_table_of_content']);
-		$this->setIsReplyTo($row['is_reply_to']);
-		$this->setMarker($row['marker']);
+		$this->setUserId((int) $row['user_id']);
+		$this->setCommentTitle((string) $row['comment_title']);
+		$this->setCommentTags((string) $row['comment_tags']);
+		$this->setIsPrivate((int) $row['is_private']);
+		$this->setIsTableOfContent((int) $row['is_table_of_content']);
+		$this->setIsReplyTo((int) $row['is_reply_to']);
+		$this->setMarker((string) $row['marker']);
 	}
 
-	public function create($return_next_id = false, $reply_to_posting = false)
+	public function create(bool $return_next_id = false, bool $reply_to_posting = false)
     {
         /**
          * @var $ilUser ilObjUser
