@@ -79,7 +79,7 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 				$this->inAnswerTag = true;
 				$text = $this->fetchAttribute($tagAttributes, 'text');
 				$correct = $this->fetchAttribute($tagAttributes, 'correct');
-				$this->xvid_obj->import_simple_choice[$this->comments]->import_answers[] = array('text' => $text, 'correct' => $correct);
+				$this->xvid_obj->import_simple_choice[$this->comments]->import_answers[] = ['text' => $text, 'correct' => $correct];
 				break;
 			case 'CommentId':
 				$this->comments++;

@@ -124,7 +124,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 
 	protected function isLearningProgressDeactivated(): bool
 	{
-		return in_array($this->parent_obj->object->getLearningProgressMode(), array(ilObjInteractiveVideo::LP_MODE_DEACTIVATED));
+		return in_array($this->parent_obj->object->getLearningProgressMode(), [ilObjInteractiveVideo::LP_MODE_DEACTIVATED]);
 	}
 
 	/**
@@ -132,7 +132,7 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
 	 */
     public function initFilter(): void
 	{
-		$this->filter = array();
+		$this->filter = [];
 	}
 
 	/**

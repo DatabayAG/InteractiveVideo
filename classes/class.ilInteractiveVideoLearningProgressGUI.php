@@ -107,7 +107,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
          */
         global $ilTabs;
 
-        $this->gui->ensureAtLeastOnePermission(array('write', 'read_learning_progress'));
+        $this->gui->ensureAtLeastOnePermission(['write', 'read_learning_progress']);
 
         $this->addLearningProgressSubTabs();
         $ilTabs->activateSubTab('lp_settings');
@@ -163,7 +163,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
      */
     public function saveLearningProgressSettings(): void
     {
-        $this->gui->ensureAtLeastOnePermission(array('write', 'read_learning_progress'));
+        $this->gui->ensureAtLeastOnePermission(['write', 'read_learning_progress']);
 
         $form = $this->getLearningProgressSettingsForm();
         if ($form->checkInput()) {
@@ -209,14 +209,14 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
          */
         global $ilTabs;
 
-        $this->gui->ensureAtLeastOnePermission(array('write', 'read_learning_progress'));
+        $this->gui->ensureAtLeastOnePermission(['write', 'read_learning_progress']);
 
         $this->addLearningProgressSubTabs();
         $ilTabs->activateSubTab('lp_users');
 
         $table = new ilInteractiveVideoLPUsersTableGUI($this, 'showLPUsers', $this->object->getId(),
             $this->object->getRefId(), false);
-        $this->tpl->setContent(implode('<br />', array($table->getHTML(), $this->__getLegendHTML())));
+        $this->tpl->setContent(implode('<br />', [$table->getHTML(), $this->__getLegendHTML()]));
     }
 
     /**
@@ -229,13 +229,13 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
          */
         global $ilTabs;
 
-        $this->gui->ensureAtLeastOnePermission(array('write', 'read_learning_progress'));
+        $this->gui->ensureAtLeastOnePermission(['write', 'read_learning_progress']);
 
         $this->addLearningProgressSubTabs();
         $ilTabs->activateSubTab('lp_summary');
 
         $table = new ilInteractiveVideoLPSummaryTableGUI($this, 'showLPSummary', $this->object->getRefId());
-        $this->tpl->setContent(implode('<br />', array($table->getHTML(), $this->__getLegendHTML())));
+        $this->tpl->setContent(implode('<br />', [$table->getHTML(), $this->__getLegendHTML()]));
     }
 
     public function showLPUserDetails(): void
@@ -272,7 +272,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
             $info->addProperty($this->lng->txt('trac_comment'), $comment);
         }
 
-        $this->tpl->setContent(implode('<br />', array($info->getHTML(), $this->__getLegendHTML())));
+        $this->tpl->setContent(implode('<br />', [$info->getHTML(), $this->__getLegendHTML()]));
     }
 
     /**
@@ -285,7 +285,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
          */
         global $ilTabs;
 
-        $this->gui->ensureAtLeastOnePermission(array('write', 'read_learning_progress'));
+        $this->gui->ensureAtLeastOnePermission(['write', 'read_learning_progress']);
 
         $this->addLearningProgressSubTabs();
         $ilTabs->activateSubTab('lp_users');
@@ -314,13 +314,13 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 
             $marks = new ilLPMarks($this->object->getId(), $user->getId());
 
-            $form->setValuesByArray(array(
+            $form->setValuesByArray([
                 'comment' => $marks->getComment(),
                 'mark' => $marks->getMark()
-            ));
+            ]);
         }
 
-        $this->tpl->setContent(implode('<br />', array($form->getHtml(), $info->getHTML())));
+        $this->tpl->setContent(implode('<br />', [$form->getHtml(), $info->getHTML()]));
     }
 
     /**
@@ -349,7 +349,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
 
     public function updateLPUsers()
     {
-        $this->gui->ensureAtLeastOnePermission(array('write', 'read_learning_progress'));
+        $this->gui->ensureAtLeastOnePermission(['write', 'read_learning_progress']);
 
         if (!isset($_GET['user_id'])) {
             return $this->showLPUsers();

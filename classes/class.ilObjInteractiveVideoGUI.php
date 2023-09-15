@@ -207,7 +207,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					case 'addToDesk':
 					case 'removeFromDesk':
 					case 'showContent':
-						if(in_array($cmd, array('addToDesk', 'removeFromDesk')))
+						if(in_array($cmd, ['addToDesk', 'removeFromDesk']))
 						{
 							$cmd .= 'Object';
 						}
@@ -550,7 +550,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					{
 						$correct = 1;
 					}
-					array_push($answers, array('answer' => $value, 'correct' => $correct));
+					array_push($answers, ['answer' => $value, 'correct' => $correct]);
 				}
 			}
 			$question->setVariable('JSON', json_encode($answers));
@@ -640,11 +640,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         }
 		$this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'ref_id', $this->ref_id);
 		$config_tpl->setVariable('PLAYER_TYPE', $video_type);
-		$config_tpl->setVariable('VIDEO_FINISHED_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postVideoFinishedPerAjax', '', true, false));
-		$config_tpl->setVariable('VIDEO_STARTED_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postVideoStartedPerAjax', '', true, false));
-		$config_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'getQuestionPerAjax', '', true, false));
-		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postAnswerPerAjax', '', true, false));
-		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTargetByClass(array('ilRepositoryGUI', 'ilObjInteractiveVideoGUI'), 'postComment', '', true, false));
+		$config_tpl->setVariable('VIDEO_FINISHED_POST_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'postVideoFinishedPerAjax', '', true, false));
+		$config_tpl->setVariable('VIDEO_STARTED_POST_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'postVideoStartedPerAjax', '', true, false));
+		$config_tpl->setVariable('QUESTION_GET_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'getQuestionPerAjax', '', true, false));
+		$config_tpl->setVariable('QUESTION_POST_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'postAnswerPerAjax', '', true, false));
+		$config_tpl->setVariable('POST_COMMENT_URL', $this->ctrl->getLinkTargetByClass(['ilRepositoryGUI', 'ilObjInteractiveVideoGUI'], 'postComment', '', true, false));
         $config_tpl->setVariable('GET_COMMENT_MARKER_MODAL', $this->ctrl->getLinkTarget($this, 'getCommentAndMarkerForm', '', true, false));
         $config_tpl->setVariable('GET_CHAPTER_MODAL', $this->ctrl->getLinkTarget($this, 'getChapterForm', '', true, false));
         $config_tpl->setVariable('GET_QUESTION_CREATION_MODAL', $this->ctrl->getLinkTarget($this, 'showTutorInsertQuestionFormAjax', '', true, false));
@@ -720,11 +720,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$config_tpl->setVariable('USER_IMAGE', ilObjComment::getUserImageInBase64($ilUser->getId()));
 		}
 
-		$stop_points = array();
-		$comments    = array();
-        $comments_toc= array();
-		$image_cache = array();
-        $compulsory_questions = array();
+		$stop_points = [];
+		$comments    = [];
+        $comments_toc= [];
+		$image_cache = [];
+        $compulsory_questions = [];
 		if( ! $edit_screen)
 		{
 			$stop_points = $this->objComment->getStopPoints();
@@ -916,16 +916,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		if(ilInteractiveVideoPlugin::getInstance()->isCoreMin52())
 		{
-			$form_array =  array(
+			$form_array =  [
 				self::CFORM_NEW => $this->initCreateForm($new_type),
 				self::CFORM_IMPORT => $this->initImportForm($new_type)
-			);
+            ];
 		}
 		else
 		{
-			$form_array =  array(
+			$form_array =  [
 				self::CFORM_NEW => $this->initCreateForm($new_type)
-			);
+            ];
 		}
 		return $form_array;
 	}
@@ -1153,7 +1153,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	protected function getSubtitleDataAndFilesForJson(){
-		$data = array();
+		$data = [];
 		$subtitle_data = $this->object->getSubtitleData();
 		$subtitle_files = $this->getSubtitleFiles();
 		$dir  = $this->getPathForSubtitleFiles();
@@ -1197,7 +1197,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->setTitle($this->plugin->txt("subtitle"));
 
 		$file = new ilFileInputGUI($this->plugin->txt('subtitle'), 'subtitle');
-		$file->setSuffixes(array('vtt'));
+		$file->setSuffixes(['vtt']);
 		$form->addItem($file);
 
 		$subtitle_data = $this->object->getSubtitleData();
@@ -1248,7 +1248,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @return array<string, string>
 	 */
 	protected function getSubtitleFiles(): array{
-		$sub_titles = array();
+		$sub_titles = [];
 		$directory = $this->getPathForSubtitleFiles();
 
 		if(file_exists($directory)) {
@@ -1334,8 +1334,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 
 		}
-		$data_short = array();
-		$data_long  = array();
+		$data_short = [];
+		$data_long  = [];
 		foreach ($_POST as $name => $value) {
 
 			if (substr($name, 0, 2) === "l#") {
@@ -1863,7 +1863,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($post->has('comment_time'))
 		{
 			$seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->int());
-			$time->setValueByArray(array('comment_time' => (int)$seconds));
+			$time->setValueByArray(['comment_time' => (int)$seconds]);
 		}
 		$form->addItem($time);
 
@@ -1874,7 +1874,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         if($post->has('comment_time_end'))
 		{
             $seconds = $post->retrieve('comment_time_end', $this->refinery->kindlyTo()->int());
-            $time->setValueByArray(array('comment_time_end' => (int)$seconds));
+            $time->setValueByArray(['comment_time_end' => (int)$seconds]);
         }
 		$form->addItem($time_end);
 
@@ -1929,7 +1929,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         if($post->has('comment_time')) {
             $seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->int());
-            $time->setValueByArray(array('comment_time' => (int)$seconds));
+            $time->setValueByArray(['comment_time' => (int)$seconds]);
         }
         $form->addItem($time);
 
@@ -2629,7 +2629,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($post->has('comment_time'))
 		{
             $seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->int());
-			$time->setValueByArray(array('comment_time' => (int)$seconds));
+			$time->setValueByArray(['comment_time' => (int)$seconds]);
 		}
 		$form->addItem($time);
 
@@ -2650,7 +2650,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($section_header);
 
 		$question_type = new ilSelectInputGUI($plugin->txt('question_type'), 'question_type');
-		$type_options = array(0 => $plugin->txt('single_choice'), 1 => $plugin->txt('multiple_choice'), 2 => $plugin->txt('reflection'));
+		$type_options = [0 => $plugin->txt('single_choice'), 1 => $plugin->txt('multiple_choice'), 2 => $plugin->txt('reflection')];
 		$question_type->setOptions($type_options);
 		$question_type->setInfo($plugin->txt('question_type_info'));
 		$form->addItem($question_type);
@@ -2662,7 +2662,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->appendImageUploadForm($plugin, $form);
 
 		$neutral_type = new ilSelectInputGUI($plugin->txt('neutral_type'), 'neutral_type');
-		$neutral_type_options = array(0 => $plugin->txt('with_correct'), 1 => $plugin->txt('neutral'));
+		$neutral_type_options = [0 => $plugin->txt('with_correct'), 1 => $plugin->txt('neutral')];
 
 		$neutral_type->setOptions($neutral_type_options);
 		$neutral_type->setInfo($plugin->txt('neutral_type_info'));
@@ -2694,7 +2694,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($post->has('jump_correct_ts'))
 		{
 			$seconds = $post->retrieve('jump_correct_ts', $this->refinery->kindlyTo()->int());
-			$time->setValueByArray(array('jump_correct_ts' => (int)$seconds));
+			$time->setValueByArray(['jump_correct_ts' => (int)$seconds]);
 		}
 		$is_jump_correct->addSubItem($jump_correct_ts);
 		$feedback_correct->addSubItem($is_jump_correct);
@@ -2716,7 +2716,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         if($post->has('jump_wrong_ts'))
         {
             $seconds = $post->retrieve('jump_wrong_ts', $this->refinery->kindlyTo()->int());
-            $time->setValueByArray(array('jump_wrong_ts' => (int)$seconds));
+            $time->setValueByArray(['jump_wrong_ts' => (int)$seconds]);
         }
 		$is_jump_wrong->addSubItem($jump_wrong_ts);
 		$feedback_one_wrong->addSubItem($is_jump_wrong);
@@ -2776,7 +2776,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 		$this->ctrl->setParameterByClass('ilformpropertydispatchgui', 'postvar', $post_var);
 		$explorer_gui = new ilInteractiveVideoSelectionExplorerGUI(
-			array('ilpropertyformgui', 'ilformpropertydispatchgui', 'ilInteractiveVideoRepositorySelectorInputGUI'),
+			['ilpropertyformgui', 'ilformpropertydispatchgui', 'ilInteractiveVideoRepositorySelectorInputGUI'],
 			'handleExplorerCommand'
 		);
 		$explorer_gui->setId($post_var);
@@ -2891,7 +2891,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	private function getQuestionFormValues(int $comment_id = 0)
 	{
-	    $values = array();
+	    $values = [];
 
         $post = $this->http->wrapper()->post();
         $get = $this->http->wrapper()->query();
@@ -2963,7 +2963,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         if($post->has('comment_id')) {
             $comment_id = $post->retrieve('comment_id', $this->refinery->kindlyTo()->int());
         }
-		$form_values = array();
+		$form_values = [];
 
 		if($comment_id > 0 && !$chk =  SimpleChoiceQuestion::answerExists($comment_id))
 		{
@@ -3125,7 +3125,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		else
 		{
-			$question->setVariable('JSON', json_encode(array()));
+			$question->setVariable('JSON', json_encode([]));
 			$question->setVariable('QUESTION_TYPE', 0);
 		}
 
@@ -3459,7 +3459,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$tpl_json->show("DEFAULT", false, true);
 			}catch(ilFFmpegException $e)
 			{
-				$tpl_json->setVariable('JSON', json_encode(array('error' => $e->getMessage())));
+				$tpl_json->setVariable('JSON', json_encode(['error' => $e->getMessage()]));
 				$tpl_json->show("DEFAULT", false, true);
 			}
 
@@ -3523,10 +3523,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$simple = new SimpleChoiceQuestionStatistics();
 		$data = $simple->getScoreForAllQuestionsAndAllUser($this->obj_id);
 
-		$csv = array();
+		$csv = [];
 		$separator = ";";
 
-		$head_row = array();
+		$head_row = [];
 		array_push($head_row, $lng->txt('name'));
 		foreach ($data['question'] as $key => $row)
 		{
@@ -3536,10 +3536,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($head_row, $plugin->txt('answered') );
 		array_push($head_row, $plugin->txt('sum'));
 		array_push($csv, ilCSVUtil::processCSVRow($head_row, TRUE, $separator) );
-		$ignore_colum = array('name','answerd', 'sum');
+		$ignore_colum = ['name', 'answerd', 'sum'];
 		foreach ($data['users'] as $key => $row)
 		{
-			$csvrow = array();
+			$csvrow = [];
 			foreach ( $row as $type => $value)
 			{
 				array_push($csvrow, trim($value, '"'));
@@ -3572,10 +3572,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$data = $this->object->getCommentsTableDataByUserId();
 
-		$csv = array();
+		$csv = [];
 		$separator = ";";
 
-		$head_row = array();
+		$head_row = [];
 		array_push($head_row, $lng->txt('id'));
 		array_push($head_row, $lng->txt('time'));
 		array_push($head_row, $plugin->txt('time_end') );
@@ -3587,7 +3587,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($csv, ilCSVUtil::processCSVRow($head_row, TRUE, $separator) );
 		foreach ($data as $key => $row)
 		{
-			$csvrow = array();
+			$csvrow = [];
 			foreach ( $row as $type => $value)
 			{
 				array_push($csvrow, trim($value, '"'));
@@ -3612,10 +3612,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$data = $this->object->getCommentsTableData(true, false, false, true);
 
-		$csv = array();
+		$csv = [];
 		$separator = ";";
 
-		$head_row = array();
+		$head_row = [];
 
 		array_push($head_row, $lng->txt('id'));
 		array_push($head_row, $lng->txt('time'));
@@ -3639,7 +3639,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		foreach ($data as $key => $row)
 		{
-			$csvrow = array();
+			$csvrow = [];
 			foreach ( $row as $type => $value)
 			{
 				array_push($csvrow, trim($value, '"'));
@@ -3679,7 +3679,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $xvid_referrer = $get->retrieve('xvid_referrer', $DIC->refinery->kindlyTo()->string());
             }
 			$ilCtrl->setParameterByClass($class_name, 'xvid_referrer', urlencode($xvid_referrer));
-			$ilCtrl->redirectByClass(array("ilobjplugindispatchgui", $class_name), "");
+			$ilCtrl->redirectByClass(["ilobjplugindispatchgui", $class_name], "");
 		}
 		else if($ilAccess->checkAccess("visible", "", $ref_id))
 		{
@@ -3692,7 +3692,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $xvid_referrer = $get->retrieve('xvid_referrer', $DIC->refinery->kindlyTo()->string());
             }
 			$ilCtrl->setParameterByClass($class_name, 'xvid_referrer', urlencode($xvid_referrer));
-			$ilCtrl->redirectByClass(array("ilobjplugindispatchgui", $class_name), "infoScreen");
+			$ilCtrl->redirectByClass(["ilobjplugindispatchgui", $class_name], "infoScreen");
 		}
 		else if ($ilAccess->checkAccess("read", "", ROOT_FOLDER_ID))
 		{

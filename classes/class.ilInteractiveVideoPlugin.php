@@ -56,7 +56,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
         /** @var $ilDB ilDBInterface */
         $ilDB = $DIC->database();
 
-        $drop_table_list = array(
+        $drop_table_list = [
             'rep_robj_xvid_answers',
             'rep_robj_xvid_comments',
             'rep_robj_xvid_lp',
@@ -70,13 +70,13 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
             'rep_robj_xvid_surl',
             'rep_robj_xvid_mobs',
             'rep_robj_xvid_vimeo'
-        );
+        ];
 
-        $drop_sequence_list = array(
+        $drop_sequence_list = [
             'rep_robj_xvid_comments',
             'rep_robj_xvid_question',
             'rep_robj_xvid_qus_text'
-        );
+        ];
 
         foreach ($drop_table_list as $key => $table) {
             if ($ilDB->tableExists($table)) {
@@ -91,7 +91,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
         }
 
         $ilDB->queryF('DELETE FROM il_wac_secure_path WHERE path = %s ',
-            array('text'), array('xvid'));
+            ['text'], ['xvid']);
     }
 
     protected function buildLanguageHandler(): ilPluginLanguage

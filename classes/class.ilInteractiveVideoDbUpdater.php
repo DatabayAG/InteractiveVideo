@@ -22,7 +22,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	/**
 	 * @var array
 	 */
-	protected $update_map = array();
+	protected $update_map = [];
 
 	/**
 	 * @var string
@@ -72,7 +72,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	protected function collectUpdateFiles()
 	{
 		$rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(dirname(__FILE__) . '/../VideoSources'));
-		$this->update_files = array();
+		$this->update_files = [];
 		/** @var SplFileInfo $file */
 		foreach($rii as $file)
 		{
@@ -96,8 +96,8 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	{
 		$res = $this->db->queryF(
 			'SELECT db_update FROM rep_robj_xvid_sources WHERE plugin_id = %s',
-			array('text'),
-			array($this->plugin_id)
+			['text'],
+			[$this->plugin_id]
 		);
 		$row = $this->db->fetchAssoc($res);
 		return (int) $row['db_update'];
@@ -110,12 +110,12 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
     public function setCurrentVersion(int $a_version): void
 	{
 		$this->db->update('rep_robj_xvid_sources',
-			array(
-				'db_update' 	=> array('integer', (int)$a_version)
-			),
-			array(
-				'plugin_id' => array('text', $this->plugin_id)
-			)
+			[
+				'db_update' 	=> ['integer', (int)$a_version]
+            ],
+			[
+				'plugin_id' => ['text', $this->plugin_id]
+            ]
 		);
 	}
 	/**
@@ -208,7 +208,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 			if($file == $value)
 			{
 				$this->plugin_id = $key;
-				$this->update_map[$key]= array('file' => $file_version, 'installed'	=> $this->getCurrentVersion());
+				$this->update_map[$key]= ['file' => $file_version, 'installed'	=> $this->getCurrentVersion()];
 				return $key;
 			}
 		}

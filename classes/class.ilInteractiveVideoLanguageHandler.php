@@ -12,7 +12,7 @@ class ilInteractiveVideoLanguageHandler extends ilPluginLanguage
 
         $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(dirname(__FILE__) . '/../VideoSources'));
         $directories = $this->exploreDirectory($rii);
-        $lang_array = array();
+        $lang_array = [];
         $prefix = $this->getPrefix();
         foreach($directories as $dir)
         {
@@ -48,7 +48,7 @@ class ilInteractiveVideoLanguageHandler extends ilPluginLanguage
      */
     protected function exploreDirectory($rii)
     {
-        $found_elements = array(dirname(__FILE__) . '/../lang');
+        $found_elements = [dirname(__FILE__) . '/../lang'];
         /** @var SplFileInfo $file */
         foreach($rii as $file)
         {

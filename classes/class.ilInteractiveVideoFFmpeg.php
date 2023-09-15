@@ -47,7 +47,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 	 */
 	static function extractImageWrapper($a_file, string $a_target_filename = '', string $a_target_dir = '', int $a_sec = 1, bool $return_json = false)
 	{
-		$json_container = array();
+		$json_container = [];
 
 		$sec =  self::parseTimeString($a_sec);
 
@@ -57,7 +57,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 			{
 				$sec = $seconds_split[0] . '.' .$i;
 				$file = self::extractImage($a_file, $i . '.jpg', $a_target_dir, $sec);
-				$json_container[] = array('time' => $sec, 'img' => ilWACSignedPath::signFile($file . '?' . rand()));
+				$json_container[] = ['time' => $sec, 'img' => ilWACSignedPath::signFile($file . '?' . rand())];
 			}
 		}
 		

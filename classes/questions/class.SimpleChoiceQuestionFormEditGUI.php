@@ -107,7 +107,7 @@ class SimpleChoiceQuestionFormEditGUI
 		if(isset($_POST['comment_time']))
 		{
 			$seconds = $_POST['comment_time'];
-			$time->setValueByArray(array('comment_time' => (int)$seconds));
+			$time->setValueByArray(['comment_time' => (int)$seconds]);
 		}
 		$form->addItem($time);
 
@@ -144,11 +144,11 @@ class SimpleChoiceQuestionFormEditGUI
 	protected function appendQuestionSettingsToQuestionForm($form)
 	{
 		$question_type = new ilSelectInputGUI($this->plugin->txt('question_type'), 'question_type');
-		$type_options  = array(
+		$type_options  = [
 			0 => $this->plugin->txt('single_choice'),
 			1 => $this->plugin->txt('multiple_choice'),
 			2 => $this->plugin->txt('reflection')
-		);
+        ];
 		$question_type->setOptions($type_options);
 		$question_type->setInfo($this->plugin->txt('question_type_info'));
 		$form->addItem($question_type);
@@ -160,10 +160,10 @@ class SimpleChoiceQuestionFormEditGUI
 		#$this->appendImageUploadForm($this->plugin, $form);
 
 		$neutral_type         = new ilSelectInputGUI($this->plugin->txt('neutral_type'), 'neutral_type');
-		$neutral_type_options = array(
+		$neutral_type_options = [
 			0 => $this->plugin->txt('with_correct'),
 			1 => $this->plugin->txt('neutral')
-		);
+        ];
 		$neutral_type->setOptions($neutral_type_options);
 		$neutral_type->setInfo($this->plugin->txt('neutral_type_info'));
 		$form->addItem($neutral_type);
@@ -243,7 +243,7 @@ class SimpleChoiceQuestionFormEditGUI
 		if(isset($_POST['jump_correct_ts']))
 		{
 			$seconds = $_POST['jump_correct_ts'];
-			$jump_correct_ts->setValueByArray(array('jump_correct_ts' => (int)$seconds));
+			$jump_correct_ts->setValueByArray(['jump_correct_ts' => (int)$seconds]);
 		}
 		$is_jump_correct->addSubItem($jump_correct_ts);
 		$feedback_correct->addSubItem($is_jump_correct);
@@ -270,7 +270,7 @@ class SimpleChoiceQuestionFormEditGUI
 		if(isset($_POST['jump_wrong_ts']))
 		{
 			$seconds = $_POST['jump_wrong_ts'];
-			$jump_wrong_ts->setValueByArray(array('jump_correct_ts' => (int)$seconds));
+			$jump_wrong_ts->setValueByArray(['jump_correct_ts' => (int)$seconds]);
 		}
 		$is_jump_wrong->addSubItem($jump_wrong_ts);
 		$feedback_one_wrong->addSubItem($is_jump_wrong);
@@ -323,7 +323,7 @@ class SimpleChoiceQuestionFormEditGUI
 	{
 		$this->ctrl->setParameterByClass('ilformpropertydispatchgui', 'postvar', $post_var);
 		$explorer_gui = new ilInteractiveVideoSelectionExplorerGUI(
-			array('ilpropertyformgui', 'ilformpropertydispatchgui', 'ilInteractiveVideoRepositorySelectorInputGUI'),
+			['ilpropertyformgui', 'ilformpropertydispatchgui', 'ilInteractiveVideoRepositorySelectorInputGUI'],
 			'handleExplorerCommand'
 		);
 		$explorer_gui->setId($post_var);
@@ -361,7 +361,7 @@ class SimpleChoiceQuestionFormEditGUI
 		}
 		else
 		{
-			$answers = array();
+			$answers = [];
 			if(is_array($_POST) && array_key_exists('answer', $_POST) && sizeof($_POST['answer'])  > 0)
 			{
 				$post_answers = ilArrayUtil::stripSlashesRecursive($_POST['answer']);
@@ -372,7 +372,7 @@ class SimpleChoiceQuestionFormEditGUI
 					{
 						$correct = 1;
 					}
-					array_push($answers, array('answer' => $value, 'correct' => $correct));
+					array_push($answers, ['answer' => $value, 'correct' => $correct]);
 				}
 			}
 			$question->setVariable('JSON', json_encode($answers));

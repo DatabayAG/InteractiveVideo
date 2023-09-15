@@ -35,7 +35,7 @@ class SimpleChoiceQuestionAjaxHandler
 		$scoring  = new SimpleChoiceQuestionScoring();
 		$score    = $scoring->getScoreForQuestionOnUserId($qid);
 		$feedback = $scoring->getFeedbackByQuestionId($qid);
-		$json     = array();
+		$json     = [];
 		$correct = false;
 		if(is_array($feedback))
 		{
@@ -201,11 +201,11 @@ class SimpleChoiceQuestionAjaxHandler
 			WHERE question.comment_id = %s 
 			AND   question.question_id = answers.question_id
 			AND   question.comment_id = comments.comment_id',
-			array('integer'), array((int)$cid)
+			['integer'], [(int)$cid]
 		);
 
 		$counter        = 0;
-		$question_data  = array();
+		$question_data  = [];
 		$question_text  = '';
 		$question_type  = 0;
 		$question_id    = 0;
@@ -243,16 +243,16 @@ class SimpleChoiceQuestionAjaxHandler
 			FROM  rep_robj_xvid_answers
 			WHERE question_id = %s 
 			AND   user_id = %s',
-			array('integer', 'integer'), array($question_id, $ilUser->getId())
+			['integer', 'integer'], [$question_id, $ilUser->getId()]
 		);
 		$counter  = 0;
-		$answered = array();
+		$answered = [];
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$answered[$counter] = $row['answer_id'];
 			$counter++;
 		}
-		$build_json = array();
+		$build_json = [];
 		//$build_json['title'] 		  = $question_data;
 		$build_json['answers']                 = $question_data;
 		$build_json['question_text']           = $question_text;
@@ -297,7 +297,7 @@ class SimpleChoiceQuestionAjaxHandler
 			FROM  rep_robj_xvid_comments
 			WHERE is_reply_to = %s 
 			AND   user_id = %s',
-				array('integer', 'integer'), array($cid, $ilUser->getId())
+				['integer', 'integer'], [$cid, $ilUser->getId()]
 			);
 			while($row = $ilDB->fetchAssoc($res))
 			{
@@ -323,9 +323,9 @@ class SimpleChoiceQuestionAjaxHandler
 		global $ilDB;
 
 		$res = $ilDB->queryF('SELECT answer_id, answer, correct FROM rep_robj_xvid_qus_text WHERE question_id = %s',
-			array('integer'), array((int)$qid));
+			['integer'], [(int)$qid]);
 
-		$question_data = array();
+		$question_data = [];
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$question_data[] = $row;

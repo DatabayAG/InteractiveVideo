@@ -118,7 +118,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
             $source = ilInteractiveVideoPlugin::stripSlashesWrapping($_GET['video_source']);
         }
 		$form->setFormAction($this->ctrl->getFormAction($this, 'showConfigurationForm'));
-		$mapping = array();
+		$mapping = [];
 
 		$update_map = $db_updater->getMap();
 		if($source == '')
@@ -142,7 +142,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 				}
 				$activation->setInfo($info);
 				$form->addItem($activation);
-				$mapping[$class] = array('path' => $engine->getClassPath(), 'id' => $engine->getId());
+				$mapping[$class] = ['path' => $engine->getClassPath(), 'id' => $engine->getId()];
 			}
 		}
 		else
@@ -271,7 +271,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	 */
 	protected function saveForm($form)
 	{
-		$settings = array();
+		$settings = [];
 		$min_selected = false;
 		foreach($form->getItems() as $key => $value)
 		{
@@ -292,7 +292,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		}
 		if($min_selected)
 		{
-			$this->video_source_factory->saveSourceSettings(array('settings' => $settings, 'mappings' => $mapping));
+			$this->video_source_factory->saveSourceSettings(['settings' => $settings, 'mappings' => $mapping]);
 		}
 		else
 		{

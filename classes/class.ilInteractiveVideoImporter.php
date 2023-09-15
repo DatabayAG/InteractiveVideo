@@ -67,7 +67,7 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 			$factory = new ilInteractiveVideoSourceFactory();
 			$source_obj = $factory->getVideoSourceObject($this->xvid_object->getSourceId());
 			$source_obj->afterImportParsing($this->xvid_object->getId(), $this->import_directory);
-			$comment_map = array();
+			$comment_map = [];
 			foreach($this->xvid_object->import_comment as $key => $comment)
 			{
 				$comment->setObjId($this->xvid_object->getId());
@@ -90,12 +90,12 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 					{
 						$answer_id = $ilDB->nextId('rep_robj_xvid_qus_text');
 						$ilDB->insert('rep_robj_xvid_qus_text',
-							array(
-								'answer_id'   => array('integer',	$answer_id),
-								'question_id' => array('integer',	(int) $question_id),
-								'answer'      => array('text', 		ilInteractiveVideoPlugin::stripSlashesWrapping($answer['text'])),
-								'correct'     => array('integer',	(int) $answer['correct'])
-							));
+							[
+                                'answer_id'   => ['integer', $answer_id],
+                                'question_id' => ['integer', (int) $question_id],
+                                'answer'      => ['text', ilInteractiveVideoPlugin::stripSlashesWrapping($answer['text'])],
+                                'correct'     => ['integer', (int) $answer['correct']]
+                            ]);
 					}
 				}
 			}

@@ -86,7 +86,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 
 	public function exportPagesXML(): void
 	{
-		$attr         = array();
+		$attr         = [];
 		$attr["Type"] = "ilInteractiveVideo";
 		$this->xml_writer->xmlStartTag("ContentObject", $attr);
 
@@ -103,7 +103,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 	private function exportXMLSettings(): void
 	{
 		$src_id = (string)$this->object->getSourceId();
-		$this->xml_writer->xmlStartTag('Settings', array('video_source_id' => $src_id));
+		$this->xml_writer->xmlStartTag('Settings', ['video_source_id' => $src_id]);
 
 		$this->xml_writer->xmlElement('Title', null, (string)$this->object->getTitle());
 		$this->xml_writer->xmlElement('Description', null, (string)$this->object->getDescription());
@@ -132,7 +132,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 	private function exportVideoSourceObject(): void
 	{
 		$src_id = (string)$this->object->getSourceId();
-		$this->xml_writer->xmlStartTag('VideoSource', array('source_id' => $src_id));
+		$this->xml_writer->xmlStartTag('VideoSource', ['source_id' => $src_id]);
 		$this->xml_writer->xmlElement('VideoSourceObject', null, $src_id);
 		$obj = $this->object->getVideoSourceObject($src_id);
 		$obj->doExportVideoSource($this->obj_id, $this->xml_writer, $this->export_dir);
@@ -196,15 +196,15 @@ class ilInteractiveVideoExporter extends ilXmlExporter
                             ilFileUtils::makeDirParents($export_path);
 							copy($path, $export_path . basename($path));
 						}
-						$this->xml_writer->xmlElement('QuestionImage', array('qid' => $qid, 'file' => '/Plugins/xvid/set_1/expDir_1/' . $qid . '/' . basename($path)));
+						$this->xml_writer->xmlElement('QuestionImage', ['qid' => $qid, 'file' => '/Plugins/xvid/set_1/expDir_1/' . $qid . '/' . basename($path)]);
 					}
 
 					$this->xml_writer->xmlStartTag('Answers');
 					$res = $ilDB->queryF('SELECT * FROM rep_robj_xvid_qus_text WHERE question_id = %s',
-						array('integer'), array((int)$qid));
+						['integer'], [(int)$qid]);
 					while($row = $ilDB->fetchAssoc($res))
 					{
-						$this->xml_writer->xmlElement('Answer', array('text' => $row['answer'], 'correct' => $row['correct']));
+						$this->xml_writer->xmlElement('Answer', ['text' => $row['answer'], 'correct' => $row['correct']]);
 					}
 					$this->xml_writer->xmlEndTag('Answers');
 				}

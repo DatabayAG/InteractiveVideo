@@ -23,8 +23,8 @@ class SimpleChoiceQuestionScoring
 		$res    = $ilDB->queryF('
 				SELECT points FROM rep_robj_xvid_score score  
 				WHERE user_id = %s AND question_id = %s',
-			array('integer', 'integer'),
-			array((int)$usr_id, (int)$qid)
+			['integer', 'integer'],
+			[(int)$usr_id, (int)$qid]
 		);
 		$score  = $ilDB->fetchAssoc($res);
 		return (int)$score['points'];
@@ -44,8 +44,8 @@ class SimpleChoiceQuestionScoring
 
 		$res = $ilDB->queryF(
 			'SELECT * FROM rep_robj_xvid_question WHERE question_id = %s',
-			array('integer'),
-			array((int)$qid)
+			['integer'],
+			[(int)$qid]
 		);
 
 		return $ilDB->fetchAssoc($res);
@@ -68,9 +68,9 @@ class SimpleChoiceQuestionScoring
 				FROM rep_robj_xvid_score score, rep_robj_xvid_question questions
 				WHERE score.question_id = questions.question_id
 			AND 	score.user_id = %s',
-			array('integer'), array($ilUser->getId())
+			['integer'], [$ilUser->getId()]
 		);
-		$answered = array();
+		$answered = [];
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$answered[$row['question_id']] = $row['points'];
@@ -78,9 +78,9 @@ class SimpleChoiceQuestionScoring
 
 		$res                = $ilDB->queryF('SELECT * FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
 					 WHERE comments.comment_id = questions.comment_id AND  is_interactive = 1 AND obj_id = %s',
-			array('integer'), array($oid)
+			['integer'], [$oid]
 		);
-		$results            = array();
+		$results            = [];
 		$counter            = 0;
 		$correct            = 0;
 		$answered_questions = 0;
@@ -161,9 +161,9 @@ class SimpleChoiceQuestionScoring
 			AND is_interactive = 1 
 			AND correct = 1 
 			AND questions.question_id = %s',
-			array('integer'), array((int)$qid)
+			['integer'], [(int)$qid]
 		);
-		$question = array();
+		$question = [];
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$question[] = $row['answer_id'];

@@ -11,7 +11,7 @@ class ilObjComment
 	protected bool $is_interactive = false;
 	protected string $comment_title = '';
 	protected string $comment_tags = '';
-	protected array $comments = array();
+	protected array $comments = [];
 	protected int $is_private = 0;
     protected int $is_table_of_content = 0;
     protected int $is_public = 0;
@@ -19,8 +19,8 @@ class ilObjComment
     protected int $is_repeat = 0;
 	protected int $is_reply_to = 0;
 	protected string $marker;
-	protected static array $user_name_cache = array();
-	protected static array $user_image_cache = array();
+	protected static array $user_name_cache = [];
+	protected static array $user_image_cache = [];
 	protected ilDBInterface $db;
 
 	public function __construct(int $comment_id = 0)
@@ -43,8 +43,8 @@ class ilObjComment
 
 		$res = $this->db->queryF(
 			'SELECT * FROM rep_robj_xvid_comments WHERE comment_id = %s',
-			array('integer'),
-			array($this->getCommentId())
+			['integer'],
+			[$this->getCommentId()]
 		);
 		$row = $this->db->fetchAssoc($res);
 
@@ -79,22 +79,22 @@ class ilObjComment
 		$this->setCommentId($next_id);
         $this->setMarker('');
         $this->db->insert('rep_robj_xvid_comments',
-			array(
-				'comment_id'     	=> array('integer', $next_id),
-				'obj_id'         	=> array('integer', $this->getObjId()),
-				'user_id'        	=> array('integer', $ilUser->getId()),
-				'is_tutor'       	=> array('integer', (int)$this->isTutor()),
-				'is_interactive' 	=> array('integer', (int)$this->isInteractive()),
-				'comment_time'   	=> array('integer', round($this->getCommentTime(), 0)),
-				'comment_time_end'  => array('integer', round($this->getCommentTimeEnd(), 0)),
-				'comment_text'   	=> array('text',  $text),
-				'comment_title'		=> array('text', $this->getCommentTitle()),
-				'comment_tags'		=> array('text', $this->getCommentTags()),
-				'is_private'		=> array('integer', $this->getIsPrivate()),
-				'is_table_of_content'=> array('integer', $this->getIsTableOfContent()),
-				'is_reply_to'		=> array('integer', $this->getIsReplyTo()),
-				'marker'			=> array('text', $this->getMarker())
-			));
+			[
+                'comment_id'     	=> ['integer', $next_id],
+                'obj_id'         	=> ['integer', $this->getObjId()],
+                'user_id'        	=> ['integer', $ilUser->getId()],
+                'is_tutor'       	=> ['integer', (int)$this->isTutor()],
+                'is_interactive' 	=> ['integer', (int)$this->isInteractive()],
+                'comment_time'   	=> ['integer', round($this->getCommentTime(), 0)],
+                'comment_time_end'  => ['integer', round($this->getCommentTimeEnd(), 0)],
+                'comment_text'   	=> ['text', $text],
+                'comment_title'		=> ['text', $this->getCommentTitle()],
+                'comment_tags'		=> ['text', $this->getCommentTags()],
+                'is_private'		=> ['integer', $this->getIsPrivate()],
+                'is_table_of_content'=> ['integer', $this->getIsTableOfContent()],
+                'is_reply_to'		=> ['integer', $this->getIsReplyTo()],
+                'marker'			=> ['text', $this->getMarker()]
+            ]);
 		if($return_next_id)
 		{
 			return $next_id;
@@ -108,7 +108,7 @@ class ilObjComment
          */
 		global $ilUser;
         $this->db->manipulateF('DELETE FROM rep_robj_xvid_comments WHERE is_reply_to = %s AND user_id = %s',
-			array('integer', 'integer'), array($reply_to, $ilUser->getId()));
+			['integer', 'integer'], [$reply_to, $ilUser->getId()]);
 	}
 
 	public function update(): void
@@ -121,22 +121,22 @@ class ilObjComment
 		$text = $purify->purify($this->getCommentText());
 
         $this->db->update('rep_robj_xvid_comments',
-			array(
-				'is_interactive' 	=> array('integer', (int)$this->isInteractive()),
-				'user_id'        	=> array('integer', $ilUser->getId()),
-				'comment_time'   	=> array('integer', round($this->getCommentTime(), 0)),
-				'comment_time_end'  => array('integer', round($this->getCommentTimeEnd(), 2)),
-				'comment_text'   	=> array('text', $text),
-				'comment_title'		=> array('text', $this->getCommentTitle()),
-				'comment_tags'		=> array('text', $this->getCommentTags()),
-				'is_private'		=> array('integer', $this->getIsPrivate()),
-				'is_table_of_content'=> array('integer', $this->getIsTableOfContent()),
-				'is_reply_to'		=> array('integer', $this->getIsReplyTo()),
-				'marker'			=> array('text', $this->getMarker())
-			),
-			array(
-				'comment_id' => array('integer', $this->getCommentId())
-			)
+			[
+                'is_interactive' 	=> ['integer', (int)$this->isInteractive()],
+                'user_id'        	=> ['integer', $ilUser->getId()],
+                'comment_time'   	=> ['integer', round($this->getCommentTime(), 0)],
+                'comment_time_end'  => ['integer', round($this->getCommentTimeEnd(), 2)],
+                'comment_text'   	=> ['text', $text],
+                'comment_title'		=> ['text', $this->getCommentTitle()],
+                'comment_tags'		=> ['text', $this->getCommentTags()],
+                'is_private'		=> ['integer', $this->getIsPrivate()],
+                'is_table_of_content'=> ['integer', $this->getIsTableOfContent()],
+                'is_reply_to'		=> ['integer', $this->getIsReplyTo()],
+                'marker'			=> ['text', $this->getMarker()]
+            ],
+			[
+				'comment_id' => ['integer', $this->getCommentId()]
+            ]
 		);
 	}
 
@@ -160,11 +160,11 @@ class ilObjComment
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s
 			ORDER BY comment_time ASC',
-			array('integer'),
-			array($this->getObjId())
+			['integer'],
+			[$this->getObjId()]
 		);
 
-		$stop_points = array();
+		$stop_points = [];
 		while($row = $this->db->fetchAssoc($res))
 		{
 			$stop_points[] = $row['comment_time'];
@@ -183,16 +183,16 @@ class ilObjComment
 		 */
 		global $ilDB, $ilUser;
 
-		$query_types = array('integer','integer','integer','integer');
-		$query_data = array($this->getObjId(), 0, 1, $ilUser->getId());
+		$query_types = ['integer', 'integer', 'integer', 'integer'];
+		$query_data = [$this->getObjId(), 0, 1, $ilUser->getId()];
 
 		$where_condition = '';
 
 		if(!$this->isPublic())
 		{
 			$where_condition = ' AND (user_id = %s OR is_tutor = %s OR is_interactive = %s )';
-			$query_types = array_merge($query_types, array('integer', 'integer', 'integer'));
-			$query_data = array_merge($query_data, array($ilUser->getId(), 1, 1));
+			$query_types = array_merge($query_types, ['integer', 'integer', 'integer']);
+			$query_data = array_merge($query_data, [$ilUser->getId(), 1, 1]);
 		}
 		
 		$res = $this->db->queryF(
@@ -206,12 +206,12 @@ class ilObjComment
 			$query_data
 		);
 
-		$comments = array();
-		$is_reply_to = array();
+		$comments = [];
+		$is_reply_to = [];
 		$i = 0;
 		while($row = $this->db->fetchAssoc($res))
 		{
-			$temp = array();
+			$temp = [];
 			$temp['comment_id'] = $row['comment_id'];
 			$temp['user_name'] = '';
 			if(!$this->isAnonymized())
@@ -238,7 +238,7 @@ class ilObjComment
 			$temp['is_table_of_content'] = $row['is_table_of_content'];
 			$temp['is_reply_to'] 		= $row['is_reply_to'];
 			$temp['marker'] 			= $row['marker'];
-			$temp['replies']			= array();
+			$temp['replies']			= [];
 
 			$temp['is_overlay'] = "1";
 
@@ -283,15 +283,15 @@ class ilObjComment
 
 	public function cloneTutorComments(int $old_id, int $new_id): void
 	{
-		$questions_array = array();
+		$questions_array = [];
 		$res = $this->db->queryF(
 			'SELECT *
 			FROM rep_robj_xvid_comments
 			WHERE obj_id = %s
 			AND is_tutor = 1
 			ORDER BY comment_time, comment_id ASC',
-			array('integer'),
-			array($old_id)
+			['integer'],
+			[$old_id]
 		);
 		while($row = $this->db->fetchAssoc($res))
 		{
@@ -378,8 +378,8 @@ class ilObjComment
                     INNER JOIN rep_robj_xvid_question 
                         ON rep_robj_xvid_comments.comment_id = rep_robj_xvid_question.comment_id
                         WHERE rep_robj_xvid_question.question_id=%s;',
-            array('integer'),
-            array($question_id)
+            ['integer'],
+            [$question_id]
         );
 
         while($row = $ilDB->fetchAssoc($res))

@@ -20,25 +20,25 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 	 */
     public function initCommands(): array
 	{
-		return array
-		(
-			array(
+		return
+            [
+                [
 				'permission' => 'visible',
 				'cmd'        => 'showContent',
 				'default'    => true
-			),
-			array(
+                ],
+                [
 				'permission' => 'read',
 				'cmd'        => 'showContent',
 				'default'    => true
-			),
-			array(
+                ],
+                [
 				'permission' => 'write',
 				'cmd'        => 'editProperties',
 				'txt'        => $this->lng->txt('edit'),
 				'default'    => false
-			),
-		);
+                ],
+            ];
 	}
 
 	/**
@@ -55,13 +55,13 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 	 */
     public function getProperties(): array
 	{
-		$props = array();
+		$props = [];
 		if(!ilObjInteractiveVideoAccess::checkOnline($this->obj_id))
 		{
-			$props[] = array(
+			$props[] = [
 				'alert' => true, 'property' => $this->txt('status'),
 				'value' => $this->txt('offline')
-			);
+            ];
 		}
 		return $props;
 	}

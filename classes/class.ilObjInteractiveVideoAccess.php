@@ -78,9 +78,9 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 	 */
     public static function getConditionOperators(): array
 	{
-		return array(
+		return [
 			ilConditionHandler::OPERATOR_LP
-		);
+        ];
 	}
 
 	/**
