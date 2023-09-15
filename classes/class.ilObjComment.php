@@ -59,7 +59,7 @@ class ilObjComment
 		$this->setMarker((string) $row['marker']);
 	}
 
-	public function create(bool $return_next_id = false, bool $reply_to_posting = false)
+	public function create(bool $return_next_id = false, bool $reply_to_posting = false) : ?int
     {
         /**
          * @var $ilUser ilObjUser
@@ -82,8 +82,8 @@ class ilObjComment
                 'user_id'        	=> ['integer', $ilUser->getId()],
                 'is_tutor'       	=> ['integer', (int)$this->isTutor()],
                 'is_interactive' 	=> ['integer', (int)$this->isInteractive()],
-                'comment_time'   	=> ['integer', round($this->getCommentTime(), 0)],
-                'comment_time_end'  => ['integer', round($this->getCommentTimeEnd(), 0)],
+                'comment_time'   	=> ['integer', round($this->getCommentTime())],
+                'comment_time_end'  => ['integer', round($this->getCommentTimeEnd())],
                 'comment_text'   	=> ['text', $text],
                 'comment_title'		=> ['text', $this->getCommentTitle()],
                 'comment_tags'		=> ['text', $this->getCommentTags()],
@@ -96,6 +96,7 @@ class ilObjComment
 		{
 			return $next_id;
 		}
+        return null;
 	}
 
 	public function removeOldReplyTo(int $reply_to): void
@@ -121,7 +122,7 @@ class ilObjComment
 			[
                 'is_interactive' 	=> ['integer', (int)$this->isInteractive()],
                 'user_id'        	=> ['integer', $ilUser->getId()],
-                'comment_time'   	=> ['integer', round($this->getCommentTime(), 0)],
+                'comment_time'   	=> ['integer', round($this->getCommentTime())],
                 'comment_time_end'  => ['integer', round($this->getCommentTimeEnd(), 2)],
                 'comment_text'   	=> ['text', $text],
                 'comment_title'		=> ['text', $this->getCommentTitle()],
@@ -169,13 +170,11 @@ class ilObjComment
     /**
      * @param bool $toc
      * @return array
+     * @throws ilWACException
      */
 	public function getContentComments(bool $toc = false) : array
     {
-		/**
-		 * @var $ilDB
-		 */
-		global $ilDB, $ilUser;
+		global $ilUser;
 
 		$query_types = ['integer', 'integer', 'integer', 'integer'];
 		$query_data = [$this->getObjId(), 0, 1, $ilUser->getId()];
@@ -303,7 +302,7 @@ class ilObjComment
 			$this->setIsReplyTo($row['is_reply_to']);
 			$this->setMarker($row['marker']);
 			$new_comment_id = $this->create(true);
-			if((bool)$row['is_interactive'])
+			if($row['is_interactive'])
 			{
 				$questions_array[$row['comment_id']] = $new_comment_id;
 			}
@@ -315,10 +314,11 @@ class ilObjComment
 		}
 	}
 
-	public static function getUserImageInBase64(int $user_id) : string
+    /**
+     * @throws ilWACException
+     */
+    public static function getUserImageInBase64(int $user_id) : string
     {
-		$user_id = (int) $user_id;
-
 		if(!array_key_exists($user_id, self::$user_image_cache))
 		{
 			$img_file = ilObjUser::_getPersonalPicturePath($user_id, 'xxsmall');
@@ -340,8 +340,6 @@ class ilObjComment
 
 	public static function lookupUsername(int $user_id) : string
     {
-		$user_id = (int) $user_id;
-
 		if(!array_key_exists($user_id, self::$user_name_cache))
 		{
 			$user = new ilObjUser($user_id);
@@ -392,7 +390,7 @@ class ilObjComment
 
 	public function setObjId(int $obj_id): void
 	{
-		$this->obj_id = (int) $obj_id;
+		$this->obj_id = $obj_id;
 	}
 
 	public function getCommentId() : int
@@ -402,7 +400,7 @@ class ilObjComment
 
 	public function setCommentId(int $comment_id): void
 	{
-		$this->comment_id = (int) $comment_id;
+		$this->comment_id = $comment_id;
 	}
 
 	public function isInteractive() : bool
