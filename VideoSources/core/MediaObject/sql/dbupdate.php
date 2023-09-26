@@ -44,12 +44,6 @@ if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'mob_id'))
 				'mob_id' => array('integer', $mob_id),
 			));
 	}
-	$ilDB->update('rep_robj_xvid_objects',
-		array(
-			'source_id' 	=> array('text', 'imo')
-		),
-		array('1' => array('integer', 1))
-	);
 	
 	$ilDB->dropTableColumn('rep_robj_xvid_objects', 'mob_id');
 }
