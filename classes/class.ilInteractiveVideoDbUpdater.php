@@ -154,7 +154,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 			$this->readLastUpdateFile();
 			$version = $this->readFileVersion();
 			$return_value = $this->applyUpdate();
-			if($return_value)
+            if(is_null($return_value) || $return_value === true)
 			{
 				$this->setCurrentVersion($version);
 			}
