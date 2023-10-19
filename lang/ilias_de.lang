@@ -140,14 +140,14 @@ db_update_failed#:#Datenbank-Update schlug fehl: %s
 task_switch#:#Aufgabenstellung aktivieren
 task_switch_info#:#Blendet oberhalb des Videos eine beliebige Aufgabenstellung ein.
 task#:#Aufgabenstellung
-lp_mode_title_by_questions#:#Fragen beantwortet 
-lp_mode_desc_by_questions#:#Das Objekt gilt als 'Bearbeitet', wenn für alle definierten Fragen eine 'richtige' Antwort gewählt und die Endposition des Videos erreicht wurde. Falls keine Fragen konfiguriert wurden, gilt das Objekt beim Erreichen der Endposition des Videos als 'Bearbeitet'.
+lp_mode_title_by_questions#:#Fragen richtig beantwortet
+lp_mode_desc_by_questions#:#Das Objekt gilt als 'bearbeitet', wenn für alle definierten Fragen eine 'richtige' Antwort ausgewählt wurde und die Endposition des Videos erreicht wurde. Wenn keine Fragen konfiguriert wurden, gilt das Objekt als 'bearbeitet', wenn die Endposition des Videos erreicht wurde.
 lp_users#:#Benutzer
 lp_matrix#:#Matrixansicht
 lp_summary#:#Zusammenfassung
 lp_settings#:#Einstellungen
 lp_mode_title_by_all_answered_questions#:#Fragen beantwortet
-lp_mode_desc_by_all_answered_questions#:#Das Objekt gilt als 'Bearbeitet', wenn für alle definierten Fragen eine Antwort gewählt wurde, unabhängig von der Korrektheit. Falls keine Fragen konfiguriert wurden, gilt das Objekt beim Erreichen der Endposition des Videos als 'Bearbeitet'.
+lp_mode_desc_by_all_answered_questions#:#Das Objekt gilt als 'bearbeitet', wenn für alle definierten Fragen eine Antwort ausgewählt wurde, unabhängig von der Korrektheit. Wenn keine Fragen konfiguriert wurden, gilt das Objekt als 'bearbeitet', wenn die Endposition des Videos erreicht wurde.
 select_at_least_one#:#Bitte wählen Sie mindestens eine Quelle aus.
 back_to#:#zurück zu
 back_to_title#:#Wollen Sie zum Urprungsobjekt %s (%s) zurückkehren?
