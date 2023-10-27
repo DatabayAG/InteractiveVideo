@@ -56,7 +56,10 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 		global $ilDB;
 		$result = $ilDB->query('SELECT youtube_id FROM '.self::TABLE_NAME.' WHERE obj_id = '.$ilDB->quote($obj_id, 'integer'));
 		$row = $ilDB->fetchAssoc($result);
-		return $row['youtube_id'];
+        if(isset($row['youtube_id'])) {
+            return $row['youtube_id'];
+        }
+        return 0;
 	}
 
 	/**

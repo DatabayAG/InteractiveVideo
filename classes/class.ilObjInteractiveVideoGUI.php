@@ -474,6 +474,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $lng, $ilObjDataCache;
 
+        $ref_id = 0;
         $get = $this->http->wrapper()->query();
         if($get->has('xvid_referrer_ref_id')){
             $xvid_referrer_ref_id = $get->retrieve('xvid_referrer_ref_id', $this->refinery->kindlyTo()->int());
@@ -483,7 +484,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $xvid_referrer = $get->retrieve('xvid_referrer', $this->refinery->kindlyTo()->string());
             $xvid_referrer = ilInteractiveVideoPlugin::stripSlashesWrapping($xvid_referrer);
         }
-		$ref_id = (int) $xvid_referrer_ref_id;
+        if (isset($xvid_referrer_ref_id)) {
+            $ref_id = (int) $xvid_referrer_ref_id;
+        }
 		$link = urldecode($xvid_referrer);
 		$url = parse_url(ILIAS_HTTP_PATH);
 		$link = $url['scheme'] . '://' . $url['host'] . (isset($url['port']) ?  ':' . $url['port'] : '') . $link;
@@ -1183,12 +1186,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 	    global $DIC;
         $get = $this->http->wrapper()->query();
+        $customJS = '';
         if($get->has('xvid_custom_js')){
             $customJS = $get->retrieve('xvid_custom_js', $this->refinery->kindlyTo()->string());
             $customJS = ilInteractiveVideoPlugin::stripSlashesWrapping($customJS);
         }
         $DIC->ui()->mainTemplate()->addOnLoadCode('"' . $customJS . '"');
-        $DIC->ui()->mainTemplate()->addOnLoadCode('console.log('. $customJS .')');
 		$this->edit();
 	}
 
