@@ -75,7 +75,9 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	public function getEditFormCustomValues(array &$a_values, $obj)
 	{
 		$object = new ilInteractiveVideoMediaObject();
-		$a_values['video_file'] = ilObject::_lookupTitle($object->doReadVideoSource($obj->getId()));
+        if($obj->getSourceId() === $object->getId()) {
+            $a_values['video_file'] = ilObject::_lookupTitle($object->doReadVideoSource($obj->getId()));
+        }
 	}
 
 	/**

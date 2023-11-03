@@ -81,7 +81,9 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 		{
 			$value = self::YOUTUBE_URL . $value;
 		}
-		$a_values[ilInteractiveVideoYoutube::FORM_FIELD] = $value;
+        if($obj->getSourceId() === $instance->getId()) {
+            $a_values[ilInteractiveVideoYoutube::FORM_FIELD] = $value;
+        }
 	}
 
 	/**
