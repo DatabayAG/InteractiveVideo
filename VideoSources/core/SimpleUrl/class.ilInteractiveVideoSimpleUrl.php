@@ -58,7 +58,9 @@ class ilInteractiveVideoSimpleUrl implements ilInteractiveVideoSource
 		global $ilDB;
 		$result = $ilDB->query('SELECT simple_url FROM '.self::TABLE_NAME.' WHERE obj_id = '.$ilDB->quote($obj_id, 'integer'));
 		$row = $ilDB->fetchAssoc($result);
-		$this->setSimpleUrl($row['simple_url']);
+        if(isset($row['simple_url'])){
+            $this->setSimpleUrl($row['simple_url']);
+        }
 	}
 
 	/**

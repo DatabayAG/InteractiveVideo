@@ -194,7 +194,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 
 		$this->ctrl->setParameter($this->parent_obj, 'comment_id', $a_set['comment_id']);
 		
-		if($a_set['is_interactive'] == 1)
+		if(isset($a_set['is_interactive']) && $a_set['is_interactive'] == 1)
 		{
 			$link_target =  $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editQuestion' : 'editComment');
 		}	

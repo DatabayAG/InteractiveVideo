@@ -58,7 +58,9 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		global $ilDB;
 		$result = $ilDB->query('SELECT mob_id FROM '. self::TABLE_NAME .' WHERE obj_id = '.$ilDB->quote($obj_id, 'integer'));
 		$row = $ilDB->fetchAssoc($result);
-		return (int) $row['mob_id'];
+        if(isset($row['mob_id'])){
+            return (int) $row['mob_id'];
+        }
 	}
 
 	/**

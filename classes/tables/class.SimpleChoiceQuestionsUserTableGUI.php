@@ -48,40 +48,51 @@ class SimpleChoiceQuestionsUserTableGUI extends ilTable2GUI
 	{
 		$current_selection_list = new ilAdvancedSelectionListGUI();
 		$current_selection_list->setListTitle($this->lng->txt('actions'));
-		$current_selection_list->setId('act_' . $a_set['user_id']);
-		$this->tpl->setVariable('QUESTION_TITLE', $a_set['title']);
+        if(isset($a_set['user_id'])) {
+            $current_selection_list->setId('act_' . $a_set['user_id']);
+        }
+        if(isset($a_set['title'])) {
+            $this->tpl->setVariable('QUESTION_TITLE', $a_set['title']);
+        }
 		#$this->tpl->setVariable('USER_ANSWERED', $a_set['answered']);
-		if($a_set['neutral_answer'] == 1)
-		{
-			$txt_value = 'yes';
-			$value = $this->lng->txt($txt_value);
-			$points = ilInteractiveVideoPlugin::getInstance()->txt('neutral_answer');
-		}
-		else if($a_set['neutral_answer'] == 0 && $a_set['neutral_answer'] != '')
-		{
-			$txt_value = 'no';
-			$value = $this->lng->txt($txt_value);
-			if($a_set['points'] == 100)
-			{
-				$points = ilInteractiveVideoPlugin::getInstance()->txt('correct_answer');
-			}
-			else if($a_set['answered'] == 0)
-			{
-				$points = ilInteractiveVideoPlugin::getInstance()->txt('not_answered');
-			}
-			else
-			{
-				$points = ilInteractiveVideoPlugin::getInstance()->txt('wrong_answer');
-			}
+        if(isset($a_set['neutral_answer'])) {
+            $points = 0;
+            if(isset($a_set['points'])) {
+                $points = $a_set['points'];
+            }
+            if($a_set['neutral_answer'] == 1)
+            {
+                $txt_value = 'yes';
+                $value = $this->lng->txt($txt_value);
+                $points_txt = ilInteractiveVideoPlugin::getInstance()->txt('neutral_answer');
+            }
+            else if($a_set['neutral_answer'] == 0 && $a_set['neutral_answer'] != '')
+            {
+                $txt_value = 'no';
+                $value = $this->lng->txt($txt_value);
+                if($points == 100)
+                {
+                    $points_txt = ilInteractiveVideoPlugin::getInstance()->txt('correct_answer');
+                }
+                else if($a_set['answered'] == 0)
+                {
+                    $points_txt = ilInteractiveVideoPlugin::getInstance()->txt('not_answered');
+                }
+                else
+                {
+                    $points_txt = ilInteractiveVideoPlugin::getInstance()->txt('wrong_answer');
+                }
 
-		}
-		else
-		{
-			$value = '';
-			$points = $a_set['points'] . '%';
-		}
+            }
+            else
+            {
+                $value = '';
+                $points_txt = $points . '%';
+            }
+        }
+
 
 		$this->tpl->setVariable('NEUTRAL_QUESTION', $value);
-		$this->tpl->setVariable('USER_SCORE', $points);
+		$this->tpl->setVariable('USER_SCORE', $points_txt);
 	}
 }

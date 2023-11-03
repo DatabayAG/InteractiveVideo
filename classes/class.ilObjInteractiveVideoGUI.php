@@ -480,6 +480,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $xvid_referrer_ref_id = $get->retrieve('xvid_referrer_ref_id', $this->refinery->kindlyTo()->int());
         }
 
+        $xvid_referrer = '';
         if($get->has('xvid_referrer')){
             $xvid_referrer = $get->retrieve('xvid_referrer', $this->refinery->kindlyTo()->string());
             $xvid_referrer = ilInteractiveVideoPlugin::stripSlashesWrapping($xvid_referrer);
@@ -637,7 +638,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         foreach($this->custom_javascript as $file)
         {
-            $tpl->addJavaScript($this->plugin->getDirectory() . $file);
+            $tpl->addJavaScript($this->plugin->getDirectory() . $file, true, 2);
         }
     }
 
@@ -1926,11 +1927,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($post->has('comment_time'))
 		{
 			$seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->string());
-            if(intval($seconds)){
-                $time->setValueByArray(['comment_time' => (int)$seconds]);
-            }
-
-		}
+            $time->setValueByArray(['comment_time' => (int)$seconds]);
+		} else {
+            $time->setValueByArray(['comment_time' => 0]);
+        }
 		$form->addItem($time);
 
 		$time_end = new ilInteractiveVideoTimePicker($plugin->txt('time_end'), 'comment_time_end');
@@ -1940,7 +1940,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         if($post->has('comment_time_end'))
 		{
             $seconds = $post->retrieve('comment_time_end', $this->refinery->kindlyTo()->int());
-            $time->setValueByArray(['comment_time_end' => (int)$seconds]);
+            $time_end->setValueByArray(['comment_time_end' => (int)$seconds]);
+        } else {
+            $time_end->setValueByArray(['comment_time_end' => 0]);
         }
 		$form->addItem($time_end);
 
