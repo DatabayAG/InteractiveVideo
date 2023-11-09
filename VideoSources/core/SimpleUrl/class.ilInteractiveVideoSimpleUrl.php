@@ -1,5 +1,4 @@
 <?php
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/interface.ilInteractiveVideoSource.php';
 /**
  * Class ilInteractiveVideoSimpleUrl
  */
@@ -223,7 +222,6 @@ class ilInteractiveVideoSimpleUrl implements ilInteractiveVideoSource
 	 */
 	public function getVideoSourceImportParser()
 	{
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/SimpleUrl/class.ilInteractiveVideoSimpleUrlXMLParser.php';
 		return 'ilInteractiveVideoSimpleUrlXMLParser';
 	}
 

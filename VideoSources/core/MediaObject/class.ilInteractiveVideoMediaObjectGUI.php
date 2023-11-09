@@ -1,9 +1,5 @@
 <?php
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/interface.ilInteractiveVideoSourceGUI.php';
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/class.ilInteractiveVideoMediaObject.php';
-require_once 'Services/MediaObjects/classes/class.ilObjMediaObject.php';
-require_once 'Services/MediaObjects/classes/class.ilObjMediaObjectGUI.php';
-require_once 'Services/MediaObjects/classes/class.ilPlayerUtil.php';
+
 /**
  * Class ilInteractiveVideoMediaObjectGUI
  * @author Guido Vollbach <gvollbach@databay.de>
@@ -53,7 +49,6 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function getPlayer($player_id, $obj)
 	{
-		require_once 'Services/WebAccessChecker/classes/class.ilWACSignedPath.php';
 		$player = new ilTemplate(self::PATH . 'tpl/tpl.video.html', false, false);
 		ilObjMediaObjectGUI::includePresentationJS();
 		$media_object = new ilInteractiveVideoMediaObject();

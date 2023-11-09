@@ -1,6 +1,4 @@
 <?php
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/interface.ilInteractiveVideoSourceGUI.php';
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/SimpleUrl/class.ilInteractiveVideoSimpleUrl.php';
 
 /**
  * Class ilInteractiveVideoSimpleUrlGUI

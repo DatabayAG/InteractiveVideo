@@ -1,5 +1,4 @@
 <?php
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/interface.ilInteractiveVideoSource.php';
 /**
  * Class ilInteractiveVideoMediaObject
  * @author Guido Vollbach <gvollbach@databay.de>
@@ -267,7 +266,6 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function getGUIClass()
 	{
-		require_once dirname(__FILE__) . '/class.ilInteractiveVideoMediaObjectGUI.php';
 		return new ilInteractiveVideoMediaObjectGUI();
 	}
 
@@ -343,7 +341,6 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function getVideoSourceImportParser()
 	{
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/class.ilInteractiveVideoMediaObjectXMLParser.php';
 		return 'ilInteractiveVideoMediaObjectXMLParser';
 	}
 

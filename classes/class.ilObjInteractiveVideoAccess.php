@@ -1,16 +1,6 @@
 <?php
 /* Copyright (c) 1998-2015 ILIAS open source, Extended GPL, see docs/LICENSE */
 
-
-if(version_compare(ILIAS_VERSION_NUMERIC, '5.4.0', '>=')) {
-	require_once 'Services/Conditions/interfaces/interface.ilConditionHandling.php';
-	require_once('./Services/Conditions/classes/class.ilConditionHandler.php');
-} else{
-	require_once 'Services/AccessControl/interfaces/interface.ilConditionHandling.php';
-	require_once 'Services/AccessControl/classes/class.ilConditionHandler.php';
-}
-
-
 /**
  * Class ilObjInteractiveVideoAccess
  * @author Nadia Ahmad <nahmad@databay.de>
@@ -96,7 +86,6 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 	{
         // Not necessary, handled in \ilConditionHandler::_checkCondition
         if ($a_operator == ilConditionHandler::OPERATOR_LP) {
-            require_once './Services/Tracking/classes/class.ilLPStatus.php';
             return ilLPStatus::_hasUserCompleted($a_trigger_obj_id, $a_usr_id);
         }
 

@@ -1,5 +1,5 @@
 <?php
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/interface.ilInteractiveVideoSource.php';
+
 /**
  * Class ilInteractiveVideoYoutube
  * @author Guido Vollbach <gvollbach@databay.de>
@@ -241,7 +241,6 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 */
 	public function getVideoSourceImportParser()
 	{
-		require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/class.ilInteractiveVideoYoutubeXMLParser.php';
 		return 'ilInteractiveVideoYoutubeXMLParser';
 	}
 
