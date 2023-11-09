@@ -343,7 +343,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$modal->setBody('');
 		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
 
-        if($this->object->getEnableCommentStream() !== "0"){
+        if($this->object->getEnableCommentStream() !== 0){
             $video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
         }
         if($this->object->doesTocCommentExists()){
