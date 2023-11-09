@@ -43,15 +43,15 @@ class SimpleChoiceQuestionAjaxHandler
 		$correct = false;
 		if(is_array($feedback))
 		{
-			if($feedback['neutral_answer'] != 1)
+			if(isset($feedback['neutral_answer']) && $feedback['neutral_answer'] != 1)
 			{
 					if($score === 0)
 					{
-						if($feedback['wrong'] === null)
+						if(isset($feedback['wrong']) && $feedback['wrong'] === null)
 						{
 							$feedback['wrong'] = '';
 						}
-						if($feedback['show_wrong_icon'])
+						if(isset($feedback['show_wrong_icon']) && $feedback['show_wrong_icon'])
 						{
 							$start_div = '<div class="wrong">';
 						}
@@ -59,7 +59,7 @@ class SimpleChoiceQuestionAjaxHandler
 						{
 							$start_div = '<div class="neutral">';
 						}
-						if($feedback['feedback_wrong_ref_id'] > 0)
+						if(isset($feedback['feedback_wrong_ref_id']) && $feedback['feedback_wrong_ref_id'] > 0)
 						{
 							$json['feedback_link'] =  $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_wrong_ref_id']);
 							$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_wrong_ref_id']);
@@ -71,11 +71,11 @@ class SimpleChoiceQuestionAjaxHandler
 					}
 					else
 					{
-						if($feedback['correct'] === null)
+						if(isset($feedback['feedback_correct']) && $feedback['feedback_correct'] === null)
 						{
 							$feedback['correct'] = '';
 						}
-						if($feedback['show_correct_icon'])
+						if(isset($feedback['show_correct_icon']) && $feedback['show_correct_icon'])
 						{
 							$start_div = '<div class="correct">';
 						}
@@ -84,7 +84,7 @@ class SimpleChoiceQuestionAjaxHandler
 							$start_div = '<div class="neutral">';
 						}
 	
-						if($feedback['feedback_correct_ref_id'] > 0)
+						if(isset($feedback['feedback_correct_ref_id']) && $feedback['feedback_correct_ref_id'] > 0)
 						{
 							$json['feedback_link'] =  $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_correct_ref_id']);
 							$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_correct_ref_id']);
@@ -98,14 +98,14 @@ class SimpleChoiceQuestionAjaxHandler
 				}
 				else
 				{
-					if($feedback['correct'] === null)
+					if(isset($feedback['feedback_correct']) && $feedback['feedback_correct'] === null)
 					{
 						$feedback['correct'] = '';
 					}
 					$start_div = '<div class="neutral">';
 
 
-					if($feedback['feedback_correct_ref_id'] > 0)
+					if(isset($feedback['feedback_correct_ref_id']) && $feedback['feedback_correct_ref_id'] > 0)
 					{
 						$json['feedback_link'] =  $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_correct_ref_id']);
 						$obj = ilObjectFactory::getInstanceByRefId($feedback['feedback_correct_ref_id']);
@@ -123,7 +123,11 @@ class SimpleChoiceQuestionAjaxHandler
 		$json['response_frequency'] = $simple->getResponseFrequency((int)$qid);
 
         $json['best_solution'] = '';
-        if($feedback['show_best_solution'] == "1" && $feedback['neutral_answer'] != 1) {
+        if(isset($feedback['show_best_solution']) &&
+            $feedback['show_best_solution'] == "1" &&
+            isset($feedback['neutral_answer']) &&
+            $feedback['neutral_answer'] != 1)
+        {
             $json['html'] .= '<div class="iv_show_best_solution"><input class="btn btn-default btn-sm" id="show_best_solution"  type="submit"/></div><div class="iv_best_solution_value"></div>';
             $json['best_solution'] = '<div class="iv_best_solution_hidden">' . $this->getBestSolution($qid) . '</div>';
         }

@@ -22,7 +22,9 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	{
 		$youtube_url = new ilTextInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('ytb_youtube_url'), ilInteractiveVideoYoutube::FORM_FIELD);
 		$object = new ilInteractiveVideoYoutube();
-		$youtube_url->setValue($object->doReadVideoSource($obj_id));
+        if($obj_id > 0) {
+            $youtube_url->setValue($object->doReadVideoSource($obj_id));
+        }
 		$youtube_url->setInfo(ilInteractiveVideoPlugin::getInstance()->txt('ytb_youtube_info'));
 		$option->addSubItem($youtube_url);
 		return $option;

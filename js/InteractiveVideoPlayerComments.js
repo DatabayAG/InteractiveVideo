@@ -323,6 +323,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			let toolbar = $('.ivToolbar_' + player_id)
 			toolbar.css('display', 'none');
 		}
+
 		if(player_data.enable_comment_stream === "0" || player_data.show_toc_first === "1") {
 			pro.displayCommentsOrToc(false, player_id);
 			pub.buildToc(player_id);
@@ -333,15 +334,21 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 	pro.displayCommentsOrToc = function(displayComments, player_id){
 		let comments_block = $('#ul_scroll_' + player_id);
+		let comments_title = $('.iv_tab_comments_' + player_id);
 		let toc_block = $('#ul_toc_' + player_id);
+		let toc_title = $('.iv_tab_toc' + player_id);
 
 		if(displayComments) {
 			comments_block.css('display', 'block');
+			comments_title.css('display', 'block');
 			toc_block.css('display', 'none');
+			toc_title.css('display', 'none');
 			pro.activateTocOrCommentTab(false, player_id);
 		} else {
 			comments_block.css('display', 'none');
+			comments_title.css('display', 'none');
 			toc_block.css('display', 'block');
+			toc_title.css('display', 'block');
 			pro.activateTocOrCommentTab(true, player_id);
 		}
 	};

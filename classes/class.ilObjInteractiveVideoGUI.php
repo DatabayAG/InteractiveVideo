@@ -1939,7 +1939,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         if($post->has('comment_time_end'))
 		{
-            $seconds = $post->retrieve('comment_time_end', $this->refinery->kindlyTo()->int());
+            $seconds = $post->retrieve('comment_time_end', $this->refinery->kindlyTo()->string());
             $time_end->setValueByArray(['comment_time_end' => (int)$seconds]);
         } else {
             $time_end->setValueByArray(['comment_time_end' => 0]);
@@ -3659,12 +3659,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		if ($ilAccess->checkAccess("read", "", $ref_id))
 		{
-			$ilCtrl->initBaseClass("ilObjPluginDispatchGUI");
 			$ilCtrl->setTargetScript("ilias.php");
-			$ilCtrl->getCallStructure(strtolower("ilObjPluginDispatchGUI"));
 			$ilCtrl->setParameterByClass($class_name, "ref_id", $ref_id);
 			$ilCtrl->saveParameterByClass($class_name, 'xvid_referrer_ref_id');
-
+            $xvid_referrer = '';
             if($get->has('xvid_referrer')){
                 $xvid_referrer = $get->retrieve('xvid_referrer', $DIC->refinery->kindlyTo()->string());
             }
@@ -3673,9 +3671,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		else if($ilAccess->checkAccess("visible", "", $ref_id))
 		{
-			$ilCtrl->initBaseClass("ilObjPluginDispatchGUI");
 			$ilCtrl->setTargetScript("ilias.php");
-			$ilCtrl->getCallStructure(strtolower("ilObjPluginDispatchGUI"));
 			$ilCtrl->setParameterByClass($class_name, "ref_id", $ref_id);
 			$ilCtrl->saveParameterByClass($class_name, 'xvid_referrer_ref_id');
             if($get->has('xvid_referrer')){
