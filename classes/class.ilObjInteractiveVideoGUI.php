@@ -2003,10 +2003,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         if($post->has('comment_time')) {
             $seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->string());
-            if(intval($seconds)){
-                $time->setValueByArray(['comment_time' => (int)$seconds]);
-            }
-            $time->setValueByArray(['comment_time' => (int)$seconds]);
+            $comment_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($seconds));
+            $time->setValueByArray(['comment_time' => $comment_time]);
         }
         $form->addItem($time);
 
@@ -2015,6 +2013,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $form->addItem($section_header);
 
         $comment = xvidUtils::constructTextAreaFormElement('comment', 'comment_text');
+        if($post->has('comment_text')) {
+            $comment_text = $post->retrieve('comment_text', $this->refinery->kindlyTo()->string());
+            $comment->setValueByArray(['comment_text' => $comment_text]);
+        }
         $form->addItem($comment);
 
         $frm_id = new ilHiddenInputGUI('comment_id');
@@ -2023,7 +2025,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $is_toc = new ilHiddenInputGUI('is_table_of_content');
         $is_toc->setValue(1);
         $form->addItem($is_toc);
-
         return $form;
     }
 
@@ -2386,7 +2387,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		else
 		{
-			$form->setValuesByPost();
+
 			$this->editChapter($form);
 		}
 	}
@@ -2529,7 +2530,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$form->setValuesByPost();
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('err_check_input'),true);
 			if($is_chapter === true) {
-                $this->ctrl->redirect($this, 'showTutorInsertChapterForm');
+                $this->editChapter();
+                return;
             }
 			$this->ctrl->redirect($this, 'showTutorInsertCommentForm');
 		}
@@ -2693,12 +2695,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $get = $this->http->wrapper()->query();
         if($comment_id === 0) {
             if($post->has('comment_id') || $get->has('comment_id')) {
-                $comment_id = $post->retrieve('comment_id', $this->refinery->kindlyTo()->int());
+                $comment_id = $post->retrieve('comment_id', $this->refinery->kindlyTo()->string());
                 if($comment_id === 0) {
-                    $comment_id = $get->retrieve('comment_id', $$this->refinery->kindlyTo()->int());
+                    $comment_id = $get->retrieve('comment_id', $this->refinery->kindlyTo()->string());
                 }
 
-                if($comment_id) {
+                if($comment_id === 0  || $comment_id === "null") {
                     $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('no_comment_id_given'), true);
                     return $this->showContent();
                 }
