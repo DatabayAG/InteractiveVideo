@@ -906,7 +906,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->object->setTaskActive((int)$is_task);
 
 		$task = $form->getInput('task');
-		$this->object->setTask(ilInteractiveVideoPlugin::stripSlashesWrapping($task, false));
+		$this->object->setTask(ilInteractiveVideoPlugin::stripSlashesWrapping($task));
 
 		$is_anonymized = $form->getInput('is_anonymized');
 		$this->object->setIsAnonymized((int)$is_anonymized);
