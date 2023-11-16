@@ -3,6 +3,7 @@
 
 use ILIAS\HTTP\Services;
 use ILIAS\DI\Container;
+use ILIAS\Refinery\ConstraintViolationException;
 
 /**
  * Class ilObjInteractiveVideoGUI
@@ -2649,9 +2650,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $get = $this->http->wrapper()->query();
 		if($comment_id === 0) {
             if($post->has('comment_id') || $get->has('comment_id')) {
-                $comment_id = $post->retrieve('comment_id', $this->refinery->kindlyTo()->int());
-                if($comment_id === 0) {
-                    $comment_id = $get->retrieve('comment_id', $this->refinery->kindlyTo()->int());
+                try {
+                    $comment_id = $post->retrieve('comment_id', $this->refinery->kindlyTo()->int());
+                    if ($comment_id === 0) {
+                        $comment_id = $get->retrieve('comment_id', $this->refinery->kindlyTo()->int());
+                    }
+                } catch (ConstraintViolationException $e) {
+                    $comment_id = false;
                 }
 
                 if($comment_id) {
