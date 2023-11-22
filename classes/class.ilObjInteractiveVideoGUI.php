@@ -1919,6 +1919,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($section_header);
 
 		$title = new ilTextInputGUI($this->lng->txt('title'), 'comment_title');
+        if($post->has('comment_title'))
+        {
+            $text = $post->retrieve('comment_title', $this->refinery->kindlyTo()->string());
+            $title->setValueByArray(['comment_title' => $text]);
+        } else {
+            $title->setValueByArray(['comment_title' => '']);
+        }
 		$form->addItem($title);
 
 		$time = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'comment_time');
@@ -1928,7 +1935,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($post->has('comment_time'))
 		{
 			$seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->string());
-            $time->setValueByArray(['comment_time' => (int)$seconds]);
+            $time->setValueByArray(['comment_time' => ilInteractiveVideoTimePicker::getSecondsFromString($seconds)]);
 		} else {
             $time->setValueByArray(['comment_time' => 0]);
         }
@@ -1941,7 +1948,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         if($post->has('comment_time_end'))
 		{
             $seconds = $post->retrieve('comment_time_end', $this->refinery->kindlyTo()->string());
-            $time_end->setValueByArray(['comment_time_end' => (int)$seconds]);
+            $time_end->setValueByArray(['comment_time_end' => ilInteractiveVideoTimePicker::getSecondsFromString($seconds)]);
         } else {
             $time_end->setValueByArray(['comment_time_end' => 0]);
         }
@@ -1962,6 +1969,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$comment = xvidUtils::constructTextAreaFormElement('comment', 'comment_text');
 		$comment->setRequired(true);
+        if($post->has('comment_text'))
+        {
+            $text = $post->retrieve('comment_text', $this->refinery->kindlyTo()->string());
+            $comment->setValueByArray(['comment_text' => $text]);
+        } else {
+            $comment->setValueByArray(['comment_text' => '']);
+        }
 		$form->addItem($comment);
 		/** tags are deactivated for the moment
 		$tags = new ilTextAreaInputGUI($plugin->txt('tags'), 'comment_tags');
@@ -2487,10 +2501,27 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         } else {
             $form = $this->initCommentForm();
         }
+        $this->objComment = new ilObjComment();
 
-		if($form->checkInput())
+        if($form->checkInput())
 		{
-			$this->objComment = new ilObjComment();
+            $comment_time		= $form->getInput('comment_time');
+            $start_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time));
+            $this->objComment->setCommentTime($start_time);
+            $comment_time_end	= $form->getInput('comment_time_end');
+            $end_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time_end));
+            $this->objComment->setCommentTimeEnd($end_time);
+            if($start_time > $end_time) {
+                $form->setValuesByPost();
+                $this->tpl->setOnScreenMessage("failure", $this->plugin->txt('endtime_warning'),true);
+                if($is_chapter === true) {
+                    $this->editChapter();
+                    return;
+                }
+                $this->showTutorInsertCommentForm();
+                #$this->ctrl->redirect($this, 'showTutorInsertCommentForm');
+                return;
+            }
 
 			$this->objComment->setObjId($this->object->getId());
 			$this->objComment->setCommentText($form->getInput('comment_text'));
@@ -2503,12 +2534,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setIsTableOfContent((int)$form->getInput('is_table_of_content'));
 
 			// calculate seconds
-			$comment_time		= $form->getInput('comment_time');
-            $start_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time));
-			$this->objComment->setCommentTime($start_time);
-			$comment_time_end	= $form->getInput('comment_time_end');
-            $end_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time_end));
-            $this->objComment->setCommentTimeEnd($end_time);
+
 			$this->objComment->setIsTutor($is_tutor);
             $fake_marker	= $form->getInput('fake_marker');
             if(strlen($fake_marker) > 0)
