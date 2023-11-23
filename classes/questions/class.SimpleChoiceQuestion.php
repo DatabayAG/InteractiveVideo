@@ -1074,8 +1074,13 @@ class SimpleChoiceQuestion
 			[(int)$qid]
 		);
 		$row = $ilDB->fetchAssoc($res);
-		return (int)$row['type'];
-
+        if($row !== null) {
+            if(isset($row['type'])) {
+                return (int)$row['type'];
+            }
+        } else {
+            return null;
+        }
 	}
 
 	/**
