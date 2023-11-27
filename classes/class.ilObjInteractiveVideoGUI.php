@@ -2687,7 +2687,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             } catch (ConstraintViolationException $e) {
                     $comment_id = false;
                 }
-            if(!$comment_id) {
+            if($comment_id === 0  || $comment_id === "null") {
                 $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('no_comment_id_given'), true);
                 return $this->showContent();
             }
@@ -2725,7 +2725,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                     $comment_id = $get->retrieve('comment_id', $this->refinery->kindlyTo()->string());
                 }
 
-                if($comment_id === 0  || $comment_id === "null") {
+                if($comment_id === 0  || $comment_id === "null")  {
                     $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('no_comment_id_given'), true);
                     return $this->showContent();
                 }
@@ -2908,7 +2908,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             } catch (ConstraintViolationException $e) {
                 $comment_id = false;
             }
-            if($comment_id) {
+            if($comment_id === 0  || $comment_id === "null") {
                 $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('no_comment_id_given'), true);
             }
         }

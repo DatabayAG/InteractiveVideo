@@ -262,3 +262,4 @@ layout_filter#:#Layout
 beta#:#Beta
 activate_marker#:#Activate marker
 activate_marker_info#:#Activate marker
+no_comment_id_given#:#Something went wrong, the comment id is missing
