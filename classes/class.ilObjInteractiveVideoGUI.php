@@ -1934,11 +1934,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		if($post->has('comment_time'))
 		{
-			$seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->string());
-            $time->setValueByArray(['comment_time' => ilInteractiveVideoTimePicker::getSecondsFromString($seconds)]);
+			$time_string = $post->retrieve('comment_time', $this->refinery->kindlyTo()->string());
+            $time->setValueByArray(['comment_time' => $time_string]);
 		} else {
             $time->setValueByArray(['comment_time' => 0]);
         }
+
 		$form->addItem($time);
 
 		$time_end = new ilInteractiveVideoTimePicker($plugin->txt('time_end'), 'comment_time_end');
@@ -2051,7 +2052,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$form = $this->initChapterForm();
         $form->setValuesByArray($this->getChapterFomValues(), true);
-        
+
 		$form->addCommandButton('insertTutorChapter', $this->lng->txt('insert'));
 		$form->addCommandButton('cancelComments', $this->lng->txt('cancel'));
         $this->addJavascriptAndCSSToTemplate($tpl);
@@ -2772,7 +2773,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         }
         if ($post->has('comment_time')) {
             $seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->string());
-            $comment_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($seconds));
+            $comment_time = ilInteractiveVideoPlugin::stripSlashesWrapping($seconds);
         } else {
             $comment_time = $comment_data['comment_time'];
         }
