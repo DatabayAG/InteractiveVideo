@@ -2015,11 +2015,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         #$time->setShowTime(true);
         #$time->setShowSeconds(true);
 
-        if($post->has('comment_time')) {
-            $seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->string());
-            $comment_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($seconds));
-            $time->setValueByArray(['comment_time' => $comment_time]);
-        }
         $form->addItem($time);
 
         $section_header = new ilFormSectionHeaderGUI();
@@ -2027,10 +2022,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $form->addItem($section_header);
 
         $comment = xvidUtils::constructTextAreaFormElement('comment', 'comment_text');
-        if($post->has('comment_text')) {
-            $comment_text = $post->retrieve('comment_text', $this->refinery->kindlyTo()->string());
-            $comment->setValueByArray(['comment_text' => $comment_text]);
-        }
         $form->addItem($comment);
 
         $frm_id = new ilHiddenInputGUI('comment_id');
@@ -2059,7 +2050,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateSubTab('editComments');
 
 		$form = $this->initChapterForm();
-
+        $form->setValuesByArray($this->getChapterFomValues(), true);
+        
 		$form->addCommandButton('insertTutorChapter', $this->lng->txt('insert'));
 		$form->addCommandButton('cancelComments', $this->lng->txt('cancel'));
         $this->addJavascriptAndCSSToTemplate($tpl);
@@ -2382,28 +2374,64 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form = $this->initChapterForm();
 
 		if($form->checkInput()) {
-			$valid            = true;
-			$comment_time     = $form->getInput('comment_time');
-			$comment_id = $form->getInput('comment_id');
-			if ($comment_id > 0) {
-				$this->objComment = new ilObjComment($comment_id);
-			}
-			$this->objComment->setCommentText($form->getInput('comment_text'));
-			$this->objComment->setCommentTitle((string)$form->getInput('comment_title'));
-			$this->objComment->setInteractive(0);
-			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
-            $this->objComment->setIsTableOfContent((int)$form->getInput('is_table_of_content'));
-			$this->objComment->setCommentTime($comment_time);
-		}
-		if($valid){
-			$this->objComment->update();
-			$this->editComments();
-		}
-		else
-		{
+            $valid = true;
+            $comment_time = $form->getInput('comment_time');
+            $comment_id = $form->getInput('comment_id');
+            if ($comment_id > 0) {
+                $this->objComment = new ilObjComment($comment_id);
+            } else {
+                $this->objComment = new ilObjComment();
+            }
 
-			$this->editChapter($form);
-		}
+            $post = $this->http->wrapper()->post();
+            $comment_title = '';
+            $comment_time = '';
+            $comment_text = '';
+            $comment_id = '';
+
+            if ($post->has('comment_title')) {
+                $comment_title = $post->retrieve('comment_title', $this->refinery->kindlyTo()->string());
+            }
+            if ($post->has('comment_time')) {
+                $seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->string());
+                $comment_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($seconds));
+            }
+            if ($post->has('comment_text')) {
+                $comment_text = $post->retrieve('comment_text', $this->refinery->kindlyTo()->string());
+            }
+            if ($post->has('comment_id')) {
+                $comment_id = $post->retrieve('comment_id', $this->refinery->kindlyTo()->string());
+            }
+            if ($comment_text !== '') {
+                $this->objComment->setCommentText($comment_text);
+            } else {
+                $this->objComment->setCommentText($form->getInput('comment_text'));
+            }
+
+            if ($comment_title !== '') {
+                $this->objComment->setCommentTitle($comment_title);
+            } else {
+                $this->objComment->setCommentTitle((string) $form->getInput('comment_title'));
+
+                if ($comment_text !== '') {
+                    $this->objComment->setCommentText($comment_text);
+                } else {
+                    $this->objComment->setCommentText($form->getInput('comment_text'));
+                }
+
+                $this->objComment->setInteractive(0);
+                $this->objComment->setIsPrivate((int) $form->getInput('is_private'));
+                $this->objComment->setIsTableOfContent((int) $form->getInput('is_table_of_content'));
+                $this->objComment->setCommentTime($comment_time);
+            }
+            if ($valid) {
+                $this->objComment->update();
+                $this->editComments();
+            } else {
+
+                $this->editChapter($form);
+            }
+        }
 	}
 
     /**
@@ -2492,7 +2520,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      * @throws ilCtrlException
      * @throws ilTemplateException
      * @throws ilSystemStyleException
-     * @throws ilSystemStyleException
      */
 	private function insertComment(int $is_tutor = 0, bool $is_chapter = false, bool $ajax = false): void
 	{
@@ -2556,7 +2583,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$form->setValuesByPost();
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('err_check_input'),true);
 			if($is_chapter === true) {
-                $this->editChapter();
+                $this->showTutorInsertChapterForm();
                 return;
             }
 			$this->ctrl->redirect($this, 'showTutorInsertCommentForm');
@@ -2731,14 +2758,43 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 }
             }
         }
+        $post = $this->http->wrapper()->post();
+        $comment_title = '';
+        $comment_time = '';
+        $comment_text = '';
+        $comment_id = '';
+        $comment_data				= $this->object->getCommentDataById($comment_id);
 
-		$comment_data				= $this->object->getCommentDataById($comment_id);
-		$values['comment_id']		= $comment_data['comment_id'];
-		$values['comment_time']		= $comment_data['comment_time'];
+        if ($post->has('comment_title')) {
+            $comment_title = $post->retrieve('comment_title', $this->refinery->kindlyTo()->string());
+        } else {
+            $comment_title = $comment_data['comment_title'];
+        }
+        if ($post->has('comment_time')) {
+            $seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->string());
+            $comment_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($seconds));
+        } else {
+            $comment_time = $comment_data['comment_time'];
+        }
+        if ($post->has('comment_text')) {
+            $comment_text = $post->retrieve('comment_text', $this->refinery->kindlyTo()->string());
+        } else {
+            $comment_text = $comment_data['comment_text'];
+        }
+        if ($post->has('comment_id')) {
+            $comment_id = $post->retrieve('comment_id', $this->refinery->kindlyTo()->string());
+        } elseif(isset($comment_data['comment_id']) && $comment_data['comment_id'] !== "" && $comment_data['comment_id'] > 0) {
+            $comment_id = $comment_data['comment_id'];
+        } else {
+            $comment_id = 0;
+        }
+
+		$values['comment_id']		= $comment_id;
+		$values['comment_time']		= $comment_time;
 		$values['comment_time_end']	= $comment_data['comment_time_end'];
-		$values['comment_text']		= $comment_data['comment_text'];
+		$values['comment_text']		= $comment_text;
 		$values['is_interactive']	= $comment_data['is_interactive'];
-		$values['comment_title']	= $comment_data['comment_title'];
+		$values['comment_title']	= $comment_title;
 		$values['comment_tags']		= $comment_data['comment_tags'];
 		$values['is_private']		= $comment_data['is_private'];
 		$values['is_table_of_content'] = $comment_data['is_table_of_content'];

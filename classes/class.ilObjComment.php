@@ -1,9 +1,9 @@
 <?php
 class ilObjComment
 {
-	protected int $obj_id;
-	protected int $comment_id;
-	protected int $user_id;
+	protected int $obj_id = 0;
+	protected int $comment_id = 0;
+	protected int $user_id = 0;
     protected bool $is_tutor = false;
     protected int $comment_time = 0;
 	protected int $comment_time_end = 0;
@@ -18,7 +18,7 @@ class ilObjComment
 	protected int $is_anonymized = 0;
     protected int $is_repeat = 0;
 	protected int $is_reply_to = 0;
-	protected string $marker;
+	protected ?string $marker = null;
 	protected static array $user_name_cache = [];
 	protected static array $user_image_cache = [];
 	protected ilDBInterface $db;
@@ -551,7 +551,7 @@ class ilObjComment
 		return self::$user_image_cache;
 	}
 
-	public function getMarker() : string
+	public function getMarker() : ?string
     {
 		return $this->marker;
 	}

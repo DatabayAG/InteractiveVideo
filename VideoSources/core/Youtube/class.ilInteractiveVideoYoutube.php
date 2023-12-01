@@ -85,9 +85,10 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	 */
 	public function doUpdateVideoSource($obj_id)
 	{
-		if(ilUtil::stripSlashes($_POST[self::FORM_FIELD]))
+        $source_id = $_POST[self::FORM_FIELD];
+		if($source_id !== null && ilUtil::stripSlashes($source_id))
 		{
-			$youtube_id = self::getYoutubeIdentifier(ilUtil::stripSlashes($_POST[self::FORM_FIELD]));
+			$youtube_id = self::getYoutubeIdentifier(ilUtil::stripSlashes($source_id));
 		}
 		else
 		{
