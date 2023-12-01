@@ -2511,7 +2511,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $comment_time_end	= $form->getInput('comment_time_end');
             $end_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time_end));
             $this->objComment->setCommentTimeEnd($end_time);
-            if($start_time > $end_time) {
+            if($end_time > 0 && $start_time > $end_time) {
                 $form->setValuesByPost();
                 $this->tpl->setOnScreenMessage("failure", $this->plugin->txt('endtime_warning'),true);
                 if($is_chapter === true) {
