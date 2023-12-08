@@ -2681,7 +2681,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
 		 */
-		global $tpl, $ilTabs;
+		global $tpl, $ilTabs, $DIC;
 
 		$ilTabs->activateTab('editComments');
 		if(!($form instanceof ilPropertyFormGUI))
@@ -2689,7 +2689,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$form = $this->initChapterForm();
 			$form->setValuesByArray($this->getChapterFomValues(), true);
 		}
-
+        $this->addJavascriptAndCSSToTemplate($DIC->ui()->mainTemplate());
 		$form->setFormAction($this->ctrl->getFormAction($this, 'updateChapter'));
 		$form->setTitle(ilInteractiveVideoPlugin::getInstance()->txt('edit_chapter'));
 		$form->addCommandButton('updateChapter', $this->lng->txt('save'));
@@ -2774,7 +2774,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->string());
             $comment_time = ilInteractiveVideoPlugin::stripSlashesWrapping($seconds);
         } elseif(isset($comment_data['comment_time'])) {
-            $comment_time = $comment_data['comment_time'];
+            $comment_time = ilInteractiveVideoTimePicker::getTimeStringFromSeconds($comment_data['comment_time']);
         } else {
             $comment_time = 0;
         }
