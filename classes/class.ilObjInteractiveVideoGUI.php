@@ -1951,7 +1951,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         if($post->has('comment_time_end'))
 		{
             $seconds = $post->retrieve('comment_time_end', $this->refinery->kindlyTo()->string());
-            $time_end->setValueByArray(['comment_time_end' => ilInteractiveVideoTimePicker::getSecondsFromString($seconds)]);
+            $time_end->setValueByArray(['comment_time_end' => $seconds]);
         } else {
             $time_end->setValueByArray(['comment_time_end' => 0]);
         }
@@ -2647,7 +2647,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
 		 */
-		global $tpl, $ilTabs;
+		global $tpl, $ilTabs, $DIC;
 
 		$ilTabs->activateTab('editComments');
 		if(!($form instanceof ilPropertyFormGUI))
@@ -2656,6 +2656,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$form->setValuesByArray($this->getCommentFormValues(), true);
 		}
 
+        $this->addJavascriptAndCSSToTemplate($DIC->ui()->mainTemplate());
 		$form->setFormAction($this->ctrl->getFormAction($this, 'updateComment'));
 		$form->setTitle(ilInteractiveVideoPlugin::getInstance()->txt('edit_comment'));
 		$form->addCommandButton('updateComment', $this->lng->txt('save'));
@@ -2725,8 +2726,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$comment_data				= $this->object->getCommentDataById($comment_id);
 		$values['comment_id']		= $comment_data['comment_id'];
-		$values['comment_time']		= $comment_data['comment_time'];
-		$values['comment_time_end']	= $comment_data['comment_time_end'];
+		$values['comment_time']		= ilInteractiveVideoTimePicker::getTimeStringFromSeconds($comment_data['comment_time']);
+		$values['comment_time_end']	= ilInteractiveVideoTimePicker::getTimeStringFromSeconds($comment_data['comment_time_end']);
 		$values['comment_text']		= $comment_data['comment_text'];
 		$values['is_interactive']	= $comment_data['is_interactive'];
 		$values['comment_title']	= $comment_data['comment_title'];
