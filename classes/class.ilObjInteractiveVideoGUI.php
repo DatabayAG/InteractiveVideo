@@ -3140,11 +3140,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $question->setFeedbackCorrectId((int)$this->getValueFromFormOrArray('feedback_correct_obj', $form));
         $question->setFeedbackWrongId((int)$this->getValueFromFormOrArray('feedback_wrong_obj', $form));
 
-        $question->setJumpCorrectTs((int)$this->getValueFromFormOrArray('jump_correct_ts', $form));
+        $correct_ts = $this->getValueFromFormOrArray('jump_correct_ts', $form);
+        $question->setJumpCorrectTs(ilInteractiveVideoTimePicker::getSecondsFromString($correct_ts));
 
         $question->setIsJumpWrong((int)$this->getValueFromFormOrArray('is_jump_wrong', $form));
         $question->setShowWrongIcon((int)$this->getValueFromFormOrArray('show_wrong_icon', $form));
-        $question->setJumpWrongTs((int)$this->getValueFromFormOrArray('jump_wrong_ts', $form));
+        $wrong_ts = $this->getValueFromFormOrArray('jump_wrong_ts', $form);
+        $question->setJumpWrongTs(ilInteractiveVideoTimePicker::getSecondsFromString($wrong_ts));
 
         $question->setShowResponseFrequency((int)$this->getValueFromFormOrArray('show_response_frequency', $form));
         $question->setShowBestSolution((int)$this->getValueFromFormOrArray('show_best_solution', $form));

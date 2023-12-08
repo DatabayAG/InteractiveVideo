@@ -598,7 +598,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $jump_correct_ts
 	 */
-	public function setJumpCorrectTs(int $jump_correct_ts)
+	public function setJumpCorrectTs($jump_correct_ts)
 	{
 		$this->jump_correct_ts = $jump_correct_ts;
 	}
@@ -646,7 +646,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $jump_wrong_ts
 	 */
-	public function setJumpWrongTs(int $jump_wrong_ts)
+	public function setJumpWrongTs($jump_wrong_ts)
 	{
 		$this->jump_wrong_ts = $jump_wrong_ts;
 	}
