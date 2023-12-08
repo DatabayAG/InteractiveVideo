@@ -3085,10 +3085,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setCommentTitle((string)$post['comment_title']);
 
 			// calculate seconds
-            $comment_time = $post['comment_time'];
+            if(isset($post['comment_time'])) {
+                $comment_time = $post['comment_time'];
+            } else {
+                $comment_time = 0;
+            }
+
             $start_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time));
             $this->objComment->setCommentTime($start_time);
-            $comment_time_end = $post['comment_time_end'];
+
+            if(isset($post['comment_time_end'])) {
+                $comment_time_end = $post['comment_time_end'];
+            } else {
+                $comment_time_end = 0;
+            }
             $end_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time_end));
             $this->objComment->setCommentTimeEnd($end_time);
 
