@@ -476,7 +476,9 @@ $ilDB->addPrimaryKey('rep_robj_xvid_score', array('question_id', 'user_id'));
 ?>
 <#21>
 <?php
-$ilDB->addIndex('rep_robj_xvid_question', array('comment_id'), 'ci');
+if( ! $ilDB->indexExistsByFields('rep_robj_xvid_question', ['comment_id'])) {
+    $ilDB->addIndex('rep_robj_xvid_question', array('comment_id'), 'ci');
+}
 ?>
 <#22>
 <?php
@@ -1117,11 +1119,16 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'disable_comment_stream'))
 ?>
 <#74>
 <?php
-$ilDB->addIndex('rep_robj_xvid_comments', ['is_interactive', 'obj_id'], 'i2');
+if( ! $ilDB->indexExistsByFields('rep_robj_xvid_comments', ['is_interactive', 'obj_id'])) {
+    $ilDB->addIndex('rep_robj_xvid_comments', ['is_interactive', 'obj_id'], 'i2');
+}
 ?>
 <#75>
 <?php
-$ilDB->addIndex('rep_robj_xvid_question', ['comment_id', 'type'], 'i2');
+if( ! $ilDB->indexExistsByFields('rep_robj_xvid_question', ['comment_id', 'type'])) {
+    $ilDB->addIndex('rep_robj_xvid_question', ['comment_id', 'type'], 'i2');
+}
+
 ?>
 <#76>
 <?php
