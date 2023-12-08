@@ -39,6 +39,8 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 	 */
 	protected $video_src_id;
 
+    protected $cdata = '';
+
     /**
      * @param ilObjInteractiveVideo $xvid_obj
      * @param string|null           $xmlFile

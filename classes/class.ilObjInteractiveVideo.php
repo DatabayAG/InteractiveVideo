@@ -219,18 +219,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		{
             if($this->http->wrapper()->post()->has('source_id')) {
                 $post_src_id =  ilInteractiveVideoPlugin::stripSlashesWrapping($this->http->wrapper()->post()->retrieve('source_id', $this->refinery->kindlyTo()->string()));
-            }
-
-			if(($post_src_id == null || $post_src_id == '') && $this->source_id != null)
-			{
-				$src_id = $this->source_id;
+                $src_id = $post_src_id;
+                $from_post = true;
+            } else {
+                $src_id = $this->source_id;
                 $from_post = false;
-			}
-			else
-			{
-				$src_id = $post_src_id;
-				$from_post = true;
-			}
+            }
 
 			if($src_id != '')
 			{

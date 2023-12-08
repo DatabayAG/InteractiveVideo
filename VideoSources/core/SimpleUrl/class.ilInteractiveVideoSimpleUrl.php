@@ -103,9 +103,9 @@ class ilInteractiveVideoSimpleUrl implements ilInteractiveVideoSource
 	 */
 	public function doUpdateVideoSource($obj_id)
 	{
-		if(ilUtil::stripSlashes($_POST['simple_url']))
+		if(isset($_POST['simple_url']) && ilUtil::stripSlashes($_POST['simple_url']))
 		{
-			$simple_url =ilUtil::stripSlashes($_POST['simple_url']);
+			$simple_url = ilUtil::stripSlashes($_POST['simple_url']);
 		}
 		else
 		{

@@ -1281,13 +1281,13 @@ class SimpleChoiceQuestion
 
         $post = $DIC->http()->request()->getParsedBody();
 
-        if(is_array($post['answer']) && count($post['answer']) > 0 && $post['question_type'] != self::REFLECTION)
+        if(isset($post['answer']) && count($post['answer']) > 0 && $post['question_type'] != self::REFLECTION)
         {
             foreach(ilArrayUtil::stripSlashesRecursive($post['answer']) as $key => $value)
             {
                 $answer_id = $DIC->database()->nextId(self::TABLE_NAME_QUESTION_TEXT);
                 if($value == null){$value = ' ';}
-                if(is_array($post['correct']) && array_key_exists($key, ilArrayUtil::stripSlashesRecursive($post['correct'])))
+                if(isset($post['correct']) && array_key_exists($key, ilArrayUtil::stripSlashesRecursive($post['correct'])))
                 {
                     $correct = 1;
                 }
