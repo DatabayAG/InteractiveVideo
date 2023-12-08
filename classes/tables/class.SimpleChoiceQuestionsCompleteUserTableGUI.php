@@ -67,7 +67,10 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI
 		global $lng;
 		$current_selection_list = new ilAdvancedSelectionListGUI();
 		$current_selection_list->setListTitle($this->lng->txt('actions'));
-		$current_selection_list->setId('act_' . $a_set['user_id']);
+        if(isset($a_set['user_id'])) {
+            $current_selection_list->setId('act_' . $a_set['user_id']);
+        }
+
 		$max_columns = count($a_set);
 		$counter     = 0;
 		foreach($a_set as $key => $value)
@@ -88,6 +91,9 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI
 			$this->tpl->parseCurrentBlock();
 			$counter++;
 		}
-		$this->ctrl->setParameter($this->parent_obj, 'user_id', $a_set['user_id']);
+        if(isset($a_set['user_id'])) {
+            $this->ctrl->setParameter($this->parent_obj, 'user_id', $a_set['user_id']);
+        }
+
 	}
 }

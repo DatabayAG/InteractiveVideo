@@ -68,7 +68,10 @@ class SimpleChoiceQuestionsOverviewTableGUI extends ilTable2GUI
 
 		$current_selection_list = new ilAdvancedSelectionListGUI();
 		$current_selection_list->setListTitle($this->lng->txt('actions'));
-		$current_selection_list->setId('act_' . $a_set['user_id']);
+        if(isset($a_set['user_id'])) {
+            $current_selection_list->setId('act_' . $a_set['user_id']);
+        }
+
 		
 		$this->tpl->setVariable('QUESTION_ID', ilLegacyFormElementsUtil::formCheckbox(0, 'question_id[]', $a_set['question_id']));
 		$this->tpl->setVariable('COMMENT_TITLE', $a_set['comment_title']);
@@ -85,7 +88,9 @@ class SimpleChoiceQuestionsOverviewTableGUI extends ilTable2GUI
 		{
 			$this->tpl->setVariable('PERCENTAGE');
 		}
+        if(isset($a_set['user_id'])) {
+            $this->ctrl->setParameter($this->parent_obj, 'user_id', $a_set['user_id']);
+        }
 
-		$this->ctrl->setParameter($this->parent_obj, 'user_id', $a_set['user_id']);
 	}
 }

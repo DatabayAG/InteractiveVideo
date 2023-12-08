@@ -170,7 +170,10 @@ class SimpleChoiceQuestionStatistics
 			['integer'], [(int)$oid]);
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$return_value['answers'][$row['user_id']][$row['question_id']] .= chr(13) . $row['answer'];
+            if(isset($return_value['answers'][$row['user_id']])) {
+                $return_value['answers'][$row['user_id']][$row['question_id']] .= chr(13) . $row['answer'];
+            }
+
 		}
 		return $return_value;
 	}
@@ -223,7 +226,7 @@ class SimpleChoiceQuestionStatistics
 		$questions = [];
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			if($row['points'] == null)
+			if($row['points'] == null || ! isset($questions[$row['question_id']]))
 			{
 				$questions[$row['question_id']]['answered'] = 0;
 				$questions[$row['question_id']]['correct']  = 0;
