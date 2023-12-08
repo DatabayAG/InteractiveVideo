@@ -167,7 +167,7 @@ class SimpleChoiceQuestionFormEditGUI
 		$question_text->setRequired(true);
 		$form->addItem($question_text);
 
-		#$this->appendImageUploadForm($this->plugin, $form);
+		$this->appendImageUploadForm($this->plugin, $form);
 
 		$neutral_type         = new ilSelectInputGUI($this->plugin->txt('neutral_type'), 'neutral_type');
 		$neutral_type_options = [

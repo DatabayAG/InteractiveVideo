@@ -33,11 +33,13 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 	pro.generateThumbnailsPerAjaxCall = function()
 	{
 		pro.displayWaitBox();
-
+		let holder = $('.ffmpeg_url_holder').data('ffmpeg-url');
+		let url = holder;
+		console.log(url)
 		$.ajax({
 			type:	"POST", 
 			cache:	false, 
-			url:	il.InteractiveVideoFFMPEGAjaxURL, 
+			url:	url,
 			data:	{time : $('#ffmpeg_time_picker').val()}, 
 			success: function (json) 
 				{
