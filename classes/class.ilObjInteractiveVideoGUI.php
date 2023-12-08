@@ -343,7 +343,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$modal->setType(ilModalGUI::TYPE_LARGE);
 		$modal->setBody('');
 		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
-
+        $this->addJavascriptAndCSSToTemplate($DIC->ui()->mainTemplate());
         if($this->object->getEnableCommentStream() !== 0){
             $video_tpl->setVariable('TXT_COMMENTS', $plugin->txt('comments'));
         }
@@ -2989,7 +2989,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$comment_data				= $this->object->getCommentDataById((int)$comment_id);
 		$values['comment_id']		= $comment_data['comment_id'];
-		$values['comment_time']		= $comment_data['comment_time'];
+		$values['comment_time']		= ilInteractiveVideoTimePicker::getTimeStringFromSeconds($comment_data['comment_time']);
 		$values['comment_time_end']	= $comment_data['comment_time_end'];
 		$values['comment_text']		= $comment_data['comment_text'];
 		$values['is_interactive']	= $comment_data['is_interactive'];

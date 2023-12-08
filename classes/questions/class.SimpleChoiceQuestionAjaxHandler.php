@@ -40,6 +40,7 @@ class SimpleChoiceQuestionAjaxHandler
 		$score    = $scoring->getScoreForQuestionOnUserId($qid);
 		$feedback = $scoring->getFeedbackByQuestionId($qid);
 		$json     = [];
+        $json['html'] = '';
 		$correct = false;
 		if(is_array($feedback))
 		{

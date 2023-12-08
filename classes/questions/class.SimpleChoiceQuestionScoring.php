@@ -24,7 +24,10 @@ class SimpleChoiceQuestionScoring
 			[$usr_id, (int)$qid]
 		);
 		$score  = $ilDB->fetchAssoc($res);
-		return (int)$score['points'];
+        if(isset($score['points'])) {
+            return (int)$score['points'];
+        }
+        return 0;
 	}
 
 	/**
@@ -81,7 +84,7 @@ class SimpleChoiceQuestionScoring
 			$results[$counter]['question_id'] = $row['question_id'];
 			$results[$counter]['title']       = $row['comment_title'];
 			$results[$counter]['neutral_answer'] = $row['neutral_answer'];
-			if($answered[$row['question_id']] !== null)
+			if(isset($answered[$row['question_id']] ) && $answered[$row['question_id']] !== null)
 			{
 				$results[$counter]['answered'] = 1;
 				$answered_questions++;

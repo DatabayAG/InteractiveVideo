@@ -112,6 +112,8 @@ class SimpleChoiceQuestionFormEditGUI
 			$seconds = $_POST['comment_time'];
 			$time->setValueByArray(['comment_time' => (int)$seconds]);
 		}
+
+
 		$form->addItem($time);
 
 		$repeat_question = new ilCheckboxInputGUI($this->plugin->txt('repeat_question'), 'repeat_question');
