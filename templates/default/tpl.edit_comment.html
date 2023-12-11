@@ -32,8 +32,7 @@
 	$("#ilInteractiveVideoTutorCommentSubmit, #ilInteractiveVideoTutorQuestionSubmit, #ilInteractiveVideoChapterSubmit").on("click", function(e) {
 		let time = il.InteractiveVideoPlayerAbstract.currentTime("{PLAYER_ID}");
 		let timesstring = il.InteractiveVideoPlayerComments.secondsToTimeCode(time);
-		console.log(time, timesstring)
-		$('#comment_time').val(time);
+		$('#comment_time').val(timesstring);
 	});
 	}, false);
 
