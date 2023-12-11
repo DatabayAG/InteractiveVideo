@@ -194,7 +194,10 @@ class SimpleChoiceQuestionFormEditGUI
 
         $comment_id_post = $DIC->http()->wrapper()->post()->has('comment_id');
         if($comment_id_post) {
-            $comment_id_post = $DIC->http()->wrapper()->post()->retrieve('comment_id', $DIC->refinery()->kindlyTo()->int());
+            $comment_id_post = $DIC->http()->wrapper()->post()->retrieve('comment_id', $DIC->refinery()->kindlyTo()->string());
+            if($comment_id_post !== '') {
+                $comment_id_post = (int) $comment_id_post;
+            }
         }
         $comment_id_get = $DIC->http()->wrapper()->query()->has('comment_id');
         if($comment_id_get) {

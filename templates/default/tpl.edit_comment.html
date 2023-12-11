@@ -30,7 +30,10 @@
 <script type="text/javascript">
 	document.addEventListener('DOMContentLoaded', function () {
 	$("#ilInteractiveVideoTutorCommentSubmit, #ilInteractiveVideoTutorQuestionSubmit, #ilInteractiveVideoChapterSubmit").on("click", function(e) {
-		$('#comment_time').val(il.InteractiveVideoPlayerAbstract.currentTime("{PLAYER_ID}"));
+		let time = il.InteractiveVideoPlayerAbstract.currentTime("{PLAYER_ID}");
+		let timesstring = il.InteractiveVideoPlayerComments.secondsToTimeCode(time);
+		console.log(time, timesstring)
+		$('#comment_time').val(time);
 	});
 	}, false);
 
