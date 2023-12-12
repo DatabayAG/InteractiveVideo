@@ -1279,15 +1279,33 @@ class SimpleChoiceQuestion
     public function editAnswersForQuestion($question_id){
         global $DIC;
 
-        $post = $DIC->http()->request()->getParsedBody();
+        $post = $DIC->http()->wrapper()->post();
 
-        if(isset($post['answer']) && count($post['answer']) > 0 && $post['question_type'] != self::REFLECTION)
+        $answer = null;
+        $question_type = null;
+        $correct_answers = null;
+
+        if($post->has('form_values'))
         {
-            foreach(ilArrayUtil::stripSlashesRecursive($post['answer']) as $key => $value)
+            $form_values = $post->retrieve('form_values', $DIC->refinery()->kindlyTo()->string());
+            $form_values = unserialize($form_values);
+            if (isset($form_values['answer'])) {
+                $answer = $form_values['answer'];
+            }
+            if (isset($form_values['question_type'])) {
+                $question_type = $form_values['question_type'];
+            }
+            if (isset($form_values['correct'])) {
+                $correct_answers = $form_values['correct'];
+             }
+        }
+        if(is_array($answer) && count($answer) > 0 && $question_type != self::REFLECTION)
+        {
+            foreach(ilArrayUtil::stripSlashesRecursive($answer) as $key => $value)
             {
                 $answer_id = $DIC->database()->nextId(self::TABLE_NAME_QUESTION_TEXT);
                 if($value == null){$value = ' ';}
-                if(isset($post['correct']) && array_key_exists($key, ilArrayUtil::stripSlashesRecursive($post['correct'])))
+                if(is_array($correct_answers) && array_key_exists($key, ilArrayUtil::stripSlashesRecursive($correct_answers)))
                 {
                     $correct = 1;
                 }
