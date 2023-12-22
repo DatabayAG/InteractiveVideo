@@ -80,7 +80,7 @@ send#:#Check
 close#:#Close
 question#:#Question
 is_anonymized#:#Anonymize Comments
-is_anonymized_info#:#If enabled all comments are shown without usernames 
+is_anonymized_info#:#If enabled all comments are shown without usernames
 is_public#:#Publish All Comments
 is_public_info#:#"If enabled all users are able to read all PUBLIC comments. Otherwise they are only able to see own comments and public comments created by administrators (in the tab "Questions, chapters and comments")
 correct_answered#:#Answered correctly
@@ -100,7 +100,7 @@ feedback#:#Feedback
 already_answered#:#Question already answered.
 reflection#:#Reflective question
 answers#:#Answers
-sure_update_question#:#Are you sure, you want to save the question? Existing user results will be deleted! 
+sure_update_question#:#Are you sure, you want to save the question? Existing user results will be deleted!
 question_type_info#:#You can choose between one of three available question types: a single choice, a multiple choice or a self-reflexion quertion. Self-reflexion questions do not have answer options and will be marked as "passed" once they have been shown to a user at least once.
 is_jump_correct_info#:#In case the question was answered correctly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
 is_jump_wrong_info#:#In case the question was answered incorrectly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
@@ -128,7 +128,7 @@ crs_create_xvid#:#Create Interactive Video
 cat_create_xvid#:#Create Interactive Video
 root_create_xvid#:#Create Interactive Video
 fold_create_xvid#:#Create Interactive Video
-rbac_create_xvid#:#Create Interactive Video 
+rbac_create_xvid#:#Create Interactive Video
 source#:#Source
 installed_version#:#Installed Database Version: %s, File Database Version %s
 source_does_not_exist#:#Source does not exist anymore or was disabled in the administration
@@ -175,7 +175,7 @@ export_all_comments#:#Export All Comments
 question_image#:#Question image
 extract#:#Generate Thumbnail from Video
 use_this_image#:#Use this image
-time_for_preview#:#Time: 
+time_for_preview#:#Time:
 comment_title_info#:#The title is always visible in the comment screen.
 correct_answer#:#Correct
 wrong_answer#:#Wrong
@@ -190,7 +190,7 @@ no_comment_info#:#There will be no comment field below the video player
 xvid_xvid_view_lp#:#View Learning Progress
 auto_resume#:#Auto resume
 auto_resume_info#:#If enabled, the video will be automatically resumed after closing a the modal question dialogue.
-fixed_modal#:#Block modal closing 
+fixed_modal#:#Block modal closing
 fixed_modal_info#:#If enabled, a modal dialogue won't be closed if a user clicks on the background.
 modal_section#:#Behaviour of Question Dialogue
 subtitle#:#Subtitle
@@ -221,3 +221,6 @@ best_solution_text#:#Best solution
 best_solution_text_info#:#If a comment field is offered (see below), a user cannot view the solution until he/she has saved an answer.
 show_best_solution_info#:#After answering the question, users can display the correct solution (via button "Show solution").
 at_least_one_answer#:#Please select an answer
+export_section#:#Export
+csv_export_delimiter#:#CSV export delimiter
+csv_export_delimiter_info#:#Change the default delimiter for CSV exports.

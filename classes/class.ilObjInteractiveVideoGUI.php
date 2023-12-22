@@ -34,7 +34,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 	/** @var ilObjInteractiveVideo $object */
 	public $object;
-	
+
 	/** @var $objComment ilObjComment */
 	public $objComment;
 
@@ -182,16 +182,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 						}
 						else  $this->editComments();
 						break;
-					
+
 					case 'updateProperties':
 					case 'editProperties':
 					case 'addSubtitle':
 					case 'postAddSubtitle':
 					case 'confirmDeleteComment':
 					case 'confirmRemoveSubtitle':
-					case 'deleteComment': 
-					case 'editComments':  
-				    case 'editQuestion': 
+					case 'deleteComment':
+					case 'editComments':
+				    case 'editQuestion':
 					case 'confirmUpdateQuestion':
 				    case 'insertQuestion':
                     case 'completeCsvExport':
@@ -542,7 +542,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
 		{
-			
+
 			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
 			$ck_editor->setVariable('MATH_JAX_CONFIG', $mathJaxSetting->get('path_to_mathjax'));
 		}
@@ -649,6 +649,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$fixed_modal = $a_form->getInput('fixed_modal');
 		$this->object->setFixedModal((int)$fixed_modal);
+
+        $csv_export_delimiter = $a_form->getInput('csv_export_delimiter');
+        $this->object->setCSVExportDelimiter(ilUtil::stripSlashes($csv_export_delimiter));
 
 		$factory = new ilInteractiveVideoSourceFactory();
 		$source = $factory->getVideoSourceObject($a_form->getInput('source_id'));
@@ -814,6 +817,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$fixed_modal->setInfo($plugin->txt('fixed_modal_info'));
 		$fixed_modal->setValue(1);
 		$a_form->addItem($fixed_modal);
+
+        $section = new ilFormSectionHeaderGUI();
+        $section->setTitle($plugin->txt('export_section'));
+        $a_form->addItem($section);
+
+        $csv_export_delimiter = new ilTextInputGUI($plugin->txt('csv_export_delimiter'), 'csv_export_delimiter');
+        $csv_export_delimiter->setInfo($plugin->txt('csv_export_delimiter_info'));
+        $csv_export_delimiter->setValue(";");
+        $a_form->addItem($csv_export_delimiter);
 	}
 
 	/**
@@ -851,6 +863,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values['task']				= $this->object->getTask();
 		$a_values['auto_resume']		= $this->object->isAutoResumeAfterQuestion();
 		$a_values['fixed_modal']		= $this->object->isFixedModal();
+        $a_values['csv_export_delimiter'] = $this->object->getCSVExportDelimiter();
 	}
 
 	public function editProperties()
@@ -908,7 +921,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->setTarget("_top");
 		$form->setFormAction($ilCtrl->getFormAction($this, "update"));
 		$form->setTitle($this->plugin->txt("subtitle"));
-		
+
 		$file = new ilFileInputGUI($this->plugin->txt('subtitle'), 'subtitle');
 		$file->setSuffixes(array('vtt'));
 		$form->addItem($file);
@@ -990,7 +1003,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->object->removeSubtitleData($filename);
 			ilUtil::sendSuccess($this->plugin->txt('subtitle_removed'), true);
 			$this->ctrl->redirect($this, 'addSubtitle');
-			
+
 		}
 
 	}
@@ -1040,7 +1053,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			{
 				chmod($new_file, 0770);
 			}
-		
+
 		}
 		$data_short = array();
 		$data_long  = array();
@@ -1059,7 +1072,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			}
 		}
 		$this->object->saveSubtitleData($data_short, $data_long);
-		
+
 		$this->addSubtitle();
 	}
 
@@ -1138,7 +1151,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 		$factory = new ilInteractiveVideoSourceFactory();
 		$sources = $factory->getVideoSources();
-		
+
 		$item_group = new ilRadioGroupInputGUI($plugin->txt('source'), 'source_id');
 		$a_form->addItem($item_group);
 		$non_active = true;
@@ -1243,7 +1256,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				}
 			}
 		}
-		
+
 		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
 		{
 			$ilTabs->addTab('editComments', ilInteractiveVideoPlugin::getInstance()->txt('questions_comments'), $this->ctrl->getLinkTarget($this, 'editComments'));
@@ -1307,7 +1320,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				}
 				$ilTabs->addSubTab('editMyComments', $plugin->txt('my_comments'),$this->ctrl->getLinkTarget($this,'editMyComments'));
 				$ilTabs->addSubTab('showMyResults', $plugin->txt('show_my_results'), $this->ctrl->getLinkTarget($this, 'showMyResults'));
-				
+
 				if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
 				{
 					$ilTabs->addSubTab('showResults', $plugin->txt('user_results'), $this->ctrl->getLinkTarget($this, 'showResults'));
@@ -1407,7 +1420,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$comment->setCommentTime((float)$_POST['comment_time']);
 		$comment->setIsTableOfContent((int)$_POST['is_table_of_content']);
 		$comment->setCommentTimeEnd($seconds_end);
-		
+
 		if(array_key_exists('is_reply_to', $_POST))
 		{
 			$comment->setIsReplyTo((int) $_POST['is_reply_to']);
@@ -1533,7 +1546,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$title = new ilTextInputGUI($this->lng->txt('title'), 'comment_title');
 		$form->addItem($title);
-		
+
 		$time = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'comment_time');
 		#$time->setShowTime(true);
 		#$time->setShowSeconds(true);
@@ -2175,7 +2188,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      * @throws ilTemplateException
      */
 	private function getCommentFormValues($comment_id = 0)
-	{		
+	{
 	    $values = array();
 		if($comment_id == 0)
 		{
@@ -2258,7 +2271,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$title->setInfo($plugin->txt('comment_title_info'));
 		$title->setRequired(true);
 		$form->addItem($title);
-		
+
 		$time = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'comment_time');
 
 		if(isset($_POST['comment_time']))
@@ -2302,7 +2315,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$neutral_type->setOptions($neutral_type_options);
 		$neutral_type->setInfo($plugin->txt('neutral_type_info'));
 		$form->addItem($neutral_type);
-		
+
 
 		$answer = new ilCustomInputGUI($this->lng->txt('answers'), 'answer_text');
 		$answer->setHtml($this->getInteractiveForm());
@@ -2609,7 +2622,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$confirm->setConfirm($this->lng->txt('update'), 'updateQuestion');
 			foreach($_POST as $key=>$value)
 			{
-				//@todo .... very quick ... very dirty .... 
+				//@todo .... very quick ... very dirty ....
 				if($key != 'cmd')
 				{
 					$form_values[$key] = $value;
@@ -2629,7 +2642,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form = $this->initQuestionForm();
 		if(isset($_POST['form_values']))
 		{
-			//@todo .... very quick ... very wtf .... 
+			//@todo .... very quick ... very wtf ....
 			$_POST = unserialize($_POST['form_values']);
 			$_FILES = unserialize($_REQUEST['form_files']);
 		}
@@ -2686,7 +2699,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			ilInteractiveVideoFFmpeg::removeSelectedImage($question->getQuestionImage());
 			$question->setQuestionImage(null);
 		}
-		
+
 		$question->setQuestionText(ilUtil::stripSlashes($form->getInput('question_text'), false));
 		$question->setFeedbackCorrect(ilUtil::stripSlashes($form->getInput('feedback_correct'), false));
 		$question->setFeedbackOneWrong(ilUtil::stripSlashes($form->getInput('feedback_one_wrong'), false));
@@ -2696,7 +2709,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$question->setShowCorrectIcon((int)$form->getInput('show_correct_icon'));
 		$question->setFeedbackCorrectId((int)$form->getInput('feedback_correct_obj'));
 		$question->setFeedbackWrongId((int)$form->getInput('feedback_wrong_obj'));
-		
+
 		$question->setJumpCorrectTs((int) $form->getInput('jump_correct_ts'));
 
 		$question->setIsJumpWrong((int)$form->getInput('is_jump_wrong'));
@@ -3020,7 +3033,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public function generateThumbnailsFromSourcePerAjax()
 	{
@@ -3050,7 +3063,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$tpl_json->setVariable('JSON', json_encode(array('error' => $e->getMessage())));
 				$tpl_json->show("DEFAULT", false, true);
 			}
-		
+
 
 		}
 		$this->callExit();
@@ -3085,7 +3098,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$this->callExit();
 	}
-	
+
 	protected function callExit()
 	{
 		exit();
@@ -3106,7 +3119,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$data = $simple->getScoreForAllQuestionsAndAllUser($this->obj_id);
 
 		$csv = array();
-		$separator = ";";
+		$separator = $this->object->getCSVExportDelimiter();
 
 		$head_row = array();
 		array_push($head_row, $lng->txt('name'));
@@ -3155,7 +3168,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$data = $this->object->getCommentsTableDataByUserId();
 
 		$csv = array();
-		$separator = ";";
+		$separator = $this->object->getCSVExportDelimiter();
 
 		$head_row = array();
 		array_push($head_row, $lng->txt('id'));
@@ -3163,6 +3176,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($head_row, $plugin->txt('time_end') );
 		array_push($head_row, $plugin->txt('comment_title'));
 		array_push($head_row, $plugin->txt('comment'));
+        array_push($head_row, $plugin->txt('compulsory'));
 		array_push($head_row, $plugin->txt('visibility'));
 		array_push($csv, ilUtil::processCSVRow($head_row, TRUE, $separator) );
 		foreach ($data as $key => $row)
@@ -3193,7 +3207,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$data = $this->object->getCommentsTableData(true, false, false, true);
 
 		$csv = array();
-		$separator = ";";
+		$separator = $this->object->getCSVExportDelimiter();
 
 		$head_row = array();
 
@@ -3206,6 +3220,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($head_row, $plugin->txt('tutor'));
 		array_push($head_row, $plugin->txt('interactive'));
 		array_push($head_row, $plugin->txt('compulsory'));
+        array_push($head_row, $plugin->txt('is_table_of_content'));
 		array_push($head_row, $plugin->txt('type'));
 
 		array_push($csv, ilUtil::processCSVRow($head_row, TRUE, $separator) );
@@ -3233,7 +3248,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		/**
 		 * @var $ilCtrl ilCtrl
-		 * @var $ilAccess ilAccessHandler 
+		 * @var $ilAccess ilAccessHandler
 		 */
 		global $ilCtrl, $ilAccess, $lng;
 
