@@ -1051,12 +1051,12 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 <?php
 if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'csv_export_delimiter'))
 {
-    $ilDB->addTableColumn('rep_robj_xvid_objects', 'csv_export_delimiter',
-        array(
-            'type'    => 'text',
-            'length'  => 1,
-            'notnull' => true,
-            'default' => ";")
-    );
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'csv_export_delimiter',
+		array(
+			'type'    => 'text',
+			'length'  => 1,
+			'notnull' => true,
+			'default' => ";")
+	);
 }
 ?>
