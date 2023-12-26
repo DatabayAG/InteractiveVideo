@@ -99,7 +99,7 @@ feedback#:#Feedback
 already_answered#:#Domanda già risposta.
 reflection#:#Domanda riflessiva
 answers#:#Risposte
-sure_update_question#:#Sei sicuro di voler salvare la domanda? I risultati utente esistenti verranno eliminati! 
+sure_update_question#:#Sei sicuro di voler salvare la domanda? I risultati utente esistenti verranno eliminati!
 question_type_info#:#Puoi scegliere tra uno dei tre tipi di domande disponibili: a scelta singola, a risposta multipla o riflessiva. Le domande riflessive non hanno opzioni di risposta e saranno contrassegnate come "superate" una volta che sono state mostrate a un utente almeno una volta.
 is_jump_correct_info#:#Nel caso in cui la risposta alla domanda sia stata corretta, è possibile selezionare un'etichetta per saltare (time stamp) all'interno del video utilizzando un pulsante. Questo pulsante verrà mostrato insieme al testo di feedback.
 is_jump_wrong_info#:#Nel caso in cui alla domanda sia stata data una risposta errata, è possibile selezionare un'etichetta per saltare (time stamp) all'interno del video utilizzando un pulsante. Questo pulsante verrà mostrato insieme al testo di feedback.
@@ -174,7 +174,7 @@ export_all_comments#:#Esporta tutti i commenti
 question_image#:#Domanda immagine
 extract#:#Genera thumbnail dal video
 use_this_image#:#Usa questa immagine
-time_for_preview#:#Tempo: 
+time_for_preview#:#Tempo:
 comment_title_info#:#Il titolo è sempre visibile nella schermata dei commenti.
 correct_answer#:#Corretto
 wrong_answer#:#Sbagliato
@@ -189,7 +189,7 @@ no_comment_info#:#Non ci sarà nessun campo di commento sotto il video player
 xvid_xvid_view_lp#:#Visualizza i progressi di apprendimento
 auto_resume#:#Ripristino automatico
 auto_resume_info#:#Se abilitato, il video verrà ripreso automaticamente dopo aver chiuso una finestra di dialogo della domanda modale.
-fixed_modal#:#Blocco chiusura modale 
+fixed_modal#:#Blocco chiusura modale
 fixed_modal_info#:#Se abilitato, un dialogo modale non verrà chiuso se un utente fa clic sullo sfondo.
 modal_section#:#Dialogo sul comportamento delle domande
 subtitle#:#Sottotitolo
@@ -220,3 +220,6 @@ best_solution_text#:#Soluzione migliore
 best_solution_text_info#:#Se viene offerto un campo di commento (vedi sotto), un utente non può visualizzare la soluzione finché non ha salvato una risposta.
 show_best_solution_info#:#Dopo aver risposto alla domanda, gli utenti possono visualizzare la soluzione corretta (tramite il pulsante "Mostra soluzione").
 at_least_one_answer#:#Seleziona una risposta
+export_section#:#Eksportuoti
+csv_export_delimiter#:#Delimitatore di esportazione CSV
+csv_export_delimiter_info#:#Modifica il delimitatore predefinito per le esportazioni CSV.

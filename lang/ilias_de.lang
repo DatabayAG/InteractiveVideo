@@ -14,7 +14,7 @@ xvid_visible#:#Interaktives Video ist sichtbar
 xvid_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
 xvid_edit_learning_progress#:#Benutzer kann Lernfortschritt Einstellungen bearbeiten
 reset#:#Zurücksetzen
-show_all_comments#:#Alle Kommentare anzeigen: 
+show_all_comments#:#Alle Kommentare anzeigen:
 author_filter#:#Autorenfilter
 crs_create_xvid#:#Neues Interaktives Video anlegen
 grp_create_xvid#:#Neues Interaktives Video anlegen
@@ -35,7 +35,7 @@ cancel#:#Abbrechen
 sure_delete_comment#:#Sind Sie sicher, dass Sie den gewählten Kommentare/Fragen/Kapitel löschen möchten?
 missing_comment_text#:#Bitte geben Sie einen Kommentar ein.
 missing_stopping_point#:#Der Haltepunkt wurde nicht zum Server übertragen. Bitte versuchen Sie es erneut.
-invalid_comment_ids#:#Einige Kommentare konnten nicht gefunden werden. 
+invalid_comment_ids#:#Einige Kommentare konnten nicht gefunden werden.
 comments_successfully_deleted#:#Die gewählten Kommentare wurden erfolgreich gelöscht.
 insert_comment#:#Neue Frage / Neuen Kommentar einfügen
 edit_comment#:#Kommentar bearbeiten
@@ -126,7 +126,7 @@ crs_create_xvid#:#Interaktives Video anlegen
 cat_create_xvid#:#Interaktives Video anlegen
 root_create_xvid#:#Interaktives Video anlegen
 fold_create_xvid#:#Interaktives Video anlegen
-rbac_create_xvid#:#Interaktives Video anlegen 
+rbac_create_xvid#:#Interaktives Video anlegen
 source#:#Quelle
 installed_version#:#Installierte Databank Version: %s, Datei Datenbank Version %s
 source_does_not_exist#:#Quelle existiert nicht mehr oder wurde in der Administration deaktiviert
@@ -173,7 +173,7 @@ export_all_comments#:#Alle Kommentare exportieren
 question_image#:#Bild für Frage
 extract#:#Thumbnail aus Video erzeugen
 use_this_image#:#Dieses Bild verwenden
-time_for_preview#:#Zeitpunkt: 
+time_for_preview#:#Zeitpunkt:
 comment_title_info#:#Der Titel wird im Kommentarstream angezeigt und ist für die Kursteilnehmer damit immer sichtbar.
 correct_answer#:#Richtig
 wrong_answer#:#Falsch
@@ -220,3 +220,6 @@ best_solution_text#:#Bestmögliche Lösung
 best_solution_text_info#:#Wenn ein Kommentarfeld angeboten wird (siehe unten), kann sich ein Nutzer die Lösung erst anzeigen lassen, wenn er/sie eine Antwort gespeichert hat.
 show_best_solution_info#:#Nachdem die Frage beantwortet wurde, können sich Nutzer die richtige Lösung anzeigen lassen (über Button «Lösung zeigen»).
 at_least_one_answer#:#Bitte wählen Sie eine Antwort aus
+export_section#:#Export
+csv_export_delimiter#:#CSV-Exporttrennzeichen
+csv_export_delimiter_info#:#Ändern Sie das Standardtrennzeichen für CSV-Exporte.

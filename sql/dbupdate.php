@@ -186,7 +186,7 @@ if(!$ilDB->tableExists('rep_robj_xvid_question'))
 			'length' => '4',
 			'notnull' => true
 		)
-	);	
+	);
 	$ilDB->createTable('rep_robj_xvid_question', $fields);
 	$ilDB->addPrimaryKey('rep_robj_xvid_question', array('question_id'));
 	$ilDB->createSequence('rep_robj_xvid_question');
@@ -413,15 +413,15 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 			)
 		);
 	}
-	
+
 	$res = $ilDB->queryF('SELECT comment_id FROM rep_robj_xvid_comments WHERE repeat_question = %s',
 		array('integer'), array(1));
-	
+
 	while($row = $ilDB->fetchAssoc($res))
 	{
 		$comment_ids[] = $row['comment_id'];
 	}
-		
+
 	$ilDB->manipulateF('
 	UPDATE rep_robj_xvid_question 
 	SET rep_robj_xvid_question.repeat_question = %s
@@ -520,7 +520,7 @@ if($ilDB->tableExists('rep_robj_xvid_comments'))
 							'notnull' => true,
 							'default' => 0));
 		}
-	} 
+	}
 ?>
 <#25>
 	<?php
@@ -1045,5 +1045,18 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
                 'default' => null
             ));
     }
+}
+?>
+<#60>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'csv_export_delimiter'))
+{
+	$ilDB->addTableColumn('rep_robj_xvid_objects', 'csv_export_delimiter',
+		array(
+			'type'    => 'text',
+			'length'  => 1,
+			'notnull' => true,
+			'default' => ";")
+	);
 }
 ?>
