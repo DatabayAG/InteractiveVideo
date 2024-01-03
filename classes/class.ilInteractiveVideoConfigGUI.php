@@ -95,7 +95,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
      * @param ilPropertyFormGUI|null $form
      * @throws ilCtrlException
      */
-	protected function showConfigurationForm(ilPropertyFormGUI $form = null)
+	protected function showConfigurationForm(ilPropertyFormGUI $form = null): void
 	{
 
 		if(!$form instanceof ilPropertyFormGUI)
@@ -108,10 +108,9 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	}
 
     /**
-     * @return ilPropertyFormGUI
-     * @throws ilCtrlException
-     */
-	protected function getConfigurationForm()
+	 * @throws ilCtrlException
+	 */
+	protected function getConfigurationForm(): \ilPropertyFormGUI
 	{
 		$form = new ilPropertyFormGUI();
 		$db_updater = new ilInteractiveVideoDbUpdater();
@@ -178,12 +177,12 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		return $form;
 	}
 
-	/**
-	 * @param ilPropertyFormGUI $form
-	 * @param $source
-	 * @return ilPropertyFormGUI
-	 */
-	protected function addPluginConfigForm(ilPropertyFormGUI $form, $source)
+    /**
+     * @param ilPropertyFormGUI $form
+     * @param string            $source
+     * @return ilPropertyFormGUI
+     */
+	protected function addPluginConfigForm(ilPropertyFormGUI $form, string $source): \ilPropertyFormGUI
 	{
 		$this->active_tab = $source;
 		$form->setTitle(ilInteractiveVideoPlugin::getInstance()->txt($source));
@@ -196,7 +195,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
     /**
      * @throws ilCtrlException
      */
-    protected function addTabs()
+    protected function addTabs(): void
 	{
 		$this->tabs->addSubTab('settings', $this->lng->txt('settings'),
 			$this->ctrl->getLinkTargetByClass('ilInteractiveVideoConfigGUI', 'view'));
@@ -215,7 +214,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
      * @throws ilCtrlException
      * @throws ilCtrlException
      */
-    protected function saveConfigurationForm()
+    protected function saveConfigurationForm(): void
 	{
 		$form = $this->getConfigurationForm();
 		if($form->checkInput())
@@ -239,7 +238,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
      * @throws ilCtrlException
      * @throws ilCtrlException
      */
-    protected function loadDbUpdates()
+    protected function loadDbUpdates(): void
 	{
 		$form = $this->getConfigurationForm();
 		if($form->checkInput())
@@ -254,7 +253,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
     /**
      * @throws ilCtrlException
      */
-    protected function loadLanguages()
+    protected function loadLanguages(): void
     {
         global $DIC;
 
@@ -273,7 +272,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 	/**
 	 * @param ilPropertyFormGUI $form
 	 */
-	protected function saveForm(ilPropertyFormGUI $form)
+	protected function saveForm(ilPropertyFormGUI $form): void
 	{
 		$settings = [];
 		$min_selected = false;

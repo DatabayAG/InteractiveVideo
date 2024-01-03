@@ -51,7 +51,7 @@ class SimpleChoiceQuestion
 		}
 	}
 
-	public function read()
+	public function read(): void
 	{
         global $ilDB;
 
@@ -118,7 +118,7 @@ class SimpleChoiceQuestion
 		return $this->comment_id;
 	}
 
-	public function setCommentId(int $comment_id)
+	public function setCommentId(int $comment_id): void
 	{
 		$this->comment_id = $comment_id;
 	}
@@ -306,7 +306,7 @@ class SimpleChoiceQuestion
 		return false;
 	}
 
-	private function readAnswerDefinitions()
+	private function readAnswerDefinitions(): void
 	{
         global $ilDB;
 
@@ -328,12 +328,12 @@ class SimpleChoiceQuestion
 		return $this->question_id;
 	}
 
-	public function setQuestionId(int $question_id)
+	public function setQuestionId(int $question_id): void
 	{
 		$this->question_id = $question_id;
 	}
 
-	public function cloneQuestionObject(int $old_comment_id, int $new_comment_id)
+	public function cloneQuestionObject(int $old_comment_id, int $new_comment_id): void
 	{
         global $ilDB;
 
@@ -486,15 +486,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $type
 	 */
-	public function setType(int $type)
+	public function setType(int $type): void
 	{
 		$this->type = $type;
 	}
 	
-	/**
-	 * @return string
-	 */
-	public function getQuestionText()
+	public function getQuestionText(): string
 	{
 		return $this->question_text;
 	}
@@ -502,15 +499,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param string $question_text
 	 */
-	public function setQuestionText(string $question_text)
+	public function setQuestionText(string $question_text): void
 	{
 		$this->question_text = $question_text;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getFeedbackCorrect()
+	public function getFeedbackCorrect(): string
 	{
 		return $this->feedback_correct;
 	}
@@ -518,15 +512,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param string $feedback_correct
 	 */
-	public function setFeedbackCorrect(string $feedback_correct)
+	public function setFeedbackCorrect(string $feedback_correct): void
 	{
 		$this->feedback_correct = $feedback_correct;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getFeedbackOneWrong()
+	public function getFeedbackOneWrong(): string
 	{
 		return $this->feedback_one_wrong;
 	}
@@ -534,15 +525,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param string $feedback_one_wrong
 	 */
-	public function setFeedbackOneWrong(string $feedback_one_wrong)
+	public function setFeedbackOneWrong(string $feedback_one_wrong): void
 	{
 		$this->feedback_one_wrong = $feedback_one_wrong;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getLimitAttempts()
+	public function getLimitAttempts(): int
 	{
 		return $this->limit_attempts;
 	}
@@ -550,15 +538,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $limit_attempts
 	 */
-	public function setLimitAttempts(int $limit_attempts)
+	public function setLimitAttempts(int $limit_attempts): void
 	{
 		$this->limit_attempts = $limit_attempts;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getShowCorrectIcon()
+	public function getShowCorrectIcon(): int
 	{
 		return $this->show_correct_icon;
 	}
@@ -566,15 +551,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $show_correct_icon
 	 */
-	public function setShowCorrectIcon(int $show_correct_icon)
+	public function setShowCorrectIcon(int $show_correct_icon): void
 	{
 		$this->show_correct_icon = $show_correct_icon;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getIsJumpCorrect()
+	public function getIsJumpCorrect(): int
 	{
 		return $this->is_jump_correct;
 	}
@@ -582,31 +564,22 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $is_jump_correct
 	 */
-	public function setIsJumpCorrect(int $is_jump_correct)
+	public function setIsJumpCorrect(int $is_jump_correct): void
 	{
 		$this->is_jump_correct = $is_jump_correct;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getJumpCorrectTs()
+	public function getJumpCorrectTs(): int
 	{
 		return $this->jump_correct_ts;
 	}
 
-	/**
-	 * @param int $jump_correct_ts
-	 */
-	public function setJumpCorrectTs($jump_correct_ts)
+	public function setJumpCorrectTs(int $jump_correct_ts): void
 	{
 		$this->jump_correct_ts = $jump_correct_ts;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getShowWrongIcon()
+	public function getShowWrongIcon(): int
 	{
 		return $this->show_wrong_icon;
 	}
@@ -614,15 +587,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $show_wrong_icon
 	 */
-	public function setShowWrongIcon(int $show_wrong_icon)
+	public function setShowWrongIcon(int $show_wrong_icon): void
 	{
 		$this->show_wrong_icon = $show_wrong_icon;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getIsJumpWrong()
+	public function getIsJumpWrong(): int
 	{
 		return $this->is_jump_wrong;
 	}
@@ -630,31 +600,22 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $is_jump_wrong
 	 */
-	public function setIsJumpWrong(int $is_jump_wrong)
+	public function setIsJumpWrong(int $is_jump_wrong): void
 	{
 		$this->is_jump_wrong = $is_jump_wrong;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getJumpWrongTs()
+	public function getJumpWrongTs(): int
 	{
 		return $this->jump_wrong_ts;
 	}
 
-	/**
-	 * @param int $jump_wrong_ts
-	 */
-	public function setJumpWrongTs($jump_wrong_ts)
+	public function setJumpWrongTs(int $jump_wrong_ts): void
 	{
 		$this->jump_wrong_ts = $jump_wrong_ts;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getShowResponseFrequency()
+	public function getShowResponseFrequency(): int
 	{
 		return $this->show_response_frequency;
 	}
@@ -662,15 +623,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $show_response_frequency
 	 */
-	public function setShowResponseFrequency(int $show_response_frequency)
+	public function setShowResponseFrequency(int $show_response_frequency): void
 	{
 		$this->show_response_frequency = $show_response_frequency;
 	}
 
-    /**
-     * @return int
-     */
-    public function getShowBestSolution()
+    public function getShowBestSolution(): int
     {
         return $this->show_best_solution;
     }
@@ -678,15 +636,12 @@ class SimpleChoiceQuestion
     /**
      * @param int $show_best_solution
      */
-    public function setShowBestSolution(int $show_best_solution)
+    public function setShowBestSolution(int $show_best_solution): void
     {
         $this->show_best_solution = $show_best_solution;
     }
 
-	/**
-	 * @return int
-	 */
-	public function getRepeatQuestion()
+	public function getRepeatQuestion(): int
 	{
 		return $this->repeat_question;
 	}
@@ -694,15 +649,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $repeat_question
 	 */
-	public function setRepeatQuestion(int $repeat_question)
+	public function setRepeatQuestion(int $repeat_question): void
 	{
 		$this->repeat_question = $repeat_question;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function checkInput()
+	public function checkInput(): bool
 	{
 		$status  = true;
 		$correct = 0;
@@ -748,7 +700,7 @@ class SimpleChoiceQuestion
 
 	/**
 	 * @param $comment_id
-	 * @return int
+	 * @return int|null
 	 */
 	public function existQuestionForCommentId($comment_id) : ?int
 	{
@@ -769,9 +721,8 @@ class SimpleChoiceQuestion
 
 	/**
 	 * @param $cid
-	 * @return string
 	 */
-	public function getCommentTitleByCommentId($cid)
+	public function getCommentTitleByCommentId($cid): string
 	{
         global $ilDB;
 
@@ -794,9 +745,9 @@ class SimpleChoiceQuestion
 
 	/**
 	 * @param int $user_id
-	 * @return array
+	 * @return mixed[]
 	 */
-	public function getAllNonRepeatAnsweredQuestion(int $user_id)
+	public function getAllNonRepeatAnsweredQuestion(int $user_id): array
 	{
         global $ilDB;
 
@@ -821,10 +772,10 @@ class SimpleChoiceQuestion
 	}
 
     /**
-     * @param int $obj_id
-     * @return array
-     */
-	public static function getAllCompulsoryQuestions(int $obj_id)
+	 * @param int $obj_id
+	 * @return array<int|string, array{time: mixed, question_id: mixed, comment_id: mixed, answered: bool}>
+	 */
+	public static function getAllCompulsoryQuestions(int $obj_id): array
 	{
         global $ilDB;
 		$res     = $ilDB->queryF('
@@ -853,9 +804,9 @@ class SimpleChoiceQuestion
 
 	/**
 	 * @param int $user_id
-	 * @return array
+	 * @return mixed[]
 	 */
-	public function getAllRepeatCorrectlyAnsweredQuestion(int $user_id)
+	public function getAllRepeatCorrectlyAnsweredQuestion(int $user_id): array
 	{
         global $ilDB;
 
@@ -884,7 +835,7 @@ class SimpleChoiceQuestion
 	 * @param array $user_ids
 	 * @param int   $obj_id
 	 */
-	public function deleteUserResults(array $user_ids, int $obj_id)
+	public function deleteUserResults(array $user_ids, int $obj_id): void
 	{
         global $ilDB;
 
@@ -906,9 +857,9 @@ class SimpleChoiceQuestion
 
 	/**
 	 * @param $obj_id
-	 * @return array
+	 * @return mixed[]
 	 */
-	public function getInteractiveQuestionIdsByObjId($obj_id)
+	public function getInteractiveQuestionIdsByObjId($obj_id): array
 	{
         global $ilDB;
 
@@ -931,9 +882,9 @@ class SimpleChoiceQuestion
 
 	/**
 	 * @param $obj_id
-	 * @return array
+	 * @return mixed[]
 	 */
-	public function getInteractiveNotNeutralQuestionIdsByObjId($obj_id)
+	public function getInteractiveNotNeutralQuestionIdsByObjId($obj_id): array
 	{
         global $ilDB;
 
@@ -957,7 +908,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param array $question_ids
 	 */
-	public function deleteQuestionsResults(array $question_ids)
+	public function deleteQuestionsResults(array $question_ids): void
 	{
         global $ilDB;
 
@@ -996,7 +947,7 @@ class SimpleChoiceQuestion
 	 * @param $qid
 	 * @param $answers
 	 */
-	public function saveAnswer($qid, $answers)
+	public function saveAnswer($qid, $answers): void
 	{
         global $ilDB, $ilUser;
 
@@ -1086,7 +1037,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param $qid
 	 */
-	public function removeAnswer($qid)
+	public function removeAnswer($qid): void
 	{
         global $ilDB, $ilUser;
 
@@ -1099,7 +1050,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param $qid
 	 */
-	public function removeScore($qid)
+	public function removeScore($qid): void
 	{
         global $ilDB, $ilUser;
 
@@ -1111,7 +1062,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param $comment_id
 	 */
-	public function deleteQuestionsIdByCommentId($comment_id)
+	public function deleteQuestionsIdByCommentId($comment_id): void
 	{
         global $ilDB;
 
@@ -1131,7 +1082,7 @@ class SimpleChoiceQuestion
 	/**
 	 * @param array $question_ids
 	 */
-	public static function deleteQuestions(array $question_ids)
+	public static function deleteQuestions(array $question_ids): void
 	{
 		if(!is_array($question_ids))
 		{
@@ -1148,10 +1099,7 @@ class SimpleChoiceQuestion
 		$ilDB->manipulate('DELETE FROM ' . self::TABLE_NAME_SCORE . ' WHERE ' . $ilDB->in('question_id', $question_ids, false, 'integer'));
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getObjId()
+	public function getObjId(): int
 	{
 		return $this->obj_id;
 	}
@@ -1159,15 +1107,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $obj_id
 	 */
-	public function setObjId(int $obj_id)
+	public function setObjId(int $obj_id): void
 	{
 		$this->obj_id = $obj_id;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getFeedbackCorrectId()
+	public function getFeedbackCorrectId(): int
 	{
 		return $this->feedback_correct_id;
 	}
@@ -1175,15 +1120,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $feedback_correct_id
 	 */
-	public function setFeedbackCorrectId(int $feedback_correct_id)
+	public function setFeedbackCorrectId(int $feedback_correct_id): void
 	{
 		$this->feedback_correct_id = $feedback_correct_id;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getFeedbackWrongId()
+	public function getFeedbackWrongId(): int
 	{
 		return $this->feedback_wrong_id;
 	}
@@ -1191,15 +1133,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $feedback_wrong_id
 	 */
-	public function setFeedbackWrongId(int $feedback_wrong_id)
+	public function setFeedbackWrongId(int $feedback_wrong_id): void
 	{
 		$this->feedback_wrong_id = $feedback_wrong_id;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getReflectionQuestionComment()
+	public function getReflectionQuestionComment(): int
 	{
 		return $this->reflection_question_comment;
 	}
@@ -1207,15 +1146,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $reflection_question_comment
 	 */
-	public function setReflectionQuestionComment(int $reflection_question_comment)
+	public function setReflectionQuestionComment(int $reflection_question_comment): void
 	{
 		$this->reflection_question_comment = $reflection_question_comment;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getNeutralAnswer()
+	public function getNeutralAnswer(): int
 	{
 		return $this->neutral_answer;
 	}
@@ -1223,15 +1159,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param int $neutral_answer
 	 */
-	public function setNeutralAnswer(int $neutral_answer)
+	public function setNeutralAnswer(int $neutral_answer): void
 	{
 		$this->neutral_answer = $neutral_answer;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getQuestionImage()
+	public function getQuestionImage(): string
 	{
 		return $this->question_image;
 	}
@@ -1239,15 +1172,12 @@ class SimpleChoiceQuestion
 	/**
 	 * @param string $question_image
 	 */
-	public function setQuestionImage(string $question_image)
+	public function setQuestionImage(string $question_image): void
 	{
 		$this->question_image = $question_image;
 	}
 
-    /**
-     * @return int
-     */
-    public function getCompulsoryQuestion()
+    public function getCompulsoryQuestion(): int
     {
         return $this->compulsory_question;
     }
@@ -1255,15 +1185,12 @@ class SimpleChoiceQuestion
     /**
      * @param int $compulsory_question
      */
-    public function setCompulsoryQuestion(int $compulsory_question)
+    public function setCompulsoryQuestion(int $compulsory_question): void
     {
         $this->compulsory_question = $compulsory_question;
     }
 
-    /**
-     * @return string
-     */
-    public function getShowBestSolutionText()
+    public function getShowBestSolutionText(): string
     {
         return $this->show_best_solution_text;
     }
@@ -1276,7 +1203,7 @@ class SimpleChoiceQuestion
         $this->show_best_solution_text = $show_best_solution_text;
     }
 
-    public function editAnswersForQuestion($question_id){
+    public function editAnswersForQuestion($question_id): void{
         global $DIC;
 
         $post = $DIC->http()->wrapper()->post();

@@ -152,7 +152,6 @@ class ilInteractiveVideoSimpleUrl implements ilInteractiveVideoSource
 	 */
 	public function getGUIClass()
 	{
-		require_once dirname(__FILE__) . '/class.ilInteractiveVideoSimpleUrlGUI.php';
 		return new ilInteractiveVideoSimpleUrlGUI();
 	}
 

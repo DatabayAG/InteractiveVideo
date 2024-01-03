@@ -26,8 +26,8 @@ class ilInteractiveVideoSimpleUrlXMLParser extends ilInteractiveVideoXMLParser
 	 * @param $tagName
 	 * @param $tagAttributes
 	 */
-	public function handlerBeginTag($xmlParser, $tagName, $tagAttributes)
-	{
+	public function handlerBeginTag($xmlParser, $tagName, $tagAttributes) : void
+    {
 		switch($tagName)
 		{
 			case 'SimpleURL':
@@ -41,8 +41,8 @@ class ilInteractiveVideoSimpleUrlXMLParser extends ilInteractiveVideoXMLParser
 	 * @param $xmlParser
 	 * @param $tagName
 	 */
-	public function handlerEndTag($xmlParser, $tagName)
-	{
+	public function handlerEndTag($xmlParser, $tagName) : void
+    {
 		switch($tagName)
 		{
 			case 'SimpleURL':

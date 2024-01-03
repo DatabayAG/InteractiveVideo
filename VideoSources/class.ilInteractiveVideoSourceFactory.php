@@ -1,5 +1,4 @@
 <?php
-require_once 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/interface.ilInteractiveVideoSource.php';
 /**
  * Class ilInteractiveVideoSourceFactory
  * @author Guido Vollbach <gvollbach@databay.de>
@@ -109,7 +108,6 @@ class ilInteractiveVideoSourceFactory
 			}
 			if($file->getExtension() === 'php' && $file->getFilename() !== 'version.php'  && $file->getFilename() !== 'dbupdate.php')
 			{
-				require_once $file;
 				$class      = str_replace(array('class.', '.php'), '', $file->getBasename());
 				$reflection = new ReflectionClass($class);
 				if( !$reflection->isAbstract() && $reflection->implementsInterface($interface))

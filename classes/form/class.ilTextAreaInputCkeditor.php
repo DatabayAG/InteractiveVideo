@@ -17,11 +17,10 @@ class ilTextAreaInputCkeditor
 	}
 
     /**
-     * @return ilTemplate
-     * @throws ilSystemStyleException
-     * @throws ilTemplateException
-     */
-	protected function getCkEditorTemplate()
+	 * @throws ilSystemStyleException
+	 * @throws ilTemplateException
+	 */
+	protected function getCkEditorTemplate(): \ilTemplate
 	{
 		$ck_editor      = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $this->plugin->getDirectory());
 
@@ -34,10 +33,7 @@ class ilTextAreaInputCkeditor
 		return $ck_editor;
 	}
 
-	/**
-	 * @return ilSetting
-	 */
-	public function addMathJaxToGlobalTemplate()
+	public function addMathJaxToGlobalTemplate(): \ilSetting
 	{
 		/**
 		 * @var $tpl ilTemplate
@@ -53,11 +49,10 @@ class ilTextAreaInputCkeditor
 	}
 
     /**
-     * @param ilTemplate $custom_tpl
-     * @throws ilSystemStyleException
-     * @throws ilTemplateException
-     */
-	public function appendCkEditorToTemplate($custom_tpl)
+	 * @throws ilSystemStyleException
+	 * @throws ilTemplateException
+	 */
+	public function appendCkEditorToTemplate(\ilTemplate $custom_tpl): void
 	{
 		$ck_editor = $this->getCkEditorTemplate();
 		$ck_editor->touchBlock('small_editor');
@@ -65,11 +60,10 @@ class ilTextAreaInputCkeditor
 	}
 
     /**
-     * @param ilPropertyFormGUI $a_form
-     * @throws ilSystemStyleException
-     * @throws ilTemplateException
-     */
-	public function appendCkEditorMathJaxSupportToForm($a_form)
+	 * @throws ilSystemStyleException
+	 * @throws ilTemplateException
+	 */
+	public function appendCkEditorMathJaxSupportToForm(\ilPropertyFormGUI $a_form): void
 	{
 		$ck_editor = $this->getCkEditorTemplate();
 		$custom = new ilCustomInputGUI();

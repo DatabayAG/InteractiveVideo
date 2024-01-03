@@ -7,11 +7,7 @@
 class SimpleChoiceQuestionStatistics
 {
 
-	/**
-	 * @param int $oid
-	 * @return int
-	 */
-	public function getQuestionCountForObject($oid)
+	public function getQuestionCountForObject(int $oid): int
 	{
         global $ilDB;
 
@@ -26,11 +22,10 @@ class SimpleChoiceQuestionStatistics
 	}
 
     /**
-     * @param int $oid
-     * @return array
-     * @throws ilWACException
-     */
-	public function getPointsForUsers($oid)
+	 * @throws ilWACException
+	 * @return array<int, array{name: mixed, user_id: mixed, answered: int, correct: mixed, neutral_questions: mixed, percentage: int|float}>
+	 */
+	public function getPointsForUsers(int $oid): array
 	{
 
         global $ilDB;
@@ -75,11 +70,11 @@ class SimpleChoiceQuestionStatistics
 	}
 
     /**
-     * @param $oid
-     * @return array
-     * @throws ilWACException
-     */
-	public function getScoreForAllQuestionsAndAllUser($oid)
+	 * @param $oid
+	 * @throws ilWACException
+	 * @return array<string, mixed[]>
+	 */
+	public function getScoreForAllQuestionsAndAllUser(int $oid): array
 	{
 		$questions_list  = $this->getQuestionIdsForObject($oid);
 		$questions_count = $this->getQuestionCountForObject($oid);
@@ -179,10 +174,9 @@ class SimpleChoiceQuestionStatistics
 	}
 
 	/**
-	 * @param int $oid
-	 * @return array
+	 * @return array<int|string, mixed>
 	 */
-	public function getQuestionIdsForObject($oid)
+	public function getQuestionIdsForObject(int $oid): array
 	{
         global $ilDB;
 
@@ -207,9 +201,9 @@ class SimpleChoiceQuestionStatistics
 
 	/**
 	 * @param int $oid object_id
-	 * @return array
+	 * @return array<int, array{question_id: int|string, comment_id: mixed, comment_title: mixed, answered: int, correct: string|float|int, neutral_question: mixed, percentage: int|string|float}>
 	 */
-	public function getQuestionsOverview($oid)
+	public function getQuestionsOverview(int $oid): array
 	{
         global $ilDB;
 
@@ -277,9 +271,8 @@ class SimpleChoiceQuestionStatistics
 	/**
 	 * @param $oid
 	 * @param $uid
-	 * @return int
 	 */
-	public function getAnsweredQuestionsFromUser($oid, $uid)
+	public function getAnsweredQuestionsFromUser($oid, $uid): int
 	{
         global $ilDB;
 
@@ -297,9 +290,9 @@ class SimpleChoiceQuestionStatistics
 
 	/**
 	 * @param $question_id
-	 * @return array
+	 * @return array<int|string, mixed>
 	 */
-	public function getResponseFrequency($question_id)
+	public function getResponseFrequency($question_id): array
 	{
         global $ilDB;
 

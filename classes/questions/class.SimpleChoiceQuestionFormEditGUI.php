@@ -42,13 +42,12 @@ class SimpleChoiceQuestionFormEditGUI
 	}
 
     /**
-     * @param bool $ajax
-     * @return ilPropertyFormGUI
-     * @throws ilCtrlException
-     * @throws ilSystemStyleException
-     * @throws ilTemplateException
-     */
-	public function initQuestionForm(bool $ajax = false)
+	 * @param bool $ajax
+	 * @throws ilCtrlException
+	 * @throws ilSystemStyleException
+	 * @throws ilTemplateException
+	 */
+	public function initQuestionForm(bool $ajax = false): \ilPropertyFormGUI
 	{
 	    global $tpl;
         $plugin = ilInteractiveVideoPlugin::getInstance();
@@ -89,7 +88,7 @@ class SimpleChoiceQuestionFormEditGUI
 	 * @param ilPropertyFormGUI $form
 	 * @param bool              $ajax
 	 */
-	protected function appendGeneralSettingsToQuestionForm(ilPropertyFormGUI $form, $plugin, bool $ajax = false)
+	protected function appendGeneralSettingsToQuestionForm(ilPropertyFormGUI $form, $plugin, bool $ajax = false): void
 	{
 		if(!$ajax)
 		{
@@ -151,7 +150,7 @@ class SimpleChoiceQuestionFormEditGUI
      * @throws ilTemplateException
      * @throws ilWACException
      */
-	protected function appendQuestionSettingsToQuestionForm(ilPropertyFormGUI $form)
+	protected function appendQuestionSettingsToQuestionForm(ilPropertyFormGUI $form): void
 	{
 		$question_type = new ilSelectInputGUI($this->plugin->txt('question_type'), 'question_type');
 		$type_options  = [
@@ -188,7 +187,7 @@ class SimpleChoiceQuestionFormEditGUI
 	 * @param ilInteractiveVideoPlugin $plugin
 	 * @param ilPropertyFormGUI        $form
 	 */
-	protected function appendImageUploadForm(ilInteractiveVideoPlugin $plugin, ilPropertyFormGUI $form)
+	protected function appendImageUploadForm(ilInteractiveVideoPlugin $plugin, ilPropertyFormGUI $form): void
 	{
         global $DIC;
 
@@ -240,7 +239,7 @@ class SimpleChoiceQuestionFormEditGUI
 	/**
 	 * @param ilPropertyFormGUI $form
 	 */
-	protected function appendCorrectFeedbackToQuestionForm(ilPropertyFormGUI $form)
+	protected function appendCorrectFeedbackToQuestionForm(ilPropertyFormGUI $form): void
 	{
 		$feedback_correct  = xvidUtils::constructTextAreaFormElement('feedback_correct', 'feedback_correct');
 		$show_correct_icon = new ilCheckboxInputGUI($this->plugin->txt('show_correct_icon'), 'show_correct_icon');
@@ -268,7 +267,7 @@ class SimpleChoiceQuestionFormEditGUI
      * @param ilPropertyFormGUI $form
      * @throws ilCtrlException
      */
-	protected function appendFeedbackWrongToQuestionForm(ilPropertyFormGUI $form)
+	protected function appendFeedbackWrongToQuestionForm(ilPropertyFormGUI $form): void
 	{
 		$feedback_one_wrong = xvidUtils::constructTextAreaFormElement('feedback_one_wrong', 'feedback_one_wrong');
 		$show_wrong_icon    = new ilCheckboxInputGUI($this->plugin->txt('show_wrong_icon'), 'show_wrong_icon');
@@ -295,7 +294,7 @@ class SimpleChoiceQuestionFormEditGUI
 	/**
 	 * @param ilPropertyFormGUI $form
 	 */
-	protected function appendHiddenQuestionFormValues(ilPropertyFormGUI $form)
+	protected function appendHiddenQuestionFormValues(ilPropertyFormGUI $form): void
 	{
 		$is_interactive = new ilHiddenInputGUI('is_interactive');
 		$is_interactive->setValue(1);
@@ -314,7 +313,7 @@ class SimpleChoiceQuestionFormEditGUI
      * @throws ilSystemStyleException
      * @throws ilTemplateException
      */
-	protected function appendWarningModalToQuestionForm(ilPropertyFormGUI $form)
+	protected function appendWarningModalToQuestionForm(ilPropertyFormGUI $form): void
 	{
 		//Todo: what to do with the modal?
 		$modal = ilModalGUI::getInstance();
@@ -336,7 +335,7 @@ class SimpleChoiceQuestionFormEditGUI
      * @param                                               $post_var
      * @throws ilCtrlException
      */
-	protected function appendRepositorySelector($form, $post_var)
+	protected function appendRepositorySelector($form, string $post_var): void
 	{
 		$this->ctrl->setParameterByClass('ilformpropertydispatchgui', 'postvar', $post_var);
 		$explorer_gui = new ilInteractiveVideoSelectionExplorerGUI(
@@ -355,14 +354,13 @@ class SimpleChoiceQuestionFormEditGUI
 	}
 
     /**
-     * @return string
-     * @throws ilDatabaseException
-     * @throws ilObjectNotFoundException
-     * @throws ilSystemStyleException
-     * @throws ilTemplateException
-     * @throws ilWACException
-     */
-	public function getInteractiveForm()
+	 * @throws ilDatabaseException
+	 * @throws ilObjectNotFoundException
+	 * @throws ilSystemStyleException
+	 * @throws ilTemplateException
+	 * @throws ilWACException
+	 */
+	public function getInteractiveForm(): string
 	{
 		$simple_choice = new SimpleChoiceQuestion();
 		$ajax_object   = new SimpleChoiceQuestionAjaxHandler();

@@ -44,7 +44,7 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 	/**
 	 * 
 	 */
-	public function initType()
+	public function initType(): void
 	{
 		$this->setType('xvid');
 	}

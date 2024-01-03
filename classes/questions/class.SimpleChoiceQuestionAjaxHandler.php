@@ -139,7 +139,7 @@ class SimpleChoiceQuestionAjaxHandler
     /**
      * @param int $qid
      */
-	protected function getBestSolution(int $qid)
+	protected function getBestSolution(int $qid): string
     {
         $best_solution = '';
 	    $answers = $this->getAnswersForQuestionId($qid, false);
@@ -153,15 +153,14 @@ class SimpleChoiceQuestionAjaxHandler
 	 * @param $ref_id
 	 * @return string
 	 */
-    /**
-     * @param $ref_id
-     * @return string
-     * @throws ilDatabaseException
-     * @throws ilObjectNotFoundException
-     * @throws ilSystemStyleException
-     * @throws ilTemplateException
-     */
-	protected function getLinkIfReadAccessForObjectByRefId($ref_id)
+	/**
+	 * @param $ref_id
+	 * @throws ilDatabaseException
+	 * @throws ilObjectNotFoundException
+	 * @throws ilSystemStyleException
+	 * @throws ilTemplateException
+	 */
+	protected function getLinkIfReadAccessForObjectByRefId($ref_id): string
 	{
 		if($ref_id != null && $ref_id != 0)
 		{

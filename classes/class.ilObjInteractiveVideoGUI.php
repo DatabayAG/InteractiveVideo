@@ -1797,7 +1797,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      * @param $marker
      * @return string|string[]
      */
-    protected function cleanMarker($marker): string
+    protected function cleanMarker(string $marker): string
     {
         $marker = '<svg>'.trim($marker).'</svg>';
         $marker = xvidUtils::secureSvg($marker);
@@ -2603,11 +2603,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
     /**
-     * @param ilPropertyFormGUI|null $form
-     * @throws ilCtrlException
-     * @throws ilTemplateException
-     * @throws ilSystemStyleException
-     */
+	 * @param \ilPropertyFormGUI $form
+	 * @throws ilCtrlException
+	 * @throws ilTemplateException
+	 * @throws ilSystemStyleException
+	 */
 	public function editMyComment(ilPropertyFormGUI $form = NULL): void
 	{
 		/**
@@ -2636,11 +2636,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
     /**
-     * @param ilPropertyFormGUI|null $form
-     * @throws ilCtrlException
-     * @throws ilTemplateException
-     * @throws ilSystemStyleException
-     */
+	 * @param \ilPropertyFormGUI $form
+	 * @throws ilCtrlException
+	 * @throws ilTemplateException
+	 * @throws ilSystemStyleException
+	 */
 	public function editComment(ilPropertyFormGUI $form = NULL): void
 	{
 		/**
@@ -2672,9 +2672,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
     /**
-     * @param ilPropertyFormGUI|null $form
-     * @throws ilCtrlException
-     */
+	 * @param \ilPropertyFormGUI $form
+	 * @throws ilCtrlException
+	 */
 	public function editChapter(ilPropertyFormGUI $form = NULL): void
 	{
 		/**
@@ -2819,15 +2819,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return $values;
 	}
 #endregion
-
-#region QUESTIONS
-    /**
-     * @return ilPropertyFormGUI
-     * @throws ilCtrlException
-     * @throws ilSystemStyleException
-     * @throws ilTemplateException
-     */
-	public function initQuestionForm()
+	#region QUESTIONS
+	/**
+	 * @throws ilCtrlException
+	 * @throws ilSystemStyleException
+	 * @throws ilTemplateException
+	 */
+	public function initQuestionForm(): \ilPropertyFormGUI
 	{
 		$plugin = ilInteractiveVideoPlugin::getInstance();
         $simple_question = new SimpleChoiceQuestionFormEditGUI($this->plugin, $this->object);
@@ -2860,11 +2858,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
     /**
-     * @param ilPropertyFormGUI|null $form
-     * @throws ilCtrlException
-     * @throws ilSystemStyleException
-     * @throws ilTemplateException
-     */
+	 * @param \ilPropertyFormGUI $form
+	 * @throws ilCtrlException
+	 * @throws ilSystemStyleException
+	 * @throws ilTemplateException
+	 */
 	public function showTutorInsertQuestionForm(ilPropertyFormGUI $form = NULL): void
 	{
 		/**
@@ -2932,11 +2930,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
     /**
-     * @param ilPropertyFormGUI|null $form
-     * @throws ilCtrlException
-     * @throws ilSystemStyleException
-     * @throws ilTemplateException
-     */
+	 * @param \ilPropertyFormGUI $form
+	 * @throws ilCtrlException
+	 * @throws ilSystemStyleException
+	 * @throws ilTemplateException
+	 */
 	public function editQuestion(ilPropertyFormGUI $form = NULL): void
 	{
 		/**
@@ -2961,10 +2959,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
     /**
-	 * @return array|null
-     * @throws ilTemplateException
+	 * @return mixed[]
+	 * @throws ilTemplateException
 	 */
-	private function getQuestionFormValues(int $comment_id = 0)
+	private function getQuestionFormValues(int $comment_id = 0): array
 	{
 	    $values = [];
 

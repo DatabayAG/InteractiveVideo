@@ -35,7 +35,7 @@ class ilObjComment
 		}
 	}
 
-	public function read()
+	public function read(): void
 	{
 
 		$res = $this->db->queryF(
@@ -259,6 +259,9 @@ class ilObjComment
 		return $comments;
 	}
 
+	/**
+	 * @return mixed[]
+	 */
 	protected function sortInReplies($is_reply_to, $comments) : array
     {
 		foreach($is_reply_to as $value)

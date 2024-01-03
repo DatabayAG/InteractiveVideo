@@ -19,7 +19,7 @@ class SimpleChoiceQuestionsCompleteUserTableGUI extends ilTable2GUI
      * @throws ilCtrlException
      * @throws ilException
      */
-	public function __construct($a_parent_obj, $a_parent_cmd, $colum_head)
+	public function __construct(?object $a_parent_obj, string $a_parent_cmd, $colum_head)
 	{
         global $ilCtrl, $lng;
 

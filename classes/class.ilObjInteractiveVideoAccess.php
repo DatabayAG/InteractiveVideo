@@ -47,9 +47,8 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 
 	/**
 	 * @param $a_id
-	 * @return bool
 	 */
-	public static function checkOnline($a_id)
+	public static function checkOnline($a_id): bool
 	{
         global $ilDB;
 

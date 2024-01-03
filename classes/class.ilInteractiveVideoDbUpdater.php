@@ -51,7 +51,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	}
 
 	
-	protected function iterateThroughUpdateFiles()
+	protected function iterateThroughUpdateFiles(): void
 	{
 		foreach($this->update_files as $file)
 		{
@@ -69,7 +69,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 
 	}
 
-	protected function collectUpdateFiles()
+	protected function collectUpdateFiles(): void
 	{
 		$rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(dirname(__FILE__) . '/../VideoSources'));
 		$this->update_files = [];
@@ -118,10 +118,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
             ]
 		);
 	}
-	/**
-	 * @return bool
-	 */
-	public function isNewerVersionFound()
+	public function isNewerVersionFound(): bool
 	{
 		return $this->newer_version_found;
 	}
@@ -135,7 +132,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 		return $this->LAST_UPDATE_FILE;
 	}
 
-	public function applyPluginUpdates()
+	public function applyPluginUpdates(): void
 	{
 		$overall_success = true;
 		$error = '';
@@ -187,7 +184,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	/**
 	 * @param $folder
 	 */
-	protected function getPluginFolder($folder)
+	protected function getPluginFolder($folder): void
 	{
 		$plugin_id = $this->getPluginId($folder);
 		if(file_exists($folder . 'sql/dbupdate.php'))
@@ -215,9 +212,9 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	}
 
 	/**
-	 * @return array
+	 * @return mixed[]
 	 */
-	public function getMap()
+	public function getMap(): array
 	{
 		return $this->update_map;
 	}

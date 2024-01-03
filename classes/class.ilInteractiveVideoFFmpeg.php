@@ -97,7 +97,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
      * @param $seconds
      * @return string
      */
-	protected static function escapeHourMinutesSeconds($hours, $minutes, $seconds): string
+	protected static function escapeHourMinutesSeconds(int $hours, int $minutes, $seconds): string
 	{
 		$hours			= (int) $hours;
 		$minutes		= (int) $minutes;
@@ -109,7 +109,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
      * @param $seconds
      * @return string
      */
-	protected static function escapeMinutesSeconds($minutes, $seconds): string
+	protected static function escapeMinutesSeconds(int $minutes, $seconds): string
 	{
 		$minutes		= (int) $minutes;
 		return self::fillZeroIfSmallerTen($minutes) . ':' . self::escapeSeconds($seconds);

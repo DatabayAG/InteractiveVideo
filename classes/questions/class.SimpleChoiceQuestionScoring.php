@@ -9,9 +9,8 @@ class SimpleChoiceQuestionScoring
 
 	/**
 	 * @param int $qid question_id
-	 * @return int
 	 */
-	public function getScoreForQuestionOnUserId($qid)
+	public function getScoreForQuestionOnUserId(int $qid): int
 	{
 
         global $ilDB, $ilUser;
@@ -32,9 +31,9 @@ class SimpleChoiceQuestionScoring
 
 	/**
 	 * @param int $qid question_id
-	 * @return array
+	 * @return mixed[]
 	 */
-	public function getFeedbackByQuestionId($qid)
+	public function getFeedbackByQuestionId(int $qid): array
 	{
 
         global $ilDB;
@@ -50,9 +49,9 @@ class SimpleChoiceQuestionScoring
 
 	/**
 	 * @param int $oid object_id
-	 * @return array
+	 * @return array<int, array{question_id: mixed, title: mixed, neutral_answer: string, answered: string, points: int|float}>
 	 */
-	public function getMyPoints($oid)
+	public function getMyPoints(int $oid): array
 	{
 
         global $ilDB, $ilUser, $lng;
@@ -135,9 +134,9 @@ class SimpleChoiceQuestionScoring
 
 	/**
 	 * @param int $qid question_id
-	 * @return array
+	 * @return mixed[]
 	 */
-	public function getCorrectAnswersForQuestion($qid)
+	public function getCorrectAnswersForQuestion(int $qid): array
 	{
 
         global $ilDB;

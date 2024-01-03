@@ -39,7 +39,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 	 */
 	protected $video_src_id;
 
-    protected $cdata = '';
+    protected string $cdata = '';
 
     /**
      * @param ilObjInteractiveVideo $xvid_obj
@@ -63,7 +63,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 	 * @param $tagName
 	 * @param $tagAttributes
 	 */
-	public function handlerBeginTag($xmlParser, $tagName, $tagAttributes)
+	public function handlerBeginTag($xmlParser, $tagName, $tagAttributes): void
 	{
 		$a = 0;
 		switch($tagName)
@@ -138,7 +138,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 	 * @param $xmlParser
 	 * @param $tagName
 	 */
-	public function handlerEndTag($xmlParser, $tagName)
+	public function handlerEndTag($xmlParser, $tagName): void
 	{
 		switch($tagName)
 		{
@@ -287,7 +287,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 	 *
 	 * @param	string $a_val import directory
 	 */
-	public function setImportDirectory($a_val)
+	public function setImportDirectory(string $a_val)
 	{
 		$this->importDirectory = $a_val;
 	}
@@ -302,7 +302,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 		return $this->importDirectory;
 	}
 
-	public function handlerCharacterData($xmlParser, $charData)
+	public function handlerCharacterData($xmlParser, $charData): void
 	{
 		if($charData != "\n")
 		{

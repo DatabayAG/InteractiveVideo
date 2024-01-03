@@ -638,7 +638,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * @param $comment_id
      * @return array|null
      */
-	public function getCommentDataById($comment_id)
+	public function getCommentDataById($comment_id): ?array
 	{
 		$res = $this->db->queryF('SELECT * FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE comment_id = %s',
 			['integer'], [$comment_id]);
