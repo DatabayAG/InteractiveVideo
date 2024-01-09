@@ -3182,7 +3182,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         $question->deleteQuestionsIdByCommentId($comment_id);
         $qid = $question->create();
-
+       # $question->editAnswersForQuestion($qid);
 	}
 
     private function getValueFromFormOrArray(string $key, $form)

@@ -51,6 +51,7 @@ InteractiveVideoQuestionCreator = (function () {
 		$.each(IVQuestionCreator.JSON, function(l,value){
 			prototype.clone().attr({id: 'inner_' + l }).appendTo(table);
 			inner = $('#inner_' + l);
+
 			inner.find('.text_field').attr(
 				{
 					'value': value.answer,
@@ -61,11 +62,13 @@ InteractiveVideoQuestionCreator = (function () {
 			inner.find('.correct_solution').attr(
 				{
 					'name' : 'correct[' + l + ']',
+					'value': value.answer,
 					'meta' : l,
 
 					'class':'checkbox correct_solution'
 				}
 			);
+
 			if(parseInt(value.correct,10) === 1 )
 			{
 				inner.find('.correct_solution').attr('checked' , 'checked');

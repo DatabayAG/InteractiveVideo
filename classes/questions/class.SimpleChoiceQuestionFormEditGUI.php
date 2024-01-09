@@ -362,6 +362,7 @@ class SimpleChoiceQuestionFormEditGUI
 	 */
 	public function getInteractiveForm(): string
 	{
+        global $DIC;
 		$simple_choice = new SimpleChoiceQuestion();
 		$ajax_object   = new SimpleChoiceQuestionAjaxHandler();
 		$question_id   = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
@@ -375,7 +376,9 @@ class SimpleChoiceQuestionFormEditGUI
 		$question->setVariable('CORRECT_SOLUTION', 	$this->plugin->txt('correct_solution'));
 		if($question_id > 0)
 		{
-            $ajax_question_object = json_decode($ajax_object->getJsonForCommentId((int)$_GET['comment_id']));
+            $get = $DIC->http()->wrapper()->query();
+            $cid = $get->retrieve('comment_id', $DIC->refinery()->kindlyTo()->int());
+            $ajax_question_object = json_decode($ajax_object->getJsonForCommentId($cid));
 			$question->setVariable('JSON', json_encode($ajax_question_object->answers));
 			$question->setVariable('QUESTION_TYPE', $simple_choice->getTypeByQuestionId($question_id));
 			$question->setVariable('QUESTION_TEXT', $simple_choice->getQuestionTextQuestionId($question_id));
@@ -383,13 +386,16 @@ class SimpleChoiceQuestionFormEditGUI
 		else
 		{
 			$answers = [];
-			if(is_array($_POST) && array_key_exists('answer', $_POST) && sizeof($_POST['answer'])  > 0)
+
+            $post = $DIC->http()->wrapper()->post();
+            if($post->has('answer'))
 			{
-				$post_answers = ilArrayUtil::stripSlashesRecursive($_POST['answer']);
+				$post_answers = ilArrayUtil::stripSlashesRecursive($post->retrieve('answer', $DIC->refinery()->kindlyTo()->listOf($DIC->refinery()->kindlyTo()->string())));
+				$post_correct = $post->retrieve('correct', $DIC->refinery()->kindlyTo()->dictOf($DIC->refinery()->kindlyTo()->string()));
 				foreach($post_answers as $key => $value)
 				{
 					$correct = 0;
-					if(is_array($_POST['correct']) && array_key_exists($key, $_POST['correct']))
+					if(is_array($post_correct) && array_key_exists($key, $post_correct))
 					{
 						$correct = 1;
 					}

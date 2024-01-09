@@ -17,7 +17,7 @@ class SimpleChoiceQuestion
 	const NEUTRAL_ANSWERS = 1;
 	protected int $obj_id;
 	protected int $comment_id;
-	protected int $question_id;
+	protected int $question_id = 0;
 	protected string $question_text;
 	protected int $type;
 	protected string $feedback_correct;
@@ -87,7 +87,7 @@ class SimpleChoiceQuestion
 			$this->setQuestionImage($row['question_image']);
 		}
 
-//		$this->readAnswerDefinitions();
+		$this->readAnswerDefinitions();
 	}
 
 	/**
@@ -110,7 +110,7 @@ class SimpleChoiceQuestion
 			return $row;
 		}
 
-//		$this->readAnswerDefinitions();
+		$this->readAnswerDefinitions();
 	}
 
 	public function getCommentId() : int
@@ -1214,8 +1214,13 @@ class SimpleChoiceQuestion
 
         if($post->has('form_values'))
         {
-            $form_values = $post->retrieve('form_values', $DIC->refinery()->kindlyTo()->string());
-            $form_values = unserialize($form_values);
+            if($post->has('form_values') ) {
+                $form_values = $post->retrieve('form_values', $DIC->refinery()->kindlyTo()->string());
+                $form_values = unserialize($form_values);
+            } else {
+                $answer = $post->retrieve('answers', $DIC->refinery()->kindlyTo()->string());
+            }
+
             if (isset($form_values['answer'])) {
                 $answer = $form_values['answer'];
             }
@@ -1225,6 +1230,16 @@ class SimpleChoiceQuestion
             if (isset($form_values['correct'])) {
                 $correct_answers = $form_values['correct'];
              }
+        } else {
+            if($post->has('answer')) {
+                $answer = $post->retrieve('answer', $DIC->refinery()->kindlyTo()->listOf($DIC->refinery()->kindlyTo()->string()));
+            }
+            if($post->has('question_type')) {
+                $question_type = $post->retrieve('question_type', $DIC->refinery()->kindlyTo()->string());
+            }
+            if($post->has('correct')) {
+                $correct_answers = $post->retrieve('correct', $DIC->refinery()->kindlyTo()->dictOf($DIC->refinery()->kindlyTo()->string()));
+            }
         }
         if(is_array($answer) && count($answer) > 0 && $question_type != self::REFLECTION)
         {
@@ -1232,14 +1247,12 @@ class SimpleChoiceQuestion
             {
                 $answer_id = $DIC->database()->nextId(self::TABLE_NAME_QUESTION_TEXT);
                 if($value == null){$value = ' ';}
-                if(is_array($correct_answers) && array_key_exists($key, ilArrayUtil::stripSlashesRecursive($correct_answers)))
+                $correct = 0;
+                if(is_array($correct_answers) && array_key_exists($key, $correct_answers))
                 {
                     $correct = 1;
                 }
-                else
-                {
-                    $correct = 0;
-                }
+
                 $DIC->database()->insert(self::TABLE_NAME_QUESTION_TEXT,
                     [
                         'answer_id'   => ['integer', $answer_id],
