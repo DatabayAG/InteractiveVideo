@@ -64,7 +64,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 				$json_container[] = ['time' => $sec, 'img' => ilWACSignedPath::signFile($file . '?' . rand())];
 			}
 		}
-		
+
 		if($return_json)
 		{
 			return json_encode($json_container);
@@ -161,7 +161,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		if(@copy($path_org, $new_file))
 		{
 			chmod($new_file, 0770);
-			ilUtil::delDir(dirname($path_org));
+			ilFileUtils::delDir(dirname($path_org));
 			return $new_file;
 		}
 	}
@@ -183,7 +183,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		{
 			return '0' . $number;
 		}
-		
+
 		return $number;
 	}
 }
