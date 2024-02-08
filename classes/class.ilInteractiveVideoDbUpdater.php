@@ -100,7 +100,12 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 			[$this->plugin_id]
 		);
 		$row = $this->db->fetchAssoc($res);
-		return (int) $row['db_update'];
+        if($row !== null && isset($row['db_update'])) {
+            return (int) $row['db_update'];
+        } else {
+            return 0;
+        }
+
 	}
 
     /**

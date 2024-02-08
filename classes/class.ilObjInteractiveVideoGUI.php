@@ -13,6 +13,7 @@ use ILIAS\Refinery\ConstraintViolationException;
  * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilInteractiveVideoLearningProgressGUI
  * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilPropertyFormGUI
  * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilInteractiveVideoExportGUI
+ * @ilCtrl_Calls         ilObjInteractiveVideoGUI: ilLearningProgressGUI
  */
 class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopItemHandling
 {
