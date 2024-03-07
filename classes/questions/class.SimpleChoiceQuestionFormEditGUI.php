@@ -391,8 +391,13 @@ class SimpleChoiceQuestionFormEditGUI
             if($post->has('answer'))
 			{
 				$post_answers = ilArrayUtil::stripSlashesRecursive($post->retrieve('answer', $DIC->refinery()->kindlyTo()->listOf($DIC->refinery()->kindlyTo()->string())));
-				$post_correct = $post->retrieve('correct', $DIC->refinery()->kindlyTo()->dictOf($DIC->refinery()->kindlyTo()->string()));
-				foreach($post_answers as $key => $value)
+                $post_correct = [];
+                if($post->has('correct')) {
+                    $post_correct = $post->retrieve('correct', $DIC->refinery()->kindlyTo()->dictOf($DIC->refinery()->kindlyTo()->string()));
+                }
+
+
+                foreach($post_answers as $key => $value)
 				{
 					$correct = 0;
 					if(is_array($post_correct) && array_key_exists($key, $post_correct))
