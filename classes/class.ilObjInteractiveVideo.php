@@ -43,6 +43,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 * @var boolean
 	 */
 	protected $fixed_modal = 0;
+
+	/**
+	 * @var string
+	 */
+	protected $csv_export_delimiter = ";";
+
 	/**
 	 * @var int
 	 */
@@ -107,7 +113,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			[$this->getId()]
 		);
 		$row = $this->db->fetchAssoc($res);
-		
+
 		$this->setIsAnonymized($row['is_anonymized']);
 		$this->setIsRepeat($row['is_repeat']);
 		$this->setIsPublic($row['is_public']);
@@ -120,6 +126,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->setEnableToolbar($row['show_toolbar']);
 		$this->setAutoResumeAfterQuestion($row['auto_resume']);
 		$this->setFixedModal($row['fixed_modal']);
+		$this->setCSVExportDelimiter($row['csv_export_delimiter']);
 		$this->setShowTocFirst($row['show_toc_first']);
 		$this->setEnableCommentStream($row['disable_comment_stream']);
 		$this->setNoCommentStream($row['no_comment_stream']);
@@ -326,6 +333,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                             'is_task'        => ['integer', $is_task],
                             'auto_resume'    => ['integer', $auto_resume],
                             'fixed_modal'    => ['integer', $fixed_modal],
+                            'csv_export_delimiter' => ['text', ";"],
                             'task'           => ['text', $task],
                             'enable_comment' => ['integer', 1],
                             'show_toolbar'   => ['integer', $show_toolbar],
@@ -363,7 +371,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     protected function doUpdate(): void
 	{
 		parent::doUpdate();
-		
+
 		$old_source_id = $this->getOldVideoSource();
 		if($old_source_id != null && $old_source_id != $this->getSourceId())
 		{
@@ -382,6 +390,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
              'task'				=> ['text', $this->getTask()],
              'auto_resume'         => ['integer', $this->isAutoResumeAfterQuestion()],
              'fixed_modal'         => ['integer', $this->isFixedModal()],
+             'csv_export_delimiter' => ['text', $this->getCSVExportDelimiter()],
              'show_toc_first'      => ['integer', $this->getShowTocFirst()],
              'disable_comment_stream'    => ['integer', $this->getEnableCommentStream()],
              'lp_mode'			    => ['integer', $this->getLearningProgressMode()],
@@ -437,6 +446,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                 'task'     => ['text', $this->getTask()],
                 'auto_resume'     => ['integer', $this->isAutoResumeAfterQuestion()],
                 'fixed_modal'     => ['integer', $this->isFixedModal()],
+                'csv_export_delimiter' => ['text', $this->getCSVExportDelimiter()],
                 'show_toc_first'  => ['integer', $this->getShowTocFirst()],
                 'disable_comment_stream'  => ['integer', $this->getEnableCommentStream()],
                 'lp_mode' => ['integer', $this->getLearningProgressMode()],
@@ -1231,6 +1241,16 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	public function setFixedModal(bool $fixed_modal): void
 	{
 		$this->fixed_modal = $fixed_modal;
+	}
+
+	public function getCSVExportDelimiter(): string
+	{
+		return $this->csv_export_delimiter;
+	}
+
+	public function setCSVExportDelimiter(string $csv_export_delimiter): void
+	{
+		$this->csv_export_delimiter = $csv_export_delimiter;
 	}
 
     public function getShowTocFirst(): int

@@ -81,7 +81,7 @@ send#:#Check
 close#:#Close
 question#:#Question
 is_anonymized#:#Anonymize Comments
-is_anonymized_info#:#If enabled all comments are shown without usernames 
+is_anonymized_info#:#If enabled all comments are shown without usernames
 is_public#:#Publish All Comments
 is_public_info#:#If enabled all users are able to read all PUBLIC comments. Otherwise they are only able to see own comments and public comments created by administrators (in the tab "Questions, chapters and comments")
 correct_answered#:#Answered correctly
@@ -101,7 +101,7 @@ feedback#:#Feedback
 already_answered#:#Question already answered.
 reflection#:#Reflective question
 answers#:#Answers
-sure_update_question#:#Are you sure, you want to save the question? Existing user results will be deleted! 
+sure_update_question#:#Are you sure, you want to save the question? Existing user results will be deleted!
 question_type_info#:#You can choose between one of three available question types: a single choice, a multiple choice or a self-reflexion quertion. Self-reflexion questions do not have answer options and will be marked as "passed" once they have been shown to a user at least once.
 is_jump_correct_info#:#In case the question was answered correctly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
 is_jump_wrong_info#:#In case the question was answered incorrectly, you can select a jump label (time stamp) within the video to which the user can jump using a button. This button will be shown along with the feedback text.
@@ -131,7 +131,7 @@ crs_create_xvid#:#Create Interactive Video
 cat_create_xvid#:#Create Interactive Video
 root_create_xvid#:#Create Interactive Video
 fold_create_xvid#:#Create Interactive Video
-rbac_create_xvid#:#Create Interactive Video 
+rbac_create_xvid#:#Create Interactive Video
 source#:#Source
 installed_version#:#Installed Database Version: %s, File Database Version %s
 source_does_not_exist#:#Source does not exist anymore or was disabled in the administration
@@ -178,7 +178,7 @@ export_all_comments#:#Export All Comments
 question_image#:#Question image
 extract#:#Generate Thumbnail from Video
 use_this_image#:#Use this image
-time_for_preview#:#Time: 
+time_for_preview#:#Time:
 comment_title_info#:#The title is always visible in the comment screen.
 correct_answer#:#Correct
 wrong_answer#:#Wrong
@@ -281,3 +281,6 @@ please_create_object_first#:#To use an Opencast video, you must first create an 
 meo#:#Vimeo
 meo_vimeo_info#:#Please insert a Vimeo URL.
 meo_url#:#Vimeo URL
+export_section#:#Export
+csv_export_delimiter#:#CSV export delimiter
+csv_export_delimiter_info#:#Change the default delimiter for CSV exports.
