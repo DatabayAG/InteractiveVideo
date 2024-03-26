@@ -262,6 +262,24 @@ beta#:#Beta
 activate_marker#:#Marker aktivieren
 activate_marker_info#:#Marker aktivieren
 no_comment_id_given#:#Ein problem ist aufgetreten, es existiert keine Kommentar-ID
+imo#:#Video-Datei hochladen
+surl#:#Direkte URL zu Mediendatei im Web
+simple_url#:#Direkte URL zu Mediendatei im Web
+simple_url_info#:#Geben sie bitte eine URL zu einem Video an.
+ytb_youtube_url#:#YouTube-URL
+ytb_youtube_info#:#Geben Sie bitte eine YouTube-URL ein.
+ytb#:#YouTube
+opc#:#Opencast
+opc_id#:#Opencast Video Id
+opc_id_info#:#Opencast Video Id
+opc_selection_info#:#Opencast:
+opc_select_video#:#Video auswählen
+opc_insert#:#Video aus Opencast einfügen:
+opc_title#:#Titel
+please_create_object_first#:#Um ein Opencast Video nutzen zu können, müssen Sie erst ein Objekt «Interaktives Video» anlegen. Geben Sie dazu einen Titel ein und klicken Sie auf «Neues Interaktives Video anlegen».
+meo#:#Vimeo
+meo_vimeo_info#:#Geben Sie bitte eine Vimeo-URL ein.
+meo_url#:#Vimeo-URL
 export_section#:#Export
 csv_export_delimiter#:#CSV-Exporttrennzeichen
 csv_export_delimiter_info#:#Ändern Sie das Standardtrennzeichen für CSV-Exporte.

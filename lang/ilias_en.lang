@@ -263,6 +263,24 @@ beta#:#Beta
 activate_marker#:#Activate marker
 activate_marker_info#:#Activate marker
 no_comment_id_given#:#Something went wrong, the comment id is missing
+imo#:#Upload video file
+surl#:#Url
+simple_url#:#Simple URL
+simple_url_info#:#Please insert an URL to a video.
+ytb_youtube_url#:#YouTube URL
+ytb_youtube_info#:#Please insert a YouTube URL.
+ytb#:#YouTube
+opc#:#Opencast
+opc_id#:#Opencast Video Id
+opc_id_info#:#Opencast Video Id
+opc_selection_info#:#Opencast:
+opc_select_video#:#Select video
+opc_insert#:#Insert Opencast video:
+opc_title#:#Title
+please_create_object_first#:#To use an Opencast video, you must first create an «Interactive Video» object. To do so, specify a title and click «Add Interactive Video».
+meo#:#Vimeo
+meo_vimeo_info#:#Please insert a Vimeo URL.
+meo_url#:#Vimeo URL
 export_section#:#Export
 csv_export_delimiter#:#CSV export delimiter
 csv_export_delimiter_info#:#Change the default delimiter for CSV exports.
