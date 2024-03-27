@@ -6,13 +6,16 @@ require_once 'Services/Component/classes/class.ilPluginDBUpdate.php';
  */
 class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 {
-
+    //TODO: cleanup class
+    private mixed $LAST_UPDATE_FILE = null;
+    private mixed $DB_UPDATE_FILE = null;
+    private mixed $current_file = null;
     protected ilDBInterface $db;
 
 	/**
 	 * @var array
 	 */
-	protected $update_files;
+	protected $update_files = null;
 
 	/**
 	 * @var bool
@@ -31,6 +34,13 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 
     protected $tpl;
 
+    protected $xvid_instance;
+
+
+    private string $db_update_file;
+    private ?int $current_version = null;
+    private ?int $file_version = null;
+
 	/** @noinspection PhpMissingParentConstructorInspection */
 	/**
 	 * ilInteractiveVideoDbUpdater constructor.
@@ -43,11 +53,16 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 
         $this->tpl = $DIC->ui()->mainTemplate();
 		$this->db = $DIC->database();
-		$this->collectUpdateFiles();
-		$this->iterateThroughUpdateFiles();
+        $component_repository = $DIC["component.repository"];
+        foreach ($component_repository->getPlugins() as $plugin) {
+            if($plugin->getId() === 'xvid') {
+                $this->xvid_instance = $plugin;
+            }
+        }
+        $this->collectUpdateFiles();
+        $this->iterateThroughUpdateFiles();
         $class_map = require ILIAS_ABSOLUTE_PATH . '/libs/composer/vendor/composer/autoload_classmap.php';
         $this->ctrl_structure_iterator = new ilCtrlArrayIterator($class_map);
-
 	}
 
 	
@@ -55,15 +70,14 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	{
 		foreach($this->update_files as $file)
 		{
-			$this->LAST_UPDATE_FILE = $file;
-			if($this->readLastUpdateFile())
+            $this->db_update_file = $file;
+            $this->plugin_id = $this->replaceFolderNameWithDbVersion($file, $this->file_version);
+            $this->readDBUpdateFile();
+            $this->readFileVersion();
+            $current = $this->getCurrentVersion();
+            if($this->file_version > $current)
 			{
-				$actual_version = $this->readFileVersion();
-				$this->plugin_id = $this->replaceFolderNameWithDbVersion($file, $actual_version);
-				if($actual_version > $this->getCurrentVersion())
-				{
-					$this->newer_version_found = true;
-				}
+                $this->newer_version_found = true;
 			}
 		}
 
@@ -112,7 +126,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
      * @param int $a_version
      * @return void
      */
-    public function setCurrentVersion(int $a_version): void
+    public function setCurrentVersion(?int $a_version): void
 	{
 		$this->db->update('rep_robj_xvid_sources',
 			[
@@ -143,21 +157,19 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 		$error = '';
 		foreach($this->update_files as $file)
 		{
-			$this->getCurrentVersion();
-
-			$this->plugin_id = $this->getPluginId(dirname(dirname($file)). '/');
-			$this->getFileForStep($this->currentVersion + 1);
 			$this->LAST_UPDATE_FILE	= $file;
 			$this->DB_UPDATE_FILE	= $file;
-			$this->current_file		=$file;
-
+            $this->db_update_file   = $file;
+			$this->current_file		= $file;
+            $folder = dirname($file, 2) . '/';
+            $this->plugin_id = $this->getPluginId($folder);
+            $this->getFileForStep($this->current_version + 1);
 			$this->readDBUpdateFile();
-			$this->readLastUpdateFile();
-			$version = $this->readFileVersion();
+			$this->readFileVersion();
 			$return_value = $this->applyUpdate();
 			if(is_null($return_value) || $return_value === true)
 			{
-				$this->setCurrentVersion($version);
+				$this->setCurrentVersion($this->file_version);
 			}
 			else
 			{
@@ -237,4 +249,58 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 			return $id;
 		}
 	}
+
+    private function readDBUpdateFile(): void
+    {
+        if (!file_exists($this->db_update_file)) {
+            $this->error = 'no_db_update_file';
+            $this->filecontent = [];
+            return;
+        }
+
+        $this->filecontent = @file($this->db_update_file);
+    }
+
+    private function readFileVersion(): void
+    {
+        //go through filecontent and search for last occurence of <#x>
+        reset($this->filecontent);
+        $regs = [];
+        $version = 0;
+        foreach ($this->filecontent as $row) {
+            if (preg_match('/^\<\#([0-9]+)>/', $row, $regs)) {
+                $version = $regs[1];
+            }
+        }
+
+        $this->file_version = (int) $version;
+    }
+
+    public function applyUpdate()
+    {
+        $ilCtrlStructureReader = null;
+        $ilDB = null;
+        $this->initGlobalsRequiredForUpdateSteps($ilCtrlStructureReader, $ilDB);
+
+        $file_version = $this->file_version;
+        $current_version = $this->current_version;
+
+        $this->updateMsg = 'no_changes';
+        if ($current_version < $file_version) {
+            $msg = [];
+            for ($i = ($current_version + 1); $i <= $file_version; $i++) {
+                if ($this->applyUpdateNr($i) === false) {
+                    $msg[] = 'msg: update_error - ' . $this->error . '; nr: ' . $i . ';';
+                    $this->updateMsg = implode("\n", $msg);
+
+                    return false;
+                }
+
+                $msg[] = 'msg: update_applied; nr: ' . $i . ';';
+            }
+
+            $this->updateMsg = implode('\n', $msg);
+        }
+    }
+
 }

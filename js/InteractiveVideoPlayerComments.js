@@ -55,7 +55,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		let comment_not_already_rendered = $('.' + list_item_id).length;
 		let player_data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
 		if(pro.isBuildListElementAllowed(player_data, username)
-			&& comment.is_table_of_content === "0"
+			&&  ( comment.is_table_of_content === "0" || comment.is_table_of_content === 0 )
 			&& comment_not_already_rendered === 0
 		)
 		{

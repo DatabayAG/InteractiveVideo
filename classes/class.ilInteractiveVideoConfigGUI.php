@@ -130,6 +130,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 			{
 				$activation = new ilCheckboxInputGUI(ilInteractiveVideoPlugin::getInstance()->txt($engine->getID()), $class);
 				$activation->setValue(1);
+                //Todo: fix broken map
 				if($this->video_source_factory->isActive($class))
 				{
 					$activation->setChecked(true);
@@ -142,7 +143,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 				{
 					$info = sprintf($this->plugin_object->txt('installed_version'), $update_map[$engine->getId()]['installed'], $update_map[$engine->getId()]['file']);
 				}
-				$activation->setInfo($info);
+                $activation->setInfo($info);
 				$form->addItem($activation);
 				$mapping[$class] = ['path' => $engine->getClassPath(), 'id' => $engine->getId()];
 			}

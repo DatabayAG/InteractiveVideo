@@ -8,8 +8,6 @@ class ilInteractiveVideoLanguageHandler extends ilPluginLanguage
      */
     public function updateLanguages(?array $a_lang_keys = null): void
     {
-        ilGlobalCache::flushAll();
-
         $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(dirname(__FILE__) . '/../VideoSources'));
         $directories = $this->exploreDirectory($rii);
         $lang_array = [];
