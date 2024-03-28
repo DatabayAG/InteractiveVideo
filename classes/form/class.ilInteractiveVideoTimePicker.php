@@ -140,7 +140,7 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
 	public static function getTimeStringFromSeconds($seconds): string
 	{
         $hour = floor($seconds / 3600);
-        $min = floor($seconds / 60 % 60);
+        $min = floor($seconds / 60 );
         $sec = floor($seconds % 60);
         return sprintf('%02d:%02d:%02d', $hour, $min, $sec);
 	}
