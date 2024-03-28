@@ -243,7 +243,9 @@ class ilObjComment
 			{
 			    if($toc === false) {
                     $comments[$i] = $temp;
-                } elseif($toc === true && $temp['is_table_of_content'] === "1"){
+                } elseif($toc === true && (
+                    $temp['is_table_of_content'] === "1" || $temp['is_table_of_content'] === 1 )
+                ){
                     $comments[$i] = $temp;
                 }
 
