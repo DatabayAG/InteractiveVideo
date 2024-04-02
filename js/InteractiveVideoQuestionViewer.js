@@ -271,8 +271,11 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	};
 
 	pro.showBestSolutionIsClicked = function(comment_id, player) {
+		console.log('CLÖICK')
 		$('#show_best_solution').prop("disabled", true)
-		if(pub.QuestionObject.limit_attempts === "0"){
+		console.log(pub.QuestionObject.limit_attempts, pub.QuestionObject)
+		//if(pub.QuestionObject.limit_attempts === "0"){
+		if(pub.QuestionObject.repeat_question === "1"){
 			$('#question_buttons_bellow_form').append(pro.createButtonButtons('repeat_question', scope.InteractiveVideo.lang.repeat, 'question_repeat_btn', 'button'))
 			$('.question_repeat_btn').off('click');
 			$('.question_repeat_btn').on('click', function () {
