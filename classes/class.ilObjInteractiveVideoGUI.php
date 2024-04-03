@@ -3807,7 +3807,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$ilCtrl->saveParameterByClass($class_name, 'xvid_referrer_ref_id');
             $xvid_referrer = '';
             if($get->has('xvid_referrer')){
-                $xvid_referrer = $get->retrieve('xvid_referrer', $DIC->refinery->kindlyTo()->string());
+                $xvid_referrer = $get->retrieve('xvid_referrer', $DIC->refinery()->kindlyTo()->string());
             }
 			$ilCtrl->setParameterByClass($class_name, 'xvid_referrer', urlencode($xvid_referrer));
 			$ilCtrl->redirectByClass(["ilobjplugindispatchgui", $class_name], "");
@@ -3818,7 +3818,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$ilCtrl->setParameterByClass($class_name, "ref_id", $ref_id);
 			$ilCtrl->saveParameterByClass($class_name, 'xvid_referrer_ref_id');
             if($get->has('xvid_referrer')){
-                $xvid_referrer = $get->retrieve('xvid_referrer', $DIC->refinery->kindlyTo()->string());
+                $xvid_referrer = $get->retrieve('xvid_referrer', $DIC->refinery()->kindlyTo()->string());
             }
 			$ilCtrl->setParameterByClass($class_name, 'xvid_referrer', urlencode($xvid_referrer));
 			$ilCtrl->redirectByClass(["ilobjplugindispatchgui", $class_name], "infoScreen");
