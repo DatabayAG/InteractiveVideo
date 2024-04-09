@@ -109,7 +109,7 @@ class SimpleChoiceQuestionFormEditGUI
 		if(isset($_POST['comment_time']))
 		{
 			$seconds = $_POST['comment_time'];
-			$time->setValueByArray(['comment_time' => (int)$seconds]);
+			$time->setValueByArray(['comment_time' => $seconds]);
 		}
 
 
