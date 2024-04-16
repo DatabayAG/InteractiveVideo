@@ -1,5 +1,3 @@
-# Development branch NOT for production use!
-
 - [InteractiveVideo](#interactivevideo)
   * [ILIAS compatibility](#ilias-compatibility)
   * [Important notice](#important-notice)
