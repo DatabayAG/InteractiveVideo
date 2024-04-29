@@ -2033,6 +2033,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $form->addItem($title);
 
         $time = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'comment_time');
+        if(isset($_POST['comment_time']))
+        {
+            $seconds = $_POST['comment_time'];
+            $time->setValueByArray(['comment_time' => $seconds]);
+        }
         #$time->setShowTime(true);
         #$time->setShowSeconds(true);
 
