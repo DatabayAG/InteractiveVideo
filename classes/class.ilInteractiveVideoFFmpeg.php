@@ -147,10 +147,10 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 			{
 				$file_extension = $clean_extension[0];
 			}
-			$path_org = preg_split('/\?/', $path_org);
-			if(is_array($path_org) && count($path_org) > 1)
+			$clean_path_org = preg_split('/\?/', $path_org);
+			if(is_array($clean_path_org) && count($clean_path_org) > 1)
 			{
-				$path_org = $path_org[0];
+				$path_org = $clean_path_org[0];
 			}
 		}
 		$clean_name		= $comment_id .'.' . $file_extension;
