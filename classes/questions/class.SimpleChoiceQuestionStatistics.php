@@ -227,8 +227,8 @@ class SimpleChoiceQuestionStatistics
 		{
 			if($row['points'] == null || ! isset($questions[$row['question_id']]))
 			{
-				$questions[$row['question_id']]['answered'] = 0;
-				$questions[$row['question_id']]['correct']  = 0;
+				$questions[$row['question_id']]['answered'] = 1;
+				$questions[$row['question_id']]['correct']  = 1;
 			}
 			else
 			{
