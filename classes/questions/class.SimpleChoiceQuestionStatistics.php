@@ -148,7 +148,8 @@ class SimpleChoiceQuestionStatistics
 		{
 			if($value['answered'] > 0)
 			{
-				$return_value['users'][$key]['answerd'] = round(($value['answered'] / $questions_count) * 100, 2) . '%';
+                $percentage = round(($value['answered'] / $questions_count) * 100, 2);
+				$return_value['users'][$key]['answerd'] = $percentage . '%';
 			}
 			else
 			{
@@ -157,7 +158,11 @@ class SimpleChoiceQuestionStatistics
 
 			if($value['answered'] > 0 && ($questions_count - $neutral) > 0)
 			{
-				$return_value['users'][$key]['sum'] = round(($value['sum'] / ($questions_count - $neutral)) * 100, 2) . '%';
+                $percentage = round(($value['sum'] / ($questions_count - $neutral)) * 100, 2);
+                if($percentage > 100) {
+                    $percentage = 100;
+                }
+				$return_value['users'][$key]['sum'] = $percentage . '%';
 			}
 			else
 			{
