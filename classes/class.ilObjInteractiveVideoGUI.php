@@ -2421,6 +2421,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             if ($post->has('comment_time')) {
                 $seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->string());
                 $comment_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($seconds));
+                $this->objComment->setCommentTime($comment_time);
             }
             if ($post->has('comment_text')) {
                 $comment_text = $post->retrieve('comment_text', $this->refinery->kindlyTo()->string());
@@ -2448,15 +2449,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $this->objComment->setInteractive(0);
                 $this->objComment->setIsPrivate((int) $form->getInput('is_private'));
                 $this->objComment->setIsTableOfContent((int) $form->getInput('is_table_of_content'));
-                $this->objComment->setCommentTime($comment_time);
             }
-            if ($valid) {
-                $this->objComment->update();
-                $this->editComments();
-            } else {
-
-                $this->editChapter($form);
-            }
+        }
+        if ($valid) {
+            $this->objComment->update();
+            $this->editComments();
+        } else {
+            $form->setValuesByPost();
+            $this->editChapter($form);
         }
 	}
 
