@@ -101,7 +101,7 @@ class SimpleChoiceQuestionStatistics
 			if(!isset($return_sums[$id]['answered']))
 			{
 				$return_sums[$id]['answered'] = 0;
-				$return_sums[$id]['sum']      = 0;
+				$return_sums[$id]['sum']      = 1;
 			}
 			foreach($questions_list as $key => $value)
 			{
@@ -135,7 +135,8 @@ class SimpleChoiceQuestionStatistics
 		{
 			if($value['answered'] > 0)
 			{
-				$return_value['users'][$key]['answerd'] = round(($value['answered'] / $questions_count) * 100, 2) . '%';
+                $percentage = round(($value['answered'] / $questions_count) * 100, 2);
+				$return_value['users'][$key]['answerd'] = $percentage . '%';
 			}
 			else
 			{
@@ -144,7 +145,11 @@ class SimpleChoiceQuestionStatistics
 
 			if($value['answered'] > 0 && ($questions_count - $neutral) > 0)
 			{
-				$return_value['users'][$key]['sum'] = round(($value['sum'] / ($questions_count - $neutral)) * 100, 2) . '%';
+                $percentage = round(($value['sum'] / ($questions_count - $neutral)) * 100, 2);
+                if($percentage > 100) {
+                    $percentage = 100;
+                }
+				$return_value['users'][$key]['sum'] = $percentage . '%';
 			}
 			else
 			{
@@ -222,8 +227,8 @@ class SimpleChoiceQuestionStatistics
 		{
 			if($row['points'] == null || ! isset($questions[$row['question_id']]))
 			{
-				$questions[$row['question_id']]['answered'] = 0;
-				$questions[$row['question_id']]['correct']  = 0;
+				$questions[$row['question_id']]['answered'] = 1;
+				$questions[$row['question_id']]['correct']  = 1;
 			}
 			else
 			{
