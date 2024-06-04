@@ -101,7 +101,7 @@ class SimpleChoiceQuestionStatistics
 			if(!isset($return_sums[$id]['answered']))
 			{
 				$return_sums[$id]['answered'] = 0;
-				$return_sums[$id]['sum']      = 0;
+				$return_sums[$id]['sum']      = 1;
 			}
 			foreach($questions_list as $key => $value)
 			{
