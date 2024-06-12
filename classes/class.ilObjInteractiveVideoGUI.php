@@ -960,6 +960,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$fixed_modal = $form->getInput('fixed_modal');
 		$this->object->setFixedModal((int)$fixed_modal);
 
+		$csv_export_delimiter = $form->getInput('csv_export_delimiter');
+		$this->object->setCSVExportDelimiter(ilInteractiveVideoPlugin::stripSlashesWrapping($csv_export_delimiter));
+
         $marker_for_students = $form->getInput('marker_for_students');
         $this->object->setMarkerForStudents((int)$marker_for_students);
 
@@ -1156,6 +1159,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$fixed_modal->setInfo($plugin->txt('fixed_modal_info'));
 		$fixed_modal->setValue(1);
 		$a_form->addItem($fixed_modal);
+
+		$section = new ilFormSectionHeaderGUI();
+		$section->setTitle($plugin->txt('export_section'));
+		$a_form->addItem($section);
+
+		$csv_export_delimiter = new ilTextInputGUI($plugin->txt('csv_export_delimiter'), 'csv_export_delimiter');
+		$csv_export_delimiter->setInfo($plugin->txt('csv_export_delimiter_info'));
+		$csv_export_delimiter->setValue(";");
+		$a_form->addItem($csv_export_delimiter);
 	}
 
 	/**
@@ -1198,6 +1210,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values['task']				= $this->object->getTask();
 		$a_values['auto_resume']		= $this->object->isAutoResumeAfterQuestion();
 		$a_values['fixed_modal']		= $this->object->isFixedModal();
+		$a_values['csv_export_delimiter'] = $this->object->getCSVExportDelimiter();
         $a_values["marker_for_students"]= $this->object->getMarkerForStudents();
         $a_values["layout_width"]       = $this->object->getLayoutWidth();
 	}
@@ -3658,7 +3671,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$data = $simple->getScoreForAllQuestionsAndAllUser($this->obj_id);
 
 		$csv = [];
-		$separator = ";";
+		$separator = $this->object->getCSVExportDelimiter();
 
 		$head_row = [];
 		array_push($head_row, $lng->txt('name'));
@@ -3707,7 +3720,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$data = $this->object->getCommentsTableDataByUserId();
 
 		$csv = [];
-		$separator = ";";
+		$separator = $this->object->getCSVExportDelimiter();
 
 		$head_row = [];
 		array_push($head_row, $lng->txt('id'));
@@ -3716,6 +3729,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($head_row, $plugin->txt('comment_title'));
 		array_push($head_row, $plugin->txt('comment'));
         array_push($head_row, $plugin->txt('visibility'));
+		array_push($head_row, $plugin->txt('is_private'));
 		array_push($head_row, $plugin->txt('reply_to'));
 
 		array_push($csv, ilCSVUtil::processCSVRow($head_row, TRUE, $separator) );
@@ -3747,7 +3761,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$data = $this->object->getCommentsTableData(true, false, false, true);
 
 		$csv = [];
-		$separator = ";";
+		$separator = $this->object->getCSVExportDelimiter();
 
 		$head_row = [];
 
