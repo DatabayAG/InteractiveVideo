@@ -303,7 +303,7 @@ class ilObjComment
 			$this->setIsPrivate($row['is_private']);
 			$this->setIsTableOfContent($row['is_table_of_content']);
 			$this->setIsReplyTo($row['is_reply_to']);
-			$this->setMarker($row['marker']);
+			$this->setMarker($row['marker'] ?: '');
 			$new_comment_id = $this->create(true);
 			if($row['is_interactive'])
 			{
