@@ -338,8 +338,8 @@ class SimpleChoiceQuestion
         global $ilDB;
 
 
-		$_POST['answer'] = [];
-		$_POST['correct'] = [];
+		$answers = [];
+		$correct = [];
 
 		$res = $ilDB->queryF('
 				SELECT * 
@@ -350,10 +350,10 @@ class SimpleChoiceQuestion
 		$counter = 0;
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$_POST['answer'][] = $row['answer'];
+            $answers[] = $row['answer'];
 			if($row['correct'] == 1)
 			{
-				$_POST['correct'][$counter] = 1;
+                $correct[$counter] = 1;
 			}
 			$counter++;
 		}
@@ -387,7 +387,6 @@ class SimpleChoiceQuestion
 			$this->setReflectionQuestionComment($row['reflection_question_comment']);
 			$this->setNeutralAnswer($row['neutral_answer']);
 			$this->setQuestionImage($row['question_image']);
-			$_POST['question_type'] = $row['type'];
 			$this->create();
 		}
 	}
