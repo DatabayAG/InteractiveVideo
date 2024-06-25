@@ -232,7 +232,7 @@ class SimpleChoiceQuestionStatistics
                     $questions[$row['question_id']]['correct']  = 0;
                 } else {
                     $questions[$row['question_id']]['answered'] = 1;
-                    $questions[$row['question_id']]['correct']  = 1;
+                    $questions[$row['question_id']]['correct']  = 0;
                 }
 
 			}
