@@ -225,10 +225,16 @@ class SimpleChoiceQuestionStatistics
 		$questions = [];
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			if($row['points'] == null || ! isset($questions[$row['question_id']]))
+			if(! isset($questions[$row['question_id']]))
 			{
-				$questions[$row['question_id']]['answered'] = 1;
-				$questions[$row['question_id']]['correct']  = 1;
+                if($row['points'] == null) {
+                    $questions[$row['question_id']]['answered'] = 0;
+                    $questions[$row['question_id']]['correct']  = 0;
+                } else {
+                    $questions[$row['question_id']]['answered'] = 1;
+                    $questions[$row['question_id']]['correct']  = 1;
+                }
+
 			}
 			else
 			{
