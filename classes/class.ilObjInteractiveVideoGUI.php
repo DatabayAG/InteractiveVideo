@@ -3532,21 +3532,23 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
             $qid = $post->retrieve('qid', $this->refinery->kindlyTo()->int());
             if(!SimpleChoiceQuestion::isLimitAttemptsEnabled($qid)){
+                $answer = [];
                 if($post->has('answer')) {
-                    $answer = [];
-                    $answer = $post->retrieve('answer', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string()));
-                    $simple_choice = new SimpleChoiceQuestion();
-                    $simple_choice->saveAnswer($qid, $answer);
+                        $answer = $post->retrieve('answer', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string()));
                 }
+                $simple_choice = new SimpleChoiceQuestion();
+                $simple_choice->saveAnswer($qid, $answer);
+
             }
             if(SimpleChoiceQuestion::existUserAnswerForQuestionId((int)$qid) == false)
             {
-                if($post->has('answer')) {
                 $answer = [];
-                $answer = $post->retrieve('answer', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string()));
+                if($post->has('answer')) {
+                    $answer = $post->retrieve('answer', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string()));
+                }
                 $simple_choice = new SimpleChoiceQuestion();
                 $simple_choice->saveAnswer($qid, $answer);
-                }
+
             }
 		}
 

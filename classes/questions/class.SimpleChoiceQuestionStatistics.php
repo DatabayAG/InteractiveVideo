@@ -223,29 +223,30 @@ class SimpleChoiceQuestionStatistics
 			[(int)$oid]
 		);
 		$questions = [];
-		while($row = $ilDB->fetchAssoc($res))
-		{
-			if(! isset($questions[$row['question_id']]))
-			{
-                if($row['points'] == null) {
-                    $questions[$row['question_id']]['answered'] = 0;
-                    $questions[$row['question_id']]['correct']  = 0;
-                } else {
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            if($row['points'] == null)
+            {
+                $questions[$row['question_id']]['answered'] = 0;
+                $questions[$row['question_id']]['correct']  = 0;
+            }
+            else if($row['points'] !== null)
+            {
+                if( ! array_key_exists($row['question_id'], $questions)) {
                     $questions[$row['question_id']]['answered'] = 1;
                     $questions[$row['question_id']]['correct']  = 0;
                 }
+            }
+            else
+            {
+                $questions[$row['question_id']]['answered']++;
+                $questions[$row['question_id']]['correct'] += $row['points'];
+            }
+            $questions[$row['question_id']]['comment_id']    = $row['comment_id'];
+            $questions[$row['question_id']]['comment_title'] = $row['comment_title'];
+            $questions[$row['question_id']]['neutral_answer'] = $row['neutral_answer'];
 
-			}
-			else
-			{
-				$questions[$row['question_id']]['answered']++;
-				$questions[$row['question_id']]['correct'] += $row['points'];
-			}
-			$questions[$row['question_id']]['comment_id']    = $row['comment_id'];
-			$questions[$row['question_id']]['comment_title'] = $row['comment_title'];
-			$questions[$row['question_id']]['neutral_answer'] = $row['neutral_answer'];
-
-		}
+        }
 		$results = [];
 		$counter = 0;
 		foreach($questions as $key => $value)

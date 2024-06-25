@@ -163,7 +163,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 	};
 
 	pub.isFullScreen = function(player_id){
-		return il.InteractiveVideo[player_id].player.fullscreen.active;
+		return il.InteractiveVideo[player_id].player.fullscreen;
 	}
 
 	pub.exitFullScreen = function(player_id){
