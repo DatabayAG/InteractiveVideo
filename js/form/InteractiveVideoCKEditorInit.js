@@ -33,7 +33,10 @@ il.InteractiveVideoEditor = (function (scope) {
 
     pub.getEditorInstanceById = function (elementId)
     {
-        return pri.txt_editor_instances['#' + elementId];
+        if (typeof pri.txt_editor_instances['#' + elementId] != "undefined") {
+            return pri.txt_editor_instances['#' + elementId];
+        }
+        return false;
     }
 
     pub.getEditorInstances = function ()
