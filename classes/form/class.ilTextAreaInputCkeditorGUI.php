@@ -44,6 +44,6 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 		 */
 		global $tpl;
 		$tpl->addCss('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/libs/npm/node_modules/ckeditor5/dist/browser/ckeditor5.css');
-       // $tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/form/ckeditorInit.js');
+       // $tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/form/InteractiveVideoCKEditorInit.js');
 	}
 }
