@@ -67,7 +67,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	pro.addCompulsoryHeader = function(header){
 		pub.toggleCloseButtons(false);
 		$(pri.ids.modal + ' .modal-header').removeClass('compulsory');
-		if(pub.QuestionObject.compulsory_question === "1") {
+		if(pub.QuestionObject.compulsory_question === "1" || pub.QuestionObject.compulsory_question === 1) {
 			if(! pub.QuestionObject.feedback) {
 				pub.toggleCloseButtons(true);
 			}
@@ -197,7 +197,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		{
 			$(pri.ids.private_modal + player_id).attr('checked', 'checked');
 		}
-		CKEDITOR.replace(comment_id);
+		//CKEDITOR.replace(comment_id);
 		feedback.prepend(language.add_comment);
 		scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReflectionCommentPosting(pub.comment_id, pub.QuestionObject.reply_original_id, player_id);
 	};

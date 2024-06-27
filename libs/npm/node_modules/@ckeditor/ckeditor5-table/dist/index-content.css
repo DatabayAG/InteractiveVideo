@@ -1,0 +1,55 @@
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+:root {
+--ck-color-selector-caption-background: hsl(0, 0%, 97%);
+--ck-color-selector-caption-text: hsl(0, 0%, 20%);
+}
+.ck-content .table {
+margin: 0.9em auto;
+display: table;
+}
+.ck-content .table table {
+border-collapse: collapse;
+border-spacing: 0;
+width: 100%;
+height: 100%;
+border: 1px double hsl(0, 0%, 70%);
+}
+.ck-content .table table td {
+min-width: 2em;
+padding: .4em;
+border: 1px solid hsl(0, 0%, 75%);
+}
+.ck-content .table table th {
+font-weight: bold;
+background: hsla(0, 0%, 0%, 5%);
+}
+.ck-content[dir="rtl"] .table th {
+text-align: right;
+}
+.ck-content[dir="ltr"] .table th {
+text-align: left;
+}
+.ck-content .table > figcaption {
+display: table-caption;
+caption-side: top;
+word-break: break-word;
+text-align: center;
+color: var(--ck-color-selector-caption-text);
+background-color: var(--ck-color-selector-caption-background);
+padding: .6em;
+font-size: .75em;
+outline-offset: -1px;
+}
+.ck-content .table .ck-table-resized {
+table-layout: fixed;
+}
+.ck-content .table table {
+overflow: hidden;
+}
+.ck-content .table td {
+overflow-wrap: break-word;
+position: relative;
+}

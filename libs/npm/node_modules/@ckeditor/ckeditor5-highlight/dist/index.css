@@ -1,0 +1,45 @@
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+/*
+ * Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+
+:root {
+	--ck-highlight-marker-yellow: hsl(60, 97%, 73%);
+	--ck-highlight-marker-green: hsl(120, 93%, 68%);
+	--ck-highlight-marker-pink: hsl(345, 96%, 73%);
+	--ck-highlight-marker-blue: hsl(201, 97%, 72%);
+	--ck-highlight-pen-red: hsl(0, 85%, 49%);
+	--ck-highlight-pen-green: hsl(112, 100%, 27%);
+}
+
+.ck-content .marker-yellow {
+		background-color: var(--ck-highlight-marker-yellow);
+	}
+.ck-content .marker-green {
+		background-color: var(--ck-highlight-marker-green);
+	}
+.ck-content .marker-pink {
+		background-color: var(--ck-highlight-marker-pink);
+	}
+.ck-content .marker-blue {
+		background-color: var(--ck-highlight-marker-blue);
+	}
+
+.ck-content .pen-red {
+		color: var(--ck-highlight-pen-red);
+
+		/* Override default yellow background of `<mark>` from user agent stylesheet */
+		background-color: transparent;
+	}
+.ck-content .pen-green {
+		color: var(--ck-highlight-pen-green);
+
+		/* Override default yellow background of `<mark>` from user agent stylesheet */
+		background-color: transparent;
+	}
+
+/*# sourceMappingURL=index.css.map */

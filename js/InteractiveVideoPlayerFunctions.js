@@ -10,7 +10,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.getCommentTextFromEditor = function()
 	{
-		return CKEDITOR.instances.comment_text.getData();
+		//return CKEDITOR.instances.comment_text.getData();
 	};
 
 	pub.seekingEventHandler = function(player)
@@ -283,7 +283,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			let time;
 			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
 			let text_instance = 'comment_text_' + player_id;
-			let comment_text = CKEDITOR.instances[text_instance].getData();
+			let comment_text = scope.InteractiveVideoEditor.getEditorInstanceById(text_instance).getData();
 			let is_private = $('#is_private_' + player_id).prop("checked");
 			let end_time = actual_time_in_video + 3;
 			if( $('#comment_time_end_chk_' + player_id).prop( "checked" ))
@@ -321,7 +321,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	{
 		$('#submit_comment_form_' + player_id).on("click", function() {
 			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
-			let comment_text = CKEDITOR.instances['text_reflection_comment_' + comment_id].getData();
+			let comment_text = scope.InteractiveVideoEditor.getEditorInstanceById('text_reflection_comment_' + player_id).getData();
 			let is_private = $('#is_private_modal_' + player_id).prop("checked");
 			$.ajax({
 				type:     "POST",
@@ -386,12 +386,11 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pro.resetCommentForm = function(player_id)
 	{
-		CKEDITOR.instances['comment_text_' + player_id].setData('');
+		scope.InteractiveVideoEditor.getEditorInstanceById('comment_text_' + player_id).setData('');
 		$('#is_private_' + player_id).prop( 'checked', false );
 		$('#comment_time_end_chk_' + player_id).prop( 'checked', false );
 		$('.end_time_selector_' + player_id).hide( 'fast' );
 		$('.alert-warning_' + player_id).addClass('ilNoDisplay');
-		CKEDITOR.instances['comment_text_' + player_id].setData('');
 		$('#is_private').prop( 'checked', false );
 		$('#comment_time_end_chk').prop( 'checked', false );
 		$('.end_time_selector').hide( 'fast' );
@@ -406,8 +405,18 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	{
 		let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
 		let editor_name = 'comment_text_' + player_id;
+		let editor_instance = scope.InteractiveVideoEditor.getEditorInstanceById(editor_name)
+
+		editor_instance.ui.focusTracker.on( 'change:isFocused', ( evt, name, isFocused ) => {
+
+			if ( isFocused ) {
+				if (player_data.pause_on_click_in_comment_field) {
+					scope.InteractiveVideoPlayerAbstract.pause(player_id);
+				}
+			}
+		} );
 		if($('#' + editor_name).size() > 0){
-			CKEDITOR.on('instanceReady', function(evt) {
+			editor_instance.on('instanceReady', function(evt) {
 				let editor = evt.editor;
 				if(editor.name === editor_name)
 				{
@@ -418,16 +427,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 					});
 				}
 			});
-
-			//because the initialisation of youtube is slower than the init of CKEDITOR we need to reinit CKEDITOR
-			if(player_data.player_type === 'ytb') {
-				let editor_old_instance = CKEDITOR.instances[editor_name];
-				if (editor_old_instance) { editor_old_instance.destroy(true); }
-				CKEDITOR.replace(editor_name);
-			}
 		}
-
-
 	};
 
 	pub.addShowAllCommentsChange = function(player_id)

@@ -1,0 +1,81 @@
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+/**
+ * @module ui/editorui/boxed/boxededitoruiview
+ */
+import EditorUIView from '../editoruiview.js';
+import LabelView from '../../label/labelview.js';
+/**
+ * The boxed editor UI view class. This class represents an editor interface
+ * consisting of a toolbar and an editable area, enclosed within a box.
+ */
+export default class BoxedEditorUIView extends EditorUIView {
+    /**
+     * Creates an instance of the boxed editor UI view class.
+     *
+     * @param locale The locale instance..
+     */
+    constructor(locale) {
+        super(locale);
+        this.top = this.createCollection();
+        this.main = this.createCollection();
+        this._voiceLabelView = this._createVoiceLabel();
+        this.setTemplate({
+            tag: 'div',
+            attributes: {
+                class: [
+                    'ck',
+                    'ck-reset',
+                    'ck-editor',
+                    'ck-rounded-corners'
+                ],
+                role: 'application',
+                dir: locale.uiLanguageDirection,
+                lang: locale.uiLanguage,
+                'aria-labelledby': this._voiceLabelView.id
+            },
+            children: [
+                this._voiceLabelView,
+                {
+                    tag: 'div',
+                    attributes: {
+                        class: [
+                            'ck',
+                            'ck-editor__top',
+                            'ck-reset_all'
+                        ],
+                        role: 'presentation'
+                    },
+                    children: this.top
+                },
+                {
+                    tag: 'div',
+                    attributes: {
+                        class: [
+                            'ck',
+                            'ck-editor__main'
+                        ],
+                        role: 'presentation'
+                    },
+                    children: this.main
+                }
+            ]
+        });
+    }
+    /**
+     * Creates a voice label view instance.
+     */
+    _createVoiceLabel() {
+        const t = this.t;
+        const voiceLabel = new LabelView();
+        voiceLabel.text = t('Rich Text Editor');
+        voiceLabel.extendTemplate({
+            attributes: {
+                class: 'ck-voice-label'
+            }
+        });
+        return voiceLabel;
+    }
+}

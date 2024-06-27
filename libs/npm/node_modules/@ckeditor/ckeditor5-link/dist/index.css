@@ -1,0 +1,148 @@
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+/*
+ * Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+
+/*
+ * Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+
+.ck.ck-link-form {
+	display: flex;
+	align-items: flex-start;
+}
+
+.ck.ck-link-form .ck-label {
+		display: none;
+	}
+
+@media screen and (max-width: 600px) {
+
+.ck.ck-link-form {
+		flex-wrap: wrap;
+}
+
+		.ck.ck-link-form .ck-labeled-field-view {
+			flex-basis: 100%;
+		}
+
+		.ck.ck-link-form .ck-button {
+			flex-basis: 50%;
+		}
+	}
+
+/*
+ * Style link form differently when manual decorators are available.
+ * See: https://github.com/ckeditor/ckeditor5-link/issues/186.
+ */
+.ck.ck-link-form_layout-vertical {
+	display: block;
+
+	/*
+	 * Whether the form is in the responsive mode or not, if there are decorator buttons
+	 * keep the top margin of action buttons medium.
+	 */
+}
+.ck.ck-link-form_layout-vertical .ck-button.ck-button-save,
+		.ck.ck-link-form_layout-vertical .ck-button.ck-button-cancel {
+			margin-top: var(--ck-spacing-medium);
+		}
+
+/*
+ * Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+
+/*
+ * Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+
+.ck-vertical-form .ck-button::after {
+		content: "";
+		width: 0;
+		position: absolute;
+		right: -1px;
+		top: -1px;
+		bottom: -1px;
+		z-index: 1;
+	}
+
+.ck-vertical-form .ck-button:focus::after {
+		display: none;
+	}
+
+@media screen and (max-width: 600px) {
+			.ck.ck-responsive-form .ck-button::after {
+				content: "";
+				width: 0;
+				position: absolute;
+				right: -1px;
+				top: -1px;
+				bottom: -1px;
+				z-index: 1;
+			}
+
+			.ck.ck-responsive-form .ck-button:focus::after {
+				display: none;
+			}
+	}
+
+/*
+ * Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+
+/*
+ * Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+
+.ck.ck-link-actions {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+}
+
+.ck.ck-link-actions .ck-link-actions__preview {
+		display: inline-block;
+	}
+
+.ck.ck-link-actions .ck-link-actions__preview .ck-button__label {
+			overflow: hidden;
+		}
+
+@media screen and (max-width: 600px) {
+
+.ck.ck-link-actions {
+		flex-wrap: wrap;
+}
+
+		.ck.ck-link-actions .ck-link-actions__preview {
+			flex-basis: 100%;
+		}
+
+		.ck.ck-link-actions .ck-button:not(.ck-link-actions__preview) {
+			flex-basis: 50%;
+		}
+	}
+
+/*
+ * Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+
+/* Linked image indicator */
+
+.ck.ck-editor__editable figure.image > a::after, .ck.ck-editor__editable a span.image-inline::after {
+			display: block;
+			position: absolute;
+		}
+
+
+/*# sourceMappingURL=index.css.map */

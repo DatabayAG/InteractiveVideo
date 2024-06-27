@@ -1,0 +1,5 @@
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+export default {"sr":{"dictionary":{"Unlink":"Отклони линк","Link":"Линк","Link URL":"УРЛ линк","Link URL must not be empty.":"URL linka ne sme biti prazan.","Link image":"Линк слике","Edit link":"Исправи линк","Open link in new tab":"Отвори линк у новом прозору","This link has no URL":"Линк не садржи УРЛ","Open in a new tab":"Отвори у новој картици","Downloadable":"Могуће преузимање","Create link":"Napravi vezu","Move out of a link":"Idi sa veze"},getPluralForm(n){return (n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);}}}

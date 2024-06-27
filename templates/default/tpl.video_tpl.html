@@ -1,4 +1,4 @@
-<nav class="ilToolbar navbar navbar-default yamm {LIGHT_VERSION} ivToolbar_{PLAYER_ID}" role="navigation">
+<div class="ilToolbarContainer navbar navbar-default yamm {LIGHT_VERSION} ivToolbar_{PLAYER_ID}" role="navigation">
 	<div class="container-fluid interativeVideoNavHeader">
 		<!-- BEGIN return_link -->
 		<ul class="ilToolbarItems nav navbar-nav">
@@ -18,45 +18,30 @@
 		<!-- END return_link -->
 		<!-- BEGIN toolbar_filter -->
 		<!-- Brand and toggle get grouped for better mobile display -->
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#tb-collapse-2">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
+		<div class="dropdown">
+			<button class="btn btn-default dropdown-toggle dropdownMenuLayoutInteraktiveVideo_{PLAYER_ID}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+				{LAYOUT_FILTER}
+				<span class="caret"></span>
 			</button>
+			<ul id="dropdownMenuLayoutInteraktiveList_{PLAYER_ID}" class="dropdown-menu" aria-labelledby="dropdownMenuInteraktiveVideo"></ul>
 		</div>
-		<div class="collapse navbar-collapse ilFloatRight" >
-			<ul class="ilToolbarItems nav navbar-nav">
-				<li>
-					<div class="dropdown">
-						<button class="btn btn-default dropdown-toggle dropdownMenuLayoutInteraktiveVideo_{PLAYER_ID}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							{LAYOUT_FILTER}
-							<span class="caret"></span>
-						</button>
-						<ul id="dropdownMenuLayoutInteraktiveList_{PLAYER_ID}" class="dropdown-menu" aria-labelledby="dropdownMenuInteraktiveVideo"></ul>
-					</div>
-				</li>
-				<li>
-					<div class="dropdown">
-						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuInteraktiveVideo_{PLAYER_ID}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							{AUTHOR_FILTER}
-							<span class="caret"></span>
-						</button>
-						<ul id="dropdownMenuInteraktiveList_{PLAYER_ID}" class="dropdown-menu" aria-labelledby="dropdownMenuInteraktiveVideo"></ul>
-					</div>
-				</li>
-				<li>
-					<label>
-						{SHOW_ALL_COMMENTS}
-					</label>
-					<input id="show_all_comments_{PLAYER_ID}" type="checkbox">
-				</li>
-			</ul>
+
+		<div class="dropdown">
+			<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuInteraktiveVideo_{PLAYER_ID}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+				{AUTHOR_FILTER}
+				<span class="caret"></span>
+			</button>
+			<ul id="dropdownMenuInteraktiveList_{PLAYER_ID}" class="dropdown-menu" aria-labelledby="dropdownMenuInteraktiveVideo"></ul>
 		</div>
+
+		<label>
+			{SHOW_ALL_COMMENTS}
+		</label>
+		<input id="show_all_comments_{PLAYER_ID}" type="checkbox">
+
 		<!-- END toolbar_filter -->
 	</div>
-</nav>
+</div>
 <div class="row">
 	<div class="col-xs-12 {IV_BOOTSTRAP_CLASS_IF_NOT_LIGHT_VERSION} player_element_{PLAYER_ID}">
 		<!-- BEGIN task_description -->
@@ -102,6 +87,7 @@
 {CONFIG}
 {MODAL_QUESTION_OVERLAY}
 {MODAL_INTERACTION_OVERLAY}
+<script type="module" src="Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/form/ckeditorInit.js"></script>
 
 <div class="prototype">
 

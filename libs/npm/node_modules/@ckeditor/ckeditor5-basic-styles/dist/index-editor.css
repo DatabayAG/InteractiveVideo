@@ -1,0 +1,7 @@
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+.ck.ck-editor__editable .ck-code_selected {
+background-color: hsla(0, 0%, 78%, 0.5);
+}

@@ -1,0 +1,147 @@
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+:root {
+--ck-color-selector-column-resizer-hover: var(--ck-color-base-active);
+--ck-table-column-resizer-width: 7px;
+--ck-table-column-resizer-position-offset: calc(var(--ck-table-column-resizer-width) * -0.5 - 0.5px);
+}
+.ck-editor__editable .ck-table-bogus-paragraph {
+display: inline-block;
+width: 100%;
+}
+.ck .ck-insert-table-dropdown__grid {
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+}
+.ck.ck-form__row {
+display: flex;
+flex-direction: row;
+flex-wrap: nowrap;
+justify-content: space-between;
+}
+.ck.ck-form__row > *:not(.ck-label) {
+flex-grow: 1;
+}
+.ck.ck-form__row.ck-table-form__action-row .ck-button-save {
+justify-content: center;
+}
+.ck.ck-table-cell-properties-form .ck-form__row.ck-table-cell-properties-form__alignment-row {
+flex-wrap: wrap;
+}
+.ck.ck-table-cell-properties-form .ck-form__row.ck-table-cell-properties-form__alignment-row .ck.ck-toolbar:first-of-type {
+flex-grow: 0.57;
+}
+.ck.ck-table-cell-properties-form .ck-form__row.ck-table-cell-properties-form__alignment-row .ck.ck-toolbar:last-of-type {
+flex-grow: 0.43;
+}
+.ck.ck-table-cell-properties-form .ck-form__row.ck-table-cell-properties-form__alignment-row .ck.ck-toolbar .ck-button {
+flex-grow: 1;
+}
+.ck.ck-input-color {
+width: 100%;
+display: flex;
+flex-direction: row-reverse;
+}
+.ck.ck-input-color > input.ck.ck-input-text {
+min-width: auto;
+flex-grow: 1;
+}
+.ck.ck-input-color > div.ck.ck-dropdown {
+min-width: auto;
+}
+.ck.ck-input-color > div.ck.ck-dropdown > .ck-input-color__button .ck-dropdown__arrow {
+display: none;
+}
+.ck.ck-input-color .ck.ck-input-color__button {
+display: flex;
+}
+.ck.ck-input-color .ck.ck-input-color__button .ck.ck-input-color__button__preview {
+position: relative;
+overflow: hidden;
+}
+.ck.ck-input-color .ck.ck-input-color__button .ck.ck-input-color__button__preview > .ck.ck-input-color__button__preview__no-color-indicator {
+position: absolute;
+display: block;
+}
+.ck.ck-table-form .ck-form__row.ck-table-form__border-row {
+flex-wrap: wrap;
+}
+.ck.ck-table-form .ck-form__row.ck-table-form__background-row {
+flex-wrap: wrap;
+}
+.ck.ck-table-form .ck-form__row.ck-table-form__dimensions-row {
+flex-wrap: wrap;
+align-items: center;
+}
+.ck.ck-table-form .ck-form__row.ck-table-form__dimensions-row .ck-labeled-field-view {
+display: flex;
+flex-direction: column-reverse;
+align-items: center;
+}
+.ck.ck-table-form .ck-form__row.ck-table-form__dimensions-row .ck-labeled-field-view .ck.ck-dropdown {
+flex-grow: 0;
+}
+.ck.ck-table-form .ck-form__row.ck-table-form__dimensions-row .ck-table-form__dimension-operator {
+flex-grow: 0;
+}
+.ck.ck-table-form .ck.ck-labeled-field-view {
+position: relative;
+}
+.ck.ck-table-form .ck.ck-labeled-field-view .ck.ck-labeled-field-view__status {
+position: absolute;
+left: 50%;
+bottom: calc( -1 * var(--ck-table-properties-error-arrow-size) );
+transform: translate(-50%,100%);
+z-index: 1;
+}
+.ck.ck-table-form .ck.ck-labeled-field-view .ck.ck-labeled-field-view__status::after {
+content: "";
+position: absolute;
+top: calc( -1 * var(--ck-table-properties-error-arrow-size) );
+left: 50%;
+transform: translateX( -50% );
+}
+.ck.ck-table-properties-form .ck-form__row.ck-table-properties-form__alignment-row {
+flex-wrap: wrap;
+flex-basis: 0;
+align-content: baseline;
+}
+.ck.ck-table-properties-form .ck-form__row.ck-table-properties-form__alignment-row .ck.ck-toolbar .ck-toolbar__items {
+flex-wrap: nowrap;
+}
+.ck.ck-editor__editable .table > figcaption.ck-placeholder::before {
+padding-left: inherit;
+padding-right: inherit;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+.ck.ck-editor__editable .table .ck-table-column-resizer {
+position: absolute;
+top: 0;
+bottom: 0;
+right: var(--ck-table-column-resizer-position-offset);
+width: var(--ck-table-column-resizer-width);
+cursor: col-resize;
+user-select: none;
+z-index: var(--ck-z-default);
+}
+.ck.ck-editor__editable.ck-column-resize_disabled .table .ck-table-column-resizer {
+display: none;
+}
+.ck.ck-editor__editable .table[draggable] .ck-table-column-resizer {
+display: none;
+}
+.ck.ck-editor__editable .table .ck-table-column-resizer:hover {
+background-color: var(--ck-color-selector-column-resizer-hover);
+opacity: 0.25;
+top: -999999px;
+bottom: -999999px;
+}
+.ck.ck-editor__editable[dir=rtl] .table .ck-table-column-resizer {
+left: var(--ck-table-column-resizer-position-offset);
+right: unset;
+}

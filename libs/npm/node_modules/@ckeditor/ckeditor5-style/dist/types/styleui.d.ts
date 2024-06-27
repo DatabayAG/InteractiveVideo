@@ -1,0 +1,34 @@
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+/**
+ * @module style/styleui
+ */
+import { Plugin } from 'ckeditor5/src/core.js';
+import StyleUtils from './styleutils.js';
+import '../theme/style.css';
+/**
+ * The UI plugin of the style feature .
+ *
+ * It registers the `'style'` UI dropdown in the editor's {@link module:ui/componentfactory~ComponentFactory component factory}
+ * that displays a grid of styles and allows changing styles of the content.
+ */
+export default class StyleUI extends Plugin {
+    /**
+     * @inheritDoc
+     */
+    static get pluginName(): "StyleUI";
+    /**
+     * @inheritDoc
+     */
+    static get requires(): readonly [typeof StyleUtils];
+    /**
+     * @inheritDoc
+     */
+    init(): void;
+}

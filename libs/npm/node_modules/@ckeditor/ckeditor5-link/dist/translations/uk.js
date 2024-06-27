@@ -1,0 +1,5 @@
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+export default {"uk":{"dictionary":{"Unlink":"Видалити посилання","Link":"Посилання","Link URL":"URL посилання","Link URL must not be empty.":"URL-адреса посилання не може бути порожньою.","Link image":"Посилання зображення","Edit link":"Редагувати посилання","Open link in new tab":"Відкрити посилання у новій вкладці","This link has no URL":"Це посилання не має URL","Open in a new tab":"Вікрити у новій вкладці","Downloadable":"Завантажувальне","Create link":"Створити посилання","Move out of a link":"Вийти з посилання"},getPluralForm(n){return (n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);}}}

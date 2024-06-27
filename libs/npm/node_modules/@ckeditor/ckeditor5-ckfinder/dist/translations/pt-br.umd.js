@@ -1,0 +1,11 @@
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+
+( e => {
+const { [ 'pt-br' ]: { dictionary, getPluralForm } } = {"pt-br":{"dictionary":{"Insert image or file":"Inserir imagem ou arquivo","Could not obtain resized image URL.":"Não foi possível obter o endereço da imagem redimensionada","Selecting resized image failed":"Seleção da imagem redimensionada falhou","Could not insert image at the current position.":"Não foi possível inserir a imagem na posição atual","Inserting image failed":"Falha ao inserir imagem"},getPluralForm(n){return (n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;}}};
+e[ 'pt-br' ] ||= { dictionary: {}, getPluralForm: null };
+e[ 'pt-br' ].dictionary = Object.assign( e[ 'pt-br' ].dictionary, dictionary );
+e[ 'pt-br' ].getPluralForm = getPluralForm;
+} )( window.CKEDITOR_TRANSLATIONS ||= {} );

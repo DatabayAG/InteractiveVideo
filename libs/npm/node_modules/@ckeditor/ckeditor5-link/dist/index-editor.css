@@ -1,0 +1,44 @@
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+.ck.ck-link-form {
+display: flex;
+align-items: flex-start;
+}
+.ck.ck-link-form .ck-label {
+display: none;
+}
+.ck.ck-link-form_layout-vertical {
+display: block;
+}
+.ck.ck-link-form_layout-vertical .ck-button.ck-button-save {
+margin-top: var(--ck-spacing-medium);
+}
+.ck-vertical-form .ck-button::after {
+content: "";
+width: 0;
+position: absolute;
+right: -1px;
+top: -1px;
+bottom: -1px;
+z-index: 1;
+}
+.ck-vertical-form .ck-button:focus::after {
+display: none;
+}
+.ck.ck-link-actions {
+display: flex;
+flex-direction: row;
+flex-wrap: nowrap;
+}
+.ck.ck-link-actions .ck-link-actions__preview {
+display: inline-block;
+}
+.ck.ck-link-actions .ck-link-actions__preview .ck-button__label {
+overflow: hidden;
+}
+.ck.ck-editor__editable figure.image > a::after {
+display: block;
+position: absolute;
+}

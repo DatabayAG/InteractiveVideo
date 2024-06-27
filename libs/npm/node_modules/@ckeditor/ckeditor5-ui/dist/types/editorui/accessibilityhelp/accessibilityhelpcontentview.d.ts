@@ -1,0 +1,39 @@
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+/**
+ * @module ui/editorui/accessibilityhelp/accessibilityhelpcontentview
+ */
+import { type Locale } from '@ckeditor/ckeditor5-utils';
+import View from '../../view.js';
+import type { KeystrokeInfoDefinitions } from '@ckeditor/ckeditor5-core';
+/**
+ * The view displaying keystrokes in the Accessibility help dialog.
+ */
+export default class AccessibilityHelpContentView extends View<HTMLDivElement> {
+    /**
+     * @inheritDoc
+     */
+    constructor(locale: Locale, keystrokes: KeystrokeInfoDefinitions);
+    /**
+     * @inheritDoc
+     */
+    focus(): void;
+    /**
+     * Creates `<section><h3>Category label</h3>...</section>` elements for each category of keystrokes.
+     */
+    private _createCategories;
+    /**
+     * Creates `[<h4>Optional label</h4>]<dl>...</dl>` elements for each group of keystrokes in a category.
+     */
+    private _createGroup;
+    /**
+     * Creates `<dt>Keystroke label</dt><dd>Keystroke definition</dd>` elements for each keystroke in a group.
+     */
+    private _createGroupRow;
+}

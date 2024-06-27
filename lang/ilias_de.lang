@@ -1,282 +1,282 @@
 <!-- language file start -->
-obj_xvid#:#Interaktives Video
-objs_xvid#:#Interaktive Videos
-obj_xvid_duplicate#:#Kopieren
-objs_xvid_duplicate#:#Interaktives Videos kopieren
-xvid_add#:#Neues Interaktives Video anlegen
-xvid_new#:#Neues Interaktives Video anlegen
-xvid_read#:#Interaktives Video lesen
-xvid_copy#:#Interaktives Video kopieren
-xvid_write#:#Interaktives Video bearbeiten
-xvid_delete#:#Interaktives Video löschen
-xvid_edit_permission#:#Rechteeinstellungen ändern
-xvid_visible#:#Interaktives Video ist sichtbar
-xvid_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
-xvid_edit_learning_progress#:#Benutzer kann Lernfortschritt Einstellungen bearbeiten
-reset#:#Zurücksetzen
-show_all_comments#:#Nur Kommentare bis zur Abspielposition zeigen:
-author_filter#:#Autorenfilter
-crs_create_xvid#:#Neues Interaktives Video anlegen
-grp_create_xvid#:#Neues Interaktives Video anlegen
-fold_create_xvid#:#Neues Interaktives Video anlegen
-root_create_xvid#:#Neues Interaktives Video anlegen
-cat_create_xvid#:#Neues Interaktives Video anlegen
-interactive#:#Interaktive
-tutor#:#Tutor
-questions_comments#:#Fragen, Kapitel und Kommentare
-questions_comments_new#:#Fragen, Kapitel und öffentliche Kommentare
-questions_comments_sub_tab#:#Verwalten
-sure_delete_comments#:#Sind Sie sicher, dass Sie die gewählten Kommentare/Fragen/Kapitel löschen möchten?
-video_file#:#Video
-comment#:#Kommentar
-comments#:#Kommentare
-post#:#Posten
-cancel#:#Abbrechen
-sure_delete_comment#:#Sind Sie sicher, dass Sie den gewählten Kommentare/Fragen/Kapitel löschen möchten?
-missing_comment_text#:#Bitte geben Sie einen Kommentar ein.
-missing_stopping_point#:#Der Haltepunkt wurde nicht zum Server übertragen. Bitte versuchen Sie es erneut.
-invalid_comment_ids#:#Einige Kommentare konnten nicht gefunden werden. 
-comments_successfully_deleted#:#Die gewählten Kommentare wurden erfolgreich gelöscht.
-insert_comment#:#Neue Frage / Neuen Kommentar einfügen
-edit_comment#:#Kommentar bearbeiten
-user#:#Benutzer
-switch_on#:#An
-switch_off#:#Aus
-correct#:#Richtig
-correct_solution#:#Richtige Lösung
+BigVideo#:#Video gross: 2:1
+BigVideo_info#:#Das Video ist deutlich breiter als die Kommentarepalte. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
+activate_marker#:#Marker aktivieren
+activate_marker_info#:#Marker aktivieren
 add_question#:#Frage hinzufügen
-single_choice#:#Single Choice
-multiple_choice#:#Multiple Choice
-correct#:#Richtig beantwortete Fragen
-questions#:#Fragen
-results#:#Ergebnisse
-user_results#:#Benutzerergebnisse
-answer_text#:#Antwort
-percentage#:#Prozent
-answered#:#Fragen beantwortet
-question_results#:#Fragenergebnisse
-user_answered#:#Beantwortet von Nutzern
-user_correct#:#Richtig beantwortet von Nutzern
-insert_question#:#Frage hinzufügen
-insert_comment#:#Kommentar/Marker hinzufügen
-insert_comment_only#:#Kommentar hinzufügen
-my_comments#:#Meine Kommentare
-general#:#Allgemein
-repeat_question#:#Frage wiederholen
-tags#:#Tags
-question_text#:#Fragentext
-question_type#:#Fragentyp
-feedback_correct#:#Feedback richtige Antwort
-feedback_one_wrong#:#Feedback bei mindestens einer falschen Antwort
-results_successfully_deleted#:#Die gewählten Ergebnisse wurden erfolgreich gelöscht
-sure_delete_results#:#Sind Sie sicher, dass Sie die gewählten Ergebnisse löschen möchten?
-comments_successfully_deleted#:#Die gewählten Kommentare wurden erfolgreich gelöscht
-invalid_question_ids#:#Ungültige Fragen-IDs
-invalid_user_ids#:#Ungültige User-IDs
-invalid_comment_ids#:#Ungültige Kommentar-IDs
-comment_title#:#Kommentar-Titel
-send#:#Überprüfen
-close#:#Schließen
-question#:#Frage
-is_anonymized#:#Kommentare ohne Namen anzeigen
-is_anonymized_info#:#Wenn aktiviert, werden alle Kommentare ohne Benutzernamen angezeigt.
-is_public#:#Alle Kommentare veröffentlichen
-is_public_info#:#Wenn aktiviert, können alle Benutzer alle ÖFFENTLICHE Kommentare lesen. Im anderen Fall sehen Sie nur ihre eigenen Kommentare und öffentliche Kommentare, welche von Administratoren erstellt wurden (im Tab "Fragen, Kapitel und Kommentare").
-correct_answered#:#Richtig beantwortet
-show_my_results#:#Meine Ergebnisse
-is_jump_correct#:#"Richtig"-Sprungmarke verwenden
-is_jump_wrong#:#"Falsch"-Sprungmarke verwenden
-limit_attempts#:#Versuche begrenzen
-limit_attempts_info#:#Der Benutzer darf die Frage nur einmal beantworten
-is_private_comment#:#Privater Kommentar
-feedback_jump_text#:#Springe zu
-repeat_question_info#:#Wenn aktiviert, wird die Frage bei jedem Abspielen des Videos immer wieder angezeigt. Die Frage wird erst dann nicht mehr angezeigt, wenn die Option "Korrekt beantwortete Fragen überspringen" in den Einstellungen aktiviert ist.
-sum#:#Korrekt
-answered#:#Beantwortet
-csv_export#:#CSV-Export
-complete_question_results#:#Komplette Fragenergebnisse
-feedback#:#Feedback
 already_answered#:#Frage wurde bereits beantwortet.
-reflection#:#Reflexionsfrage
+answer_text#:#Antwort
+answered#:#Beantwortet
+answered#:#Fragen beantwortet
 answers#:#Antworten
-sure_update_question#:#Sind Sie sicher, dass Sie die Frage überschreiben wollen? Vorhandene Benutzerergebnisse werden gelöscht!
-question_type_info#:#Sie können zwischen drei Fragetypen wählen: Single Choice, Multiple Choice und Reflexionsfragen. Eine Reflexionsfrage wird wie eine SC- bzw. eine MC-Frage angezeigt, enthält jedoch keine Antwortmöglichkeiten. Sie wird sofort als bestanden gewertet, wenn Sie einem Nutzer mindestens einmal angezeigt wurde.
-is_jump_correct_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage richtig beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblendet.
-is_jump_wrong_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage falsch beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblendet.
-learning_recommendation#:#Lernempfehlung an folgender Stelle im Video
-is_repeat#:#Korrekt beantwortete Fragen überspringen
-is_repeat_info#:#Wenn aktiviert, werden bereits korrekt beantwortete Fragen beim wiederholten Abspielen übersprungen.
-offline#:#Offline
-status#:#Status
-is_chronologic#:#Nur Kommentare bis zur Abspielposition zeigen
-is_chronologic_settings#:#Nur Kommentare bis zur Abspielposition zeigen
-is_chronologic_settings_info#:#Wenn aktiviert, werden nur jene Kommentare angezeigt, die vor der aktuellen Abspielposition liegen. Beim Abspielen des Videos werden die neu erscheinenden Kommentare fortlaufend und jeweils zuoberst eingeblendet. In der Toolbar können Benutzer die eigene Ansicht ändern.
-is_chronologic_info#:#Wenn aktiviert, werden nur jene Kommentare angezeigt, die vor der aktuellen Abspielposition liegen. Beim Abspielen des Videos werden die neu erscheinenden Kommentare fortlaufend und jeweils zuoberst eingeblendet. In der Toolbar können Benutzer die eigene Ansicht ändern.
-time_end#:#Ende der Passage
-show_response_frequency#:#Zeige Antworthäufigkeiten
-show_response_frequency_info#:#Nachdem die Frage beantwortet wurde, wird unter jeder Antwortoption die relative Antworthäufigkeit in Prozent angezeigt
-type#:#Typ
-title_of_question#:#Titel der Frage
-endtime_warning#:#Das Ende der Passage darf nicht kleiner sein als die aktuelle Zeit im Video
-screen_info#:#Diese Ansicht dient zum Erstellen und Verwalten von Fragen und Kommentaren. Achtung: Interaktive Fragen werden hier NICHT beim Abspielen des Videos angezeigt, wechseln Sie zum Reiter "Inhalt" um die Fragen während des Abspielvorganges eingeblendet zu bekommen.
-show_correct_icon#:#Feedback visuell als 'richtig' kennzeichnen
-show_correct_icon_info#:#Wenn aktiviert, wird das Feedback grün unterlegt dargestellt und mit einem Häkchen als 'richtig' markiert.
-show_wrong_icon#:#Feedback visuell als 'falsch' kennzeichnen
-show_wrong_icon_info#:#Wenn aktiviert, wird das Feedback rot unterlegt dargestellt und durch ein Kreuz als 'falsch' markiert.
-no_text_warning#:#Sie müssen einen Text eingeben
-grp_create_xvid#:#Interaktives Video anlegen
-crs_create_xvid#:#Interaktives Video anlegen
-cat_create_xvid#:#Interaktives Video anlegen
-root_create_xvid#:#Interaktives Video anlegen
-fold_create_xvid#:#Interaktives Video anlegen
-rbac_create_xvid#:#Interaktives Video anlegen 
-source#:#Quelle
-installed_version#:#Installierte Databank Version: %s, Datei Datenbank Version %s
-source_does_not_exist#:#Quelle existiert nicht mehr oder wurde in der Administration deaktiviert
-update_db#:#Datenbank-Updates einspielen
-db_up_to_date#:#Datenbank aktuell
-db_update_worked#:#Datenbank erfolgreich aktualisiert
-db_update_failed#:#Datenbank-Update schlug fehl: %s
-task_switch#:#Aufgabenstellung aktivieren
-task_switch_info#:#Blendet oberhalb des Videos eine beliebige Aufgabenstellung ein.
-task#:#Aufgabenstellung
-lp_mode_title_by_questions#:#Fragen korrekt beantwortet
-lp_mode_desc_by_questions#:#Das Objekt gilt als 'Bearbeitet', wenn für alle definierten Fragen eine 'richtige' Antwort gewählt und die Endposition des Videos erreicht wurde. Falls keine Fragen konfiguriert wurden, gilt das Objekt beim Erreichen der Endposition des Videos als 'Bearbeitet'.
-lp_users#:#Benutzer
-lp_matrix#:#Matrixansicht
-lp_summary#:#Zusammenfassung
-lp_settings#:#Einstellungen
-lp_mode_title_by_all_answered_questions#:#Fragen beantwortet
-lp_mode_desc_by_all_answered_questions#:#Das Objekt gilt als 'Bearbeitet', wenn für alle definierten Fragen eine Antwort gewählt wurde, unabhängig von der Korrektheit. Falls keine Fragen konfiguriert wurden, gilt das Objekt beim Erreichen der Endposition des Videos als 'Bearbeitet'.
-select_at_least_one#:#Bitte wählen Sie mindestens eine Quelle aus.
-back_to#:#zurück zu
-back_to_title#:#Wollen Sie zum Urprungsobjekt %s (%s) zurückkehren?
-save#:#Speichern
+arrow#:#Pfeil
+at_least_one_answer#:#Bitte wählen Sie eine Antwort aus
 at_least_one_source#:#Es wird mindestens eine Video-Quelle benötigt, stellen Sie bitte sicher, dass Sie in der Konfiguration des Interaktive Video Plugins mindestens eine Quelle ausgewählt haben.
-feedback_correct_obj#:#Feedback-Link auf Magazin-Objekt bei korrekter Antwort
-feedback_correct_obj_info#:#Feedback-Link auf Magazin-Objekt bei korrekter Antwort
-feedback_wrong_obj#:#Feedback-Link auf Magazin-Objekt bei mindestens einer falschen Antwort
-feedback_wrong_obj_info#:#Feedback-Link auf Magazin-Objekt bei mindestens einer falschen Antwort
-show_comment_field#:#Zeige ein Kommtarfeld an
-show_comment_field_info#:#Zeige ein Kommtarfeld unter der Reflexionsfrage an
-more_informations#:#Weiterführende Informationen
-neutral_type#:#Bewertung
-with_correct#:#Mit korrekter Antwort
-neutral#:#Neutrale Antworten
-neutral_type_info#:#Wenn die Option 'Neutrale Anworten' ausgewählt ist, gibt es keine richtige Lösung für diese Aufgabe
-feedback_neutral#:#Feedback
-feedback_jump_neutral_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblendet.
-feedback_jump_neutral#:#Sprungmarke
-feedback_repository_neutral#:#Feedback-Link zu einem Magazin-Objekt
-feedback_repository_neutral_info#:#Feedback-Link zu einem Magazin-Objekt
-neutral_questions#:#Neutrale Fragen
-neutral_question#:#Neutrale Frage
-export_comments#:#Kommentare exportieren
-export_all_comments#:#Alle Kommentare exportieren
-question_image#:#Bild für Frage
-extract#:#Thumbnail aus Video erzeugen
-use_this_image#:#Dieses Bild verwenden
-time_for_preview#:#Zeitpunkt: 
-comment_title_info#:#Der Titel wird im Kommentarstream angezeigt und ist für die Kursteilnehmer damit immer sichtbar.
-correct_answer#:#Richtig
-wrong_answer#:#Falsch
-neutral_answer#:#-
-not_answered#:#Nicht beantwortet
-private#:#privat
-public#:#öffentlich
-visibility#:#Sichtbarkeit
-save_anyway#:#Trotzdem speichern
-save_without_correct#:#Sind haben keine korrekte Antwort ausgewählt
-save_without_correct_detail#:#Sie haben weder eine Reflexionsfrage, noch neutrale Antworten aktiviert, sind Sie sicher, dass Sie die Frage ohne korrekte Antwort speichern wollen?
-enable_comment#:#Zeige Kommentarfeld
-enable_comment_info#:#Blendet unter dem Video ein Kommentarfeld ein. Muss aktiviert sein, wenn Studierende Marker hinzufügen können sollen (siehe unten).
-xvid_xvid_view_lp#:#Lernfortschritt einsehen
+author_filter#:#Autorenfilter
 auto_resume#:#Fortsetzen
 auto_resume_info#:#Wenn aktiviert, wird das Video beim Schließen des Fragen-Dialogs automatisch fortgesetzt.
-fixed_modal#:#Frage schließen blockieren
-fixed_modal_info#:#Wenn aktiviert, wird eine angezeigte Frage beim Klick eines Benutzers auf den Hintergrund nicht geschlossen.
-modal_section#:#Verhalten des Fragendialoges
-subtitle#:#Untertitel
-short_title#:#Kürzel
-long_title#:#Titel
-subtitle_removed#:#Untertitel gelöscht
-sure_delete_subtitle#:#Sind Sie sicher das Sie diesen Untertitel löschen wollen?
-you_need_a_short_title#:#Sie müssen einen Kurztitel eintragen!
-show_toolbar#:#Zeige Toolbar
-show_toolbar_info#:#Zeigt beim Benutzer oben rechts die Toolbar mit folgenden Möglichkeiten an: Einstellung Videogrösse, Autorenfilter, Nur Kommentare bis zur Abspielposition zeigen.
-is_table_of_content#:#Inhaltsverzeichnis
-toc#:#Inhaltsverzeichnis
-show_toc_first#:#Zeige Inhaltsverzeichnis als erstes
-show_toc_first_info#:#Falls Kapitel erstellt wurden, wird das Inhaltsverzeichnis neben dem Video direkt angezeigt. Standardmässig ist das Inhaltsverzeichnis von der Kommentarspalte überdeckt und muss aktiv aufgerufen werden.
-enable_comment_stream#:#Zeige Kommentarspalte
-enable_comment_stream_info#:#Zeigt neben dem Video die Kommentarspalte an. Darin werden die Kommentare und Fragen aufgeführt.
-insert_chapter#:#Kapitel einfügen
-edit_chapter#:#Kapitel editieren
-comment_table_title#:#Kommentar / Fragentext
-compulsory_question#:#Verpflichtende Frage
-compulsory#:#Verpflichtend
-compulsory_question_info#:#Diese Frage muss beantwortet werden, bevor das Video weiter geschaut werden kann
-show_best_solution#:#Lösung zeigen
-solution#:#Lösung
-repeat#:#Wiederholen
+back_to#:#zurück zu
+back_to_title#:#Wollen Sie zum Urprungsobjekt %s (%s) zurückkehren?
 best_solution_text#:#Bestmögliche Lösung
 best_solution_text_info#:#Wenn ein Kommentarfeld angeboten wird (siehe unten), kann sich ein Nutzer die Lösung erst anzeigen lassen, wenn er/sie eine Antwort gespeichert hat.
-show_best_solution_info#:#Nachdem die Frage beantwortet wurde, können sich Nutzer die richtige Lösung anzeigen lassen (über Button «Lösung zeigen»).
-at_least_one_answer#:#Bitte wählen Sie eine Antwort aus
-no_comment_stream#:#Kein Kommentar-Stream
-no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflektionsfragen mit aktiviertem Kommentarfeld sind nach wie vor möglich.
-no_comment_stream_info#:#Es wird kein Kommentar-Stream nebem dem Video angezeigt, somit auf keine Toolbar mit Filtern, Frage funktionieren weiter wie gewohnt.
-process_header#:#Durchführung
-insert_marker#:#Marker einfügen
-color#:#Farbe
-stroke#:#Strichstärke
-width#:#Breite
-height#:#Höhe
-rotate#:#Drehen
-rectangle#:#Rechteck
-arrow#:#Pfeil
+beta#:#Beta
+cancel#:#Abbrechen
+cat_create_xvid#:#Interaktives Video anlegen
+cat_create_xvid#:#Neues Interaktives Video anlegen
 circle#:#Kreis
-scale#:#Skalieren
-with_marker#:#mit Marker
-line#:#Linie
-marker_for_students#:#Marker für Studierende
-marker_for_students_info#:#Wenn aktiviert, können Studierende Marker in ein Video einfügen (z.B. Formen oder Texte). Die Option wird unterhalb des Kommentarfeldes angeboten.
+close#:#Schließen
+color#:#Farbe
+comment#:#Kommentar
+comment_table_title#:#Kommentar / Fragentext
+comment_title#:#Kommentar-Titel
+comment_title_info#:#Der Titel wird im Kommentarstream angezeigt und ist für die Kursteilnehmer damit immer sichtbar.
+comments#:#Kommentare
+comments_successfully_deleted#:#Die gewählten Kommentare wurden erfolgreich gelöscht
+comments_successfully_deleted#:#Die gewählten Kommentare wurden erfolgreich gelöscht.
+complete_question_results#:#Komplette Fragenergebnisse
+compulsory#:#Verpflichtend
+compulsory_question#:#Verpflichtende Frage
+compulsory_question_info#:#Diese Frage muss beantwortet werden, bevor das Video weiter geschaut werden kann
+correct#:#Richtig
+correct#:#Richtig beantwortete Fragen
+correct_answer#:#Richtig
+correct_answered#:#Richtig beantwortet
+correct_solution#:#Richtige Lösung
+crs_create_xvid#:#Interaktives Video anlegen
+crs_create_xvid#:#Neues Interaktives Video anlegen
+csv_export#:#CSV-Export
+db_up_to_date#:#Datenbank aktuell
+db_update_failed#:#Datenbank-Update schlug fehl: %s
+db_update_worked#:#Datenbank erfolgreich aktualisiert
 delete_marker#:#Marker Löschen
-text#:#Text
-font_size#:#Schriftgröße
-is_reply_to#:#Antwort
-reply_to#:#Antworten
-jump_to_timestamp#:#Bitte zweimal auf das Video klicken (kein Doppelklick) um zum richtigen Zeitpunkt zu springen.
-insert_marker_info#:#Sie können den Marker per Drag & Drop auf dem Video verschieben.
 display#:#Darstellung
 display_width#:#Breite Video- & Kommentarspalte
 display_width_info#:#- Gleich gross: 1:1 Die beiden Spalten sind gleich breit. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/> - Video gross: 2:1 Das Video ist deutlich breiter als die Kommentarepalte, (Verhältnis = 2:1). Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/> - Video sehr gross: Untereinander Das Video füllt die volle Fensterbreite aus. Die Kommentarepalte wird darunter angezeigt. In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/>
-similarSize#:#Gleich gross: 1:1
-similarSize_info#:#Die beiden Spalten sind gleich breit. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
-BigVideo#:#Video gross: 2:1
-BigVideo_info#:#Das Video ist deutlich breiter als die Kommentarepalte. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
-veryBigVideo#:#Video sehr gross: Untereinander
-veryBigVideo_info#:#Das Video füllt die volle Fensterbreite aus. Die Kommentarepalte wird darunter angezeigt. In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
-layout_filter#:#Layout
-beta#:#Beta
-activate_marker#:#Marker aktivieren
-activate_marker_info#:#Marker aktivieren
-no_comment_id_given#:#Ein problem ist aufgetreten, es existiert keine Kommentar-ID
+edit_chapter#:#Kapitel editieren
+edit_comment#:#Kommentar bearbeiten
+enable_comment#:#Zeige Kommentarfeld
+enable_comment_info#:#Blendet unter dem Video ein Kommentarfeld ein. Muss aktiviert sein, wenn Studierende Marker hinzufügen können sollen (siehe unten).
+enable_comment_stream#:#Zeige Kommentarspalte
+enable_comment_stream_info#:#Zeigt neben dem Video die Kommentarspalte an. Darin werden die Kommentare und Fragen aufgeführt.
+endtime_warning#:#Das Ende der Passage darf nicht kleiner sein als die aktuelle Zeit im Video
+export_all_comments#:#Alle Kommentare exportieren
+export_comments#:#Kommentare exportieren
+extract#:#Thumbnail aus Video erzeugen
+feedback#:#Feedback
+feedback_correct#:#Feedback richtige Antwort
+feedback_correct_obj#:#Feedback-Link auf Magazin-Objekt bei korrekter Antwort
+feedback_correct_obj_info#:#Feedback-Link auf Magazin-Objekt bei korrekter Antwort
+feedback_jump_neutral#:#Sprungmarke
+feedback_jump_neutral_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblendet.
+feedback_jump_text#:#Springe zu
+feedback_neutral#:#Feedback
+feedback_one_wrong#:#Feedback bei mindestens einer falschen Antwort
+feedback_repository_neutral#:#Feedback-Link zu einem Magazin-Objekt
+feedback_repository_neutral_info#:#Feedback-Link zu einem Magazin-Objekt
+feedback_wrong_obj#:#Feedback-Link auf Magazin-Objekt bei mindestens einer falschen Antwort
+feedback_wrong_obj_info#:#Feedback-Link auf Magazin-Objekt bei mindestens einer falschen Antwort
+fixed_modal#:#Frage schließen blockieren
+fixed_modal_info#:#Wenn aktiviert, wird eine angezeigte Frage beim Klick eines Benutzers auf den Hintergrund nicht geschlossen.
+fold_create_xvid#:#Interaktives Video anlegen
+fold_create_xvid#:#Neues Interaktives Video anlegen
+font_size#:#Schriftgröße
+general#:#Allgemein
+grp_create_xvid#:#Interaktives Video anlegen
+grp_create_xvid#:#Neues Interaktives Video anlegen
+height#:#Höhe
 imo#:#Video-Datei hochladen
-surl#:#Direkte URL zu Mediendatei im Web
-simple_url#:#Direkte URL zu Mediendatei im Web
-simple_url_info#:#Geben sie bitte eine URL zu einem Video an.
-ytb_youtube_url#:#YouTube-URL
-ytb_youtube_info#:#Geben Sie bitte eine YouTube-URL ein.
-ytb#:#YouTube
+insert_chapter#:#Kapitel einfügen
+insert_comment#:#Kommentar/Marker hinzufügen
+insert_comment#:#Neue Frage / Neuen Kommentar einfügen
+insert_comment_only#:#Kommentar hinzufügen
+insert_marker#:#Marker einfügen
+insert_marker_info#:#Sie können den Marker per Drag & Drop auf dem Video verschieben.
+insert_question#:#Frage hinzufügen
+installed_version#:#Installierte Databank Version: %s, Datei Datenbank Version %s
+interactive#:#Interaktive
+invalid_comment_ids#:#Einige Kommentare konnten nicht gefunden werden. 
+invalid_comment_ids#:#Ungültige Kommentar-IDs
+invalid_question_ids#:#Ungültige Fragen-IDs
+invalid_user_ids#:#Ungültige User-IDs
+is_anonymized#:#Kommentare ohne Namen anzeigen
+is_anonymized_info#:#Wenn aktiviert, werden alle Kommentare ohne Benutzernamen angezeigt.
+is_chronologic#:#Nur Kommentare bis zur Abspielposition zeigen
+is_chronologic_info#:#Wenn aktiviert, werden nur jene Kommentare angezeigt, die vor der aktuellen Abspielposition liegen. Beim Abspielen des Videos werden die neu erscheinenden Kommentare fortlaufend und jeweils zuoberst eingeblendet. In der Toolbar können Benutzer die eigene Ansicht ändern.
+is_chronologic_settings#:#Nur Kommentare bis zur Abspielposition zeigen
+is_chronologic_settings_info#:#Wenn aktiviert, werden nur jene Kommentare angezeigt, die vor der aktuellen Abspielposition liegen. Beim Abspielen des Videos werden die neu erscheinenden Kommentare fortlaufend und jeweils zuoberst eingeblendet. In der Toolbar können Benutzer die eigene Ansicht ändern.
+is_jump_correct#:#"Richtig"-Sprungmarke verwenden
+is_jump_correct_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage richtig beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblendet.
+is_jump_wrong#:#"Falsch"-Sprungmarke verwenden
+is_jump_wrong_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage falsch beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblendet.
+is_private_comment#:#Privater Kommentar
+is_public#:#Alle Kommentare veröffentlichen
+is_public_info#:#Wenn aktiviert, können alle Benutzer alle ÖFFENTLICHE Kommentare lesen. Im anderen Fall sehen Sie nur ihre eigenen Kommentare und öffentliche Kommentare, welche von Administratoren erstellt wurden (im Tab "Fragen, Kapitel und Kommentare").
+is_repeat#:#Korrekt beantwortete Fragen überspringen
+is_repeat_info#:#Wenn aktiviert, werden bereits korrekt beantwortete Fragen beim wiederholten Abspielen übersprungen.
+is_reply_to#:#Antwort
+is_table_of_content#:#Inhaltsverzeichnis
+jump_to_timestamp#:#Bitte zweimal auf das Video klicken (kein Doppelklick) um zum richtigen Zeitpunkt zu springen.
+layout_filter#:#Layout
+learning_recommendation#:#Lernempfehlung an folgender Stelle im Video
+limit_attempts#:#Versuche begrenzen
+limit_attempts_info#:#Der Benutzer darf die Frage nur einmal beantworten
+line#:#Linie
+long_title#:#Titel
+lp_matrix#:#Matrixansicht
+lp_mode_desc_by_all_answered_questions#:#Das Objekt gilt als 'Bearbeitet', wenn für alle definierten Fragen eine Antwort gewählt wurde, unabhängig von der Korrektheit. Falls keine Fragen konfiguriert wurden, gilt das Objekt beim Erreichen der Endposition des Videos als 'Bearbeitet'.
+lp_mode_desc_by_questions#:#Das Objekt gilt als 'Bearbeitet', wenn für alle definierten Fragen eine 'richtige' Antwort gewählt und die Endposition des Videos erreicht wurde. Falls keine Fragen konfiguriert wurden, gilt das Objekt beim Erreichen der Endposition des Videos als 'Bearbeitet'.
+lp_mode_title_by_all_answered_questions#:#Fragen beantwortet
+lp_mode_title_by_questions#:#Fragen korrekt beantwortet
+lp_settings#:#Einstellungen
+lp_summary#:#Zusammenfassung
+lp_users#:#Benutzer
+marker_for_students#:#Marker für Studierende
+marker_for_students_info#:#Wenn aktiviert, können Studierende Marker in ein Video einfügen (z.B. Formen oder Texte). Die Option wird unterhalb des Kommentarfeldes angeboten.
+meo#:#Vimeo
+meo_url#:#Vimeo-URL
+meo_vimeo_info#:#Geben Sie bitte eine Vimeo-URL ein.
+missing_comment_text#:#Bitte geben Sie einen Kommentar ein.
+missing_stopping_point#:#Der Haltepunkt wurde nicht zum Server übertragen. Bitte versuchen Sie es erneut.
+modal_section#:#Verhalten des Fragendialoges
+more_informations#:#Weiterführende Informationen
+multiple_choice#:#Multiple Choice
+my_comments#:#Meine Kommentare
+neutral#:#Neutrale Antworten
+neutral_answer#:#-
+neutral_question#:#Neutrale Frage
+neutral_questions#:#Neutrale Fragen
+neutral_type#:#Bewertung
+neutral_type_info#:#Wenn die Option 'Neutrale Anworten' ausgewählt ist, gibt es keine richtige Lösung für diese Aufgabe
+no_comment_id_given#:#Ein problem ist aufgetreten, es existiert keine Kommentar-ID
+no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflektionsfragen mit aktiviertem Kommentarfeld sind nach wie vor möglich.
+no_comment_stream#:#Kein Kommentar-Stream
+no_comment_stream_info#:#Es wird kein Kommentar-Stream nebem dem Video angezeigt, somit auf keine Toolbar mit Filtern, Frage funktionieren weiter wie gewohnt.
+no_text_warning#:#Sie müssen einen Text eingeben
+not_answered#:#Nicht beantwortet
+obj_xvid#:#Interaktives Video
+obj_xvid_duplicate#:#Kopieren
+objs_xvid#:#Interaktive Videos
+objs_xvid_duplicate#:#Interaktives Videos kopieren
+offline#:#Offline
 opc#:#Opencast
 opc_id#:#Opencast Video Id
 opc_id_info#:#Opencast Video Id
-opc_selection_info#:#Opencast:
-opc_select_video#:#Video auswählen
 opc_insert#:#Video aus Opencast einfügen:
+opc_select_video#:#Video auswählen
+opc_selection_info#:#Opencast:
 opc_title#:#Titel
+percentage#:#Prozent
 please_create_object_first#:#Um ein Opencast Video nutzen zu können, müssen Sie erst ein Objekt «Interaktives Video» anlegen. Geben Sie dazu einen Titel ein und klicken Sie auf «Neues Interaktives Video anlegen».
-meo#:#Vimeo
-meo_vimeo_info#:#Geben Sie bitte eine Vimeo-URL ein.
-meo_url#:#Vimeo-URL
+post#:#Posten
+private#:#privat
+process_header#:#Durchführung
+public#:#öffentlich
+question#:#Frage
+question_image#:#Bild für Frage
+question_results#:#Fragenergebnisse
+question_text#:#Fragentext
+question_type#:#Fragentyp
+question_type_info#:#Sie können zwischen drei Fragetypen wählen: Single Choice, Multiple Choice und Reflexionsfragen. Eine Reflexionsfrage wird wie eine SC- bzw. eine MC-Frage angezeigt, enthält jedoch keine Antwortmöglichkeiten. Sie wird sofort als bestanden gewertet, wenn Sie einem Nutzer mindestens einmal angezeigt wurde.
+questions#:#Fragen
+questions_comments#:#Fragen, Kapitel und Kommentare
+questions_comments_new#:#Fragen, Kapitel und öffentliche Kommentare
+questions_comments_sub_tab#:#Verwalten
+rbac_create_xvid#:#Interaktives Video anlegen 
+rectangle#:#Rechteck
+reflection#:#Reflexionsfrage
+repeat#:#Wiederholen
+repeat_question#:#Frage wiederholen
+repeat_question_info#:#Wenn aktiviert, wird die Frage bei jedem Abspielen des Videos immer wieder angezeigt. Die Frage wird erst dann nicht mehr angezeigt, wenn die Option "Korrekt beantwortete Fragen überspringen" in den Einstellungen aktiviert ist.
+reply_to#:#Antworten
+reset#:#Zurücksetzen
+results#:#Ergebnisse
+results_successfully_deleted#:#Die gewählten Ergebnisse wurden erfolgreich gelöscht
+root_create_xvid#:#Interaktives Video anlegen
+root_create_xvid#:#Neues Interaktives Video anlegen
+rotate#:#Drehen
+save#:#Speichern
+save_anyway#:#Trotzdem speichern
+save_without_correct#:#Sind haben keine korrekte Antwort ausgewählt
+save_without_correct_detail#:#Sie haben weder eine Reflexionsfrage, noch neutrale Antworten aktiviert, sind Sie sicher, dass Sie die Frage ohne korrekte Antwort speichern wollen?
+scale#:#Skalieren
+screen_info#:#Diese Ansicht dient zum Erstellen und Verwalten von Fragen und Kommentaren. Achtung: Interaktive Fragen werden hier NICHT beim Abspielen des Videos angezeigt, wechseln Sie zum Reiter "Inhalt" um die Fragen während des Abspielvorganges eingeblendet zu bekommen.
+select_at_least_one#:#Bitte wählen Sie mindestens eine Quelle aus.
+send#:#Überprüfen
+short_title#:#Kürzel
+show_all_comments#:#Nur Kommentare bis zur Abspielposition zeigen:
+show_best_solution#:#Lösung zeigen
+show_best_solution_info#:#Nachdem die Frage beantwortet wurde, können sich Nutzer die richtige Lösung anzeigen lassen (über Button «Lösung zeigen»).
+show_comment_field#:#Zeige ein Kommtarfeld an
+show_comment_field_info#:#Zeige ein Kommtarfeld unter der Reflexionsfrage an
+show_correct_icon#:#Feedback visuell als 'richtig' kennzeichnen
+show_correct_icon_info#:#Wenn aktiviert, wird das Feedback grün unterlegt dargestellt und mit einem Häkchen als 'richtig' markiert.
+show_my_results#:#Meine Ergebnisse
+show_response_frequency#:#Zeige Antworthäufigkeiten
+show_response_frequency_info#:#Nachdem die Frage beantwortet wurde, wird unter jeder Antwortoption die relative Antworthäufigkeit in Prozent angezeigt
+show_toc_first#:#Zeige Inhaltsverzeichnis als erstes
+show_toc_first_info#:#Falls Kapitel erstellt wurden, wird das Inhaltsverzeichnis neben dem Video direkt angezeigt. Standardmässig ist das Inhaltsverzeichnis von der Kommentarspalte überdeckt und muss aktiv aufgerufen werden.
+show_toolbar#:#Zeige Toolbar
+show_toolbar_info#:#Zeigt beim Benutzer oben rechts die Toolbar mit folgenden Möglichkeiten an: Einstellung Videogrösse, Autorenfilter, Nur Kommentare bis zur Abspielposition zeigen.
+show_wrong_icon#:#Feedback visuell als 'falsch' kennzeichnen
+show_wrong_icon_info#:#Wenn aktiviert, wird das Feedback rot unterlegt dargestellt und durch ein Kreuz als 'falsch' markiert.
+similarSize#:#Gleich gross: 1:1
+similarSize_info#:#Die beiden Spalten sind gleich breit. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
+simple_url#:#Direkte URL zu Mediendatei im Web
+simple_url_info#:#Geben sie bitte eine URL zu einem Video an.
+single_choice#:#Single Choice
+solution#:#Lösung
+source#:#Quelle
+source_does_not_exist#:#Quelle existiert nicht mehr oder wurde in der Administration deaktiviert
+status#:#Status
+stroke#:#Strichstärke
+subtitle#:#Untertitel
+subtitle_removed#:#Untertitel gelöscht
+sum#:#Korrekt
+sure_delete_comment#:#Sind Sie sicher, dass Sie den gewählten Kommentare/Fragen/Kapitel löschen möchten?
+sure_delete_comments#:#Sind Sie sicher, dass Sie die gewählten Kommentare/Fragen/Kapitel löschen möchten?
+sure_delete_results#:#Sind Sie sicher, dass Sie die gewählten Ergebnisse löschen möchten?
+sure_delete_subtitle#:#Sind Sie sicher das Sie diesen Untertitel löschen wollen?
+sure_update_question#:#Sind Sie sicher, dass Sie die Frage überschreiben wollen? Vorhandene Benutzerergebnisse werden gelöscht!
+surl#:#Direkte URL zu Mediendatei im Web
+switch_off#:#Aus
+switch_on#:#An
+tags#:#Tags
+task#:#Aufgabenstellung
+task_switch#:#Aufgabenstellung aktivieren
+task_switch_info#:#Blendet oberhalb des Videos eine beliebige Aufgabenstellung ein.
+text#:#Text
+time_end#:#Ende der Passage
+time_for_preview#:#Zeitpunkt: 
+title_of_question#:#Titel der Frage
+toc#:#Inhaltsverzeichnis
+tutor#:#Tutor
+type#:#Typ
+update_db#:#Datenbank-Updates einspielen
+use_this_image#:#Dieses Bild verwenden
+user#:#Benutzer
+user_answered#:#Beantwortet von Nutzern
+user_correct#:#Richtig beantwortet von Nutzern
+user_results#:#Benutzerergebnisse
+veryBigVideo#:#Video sehr gross: Untereinander
+veryBigVideo_info#:#Das Video füllt die volle Fensterbreite aus. Die Kommentarepalte wird darunter angezeigt. In der Toolbar kann der Benutzer die eigene Ansicht anpassen.
+video_file#:#Video
+visibility#:#Sichtbarkeit
+width#:#Breite
+with_correct#:#Mit korrekter Antwort
+with_marker#:#mit Marker
+wrong_answer#:#Falsch
+xvid_add#:#Neues Interaktives Video anlegen
+xvid_copy#:#Interaktives Video kopieren
+xvid_delete#:#Interaktives Video löschen
+xvid_edit_learning_progress#:#Benutzer kann Lernfortschritt Einstellungen bearbeiten
+xvid_edit_permission#:#Rechteeinstellungen ändern
+xvid_new#:#Neues Interaktives Video anlegen
+xvid_read#:#Interaktives Video lesen
+xvid_read_learning_progress#:#Benutzer kann Lernfortschritt anderer Benutzer einsehen
+xvid_visible#:#Interaktives Video ist sichtbar
+xvid_write#:#Interaktives Video bearbeiten
+xvid_xvid_view_lp#:#Lernfortschritt einsehen
+you_need_a_short_title#:#Sie müssen einen Kurztitel eintragen!
+ytb#:#YouTube
+ytb_youtube_info#:#Geben Sie bitte eine YouTube-URL ein.
+ytb_youtube_url#:#YouTube-URL

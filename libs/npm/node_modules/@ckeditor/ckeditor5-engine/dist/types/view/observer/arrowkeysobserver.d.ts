@@ -1,0 +1,49 @@
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+/**
+ * @module engine/view/observer/arrowkeysobserver
+ */
+import Observer from './observer.js';
+import type View from '../view.js';
+import type { KeyEventData } from './keyobserver.js';
+import type { BubblingEvent } from './bubblingemittermixin.js';
+/**
+ * Arrow keys observer introduces the {@link module:engine/view/document~Document#event:arrowKey `Document#arrowKey`} event.
+ *
+ * Note that this observer is attached by the {@link module:engine/view/view~View} and is available by default.
+ */
+export default class ArrowKeysObserver extends Observer {
+    /**
+     * @inheritDoc
+     */
+    constructor(view: View);
+    /**
+     * @inheritDoc
+     */
+    observe(): void;
+    /**
+     * @inheritDoc
+     */
+    stopObserving(): void;
+}
+/**
+ * Event fired when the user presses an arrow keys.
+ *
+ * Introduced by {@link module:engine/view/observer/arrowkeysobserver~ArrowKeysObserver}.
+ *
+ * Note that because {@link module:engine/view/observer/arrowkeysobserver~ArrowKeysObserver} is attached by the
+ * {@link module:engine/view/view~View} this event is available by default.
+ *
+ * @eventName module:engine/view/document~Document#arrowKey
+ * @param data
+ */
+export type ViewDocumentArrowKeyEvent = BubblingEvent<{
+    name: 'arrowKey';
+    args: [data: KeyEventData];
+}>;

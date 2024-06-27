@@ -113,7 +113,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		{
 			$('#is_private_modal').attr('checked', 'checked');
 		}
-		CKEDITOR.replace(comment_id);
+		//CKEDITOR.replace(comment_id);
 		$('.modal_feedback').prepend(scope.InteractiveVideo.lang.add_comment);
 		scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReflectionCommentPosting(pub.comment_id, pub.QuestionObject.reply_original_id);
 	};

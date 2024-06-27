@@ -1,0 +1,5 @@
+/**
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+export default {"pl":{"dictionary":{"media widget":"widget osadzenia mediów","Media URL":"Adres URL","Paste the media URL in the input.":"Wklej adres URL mediów do pola.","Tip: Paste the URL into the content to embed faster.":"Wskazówka: Wklej URL do treści edytora, by łatwiej osadzić media.","The URL must not be empty.":"Adres URL nie może być pusty.","This media URL is not supported.":"Ten rodzaj adresu URL nie jest obsługiwany.","Insert media":"Wstaw media","Media":"Nośniki","Media toolbar":"Pasek narzędzi mediów","Open media in new tab":"Otwórz media w nowej zakładce"},getPluralForm(n){return (n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);}}}
