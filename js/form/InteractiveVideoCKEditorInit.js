@@ -20,26 +20,31 @@ import {
 il.InteractiveVideoEditor = (function (scope) {
     'use strict';
 
-    let pub = {}, pro = {}, pri = {txt_editor_instances : {}};
-
-    pub.createInstance = function(elementIdentifier) {
-        return ClassicEditor
-            .create( document.querySelector( elementIdentifier ), pri.getCKEditorConfig())
-            .then( editor => {
-                pri.txt_editor_instances[ elementIdentifier ] = editor;
-            } )
-            .catch( err => console.error( err.stack ) );
-    }
+    let pub = {}, pro = {},
+        pri = {
+            editor_instances : {}
+    };
 
     pub.createMultipleInstance = function(elementIdentifiers) {
         elementIdentifiers.forEach((elementIdentifier) => pub.createInstance(elementIdentifier));
     }
 
-    pub.getEditorInstanceById = function (elementId)
+    pub.createInstance = function(elementIdentifier) {
+        if(document.getElementById(elementIdentifier)) {
+            return ClassicEditor
+                .create( document.querySelector( '#' + elementIdentifier ), pri.getEditorConfig())
+                .then( editor => {
+                    pri.editor_instances[ elementIdentifier ] = editor;
+                } )
+                .catch( err => console.error( err.stack ) );
+        }
+    }
+
+    pub.getEditorInstanceById = function (elementIdentifier)
     {
         if(pub.getEditorInstancesCount() >= 1) {
-            if (typeof pri.txt_editor_instances['#' + elementId] != "undefined") {
-                return pri.txt_editor_instances['#' + elementId];
+            if (typeof pri.editor_instances['#' + elementIdentifier] != "undefined") {
+                return pri.editor_instances['#' + elementIdentifier];
             }
         }
 
@@ -47,15 +52,15 @@ il.InteractiveVideoEditor = (function (scope) {
     }
 
     pub.getEditorInstancesCount = function () {
-        return Object.keys(pri.txt_editor_instances).length;
+        return Object.keys(pri.editor_instances).length;
     }
 
     pub.getEditorInstances = function ()
     {
-        return pri.txt_editor_instances;
+        return pri.editor_instances;
     }
 
-    pri.getCKEditorConfig = function()
+    pri.getEditorConfig = function()
     {
         return {
             toolbar: {
@@ -116,5 +121,3 @@ il.InteractiveVideoEditor = (function (scope) {
     return pub;
 
 }(il));
-
-//ClassicEditor.create(document.querySelector('.comment_text_iv_field'), editorConfig);

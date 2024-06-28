@@ -392,18 +392,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
             });
         }
 
-        if ($('#' + editor_name).size() > 0) {
-            editor_instance.on('instanceReady', function (evt) {
-                let editor = evt.editor;
-                if (editor.name === editor_name) {
-                    editor.on('focus', function () {
-                        if (player_data.pause_on_click_in_comment_field) {
-                            scope.InteractiveVideoPlayerAbstract.pause(player_id);
-                        }
-                    });
-                }
-            });
-        }
+
     };
 
     pub.addShowAllCommentsChange = function (player_id) {
