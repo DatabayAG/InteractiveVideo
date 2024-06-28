@@ -33,7 +33,7 @@ il.InteractiveVideoEditor = (function (scope) {
 
     pub.getEditorInstanceById = function (elementId)
     {
-        if(pub.getEditorInstancesCount() > 1) {
+        if(pub.getEditorInstancesCount() >= 1) {
             if (typeof pri.txt_editor_instances['#' + elementId] != "undefined") {
                 return pri.txt_editor_instances['#' + elementId];
             }
