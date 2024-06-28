@@ -1,8 +1,13 @@
+<script type="module" src="Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/form/InteractiveVideoCKEditorInit.js"></script>
+
 <!-- BEGIN mathjax_enabled -->
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
-      //  CKEDITOR.config.mathJaxLib = "{MATH_JAX_CONFIG}";
-    //    CKEDITOR.config.customConfig = 'otherConfig.js'
+        il.InteractiveVideoEditor.createInstance('#question_text')
+        let editor = il.InteractiveVideoEditor.getEditorInstanceById('question_text')
+        editor.config.mathJaxLib = "{MATH_JAX_CONFIG}";
+        editor.config.customConfig = 'otherConfig.js'
+
     })
 
 </script>
@@ -10,8 +15,10 @@
 <!-- BEGIN small_editor -->
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
-     //   CKEDITOR.config.width = '100%';
-      //  CKEDITOR.config.height = '50px';
+        il.InteractiveVideoEditor.createMultipleInstance(['#question_text', '#feedback_one_wrong', '#feedback_correct']);
+        let editor = il.InteractiveVideoEditor.getEditorInstanceById('question_text')
+        //editor.config.width = '100%';
+        //editor.config.height = '50px';
     })
 </script>
 <!-- END small_editor -->

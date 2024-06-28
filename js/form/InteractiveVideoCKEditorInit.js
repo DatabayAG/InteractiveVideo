@@ -31,6 +31,10 @@ il.InteractiveVideoEditor = (function (scope) {
             .catch( err => console.error( err.stack ) );
     }
 
+    pub.createMultipleInstance = function(elementIdentifiers) {
+        elementIdentifiers.forEach((elementIdentifier) => pub.createInstance(elementIdentifier));
+    }
+
     pub.getEditorInstanceById = function (elementId)
     {
         if(pub.getEditorInstancesCount() >= 1) {

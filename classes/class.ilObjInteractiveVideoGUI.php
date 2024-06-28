@@ -2072,11 +2072,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$form = $this->initChapterForm();
         $form->setValuesByArray($this->getChapterFomValues(), true);
-
+        $my_tpl = $this->getCommentTemplate();
 		$form->addCommandButton('insertTutorChapter', $this->lng->txt('insert'));
 		$form->addCommandButton('cancelComments', $this->lng->txt('cancel'));
         $this->addJavascriptAndCSSToTemplate($tpl);
-		$tpl->setContent($form->getHTML());
+        $my_tpl->setVariable('FORM',$form->getHTML());
+        $tpl->setContent($my_tpl->get());
 	}
 
     /**

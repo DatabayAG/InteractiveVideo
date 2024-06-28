@@ -30,6 +30,7 @@
 
 <script type="text/javascript">
 	document.addEventListener('DOMContentLoaded', function () {
+		il.InteractiveVideoEditor.createInstance('comment_text')
 	$("#ilInteractiveVideoTutorCommentSubmit, #ilInteractiveVideoTutorQuestionSubmit, #ilInteractiveVideoChapterSubmit").on("click", function(e) {
 		let time = il.InteractiveVideoPlayerAbstract.currentTime("{PLAYER_ID}");
 		let timesstring = il.InteractiveVideoPlayerComments.secondsToTimeCode(time);
