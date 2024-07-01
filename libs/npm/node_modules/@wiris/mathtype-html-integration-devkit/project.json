@@ -1,0 +1,14 @@
+{
+  "name": "devkit",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "eslintConfig": "./.eslintrc.js",
+        "lintFilePatterns": ["packages/devkit/**/*.{ts,tsx,js,jsx}"]
+      },
+      "outputs": ["{options.outputFile}"]
+    }
+  }
+}

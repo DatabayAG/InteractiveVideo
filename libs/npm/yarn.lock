@@ -465,6 +465,21 @@
   resolved "https://registry.npmjs.org/@mixmark-io/domino/-/domino-2.2.0.tgz"
   integrity sha512-Y28PR25bHXUg88kCV7nivXrP2Nj2RueZ3/l/jdx6J9f8J4nsEGcgX0Qe6lt7Pa+J79+kPiJU3LguR6O/6zrLOw==
 
+"@wiris/mathtype-ckeditor5@^8.10.0":
+  version "8.10.0"
+  resolved "https://registry.npmjs.org/@wiris/mathtype-ckeditor5/-/mathtype-ckeditor5-8.10.0.tgz"
+  integrity sha512-2lZIwSbG983MEdO48QmPQW8/p8sfbblUMnK1p94zZayWy3tDJ6mA0SPsOU8a2RYp/Zbm2XqB/MHKmXth/FgODw==
+  dependencies:
+    "@wiris/mathtype-html-integration-devkit" "1.17.3"
+
+"@wiris/mathtype-html-integration-devkit@1.17.3":
+  version "1.17.3"
+  resolved "https://registry.npmjs.org/@wiris/mathtype-html-integration-devkit/-/mathtype-html-integration-devkit-1.17.3.tgz"
+  integrity sha512-W2q0N1mh5ZALnYwh98H0FoxYHJ5aHBZeR0lGFJTjwF54dF4ovewmabXDgWsaP+l+cKf50QBKFp8lGcpuVjNmmA==
+  dependencies:
+    dompurify "^3.0.10"
+    uuid "^8.3.2"
+
 blurhash@2.0.5:
   version "2.0.5"
   resolved "https://registry.npmjs.org/blurhash/-/blurhash-2.0.5.tgz"
@@ -475,7 +490,12 @@ bootstrap-timepicker@^0.5.2:
   resolved "https://registry.npmjs.org/bootstrap-timepicker/-/bootstrap-timepicker-0.5.2.tgz"
   integrity sha512-ZUEEu2H6hz/6N8Myi0KGxyqZ5+SmNbPKLgD/2s4dQcK/MrUw/1b9OmK46dSLVwKEARTWITCWz6QRZAJs5YeRBA==
 
-ckeditor5@^42.0.0, ckeditor5@42.0.0:
+ckeditor5-mathtype@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/ckeditor5-mathtype/-/ckeditor5-mathtype-1.0.4.tgz"
+  integrity sha512-R4JB9DtCZfpJZYNkPNIy0gwbk3do6+Vkt+eEiraIweUO9qmUBp+sxWPxb8ZqVNipQndTUURuaxEmeuM9gx8GuA==
+
+ckeditor5@^42.0.0, ckeditor5@>=42.0.0, ckeditor5@42.0.0:
   version "42.0.0"
   resolved "https://registry.npmjs.org/ckeditor5/-/ckeditor5-42.0.0.tgz"
   integrity sha512-l/Qdw61+nAhkNfXRzPp3a6W75XGnKBKWlJqEbgMGclgAvaqgWE7MAz9VqQCJSeMK8PjgFH1EcBMPRmG+6W8QRQ==
@@ -567,6 +587,11 @@ custom-event-polyfill@^1.0.7:
   resolved "https://registry.npmjs.org/custom-event-polyfill/-/custom-event-polyfill-1.0.7.tgz"
   integrity sha512-TDDkd5DkaZxZFM8p+1I3yAlvM3rSr1wbrOliG4yJiwinMZN8z/iGL7BTlDkrJcYTmgUSb4ywVCc3ZaUtOtC76w==
 
+dompurify@^3.0.10:
+  version "3.1.5"
+  resolved "https://registry.npmjs.org/dompurify/-/dompurify-3.1.5.tgz"
+  integrity sha512-lwG+n5h8QNpxtyrJW/gJWckL+1/DQiYMX8f7t8Z2AZTPw1esVrqjI63i7Zc2Gz0aKzLVMYC1V1PL/ky+aY/NgA==
+
 loadjs@^4.2.0:
   version "4.3.0"
   resolved "https://registry.npmjs.org/loadjs/-/loadjs-4.3.0.tgz"
@@ -626,6 +651,11 @@ url-polyfill@^1.1.12:
   version "1.1.12"
   resolved "https://registry.npmjs.org/url-polyfill/-/url-polyfill-1.1.12.tgz"
   integrity sha512-mYFmBHCapZjtcNHW0MDq9967t+z4Dmg5CJ0KqysK3+ZbyoNOWQHksGCTWwDhxGXllkWlOc10Xfko6v4a3ucM6A==
+
+uuid@^8.3.2:
+  version "8.3.2"
+  resolved "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 vanilla-colorful@0.7.2:
   version "0.7.2"
