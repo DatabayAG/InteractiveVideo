@@ -45,8 +45,8 @@ il.InteractiveVideoEditor = (function (scope) {
     pub.getEditorInstanceById = function (elementIdentifier)
     {
         if(pub.getEditorInstancesCount() >= 1) {
-            if (typeof pri.editor_instances['#' + elementIdentifier] != "undefined") {
-                return pri.editor_instances['#' + elementIdentifier];
+            if (typeof pri.editor_instances[elementIdentifier] != "undefined") {
+                return pri.editor_instances[elementIdentifier];
             }
         }
 
