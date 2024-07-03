@@ -32,14 +32,20 @@ il.InteractiveVideoEditor = (function (scope) {
     }
 
     pub.createInstance = function(elementIdentifier) {
-        if(document.getElementById(elementIdentifier)) {
-            return ClassicEditor
-                .create( document.querySelector( '#' + elementIdentifier ), pri.getEditorConfig())
-                .then( editor => {
-                    pri.editor_instances[ elementIdentifier ] = editor;
-                } )
-                .catch( err => console.error( err.stack ) );
+        if( ! pub.getEditorInstanceById(elementIdentifier)) {
+            if(document.getElementById(elementIdentifier)) {
+                return ClassicEditor
+                    .create( document.querySelector( '#' + elementIdentifier ), pri.getEditorConfig())
+                    .then( editor => {
+                        pri.editor_instances[ elementIdentifier ] = editor;
+                        editor.editing.view.change( writer => {
+                            writer.setStyle('min-height', '75px', editor.editing.view.document.getRoot());
+                        } );
+                    } )
+                    .catch( err => console.error( err.stack ) );
+            }
         }
+
     }
 
     pub.getEditorInstanceById = function (elementIdentifier)
@@ -70,8 +76,6 @@ il.InteractiveVideoEditor = (function (scope) {
                     'undo',
                     'redo',
                     '|',
-                    'selectAll',
-                    '|',
                     'bold',
                     'italic',
                     'underline',
@@ -79,7 +83,6 @@ il.InteractiveVideoEditor = (function (scope) {
                     'subscript',
                     'superscript',
                     '|',
-                    'specialCharacters',
                     'link',
                     '|',
                     'accessibilityHelp'
@@ -105,18 +108,9 @@ il.InteractiveVideoEditor = (function (scope) {
             ],
             link: {
                 addTargetToExternalLinks: true,
-                defaultProtocol: 'https://',
-                decorators: {
-                    toggleDownloadable: {
-                        mode: 'manual',
-                        label: 'Downloadable',
-                        attributes: {
-                            download: 'file'
-                        }
-                    }
-                }
+                defaultProtocol: 'https://'
             },
-            placeholder: 'Type or paste your content here!'
+            placeholder: ''
         };
     }
     pub.protect = pro;

@@ -990,6 +990,9 @@ li.toc_item > div > h5 > time {
 #stroke_picker, #color_picker, #color_picker_fill{
     width: 10%;
 }
+#ilInteractiveVideoCommentsForm > div.ilFormFooter.clearfix > div.col-sm-12.ilFormCmds.ilInteractiveVideoFormCommands > button {
+    min-height: 28px; !important;
+}
 
 
 
