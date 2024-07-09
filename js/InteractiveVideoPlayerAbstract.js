@@ -163,11 +163,11 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 	};
 
 	pub.isFullScreen = function(player_id){
-		return il.InteractiveVideo[player_id].player.fullscreen;
+		return document.fullscreenElement !== null
 	}
 
 	pub.exitFullScreen = function(player_id){
-		return il.InteractiveVideo[player_id].player.fullscreen.exit();
+		document.exitFullscreen();
 	}
 
 	pro.moveMarkerOverlayIntoPlayer = function(player_id, prependElement) {
