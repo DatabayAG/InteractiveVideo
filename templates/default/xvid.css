@@ -993,6 +993,9 @@ li.toc_item > div > h5 > time {
 #ilInteractiveVideoCommentsForm > div.ilFormFooter.clearfix > div.col-sm-12.ilFormCmds.ilInteractiveVideoFormCommands > button {
     min-height: 28px; !important;
 }
+#close_form{
+    min-height: 28px; !important;
+}
 .ilToolbarContainer{
     text-align:right;
 }
