@@ -88,10 +88,12 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function doUpdateVideoSource($obj_id)
 	{
-		$file = $_FILES['video_file'];
-		if($file['error'] == 0 && $this->import_file_name == '')
+		if (isset($_FILES['video_file']))
 		{
-			$this->uploadVideoFile($obj_id);
+			$file = $_FILES['video_file'];
+			if ($file['error'] == 0 && $this->import_file_name == '') {
+				$this->uploadVideoFile($obj_id);
+			}
 		}
 	}
 
@@ -382,7 +384,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 			$mob->setDescription($format);
 			$media_item->setHAlign("Left");
 
-			ilUtil::renameExecutables($mob_dir);
+			ilFileUtils::renameExecutables($mob_dir);
 
 			$mob->update();
 

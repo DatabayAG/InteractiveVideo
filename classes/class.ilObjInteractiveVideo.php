@@ -115,7 +115,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$this->setIsChronologic($row['is_chronologic']);
 		$this->setSourceId($row['source_id']);
 		$this->setTaskActive($row['is_task']);
-		$this->setTask($row['task']);
+		$this->setTask($row['task'] ?: '');
 		$this->setEnableComment($row['enable_comment']);
 		$this->setEnableToolbar($row['show_toolbar']);
 		$this->setAutoResumeAfterQuestion($row['auto_resume']);

@@ -1,5 +1,3 @@
-# Development branch NOT for production use!
-
 - [InteractiveVideo](#interactivevideo)
   * [ILIAS compatibility](#ilias-compatibility)
   * [Important notice](#important-notice)
@@ -23,7 +21,10 @@
 ILIAS Interactive Video Plugin
 
 ## ILIAS compatibility
-Since there are a lot of changes in ILIAS 6, there will be a new branch '6_x' which is compatible with ILIAS 6, for older ILIAS versions you can still use the master branch.
+- The branch r8 is compatible with ILIAS 8
+- If you are looking for a ILIAS 6 or ILIAS 7 compatible version of the plugin, please use the master branch.
+- If you are looking for a ILIAS 5.2-5.4 compatible version, please use the release_2 branch.
+- For even older ILIAS versions, please use the release_1 branch.
 
 ## Changes in version 3.0.0
 1. [SVG marker for videos](https://www.ilias.de/docu/goto_docu_wiki_wpage_4971_1357.html)

@@ -135,7 +135,8 @@ class SimpleChoiceQuestionStatistics
 		{
 			if($value['answered'] > 0)
 			{
-				$return_value['users'][$key]['answerd'] = round(($value['answered'] / $questions_count) * 100, 2) . '%';
+                $percentage = round(($value['answered'] / $questions_count) * 100, 2);
+				$return_value['users'][$key]['answerd'] = $percentage . '%';
 			}
 			else
 			{
@@ -144,7 +145,11 @@ class SimpleChoiceQuestionStatistics
 
 			if($value['answered'] > 0 && ($questions_count - $neutral) > 0)
 			{
-				$return_value['users'][$key]['sum'] = round(($value['sum'] / ($questions_count - $neutral)) * 100, 2) . '%';
+                $percentage = round(($value['sum'] / ($questions_count - $neutral)) * 100, 2);
+                if($percentage > 100) {
+                    $percentage = 100;
+                }
+				$return_value['users'][$key]['sum'] = $percentage . '%';
 			}
 			else
 			{
@@ -218,23 +223,30 @@ class SimpleChoiceQuestionStatistics
 			[(int)$oid]
 		);
 		$questions = [];
-		while($row = $ilDB->fetchAssoc($res))
-		{
-			if($row['points'] == null || ! isset($questions[$row['question_id']]))
-			{
-				$questions[$row['question_id']]['answered'] = 0;
-				$questions[$row['question_id']]['correct']  = 0;
-			}
-			else
-			{
-				$questions[$row['question_id']]['answered']++;
-				$questions[$row['question_id']]['correct'] += $row['points'];
-			}
-			$questions[$row['question_id']]['comment_id']    = $row['comment_id'];
-			$questions[$row['question_id']]['comment_title'] = $row['comment_title'];
-			$questions[$row['question_id']]['neutral_answer'] = $row['neutral_answer'];
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            if($row['points'] == null)
+            {
+                $questions[$row['question_id']]['answered'] = 0;
+                $questions[$row['question_id']]['correct']  = 0;
+            }
+            else if($row['points'] !== null)
+            {
+                if( ! array_key_exists($row['question_id'], $questions)) {
+                    $questions[$row['question_id']]['answered'] = 1;
+                    $questions[$row['question_id']]['correct']  = 0;
+                }
+            }
+            else
+            {
+                $questions[$row['question_id']]['answered']++;
+                $questions[$row['question_id']]['correct'] += $row['points'];
+            }
+            $questions[$row['question_id']]['comment_id']    = $row['comment_id'];
+            $questions[$row['question_id']]['comment_title'] = $row['comment_title'];
+            $questions[$row['question_id']]['neutral_answer'] = $row['neutral_answer'];
 
-		}
+        }
 		$results = [];
 		$counter = 0;
 		foreach($questions as $key => $value)

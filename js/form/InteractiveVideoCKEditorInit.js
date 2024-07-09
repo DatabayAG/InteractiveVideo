@@ -43,7 +43,7 @@ il.InteractiveVideoEditor = (function (scope) {
     }
 
     pub.getEditorInstancesCount = function () {
-        return Object.keys(pri.editor_instances).length;
+        return Object.keys(pub.getEditorInstances()).length;
     }
 
     pub.getEditorInstances = function () {

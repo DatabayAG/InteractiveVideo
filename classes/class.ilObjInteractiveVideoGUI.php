@@ -2033,6 +2033,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $form->addItem($title);
 
         $time = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'comment_time');
+        if(isset($_POST['comment_time']))
+        {
+            $seconds = $_POST['comment_time'];
+            $time->setValueByArray(['comment_time' => $seconds]);
+        }
         #$time->setShowTime(true);
         #$time->setShowSeconds(true);
 
@@ -2417,6 +2422,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             if ($post->has('comment_time')) {
                 $seconds = $post->retrieve('comment_time', $this->refinery->kindlyTo()->string());
                 $comment_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($seconds));
+                $this->objComment->setCommentTime($comment_time);
             }
             if ($post->has('comment_text')) {
                 $comment_text = $post->retrieve('comment_text', $this->refinery->kindlyTo()->string());
@@ -2444,15 +2450,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $this->objComment->setInteractive(0);
                 $this->objComment->setIsPrivate((int) $form->getInput('is_private'));
                 $this->objComment->setIsTableOfContent((int) $form->getInput('is_table_of_content'));
-                $this->objComment->setCommentTime($comment_time);
             }
-            if ($valid) {
-                $this->objComment->update();
-                $this->editComments();
-            } else {
-
-                $this->editChapter($form);
-            }
+        }
+        if ($valid) {
+            $this->objComment->update();
+            $this->editComments();
+        } else {
+            $form->setValuesByPost();
+            $this->editChapter($form);
         }
 	}
 
@@ -2608,17 +2613,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $this->showTutorInsertChapterForm();
                 return;
             }
-			$this->ctrl->redirect($this, 'showTutorInsertCommentForm');
+			#$this->ctrl->redirect($this, 'showTutorInsertCommentForm');
+            $this->showTutorInsertCommentForm();
 		}
-
-		if($is_tutor)
-		{
-			$this->editComments();
-		}
-		else
-		{
-			$this->showContent();
-		}
+        
 	}
 
     /**
@@ -3183,7 +3181,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $question->setFeedbackCorrect(ilInteractiveVideoPlugin::stripSlashesWrapping($this->getValueFromFormOrArray('feedback_correct', $form)));
         $question->setFeedbackOneWrong(ilInteractiveVideoPlugin::stripSlashesWrapping($this->getValueFromFormOrArray('feedback_one_wrong', $form)));
 
-        $question->setLimitAttempts((int)$this->getValueFromFormOrArray('limit_attempts', $form));
+        if ($question->getType() !== 2) {
+            $question->setLimitAttempts((int)$this->getValueFromFormOrArray('limit_attempts', $form));
+        } else {
+            $question->setLimitAttempts(0);
+        }
+
         $question->setIsJumpCorrect((int)$this->getValueFromFormOrArray('is_jump_correct', $form));
         $question->setShowCorrectIcon((int)$this->getValueFromFormOrArray('show_correct_icon', $form));
         $question->setFeedbackCorrectId((int)$this->getValueFromFormOrArray('feedback_correct_obj', $form));
@@ -3528,19 +3531,23 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
             $qid = $post->retrieve('qid', $this->refinery->kindlyTo()->int());
             if(!SimpleChoiceQuestion::isLimitAttemptsEnabled($qid)){
+                $answer = [];
                 if($post->has('answer')) {
-                    $answer = [];
-                    $answer = $post->retrieve('answer', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string()));
-                    $simple_choice = new SimpleChoiceQuestion();
-                    $simple_choice->saveAnswer($qid, $answer);
+                        $answer = $post->retrieve('answer', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string()));
                 }
+                $simple_choice = new SimpleChoiceQuestion();
+                $simple_choice->saveAnswer($qid, $answer);
+
             }
             if(SimpleChoiceQuestion::existUserAnswerForQuestionId((int)$qid) == false)
             {
                 $answer = [];
-                $answer = $post->retrieve('answer', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string()));
+                if($post->has('answer')) {
+                    $answer = $post->retrieve('answer', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string()));
+                }
                 $simple_choice = new SimpleChoiceQuestion();
                 $simple_choice->saveAnswer($qid, $answer);
+
             }
 		}
 
@@ -3610,7 +3617,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         }
 		$feedback      = $ajax_object->getFeedbackForQuestion($qid);
 		$tpl_json->setVariable('JSON', $feedback);
-		$tpl_json->show("DEFAULT", false, true );
+		$tpl_json->show("DEFAULT");
 	}
 
 	public function postVideoStartedPerAjax(): void
@@ -3808,7 +3815,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$ilCtrl->saveParameterByClass($class_name, 'xvid_referrer_ref_id');
             $xvid_referrer = '';
             if($get->has('xvid_referrer')){
-                $xvid_referrer = $get->retrieve('xvid_referrer', $DIC->refinery->kindlyTo()->string());
+                $xvid_referrer = $get->retrieve('xvid_referrer', $DIC->refinery()->kindlyTo()->string());
             }
 			$ilCtrl->setParameterByClass($class_name, 'xvid_referrer', urlencode($xvid_referrer));
 			$ilCtrl->redirectByClass(["ilobjplugindispatchgui", $class_name], "");
@@ -3819,7 +3826,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$ilCtrl->setParameterByClass($class_name, "ref_id", $ref_id);
 			$ilCtrl->saveParameterByClass($class_name, 'xvid_referrer_ref_id');
             if($get->has('xvid_referrer')){
-                $xvid_referrer = $get->retrieve('xvid_referrer', $DIC->refinery->kindlyTo()->string());
+                $xvid_referrer = $get->retrieve('xvid_referrer', $DIC->refinery()->kindlyTo()->string());
             }
 			$ilCtrl->setParameterByClass($class_name, 'xvid_referrer', urlencode($xvid_referrer));
 			$ilCtrl->redirectByClass(["ilobjplugindispatchgui", $class_name], "infoScreen");
