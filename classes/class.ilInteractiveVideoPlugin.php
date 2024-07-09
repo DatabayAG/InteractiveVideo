@@ -11,6 +11,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 	const CNAME = 'Repository';
 	const SLOT_ID = 'robj';
 	const PNAME = 'InteractiveVideo';
+    const PLUGIN_ID = 'xvid';
 
 	private static ?ilInteractiveVideoPlugin $instance = null;
 

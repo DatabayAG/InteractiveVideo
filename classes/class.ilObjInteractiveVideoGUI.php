@@ -289,6 +289,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl = $this->buildContentTemplate();
 
 		$tpl->setContent($video_tpl->get());
+        $tpl->setPermanentLink(ilInteractiveVideoPlugin::PLUGIN_ID, $this->ref_id);
 	}
 
     /**
