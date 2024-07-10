@@ -350,7 +350,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
             reflection_solution_btn.prop('disabled', true);
             $('.submit_comment_form').remove();
             $('.iv_show_best_solution_reflection').removeClass('iv_best_solution_hidden')
-            il.InteractiveVideoQuestionViewer.showBestSolutionForReflectionIsClicked(comment_id, player_id);
         });
     };
 
