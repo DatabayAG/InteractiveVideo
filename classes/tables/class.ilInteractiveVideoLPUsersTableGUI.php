@@ -139,13 +139,6 @@ class ilInteractiveVideoLPUsersTableGUI extends ilTrObjectUsersPropsTableGUI
      * {@inheritdoc}
      * @throws ilDateTimeException
      * @throws ilTemplateException
-     * @throws ilTemplateException
-     * @throws ilTemplateException
-     * @throws ilTemplateException
-     * @throws ilTemplateException
-     * @throws ilTemplateException
-     * @throws ilTemplateException
-     * @throws ilTemplateException
      */
     protected function fillRow(array $a_set): void
 	{

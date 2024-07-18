@@ -197,7 +197,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		{
 			$(pri.ids.private_modal + player_id).attr('checked', 'checked');
 		}
-		//CKEDITOR.replace(comment_id);
+		il.InteractiveVideoEditor.createInstance(comment_id)
 		feedback.prepend(language.add_comment);
 		scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReflectionCommentPosting(pub.comment_id, pub.QuestionObject.reply_original_id, player_id);
 	};

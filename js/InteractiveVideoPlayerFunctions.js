@@ -293,7 +293,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
     pub.addAjaxFunctionForReflectionCommentPosting = function (comment_id, org_id, player_id) {
         $('#submit_comment_form_' + player_id).on("click", function () {
             let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
-            let comment_text = scope.InteractiveVideoEditor.getEditorInstanceById('text_reflection_comment_' + player_id).getData();
+            console.log('text_reflection_comment_' + player_id, 'text_reflection_comment_' + comment_id)
+            let comment_text = scope.InteractiveVideoEditor.getEditorInstanceById('text_reflection_comment_' + comment_id).getData();
             let is_private = $('#is_private_modal_' + player_id).prop("checked");
             $.ajax({
                 type: "POST",
