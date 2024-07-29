@@ -21,6 +21,7 @@
 ILIAS Interactive Video Plugin
 
 ## ILIAS compatibility
+- The branch r9 is compatible with ILIAS 9
 - The branch r8 is compatible with ILIAS 8
 - If you are looking for a ILIAS 6 or ILIAS 7 compatible version of the plugin, please use the master branch.
 - If you are looking for a ILIAS 5.2-5.4 compatible version, please use the release_2 branch.
