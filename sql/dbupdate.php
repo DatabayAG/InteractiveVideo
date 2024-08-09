@@ -48,8 +48,13 @@ if(!$ilDB->tableExists('rep_robj_xvid_comments'))
 	);
 
 	$ilDB->createTable('rep_robj_xvid_comments', $fields);
-	$ilDB->addPrimaryKey('rep_robj_xvid_comments', array('comment_id'));
-	$ilDB->createSequence('rep_robj_xvid_comments');
+    if(!$ilDB->primaryExistsByFields('rep_robj_xvid_comments', array('comment_id'))){
+        $ilDB->addPrimaryKey('rep_robj_xvid_comments', array('comment_id'));
+    }
+    if(!$ilDB->sequenceExists('rep_robj_xvid_comments')){
+        $ilDB->createSequence('rep_robj_xvid_comments');
+    }
+
 }
 ?>
 <#2>
@@ -156,8 +161,13 @@ if(!$ilDB->tableExists('rep_robj_xvid_qus_text'))
 		)
 	);
 	$ilDB->createTable('rep_robj_xvid_qus_text', $fields);
-	$ilDB->addPrimaryKey('rep_robj_xvid_qus_text', array('answer_id'));
-	$ilDB->createSequence('rep_robj_xvid_qus_text');
+    if(!$ilDB->primaryExistsByFields('rep_robj_xvid_qus_text', array('answer_id'))){
+        $ilDB->addPrimaryKey('rep_robj_xvid_qus_text', array('answer_id'));
+    }
+    if(!$ilDB->sequenceExists('rep_robj_xvid_qus_text')){
+        $ilDB->createSequence('rep_robj_xvid_qus_text');
+    }
+
 }
 ?>
 <#8>
@@ -188,8 +198,14 @@ if(!$ilDB->tableExists('rep_robj_xvid_question'))
 		)
 	);	
 	$ilDB->createTable('rep_robj_xvid_question', $fields);
-	$ilDB->addPrimaryKey('rep_robj_xvid_question', array('question_id'));
-	$ilDB->createSequence('rep_robj_xvid_question');
+    if(!$ilDB->primaryExistsByFields('rep_robj_xvid_question', array('question_id'))){
+        $ilDB->addPrimaryKey('rep_robj_xvid_question', array('question_id'));
+    }
+
+    if(!$ilDB->sequenceExists('rep_robj_xvid_question')){
+        $ilDB->createSequence('rep_robj_xvid_question');
+    }
+
 }
 ?>
 <#9>
@@ -471,8 +487,12 @@ if($ilDB->tableExists('rep_robj_xvid_objects'))
 ?>
 <#20>
 <?php
-$ilDB->addPrimaryKey('rep_robj_xvid_answers', array('question_id', 'answer_id', 'user_id'));
-$ilDB->addPrimaryKey('rep_robj_xvid_score', array('question_id', 'user_id'));
+if(!$ilDB->primaryExistsByFields('rep_robj_xvid_answers', array('question_id', 'answer_id', 'user_id'))){
+    $ilDB->addPrimaryKey('rep_robj_xvid_answers', array('question_id', 'answer_id', 'user_id'));
+}
+if(!$ilDB->primaryExistsByFields('rep_robj_xvid_score', array('question_id', 'user_id'))){
+    $ilDB->addPrimaryKey('rep_robj_xvid_score', array('question_id', 'user_id'));
+}
 ?>
 <#21>
 <?php
@@ -578,7 +598,10 @@ if(!$ilDB->tableExists('rep_robj_xvid_plugins'))
 	);
 
 	$ilDB->createTable('rep_robj_xvid_plugins', $fields);
-	$ilDB->addPrimaryKey('rep_robj_xvid_plugins', array('plugin_name'));
+    if(!$ilDB->primaryExistsByFields('rep_robj_xvid_plugins', array('plugin_name'))){
+        $ilDB->addPrimaryKey('rep_robj_xvid_plugins', array('plugin_name'));
+    }
+
 }
 ?>
 <#28>
@@ -626,7 +649,8 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'plugin_id'))
 ?>
 <#32>
 <?php
-if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'plugin_id'))
+if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'plugin_id') &&
+    ! $ilDB->tableColumnExists('rep_robj_xvid_objects', 'source_id'))
 {
 	$ilDB->renameTableColumn('rep_robj_xvid_objects', 'plugin_id', 'source_id');
 }
@@ -726,11 +750,13 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 <?php
 if($ilDB->tableExists('rep_robj_xvid_question'))
 {
-	if($ilDB->tableColumnExists('rep_robj_xvid_question', 'feedback_wrong_obj_id'))
+	if($ilDB->tableColumnExists('rep_robj_xvid_question', 'feedback_wrong_obj_id') &&
+      ! $ilDB->tableColumnExists('rep_robj_xvid_question', 'feedback_wrong_ref_id'))
 	{
 		$ilDB->renameTableColumn('rep_robj_xvid_question', 'feedback_wrong_obj_id', 'feedback_wrong_ref_id');
 	}
-	if($ilDB->tableColumnExists('rep_robj_xvid_question', 'feedback_correct_obj_id'))
+	if($ilDB->tableColumnExists('rep_robj_xvid_question', 'feedback_correct_obj_id') &&
+        ! $ilDB->tableColumnExists('rep_robj_xvid_question', 'feedback_correct_ref_id'))
 	{
 		$ilDB->renameTableColumn('rep_robj_xvid_question', 'feedback_correct_obj_id', 'feedback_correct_ref_id');
 	}
@@ -794,7 +820,10 @@ if(!$ilDB->tableExists('rep_robj_xvid_lp'))
 		);
 
 		$ilDB->createTable('rep_robj_xvid_lp', $fields);
-		$ilDB->addPrimaryKey('rep_robj_xvid_lp', array('obj_id', 'usr_id'));
+        if(!$ilDB->primaryExistsByFields('rep_robj_xvid_lp', array('obj_id', 'usr_id'))){
+            $ilDB->addPrimaryKey('rep_robj_xvid_lp', array('obj_id', 'usr_id'));
+        }
+
 	}
 }
 ?>
@@ -854,7 +883,10 @@ if($ilDB->tableExists('rep_robj_xvid_lp'))
 		);
 
 		$ilDB->createTable('rep_robj_xvid_lp', $fields);
-		$ilDB->addPrimaryKey('rep_robj_xvid_lp', array('obj_id', 'usr_id'));
+        if(!$ilDB->primaryExistsByFields('rep_robj_xvid_lp', array('obj_id', 'usr_id'))){
+            $ilDB->addPrimaryKey('rep_robj_xvid_lp', array('obj_id', 'usr_id'));
+        }
+
 }
 ?>
 <#45>
@@ -1051,7 +1083,9 @@ if(!$ilDB->tableExists('rep_robj_xvid_subtitle'))
 		);
 
 		$ilDB->createTable('rep_robj_xvid_subtitle', $fields);
-		$ilDB->addPrimaryKey('rep_robj_xvid_subtitle', array('obj_id', 'short_title'));
+        if(!$ilDB->primaryExistsByFields('rep_robj_xvid_subtitle', array('obj_id', 'short_title'))){
+            $ilDB->addPrimaryKey('rep_robj_xvid_subtitle', array('obj_id', 'short_title'));
+        }
 	}
 }
 ?>
@@ -1071,7 +1105,9 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_toolbar'))
 <#70>
 <?php
 try {
-    $ilDB->addPrimaryKey('rep_robj_xvid_objects', array('obj_id'));
+    if(!$ilDB->primaryExistsByFields('rep_robj_xvid_objects', array('obj_id'))){
+        $ilDB->addPrimaryKey('rep_robj_xvid_objects', array('obj_id'));
+    }
 } catch (Exception $e) {
 
 }
