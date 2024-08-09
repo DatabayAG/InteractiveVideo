@@ -846,11 +846,13 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 <#43>
 <?php
 require_once 'Services/WebAccessChecker/classes/class.ilWACSecurePath.php';
+# If already registered comment out between this lines and let the update run again
 $ilWACSecurePath = new ilWACSecurePath();
 $ilWACSecurePath->setPath('xvid');
 $ilWACSecurePath->setCheckingClass('ilObjInteractiveVideoAccess');
 $ilWACSecurePath->setComponentDirectory('/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo');
 $ilWACSecurePath->create();
+# If already registered comment out between this lines and let the update run again
 ?>
 <#44>
 <?php
@@ -1241,7 +1243,8 @@ if ($read_lp && $xoct_type_id) {
 ?>
 <#81>
 <?php
-if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_toolbar'))
+if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_toolbar') &&
+ ! $ilDB->tableColumnExists('rep_robj_xvid_objects', 'show_toolbar'))
 {
     $ilDB->renameTableColumn('rep_robj_xvid_objects', 'no_toolbar', 'show_toolbar');
 }
