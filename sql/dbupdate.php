@@ -846,13 +846,13 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 <#43>
 <?php
 require_once 'Services/WebAccessChecker/classes/class.ilWACSecurePath.php';
-# If already registered comment out between this lines and let the update run again
+# If already registered comment out between these lines and let the update run again
 $ilWACSecurePath = new ilWACSecurePath();
 $ilWACSecurePath->setPath('xvid');
 $ilWACSecurePath->setCheckingClass('ilObjInteractiveVideoAccess');
 $ilWACSecurePath->setComponentDirectory('/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo');
 $ilWACSecurePath->create();
-# If already registered comment out between this lines and let the update run again
+# If already registered comment out between these lines and let the update run again
 ?>
 <#44>
 <?php
