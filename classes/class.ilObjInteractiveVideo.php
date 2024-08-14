@@ -28,7 +28,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	protected int $is_repeat = 0;
 	protected int $is_chronologic = 0;
 	protected int $is_public = 0;
-	protected string $source_id;
+	protected string $source_id = '';
 	protected ?ilInteractiveVideoSource $video_source_object = null;
 	protected $video_source_import_object;
 	protected int $task_active = 0;
@@ -81,7 +81,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 * @param $src_id
 	 * @return ilInteractiveVideoSource
 	 */
-	public function getVideoSourceObject($src_id) : ilInteractiveVideoSource
+	public function getVideoSourceObject($src_id) : ?ilInteractiveVideoSource
     {
 		$factory = new ilInteractiveVideoSourceFactory();
 		if($this->video_source_object === null)
@@ -399,7 +399,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	{
         if (((!$this->referenced) || ($this->countReferences() == 1)) && $this->video_source_object !== null ) {
             $this->getVideoSourceObject($this->getSourceId());
-            $this->video_source_object->beforeDeleteVideoSource($this->getId());
+            if($this->video_source_object !== null) {
+                $this->video_source_object->beforeDeleteVideoSource($this->getId());
+            }
+
             self::deleteComments(self::getCommentIdsByObjId($this->getId(), false));
 
             $this->db->manipulate('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = ' . $this->db->quote($this->getId(), 'integer'));
