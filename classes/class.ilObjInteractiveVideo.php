@@ -81,8 +81,11 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	 * @param $src_id
 	 * @return ilInteractiveVideoSource
 	 */
-	public function getVideoSourceObject($src_id) : ?ilInteractiveVideoSource
+	public function getVideoSourceObject($src_id)
     {
+        if($src_id === '') {
+            $this->log->error(sprintf('No source id give for InteractiveVideo object with the id %s', $this->id));
+        }
 		$factory = new ilInteractiveVideoSourceFactory();
 		if($this->video_source_object === null)
 		{
