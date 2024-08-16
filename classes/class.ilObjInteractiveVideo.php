@@ -99,6 +99,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			}
 		}
 
+        if($this->video_source_object === null) {
+            $this->log->error(sprintf('No valid source found for InteractiveVideo object with the id %s and source_id %s', $this->id, $this->source_id));
+        }
+
 		return $this->video_source_object;
 	}
 
