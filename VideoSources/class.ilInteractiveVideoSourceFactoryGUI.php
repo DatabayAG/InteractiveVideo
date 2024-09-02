@@ -36,7 +36,8 @@ class ilInteractiveVideoSourceFactoryGUI
 		$this->obj		= $obj;
 		$factory		= new ilInteractiveVideoSourceFactory();
 		$this->sources	= $factory->getVideoSources();
-		if($factory->isActive($factory->getVideoSourceObject($obj->getSourceId())->getClass()) !== false)
+		if($obj->getSourceId() !== '' &&
+            $factory->isActive($factory->getVideoSourceObject($obj->getSourceId())->getClass()) !== false)
 		{
 			$this->gui_source = $factory->getVideoSourceObject($obj->getSourceId())->getGUIClass();
 		}
@@ -67,7 +68,8 @@ class ilInteractiveVideoSourceFactoryGUI
 	protected function sourceDoesNotExistsAnymore()
 	{
         global $DIC;
-        $DIC->ui()->mainTemplate()->setOnScreenMessage("failure", $DIC->language()->txt("source_does_not_exist"), true);
+        $plugin = ilInteractiveVideoPlugin::getInstance();
+        $DIC->ui()->mainTemplate()->setOnScreenMessage("failure", $plugin->txt("source_does_not_exist"), true);
 		ilUtil::redirect('ilias.php?baseClass=ilDashboardGUI');
 	}
 
