@@ -102,10 +102,13 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function beforeDeleteVideoSource($obj_id)
 	{
-		$mob = new ilObjMediaObject($this->doReadVideoSource($obj_id));
-		ilObjMediaObject::_removeUsage($mob->getId(), 'xvid', $obj_id);
-		$this->removeMobFromPluginTable($obj_id, $mob->getId());
-		$mob->delete();
+        $video_source_id = $this->doReadVideoSource($obj_id);
+        if($video_source_id !== null) {
+            $mob = new ilObjMediaObject($video_source_id);
+            ilObjMediaObject::_removeUsage($mob->getId(), 'xvid', $obj_id);
+            $this->removeMobFromPluginTable($obj_id, $mob->getId());
+            $mob->delete();
+        }
 	}
 
 	/**
