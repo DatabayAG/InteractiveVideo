@@ -408,7 +408,11 @@ class SimpleChoiceQuestionFormEditGUI
 				}
 			}
 			$question->setVariable('JSON', json_encode($answers));
-			$question->setVariable('QUESTION_TYPE', 0);
+            $post_type = 0;
+            if($post->has('question_type')) {
+                $post_type = $post->retrieve('question_type', $DIC->refinery()->kindlyTo()->int());
+            }
+			$question->setVariable('QUESTION_TYPE', $post_type);
 			$question->setVariable('QUESTION_TEXT');
 		}
 		$question->setVariable('LABEL_FEEDBACK_NEUTRAL',		json_encode($this->plugin->txt('feedback_neutral')));

@@ -387,7 +387,7 @@ class SimpleChoiceQuestion
 			$this->setReflectionQuestionComment($row['reflection_question_comment']);
 			$this->setNeutralAnswer($row['neutral_answer']);
 			$this->setQuestionImage($row['question_image']);
-			$this->create();
+			$this->create($answers, $correct);
 		}
 	}
 
@@ -402,7 +402,7 @@ class SimpleChoiceQuestion
 		return $row['question_id'];
 	}
 
-	public function create() : int
+	public function create($answers = [], $correct = []) : int
     {
         global $ilDB;
 
@@ -433,7 +433,7 @@ class SimpleChoiceQuestion
                 'neutral_answer' => ['integer', $this->getNeutralAnswer()],
                 'question_image' => ['text', $this->getQuestionImage()],
             ]);
-		$this->editAnswersForQuestion($question_id);
+		$this->editAnswersForQuestion($question_id, $answers, $correct, $this->getType());
 		return $question_id;
 	}
 
@@ -1202,7 +1202,7 @@ class SimpleChoiceQuestion
         $this->show_best_solution_text = $show_best_solution_text;
     }
 
-    public function editAnswersForQuestion($question_id): void{
+    public function editAnswersForQuestion($question_id, $answers_param = [], $correct_param = [], $type = null): void{
         global $DIC;
 
         $post = $DIC->http()->wrapper()->post();
@@ -1229,7 +1229,7 @@ class SimpleChoiceQuestion
             if (isset($form_values['correct'])) {
                 $correct_answers = $form_values['correct'];
              }
-        } else {
+        } elseif($post->has('answer')) {
             if($post->has('answer')) {
                 $answer = $post->retrieve('answer', $DIC->refinery()->kindlyTo()->listOf($DIC->refinery()->kindlyTo()->string()));
             }
@@ -1239,7 +1239,16 @@ class SimpleChoiceQuestion
             if($post->has('correct')) {
                 $correct_answers = $post->retrieve('correct', $DIC->refinery()->kindlyTo()->dictOf($DIC->refinery()->kindlyTo()->string()));
             }
+        } else if($type !== null) {
+            $question_type = $type;
+            if(count($answers_param) > 0) {
+                $answer = $answers_param;
+            }
+            if(count($correct_param) > 0) {
+                $correct_answers = $correct_param;
+            }
         }
+
         if(is_array($answer) && count($answer) > 0 && $question_type != self::REFLECTION)
         {
             foreach(ilArrayUtil::stripSlashesRecursive($answer) as $key => $value)

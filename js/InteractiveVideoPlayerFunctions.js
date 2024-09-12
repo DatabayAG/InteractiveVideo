@@ -290,68 +290,66 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
         pub.refreshMathJaxView();
     };
 
-    pub.addAjaxFunctionForReflectionCommentPosting = function (comment_id, org_id, player_id) {
-        $('#submit_comment_form_' + player_id).on("click", function () {
-            let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
-            let comment_text = scope.InteractiveVideoEditor.getEditorInstanceById('text_reflection_comment_' + comment_id).getData();
-            let is_private = $('#is_private_modal_' + player_id).prop("checked");
-            $.ajax({
-                type: "POST",
-                url: il.InteractiveVideo[player_id].post_comment_url,
-                data: {
-                    'comment_time': actual_time_in_video,
-                    'comment_text': comment_text,
-                    'is_private': is_private,
-                    'is_reply_to': comment_id
-                },
-                success: function () {
-                    $('.reply_comment_' + org_id).remove();
-                    $('.list_item_' + comment_id + ' .reply_comment_non_existent').remove();
-                    let reply = {
-                        'comment_text': comment_text,
-                        'is_interactive': 0,
-                        'is_private': is_private,
-                        'user_name': scope.InteractiveVideo[player_id].username,
-                        'comment_id': 'non_existent'
-                    };
-                    let html = scope.InteractiveVideoPlayerComments.getCommentRepliesHtml(reply);
-                    $('.list_item_' + comment_id).find('.comment_replies').append(html);
-                    pub.decideSolutionHandlingForReflectionQuestion(comment_id, player_id);
-                    pro.replyWasSubmittedSuccessful(player_id, org_id, comment_text, is_private, comment_id);
-                    $('#ilQuestionModal').modal('hide');
-                    $('.reply_comment_' + org_id).remove();
-                    $('.reply_comment_non_existent').remove()
-                }
-            });
-        });
-    };
+	pub.addAjaxFunctionForReflectionCommentPosting = function(comment_id, org_id, player_id)
+	{
+		$('#submit_comment_form_' + player_id).on("click", function() {
+			let actual_time_in_video = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
+			let comment_text = scope.InteractiveVideoEditor.getEditorInstanceById('text_reflection_comment_' + comment_id).getData();
+			let is_private = $('#is_private_modal_' + player_id).prop("checked");
+			$.ajax({
+				type:     "POST",
+				url:      il.InteractiveVideo[player_id].post_comment_url,
+				data:     {
+					'comment_time':      actual_time_in_video,
+					'comment_text':      comment_text,
+					'is_private':        is_private,
+					'is_reply_to':       comment_id
+				},
+				success:  function () {
+					$('.reply_comment_' + org_id).remove();
+					$('.list_item_' + comment_id + ' .reply_comment_non_existent').remove();
+					let reply = {'comment_text' : comment_text, 'is_interactive' : 0, 'is_private' : is_private, 'user_name' : scope.InteractiveVideo[player_id].username, 'comment_id' : 'non_existent'};
+					let html = scope.InteractiveVideoPlayerComments.getCommentRepliesHtml(reply);
+					pub.decideSolutionHandlingForReflectionQuestion(comment_id, player_id);
+					pro.replyWasSubmittedSuccessful(player_id, org_id, comment_text, is_private, comment_id);
+					//$('#ilQuestionModal').modal('hide');
+					$('.reply_comment_' + org_id).remove();
+					$('.reply_comment_non_existent').remove()
+					$('.list_item_' + comment_id).find('.comment_replies').append(html);
+				}
+			});
+		});
+	};
 
-    pub.decideSolutionHandlingForReflectionQuestion = function (comment_id, player_id) {
-        let question = il.InteractiveVideoQuestionViewer.QuestionObject;
-        if (question.show_best_solution === "1" && question.show_best_solution_text.length >= 0) {
-            let reflection_solution = '<input id="reflection_solution" class="btn btn-default btn-sm" value="' + il.InteractiveVideo.lang.show_best_solution + '" ' + 'type="submit">';
-            let best_solution_element = '<div class="iv_show_best_solution_reflection iv_best_solution_hidden">' +
-                '<div class="reflection_best_solution_title">' + il.InteractiveVideo.lang.solution + ': </div>' +
-                '<div class="reflection_best_solution_text">' + question.show_best_solution_text + '</div>' +
-                '</div>';
-            $('.question_center').append($(best_solution_element))
-            $('#question_reflection_buttons_bellow_form').append(reflection_solution)
-            pro.registerReflectionBestSolutionListener(comment_id, player_id);
-        } else {
-            $('#ilQuestionModal').modal('hide');
-            pub.refreshMathJaxView();
-        }
-    };
+	pub.decideSolutionHandlingForReflectionQuestion = function(comment_id, player_id) {
+		let question = il.InteractiveVideoQuestionViewer.QuestionObject;
+		if(question.show_best_solution === "1" && question.show_best_solution_text.length >= 0){
+			let reflection_solution = '<input id="reflection_solution" class="btn btn-default btn-sm" value="' +  il.InteractiveVideo.lang.show_best_solution + '" '+ 'type="submit">';
+			let best_solution_element = '<div class="iv_show_best_solution_reflection iv_best_solution_hidden">' +
+				'<div class="reflection_best_solution_title">' + il.InteractiveVideo.lang.solution + ': </div>' +
+				'<div class="reflection_best_solution_text">' + question.show_best_solution_text + '</div>' +
+				'</div>';
+			$('.question_center').append($(best_solution_element))
+			if(! document.getElementById('reflection_solution')) {
+				$('#question_reflection_buttons_bellow_form').append(reflection_solution)
+				pro.registerReflectionBestSolutionListener(comment_id, player_id);
+			}
+		} else {
+			$('#ilQuestionModal').modal('hide');
+			pub.refreshMathJaxView();
+		}
+	};
 
-    pro.registerReflectionBestSolutionListener = function (comment_id, player_id) {
-        let reflection_solution_btn = $('#reflection_solution');
-        reflection_solution_btn.off('click');
-        reflection_solution_btn.on('click', function () {
-            reflection_solution_btn.prop('disabled', true);
-            $('.submit_comment_form').remove();
-            $('.iv_show_best_solution_reflection').removeClass('iv_best_solution_hidden')
-        });
-    };
+	pro.registerReflectionBestSolutionListener = function(comment_id, player_id)
+	{
+		let reflection_solution_btn = $('#reflection_solution');
+		reflection_solution_btn.off('click');
+		reflection_solution_btn.on('click', function () {
+			reflection_solution_btn.prop('disabled', true);
+			$('.submit_comment_form').remove();
+			$('.iv_show_best_solution_reflection').removeClass('iv_best_solution_hidden')
+		});
+	};
 
     pro.resetCommentFormOnClick = function (player_id) {
         $('#ilInteractiveVideoCommentCancel_' + player_id).on("click", function () {

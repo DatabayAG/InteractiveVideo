@@ -3234,10 +3234,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function getAnswerDefinitionsJSON(): string
 	{
         global $DIC;
-		$simple_choice = new SimpleChoiceQuestion();
-		$ajax_object   = new SimpleChoiceQuestionAjaxHandler();
-        $qid = $DIC->http()->wrapper()->query()->retrieve('comment_id', $DIC->refinery()->kindlyTo()->int());
-		$question_id = $qid;
+        $cid = $DIC->http()->wrapper()->query()->retrieve('comment_id', $DIC->refinery()->kindlyTo()->int());
+        $simple_choice = new SimpleChoiceQuestion($cid);
+        $ajax_object   = new SimpleChoiceQuestionAjaxHandler();
+		$question_id = $simple_choice->getQuestionId();
 		$question = new ilTemplate("tpl.simple_questions.html", true, true, ilInteractiveVideoPlugin::getInstance()->getDirectory());
 		if($question_id > 0)
 		{

@@ -200,8 +200,29 @@ class SimpleChoiceQuestionAjaxHandler
 	public function getJsonForCommentId($cid)
 	{
         global $ilDB, $ilUser;
+        $res = $ilDB->queryF('
+			SELECT type 
+			FROM  rep_robj_xvid_question question
+			WHERE question.comment_id = %s ',
+            ['integer'], [(int)$cid]
+        );
+        $type = null;
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            $type = (int) $row['type'];
+        }
 
-		$res = $ilDB->queryF('
+        if($type === 2) {
+            $res = $ilDB->queryF('
+			SELECT * 
+			FROM  rep_robj_xvid_question question, 
+				  rep_robj_xvid_comments comments 
+			WHERE question.comment_id = %s 
+			AND   question.comment_id = comments.comment_id',
+                ['integer'], [(int)$cid]
+            );
+        } else {
+            $res = $ilDB->queryF('
 			SELECT * 
 			FROM  rep_robj_xvid_question question, 
 				  rep_robj_xvid_qus_text answers,
@@ -209,8 +230,10 @@ class SimpleChoiceQuestionAjaxHandler
 			WHERE question.comment_id = %s 
 			AND   question.question_id = answers.question_id
 			AND   question.comment_id = comments.comment_id',
-			['integer'], [(int)$cid]
-		);
+                ['integer'], [(int)$cid]
+            );
+        }
+
 
 		$counter        = 0;
 		$question_data  = [];
@@ -235,9 +258,11 @@ class SimpleChoiceQuestionAjaxHandler
 
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$question_data[$counter]['answer']    = $row['answer'];
-			$question_data[$counter]['answer_id'] = $row['answer_id'];
-			$question_data[$counter]['correct']   = $row['correct'];
+            if($type !== 2) {
+                $question_data[$counter]['answer']    = $row['answer'];
+                $question_data[$counter]['answer_id'] = $row['answer_id'];
+                $question_data[$counter]['correct']   = $row['correct'];
+            }
 			$question_text           = $row['question_text'];
 			$question_type           = $row['type'];
 			$question_id             = $row['question_id'];

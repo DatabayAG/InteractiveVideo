@@ -418,19 +418,22 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	};
 
 	pub.highlightTocItem = function(player_id, current_time){
-
-		$( ".toc_item" ).each(function( index ) {
-			let toc_time = $( this ).data('toc-time');
-			let toc_time_next = $( this ).next().data('toc-time');
-			if(toc_time <= current_time
-				&& !(toc_time_next < current_time)) {
-				$('.toc_item').removeClass('activeToc');
-				$(this).addClass('activeToc');
-				$('.toc_description').hide();
-				$(this).find('.toc_description').show();
-			}
-		});
-		pro.changeArrowForTocItem(player_id);
+		let toc_block = $('#ul_toc_' + player_id);
+		if(toc_block.css('display') === 'block') {
+			$(".toc_item").each(function (index) {
+				let toc_time = $(this).data('toc-time');
+				let toc_time_next = $(this).next().data('toc-time');
+				if (toc_time <= current_time
+					&& !(toc_time_next < current_time)) {
+					$('.toc_item').removeClass('activeToc');
+					$(this).addClass('activeToc');
+					$('.toc_description').hide();
+					$('.tocManualOverride').show();
+					$(this).find('.toc_description').show();
+				}
+			});
+			pro.changeArrowForTocItem(player_id);
+		}
 	};
 
 	pro.changeArrowForTocItem = function(player_id){
