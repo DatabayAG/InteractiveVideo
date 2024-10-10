@@ -216,8 +216,10 @@ class SimpleChoiceQuestionFormEditGUI
 				if(array_key_exists('question_data', $question_data))
 				{
                     if($question_data['question_data'] != null && array_key_exists('question_image', $question_data['question_data'])){
-                        $image_upload->setValue($question_data['question_data']['question_image']);
-                        $image_upload->setImage($question_data['question_data']['question_image']);
+                        if( $question_data['question_data']['question_image'] !== null) {
+                            $image_upload->setValue($question_data['question_data']['question_image']);
+                            $image_upload->setImage($question_data['question_data']['question_image']);
+                        }
                     }
 				}
 			}
