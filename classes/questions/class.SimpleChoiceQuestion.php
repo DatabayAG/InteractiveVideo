@@ -64,27 +64,27 @@ class SimpleChoiceQuestion
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$this->setQuestionId($row['question_id']);
-			$this->setQuestionText($row['question_text']);
-			$this->setType($row['type']);
-			$this->setFeedbackCorrect($row['feedback_correct']);
-			$this->setFeedbackOneWrong($row['feedback_one_wrong']);
-			$this->setLimitAttempts($row['limit_attempts']);
-			$this->setIsJumpCorrect($row['is_jump_correct']);
-			$this->setShowCorrectIcon($row['show_correct_icon']);
-			$this->setJumpCorrectTs($row['jump_correct_ts']);
-			$this->setIsJumpWrong($row['is_jump_wrong']);
-			$this->setShowWrongIcon($row['show_wrong_icon']);
-			$this->setJumpWrongTs($row['jump_wrong_ts']);
-			$this->setCompulsoryQuestion($row['compulsory_question']);
-			$this->setShowResponseFrequency($row['show_response_frequency']);
-			$this->setShowBestSolution($row['show_best_solution']);
-			$this->setShowBestSolutionText($row['show_best_solution_text']);
-			$this->setFeedbackCorrectId($row['feedback_correct_ref_id']);
-			$this->setFeedbackWrongId($row['feedback_wrong_ref_id']);
-			$this->setRepeatQuestion($row['repeat_question']);
-			$this->setReflectionQuestionComment($row['reflection_question_comment']);
-			$this->setNeutralAnswer($row['neutral_answer']);
-			$this->setQuestionImage($row['question_image']);
+			$this->setQuestionText($row['question_text'] ?: '');
+			$this->setType($row['type'] ?: 0);
+			$this->setFeedbackCorrect($row['feedback_correct']  ?: '');
+			$this->setFeedbackOneWrong($row['feedback_one_wrong']  ?: '');
+			$this->setLimitAttempts($row['limit_attempts'] ?: 0);
+			$this->setIsJumpCorrect($row['is_jump_correct'] ?: 0);
+			$this->setShowCorrectIcon($row['show_correct_icon'] ?: 0);
+			$this->setJumpCorrectTs($row['jump_correct_ts'] ?: 0);
+			$this->setIsJumpWrong($row['is_jump_wrong'] ?: 0);
+			$this->setShowWrongIcon($row['show_wrong_icon'] ?: 0);
+			$this->setJumpWrongTs($row['jump_wrong_ts'] ?: 0);
+			$this->setCompulsoryQuestion($row['compulsory_question'] ?: 0);
+			$this->setShowResponseFrequency($row['show_response_frequency'] ?: 0);
+			$this->setShowBestSolution($row['show_best_solution'] ?: 0);
+			$this->setShowBestSolutionText($row['show_best_solution_text'] ?: '');
+			$this->setFeedbackCorrectId($row['feedback_correct_ref_id'] ?: 0);
+			$this->setFeedbackWrongId($row['feedback_wrong_ref_id'] ?: 0);
+			$this->setRepeatQuestion($row['repeat_question'] ?: 0);
+			$this->setReflectionQuestionComment($row['reflection_question_comment'] ?: 0);
+			$this->setNeutralAnswer($row['neutral_answer'] ?: 0);
+			$this->setQuestionImage($row['question_image'] ?: '');
 		}
 
 		$this->readAnswerDefinitions();
