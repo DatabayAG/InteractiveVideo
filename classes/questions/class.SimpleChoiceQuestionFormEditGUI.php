@@ -383,7 +383,6 @@ class SimpleChoiceQuestionFormEditGUI
 		$question->setVariable('CORRECT_SOLUTION', 	$this->plugin->txt('correct_solution'));
 		if($question_id > 0)
 		{
-            $get = $DIC->http()->wrapper()->query();
             $cid = $get->retrieve('comment_id', $DIC->refinery()->kindlyTo()->int());
             $ajax_question_object = json_decode($ajax_object->getJsonForCommentId($cid));
 			$question->setVariable('JSON', json_encode($ajax_question_object->answers));
