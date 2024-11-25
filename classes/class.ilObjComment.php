@@ -357,6 +357,9 @@ class ilObjComment
 				{
 					self::$user_name_cache[$user_id] = '[' . $user->getLogin() . ']';
 				}
+			} else {
+				global $lng;
+				self::$user_name_cache[$user_id] = '[' . $lng->txt('deleted') . ']';
 			}
 		}
 
