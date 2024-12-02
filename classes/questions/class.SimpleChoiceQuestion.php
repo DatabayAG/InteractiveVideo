@@ -42,6 +42,7 @@ class SimpleChoiceQuestion
 	protected int $compulsory_question = 0;
 	public string $import_question_image = '';
 	public array $import_answers = [];
+    private array $answer_defs = [];
 	public function __construct(int $comment_id = 0)
 	{
 		if($comment_id > 0)
@@ -465,7 +466,7 @@ class SimpleChoiceQuestion
 		{
 			$user_ids[$row['usr_id']] = (int) $row['points'];
 		}
-		
+
 		if($a_user_id != null && array_key_exists($a_user_id, $user_ids))
 		{
 			return $user_ids[$a_user_id];
@@ -476,7 +477,7 @@ class SimpleChoiceQuestion
 		}
 		return $user_ids;
 	}
-	
+
 	public function getType() : int
     {
 		return $this->type;
@@ -489,7 +490,7 @@ class SimpleChoiceQuestion
 	{
 		$this->type = $type;
 	}
-	
+
 	public function getQuestionText(): string
 	{
 		return $this->question_text;
@@ -996,7 +997,7 @@ class SimpleChoiceQuestion
 		{
 			$points = 1;
 		}
-		
+
 		if($this->getNeutralAnswer() === self::NEUTRAL_ANSWERS)
 		{
 			$points = 0;
