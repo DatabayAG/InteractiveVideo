@@ -116,7 +116,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 		$db_updater = new ilInteractiveVideoDbUpdater();
 
         $source = '';
-        if($_GET['video_source']){
+        if(isset($_GET['video_source'])){
             $source = ilInteractiveVideoPlugin::stripSlashesWrapping($_GET['video_source']);
         }
 		$form->setFormAction($this->ctrl->getFormAction($this, 'showConfigurationForm'));
