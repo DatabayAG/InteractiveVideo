@@ -968,6 +968,11 @@ li.toc_item > div > h5 > time {
 .thirty{
     width: 30%;
 }
+
+#opc_selected_title{
+    margin-left: -62px;
+}
+
 @media (min-width: 768px) {
     .video_fifty{
         width: 50% !important;
@@ -991,6 +996,7 @@ li.toc_item > div > h5 > time {
 #stroke_picker, #color_picker, #color_picker_fill{
     width: 10%;
 }
+
 
 
 

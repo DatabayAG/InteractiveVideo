@@ -4,6 +4,8 @@
 use ILIAS\HTTP\Services;
 use ILIAS\DI\Container;
 use ILIAS\Refinery\ConstraintViolationException;
+use ILIAS\Data\URI;
+use srag\Plugins\Opencast\Container\Init;
 
 /**
  * Class ilObjInteractiveVideoGUI
@@ -165,7 +167,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$this->ctrl->forwardCommand($exp_gui);
 				break;
 			default:
-				switch($cmd)
+                $this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'obj_id', $this->obj_id);
+
+                switch($cmd)
 				{
 					case 'showLPUserDetails':
 					case 'showLPSummary':
@@ -176,6 +180,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					case 'updateLPUsers':
 						$ilTabs->setTabActive('learning_progress');
 						$this->$cmd();
+						break;
+                    case 'edit':
+                        $this->addSettingsTabs();
+                        $this->editProperties();
 						break;
 
 					case 'showTutorInsertForm':
@@ -204,7 +212,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                     $this->checkPermission('write');
 						$this->$cmd();
 						break;
-
+                    case 'addVideoSelectionForm':
+                        $this->checkPermission('write');
+                        $this->creation_mode = true;
+                        $this->$cmd();
+                        break;
 					case 'redrawHeaderAction':
 					case 'addToDesk':
 					case 'removeFromDesk':
@@ -222,37 +234,38 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 						$this->checkPermission('read');
 						$this->$cmd();
 						break;
+
 					default:
-						if(method_exists($this, $cmd))
+                        $get = $this->http->wrapper()->query();
+
+                        if($get->has('xvid_plugin_ctrl'))
+                        {
+                            $xvid_plugin_ctrl = $get->retrieve('xvid_plugin_ctrl', $this->refinery->kindlyTo()->string());
+
+                            if($xvid_plugin_ctrl !== '') {
+                                $dir = ltrim($xvid_plugin_ctrl,'il');
+                                $dir = rtrim($dir,'GUI');
+                                $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $xvid_plugin_ctrl . '.php';
+                                if(file_exists($path)){
+                                    global $DIC;
+                                    $class = new $xvid_plugin_ctrl($DIC);
+                                    if(method_exists($class, $cmd))
+                                    {
+                                        $class->{$cmd}();
+                                    }
+                                } else {
+                                    throw new ilException(sprintf("Unsupported plugin command %s in %s", $cmd, __METHOD__));
+                                }
+                            }
+                        } elseif(method_exists($this, $cmd))
 						{
 							$this->checkPermission('read');
 							$this->$cmd();
-						}
-						else
-						{
-                            $get = $this->http->wrapper()->query();
-                            if($get->has('xvid_plugin_ctrl')){
-                                $xvid_plugin_ctrl = $get->retrieve('xvid_plugin_ctrl', $this->refinery->kindlyTo()->string());
-                                $xvid_plugin_ctrl = ilInteractiveVideoPlugin::stripSlashesWrapping($xvid_plugin_ctrl);
-                            }
-						    $dir = ltrim($xvid_plugin_ctrl,'il');
-                            $dir = rtrim($dir,'GUI');
-						    $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $xvid_plugin_ctrl . '.php';
-                            if(file_exists($path)){
-                                global $DIC;
-						        $class = new $xvid_plugin_ctrl($DIC);
-                                if(method_exists($class, $cmd))
-                                {
-                                    $class->{$cmd}();
-                                }
-                            }
-                             else {
-                                throw new ilException(sprintf("Unsupported plugin command %s ind %s", $cmd, __METHOD__));
-                            }
-						}
+						} else {
+                            throw new ilException(sprintf("Unsupported plugin command %s in %s", $cmd, __METHOD__));
+                        }
 						break;
 				}
-				break;
 		}
 
 		$this->addHeaderAction();
@@ -1015,10 +1028,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
     protected function initEditCustomForm(ilPropertyFormGUI $a_form): void
 	{
-		/**
-		 * @var $ilTabs ilTabsGUI
-		 */
-		global $ilTabs;
+        global $ilTabs;
+
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('editProperties');
 
@@ -1206,14 +1217,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function editProperties(): void
 	{
 	    global $DIC;
+
         $get = $this->http->wrapper()->query();
-        $customJS = '';
+
         if($get->has('xvid_custom_js')){
             $customJS = $get->retrieve('xvid_custom_js', $this->refinery->kindlyTo()->string());
             $customJS = ilInteractiveVideoPlugin::stripSlashesWrapping($customJS);
+            $DIC->ui()->mainTemplate()->addOnLoadCode('"' . $customJS . '"');
         }
-        $DIC->ui()->mainTemplate()->addOnLoadCode('"' . $customJS . '"');
-		$this->edit();
+        $DIC->ctrl()->clearParameters(new ilObjInteractiveVideoGUI());
+        $this->edit();
 	}
 
 	protected function getSubtitleDataAndFilesForJson(){
@@ -1240,6 +1253,40 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return ilFileUtils::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/';
 	}
 
+    public function addVideoSelectionForm(): void
+    {
+        $get = $this->http->wrapper()->query();
+        $cmd = 'getTable';
+        if($get->has('xvid_plugin_ctrl')){
+            $xvid_plugin_ctrl = $get->retrieve('xvid_plugin_ctrl', $this->refinery->kindlyTo()->string());
+            $xvid_plugin_ctrl = ilInteractiveVideoPlugin::stripSlashesWrapping($xvid_plugin_ctrl);
+
+            $dir = ltrim($xvid_plugin_ctrl,'il');
+            $dir = rtrim($dir,'GUI');
+            $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $xvid_plugin_ctrl . '.php';
+            if(file_exists($path)){
+                global $DIC;
+                $class = new $xvid_plugin_ctrl($DIC);
+                if(method_exists($class, $cmd))
+                {
+                    $class->{$cmd}();
+                }
+            }
+        }
+
+    }
+
+    public function addSettingsTabs(){
+        /**
+         * @var $ilTabs ilTabsGUI
+         */
+        global $ilTabs;
+
+        $ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
+        $ilTabs->addSubTab('addSubtitle', $this->plugin->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
+
+    }
+
     /**
      * @throws ilCtrlException
      */
@@ -1250,8 +1297,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $ilTabs, $tpl;
 
-		$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
-		$ilTabs->addSubTab('addSubtitle', $this->plugin->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
+        $this->addSettingsTabs();
 
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('addSubtitle');
@@ -2616,7 +2662,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			#$this->ctrl->redirect($this, 'showTutorInsertCommentForm');
             $this->showTutorInsertCommentForm();
 		}
-        
+
 	}
 
     /**
