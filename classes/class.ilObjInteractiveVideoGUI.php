@@ -4,8 +4,6 @@
 use ILIAS\HTTP\Services;
 use ILIAS\DI\Container;
 use ILIAS\Refinery\ConstraintViolationException;
-use ILIAS\Data\URI;
-use srag\Plugins\Opencast\Container\Init;
 
 /**
  * Class ilObjInteractiveVideoGUI
