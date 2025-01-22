@@ -1660,7 +1660,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			if($ilCtrl->getCmd() === 'editProperties')
 			{
 				$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
-				$a = $this->object->getSourceId();
                 if($this->object->getVideoSourceObject($this->object->getSourceId())->isFileBased()) {
 					$ilTabs->addSubTab('addSubtitle', $this->plugin->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
 				}
