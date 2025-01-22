@@ -1274,15 +1274,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
     }
 
-    public function addSettingsTabs(){
+    public function addSettingsTabs(bool $is_file_based = false){
         /**
          * @var $ilTabs ilTabsGUI
          */
         global $ilTabs;
 
         $ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
-        $ilTabs->addSubTab('addSubtitle', $this->plugin->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
 
+        if($is_file_based)
+        {
+            $ilTabs->addSubTab('addSubtitle', $this->plugin->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
+        }
     }
 
     /**
@@ -1657,7 +1660,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			if($ilCtrl->getCmd() === 'editProperties')
 			{
 				$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
-				if( ! $this->object->getVideoSourceObject($this->object->getSourceId())->hasOwnPlayer()) {
+				$a = $this->object->getSourceId();
+                if($this->object->getVideoSourceObject($this->object->getSourceId())->isFileBased()) {
 					$ilTabs->addSubTab('addSubtitle', $this->plugin->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
 				}
 			}
