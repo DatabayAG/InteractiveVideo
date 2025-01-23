@@ -997,6 +997,13 @@ li.toc_item > div > h5 > time {
     width: 10%;
 }
 
+#opc_info_text {
+    display: block;
+    margin-left: -33%;
+    width: 100% !important;
+    text-align: left;
+}
+
 
 
 
