@@ -273,11 +273,16 @@ opc#:#Opencast
 opc_id#:#Opencast Video Id
 opc_id_info#:#Opencast Video Id
 opc_selection_info#:#Opencast:
-opc_select_video#:#Video auswählen
+opc_selection#:#Bestehendes Video aus Opencast Video auswählen
+opc_selection_current#:#Aktuell ausgewähltes Video
+opc_select_video#:#Video ändern
 opc_insert#:#Video aus Opencast einfügen:
-opc_title#:#Titel
-please_create_object_first#:#Um ein Opencast Video nutzen zu können, müssen Sie erst ein Objekt «Interaktives Video» anlegen. Geben Sie dazu einen Titel ein und klicken Sie auf «Neues Interaktives Video anlegen».
+opc_title#:#Ausgewähltes Video:
+please_create_object_first#:#Um ein Opencast Video nutzen zu können, müssen Sie erst ein Objekt «Interaktives Video» anlegen. Geben Sie dazu einen Titel ein und klicken Sie auf «Neues Interaktives Video anlegen». Sie können anschliessend ein Video auswählen.
 meo#:#Vimeo
 meo_vimeo_info#:#Geben Sie bitte eine Vimeo-URL ein.
 meo_url#:#Vimeo-URL
 back#:#Zurück
+date_txt#:#Datum:
+presenter_txt#:#Referent/in:
+serie_txt#:#Serie:
