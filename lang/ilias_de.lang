@@ -270,6 +270,7 @@ ytb_youtube_url#:#YouTube-URL
 ytb_youtube_info#:#Geben Sie bitte eine YouTube-URL ein.
 ytb#:#YouTube
 opc#:#Opencast
+opc_video#:#Opencast Video
 opc_id#:#Opencast Video Id
 opc_id_info#:#Opencast Video Id
 opc_selection_info#:#Opencast:
@@ -279,6 +280,7 @@ opc_select_video#:#Video ändern
 opc_insert#:#Video aus Opencast einfügen:
 opc_title#:#Ausgewähltes Video
 please_create_object_first#:#Um ein Opencast Video nutzen zu können, müssen Sie erst ein Objekt «Interaktives Video» anlegen. Geben Sie dazu einen Titel ein und klicken Sie auf «Neues Interaktives Video anlegen». Sie können anschliessend ein Video auswählen.
+no_oc_video_selected#:#Noch kein Opencast-Video ausgewählt. Bitte wählen Sie ein Opencast-Video aus
 meo#:#Vimeo
 meo_vimeo_info#:#Geben Sie bitte eine Vimeo-URL ein.
 meo_url#:#Vimeo-URL
