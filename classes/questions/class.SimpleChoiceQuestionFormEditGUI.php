@@ -18,7 +18,7 @@ class SimpleChoiceQuestionFormEditGUI
 	protected $lng;
 
 	/**
-	 * @var 
+	 * @var
 	 */
 	protected $object;
 
@@ -34,7 +34,7 @@ class SimpleChoiceQuestionFormEditGUI
 		 * @var ilLanguage $lng
 		 */
 		global $ilCtrl, $lng;
-		
+
 		$this->ctrl   = $ilCtrl;
 		$this->lng    = $lng;
 		$this->plugin = $plugin;
@@ -367,7 +367,12 @@ class SimpleChoiceQuestionFormEditGUI
         global $DIC;
 		$simple_choice = new SimpleChoiceQuestion();
 		$ajax_object   = new SimpleChoiceQuestionAjaxHandler();
-		$question_id   = $simple_choice->existQuestionForCommentId((int)$_GET['comment_id']);
+        $question_id = 0;
+        $get = $DIC->http()->wrapper()->query();
+        if($get->has('comment_id')) {
+            $comment_id = $get->retrieve('comment_id', $DIC->refinery()->kindlyTo()->int());
+            $question_id = $simple_choice->existQuestionForCommentId($comment_id);
+        }
 
 		$question      = new ilTemplate("tpl.simple_questions.html", true, true, $this->plugin->getDirectory());
 
@@ -378,7 +383,6 @@ class SimpleChoiceQuestionFormEditGUI
 		$question->setVariable('CORRECT_SOLUTION', 	$this->plugin->txt('correct_solution'));
 		if($question_id > 0)
 		{
-            $get = $DIC->http()->wrapper()->query();
             $cid = $get->retrieve('comment_id', $DIC->refinery()->kindlyTo()->int());
             $ajax_question_object = json_decode($ajax_object->getJsonForCommentId($cid));
 			$question->setVariable('JSON', json_encode($ajax_question_object->answers));
