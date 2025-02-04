@@ -187,7 +187,7 @@ class ilObjComment
 			$query_types = array_merge($query_types, ['integer', 'integer', 'integer']);
 			$query_data = array_merge($query_data, [$ilUser->getId(), 1, 1]);
 		}
-		
+
 		$res = $this->db->queryF(
 			'SELECT *
 			FROM rep_robj_xvid_comments
@@ -252,7 +252,7 @@ class ilObjComment
 				$i++;
 			}
 		}
-		
+
 		if(is_array($is_reply_to) && sizeof($is_reply_to) > 0)
 		{
 			$comments = $this->sortInReplies($is_reply_to, $comments);
@@ -362,7 +362,7 @@ class ilObjComment
             }
 		}
 
-		return self::$user_name_cache[$user_id];
+        return self::$user_name_cache[$user_id] ?? '';
 	}
 
 	public static function getCommentTitleByQuestionId(int $question_id) : string
@@ -501,7 +501,7 @@ class ilObjComment
     {
         $this->is_table_of_content = $is_table_of_content;
     }
-	
+
 	public function isPublic() : int
     {
 		return $this->is_public;
