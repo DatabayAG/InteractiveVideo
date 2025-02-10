@@ -49,15 +49,12 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.playingEventHandler = function(interval, player)
 	{
-		console.log('Playing handler: INIT ...')
 		let cueTime, stop_video, i, j;
 		let player_id       = pub.getPlayerIdFromPlayerObject(player);
 		let current_time    = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
 		let duration        = scope.InteractiveVideoPlayerAbstract.duration(player_id);
 		let player_data     = pub.getPlayerDataObjectByPlayer(player);
-		console.log('Playing handler: INIT done.')
 		if (current_time >= duration) {
-			console.log('Playing handler: clear interval')
 			clearInterval(interval);
 			return;
 		}
@@ -65,45 +62,35 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		scope.InteractiveVideoPlayerResume.saveResumeTime(player_id);
 		pri.utils.highlightTocItem(player_id, current_time);
 		if (!isNaN(current_time) && current_time > 0) {
-			console.log('Playing handler: current_time > 0')
 			pri.checkForCompulsoryQuestion(player_id, current_time);
 			pri.utils.clearCommentsWhereTimeEndEnded(player_id, current_time);
 			for (j = player_data.stopPoints.length - 1; j >= 0; j--)
 			{
-				console.log('Playing handler: analysing stop points')
 				cueTime = parseInt(player_data.stopPoints[j], 10);
 				if (cueTime >= player_data.last_time && cueTime <= current_time)
 				{
-					console.log('Playing handler: analysing stop points 1 ', cueTime, player_data.last_time, current_time)
 					stop_video = 0;
 					if (player_data.last_stopPoint <= cueTime)
 					{
-						console.log('Playing handler: analysing stop points 2 ', player_data.last_stopPoint, cueTime)
 						for (i = 0; i < Object.keys(player_data.comments).length; i++)
 						{
-							console.log('Playing handler: analysing stop points 3 i ', i)
 							if (parseInt(player_data.comments[i].comment_time, 10) === cueTime && player_data.last_stop_id !== j)
 							{
 								stop_video = pro.commentsObjectActions(i, current_time, player);
-								console.log('Playing handler: analysing stop points 4, stop video ', stop_video)
 							}
 							if (stop_video === 1) {
-								console.log('Playing handler: analysing stop points 5, stopped video ')
 								player_data.last_stop_id = j;
 								if(scope.InteractiveVideoPlayerAbstract.isFullScreen(player_id)){
 									scope.InteractiveVideoPlayerAbstract.exitFullScreen(player_id)
 								}
 								scope.InteractiveVideoPlayerAbstract.pause(player_id);
 								stop_video = 0;
-								console.log('Playing handler: analysing stop points 6, unstopped video ')
 							}
 						}
 					}
-					console.log('Playing handler: set cueTime to last StopPoint ', player_data.last_stopPoint, cueTime)
 					player_data.last_stopPoint = cueTime;
 				}
 			}
-			console.log('Playing handler: set current_time to last_time ', player_data.last_time, current_time)
 			player_data.last_time = parseInt(current_time, 10);
 		}
 		pro.autoScrollForViewAllComments(player_id);
