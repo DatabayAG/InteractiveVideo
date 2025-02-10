@@ -22,9 +22,9 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 * @var string
 	 */
 	protected $mob_id;
-	
+
 	public $import_part_path = '';
-	
+
 	public $import_file_name = '';
 
 	/**
@@ -128,7 +128,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 			$cmd = $ilCtrl->getCmd();
 			if($cmd == 'saveTarget')
 			{
-				// doClone .. 
+				// doClone ..
 				return true;
 			}
 			else
@@ -401,4 +401,16 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	{
 		return false;
 	}
+
+    public function validateCreateForm() {
+        if (isset($_FILES['video_file']))
+        {
+            $file = $_FILES['video_file'];
+            if ($file['error'] == 0 && $this->import_file_name == '') {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

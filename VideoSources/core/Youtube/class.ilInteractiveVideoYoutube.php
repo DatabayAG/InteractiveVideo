@@ -8,7 +8,7 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 {
 
 	const FORM_FIELD = 'youtube_url';
-	
+
 	const TABLE_NAME = 'rep_robj_xvid_youtube';
 
 	/**
@@ -257,4 +257,12 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	{
 		return true;
 	}
+
+    public function validateCreateForm() {
+        if(isset($_POST[self::FORM_FIELD]) && ilUtil::stripSlashes($_POST[self::FORM_FIELD]))
+        {
+            return true;
+        }
+        return false;
+    }
 }

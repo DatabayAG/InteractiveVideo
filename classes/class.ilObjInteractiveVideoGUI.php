@@ -1522,7 +1522,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		try
 		{
-			parent::saveObject();
+            $this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'new_type', 'xvid');
+            $this->validateCustomCreateFields();
+            parent::saveObject();
 		}
 		catch(Exception $e)
 		{
@@ -1545,6 +1547,29 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->ctrl->redirectByClass('ilrepositorygui');
 		}
 	}
+
+    /**
+     * @throws Exception
+     */
+    protected function validateCustomCreateFields() {
+        $factory = new ilInteractiveVideoSourceFactory();
+
+        $post = $this->http->wrapper()->post();
+        if($post->has('source_id')) {
+            $source_id = $post->retrieve('source_id', $this->refinery->kindlyTo()->string());
+            $source = $factory->getVideoSourceObject($source_id);
+            if(method_exists($source, 'validateCreateForm')) {
+                if(! $source->validateCreateForm()) {
+                    throw new Exception('No source selected.');
+                }
+            }
+
+        } else {
+            throw new Exception('No source selected.');
+        }
+
+
+    }
 
     /**
      * @param ilPropertyFormGUI $a_form

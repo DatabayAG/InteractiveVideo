@@ -76,6 +76,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         $this->db = $DIC->database();
         $this->user = $DIC->user();
         $this->log = $DIC->logger()->root();
+        $this->source_id = '';
     }
 	/**
 	 * @param $src_id
@@ -114,7 +115,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			[$this->getId()]
 		);
 		$row = $this->db->fetchAssoc($res);
-		
+
 		$this->setIsAnonymized($row['is_anonymized'] ?: 0);
 		$this->setIsRepeat($row['is_repeat'] ?: 0);
 		$this->setIsPublic($row['is_public'] ?: 0);
@@ -370,7 +371,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     protected function doUpdate(): void
 	{
 		parent::doUpdate();
-		
+
 		$old_source_id = $this->getOldVideoSource();
 		if($old_source_id != null && $old_source_id != $this->getSourceId())
 		{
