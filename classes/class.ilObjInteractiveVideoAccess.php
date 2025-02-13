@@ -27,7 +27,7 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 		{
             $user_id = $ilUser->getId();
 		}
-		
+
 		switch($permission)
 		{
 			case 'read':
@@ -41,7 +41,7 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 				}
 				break;
 		}
-		
+
 		return true;
 	}
 
@@ -56,7 +56,10 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 			SELECT is_online FROM rep_robj_xvid_objects WHERE obj_id = ' . $ilDB->quote($a_id, 'integer')
 		);
 		$rec = $ilDB->fetchAssoc($set);
-		return (bool)$rec['is_online'];
+        if($rec !== null && $rec['is_online']) {
+            return (bool)$rec['is_online'];
+        }
+        return false;
 	}
 
 	/**
@@ -112,6 +115,6 @@ class ilObjInteractiveVideoAccess extends ilObjectPluginAccess implements ilCond
 
 		return false;
 	}
-	
-	
+
+
 }
