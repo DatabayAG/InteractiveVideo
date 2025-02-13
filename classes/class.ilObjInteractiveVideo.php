@@ -114,34 +114,36 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			[$this->getId()]
 		);
 		$row = $this->db->fetchAssoc($res);
-		
-		$this->setIsAnonymized($row['is_anonymized'] ?: 0);
-		$this->setIsRepeat($row['is_repeat'] ?: 0);
-		$this->setIsPublic($row['is_public'] ?: 0);
-		$this->setOnline((bool) $row['is_online'] || false);
-		$this->setIsChronologic($row['is_chronologic']  ?: 0);
-		$this->setSourceId($row['source_id'] ?: '');
-		$this->setTaskActive($row['is_task'] ?: 0);
-		$this->setTask($row['task'] ?: '');
-		$this->setEnableComment($row['enable_comment'] ?: 0);
-		$this->setEnableToolbar($row['show_toolbar'] ?: 0);
-		$this->setAutoResumeAfterQuestion($row['auto_resume'] ?: 0);
-		$this->setFixedModal($row['fixed_modal'] ?: 0);
-		$this->setShowTocFirst($row['show_toc_first'] ?: 0);
-		$this->setEnableCommentStream($row['disable_comment_stream'] ?: 0);
-		$this->setNoCommentStream($row['no_comment_stream'] ?: 0);
-		$this->setVideoMode($row['video_mode'] ?: 0);
-		$this->setMarkerForStudents($row['marker_for_students'] ?: 0);
-        $this->setLayoutWidth($row['layout_width'] ?: 0);
-        $this->video_source_object = null;
-		$this->getVideoSourceObject($row['source_id']);
-		$this->setLearningProgressMode($row['lp_mode'] ?: 0);
+		if($row !== null) {
+            $this->setIsAnonymized($row['is_anonymized'] ?: 0);
+            $this->setIsRepeat($row['is_repeat'] ?: 0);
+            $this->setIsPublic($row['is_public'] ?: 0);
+            $this->setOnline((bool) $row['is_online'] || false);
+            $this->setIsChronologic($row['is_chronologic']  ?: 0);
+            $this->setSourceId($row['source_id'] ?: '');
+            $this->setTaskActive($row['is_task'] ?: 0);
+            $this->setTask($row['task'] ?: '');
+            $this->setEnableComment($row['enable_comment'] ?: 0);
+            $this->setEnableToolbar($row['show_toolbar'] ?: 0);
+            $this->setAutoResumeAfterQuestion($row['auto_resume'] ?: 0);
+            $this->setFixedModal($row['fixed_modal'] ?: 0);
+            $this->setShowTocFirst($row['show_toc_first'] ?: 0);
+            $this->setEnableCommentStream($row['disable_comment_stream'] ?: 0);
+            $this->setNoCommentStream($row['no_comment_stream'] ?: 0);
+            $this->setVideoMode($row['video_mode'] ?: 0);
+            $this->setMarkerForStudents($row['marker_for_students'] ?: 0);
+            $this->setLayoutWidth($row['layout_width'] ?: 0);
+            $this->video_source_object = null;
+            $this->getVideoSourceObject($row['source_id']);
+            $this->setLearningProgressMode($row['lp_mode'] ?: 0);
 
-        $db_settings = new ilSetting(('xvid'));
-        if((int) $db_settings->get('xvid_activate_marker') === 1)
-        {
-            $this->marker_active = true;
+            $db_settings = new ilSetting(('xvid'));
+            if((int) $db_settings->get('xvid_activate_marker') === 1)
+            {
+                $this->marker_active = true;
+            }
         }
+
 		parent::doRead();
 	}
 
@@ -370,7 +372,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
     protected function doUpdate(): void
 	{
 		parent::doUpdate();
-		
+
 		$old_source_id = $this->getOldVideoSource();
 		if($old_source_id != null && $old_source_id != $this->getSourceId())
 		{
