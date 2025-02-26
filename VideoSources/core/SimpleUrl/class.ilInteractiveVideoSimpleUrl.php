@@ -187,7 +187,7 @@ class ilInteractiveVideoSimpleUrl implements ilInteractiveVideoSource
 	{
 		return '';
 	}
-	
+
 
 	/**
 	 * @return string
@@ -237,5 +237,13 @@ class ilInteractiveVideoSimpleUrl implements ilInteractiveVideoSource
 	{
 		return false;
 	}
+
+    public function validateCreateForm() {
+        if(isset($_POST['simple_url']) && ilUtil::stripSlashes($_POST['simple_url']))
+        {
+            return true;
+        }
+        return false;
+    }
 
 }

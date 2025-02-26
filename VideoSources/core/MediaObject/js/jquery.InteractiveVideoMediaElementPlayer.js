@@ -56,6 +56,8 @@ il.InteractiveVideoMediaElementPlayer = (function (scope) {
 							il.InteractiveVideoPlayerFunction.playingEventHandler(interval, player_id);
 						}, 500);
 					});
+					il.InteractiveVideoPlayerAbstract.play(player_id);
+					il.InteractiveVideoPlayerAbstract.pause(player_id);
 				});
 			}
 
@@ -65,6 +67,13 @@ il.InteractiveVideoMediaElementPlayer = (function (scope) {
 	return pub;
 
 }(il));
-document.addEventListener('DOMContentLoaded', function () {
-	il.InteractiveVideoMediaElementPlayer.initPlayer();
-})
+document.addEventListener("readystatechange", (event) => {
+	if (event.target.readyState === "loading") {
+		console.log('INIT PLAYER loading')
+	}else if (event.target.readyState === "interactive") {
+		console.log('INIT PLAYER interactive')
+	} else if (event.target.readyState === "complete") {
+		console.log('INIT PLAYER complete')
+		il.InteractiveVideoMediaElementPlayer.initPlayer();
+	}
+});

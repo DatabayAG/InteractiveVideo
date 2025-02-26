@@ -54,7 +54,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		let current_time    = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
 		let duration        = scope.InteractiveVideoPlayerAbstract.duration(player_id);
 		let player_data     = pub.getPlayerDataObjectByPlayer(player);
-
 		if (current_time >= duration) {
 			clearInterval(interval);
 			return;
@@ -152,7 +151,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 		let width = player_data.layout_width
 		pro.selectLayoutValue(player_id, width);
 	};
-	
+
 	pro.addTaskInteraction = function(player_id)
 	{
 		$('#task_interaction_' + player_id).on('click', function() {
@@ -176,7 +175,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 	pro.addHighlightToCommentWithoutEndTime = function(comment, player_id)
 	{
 		let time_end = parseInt(comment.comment_time_end, 10);
-		if(time_end === 0 || time_end === null) 
+		if(time_end === 0 || time_end === null)
 		{
 			$('.list_item_' + comment.comment_id).addClass('activeCommentWithoutEndTime');
 			setTimeout(function(){
@@ -207,7 +206,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			comments_div.prepend(pri.utils.buildListElement(player_id, comment, current_time, comment.user_name));
 			il.InteractiveVideoPlayerComments.registerReplyToListeners(player_id);
 			pro.addHighlightToCommentWithoutEndTime(comment, player_id);
-			if (comment.comment_time_end > 0) 
+			if (comment.comment_time_end > 0)
 			{
 				pri.utils.fillCommentsTimeEndBlacklist(player_id, comment.comment_time_end, comment.comment_id);
 			}
@@ -251,7 +250,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 				'has_no_reply_button' : true
 
 			};
-		if (!tmp_obj.comment_text) 
+		if (!tmp_obj.comment_text)
 		{
 			$('#no_text_warning_' + player_id).removeClass('ilNoDisplay');
 			return;
@@ -492,7 +491,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 			pro.isChronologicViewDeactivatedShowAllComments(player_id);
 		}());
 	};
-	
+
 	pro.isChronologicViewDeactivatedShowAllComments = function(player_id)
 	{
 		if(pub.getPlayerDataObjectByPlayerId(player_id).show_only_until_playhead === '1' ||

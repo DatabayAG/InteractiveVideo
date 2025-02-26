@@ -76,6 +76,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         $this->db = $DIC->database();
         $this->user = $DIC->user();
         $this->log = $DIC->logger()->root();
+        $this->source_id = '';
     }
 	/**
 	 * @param $src_id
