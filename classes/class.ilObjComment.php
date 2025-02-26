@@ -360,7 +360,7 @@ class ilObjComment
             }
 		}
 
-        return self::$user_name_cache[$user_id] ?? '';
+		return self::$user_name_cache[$user_id] ?? '';
 	}
 
 	public static function getCommentTitleByQuestionId(int $question_id) : string
