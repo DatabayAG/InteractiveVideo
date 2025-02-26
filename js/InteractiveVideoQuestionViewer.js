@@ -16,11 +16,11 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 					reflection_question_btns_below_form: '#question_reflection_buttons_bellow_form',
 				},
 				classes: {
-					modal_body:     '.modal-body',
-					modal_title:    '.modal-title',
-					modal_feedback: '.modal_feedback',
+					modal_body:     '#ilQuestionModal .modal-body',
+					modal_title:    '#ilQuestionModal .modal-title',
+					modal_feedback: '#ilQuestionModal .modal_feedback',
 					modal_close:    '.close',
-					modal_content:  '.modal-content'
+					modal_content:  '#ilQuestionModal .modal-content'
 				},
 			};
 
@@ -147,7 +147,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 			' value="'      + value.answer_id + '"' +
 			' type="'       + input_type + '">' +
 			value.answer +
-			'</label>' + 
+			'</label>' +
 			'<div class="progress rf_listener response_frequency_' + value.answer_id + ' ilNoDisplay"></div>';
 	};
 
@@ -179,7 +179,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 			}
 		});
 	};
-	
+
 	pro.appendSelfReflectionCommentForm = function(player_id)
 	{
 		let comment_id = 'text_reflection_comment_'+ pub.comment_id ;
@@ -313,7 +313,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		$('.question_flex_div').prepend($('<div class="best_solution_block">' + il.InteractiveVideo["lang"].solution + ': </div>'))
 	}
 
-	pro.showResponseFrequency = function(response_frequency) 
+	pro.showResponseFrequency = function(response_frequency)
 	{
 		let answers_count = 0;
 		let percentage = 0;
@@ -376,7 +376,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	pro.disableInteractionsIfLimitAttemptsIsActivated = function(player_id)
 	{
 		let limit_attempts = il.InteractiveVideoQuestionViewer.QuestionObject.limit_attempts;
-		
+
 		if(limit_attempts === '1') {
 			$("#question_form :input").attr("disabled", true);
 			$('#close_form').prop('disabled', false);
