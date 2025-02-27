@@ -117,7 +117,9 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
     };
 
     pub.appendInteractionEvents = function (player_id) {
-        pro.setInitialLayoutValue(player_id);
+        if($('.InteractiveVideoReferenceHeader').size() === 0 && $('.iv_light_version').size() === 0) {
+            pro.setInitialLayoutValue(player_id);
+        }
         pro.addAjaxFunctionForCommentPosting(player_id);
         pub.addShowAllCommentsChange(player_id);
         pro.addTaskInteraction(player_id);
