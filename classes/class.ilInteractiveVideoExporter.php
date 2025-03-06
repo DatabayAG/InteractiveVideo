@@ -19,7 +19,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 	 * @var int
 	 */
 	protected $obj_id;
-	
+
 	/**
 	 * @var string
 	 */
@@ -96,7 +96,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		// Settings
 		$this->exportXMLSettings();
 
-		
+
 		$this->xml_writer->xmlEndTag("ContentObject");
 	}
 
@@ -131,6 +131,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 
 	private function exportVideoSourceObject(): void
 	{
+        $this->object->initObject();
 		$src_id = $this->object->getSourceId();
 		$this->xml_writer->xmlStartTag('VideoSource', ['source_id' => $src_id]);
 		$this->xml_writer->xmlElement('VideoSourceObject', null, $src_id);
@@ -208,7 +209,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 					}
 					$this->xml_writer->xmlEndTag('Answers');
 				}
-				
+
 				$this->xml_writer->xmlEndTag('Question');
 			}
 		}
