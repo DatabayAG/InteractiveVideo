@@ -337,7 +337,9 @@ class ilObjComment
 			else if(strlen($img_file) > 0)
 			{
 				self::$user_image_cache[$user_id] = $img_file;
-			}
+			} else {
+                self::$user_image_cache[$user_id] = '';
+            }
 		}
 
 		return self::$user_image_cache[$user_id];
