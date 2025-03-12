@@ -32,7 +32,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	protected ?ilInteractiveVideoSource $video_source_object = null;
 	protected $video_source_import_object;
 	protected int $task_active = 0;
-	protected string $task;
+	protected string $task = '';
 
 	/**
 	 * @var boolean
@@ -107,6 +107,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		return $this->video_source_object;
 	}
 
+    public function initObject(){
+        $this->doRead();
+    }
+
     protected function doRead(): void
 	{
 		$res = $this->db->queryF(
@@ -148,7 +152,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		parent::doRead();
 	}
 
-	protected function getOldVideoSource() : string
+	protected function getOldVideoSource() : ?string
     {
 		$res = $this->db->queryF(
 			'SELECT source_id FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = %s',
@@ -381,8 +385,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			$this->video_source_object->doDeleteVideoSource($this->getId());
 		}
 
+        $this->updateObject();
+	}
+
+    protected function updateObject() {
         $this->db->update(self::TABLE_NAME_OBJECTS ,
-			['is_anonymized'		=> ['integer', $this->isAnonymized()],
+            ['is_anonymized'		=> ['integer', $this->isAnonymized()],
              'is_repeat'			=> ['integer', $this->isRepeat()],
              'is_public'			=> ['integer', $this->isPublic()],
              'is_chronologic'	    => ['integer', $this->isChronologic()],
@@ -402,8 +410,46 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
              'marker_for_students'	=> ['integer', $this->getMarkerForStudents()],
              'layout_width'	    => ['integer', $this->getLayoutWidth()]
             ],
-			['obj_id' => ['integer', $this->getId()]]);
-	}
+            ['obj_id' => ['integer', $this->getId()]]);
+    }
+
+    protected function insertObject(){
+        $this->db->insert(self::TABLE_NAME_OBJECTS ,
+            ['is_anonymized'		=> ['integer', $this->isAnonymized()],
+             'obj_id'			=> ['integer', $this->getId()],
+             'is_repeat'			=> ['integer', $this->isRepeat()],
+             'is_public'			=> ['integer', $this->isPublic()],
+             'is_chronologic'	    => ['integer', $this->isChronologic()],
+             'is_online'			=> ['integer', $this->isOnline()],
+             'source_id'			=> ['text', $this->getSourceId()],
+             'is_task'			    => ['integer', $this->getTaskActive()],
+             'task'				=> ['text', $this->getTask()],
+             'auto_resume'         => ['integer', $this->isAutoResumeAfterQuestion()],
+             'fixed_modal'         => ['integer', $this->isFixedModal()],
+             'show_toc_first'      => ['integer', $this->getShowTocFirst()],
+             'disable_comment_stream'    => ['integer', $this->getEnableCommentStream()],
+             'lp_mode'			    => ['integer', $this->getLearningProgressMode()],
+             'enable_comment'		=> ['integer', $this->getEnableComment()],
+             'show_toolbar'		=> ['integer', $this->getEnableToolbar()],
+             'no_comment_stream'	=> ['integer', $this->getNoCommentStream()],
+             'video_mode'			=> ['integer', $this->getVideoMode()],
+             'marker_for_students'	=> ['integer', $this->getMarkerForStudents()],
+             'layout_width'	    => ['integer', $this->getLayoutWidth()]
+            ]);
+    }
+
+    public function doUpdatePropertiesAfterImportParsing(bool $in_course = false){
+        if($in_course) {
+            $this->insertObject();
+            $this->video_source_object->doCreateVideoSource($this->getId());
+        } else {
+            $this->create();
+            $this->updateObject();
+            $this->video_source_object->doCreateVideoSource($this->getId());
+        }
+
+
+    }
 
     protected function beforeDelete(): bool
 	{
