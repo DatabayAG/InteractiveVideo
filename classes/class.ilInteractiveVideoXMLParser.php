@@ -93,11 +93,6 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 				$this->xvid_obj->setSourceId($video_src_id);
 				$factory = new ilInteractiveVideoSourceFactory();
 				$obj = $factory->getVideoSourceObject($video_src_id);
-				if($obj == null)
-				{
-					global $ilErr;
-					$ilErr->raiseError(sprintf('Video source with the id "%s" does not exist in this installation.', $video_src_id));
-				}
 				break;
 			case 'Questions':
 				$this->xvid_obj->setSourceId($this->video_src_id);
