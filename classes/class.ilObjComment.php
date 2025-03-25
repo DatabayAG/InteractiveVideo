@@ -326,7 +326,14 @@ class ilObjComment
     {
 		if(!array_key_exists($user_id, self::$user_image_cache))
 		{
-			$img_file = ilObjUser::_getPersonalPicturePath($user_id, 'xxsmall');
+            try{
+                $img_file = ilObjUser::_getPersonalPicturePath($user_id, 'xxsmall');
+            } catch(Exception $e){
+                $img_file = '';
+                global $DIC;
+                $DIC->logger()->root()->error(sprintf('No user dataset found with id %s.', $user_id));
+            }
+
 			$img_file = preg_split('/\?/', $img_file);
 			$img_file = $img_file[0];
 			if(file_exists($img_file))
