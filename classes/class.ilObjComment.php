@@ -342,22 +342,25 @@ class ilObjComment
 	}
 
 	public static function lookupUsername(int $user_id) : string
-    {
+	{
 		if(!array_key_exists($user_id, self::$user_name_cache))
 		{
-            $user_obj_exists = ilObjUser::_exists($user_id, false, 'usr');
-            $user_has_login = ilObjUser::_lookupLogin($user_id);
-            if($user_obj_exists && $user_has_login) {
-                $user = new ilObjUser($user_id);
-                if($user->hasPublicProfile())
-                {
-                    self::$user_name_cache[$user_id] = $user->getFirstname() . ' ' . $user->getLastname();
-                }
-                else
-                {
-                    self::$user_name_cache[$user_id] = '[' . $user->getLogin() . ']';
-                }
-            }
+			$user_obj_exists = ilObjUser::_exists($user_id, false, 'usr');
+			$user_has_login = ilObjUser::_lookupLogin($user_id);
+			if($user_obj_exists && $user_has_login) {
+				$user = new ilObjUser($user_id);
+				if($user->hasPublicProfile())
+				{
+					self::$user_name_cache[$user_id] = $user->getFirstname() . ' ' . $user->getLastname();
+				}
+				else
+				{
+					self::$user_name_cache[$user_id] = '[' . $user->getLogin() . ']';
+				}
+			} else {
+				global $lng;
+				self::$user_name_cache[$user_id] = '[' . $lng->txt('deleted') . ']';
+			}
 		}
 
 		return self::$user_name_cache[$user_id] ?? '';
