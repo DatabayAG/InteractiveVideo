@@ -1018,10 +1018,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		/**
 		 * @var $ilTabs ilTabsGUI
 		 */
-		global $ilTabs;
+		global $ilTabs, $DIC;
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('editProperties');
 
+        $DIC->ui()->mainTemplate()->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/form/InteractiveVideoEditorInit.js');
+        $DIC->ui()->mainTemplate()->addOnLoadCode('il.InteractiveVideoEditor.createInstance("task")');
 		$a_form = $this->appendFormsFromFactory($a_form);
 		$this->appendCkEditorMathJaxSupportToForm($a_form);
 		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
@@ -2617,7 +2619,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			#$this->ctrl->redirect($this, 'showTutorInsertCommentForm');
             $this->showTutorInsertCommentForm();
 		}
-        
+
 	}
 
     /**
