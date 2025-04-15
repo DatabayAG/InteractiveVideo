@@ -2653,6 +2653,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addCommandButton('updateMyComment', $this->lng->txt('save'));
 		$form->addCommandButton('editMyComments', $this->lng->txt('cancel'));
 
+        $tpl->addOnLoadCode('il.InteractiveVideoEditor.createInstance("comment_text");');
 		$tpl->setContent($form->getHTML());
 	}
 
