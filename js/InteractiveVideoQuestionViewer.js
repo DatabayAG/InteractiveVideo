@@ -377,9 +377,9 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	{
 		let limit_attempts = il.InteractiveVideoQuestionViewer.QuestionObject.limit_attempts;
 
-		if(limit_attempts === '1') {
-			$("#question_form :input").attr("disabled", true);
-			$('#close_form').prop('disabled', false);
+		if(limit_attempts === '1' || limit_attempts === 1) {
+			$("#ilQuestionModal #sendForm").attr("disabled", true);
+			//$('#close_form').prop('disabled', false);
 		}
 
 	};
