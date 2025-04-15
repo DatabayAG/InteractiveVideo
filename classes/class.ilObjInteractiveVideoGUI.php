@@ -2524,6 +2524,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $tbl->setIsPublic($this->object->isPublic());
 		$tbl->setData($tbl_data);
 		$video_tpl->setVariable('TABLE', $tbl->getHTML());
+
 		$tpl->setContent($video_tpl->get());
 	}
 
@@ -2688,6 +2689,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $my_tpl = $this->getCommentTemplate();
         $my_tpl->setVariable('FORM',$form->getHTML());
 
+        $tpl->addOnLoadCode('il.InteractiveVideoEditor.createInstance("comment_text");');
         if($this->object->isMarkerActive()){
             $tpl->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
         }
@@ -2720,7 +2722,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->setTitle(ilInteractiveVideoPlugin::getInstance()->txt('edit_chapter'));
 		$form->addCommandButton('updateChapter', $this->lng->txt('save'));
 		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
-
+        $tpl->addOnLoadCode('il.InteractiveVideoEditor.createInstance("comment_text");');
 		$tpl->setContent($form->getHTML());
 	}
 
