@@ -294,7 +294,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 			let question_type = pub.QuestionObject.type;
 			let answer_id = parseInt($(object).data('best-solution'), 10);
 			let answer_state = parseInt($(object).data('answer-state'), 10);
-			if(question_type === "0"){
+			if(question_type === 0){
 				let element = '<div class="best_solution_answer_view"><input type="radio" onClick="return false;"></div>'
 				if(answer_state === 1) {
 					element = '<div class="best_solution_answer_view"><input type="radio" onClick="return false;" checked="checked"></div>'
