@@ -2179,13 +2179,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
 			$this->objComment->setIsTableOfContent((int)$form->getInput('is_table_of_content'));
 
-			// calculate seconds
-			$comment_time = $form->getInput('comment_time');
+            $comment_time     = $form->getInput('comment_time');
             $start_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time));
+            $comment_time_end = $form->getInput('comment_time_end');
+            $end_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time_end));
+            if ($end_time > 0 && $start_time > $end_time) {
+                $valid = false;
+                $this->tpl->setOnScreenMessage("failure", $this->plugin->txt('endtime_warning'));
+            }
             $this->objComment->setCommentTime($start_time);
-
-			$comment_time_end = $form->getInput('comment_time_end');
-            $end_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time));
             $this->objComment->setCommentTimeEnd($end_time);
 			$this->objComment->update();
 

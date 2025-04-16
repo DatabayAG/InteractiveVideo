@@ -94,7 +94,7 @@ insert_marker_info#:#Sie können den Marker per Drag & Drop auf dem Video versch
 insert_question#:#Frage hinzufügen
 installed_version#:#Installierte Databank Version: %s, Datei Datenbank Version %s
 interactive#:#Interaktive
-invalid_comment_ids#:#Einige Kommentare konnten nicht gefunden werden. 
+invalid_comment_ids#:#Einige Kommentare konnten nicht gefunden werden.
 invalid_comment_ids#:#Ungültige Kommentar-IDs
 invalid_question_ids#:#Ungültige Fragen-IDs
 invalid_user_ids#:#Ungültige User-IDs
@@ -181,7 +181,7 @@ questions#:#Fragen
 questions_comments#:#Fragen, Kapitel und Kommentare
 questions_comments_new#:#Fragen, Kapitel und öffentliche Kommentare
 questions_comments_sub_tab#:#Verwalten
-rbac_create_xvid#:#Interaktives Video anlegen 
+rbac_create_xvid#:#Interaktives Video anlegen
 rectangle#:#Rechteck
 reflection#:#Reflexionsfrage
 repeat#:#Wiederholen
@@ -196,7 +196,7 @@ root_create_xvid#:#Neues Interaktives Video anlegen
 rotate#:#Drehen
 save#:#Speichern
 save_anyway#:#Trotzdem speichern
-save_without_correct#:#Sind haben keine korrekte Antwort ausgewählt
+save_without_correct#:#Sie haben keine korrekte Antwort ausgewählt
 save_without_correct_detail#:#Sie haben weder eine Reflexionsfrage, noch neutrale Antworten aktiviert, sind Sie sicher, dass Sie die Frage ohne korrekte Antwort speichern wollen?
 scale#:#Skalieren
 screen_info#:#Diese Ansicht dient zum Erstellen und Verwalten von Fragen und Kommentaren. Achtung: Interaktive Fragen werden hier NICHT beim Abspielen des Videos angezeigt, wechseln Sie zum Reiter "Inhalt" um die Fragen während des Abspielvorganges eingeblendet zu bekommen.
@@ -246,7 +246,7 @@ task_switch#:#Aufgabenstellung aktivieren
 task_switch_info#:#Blendet oberhalb des Videos eine beliebige Aufgabenstellung ein.
 text#:#Text
 time_end#:#Ende der Passage
-time_for_preview#:#Zeitpunkt: 
+time_for_preview#:#Zeitpunkt:
 title_of_question#:#Titel der Frage
 toc#:#Inhaltsverzeichnis
 tutor#:#Tutor

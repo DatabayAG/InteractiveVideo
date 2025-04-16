@@ -99,7 +99,7 @@ invalid_comment_ids#:#Some comments could not be found.
 invalid_question_ids#:#Invalid Question-Ids
 invalid_user_ids#:#Invalid User-Ids
 is_anonymized#:#Anonymize Comments
-is_anonymized_info#:#If enabled all comments are shown without usernames 
+is_anonymized_info#:#If enabled all comments are shown without usernames
 is_chronologic#:#Show only comments up to the playhead
 is_chronologic_info#:#If enabled, only comments prior to the current playhead position are displayed. When playing the video, the newly appearing comments are displayed continuously and at the very top. Users can change their view in the toolbar.
 is_chronologic_settings#:#Show only comments up to the playhead
@@ -182,7 +182,7 @@ questions#:#Questions
 questions_comments#:#Questions, chapters and comments
 questions_comments_new#:#Questions, chapters, public comments
 questions_comments_sub_tab#:#Edit
-rbac_create_xvid#:#Create Interactive Video 
+rbac_create_xvid#:#Create Interactive Video
 rectangle#:#Rectangle
 reflection#:#Reflective question
 repeat#:#Retry
@@ -197,6 +197,7 @@ root_create_xvid#:#Create Interactive Video
 rotate#:#Rotate
 save#:#Save
 save_anyway#:#Save Anyway
+save_without_correct#:#No answer indicated as correct
 save_without_correct_detail#:#You don't have selected a reflection question or have you selected a question without correct answers, are you sure you want to save the question?
 scale#:#Scale
 screen_info#:#Use this screen to create and manage questions and comments. Caution: Interactive questions will NOT be shown on this screen. In order to see them during playback, go to the tab "Content".
@@ -237,7 +238,7 @@ sure_delete_comment#:#Are you sure, you want to delete the selected comments/que
 sure_delete_comments#:#Are you sure you want to delete the selected comments/questions/chapters?
 sure_delete_results#:#Are you sure, you want to delete the selected results?
 sure_delete_subtitle#:#Are you sure you want to remove this subtitle?
-sure_update_question#:#Are you sure, you want to save the question? Existing user results will be deleted! 
+sure_update_question#:#Are you sure, you want to save the question? Existing user results will be deleted!
 surl#:#Url
 switch_off#:#Off
 switch_on#:#On
@@ -247,7 +248,7 @@ task_switch#:#Activate Task
 task_switch_info#:#Displays any task above the video.
 text#:#Text
 time_end#:#End Time
-time_for_preview#:#Time: 
+time_for_preview#:#Time:
 title_of_question#:#Questiontitle
 toc#:#Table of Content
 tutor#:#Tutor
@@ -263,7 +264,7 @@ veryBigVideo_info#:#The video fills the full width of the window. The comments c
 video_file#:#Video
 visibility#:#Visibility
 width#:#Width
-with_correct#:#With corrects answers
+with_correct#:#With correct answers
 with_marker#:#with marker
 wrong_answer#:#Wrong
 xvid_add#:#Add Interactive Video
