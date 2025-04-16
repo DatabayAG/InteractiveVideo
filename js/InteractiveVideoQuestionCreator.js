@@ -87,7 +87,7 @@ InteractiveVideoQuestionCreator = (function () {
 			$('#il_prop_cont_feedback_one_wrong').hide();
 			$('#il_prop_cont_show_response_frequency').hide();
 			$('#il_prop_cont_neutral_type').hide();
-			$('#il_prop_cont_show_comment_field').show();
+			$('#il_prop_cont_show_comment_field').css("display","flex");
 			if( $('#show_best_solution').is(':checked')){
 				$('#subform_show_best_solution').show();
 			}
@@ -205,7 +205,7 @@ InteractiveVideoQuestionCreator = (function () {
 		pro.showHideFormElementsForReflectionType();
 	};
 
-	pro.submitAnyway = function () 
+	pro.submitAnyway = function ()
 	{
 		$('#simple_question_warning').modal('hide');
 		$( 'input[name="cmd[insertQuestion]"]' ).off('click');
