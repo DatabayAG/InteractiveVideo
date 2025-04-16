@@ -3032,14 +3032,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['feedback_correct']			= $question_data['question_data']['feedback_correct'];
 		$values['is_jump_correct']			= $question_data['question_data']['is_jump_correct'];
 		$values['show_correct_icon']		= $question_data['question_data']['show_correct_icon'];
-		$values['jump_correct_ts']			= $question_data['question_data']['jump_correct_ts'];
+		$values['jump_correct_ts']			= date('H:i:s', $question_data['question_data']['jump_correct_ts']);
 		$values['feedback_one_wrong']		= $question_data['question_data']['feedback_one_wrong'];
 		$values['show_response_frequency']	= $question_data['question_data']['show_response_frequency'];
 		$values['show_best_solution']	    = $question_data['question_data']['show_best_solution'];
 		$values['show_best_solution_text']  = $question_data['question_data']['show_best_solution_text'];
 		$values['is_jump_wrong']			= $question_data['question_data']['is_jump_wrong'];
 		$values['show_wrong_icon']			= $question_data['question_data']['show_wrong_icon'];
-		$values['jump_wrong_ts']			= $question_data['question_data']['jump_wrong_ts'];
+		$values['jump_wrong_ts']			= date('H:i:s', $question_data['question_data']['jump_wrong_ts']);
 		$values['limit_attempts']			= $question_data['question_data']['limit_attempts'];
 		$values['repeat_question']			= $question_data['question_data']['repeat_question'];
 		$values['compulsory_question']		= $question_data['question_data']['compulsory_question'];
