@@ -116,6 +116,6 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
         if(is_null($a_str)) {
             return '';
         }
-        return ilUtil::stripSlashes($a_str, true, '<a><br><strong><em><span>');
+        return ilUtil::stripSlashes($a_str, true, '<a><br><strong><em><span><p>');
     }
 }
