@@ -442,7 +442,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
             $this->insertObject();
             $this->video_source_object->doCreateVideoSource($this->getId());
         } else {
-            $this->create();
             $this->updateObject();
             $this->video_source_object->doCreateVideoSource($this->getId());
         }
