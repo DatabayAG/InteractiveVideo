@@ -57,8 +57,9 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 
         for($i = 0; $i <= 9; $i = $i+2)
         {
-            $file = self::extractImage($a_file, $i . '.jpg', $a_target_dir, $i);
-            $json_container[] = ['time' => $i, 'img' => ilWACSignedPath::signFile($file . '?' . rand())];
+            $time = (int) $sec + $i;
+            $file = self::extractImage($a_file, $i . '.jpg', $a_target_dir, $time);
+            $json_container[] = ['time' => $time, 'img' => ilWACSignedPath::signFile($file . '?' . rand())];
         }
 
 		if($return_json)
