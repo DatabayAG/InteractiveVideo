@@ -55,15 +55,12 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 
 		$sec =  self::parseTimeString($a_sec);
 
-		if($seconds_split = preg_split('/\./', $sec))
-		{
-			for($i = 0; $i <= 9; $i = $i+3)
-			{
-				$sec = $seconds_split[0] . '.' .$i;
-				$file = self::extractImage($a_file, $i . '.jpg', $a_target_dir, $sec);
-				$json_container[] = ['time' => $sec, 'img' => ilWACSignedPath::signFile($file . '?' . rand())];
-			}
-		}
+        for($i = 0; $i <= 9; $i = $i+2)
+        {
+            $time = (int) $sec + $i;
+            $file = self::extractImage($a_file, $i . '.jpg', $a_target_dir, $time);
+            $json_container[] = ['time' => $time, 'img' => ilWACSignedPath::signFile($file . '?' . rand())];
+        }
 
 		if($return_json)
 		{

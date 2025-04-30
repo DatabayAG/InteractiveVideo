@@ -272,7 +272,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.showBestSolutionIsClicked = function(comment_id, player) {
 		$('#show_best_solution').prop("disabled", true)
-		if(pub.QuestionObject.limit_attempts === "0"){
+		if(pub.QuestionObject.limit_attempts === 0){
 			$('#question_buttons_bellow_form').append(pro.createButtonButtons('repeat_question', scope.InteractiveVideo.lang.repeat, 'question_repeat_btn', 'button'))
 			$('.question_repeat_btn').off('click');
 			$('.question_repeat_btn').on('click', function () {
@@ -294,7 +294,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 			let question_type = pub.QuestionObject.type;
 			let answer_id = parseInt($(object).data('best-solution'), 10);
 			let answer_state = parseInt($(object).data('answer-state'), 10);
-			if(question_type === "0"){
+			if(question_type === 0){
 				let element = '<div class="best_solution_answer_view"><input type="radio" onClick="return false;"></div>'
 				if(answer_state === 1) {
 					element = '<div class="best_solution_answer_view"><input type="radio" onClick="return false;" checked="checked"></div>'
@@ -377,9 +377,10 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	{
 		let limit_attempts = il.InteractiveVideoQuestionViewer.QuestionObject.limit_attempts;
 
-		if(limit_attempts === '1') {
-			$("#question_form :input").attr("disabled", true);
-			$('#close_form').prop('disabled', false);
+		if(limit_attempts === '1' || limit_attempts === 1) {
+			$("#ilQuestionModal #sendForm").attr("disabled", true);
+			$('#question_form input[name="answer[]"]').prop( "disabled", true )
+			//$('#close_form').prop('disabled', false);
 		}
 
 	};

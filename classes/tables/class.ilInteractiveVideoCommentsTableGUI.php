@@ -37,7 +37,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	{
 		/**
 		 * @var $ilCtrl ilCtrl
-		 * @var ilToolbarGUI $ilToolbar 
+		 * @var ilToolbarGUI $ilToolbar
 		 */
 		global $ilCtrl, $ilAccess, $ilToolbar, $DIC;
 		$this->ctrl = $ilCtrl;
@@ -61,7 +61,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		{
 			$title = $a_parent_obj->getPluginInstance()->txt('my_comments');
 		}
-		
+
 		$this->setTitle($title);
 		$this->setRowTemplate('tpl.row_comments.html', $a_parent_obj->getPluginInstance()->getDirectory());
 
@@ -93,7 +93,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$this->addColumn($this->lng->txt('actions'), 'actions', '10%');
 
 		$this->setSelectAllCheckbox('comment_id');
-		
+
 		if($a_parent_cmd == 'editComments')
 		{
 			$this->addMultiCommand('confirmDeleteComment', $this->lng->txt('delete'));
@@ -102,7 +102,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		{
 			$this->addMultiCommand('confirmDeleteMyComment', $this->lng->txt('delete'));
 		}
-		
+
 		$this->setShowRowsSelector(true);
 	}
 
@@ -193,19 +193,19 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$current_selection_list->setId('act_' . $a_set['comment_id']);
 
 		$this->ctrl->setParameter($this->parent_obj, 'comment_id', $a_set['comment_id']);
-		
+
 		if(isset($a_set['is_interactive']) && $a_set['is_interactive'] == 1)
 		{
 			$link_target =  $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editQuestion' : 'editComment');
-		}	
+		}
 		else
 		{
 			$link_target =  $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editComment' : 'editMyComment');
-            if(isset($a_set['is_table_of_content']) && $a_set['is_table_of_content'] === "1") {
+            if(isset($a_set['is_table_of_content']) && ($a_set['is_table_of_content'] === "1" || $a_set['is_table_of_content'] === 1)) {
                 $link_target =  $this->ctrl->getLinkTarget($this->parent_obj,'editChapter');
             }
 		}
-		
+
 		$current_selection_list->addItem($this->lng->txt('edit'), '', $link_target);
 		$this->tpl->setVariable('VAL_ACTIONS', $current_selection_list->getHTML());
 	}
