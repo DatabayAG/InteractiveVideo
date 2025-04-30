@@ -272,7 +272,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.showBestSolutionIsClicked = function(comment_id, player) {
 		$('#show_best_solution').prop("disabled", true)
-		if(pub.QuestionObject.limit_attempts === "0"){
+		if(pub.QuestionObject.limit_attempts === 0){
 			$('#question_buttons_bellow_form').append(pro.createButtonButtons('repeat_question', scope.InteractiveVideo.lang.repeat, 'question_repeat_btn', 'button'))
 			$('.question_repeat_btn').off('click');
 			$('.question_repeat_btn').on('click', function () {
