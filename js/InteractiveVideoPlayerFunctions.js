@@ -607,9 +607,31 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
         });
     };
 
-    pub.refreshMathJaxView = function () {
+    pub.refreshMathJaxView = function (elements, reprocess = false) {
         if (typeof MathJax !== 'undefined') {
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            if (typeof MathJax.Hub !== 'undefined') {
+                // MathJax 2
+                if (reprocess) {
+                    MathJax.Hub.Queue(['Reprocess', MathJax.Hub, elements]);
+                } else {
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, elements]);
+                }
+            } else {
+                // MathJax 3
+                const interval_id = setInterval((resolve, reject) => {
+                    if (typeof MathJax.startup.promise !== 'undefined') {
+                        clearInterval(interval_id);
+                        MathJax.startup.promise = MathJax.startup.promise
+                          .then(() => {
+                              if (reprocess) {
+                                  MathJax.typesetClear(elements);
+                              }
+                              MathJax.typesetPromise()
+                                .catch((err) => console.log(`MathJax typesetting failed: ${err.message}`));
+                          });
+                    }
+                });
+            }
         }
     };
 
