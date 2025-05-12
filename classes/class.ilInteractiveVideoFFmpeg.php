@@ -55,7 +55,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 
 		$sec =  self::parseTimeString($a_sec);
 
-        for($i = 0; $i <= 9; $i = $i+2)
+        for($i = 0; $i <= 9; $i++)
         {
             $time = (int) $sec + $i;
             $file = self::extractImage($a_file, $i . '.jpg', $a_target_dir, $time);
