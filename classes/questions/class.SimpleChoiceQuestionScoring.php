@@ -132,6 +132,52 @@ class SimpleChoiceQuestionScoring
 		return $results;
 	}
 
+    public function getMyPointsNew(int $oid): array
+	{
+
+        global $ilDB;
+
+		$res  = $ilDB->queryF('SELECT * FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
+					 WHERE comments.comment_id = questions.comment_id AND  is_interactive = 1 AND obj_id = %s',
+			['integer'], [$oid]
+		);
+
+        $counter = 0;
+        $results = [];
+		while($row = $ilDB->fetchAssoc($res))
+		{
+			$results[$counter]['id'] = $row['question_id'];
+			$results[$counter]['type'] = $this->replaceQuestionTypeWithLangVar((int) $row['type']);
+			$results[$counter]['title'] = $row['comment_title'];
+			$results[$counter]['neutral_answer'] = $row['neutral_answer'];
+
+            $results[$counter]['answered'] = 0;
+            $results[$counter]['points']   = 0;
+
+			if($results[$counter]['neutral_answer'] == 1 || (int) $row['type'] === 2)
+			{
+				$results[$counter]['points']  = '-';
+
+			}
+			$counter++;
+		}
+
+		return $results;
+	}
+
+    private function replaceQuestionTypeWithLangVar(int $question_type) : string
+    {
+        switch($question_type) {
+            case 0:
+                return ilInteractiveVideoPlugin::getInstance()->txt('single_choice');
+            case 1:
+                return ilInteractiveVideoPlugin::getInstance()->txt('multiple_choice');
+            case 2:
+                return ilInteractiveVideoPlugin::getInstance()->txt('reflection');
+        }
+        return '-';
+    }
+
 	/**
 	 * @param int $qid question_id
 	 * @return mixed[]

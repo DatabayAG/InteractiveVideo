@@ -282,3 +282,6 @@ you_need_a_short_title#:#You need to provide a short title!
 ytb#:#YouTube
 ytb_youtube_info#:#Please insert a YouTube URL.
 ytb_youtube_url#:#YouTube URL
+results#:#Results
+question_type#:#Questiontype
+question_result#:#Result

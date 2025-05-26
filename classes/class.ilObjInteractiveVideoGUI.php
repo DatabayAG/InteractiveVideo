@@ -17,7 +17,9 @@ use ILIAS\Refinery\ConstraintViolationException;
  */
 class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopItemHandling
 {
-	/** @var ilCtrl */
+    private int $parent_obj_id;
+    private string $parent_obj_type;
+    /** @var ilCtrl */
     protected ilCtrl $ctrl;
 
 	/** @var ilObjInteractiveVideo|null $object */
@@ -39,6 +41,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         /** @var Container $DIC */
         global $DIC;
         $this->http = $DIC->http();
+        $this->parent_obj_id =  ilObject::_lookupObjId($a_ref_id);
+        $this->parent_obj_type = ilObject::_lookupType($this->parent_obj_id);
         parent::__construct($a_ref_id, $a_id_type, $a_parent_node_id);
     }
 	protected function appendImageUploadForm(ilInteractiveVideoPlugin $plugin, ilPropertyFormGUI $form): void
@@ -201,6 +205,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				    case 'insertQuestion':
                     case 'completeCsvExport':
                     case 'removeSubtitle ':
+                    case 'showResults':
                     $this->checkPermission('write');
 						$this->$cmd();
 						break;
@@ -1629,7 +1634,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$ilTabs->addTab('editComments', ilInteractiveVideoPlugin::getInstance()->txt('questions_comments'), $this->ctrl->getLinkTarget($this, 'editMyComments'));
 		}
-		$a = $this->object;
+
+        if($ilAccess->checkAccess('read', '', $this->object->getRefId()))
+        {
+            $ilTabs->addTab('results', ilInteractiveVideoPlugin::getInstance()->txt('results'), $this->ctrl->getLinkTarget($this, 'showMyResults'));
+        }
 		if(! $this->object instanceof ilObjRootFolder) {
             if(ilLearningProgressAccess::checkAccess($this->object->getRefId()))
             {
@@ -1678,17 +1687,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             }
             $ilTabs->addSubTab('editMyComments', $plugin->txt('my_comments'),
                 $this->ctrl->getLinkTarget($this, 'editMyComments'));
-            $ilTabs->addSubTab('showMyResults', $plugin->txt('show_my_results'),
-                $this->ctrl->getLinkTarget($this, 'showMyResults'));
-
-            if ($ilAccess->checkAccess('write', '', $this->object->getRefId())) {
-                $ilTabs->addSubTab('showResults', $plugin->txt('user_results'),
-                    $this->ctrl->getLinkTarget($this, 'showResults'));
-                $ilTabs->addSubTab('showQuestionsResults', $plugin->txt('question_results'),
-                    $this->ctrl->getLinkTarget($this, 'showQuestionsResults'));
-                $ilTabs->addSubTab('showCompleteOverviewOverAllResults', $plugin->txt('complete_question_results'),
-                    $this->ctrl->getLinkTarget($this, 'showCompleteOverviewOverAllResults'));
-            }
         }
 	}
 	/**
@@ -3271,10 +3269,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $ilTabs;
 
-		$this->setSubTabs('editComments');
 
-		$ilTabs->activateTab('editComments');
-		$ilTabs->activateSubTab('showResults');
+        $this->setResultsSubTabs('showResults');
 
 		$simple = new SimpleChoiceQuestionStatistics();
 		$tbl_data = $simple->getPointsForUsers($this->obj_id);
@@ -3285,27 +3281,56 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
     /**
-     *
+     * @throws ilException
+     * @throws ilCtrlException
      */
+    public function showQuestionsResults(): void
+    {
+        /**
+         * @var $tpl    ilTemplate
+         */
+        global $tpl;
+
+        $this->setResultsSubTabs('showQuestionsResults');
+        $simple = new SimpleChoiceQuestionStatistics();
+        $tbl_data = $simple->getQuestionsOverview($this->obj_id);
+        $tbl = new SimpleChoiceQuestionsOverviewTableGUI($this, 'showQuestionsResults');
+
+        $tbl->setData($tbl_data);
+        $tpl->setContent($tbl->getHTML());
+    }
+
 	public function showMyResults(): void
 	{
-		/**
-		 * @var $tpl    ilTemplate
-		 * @var $ilTabs ilTabsGUI
-		 */
-		global $tpl, $ilTabs;
-
-		$this->setSubTabs('editComments');
-
-		$ilTabs->activateTab('editComments');
-		$ilTabs->activateSubTab('showMyResults');
-
-		$simple = new SimpleChoiceQuestionScoring();
-		$tbl_data = $simple->getMyPoints($this->obj_id);
-		$tbl = new SimpleChoiceQuestionsUserTableGUI($this, 'showMyResults');
-		$tbl->setData($tbl_data);
-		$tpl->setContent($tbl->getHTML());
+        $this->setResultsSubTabs('showMyResults');
+		$tbl = new SimpleChoiceQuestionsUserTableGUI($this->parent_obj_id, $this->parent_obj_type);
+		$tbl->renderTable();
 	}
+
+    private function setResultsSubTabs($activate_subTab) {
+        /**
+         * @var $tpl    ilTemplate
+         * @var $ilTabs ilTabsGUI
+         */
+        global $ilTabs, $ilAccess;
+        $plugin = ilInteractiveVideoPlugin::getInstance();
+
+        $ilTabs->addSubTab('showMyResults', $plugin->txt('show_my_results'),
+            $this->ctrl->getLinkTarget($this, 'showMyResults'));
+
+        if ($ilAccess->checkAccess('write', '', $this->object->getRefId())) {
+            $ilTabs->addSubTab('showResults', $plugin->txt('user_results'),
+                $this->ctrl->getLinkTarget($this, 'showResults'));
+            $ilTabs->addSubTab('showQuestionsResults', $plugin->txt('question_results'),
+                $this->ctrl->getLinkTarget($this, 'showQuestionsResults'));
+            //Todo: remove tables
+          #  $ilTabs->addSubTab('showCompleteOverviewOverAllResults', $plugin->txt('complete_question_results'),
+          #      $this->ctrl->getLinkTarget($this, 'showCompleteOverviewOverAllResults'));
+        }
+
+        $ilTabs->activateTab('results');
+        $ilTabs->activateSubTab($activate_subTab);
+    }
 
     /**
      * @throws ilWACException
@@ -3399,31 +3424,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('invalid_user_ids'));
 		}
 		$this->showResults();
-	}
-
-    /**
-     * @throws ilException
-     * @throws ilCtrlException
-     */
-    public function showQuestionsResults(): void
-	{
-		/**
-		 * @var $tpl    ilTemplate
-		 * @var $ilTabs ilTabsGUI
-		 */
-		global $tpl, $ilTabs;
-
-		$this->setSubTabs('editComments');
-
-		$ilTabs->activateTab('editComments');
-		$ilTabs->activateSubTab('showQuestionsResults');
-
-		$simple = new SimpleChoiceQuestionStatistics();
-		$tbl_data = $simple->getQuestionsOverview($this->obj_id);
-		$tbl = new SimpleChoiceQuestionsOverviewTableGUI($this, 'showQuestionsResults');
-
-		$tbl->setData($tbl_data);
-		$tpl->setContent($tbl->getHTML());
 	}
 
     /**
