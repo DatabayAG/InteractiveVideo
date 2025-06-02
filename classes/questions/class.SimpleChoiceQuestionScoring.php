@@ -147,7 +147,7 @@ class SimpleChoiceQuestionScoring
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$results[$counter]['id'] = $row['question_id'];
-			$results[$counter]['type'] = $this->replaceQuestionTypeWithLangVar((int) $row['type']);
+			$results[$counter]['type'] = xvidUtils::replaceQuestionTypeWithLang((int) $row['type']);
 			$results[$counter]['title'] = $row['comment_title'];
 			$results[$counter]['neutral_answer'] = $row['neutral_answer'];
 
@@ -164,19 +164,6 @@ class SimpleChoiceQuestionScoring
 
 		return $results;
 	}
-
-    private function replaceQuestionTypeWithLangVar(int $question_type) : string
-    {
-        switch($question_type) {
-            case 0:
-                return ilInteractiveVideoPlugin::getInstance()->txt('single_choice');
-            case 1:
-                return ilInteractiveVideoPlugin::getInstance()->txt('multiple_choice');
-            case 2:
-                return ilInteractiveVideoPlugin::getInstance()->txt('reflection');
-        }
-        return '-';
-    }
 
 	/**
 	 * @param int $qid question_id

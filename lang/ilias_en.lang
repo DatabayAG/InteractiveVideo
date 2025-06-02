@@ -285,3 +285,6 @@ ytb_youtube_url#:#YouTube URL
 results#:#Results
 question_type#:#Questiontype
 question_result#:#Result
+answered_by_user#:#Answered by users
+correct_answered_by_user#:#Correctly answered by users
+correct_percentage#:#Correct percentage

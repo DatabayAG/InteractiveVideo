@@ -5,9 +5,9 @@ use enshrined\svgSanitize\Sanitizer;
  *
  * @author Nadia Ahmad <nahmad@databay.de>
  */
-class xvidUtils 
+class xvidUtils
 {
-	
+
 	const INTERACTIVE_VIDEO = '/xvid/';
 
 	/**
@@ -133,4 +133,17 @@ class xvidUtils
 		}
 		return $svg;
 	}
+
+    public static function replaceQuestionTypeWithLang(int $question_type) : string
+    {
+        switch($question_type) {
+            case 0:
+                return ilInteractiveVideoPlugin::getInstance()->txt('single_choice');
+            case 1:
+                return ilInteractiveVideoPlugin::getInstance()->txt('multiple_choice');
+            case 2:
+                return ilInteractiveVideoPlugin::getInstance()->txt('reflection');
+        }
+        return '-';
+    }
 }

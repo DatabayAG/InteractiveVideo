@@ -7,7 +7,45 @@
 class SimpleChoiceQuestionStatistics
 {
 
-	public function getQuestionCountForObject(int $oid): int
+    /**
+     * @param int           $oid
+     * @return array
+     */
+    protected function getUserQuestionResults(int $oid) : array
+    {
+        global $ilDB;
+
+        $res = $ilDB->queryF(
+            'SELECT questions.question_id, score.user_id, score.points, comments.comment_id, comments.comment_title
+			FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
+			LEFT JOIN rep_robj_xvid_score score ON questions.question_id = score.question_id
+			WHERE comments.comment_id = questions.comment_id
+			AND is_interactive = 1
+			AND obj_id = %s',
+            ['integer'],
+            [(int) $oid]
+        );
+
+        $points = [];
+
+        while ($row = $ilDB->fetchAssoc($res)) {
+            $qid = $row['question_id'];
+            if (!isset($points[$qid]['answered'])) {
+                $points[$qid]['answered'] = 0;
+                $points[$qid]['correct'] = 0;
+            }
+
+            if ($row['points'] !== null) {
+                $points[$qid]['answered']++;
+            }
+            if ($row['points'] === 1) {
+                $points[$qid]['correct']++;
+            }
+        }
+        return $points;
+    }
+
+    public function getQuestionCountForObject(int $oid): int
 	{
         global $ilDB;
 
@@ -212,71 +250,65 @@ class SimpleChoiceQuestionStatistics
 	{
         global $ilDB;
 
-		$res       = $ilDB->queryF(
-			'SELECT questions.question_id, questions.neutral_answer, score.user_id, score.points, comments.comment_id, comments.comment_title
+       $points = $this->getUserQuestionResults($oid);
+
+        $res = $ilDB->queryF(
+			'SELECT questions.question_id, questions.type, questions.neutral_answer, score.user_id, score.points, comments.comment_id, comments.comment_title
 			FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
 			LEFT JOIN rep_robj_xvid_score score ON questions.question_id = score.question_id
 			WHERE comments.comment_id = questions.comment_id
-			AND is_interactive =1
+			AND is_interactive = 1
 			AND obj_id = %s',
 			['integer'],
 			[(int)$oid]
 		);
+
 		$questions = [];
         while($row = $ilDB->fetchAssoc($res))
         {
-            if($row['points'] == null)
-            {
-                $questions[$row['question_id']]['answered'] = 0;
-                $questions[$row['question_id']]['correct']  = 0;
-            }
-            else if($row['points'] !== null)
-            {
-                if( ! array_key_exists($row['question_id'], $questions)) {
-                    $questions[$row['question_id']]['answered'] = 1;
-                    $questions[$row['question_id']]['correct']  = 0;
-                }
-            }
-            else
-            {
-                $questions[$row['question_id']]['answered']++;
-                $questions[$row['question_id']]['correct'] += $row['points'];
-            }
-            $questions[$row['question_id']]['comment_id']    = $row['comment_id'];
-            $questions[$row['question_id']]['comment_title'] = $row['comment_title'];
-            $questions[$row['question_id']]['neutral_answer'] = $row['neutral_answer'];
+            $qid = $row['question_id'];
+            $questions[$qid]['comment_id']    = $row['comment_id'];
+            $questions[$qid]['comment_title'] = $row['comment_title'];
+            $questions[$qid]['neutral_answer'] = $row['neutral_answer'];
+            $questions[$qid]['type'] = (int) $row['type'];
 
         }
 		$results = [];
-		$counter = 0;
 		foreach($questions as $key => $value)
 		{
-			$results[$counter]['question_id']   = $key;
-			$results[$counter]['comment_id']    = $value['comment_id'];
-			$results[$counter]['comment_title'] = $value['comment_title'];
-			$results[$counter]['answered']      = $value['answered'];
-			$results[$counter]['correct']       = $value['correct'];
-			$results[$counter]['neutral_question'] = $value['neutral_answer'];
-			if($value['neutral_answer'] == 1)
-			{
-				$results[$counter]['percentage'] = '';
-				$results[$counter]['correct'] = '';
-			}
-			else
-			{
-				if($value['answered'] > 0)
-				{
-					$results[$counter]['percentage'] = round(($value['correct'] / $value['answered']) * 100, 2);
-                }
-				else
-				{
-					$results[$counter]['percentage'] = 0;
-				}
-			}
+			$results[$key]['question_id']   = $key;
+			$results[$key]['id']            = $value['comment_id'];
+			$results[$key]['title']         = $value['comment_title'];
+			$results[$key]['type']          = $value['type'];
+			$results[$key]['type_txt']      = xvidUtils::replaceQuestionTypeWithLang((int) $value['type']);
+			$results[$key]['neutral_question'] = $value['neutral_answer'];
+			$results[$key]['answered_by_user'] = $points[$key]['answered'];
+			$results[$key]['correct_answered_by_user'] = $points[$key]['correct'];
+			$results[$key]['correct_percentage'] = 0;
 
-			
-			$counter++;
+            if($value['neutral_answer'] == 1 || $value['type'] == 2)
+			{
+				$results[$key]['correct_percentage'] = '-';
+				$results[$key]['correct_answered_by_user'] = '-';
+			}
 		}
+
+        foreach($results as $key => $value)
+        {
+            if($value['neutral_question'] == 1 || $value['type'] == 2)
+            {
+                $results[$key]['correct_percentage'] = '-';
+            } else {
+                $correct = (int) $value['correct_answered_by_user'];
+                $qid = (int) $value['question_id'];
+                if($correct === 0) {
+                    $results[$key]['correct_percentage'] = '0%';
+                } else {
+                    $results[$key]['correct_percentage'] = ($correct / $points[$qid]['answered']) * 100 . '%';
+                }
+            }
+        }
+
 		return $results;
 	}
 

@@ -3292,12 +3292,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         global $tpl;
 
         $this->setResultsSubTabs('showQuestionsResults');
-        $simple = new SimpleChoiceQuestionStatistics();
-        $tbl_data = $simple->getQuestionsOverview($this->obj_id);
-        $tbl = new SimpleChoiceQuestionsOverviewTableGUI($this, 'showQuestionsResults');
-
-        $tbl->setData($tbl_data);
-        $tpl->setContent($tbl->getHTML());
+        $tbl = new SimpleChoiceQuestionsOverviewTableGUI($this->parent_obj_id, $this->parent_obj_type);
+        $tbl->renderTable();
     }
 
 	public function showMyResults(): void
