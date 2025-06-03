@@ -29,6 +29,15 @@ class SimpleChoiceQuestionScoring
         return 0;
 	}
 
+    public function getScoreTxtForQuestionOnUserId(int $qid): string
+    {
+        $score = $this->getScoreForQuestionOnUserId($qid);
+        if($score === 1) {
+            return ilInteractiveVideoPlugin::getInstance()->txt('correct_answer');
+        }
+        return ilInteractiveVideoPlugin::getInstance()->txt('wrong_answer');
+    }
+
 	/**
 	 * @param int $qid question_id
 	 * @return mixed[]
@@ -144,15 +153,19 @@ class SimpleChoiceQuestionScoring
 
         $counter = 0;
         $results = [];
+        $scoring         = new SimpleChoiceQuestionStatistics();
+
 		while($row = $ilDB->fetchAssoc($res))
 		{
-			$results[$counter]['id'] = $row['question_id'];
+            $qid = $row['question_id'];
+			$results[$counter]['id'] = $qid;
+            $question_points = $this->getScoreTxtForQuestionOnUserId($qid);
 			$results[$counter]['type'] = xvidUtils::replaceQuestionTypeWithLang((int) $row['type']);
 			$results[$counter]['title'] = $row['comment_title'];
 			$results[$counter]['neutral_answer'] = $row['neutral_answer'];
 
             $results[$counter]['answered'] = 0;
-            $results[$counter]['points']   = 0;
+            $results[$counter]['points']  = $question_points;
 
 			if($results[$counter]['neutral_answer'] == 1 || (int) $row['type'] === 2)
 			{

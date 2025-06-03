@@ -3292,7 +3292,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         global $tpl;
 
         $this->setResultsSubTabs('showQuestionsResults');
-        $tbl = new SimpleChoiceQuestionsOverviewTableGUI($this->parent_obj_id, $this->parent_obj_type);
+        $has_write = $this->access->checkAccess("write", "", $this->object->getRefId());
+        $tbl = new SimpleChoiceQuestionsOverviewTableGUI($this->parent_obj_id, $this->parent_obj_type, $has_write);
         $tbl->renderTable();
     }
 

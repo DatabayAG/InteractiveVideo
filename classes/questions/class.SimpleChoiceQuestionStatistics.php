@@ -7,44 +7,6 @@
 class SimpleChoiceQuestionStatistics
 {
 
-    /**
-     * @param int           $oid
-     * @return array
-     */
-    protected function getUserQuestionResults(int $oid) : array
-    {
-        global $ilDB;
-
-        $res = $ilDB->queryF(
-            'SELECT questions.question_id, score.user_id, score.points, comments.comment_id, comments.comment_title
-			FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
-			LEFT JOIN rep_robj_xvid_score score ON questions.question_id = score.question_id
-			WHERE comments.comment_id = questions.comment_id
-			AND is_interactive = 1
-			AND obj_id = %s',
-            ['integer'],
-            [(int) $oid]
-        );
-
-        $points = [];
-
-        while ($row = $ilDB->fetchAssoc($res)) {
-            $qid = $row['question_id'];
-            if (!isset($points[$qid]['answered'])) {
-                $points[$qid]['answered'] = 0;
-                $points[$qid]['correct'] = 0;
-            }
-
-            if ($row['points'] !== null) {
-                $points[$qid]['answered']++;
-            }
-            if ($row['points'] === 1) {
-                $points[$qid]['correct']++;
-            }
-        }
-        return $points;
-    }
-
     public function getQuestionCountForObject(int $oid): int
 	{
         global $ilDB;
@@ -248,32 +210,10 @@ class SimpleChoiceQuestionStatistics
 	 */
 	public function getQuestionsOverview(int $oid): array
 	{
-        global $ilDB;
+        $points = $this->getCorrectAnswersByQuestion($oid);
+        $questions = $this->getQuestionTitleAndType($oid);
 
-       $points = $this->getUserQuestionResults($oid);
-
-        $res = $ilDB->queryF(
-			'SELECT questions.question_id, questions.type, questions.neutral_answer, score.user_id, score.points, comments.comment_id, comments.comment_title
-			FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
-			LEFT JOIN rep_robj_xvid_score score ON questions.question_id = score.question_id
-			WHERE comments.comment_id = questions.comment_id
-			AND is_interactive = 1
-			AND obj_id = %s',
-			['integer'],
-			[(int)$oid]
-		);
-
-		$questions = [];
-        while($row = $ilDB->fetchAssoc($res))
-        {
-            $qid = $row['question_id'];
-            $questions[$qid]['comment_id']    = $row['comment_id'];
-            $questions[$qid]['comment_title'] = $row['comment_title'];
-            $questions[$qid]['neutral_answer'] = $row['neutral_answer'];
-            $questions[$qid]['type'] = (int) $row['type'];
-
-        }
-		$results = [];
+        $results = [];
 		foreach($questions as $key => $value)
 		{
 			$results[$key]['question_id']   = $key;
@@ -293,24 +233,104 @@ class SimpleChoiceQuestionStatistics
 			}
 		}
 
-        foreach($results as $key => $value)
-        {
-            if($value['neutral_question'] == 1 || $value['type'] == 2)
-            {
+        $results = $this->calculateResults($results, $points);
+
+        return $results;
+	}
+
+    /**
+     * @param int           $oid
+     * @return array<int, array{answered: int, correct: int}>
+     */
+    protected function getCorrectAnswersByQuestion(int $oid) : array
+    {
+        global $ilDB;
+
+        $res = $ilDB->queryF(
+            'SELECT questions.question_id, score.user_id, score.points, comments.comment_id, comments.comment_title
+			FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
+			LEFT JOIN rep_robj_xvid_score score ON questions.question_id = score.question_id
+			WHERE comments.comment_id = questions.comment_id
+			AND is_interactive = 1
+			AND obj_id = %s',
+            ['integer'],
+            [(int) $oid]
+        );
+
+        $points = [];
+
+        while ($row = $ilDB->fetchAssoc($res)) {
+            $qid = $row['question_id'];
+            if (!isset($points[$qid]['answered'])) {
+                $points[$qid]['answered'] = 0;
+                $points[$qid]['correct'] = 0;
+            }
+
+            if ($row['points'] !== null) {
+                $points[$qid]['answered']++;
+            }
+            if ($row['points'] === 1) {
+                $points[$qid]['correct']++;
+            }
+        }
+        return $points;
+    }
+
+    /**
+     * @param int           $oid
+     * @return array
+     */
+    protected function getQuestionTitleAndType(int $oid) : array
+    {
+        global $ilDB;
+
+        $res = $ilDB->queryF(
+            'SELECT questions.question_id, questions.type, questions.neutral_answer, score.user_id, score.points, comments.comment_id, comments.comment_title
+			FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
+			LEFT JOIN rep_robj_xvid_score score ON questions.question_id = score.question_id
+			WHERE comments.comment_id = questions.comment_id
+			AND is_interactive = 1
+			AND obj_id = %s',
+            ['integer'],
+            [(int) $oid]
+        );
+
+        $questions = [];
+
+        while ($row = $ilDB->fetchAssoc($res)) {
+            $qid = $row['question_id'];
+            $questions[$qid]['comment_id'] = $row['comment_id'];
+            $questions[$qid]['comment_title'] = $row['comment_title'];
+            $questions[$qid]['neutral_answer'] = $row['neutral_answer'];
+            $questions[$qid]['type'] = (int) $row['type'];
+
+        }
+
+        return $questions;
+    }
+
+    /**
+     * @param array $results
+     * @param array $points
+     * @return array
+     */
+    protected function calculateResults(array $results, array $points) : array
+    {
+        foreach ($results as $key => $value) {
+            if ($value['neutral_question'] == 1 || $value['type'] == 2) {
                 $results[$key]['correct_percentage'] = '-';
             } else {
                 $correct = (int) $value['correct_answered_by_user'];
                 $qid = (int) $value['question_id'];
-                if($correct === 0) {
+                if ($correct === 0) {
                     $results[$key]['correct_percentage'] = '0%';
                 } else {
                     $results[$key]['correct_percentage'] = ($correct / $points[$qid]['answered']) * 100 . '%';
                 }
             }
         }
-
-		return $results;
-	}
+        return $results;
+    }
 
 	/**
 	 * @param $oid

@@ -129,7 +129,15 @@ class SimpleChoiceQuestionsOverviewTableGUI implements DataRetrieval
         URLBuilderToken $action_parameter_token,
         URLBuilderToken $row_id_token,
     ): array {
-        return [];
+        return $this->has_write ? [
+            'badge_image_template_delete' =>
+                $this->factory->table()->action()->multi(
+                //TODO: implement
+                    $this->lng->txt('delete_needs_to_be_implenented'),
+                    $url_builder->withParameter($action_parameter_token, 'badge_image_template_delete'),
+                    $row_id_token
+                )
+        ] : [];
     }
 
     public function renderTable(): void
@@ -148,7 +156,7 @@ class SimpleChoiceQuestionsOverviewTableGUI implements DataRetrieval
 
         $table = $this->factory
             ->table()
-            ->data(ilInteractiveVideoPlugin::getInstance()->txt('show_my_results'), $this->getColumns(), $this)
+            ->data(ilInteractiveVideoPlugin::getInstance()->txt('question_results'), $this->getColumns(), $this)
             ->withId(self::class . '_' . $this->parent_id)
             ->withOrder(new Order('title', Order::ASC))
             ->withActions($this->getActions($url_builder, $action_parameter_token, $row_id_token))
