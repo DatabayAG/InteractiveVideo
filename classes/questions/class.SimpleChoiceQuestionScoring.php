@@ -154,27 +154,45 @@ class SimpleChoiceQuestionScoring
         $counter = 0;
         $results = [];
         $scoring         = new SimpleChoiceQuestionStatistics();
+        $evaluable_answer = 0;
+        $correct_answer = 0;
 
 		while($row = $ilDB->fetchAssoc($res))
 		{
             $qid = $row['question_id'];
 			$results[$counter]['id'] = $qid;
-            $question_points = $this->getScoreTxtForQuestionOnUserId($qid);
+            $question_points = $this->getScoreForQuestionOnUserId($qid);
+            $question_points_txt = $this->getScoreTxtForQuestionOnUserId($qid);
 			$results[$counter]['type'] = xvidUtils::replaceQuestionTypeWithLang((int) $row['type']);
 			$results[$counter]['title'] = $row['comment_title'];
 			$results[$counter]['neutral_answer'] = $row['neutral_answer'];
 
             $results[$counter]['answered'] = 0;
+            $results[$counter]['points_txt']  = $question_points_txt;
             $results[$counter]['points']  = $question_points;
 
-			if($results[$counter]['neutral_answer'] == 1 || (int) $row['type'] === 2)
-			{
+			if($results[$counter]['neutral_answer'] == 1 || (int) $row['type'] === 2) {
+				$results[$counter]['points_txt']  = '-';
 				$results[$counter]['points']  = '-';
 
-			}
+			} else {
+                if($question_points === 1) {
+                    $correct_answer++;
+                }
+                $evaluable_answer++;
+            }
+
 			$counter++;
 		}
-
+        $results[PHP_INT_MAX] = [
+            'id' => PHP_INT_MAX,
+            'correct' => $correct_answer,
+            'overall' => $evaluable_answer,
+            'answered' => '-',
+            'points_txt' => '-',
+            'type' => '-',
+            'title' => ''
+        ];
 		return $results;
 	}
 

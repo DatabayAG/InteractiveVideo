@@ -288,3 +288,8 @@ question_result#:#Result
 answered_by_user#:#Answered by users
 correct_answered_by_user#:#Correctly answered by users
 correct_percentage#:#Correct percentage
+name#:#Name
+total#:#Total
+neutral_reflection#:#Neutrale Questions & Reflections
+evaluable_questions#:#Evaluable Questions
+percentage_correct#:#Percent correct

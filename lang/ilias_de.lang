@@ -286,3 +286,8 @@ question_result#:#Bewertung
 answered_by_user#:#Beantwortet von Nutzern
 correct_answered_by_user#:#Richtig beantwortet von Nutzern
 correct_percentage#:#Prozent richtig
+name#:#Name
+total#:#Total
+neutral_reflection#:#Neutrale & Reflektionsfragen
+evaluable_questions#:#Auswertbare Fragen
+percentage_correct#:#Prozent richtig

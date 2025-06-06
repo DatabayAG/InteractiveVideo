@@ -31,6 +31,7 @@ class SimpleChoiceQuestionsUserTableGUI implements DataRetrieval
     private readonly ilGlobalTemplateInterface $tpl;
 
     private ?array $cached_records = null;
+    private array $final_row;
 
     public function __construct(int $parent_obj_id, string $parent_obj_type, protected bool $has_write = false)
     {
@@ -57,7 +58,8 @@ class SimpleChoiceQuestionsUserTableGUI implements DataRetrieval
         $rows = [];
         $simple = new SimpleChoiceQuestionScoring();
         $rows = $simple->getMyPointsNew($this->parent_id);
-
+        $this->final_row = $rows[PHP_INT_MAX];
+        unset($rows[PHP_INT_MAX]);
         $this->cached_records = $rows;
 
         return $rows;
@@ -97,6 +99,21 @@ class SimpleChoiceQuestionsUserTableGUI implements DataRetrieval
             $records = \array_slice($records, $range->getStart(), $range->getLength());
         }
 
+
+        $id = $this->final_row['id'];
+        $correct = $this->final_row['correct'];
+        $overall = $this->final_row['overall'];
+        $result = floor(( $correct / $overall ) * 100) .'%';
+
+        $records[] = [
+            'id' => $id,
+            'answered' => 999999999,
+            'neutral_answer' => 999999999,
+            'points_txt' => '<b>' . $result . '</b>',
+            'title' => '<b>' . ilInteractiveVideoPlugin::getInstance()->txt('lp_summary') . '</b>',
+            'type' => '<b>-</b>'
+        ];
+
         foreach ($records as $record) {
             yield $row_builder
                 ->buildDataRow((string) $record['id'], $record);
@@ -118,7 +135,7 @@ class SimpleChoiceQuestionsUserTableGUI implements DataRetrieval
         return [
             'title' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('question')),
             'type' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('question_type')),
-            'points' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('question_result')),
+            'points_txt' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('question_result')),
         ];
     }
 
