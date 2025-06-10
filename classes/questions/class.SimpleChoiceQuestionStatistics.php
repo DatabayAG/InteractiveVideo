@@ -93,55 +93,46 @@ class SimpleChoiceQuestionStatistics
 			['integer'], [(int)$oid]
 		);
 		$return_value = ['users' => [], 'question' => [], 'answers' => []];
-		$return_sums  = [];
-
+        $sort_new = [];
 		while($row = $ilDB->fetchAssoc($res))
 		{
 			$name = ilUserUtil::getNamePresentation($row['user_id']);
 			$id                                 = $row['user_id'];
-			$return_value['users'][$id]['id'] = $id;
+			$return_value['users'][$id]['id']   = $id;
 			$return_value['users'][$id]['name'] = $name;
-
-			if(!isset($return_sums[$id]['answered']))
+			if(!isset($sort_new[$id]['answered']))
 			{
-				$return_sums[$id]['answered'] = 0;
-                $return_sums[$id]['answered_correct'] = 0;
-                $return_sums[$id]['sum']      = 0;
+                $sort_new[$id]['answered_correct']   = 0;
+                $sort_new[$id]['answered_wrong']     = 0;
+                $sort_new[$id]['answered_neutral']   = 0;
+                $sort_new[$id]['answered']           = 0;
 			}
-			foreach($questions_list as $key => $value)
-			{
-				if($key == $row['question_id'])
-				{
-                    $type = $questions_list[$key]['type'];
-					if($row['neutral_answer'] == 1 || $type == 2)
-					{
-                        $points = 0;
-						$return_value['users'][$id][$key] = ['points' => $points, 'neutral' => 1];
-					}
-					else
-					{
-						$points = $row['points'];
-                        $return_value['users'][$id][$key] = ['points' => $points , 'neutral' => 0];
-                        $return_sums[$id]['answered']++;
-                        if($points >= 1) {
-                            $return_sums[$id]['answered_correct']++;
-                        }
-                    }
-                    $return_sums[$id]['sum'] += $points;
-					$return_value['question'][$key] = $value;
 
-				}
-			}
+            $qid = $row['question_id'];
+            $type = $questions_list[$qid]['type'];
+
+            $sort_new[$id]['answered']++;
+
+            if($row['neutral_answer'] == 1 || $type == 2) {
+                $sort_new[$id]['answered_neutral']++;
+            } else {
+                $points = $row['points'];
+                if($points >= 1) {
+                    $sort_new[$id]['answered_correct']++;
+                } else {
+                    $sort_new[$id]['answered_wrong']++;
+                }
+            }
 		}
 
-		foreach($return_sums as $key => $value)
+		foreach($sort_new as $key => $value)
 		{
 			if($value['answered'] > 0)
 			{
                 $percentage = floor(( ($value['answered_correct']) / $answerable) * 100);
 				$return_value['users'][$key]['total'] = $value['answered'] . ' / ' . $questions_count;
-                $return_value['users'][$key]['correct'] = $value['sum'];
-                $return_value['users'][$key]['wrong'] = $answerable - $value['sum'];
+                $return_value['users'][$key]['correct'] = $value['answered_correct'];
+                $return_value['users'][$key]['wrong'] = $value['answered_wrong'];
                 $return_value['users'][$key]['percentage_correct'] = $percentage . '%';
 			}
 			else
@@ -152,7 +143,7 @@ class SimpleChoiceQuestionStatistics
                 $return_value['users'][$key]['wrong'] = '-';
 			}
             $return_value['users'][$key]['neutral_reflection'] = $questions_count - $answerable;
-            $return_value['users'][$key]['evaluable_questions'] = $answerable;
+            $return_value['users'][$key]['evaluable_questions'] = $value['answered_correct'] + $value['answered_wrong'] . ' / ' . $answerable;
 		}
 
 		$res = $ilDB->queryF('SELECT answers.user_id, text.answer, text.correct, answers.answer_id, questions.question_id
