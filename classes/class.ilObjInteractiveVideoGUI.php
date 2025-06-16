@@ -17,6 +17,7 @@ use ILIAS\Refinery\ConstraintViolationException;
  */
 class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopItemHandling
 {
+    private const ACTION_PARAMETER_TOKEN = 'tid_id';
     private int $parent_obj_id;
     private string $parent_obj_type;
     /** @var ilCtrl */
@@ -169,6 +170,27 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$this->ctrl->forwardCommand($exp_gui);
 				break;
 			default:
+                global $DIC;
+                $render_default = true;
+                $action_parameter_token = 'tid_id';
+                $parameter = 'tid_table_action';
+                $query = $DIC->http()->wrapper()->query();
+                if ($query->has($parameter)) {
+                    $action = $query->retrieve($parameter, $DIC->refinery()->kindlyTo()->string());
+                    if($action !== null) {
+                        switch($action)
+                        {
+                            case 'iv_remove_user_result':
+                                $this->confirmDeleteUserResults();
+                                $render_default = false;
+                                break;
+                            case 'iv_remove_question_result':
+                                $this->confirmDeleteQuestionsResults();
+                                $render_default = false;
+                                break;
+                        }
+                    }
+                }
 				switch($cmd)
 				{
 					case 'showLPUserDetails':
@@ -207,8 +229,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                     case 'removeSubtitle ':
                     case 'showResults':
                     $this->checkPermission('write');
-						$this->$cmd();
-						break;
+                    if ($render_default) {
+                        $this->$cmd();
+                        break;
+                    }
 
 					case 'redrawHeaderAction':
 					case 'addToDesk':
@@ -219,19 +243,27 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 							$cmd .= 'Object';
 						}
 						$this->checkPermission('read');
-						$this->$cmd();
-						break;
+                        if ($render_default) {
+                            $this->$cmd();
+                            break;
+                        }
 					case 'getQuestionPerAjax':
 					case 'insertTutorCommentAjax':
 					case 'postAnswerPerAjax':
 						$this->checkPermission('read');
-						$this->$cmd();
-						break;
+                        if ($render_default) {
+                            $this->$cmd();
+                            break;
+                        }
 					default:
+
 						if(method_exists($this, $cmd))
 						{
 							$this->checkPermission('read');
-							$this->$cmd();
+                            if ($render_default) {
+                                $this->$cmd();
+                                break;
+                            }
 						}
 						else
 						{
@@ -3272,7 +3304,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         $this->setResultsSubTabs('showResults');
 
-        $tbl = new SimpleChoiceQuestionsTableGUI($this->obj_id, 'showResults');
+        $has_write = $this->access->checkAccess("write", "", $this->object->getRefId());
+        $tbl = new SimpleChoiceQuestionsTableGUI($this->obj_id, 'showResults', $has_write);
 
 		$tbl->renderTable();
 	}
@@ -3359,17 +3392,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
 		 */
-		global $tpl, $ilTabs;
+		global $tpl;
 
-		$this->setSubTabs('editComments');
+        $user_ids = $this->getMultiActionIdsFromUrl();
 
-		$ilTabs->activateTab('editComments');
-		$ilTabs->activateSubTab('showResults');
-        $post = $this->http->wrapper()->post();
-        $user_ids = [];
-        if($post->has('user_id')) {
-            $user_ids = $post->retrieve('user_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
-        }
 		if(!count($user_ids))
 		{
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'));
@@ -3390,6 +3416,23 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$tpl->setContent($confirm->getHTML());
 	}
+
+    /**
+     * @return list<string>
+     */
+    public function getMultiActionIdsFromUrl(): array
+    {
+        $ids = [];
+        $query = $this->http->wrapper()->query();
+        if ($query->has(self::ACTION_PARAMETER_TOKEN)) {
+            $ids = $query->retrieve(
+                self::ACTION_PARAMETER_TOKEN,
+                $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string())
+            );
+        }
+
+        return $ids;
+    }
 
 	public function deleteUserResults(): void
 	{
@@ -3427,19 +3470,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		/**
 		 * @var $tpl    ilTemplate
-		 * @var $ilTabs ilTabsGUI
 		 */
-		global $tpl, $ilTabs;
+		global $tpl;
 
-		$this->setSubTabs('editComments');
-
-		$ilTabs->activateTab('editComments');
-		$ilTabs->activateSubTab('showQuestionsResults');
-        $post = $this->http->wrapper()->post();
-        $question_ids = [];
-        if($post->has('question_id')) {
-            $question_ids = $post->retrieve('question_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
-        }
+        $question_ids = $this->getMultiActionIdsFromUrl();
 
 		if(!count($question_ids))
 		{

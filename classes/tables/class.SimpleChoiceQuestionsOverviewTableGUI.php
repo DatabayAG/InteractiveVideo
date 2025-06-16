@@ -96,7 +96,7 @@ class SimpleChoiceQuestionsOverviewTableGUI implements DataRetrieval
 
         foreach ($records as $record) {
             yield $row_builder
-                ->buildDataRow((string) $record['id'], $record);
+                ->buildDataRow((string) $record['question_id'], $record);
         }
     }
 
@@ -132,9 +132,8 @@ class SimpleChoiceQuestionsOverviewTableGUI implements DataRetrieval
         return $this->has_write ? [
             'badge_image_template_delete' =>
                 $this->factory->table()->action()->multi(
-                //TODO: implement
-                    $this->lng->txt('delete_needs_to_be_implenented'),
-                    $url_builder->withParameter($action_parameter_token, 'badge_image_template_delete'),
+                    $this->lng->txt('delete'),
+                    $url_builder->withParameter($action_parameter_token, 'iv_remove_question_result'),
                     $row_id_token
                 )
         ] : [];

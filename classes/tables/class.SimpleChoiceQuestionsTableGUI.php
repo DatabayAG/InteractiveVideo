@@ -135,7 +135,15 @@ class SimpleChoiceQuestionsTableGUI implements DataRetrieval
         URLBuilderToken $action_parameter_token,
         URLBuilderToken $row_id_token,
     ): array {
-        return [];
+        $this->has_write = true;
+        return $this->has_write ? [
+            'iv_remove_user_result' =>
+                $this->factory->table()->action()->multi(
+                    $this->lng->txt('delete'),
+                    $url_builder->withParameter($action_parameter_token, 'iv_remove_user_result'),
+                    $row_id_token
+                )
+        ] : [];
     }
 
     public function renderTable(): void
