@@ -3474,6 +3474,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         $question_ids = $this->getMultiActionIdsFromUrl();
 
+        if($question_ids === [self::ACTION_ALL_TOKEN]){
+            $simple = new SimpleChoiceQuestion();
+            $question_ids = $simple->getInteractiveQuestionIdsByObjId($this->obj_id);
+        }
+
 		if(!count($question_ids))
 		{
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'));
