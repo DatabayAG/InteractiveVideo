@@ -33,6 +33,7 @@ class SimpleChoiceQuestionsTableGUI implements DataRetrieval
 
     private ?array $cached_records = null;
     private array $final_row;
+    private ilCtrlInterface $ctrl;
 
     public function __construct(int $parent_obj_id, string $parent_obj_type, protected bool $has_write = false)
     {
@@ -45,6 +46,7 @@ class SimpleChoiceQuestionsTableGUI implements DataRetrieval
         $this->refinery = $DIC->refinery();
         $this->request = $DIC->http()->request();
         $this->http = $DIC->http();
+        $this->ctrl = $DIC->ctrl();
 
         $this->parent_id = $parent_obj_id;
         $this->parent_type = $parent_obj_type;
@@ -169,10 +171,9 @@ class SimpleChoiceQuestionsTableGUI implements DataRetrieval
             ->withRequest($this->request);
         $out = [$table];
 
-        global $DIC;
-        $f = $DIC->ui()->factory();
-        $renderer = $DIC->ui()->renderer();
-        $action = $DIC->ctrl()->getLinkTargetByClass(ilObjInteractiveVideoGUI::class, "completeCsvExport");
+        $f = $this->factory;
+        $renderer = $this->renderer;
+        $action = $this->ctrl->getLinkTargetByClass(ilObjInteractiveVideoGUI::class, "completeCsvExport");
         $button = $renderer->render($f->button()->standard(ilInteractiveVideoPlugin::getInstance()->txt('csv_export'), $action));
         $this->tpl->setContent($button . '<p></p> ' . $this->renderer->render($out));
     }
