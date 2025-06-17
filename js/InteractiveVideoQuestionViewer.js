@@ -34,7 +34,9 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	}
 
 	pub.getQuestionPerAjax = function (comment_id, player, show_previous_answer) {
+
 		pro.cleanModal();
+
 		if(pro.isQuestionLockEnabled() && $(pri.ids.modal).css('display') === 'none') {
 				pro.removeQuestionLock();
 		}

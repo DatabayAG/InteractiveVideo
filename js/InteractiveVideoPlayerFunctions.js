@@ -619,7 +619,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
             } else {
                 // MathJax 3
                 const interval_id = setInterval((resolve, reject) => {
-                    if (typeof MathJax.startup.promise !== 'undefined') {
+                    if (typeof MathJax.startup !== 'undefined' && typeof MathJax.startup.promise !== 'undefined') {
                         clearInterval(interval_id);
                         MathJax.startup.promise = MathJax.startup.promise
                           .then(() => {
