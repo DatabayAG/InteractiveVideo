@@ -26,14 +26,15 @@ class SimpleChoiceQuestionScoring
         if(isset($score['points'])) {
             return (int)$score['points'];
         }
-        return 0;
+        return -1;
 	}
 
-    public function getScoreTxtForQuestionOnUserId(int $qid): string
+    public function translateScoreToTxt(int $score): string
     {
-        $score = $this->getScoreForQuestionOnUserId($qid);
         if($score === 1) {
             return ilInteractiveVideoPlugin::getInstance()->txt('correct_answer');
+        } elseif($score === -1) {
+            return '-';
         }
         return ilInteractiveVideoPlugin::getInstance()->txt('wrong_answer');
     }
@@ -162,7 +163,7 @@ class SimpleChoiceQuestionScoring
             $qid = $row['question_id'];
 			$results[$counter]['id'] = $qid;
             $question_points = $this->getScoreForQuestionOnUserId($qid);
-            $question_points_txt = $this->getScoreTxtForQuestionOnUserId($qid);
+            $question_points_txt = $this->translateScoreToTxt($question_points);
 			$results[$counter]['type'] = xvidUtils::replaceQuestionTypeWithLang((int) $row['type']);
 			$results[$counter]['title'] = $row['comment_title'];
 			$results[$counter]['neutral_answer'] = $row['neutral_answer'];

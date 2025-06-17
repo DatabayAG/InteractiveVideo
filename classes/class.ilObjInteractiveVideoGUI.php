@@ -18,6 +18,7 @@ use ILIAS\Refinery\ConstraintViolationException;
 class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopItemHandling
 {
     private const ACTION_PARAMETER_TOKEN = 'tid_id';
+    private const ACTION_ALL_TOKEN = 'ALL_OBJECTS';
     private int $parent_obj_id;
     private string $parent_obj_type;
     /** @var ilCtrl */
@@ -3295,13 +3296,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
     public function showResults(): void
 	{
-		/**
-		 * @var $tpl    ilTemplate
-		 * @var $ilTabs ilTabsGUI
-		 */
-		global $tpl, $ilTabs;
-
-
         $this->setResultsSubTabs('showResults');
 
         $has_write = $this->access->checkAccess("write", "", $this->object->getRefId());
@@ -3408,12 +3402,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteUserResults');
 		$confirm->setCancel($this->lng->txt('cancel'), 'showResults');
 
-		foreach($user_ids as $user_id)
-		{
-			$login = ilObjUser::_lookupName($user_id);
+        if($user_ids === [self::ACTION_ALL_TOKEN]){
+            $simple = new SimpleChoiceQuestion();
+            $user_ids = $simple->getUsersWithAnsweredQuestion($this->obj_id);
+        }
 
-			$confirm->addItem('user_id[]', $user_id, $login['firstname'].' '.$login['lastname']);
-		}
+        foreach($user_ids as $user_id)
+        {
+            $login = ilObjUser::_lookupName($user_id);
+            $confirm->addItem('user_id[]', $user_id, $login['firstname'].' '.$login['lastname']);
+        }
+
 		$tpl->setContent($confirm->getHTML());
 	}
 
