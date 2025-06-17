@@ -44,7 +44,7 @@ correct_answered#:#Richtig beantwortet
 correct_solution#:#Richtige Lösung
 crs_create_xvid#:#Interaktives Video anlegen
 crs_create_xvid#:#Neues Interaktives Video anlegen
-csv_export#:#CSV-Export
+csv_export#:#Export detailierte Benutzerergebnisse
 db_up_to_date#:#Datenbank aktuell
 db_update_failed#:#Datenbank-Update schlug fehl: %s
 db_update_worked#:#Datenbank erfolgreich aktualisiert
@@ -291,3 +291,4 @@ total#:#Total
 neutral_reflection#:#Neutrale & Reflektionsfragen
 evaluable_questions#:#Auswertbare Fragen
 percentage_correct#:#Prozent richtig
+answered_questions#:#Beantwortete Fragen

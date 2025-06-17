@@ -162,15 +162,18 @@ class SimpleChoiceQuestionsTableGUI implements DataRetrieval
 
         $table = $this->factory
             ->table()
-            ->data(ilInteractiveVideoPlugin::getInstance()->txt('show_my_results'), $this->getColumns(), $this)
+            ->data(ilInteractiveVideoPlugin::getInstance()->txt('answered_questions'), $this->getColumns(), $this)
             ->withId(self::class . '_' . $this->parent_id)
             ->withOrder(new Order('title', Order::ASC))
             ->withActions($this->getActions($url_builder, $action_parameter_token, $row_id_token))
             ->withRequest($this->request);
         $out = [$table];
 
-        $query = $this->http->wrapper()->query();
-
-        $this->tpl->setContent($this->renderer->render($out));
+        global $DIC;
+        $f = $DIC->ui()->factory();
+        $renderer = $DIC->ui()->renderer();
+        $action = $DIC->ctrl()->getLinkTargetByClass(ilObjInteractiveVideoGUI::class, "completeCsvExport");
+        $button = $renderer->render($f->button()->standard(ilInteractiveVideoPlugin::getInstance()->txt('csv_export'), $action));
+        $this->tpl->setContent($button . '<p></p> ' . $this->renderer->render($out));
     }
 }
