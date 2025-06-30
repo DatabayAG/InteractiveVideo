@@ -69,6 +69,110 @@ class SimpleChoiceQuestionStatistics
 		return $results;
 	}
 
+    public function getScoreForAllQuestionsAndAllUserOrg(int $oid): array
+    {
+        $questions_list  = $this->getQuestionIdsForObject($oid);
+        $questions_count = $this->getQuestionCountForObject($oid);
+        global $ilDB;
+
+        $res          = $ilDB->queryF('
+			SELECT score.user_id, points,questions.question_id, neutral_answer
+			FROM 	rep_robj_xvid_comments comments, 
+				 	rep_robj_xvid_question questions, 
+				 	rep_robj_xvid_score score  
+			WHERE 	comments.comment_id   = questions.comment_id 
+			AND 	questions.question_id = score.question_id 
+			AND 	obj_id = %s  ORDER BY comments.comment_time',
+            ['integer'], [(int)$oid]
+        );
+        $return_value = ['users' => [], 'question' => [], 'answers' => []];
+        $return_sums  = [];
+        $neutral = 0;
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            $name = ilUserUtil::getNamePresentation($row['user_id']);
+            $id                                 = $row['user_id'];
+            $return_value['users'][$id]['name'] = $name;
+            if(!isset($return_sums[$id]['answered']))
+            {
+                $return_sums[$id]['answered'] = 0;
+                $return_sums[$id]['sum']      = 0;
+            }
+            foreach($questions_list as $key => $value)
+            {
+                if($key == $row['question_id'])
+                {
+                    if($row['neutral_answer'] == 1)
+                    {
+                        $points = 0;
+                        $return_value['users'][$id][$key] = 1;
+                        $neutral++;
+                    }
+                    else
+                    {
+                        $points = $row['points'];
+                        $return_value['users'][$id][$key] = $points;
+                    }
+
+                    $return_sums[$id]['answered']++;
+                    $return_sums[$id]['sum'] += $points;
+                    $return_value['question'][$key]   = $value;
+
+                }
+                if(!isset($return_value['users'][$id][$key]))
+                {
+                    $return_value['users'][$id][$key] = '-';
+                    $return_value['question'][$key]   = $value;
+                }
+            }
+        }
+        foreach($return_sums as $key => $value)
+        {
+            if($value['answered'] > 0)
+            {
+                $percentage = round(($value['answered'] / $questions_count) * 100, 2);
+                $return_value['users'][$key]['answerd'] = $percentage . '%';
+            }
+            else
+            {
+                $return_value['users'][$key]['answerd'] = '0%';
+            }
+
+            if($value['answered'] > 0 && ($questions_count - $neutral) > 0)
+            {
+                $percentage = round(($value['sum'] / ($questions_count - $neutral)) * 100, 2);
+                if($percentage > 100) {
+                    $percentage = 100;
+                }
+                $return_value['users'][$key]['sum'] = $percentage . '%';
+            }
+            else
+            {
+                $return_value['users'][$key]['sum'] = '0%';
+            }
+
+        }
+
+        $res = $ilDB->queryF('SELECT answers.user_id, text.answer, text.correct, answers.answer_id, questions.question_id
+			FROM 	rep_robj_xvid_question questions,
+					rep_robj_xvid_answers answers,
+					rep_robj_xvid_comments comments,
+					rep_robj_xvid_qus_text text
+			WHERE   questions.question_id = answers.question_id
+			AND 	comments.comment_id   = questions.comment_id 
+			AND 	text.answer_id = answers.answer_id
+			AND 	obj_id = %s  ORDER BY comments.comment_time',
+            ['integer'], [(int)$oid]);
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            if(isset($return_value['answers'][$row['user_id']])) {
+                $return_value['answers'][$row['user_id']][$row['question_id']] .= chr(13) . $row['answer'];
+            }
+
+        }
+        return $return_value;
+    }
+
     /**
 	 * @param $oid
 	 * @throws ilWACException

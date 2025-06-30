@@ -3698,7 +3698,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
 		$simple = new SimpleChoiceQuestionStatistics();
-		$data = $simple->getScoreForAllQuestionsAndAllUser($this->obj_id);
+		$data = $simple->getScoreForAllQuestionsAndAllUserOrg($this->obj_id);
 
 		$csv = [];
 		$separator = ";";
@@ -3707,8 +3707,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($head_row, $lng->txt('name'));
 		foreach ($data['question'] as $key => $row)
 		{
-			array_push($head_row, trim($row, '"'));
-			array_push($head_row, trim($row, '"') . ' ' .$plugin->txt('answers') );
+			array_push($head_row, trim($row['title'], '"'));
+			array_push($head_row, trim($row['title'], '"') . ' ' .$plugin->txt('answers') );
 		}
 		array_push($head_row, $plugin->txt('answered') );
 		array_push($head_row, $plugin->txt('sum'));
