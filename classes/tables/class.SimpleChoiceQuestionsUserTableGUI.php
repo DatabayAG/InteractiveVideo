@@ -103,7 +103,12 @@ class SimpleChoiceQuestionsUserTableGUI implements DataRetrieval
         $id = $this->final_row['id'];
         $correct = $this->final_row['correct'];
         $overall = $this->final_row['overall'];
-        $result = floor(( $correct / $overall ) * 100) .'%';
+        if($overall > 0) {
+            $result = floor(( $correct / $overall ) * 100) .'%';
+        } else {
+            $result = '-';
+        }
+
 
         $records[] = [
             'id' => $id,

@@ -233,7 +233,12 @@ class SimpleChoiceQuestionStatistics
 		{
 			if($value['answered'] > 0)
 			{
-                $percentage = floor(( ($value['answered_correct']) / $answerable) * 100);
+                if($answerable > 0) {
+                    $percentage = floor(( ($value['answered_correct']) / $answerable) * 100);
+                } else {
+                    $percentage = 0;
+                }
+
 				$return_value['users'][$key]['total'] = $value['answered'] . ' / ' . $questions_count;
                 $return_value['users'][$key]['correct'] = $value['answered_correct'];
                 $return_value['users'][$key]['wrong'] = $value['answered_wrong'];
