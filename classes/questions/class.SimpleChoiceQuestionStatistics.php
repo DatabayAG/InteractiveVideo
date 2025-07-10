@@ -7,32 +7,32 @@
 class SimpleChoiceQuestionStatistics
 {
 
-	public function getQuestionCountForObject(int $oid): int
-	{
+    public function getQuestionCountForObject(int $oid): int
+    {
         global $ilDB;
 
-		$res = $ilDB->queryF(
-			'SELECT count(question_id) count FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
+        $res = $ilDB->queryF(
+            'SELECT count(question_id) count FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
 					 WHERE comments.comment_id = questions.comment_id AND  is_interactive = 1 AND obj_id = %s',
-			['integer'],
-			[(int)$oid]
-		);
-		$row = $ilDB->fetchAssoc($res);
-		return (int)$row['count'];
-	}
+            ['integer'],
+            [(int)$oid]
+        );
+        $row = $ilDB->fetchAssoc($res);
+        return (int)$row['count'];
+    }
 
     /**
-	 * @throws ilWACException
-	 * @return array<int, array{name: mixed, user_id: mixed, answered: int, correct: mixed, neutral_questions: mixed, percentage: int|float}>
-	 */
-	public function getPointsForUsers(int $oid): array
-	{
+     * @throws ilWACException
+     * @return array<int, array{name: mixed, user_id: mixed, answered: int, correct: mixed, neutral_questions: mixed, percentage: int|float}>
+     */
+    public function getPointsForUsers(int $oid): array
+    {
 
         global $ilDB;
 
-		$questions_for_object = $this->getQuestionCountForObject($oid);
+        $questions_for_object = $this->getQuestionCountForObject($oid);
 
-		$res     = $ilDB->queryF('
+        $res     = $ilDB->queryF('
 			SELECT score.user_id, sum(points) points, sum(neutral_answer) as neutral 
 			FROM 	rep_robj_xvid_comments comments, 
 				 	rep_robj_xvid_question questions, 
@@ -41,46 +41,41 @@ class SimpleChoiceQuestionStatistics
 			AND 	questions.question_id = score.question_id 
 			AND 	obj_id = %s 
 			GROUP BY user_id',
-			['integer'], [(int)$oid]
-		);
+            ['integer'], [(int)$oid]
+        );
 
-		$results = [];
-		$counter = 0;
-		while($row = $ilDB->fetchAssoc($res))
-		{
-			$results[$counter]['name']       = ilUserUtil::getNamePresentation($row['user_id']);
-			$results[$counter]['user_id']    = $row['user_id'];
-			$results[$counter]['answered']   = $this->getAnsweredQuestionsFromUser($oid, $row['user_id']);
-			$results[$counter]['correct']    = $row['points'];
-			$results[$counter]['neutral_questions']    = $row['neutral'];
-			$answer_with_point               = $questions_for_object - $row['neutral'];
-			if($answer_with_point == 0)
-			{
-				$percentage = 100;
-			}
-			else
-			{
-				$percentage = round(($row['points'] / ($answer_with_point)) * 100, 2);
-			}
-			$results[$counter]['percentage'] = $percentage;
-			$counter++;
-		}
+        $results = [];
+        $counter = 0;
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            $results[$counter]['name']       = ilUserUtil::getNamePresentation($row['user_id']);
+            $results[$counter]['user_id']    = $row['user_id'];
+            $results[$counter]['answered']   = $this->getAnsweredQuestionsFromUser($oid, $row['user_id']);
+            $results[$counter]['correct']    = $row['points'];
+            $results[$counter]['neutral_questions']    = $row['neutral'];
+            $answer_with_point               = $questions_for_object - $row['neutral'];
+            if($answer_with_point == 0)
+            {
+                $percentage = 100;
+            }
+            else
+            {
+                $percentage = round(($row['points'] / ($answer_with_point)) * 100, 2);
+            }
+            $results[$counter]['percentage'] = $percentage;
+            $counter++;
+        }
 
-		return $results;
-	}
+        return $results;
+    }
 
-    /**
-	 * @param $oid
-	 * @throws ilWACException
-	 * @return array<string, mixed[]>
-	 */
-	public function getScoreForAllQuestionsAndAllUser(int $oid): array
-	{
-		$questions_list  = $this->getQuestionIdsForObject($oid);
-		$questions_count = $this->getQuestionCountForObject($oid);
+    public function getScoreForAllQuestionsAndAllUserOrg(int $oid): array
+    {
+        $questions_list  = $this->getQuestionIdsForObject($oid);
+        $questions_count = $this->getQuestionCountForObject($oid);
         global $ilDB;
 
-		$res          = $ilDB->queryF('
+        $res          = $ilDB->queryF('
 			SELECT score.user_id, points,questions.question_id, neutral_answer
 			FROM 	rep_robj_xvid_comments comments, 
 				 	rep_robj_xvid_question questions, 
@@ -88,77 +83,77 @@ class SimpleChoiceQuestionStatistics
 			WHERE 	comments.comment_id   = questions.comment_id 
 			AND 	questions.question_id = score.question_id 
 			AND 	obj_id = %s  ORDER BY comments.comment_time',
-			['integer'], [(int)$oid]
-		);
-		$return_value = ['users' => [], 'question' => [], 'answers' => []];
-		$return_sums  = [];
-		$neutral = 0;
-		while($row = $ilDB->fetchAssoc($res))
-		{
-			$name = ilUserUtil::getNamePresentation($row['user_id']);
-			$id                                 = $row['user_id'];
-			$return_value['users'][$id]['name'] = $name;
-			if(!isset($return_sums[$id]['answered']))
-			{
-				$return_sums[$id]['answered'] = 0;
-				$return_sums[$id]['sum']      = 0;
-			}
-			foreach($questions_list as $key => $value)
-			{
-				if($key == $row['question_id'])
-				{
-					if($row['neutral_answer'] == 1)
-					{
-						$points = 0;
-						$return_value['users'][$id][$key] = 1;
-						$neutral++;
-					}
-					else
-					{
-						$points = $row['points'];
-						$return_value['users'][$id][$key] = $points;
-					}
+            ['integer'], [(int)$oid]
+        );
+        $return_value = ['users' => [], 'question' => [], 'answers' => []];
+        $return_sums  = [];
+        $neutral = 0;
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            $name = ilUserUtil::getNamePresentation($row['user_id']);
+            $id                                 = $row['user_id'];
+            $return_value['users'][$id]['name'] = $name;
+            if(!isset($return_sums[$id]['answered']))
+            {
+                $return_sums[$id]['answered'] = 0;
+                $return_sums[$id]['sum']      = 0;
+            }
+            foreach($questions_list as $key => $value)
+            {
+                if($key == $row['question_id'])
+                {
+                    if($row['neutral_answer'] == 1)
+                    {
+                        $points = 0;
+                        $return_value['users'][$id][$key] = 1;
+                        $neutral++;
+                    }
+                    else
+                    {
+                        $points = $row['points'];
+                        $return_value['users'][$id][$key] = $points;
+                    }
 
-					$return_sums[$id]['answered']++;
-					$return_sums[$id]['sum'] += $points;
-					$return_value['question'][$key]   = $value;
+                    $return_sums[$id]['answered']++;
+                    $return_sums[$id]['sum'] += $points;
+                    $return_value['question'][$key]   = $value;
 
-				}
-				if(!isset($return_value['users'][$id][$key]))
-				{
-					$return_value['users'][$id][$key] = '-';
-					$return_value['question'][$key]   = $value;
-				}
-			}
-		}
-		foreach($return_sums as $key => $value)
-		{
-			if($value['answered'] > 0)
-			{
+                }
+                if(!isset($return_value['users'][$id][$key]))
+                {
+                    $return_value['users'][$id][$key] = '-';
+                    $return_value['question'][$key]   = $value;
+                }
+            }
+        }
+        foreach($return_sums as $key => $value)
+        {
+            if($value['answered'] > 0)
+            {
                 $percentage = round(($value['answered'] / $questions_count) * 100, 2);
-				$return_value['users'][$key]['answerd'] = $percentage . '%';
-			}
-			else
-			{
-				$return_value['users'][$key]['answerd'] = '0%';
-			}
+                $return_value['users'][$key]['answerd'] = $percentage . '%';
+            }
+            else
+            {
+                $return_value['users'][$key]['answerd'] = '0%';
+            }
 
-			if($value['answered'] > 0 && ($questions_count - $neutral) > 0)
-			{
+            if($value['answered'] > 0 && ($questions_count - $neutral) > 0)
+            {
                 $percentage = round(($value['sum'] / ($questions_count - $neutral)) * 100, 2);
                 if($percentage > 100) {
                     $percentage = 100;
                 }
-				$return_value['users'][$key]['sum'] = $percentage . '%';
-			}
-			else
-			{
-				$return_value['users'][$key]['sum'] = '0%';
-			}
+                $return_value['users'][$key]['sum'] = $percentage . '%';
+            }
+            else
+            {
+                $return_value['users'][$key]['sum'] = '0%';
+            }
 
-		}
+        }
 
-		$res = $ilDB->queryF('SELECT answers.user_id, text.answer, text.correct, answers.answer_id, questions.question_id
+        $res = $ilDB->queryF('SELECT answers.user_id, text.answer, text.correct, answers.answer_id, questions.question_id
 			FROM 	rep_robj_xvid_question questions,
 					rep_robj_xvid_answers answers,
 					rep_robj_xvid_comments comments,
@@ -167,161 +162,331 @@ class SimpleChoiceQuestionStatistics
 			AND 	comments.comment_id   = questions.comment_id 
 			AND 	text.answer_id = answers.answer_id
 			AND 	obj_id = %s  ORDER BY comments.comment_time',
-			['integer'], [(int)$oid]);
-		while($row = $ilDB->fetchAssoc($res))
-		{
+            ['integer'], [(int)$oid]);
+        while($row = $ilDB->fetchAssoc($res))
+        {
             if(isset($return_value['answers'][$row['user_id']])) {
                 $return_value['answers'][$row['user_id']][$row['question_id']] .= chr(13) . $row['answer'];
             }
 
-		}
-		return $return_value;
-	}
+        }
+        return $return_value;
+    }
 
-	/**
-	 * @return array<int|string, mixed>
-	 */
-	public function getQuestionIdsForObject(int $oid): array
-	{
+    /**
+     * @param $oid
+     * @throws ilWACException
+     * @return array<string, mixed[]>
+     */
+    public function getScoreForAllQuestionsAndAllUser(int $oid): array
+    {
         global $ilDB;
 
-		$result_set = [];
-		$res        = $ilDB->queryF(
-			'SELECT question_id, comment_title FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
-					 WHERE comments.comment_id = questions.comment_id AND  is_interactive = 1 AND obj_id = %s ORDER BY comment_time',
-			['integer'],
-			[(int)$oid]
-		);
-		while($row = $ilDB->fetchAssoc($res))
-		{
-			$title = $row['comment_title'];
-			if($title == null)
-			{
-				$title = $row['question_id'];
-			}
-			$result_set[$row['question_id']] = $title;
-		}
-		return $result_set;
-	}
+        $questions_list  = $this->getQuestionIdsForObject($oid);
+        $questions_count = $this->getQuestionCountForObject($oid);
+        $answerable = $this->getAnswerableQuestionCountForObject($oid);
 
-	/**
-	 * @param int $oid object_id
-	 * @return array<int, array{question_id: int|string, comment_id: mixed, comment_title: mixed, answered: int, correct: string|float|int, neutral_question: mixed, percentage: int|string|float}>
-	 */
-	public function getQuestionsOverview(int $oid): array
-	{
-        global $ilDB;
-
-		$res       = $ilDB->queryF(
-			'SELECT questions.question_id, questions.neutral_answer, score.user_id, score.points, comments.comment_id, comments.comment_title
-			FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
-			LEFT JOIN rep_robj_xvid_score score ON questions.question_id = score.question_id
-			WHERE comments.comment_id = questions.comment_id
-			AND is_interactive =1
-			AND obj_id = %s',
-			['integer'],
-			[(int)$oid]
-		);
-		$questions = [];
+        $res          = $ilDB->queryF('
+			SELECT score.user_id, points,questions.question_id, neutral_answer
+			FROM 	rep_robj_xvid_comments comments, 
+				 	rep_robj_xvid_question questions, 
+				 	rep_robj_xvid_score score  
+			WHERE 	comments.comment_id   = questions.comment_id 
+			AND 	questions.question_id = score.question_id 
+			AND 	obj_id = %s  ORDER BY comments.comment_time',
+            ['integer'], [(int)$oid]
+        );
+        $return_value = ['users' => [], 'question' => [], 'answers' => []];
+        $sort_new = [];
         while($row = $ilDB->fetchAssoc($res))
         {
-            if($row['points'] == null)
+            $name = ilUserUtil::getNamePresentation($row['user_id']);
+            $id                                 = $row['user_id'];
+            $return_value['users'][$id]['id']   = $id;
+            $return_value['users'][$id]['name'] = $name;
+            if(!isset($sort_new[$id]['answered']))
             {
-                $questions[$row['question_id']]['answered'] = 0;
-                $questions[$row['question_id']]['correct']  = 0;
+                $sort_new[$id]['answered_correct']   = 0;
+                $sort_new[$id]['answered_wrong']     = 0;
+                $sort_new[$id]['answered_neutral']   = 0;
+                $sort_new[$id]['answered']           = 0;
             }
-            else if($row['points'] !== null)
-            {
-                if( ! array_key_exists($row['question_id'], $questions)) {
-                    $questions[$row['question_id']]['answered'] = 1;
-                    $questions[$row['question_id']]['correct']  = 0;
+
+            $qid = $row['question_id'];
+            $type = $questions_list[$qid]['type'];
+
+            $sort_new[$id]['answered']++;
+
+            if($row['neutral_answer'] == 1 || $type == 2) {
+                $sort_new[$id]['answered_neutral']++;
+            } else {
+                $points = $row['points'];
+                if($points >= 1) {
+                    $sort_new[$id]['answered_correct']++;
+                } else {
+                    $sort_new[$id]['answered_wrong']++;
                 }
+            }
+        }
+
+        foreach($sort_new as $key => $value)
+        {
+            if($value['answered'] > 0)
+            {
+                if($answerable > 0) {
+                    $percentage = floor(( ($value['answered_correct']) / $answerable) * 100);
+                } else {
+                    $percentage = 0;
+                }
+
+                $return_value['users'][$key]['total'] = $value['answered'] . ' / ' . $questions_count;
+                $return_value['users'][$key]['correct'] = $value['answered_correct'];
+                $return_value['users'][$key]['wrong'] = $value['answered_wrong'];
+                $return_value['users'][$key]['percentage_correct'] = $percentage . '%';
             }
             else
             {
-                $questions[$row['question_id']]['answered']++;
-                $questions[$row['question_id']]['correct'] += $row['points'];
+                $return_value['users'][$key]['percentage_correct'] = '0%';
+                $return_value['users'][$key]['total'] = 0;
+                $return_value['users'][$key]['correct'] = '-';
+                $return_value['users'][$key]['wrong'] = '-';
             }
-            $questions[$row['question_id']]['comment_id']    = $row['comment_id'];
-            $questions[$row['question_id']]['comment_title'] = $row['comment_title'];
-            $questions[$row['question_id']]['neutral_answer'] = $row['neutral_answer'];
+            $return_value['users'][$key]['neutral_reflection'] = $questions_count - $answerable;
+            $return_value['users'][$key]['evaluable_questions'] = $value['answered_correct'] + $value['answered_wrong'] . ' / ' . $answerable;
+        }
+
+        $res = $ilDB->queryF('SELECT answers.user_id, text.answer, text.correct, answers.answer_id, questions.question_id
+			FROM 	rep_robj_xvid_question questions,
+					rep_robj_xvid_answers answers,
+					rep_robj_xvid_comments comments,
+					rep_robj_xvid_qus_text text
+			WHERE   questions.question_id = answers.question_id
+			AND 	comments.comment_id   = questions.comment_id 
+			AND 	text.answer_id = answers.answer_id
+			AND 	obj_id = %s  ORDER BY comments.comment_time',
+            ['integer'], [(int)$oid]);
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            if(isset($return_value['answers'][$row['user_id']])) {
+                $return_value['answers'][$row['user_id']][$row['question_id']] .= chr(13) . $row['answer'];
+            }
 
         }
-		$results = [];
-		$counter = 0;
-		foreach($questions as $key => $value)
-		{
-			$results[$counter]['question_id']   = $key;
-			$results[$counter]['comment_id']    = $value['comment_id'];
-			$results[$counter]['comment_title'] = $value['comment_title'];
-			$results[$counter]['answered']      = $value['answered'];
-			$results[$counter]['correct']       = $value['correct'];
-			$results[$counter]['neutral_question'] = $value['neutral_answer'];
-			if($value['neutral_answer'] == 1)
-			{
-				$results[$counter]['percentage'] = '';
-				$results[$counter]['correct'] = '';
-			}
-			else
-			{
-				if($value['answered'] > 0)
-				{
-					$results[$counter]['percentage'] = round(($value['correct'] / $value['answered']) * 100, 2);
-                }
-				else
-				{
-					$results[$counter]['percentage'] = 0;
-				}
-			}
+        return $return_value;
+    }
 
-			
-			$counter++;
-		}
-		return $results;
-	}
-
-	/**
-	 * @param $oid
-	 * @param $uid
-	 */
-	public function getAnsweredQuestionsFromUser($oid, $uid): int
-	{
+    /**
+     * @return array<int|string, mixed>
+     */
+    public function getQuestionIdsForObject(int $oid): array
+    {
         global $ilDB;
 
-		$res = $ilDB->queryF(
-			'SELECT count(score.question_id)  count FROM rep_robj_xvid_comments  comments, 
+        $result_set = [];
+        $res        = $ilDB->queryF(
+            'SELECT question_id, type, comment_title FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
+					 WHERE comments.comment_id = questions.comment_id AND  is_interactive = 1 AND obj_id = %s ORDER BY comment_time',
+            ['integer'],
+            [(int)$oid]
+        );
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            $title = $row['comment_title'];
+            if($title == null)
+            {
+                $title = $row['question_id'];
+            }
+            $result_set[$row['question_id']] = ['title' => $title, 'type' => $row['type']];
+        }
+        return $result_set;
+    }
+
+    public function getAnswerableQuestionCountForObject(int $oid): int
+    {
+        $questions = $this->getQuestionTitleAndType($oid);
+
+        $answerable = 0;
+        foreach($questions as $key => $value)
+        {
+            if($value['neutral_answer'] == 1 || $value['type'] == 2) {
+                continue;
+            } else {
+                $answerable++;
+            }
+        }
+        return $answerable;
+    }
+
+    /**
+     * @param int $oid object_id
+     * @return array<int, array{question_id: int|string, comment_id: mixed, comment_title: mixed, answered: int, correct: string|float|int, neutral_question: mixed, percentage: int|string|float}>
+     */
+    public function getQuestionsOverview(int $oid): array
+    {
+        $points = $this->getCorrectAnswersByQuestion($oid);
+        $questions = $this->getQuestionTitleAndType($oid);
+
+        $results = [];
+        foreach($questions as $key => $value)
+        {
+            $results[$key]['question_id']   = $key;
+            $results[$key]['id']            = $value['comment_id'];
+            $results[$key]['title']         = $value['comment_title'];
+            $results[$key]['type']          = $value['type'];
+            $results[$key]['type_txt']      = xvidUtils::replaceQuestionTypeWithLang((int) $value['type']);
+            $results[$key]['neutral_question'] = $value['neutral_answer'];
+            $results[$key]['answered_by_user'] = $points[$key]['answered'];
+            $results[$key]['correct_answered_by_user'] = $points[$key]['correct'];
+            $results[$key]['correct_percentage'] = 0;
+
+            if($value['neutral_answer'] == 1 || $value['type'] == 2)
+            {
+                $results[$key]['correct_percentage'] = '-';
+                $results[$key]['correct_answered_by_user'] = '-';
+            }
+        }
+
+        $results = $this->calculateResults($results, $points);
+
+        return $results;
+    }
+
+    /**
+     * @param int           $oid
+     * @return array<int, array{answered: int, correct: int}>
+     */
+    protected function getCorrectAnswersByQuestion(int $oid) : array
+    {
+        global $ilDB;
+
+        $res = $ilDB->queryF(
+            'SELECT questions.question_id, score.user_id, score.points, comments.comment_id, comments.comment_title
+			FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
+			LEFT JOIN rep_robj_xvid_score score ON questions.question_id = score.question_id
+			WHERE comments.comment_id = questions.comment_id
+			AND is_interactive = 1
+			AND obj_id = %s',
+            ['integer'],
+            [(int) $oid]
+        );
+
+        $points = [];
+
+        while ($row = $ilDB->fetchAssoc($res)) {
+            $qid = $row['question_id'];
+            if (!isset($points[$qid]['answered'])) {
+                $points[$qid]['answered'] = 0;
+                $points[$qid]['correct'] = 0;
+            }
+
+            if ($row['points'] !== null) {
+                $points[$qid]['answered']++;
+            }
+            if ($row['points'] === 1) {
+                $points[$qid]['correct']++;
+            }
+        }
+        return $points;
+    }
+
+    /**
+     * @param int           $oid
+     * @return array
+     */
+    protected function getQuestionTitleAndType(int $oid) : array
+    {
+        global $ilDB;
+
+        $res = $ilDB->queryF(
+            'SELECT questions.question_id, questions.type, questions.neutral_answer, score.user_id, score.points, comments.comment_id, comments.comment_title
+			FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
+			LEFT JOIN rep_robj_xvid_score score ON questions.question_id = score.question_id
+			WHERE comments.comment_id = questions.comment_id
+			AND is_interactive = 1
+			AND obj_id = %s',
+            ['integer'],
+            [(int) $oid]
+        );
+
+        $questions = [];
+
+        while ($row = $ilDB->fetchAssoc($res)) {
+            $qid = $row['question_id'];
+            $questions[$qid]['comment_id'] = $row['comment_id'];
+            $questions[$qid]['comment_title'] = $row['comment_title'];
+            $questions[$qid]['neutral_answer'] = $row['neutral_answer'];
+            $questions[$qid]['type'] = (int) $row['type'];
+
+        }
+
+        return $questions;
+    }
+
+    /**
+     * @param array $results
+     * @param array $points
+     * @return array
+     */
+    protected function calculateResults(array $results, array $points) : array
+    {
+        foreach ($results as $key => $value) {
+            if ($value['neutral_question'] == 1 || $value['type'] == 2) {
+                $results[$key]['correct_percentage'] = '-';
+            } else {
+                $correct = (int) $value['correct_answered_by_user'];
+                $qid = (int) $value['question_id'];
+                if ($correct === 0) {
+                    $results[$key]['correct_percentage'] = '0%';
+                } else {
+                    $results[$key]['correct_percentage'] = ($correct / $points[$qid]['answered']) * 100 . '%';
+                }
+            }
+        }
+        return $results;
+    }
+
+    /**
+     * @param $oid
+     * @param $uid
+     */
+    public function getAnsweredQuestionsFromUser($oid, $uid): int
+    {
+        global $ilDB;
+
+        $res = $ilDB->queryF(
+            'SELECT count(score.question_id)  count FROM rep_robj_xvid_comments  comments, 
 							rep_robj_xvid_question questions, rep_robj_xvid_score  score
 					 WHERE comments.comment_id = questions.comment_id AND questions.question_id = score.question_id 
 					 		AND is_interactive = 1 AND obj_id = %s AND score.user_id = %s',
-			['integer', 'integer'],
-			[(int)$oid, $uid]
-		);
-		$row = $ilDB->fetchAssoc($res);
-		return (int)$row['count'];
-	}
+            ['integer', 'integer'],
+            [(int)$oid, $uid]
+        );
+        $row = $ilDB->fetchAssoc($res);
+        return (int)$row['count'];
+    }
 
-	/**
-	 * @param $question_id
-	 * @return array<int|string, mixed>
-	 */
-	public function getResponseFrequency($question_id): array
-	{
+    /**
+     * @param $question_id
+     * @return array<int|string, mixed>
+     */
+    public function getResponseFrequency($question_id): array
+    {
         global $ilDB;
 
-		$res          = $ilDB->queryF(
-			'SELECT rep_robj_xvid_answers.answer_id, count(rep_robj_xvid_answers.answer_id) AS counter FROM rep_robj_xvid_question
+        $res          = $ilDB->queryF(
+            'SELECT rep_robj_xvid_answers.answer_id, count(rep_robj_xvid_answers.answer_id) AS counter FROM rep_robj_xvid_question
 				LEFT JOIN rep_robj_xvid_qus_text ON rep_robj_xvid_qus_text.question_id = rep_robj_xvid_question.question_id 
 				RIGHT JOIN rep_robj_xvid_answers ON rep_robj_xvid_qus_text.answer_id = rep_robj_xvid_answers.answer_id
 				WHERE  rep_robj_xvid_question.question_id = %s GROUP BY rep_robj_xvid_answers.answer_id',
-			['integer'],
-			[(int)$question_id]
-		);
-		$answer_stats = [];
-		while($row = $ilDB->fetchAssoc($res))
-		{
-			$answer_stats[$row['answer_id']] = $row['counter'];
-		}
-		return $answer_stats;
+            ['integer'],
+            [(int)$question_id]
+        );
+        $answer_stats = [];
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            $answer_stats[$row['answer_id']] = $row['counter'];
+        }
+        return $answer_stats;
 
-	}
+    }
 }
