@@ -324,19 +324,19 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 
 			$.each(response_frequency, function (l, value) {
 				if(answers_count[l] === undefined) {
-					 answers_count[l] = parseInt(value, 10);
-					 if(l === 'max_user_answers') {
-						 max_user_answers = answers_count[l];
-					 }
+					answers_count[l] = parseInt(value, 10);
+					if(l === 'max_user_answers') {
+						max_user_answers = answers_count[l];
+					}
 				}
 			});
-			console.log(max_user_answers)
 
 			$.each($('.rf_listener'), function () {
 				$(this).removeClass('ilNoDisplay');
 				$(this).html('<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>');
 			});
 			$.each(response_frequency, function (l, value) {
+				console.log(value, l)
 				if(max_user_answers === 0) {
 					percentage = 0;
 				} else {
