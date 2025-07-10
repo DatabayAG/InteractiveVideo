@@ -157,6 +157,8 @@ class SimpleChoiceQuestionScoring
         $scoring         = new SimpleChoiceQuestionStatistics();
         $evaluable_answer = 0;
         $correct_answer = 0;
+        $neutral = xvidUtils::getTextFromLangVariable('neutral_string');
+        $answered = xvidUtils::getTextFromLangVariable('answered');
 
 		while($row = $ilDB->fetchAssoc($res))
 		{
@@ -165,6 +167,7 @@ class SimpleChoiceQuestionScoring
             $question_points = $this->getScoreForQuestionOnUserId($qid);
             $question_points_txt = $this->translateScoreToTxt($question_points);
 			$results[$counter]['type'] = xvidUtils::replaceQuestionTypeWithLang((int) $row['type']);
+
 			$results[$counter]['title'] = $row['comment_title'];
 			$results[$counter]['neutral_answer'] = $row['neutral_answer'];
 
@@ -173,8 +176,9 @@ class SimpleChoiceQuestionScoring
             $results[$counter]['points']  = $question_points;
 
 			if($results[$counter]['neutral_answer'] == 1 || (int) $row['type'] === 2) {
-				$results[$counter]['points_txt']  = '-';
-				$results[$counter]['points']  = '-';
+				$results[$counter]['points_txt']  = $answered;
+				$results[$counter]['points']  = '';
+                $results[$counter]['type'] .= ' ' . $neutral;
 
 			} else {
                 if($question_points === 1) {

@@ -146,4 +146,10 @@ class xvidUtils
         }
         return '-';
     }
+
+    public static function getTextFromLangVariable(string $string) : string
+    {
+        return ilInteractiveVideoPlugin::getInstance()->txt($string);
+
+    }
 }
