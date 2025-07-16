@@ -271,16 +271,24 @@ ytb_youtube_url#:#YouTube URL
 ytb_youtube_info#:#Please insert a YouTube URL.
 ytb#:#YouTube
 opc#:#Opencast
+opc_video#:#Opencast Video
 opc_id#:#Opencast Video Id
 opc_id_info#:#Opencast Video Id
 opc_selection_info#:#Opencast:
-opc_select_video#:#Select video
+opc_selection#:#Select video from opencast
+opc_selection_current#:#Currently selected video
+opc_select_video#:#Change video
 opc_insert#:#Insert Opencast video:
-opc_title#:#Title
-please_create_object_first#:#To use an Opencast video, you must first create an «Interactive Video» object. To do so, specify a title and click «Add Interactive Video».
+opc_title#:#Selected video:
+please_create_object_first#:#To use an Opencast video, you must first create an «Interactive Video» object. To do so, specify a title and click «Add Interactive Video». After this you can select a video.
+no_oc_video_selected#:#No opencast video selected. Please select an opencast video
 meo#:#Vimeo
 meo_vimeo_info#:#Please insert a Vimeo URL.
 meo_url#:#Vimeo URL
+back#:#Back
+date_txt#:#Date:
+presenter_txt#:#Presenter:
+serie_txt#:#Series:
 export_section#:#Export
 csv_export_delimiter#:#CSV export delimiter
 csv_export_delimiter_info#:#Change the default delimiter for CSV exports.

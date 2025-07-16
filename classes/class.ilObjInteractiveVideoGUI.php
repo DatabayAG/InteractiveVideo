@@ -165,7 +165,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$this->ctrl->forwardCommand($exp_gui);
 				break;
 			default:
-				switch($cmd)
+                $this->ctrl->setParameterByClass('ilObjInteractiveVideoGUI', 'obj_id', $this->obj_id);
+
+                switch($cmd)
 				{
 					case 'showLPUserDetails':
 					case 'showLPSummary':
@@ -176,6 +178,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					case 'updateLPUsers':
 						$ilTabs->setTabActive('learning_progress');
 						$this->$cmd();
+						break;
+                    case 'edit':
+                        $this->addSettingsTabs();
+                        $this->editProperties();
 						break;
 
 					case 'showTutorInsertForm':
@@ -204,7 +210,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                     $this->checkPermission('write');
 						$this->$cmd();
 						break;
-
+                    case 'addVideoSelectionForm':
+                        $this->checkPermission('write');
+                        $this->creation_mode = true;
+                        $this->$cmd();
+                        break;
 					case 'redrawHeaderAction':
 					case 'addToDesk':
 					case 'removeFromDesk':
@@ -222,37 +232,38 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 						$this->checkPermission('read');
 						$this->$cmd();
 						break;
+
 					default:
-						if(method_exists($this, $cmd))
+                        $get = $this->http->wrapper()->query();
+
+                        if($get->has('xvid_plugin_ctrl'))
+                        {
+                            $xvid_plugin_ctrl = $get->retrieve('xvid_plugin_ctrl', $this->refinery->kindlyTo()->string());
+
+                            if($xvid_plugin_ctrl !== '') {
+                                $dir = ltrim($xvid_plugin_ctrl,'il');
+                                $dir = rtrim($dir,'GUI');
+                                $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $xvid_plugin_ctrl . '.php';
+                                if(file_exists($path)){
+                                    global $DIC;
+                                    $class = new $xvid_plugin_ctrl($DIC);
+                                    if(method_exists($class, $cmd))
+                                    {
+                                        $class->{$cmd}();
+                                    }
+                                } else {
+                                    throw new ilException(sprintf("Unsupported plugin command %s in %s", $cmd, __METHOD__));
+                                }
+                            }
+                        } elseif(method_exists($this, $cmd))
 						{
 							$this->checkPermission('read');
 							$this->$cmd();
-						}
-						else
-						{
-                            $get = $this->http->wrapper()->query();
-                            if($get->has('xvid_plugin_ctrl')){
-                                $xvid_plugin_ctrl = $get->retrieve('xvid_plugin_ctrl', $this->refinery->kindlyTo()->string());
-                                $xvid_plugin_ctrl = ilInteractiveVideoPlugin::stripSlashesWrapping($xvid_plugin_ctrl);
-                            }
-						    $dir = ltrim($xvid_plugin_ctrl,'il');
-                            $dir = rtrim($dir,'GUI');
-						    $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $xvid_plugin_ctrl . '.php';
-                            if(file_exists($path)){
-                                global $DIC;
-						        $class = new $xvid_plugin_ctrl($DIC);
-                                if(method_exists($class, $cmd))
-                                {
-                                    $class->{$cmd}();
-                                }
-                            }
-                             else {
-                                throw new ilException(sprintf("Unsupported plugin command %s ind %s", $cmd, __METHOD__));
-                            }
-						}
+						} else {
+                            throw new ilException(sprintf("Unsupported plugin command %s in %s", $cmd, __METHOD__));
+                        }
 						break;
 				}
-				break;
 		}
 
 		$this->addHeaderAction();
@@ -1018,10 +1029,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
     protected function initEditCustomForm(ilPropertyFormGUI $a_form): void
 	{
-		/**
-		 * @var $ilTabs ilTabsGUI
-		 */
-		global $ilTabs;
+        global $ilTabs;
+
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('editProperties');
 
@@ -1219,14 +1228,16 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function editProperties(): void
 	{
 	    global $DIC;
+
         $get = $this->http->wrapper()->query();
-        $customJS = '';
+
         if($get->has('xvid_custom_js')){
             $customJS = $get->retrieve('xvid_custom_js', $this->refinery->kindlyTo()->string());
             $customJS = ilInteractiveVideoPlugin::stripSlashesWrapping($customJS);
+            $DIC->ui()->mainTemplate()->addOnLoadCode('"' . $customJS . '"');
         }
-        $DIC->ui()->mainTemplate()->addOnLoadCode('"' . $customJS . '"');
-		$this->edit();
+        $DIC->ctrl()->clearParameters(new ilObjInteractiveVideoGUI());
+        $this->edit();
 	}
 
 	protected function getSubtitleDataAndFilesForJson(){
@@ -1253,6 +1264,43 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return ilFileUtils::getWebspaceDir() . '/xvid/xvid_' . $this->object->getId() . '/subtitles/';
 	}
 
+    public function addVideoSelectionForm(): void
+    {
+        $get = $this->http->wrapper()->query();
+        $cmd = 'getTable';
+        if($get->has('xvid_plugin_ctrl')){
+            $xvid_plugin_ctrl = $get->retrieve('xvid_plugin_ctrl', $this->refinery->kindlyTo()->string());
+            $xvid_plugin_ctrl = ilInteractiveVideoPlugin::stripSlashesWrapping($xvid_plugin_ctrl);
+
+            $dir = ltrim($xvid_plugin_ctrl,'il');
+            $dir = rtrim($dir,'GUI');
+            $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $xvid_plugin_ctrl . '.php';
+            if(file_exists($path)){
+                global $DIC;
+                $class = new $xvid_plugin_ctrl($DIC);
+                if(method_exists($class, $cmd))
+                {
+                    $class->{$cmd}();
+                }
+            }
+        }
+
+    }
+
+    public function addSettingsTabs(bool $is_file_based = false){
+        /**
+         * @var $ilTabs ilTabsGUI
+         */
+        global $ilTabs;
+
+        $ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
+
+        if($is_file_based)
+        {
+            $ilTabs->addSubTab('addSubtitle', $this->plugin->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
+        }
+    }
+
     /**
      * @throws ilCtrlException
      */
@@ -1263,8 +1311,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $ilTabs, $tpl;
 
-		$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
-		$ilTabs->addSubTab('addSubtitle', $this->plugin->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
+        $this->addSettingsTabs();
 
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('addSubtitle');
@@ -1488,7 +1535,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		try
 		{
-			parent::saveObject();
+            $this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'new_type', 'xvid');
+            $this->validateCustomCreateFields();
+            parent::saveObject();
 		}
 		catch(Exception $e)
 		{
@@ -1511,6 +1560,29 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->ctrl->redirectByClass('ilrepositorygui');
 		}
 	}
+
+    /**
+     * @throws Exception
+     */
+    protected function validateCustomCreateFields() {
+        $factory = new ilInteractiveVideoSourceFactory();
+
+        $post = $this->http->wrapper()->post();
+        if($post->has('source_id')) {
+            $source_id = $post->retrieve('source_id', $this->refinery->kindlyTo()->string());
+            $source = $factory->getVideoSourceObject($source_id);
+            if(method_exists($source, 'validateCreateForm')) {
+                if(! $source->validateCreateForm()) {
+                    throw new Exception('No source selected.');
+                }
+            }
+
+        } else {
+            throw new Exception('No source selected.');
+        }
+
+
+    }
 
     /**
      * @param ilPropertyFormGUI $a_form
@@ -1626,7 +1698,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			if($ilCtrl->getCmd() === 'editProperties')
 			{
 				$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
-				if( ! $this->object->getVideoSourceObject($this->object->getSourceId())->hasOwnPlayer()) {
+                if($this->object->getVideoSourceObject($this->object->getSourceId())->isFileBased()) {
 					$ilTabs->addSubTab('addSubtitle', $this->plugin->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
 				}
 			}
@@ -2629,7 +2701,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			#$this->ctrl->redirect($this, 'showTutorInsertCommentForm');
             $this->showTutorInsertCommentForm();
 		}
-        
+
 	}
 
     /**
@@ -3852,4 +3924,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             ilObjectGUI::_gotoRepositoryRoot();
 		}
 	}
+
+    protected function afterSave(ilObject $new_object): void
+    {
+        global $DIC;
+        $post = $DIC->http()->wrapper()->post();
+        if($post->has('source_id')) {
+            $source_id = $post->retrieve('source_id', $DIC->refinery()->kindlyTo()->string());
+            if($source_id === 'opc') {
+                $DIC->ctrl()->setParameter($this, 'ref_id', $new_object->getRefId());
+                $DIC->ctrl()->setParameter(new ilObjInteractiveVideoGUI(), 'xvid_plugin_ctrl', 'ilInteractiveVideoOpenCastGUI');
+                $DIC->ctrl()->setParameter(new ilObjInteractiveVideoGUI(), 'xvid_source_id', $source_id);
+                $DIC->ctrl()->redirectByClass(['ilobjplugindispatchgui', 'ilObjInteractiveVideoGUI'], 'update');
+            }
+        }
+        parent::afterSave($new_object);
+    }
 }
