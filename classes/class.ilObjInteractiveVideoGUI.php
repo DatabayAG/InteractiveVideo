@@ -257,8 +257,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                             break;
                         }
 					default:
-
-						if(method_exists($this, $cmd))
+                        $get = $this->http->wrapper()->query();
+						if($cmd !== 'update' && method_exists($this, $cmd))
 						{
 							$this->checkPermission('read');
                             if ($render_default) {
@@ -266,28 +266,27 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                                 break;
                             }
 						}
-						else
+						elseif($get->has('xvid_plugin_ctrl'))
 						{
-                            $get = $this->http->wrapper()->query();
-                            if($get->has('xvid_plugin_ctrl')){
                                 $xvid_plugin_ctrl = $get->retrieve('xvid_plugin_ctrl', $this->refinery->kindlyTo()->string());
                                 $xvid_plugin_ctrl = ilInteractiveVideoPlugin::stripSlashesWrapping($xvid_plugin_ctrl);
-                            }
-						    $dir = ltrim($xvid_plugin_ctrl,'il');
-                            $dir = rtrim($dir,'GUI');
-						    $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $xvid_plugin_ctrl . '.php';
-                            if(file_exists($path)){
-                                global $DIC;
-						        $class = new $xvid_plugin_ctrl($DIC);
-                                if(method_exists($class, $cmd))
-                                {
-                                    $class->{$cmd}();
+                                $dir = ltrim($xvid_plugin_ctrl,'il');
+                                $dir = rtrim($dir,'GUI');
+                                $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $xvid_plugin_ctrl . '.php';
+                                if(file_exists($path)){
+                                    global $DIC;
+                                    $class = new $xvid_plugin_ctrl($DIC);
+                                    if(method_exists($class, $cmd))
+                                    {
+                                        $class->{$cmd}();
+                                    }
                                 }
-                            }
-                             else {
-                                throw new ilException(sprintf("Unsupported plugin command %s ind %s", $cmd, __METHOD__));
-                            }
-						}
+                                else {
+                                    throw new ilException(sprintf("Unsupported plugin command %s ind %s", $cmd, __METHOD__));
+                                }
+						} else {
+                            $this->$cmd();
+                        }
 						break;
 				}
 				break;

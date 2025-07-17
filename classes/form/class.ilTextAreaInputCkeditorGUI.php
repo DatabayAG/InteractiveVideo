@@ -15,7 +15,7 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 		parent::__construct($a_title, $a_postvar);
 		$this->setType("textarea");
 		$this->setPurifier(new ilHtmlInteractiveVideoPostPurifier());
-		$this->usePurifier(true);
+		$this->usePurifier(false);
 	}
 
     /**
@@ -25,7 +25,7 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
      */
     public function insert(ilTemplate $a_tpl): void
 	{
-		$this->appendJavascriptFile();
+		self::appendJavascriptFile();
 		$ttpl = new ilTemplate("tpl.textarea_ckeditor.html", true, true, "Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/");
 
 		$ttpl->setVariable("PROPERTY_VALUE", ilLegacyFormElementsUtil::prepareFormOutput($this->getValue()));
@@ -36,7 +36,7 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 		$a_tpl->setVariable("PROP_GENERIC", $ttpl->get());
 		$a_tpl->parseCurrentBlock();
 	}
-	
+
 	public static function appendJavascriptFile(): void
 	{
 		/**
