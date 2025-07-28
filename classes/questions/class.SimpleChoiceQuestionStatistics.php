@@ -165,10 +165,15 @@ class SimpleChoiceQuestionStatistics
             ['integer'], [(int)$oid]);
         while($row = $ilDB->fetchAssoc($res))
         {
-            if(isset($return_value['answers'][$row['user_id']])) {
-                $return_value['answers'][$row['user_id']][$row['question_id']] .= chr(13) . $row['answer'];
+
+            if(! isset($return_value['answers'][$row['user_id']])) {
+                $return_value['answers'][$row['user_id']] = [];
+            }
+            if(! isset($return_value['answers'][$row['user_id']][$row['question_id']])) {
+                $return_value['answers'][$row['user_id']][$row['question_id']] = '';
             }
 
+            $return_value['answers'][$row['user_id']][$row['question_id']] .= chr(13) . $row['answer'];
         }
         return $return_value;
     }

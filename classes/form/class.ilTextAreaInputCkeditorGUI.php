@@ -15,7 +15,7 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 		parent::__construct($a_title, $a_postvar);
 		$this->setType("textarea");
 		$this->setPurifier(new ilHtmlInteractiveVideoPostPurifier());
-		$this->usePurifier(false);
+		$this->usePurifier(true);
 	}
 
     /**
