@@ -233,6 +233,7 @@ class SimpleChoiceQuestionStatistics
                 }
             }
 		}
+        $from = xvidUtils::getTextFromLangVariable('from');
 
 		foreach($sort_new as $key => $value)
 		{
@@ -244,7 +245,7 @@ class SimpleChoiceQuestionStatistics
                     $percentage = 0;
                 }
 
-				$return_value['users'][$key]['total'] = $value['answered'] . ' / ' . $questions_count;
+				$return_value['users'][$key]['total'] = $value['answered'] . ' ' . $from . ' '. $questions_count;
                 $return_value['users'][$key]['correct'] = $value['answered_correct'];
                 $return_value['users'][$key]['wrong'] = $value['answered_wrong'];
                 $return_value['users'][$key]['percentage_correct'] = $percentage . '%';
@@ -257,7 +258,7 @@ class SimpleChoiceQuestionStatistics
                 $return_value['users'][$key]['wrong'] = '-';
 			}
             $return_value['users'][$key]['neutral_reflection'] = $questions_count - $answerable;
-            $return_value['users'][$key]['evaluable_questions'] = $value['answered_correct'] + $value['answered_wrong'] . ' / ' . $answerable;
+            $return_value['users'][$key]['evaluable_questions'] = $value['answered_correct'] + $value['answered_wrong'] . ' ' . $from . ' '. $answerable;
 		}
 
 		$res = $ilDB->queryF('SELECT answers.user_id, text.answer, text.correct, answers.answer_id, questions.question_id
@@ -332,6 +333,7 @@ class SimpleChoiceQuestionStatistics
         $questions = $this->getQuestionTitleAndType($oid);
 
         $results = [];
+        $neutral = xvidUtils::getTextFromLangVariable('neutral_string');
 		foreach($questions as $key => $value)
 		{
 			$results[$key]['question_id']   = $key;
@@ -346,14 +348,13 @@ class SimpleChoiceQuestionStatistics
 
             if($value['neutral_answer'] == 1 || $value['type'] == 2)
 			{
-				$results[$key]['correct_percentage'] = '-';
-				$results[$key]['correct_answered_by_user'] = '-';
+				$results[$key]['correct_percentage'] = '';
+				$results[$key]['correct_answered_by_user'] = '';
+                $results[$key]['type_txt'] .= ' ' . $neutral;
 			}
 		}
 
-        $results = $this->calculateResults($results, $points);
-
-        return $results;
+        return $this->calculateResults($results, $points);
 	}
 
     /**
@@ -436,7 +437,7 @@ class SimpleChoiceQuestionStatistics
     {
         foreach ($results as $key => $value) {
             if ($value['neutral_question'] == 1 || $value['type'] == 2) {
-                $results[$key]['correct_percentage'] = '-';
+                $results[$key]['correct_percentage'] = '';
             } else {
                 $correct = (int) $value['correct_answered_by_user'];
                 $qid = (int) $value['question_id'];
@@ -478,6 +479,20 @@ class SimpleChoiceQuestionStatistics
 	{
         global $ilDB;
 
+        $res          = $ilDB->queryF(
+            'SELECT rep_robj_xvid_answers.user_id, question_id FROM rep_robj_xvid_answers
+                    WHERE rep_robj_xvid_answers.question_id = %s GROUP BY rep_robj_xvid_answers.user_id',
+            ['integer'],
+            [(int) $question_id]
+        );
+
+        $users_answered = [];
+
+        while($row = $ilDB->fetchAssoc($res))
+        {
+            $users_answered[] = $row['user_id'];
+        }
+        $max_count_user = count($users_answered);
 		$res          = $ilDB->queryF(
 			'SELECT rep_robj_xvid_answers.answer_id, count(rep_robj_xvid_answers.answer_id) AS counter FROM rep_robj_xvid_question
 				LEFT JOIN rep_robj_xvid_qus_text ON rep_robj_xvid_qus_text.question_id = rep_robj_xvid_question.question_id 
@@ -491,6 +506,7 @@ class SimpleChoiceQuestionStatistics
 		{
 			$answer_stats[$row['answer_id']] = $row['counter'];
 		}
+        $answer_stats['max_user_answers'] = $max_count_user;
 		return $answer_stats;
 
 	}
