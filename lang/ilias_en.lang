@@ -164,7 +164,8 @@ opc_id_info#:#Opencast Video Id
 opc_insert#:#Insert Opencast video:
 opc_select_video#:#Select video
 opc_selection_info#:#Opencast:
-opc_title#:#Title
+opc_title#:#Selected video
+opc_change#:#Change video
 percentage#:#Overall Percentage
 please_create_object_first#:#To use an Opencast video, you must first create an «Interactive Video» object. To do so, specify a title and click «Add Interactive Video».
 post#:#Post
@@ -297,3 +298,5 @@ answered_questions#:#Answered Questions
 from#:#from
 neutral_string#:#(neutral)
 answered#:#Answered
+opc_selection_current#:#Selected Video
+opc_selection#:#Select existing video from Opencast

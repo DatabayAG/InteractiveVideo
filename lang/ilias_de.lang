@@ -180,10 +180,11 @@ opc_id#:#Opencast Video Id
 opc_id_info#:#Opencast Video Id
 opc_insert#:#Video aus Opencast einfügen:
 opc_select_video#:#Video auswählen
+opc_change#:#Video ändern
 opc_selection_info#:#Opencast:
-opc_title#:#Titel
+opc_title#:#Ausgewähltes Video
 percentage#:#Prozent
-please_create_object_first#:#Um ein Opencast Video nutzen zu können, müssen Sie erst ein Objekt «Interaktives Video» anlegen. Geben Sie dazu einen Titel ein und klicken Sie auf «Neues Interaktives Video anlegen».
+please_create_object_first#:#Um ein Opencast Video nutzen zu können, müssen Sie erst ein Objekt «Interaktives Video» anlegen. Geben Sie dazu einen Titel ein und klicken Sie auf «Neues Interaktives Video anlegen». Sie können anschliessend ein Video auswählen.
 post#:#Posten
 private#:#privat
 process_header#:#Durchführung
@@ -312,3 +313,5 @@ answered_questions#:#Beantwortete Fragen
 from#:#von
 neutral_string#:#(neutral)
 answered#:#Beantwortet
+opc_selection_current#:#Aktuell ausgewähltes Video
+opc_selection#:#Bestehendes Video aus Opencast Video auswählen

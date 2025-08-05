@@ -3878,4 +3878,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             ilObjectGUI::_gotoRepositoryRoot();
 		}
 	}
+    protected function afterSave(ilObject $new_object): void
+    {
+        global $DIC;
+        $post = $DIC->http()->wrapper()->post();
+        if($post->has('source_id')) {
+            $source_id = $post->retrieve('source_id', $DIC->refinery()->kindlyTo()->string());
+            if($source_id === 'opc') {
+                $DIC->ctrl()->setParameter($this, 'ref_id', $new_object->getRefId());
+                $DIC->ctrl()->setParameter(new ilObjInteractiveVideoGUI(), 'xvid_plugin_ctrl', 'ilInteractiveVideoOpenCastGUI');
+                $DIC->ctrl()->setParameter(new ilObjInteractiveVideoGUI(), 'xvid_source_id', $source_id);
+                $DIC->ctrl()->redirectByClass(['ilobjplugindispatchgui', 'ilObjInteractiveVideoGUI'], 'update');
+            }
+        }
+        parent::afterSave($new_object);
+    }
+
 }
