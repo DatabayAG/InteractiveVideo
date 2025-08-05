@@ -337,6 +337,7 @@ class SimpleChoiceQuestionStatistics
 		{
 			$results[$key]['question_id']   = $key;
 			$results[$key]['id']            = $value['comment_id'];
+			$results[$key]['comments_time'] = xvidUtils::getTimeStringFromSeconds($value['comments_time']);
 			$results[$key]['title']         = $value['comment_title'];
 			$results[$key]['type']          = $value['type'];
 			$results[$key]['type_txt']      = xvidUtils::replaceQuestionTypeWithLang((int) $value['type']);
@@ -403,7 +404,7 @@ class SimpleChoiceQuestionStatistics
         global $ilDB;
 
         $res = $ilDB->queryF(
-            'SELECT questions.question_id, questions.type, questions.neutral_answer, score.user_id, score.points, comments.comment_id, comments.comment_title
+            'SELECT questions.question_id, questions.type, questions.neutral_answer, score.user_id, score.points, comments.comment_id, comments.comment_title, comments.comment_time
 			FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
 			LEFT JOIN rep_robj_xvid_score score ON questions.question_id = score.question_id
 			WHERE comments.comment_id = questions.comment_id
@@ -419,6 +420,7 @@ class SimpleChoiceQuestionStatistics
             $qid = $row['question_id'];
             $questions[$qid]['comment_id'] = $row['comment_id'];
             $questions[$qid]['comment_title'] = $row['comment_title'];
+            $questions[$qid]['comments_time'] = $row['comment_time'];
             $questions[$qid]['neutral_answer'] = $row['neutral_answer'];
             $questions[$qid]['type'] = (int) $row['type'];
 

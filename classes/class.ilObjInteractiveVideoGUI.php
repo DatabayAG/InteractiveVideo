@@ -212,7 +212,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 						{
 							$this->$cmd();
 						}
-						else  $this->editComments();
+						else {
+                            $this->editComments();
+                        }
 						break;
 
 					case 'updateProperties':

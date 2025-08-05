@@ -50,8 +50,6 @@ class SimpleChoiceQuestionsOverviewTableGUI implements DataRetrieval
             return $this->cached_records;
         }
 
-        $rows = [];
-
         $simple = new SimpleChoiceQuestionStatistics();
         $rows = $simple->getQuestionsOverview($this->parent_id);
 
@@ -113,6 +111,7 @@ class SimpleChoiceQuestionsOverviewTableGUI implements DataRetrieval
     private function getColumns(): array
     {
         return [
+            'comments_time' => $this->factory->table()->column()->text($this->lng->txt('time')),
             'title' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('question')),
             'type_txt' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('question_type')),
             'answered_by_user' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('answered_by_user')),
