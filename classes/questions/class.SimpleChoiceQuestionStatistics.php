@@ -73,6 +73,7 @@ class SimpleChoiceQuestionStatistics
     {
         $questions_list  = $this->getQuestionIdsForObject($oid);
         $questions_count = $this->getQuestionCountForObject($oid);
+        $answerable = $this->getAnswerableQuestionCountForObject($oid);
         global $ilDB;
 
         $res          = $ilDB->queryF('
@@ -102,20 +103,18 @@ class SimpleChoiceQuestionStatistics
             {
                 if($key == $row['question_id'])
                 {
-                    if($row['neutral_answer'] == 1)
+
+                    if($row['neutral_answer'] == 1 || $value['type'] === 2)
                     {
                         $points = 0;
-                        $return_value['users'][$id][$key] = 1;
-                        $neutral++;
                     }
                     else
                     {
                         $points = $row['points'];
                         $return_value['users'][$id][$key] = $points;
+                        $return_sums[$id]['answered']++;
+                        $return_sums[$id]['sum'] += $points;
                     }
-
-                    $return_sums[$id]['answered']++;
-                    $return_sums[$id]['sum'] += $points;
                     $return_value['question'][$key]   = $value;
 
                 }
@@ -128,9 +127,9 @@ class SimpleChoiceQuestionStatistics
         }
         foreach($return_sums as $key => $value)
         {
-            if($value['answered'] > 0)
+            if($value['answered'] > 0 && $answerable > 0)
             {
-                $percentage = round(($value['answered'] / $questions_count) * 100, 2);
+                $percentage = floor(($value['answered'] / $answerable) * 100);
                 $return_value['users'][$key]['answerd'] = $percentage . '%';
             }
             else
@@ -138,9 +137,9 @@ class SimpleChoiceQuestionStatistics
                 $return_value['users'][$key]['answerd'] = '0%';
             }
 
-            if($value['answered'] > 0 && ($questions_count - $neutral) > 0)
+            if($value['answered'] > 0 && $answerable > 0)
             {
-                $percentage = round(($value['sum'] / ($questions_count - $neutral)) * 100, 2);
+                $percentage = floor(($value['sum'] / ($answerable)) * 100);
                 if($percentage > 100) {
                     $percentage = 100;
                 }
@@ -257,7 +256,7 @@ class SimpleChoiceQuestionStatistics
                 $return_value['users'][$key]['correct'] = '-';
                 $return_value['users'][$key]['wrong'] = '-';
 			}
-            $return_value['users'][$key]['neutral_reflection'] = $questions_count - $answerable;
+            $return_value['users'][$key]['neutral_reflection'] = $value['answered_neutral'] ;
             $return_value['users'][$key]['evaluable_questions'] = $value['answered_correct'] + $value['answered_wrong'] . ' ' . $from . ' '. $answerable;
 		}
 
