@@ -138,6 +138,7 @@ class SimpleChoiceQuestionsUserTableGUI implements DataRetrieval
     private function getColumns(): array
     {
         return [
+            'comments_time' => $this->factory->table()->column()->text($this->lng->txt('time')),
             'title' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('question')),
             'type' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('question_type')),
             'points_txt' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('question_result')),

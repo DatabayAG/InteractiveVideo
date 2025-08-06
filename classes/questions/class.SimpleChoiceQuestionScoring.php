@@ -171,6 +171,7 @@ class SimpleChoiceQuestionScoring
 
 			$results[$counter]['title'] = $row['comment_title'];
 			$results[$counter]['neutral_answer'] = $row['neutral_answer'];
+            $results[$counter]['comments_time'] = xvidUtils::getTimeStringFromSeconds($row['comment_time']);
 
             $results[$counter]['answered'] = 0;
             $results[$counter]['points_txt']  = $question_points_txt;
