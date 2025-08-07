@@ -3104,13 +3104,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         if($post->has('comment_title')) {
             $comment_title = $post->retrieve('comment_title', $this->refinery->kindlyTo()->string());
         }
-        if($post->has('comment_text')) {
-            $comment_text = $post->retrieve('comment_text', $this->refinery->kindlyTo()->string());
+        if($post->has('question_text')) {
+            $question_text = $post->retrieve('question_text', $this->refinery->kindlyTo()->string());
         }
 
-		if($comment_id > 0 && $comment_title !== '' && $comment_text !== '' && !$chk = (SimpleChoiceQuestion::answerExists($comment_id)))
+		if($comment_id > 0 && $comment_title !== '' && $question_text !== '')
 		{
-			$this->updateQuestion();
+            if( !$chk = SimpleChoiceQuestion::answerExists($comment_id) ) {
+                $this->existingAnswersForAnswerOptions();
+                return;
+            }
+            $this->updateQuestion();
 		}
 		else
 		{
@@ -3125,6 +3129,35 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $tpl->setContent($form->getHTML());
 		}
 	}
+
+    private function existingAnswersForAnswerOptions() {
+        /**
+         * @var $tpl    ilTemplate
+         * @var $ilTabs ilTabsGUI
+         */
+        global $tpl, $ilTabs;
+        $form = $this->initQuestionForm();
+        $form->checkInput();
+        $confirm = new ilConfirmationGUI();
+        $confirm->setFormAction($this->ctrl->getFormAction($this, 'updateQuestion'));
+        $confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_update_question'));
+
+        $confirm->setCancel($this->lng->txt('cancel'), 'editComments');
+        $confirm->setConfirm($this->lng->txt('update'), 'updateQuestion');
+        global $DIC;
+        $form = $DIC->http()->request()->getParsedBody();
+        foreach($form as $key=>$value)
+        {
+            //@todo .... very quick ... very dirty ....
+            if($key != 'cmd')
+            {
+                $form_values[$key] = $value;
+            }
+        }
+        $confirm->addHiddenItem('form_values', serialize($form_values));
+        $confirm->addHiddenItem('form_files', serialize($_FILES));
+        $tpl->setContent($confirm->getHTML());
+    }
 
     /**
      * @throws ilCtrlException
