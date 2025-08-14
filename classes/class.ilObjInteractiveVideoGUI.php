@@ -3123,7 +3123,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $form->setValuesByPost();
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('err_check_input'));
             $this->appendCkEditorMathJaxSupportToForm($form);
-            $form->addCommandButton('updateQuestion', $this->lng->txt('insert'));
+            $form->addCommandButton('confirmUpdateQuestion', $this->lng->txt('update'));
             $form->addCommandButton('editComments', $this->lng->txt('cancel'));
             $this->addJavascriptAndCSSToTemplate($tpl);
             $tpl->setContent($form->getHTML());
