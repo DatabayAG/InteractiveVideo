@@ -41,6 +41,7 @@ class ilInteractiveVideoImporter extends ilXmlImporter
         global $tree, $ilDB;
 
         $in_course = false;
+        $create_object = false;
 		$this->init();
         $new_id = $a_mapping->getMapping('Services/Container', 'objs', $a_id);
 		if ($new_id != "")
@@ -57,6 +58,7 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 		else
 		{
 			$this->xvid_object = new ilObjInteractiveVideo();
+            $create_object = true;
         }
 
         $parser = new ilInteractiveVideoXMLParser($this->xvid_object, $this->getXmlFile());
@@ -66,6 +68,10 @@ class ilInteractiveVideoImporter extends ilXmlImporter
         $this->xvid_object = $parser->getObjInteractiveVideo();
         $factory = new ilInteractiveVideoSourceFactory();
         $source_obj = $factory->getVideoSourceObject($this->xvid_object->getSourceId());
+        if($create_object) {
+            $this->xvid_object->create();
+        }
+
         $source_obj->afterImportParsing($this->xvid_object->getId(), $this->import_directory);
         $comment_map = [];
         foreach($this->xvid_object->import_comment as $key => $comment)

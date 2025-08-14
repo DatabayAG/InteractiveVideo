@@ -1018,10 +1018,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		/**
 		 * @var $ilTabs ilTabsGUI
 		 */
-		global $ilTabs;
+		global $ilTabs, $DIC;
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('editProperties');
 
+        $DIC->ui()->mainTemplate()->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/form/InteractiveVideoEditorInit.js');
+        $DIC->ui()->mainTemplate()->addOnLoadCode('il.InteractiveVideoEditor.createInstance("task")');
 		$a_form = $this->appendFormsFromFactory($a_form);
 		$this->appendCkEditorMathJaxSupportToForm($a_form);
 		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
@@ -2177,13 +2179,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$this->objComment->setIsPrivate((int)$form->getInput('is_private'));
 			$this->objComment->setIsTableOfContent((int)$form->getInput('is_table_of_content'));
 
-			// calculate seconds
-			$comment_time = $form->getInput('comment_time');
+            $comment_time     = $form->getInput('comment_time');
             $start_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time));
+            $comment_time_end = $form->getInput('comment_time_end');
+            $end_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time_end));
+            if ($end_time > 0 && $start_time > $end_time) {
+                $valid = false;
+                $this->tpl->setOnScreenMessage("failure", $this->plugin->txt('endtime_warning'));
+            }
             $this->objComment->setCommentTime($start_time);
-
-			$comment_time_end = $form->getInput('comment_time_end');
-            $end_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time));
             $this->objComment->setCommentTimeEnd($end_time);
 			$this->objComment->update();
 
@@ -2522,6 +2526,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $tbl->setIsPublic($this->object->isPublic());
 		$tbl->setData($tbl_data);
 		$video_tpl->setVariable('TABLE', $tbl->getHTML());
+
 		$tpl->setContent($video_tpl->get());
 	}
 
@@ -2650,6 +2655,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addCommandButton('updateMyComment', $this->lng->txt('save'));
 		$form->addCommandButton('editMyComments', $this->lng->txt('cancel'));
 
+        $tpl->addOnLoadCode('il.InteractiveVideoEditor.createInstance("comment_text");');
 		$tpl->setContent($form->getHTML());
 	}
 
@@ -2686,6 +2692,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $my_tpl = $this->getCommentTemplate();
         $my_tpl->setVariable('FORM',$form->getHTML());
 
+        $tpl->addOnLoadCode('il.InteractiveVideoEditor.createInstance("comment_text");');
         if($this->object->isMarkerActive()){
             $tpl->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
         }
@@ -2718,7 +2725,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->setTitle(ilInteractiveVideoPlugin::getInstance()->txt('edit_chapter'));
 		$form->addCommandButton('updateChapter', $this->lng->txt('save'));
 		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
-
+        $tpl->addOnLoadCode('il.InteractiveVideoEditor.createInstance("comment_text");');
 		$tpl->setContent($form->getHTML());
 	}
 
@@ -3019,7 +3026,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['comment_tags']		= $comment_data['comment_tags'];
 
 		$question_data = $this->object->getQuestionDataById((int)$comment_id);
-        
+
         if(isset($question_data['question_data'])) {
             $values['question_text']			= $question_data['question_data']['question_text'];
             $values['question_type']			= $question_data['question_data']['type'];
@@ -3720,6 +3727,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($head_row, $plugin->txt('time_end') );
 		array_push($head_row, $plugin->txt('comment_title'));
 		array_push($head_row, $plugin->txt('comment'));
+		array_push($head_row, $plugin->txt('is_table_of_content'));
         array_push($head_row, $plugin->txt('visibility'));
 		array_push($head_row, $plugin->txt('reply_to'));
 

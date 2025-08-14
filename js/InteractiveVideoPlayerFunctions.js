@@ -325,7 +325,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
 	pub.decideSolutionHandlingForReflectionQuestion = function(comment_id, player_id) {
 		let question = il.InteractiveVideoQuestionViewer.QuestionObject;
-		if(question.show_best_solution === "1" && question.show_best_solution_text.length >= 0){
+		if(question.show_best_solution === 1 && question.show_best_solution_text.length >= 0){
 			let reflection_solution = '<input id="reflection_solution" class="btn btn-default btn-sm" value="' +  il.InteractiveVideo.lang.show_best_solution + '" '+ 'type="submit">';
 			let best_solution_element = '<div class="iv_show_best_solution_reflection iv_best_solution_hidden">' +
 				'<div class="reflection_best_solution_title">' + il.InteractiveVideo.lang.solution + ': </div>' +
@@ -607,9 +607,31 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
         });
     };
 
-    pub.refreshMathJaxView = function () {
+    pub.refreshMathJaxView = function (elements, reprocess = false) {
         if (typeof MathJax !== 'undefined') {
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            if (typeof MathJax.Hub !== 'undefined') {
+                // MathJax 2
+                if (reprocess) {
+                    MathJax.Hub.Queue(['Reprocess', MathJax.Hub, elements]);
+                } else {
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, elements]);
+                }
+            } else {
+                // MathJax 3
+                const interval_id = setInterval((resolve, reject) => {
+                    if (typeof MathJax.startup.promise !== 'undefined') {
+                        clearInterval(interval_id);
+                        MathJax.startup.promise = MathJax.startup.promise
+                          .then(() => {
+                              if (reprocess) {
+                                  MathJax.typesetClear(elements);
+                              }
+                              MathJax.typesetPromise()
+                                .catch((err) => console.log(`MathJax typesetting failed: ${err.message}`));
+                          });
+                    }
+                });
+            }
         }
     };
 
