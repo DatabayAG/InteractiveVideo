@@ -2617,7 +2617,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			#$this->ctrl->redirect($this, 'showTutorInsertCommentForm');
             $this->showTutorInsertCommentForm();
 		}
-        
+
 	}
 
     /**
@@ -3019,28 +3019,29 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$values['comment_tags']		= $comment_data['comment_tags'];
 
 		$question_data = $this->object->getQuestionDataById((int)$comment_id);
-
-		$values['question_text']			= $question_data['question_data']['question_text'];
-		$values['question_type']			= $question_data['question_data']['type'];
-		$values['feedback_correct']			= $question_data['question_data']['feedback_correct'];
-		$values['is_jump_correct']			= $question_data['question_data']['is_jump_correct'];
-		$values['show_correct_icon']		= $question_data['question_data']['show_correct_icon'];
-		$values['jump_correct_ts']			= $question_data['question_data']['jump_correct_ts'];
-		$values['feedback_one_wrong']		= $question_data['question_data']['feedback_one_wrong'];
-		$values['show_response_frequency']	= $question_data['question_data']['show_response_frequency'];
-		$values['show_best_solution']	    = $question_data['question_data']['show_best_solution'];
-		$values['show_best_solution_text']  = $question_data['question_data']['show_best_solution_text'];
-		$values['is_jump_wrong']			= $question_data['question_data']['is_jump_wrong'];
-		$values['show_wrong_icon']			= $question_data['question_data']['show_wrong_icon'];
-		$values['jump_wrong_ts']			= $question_data['question_data']['jump_wrong_ts'];
-		$values['limit_attempts']			= $question_data['question_data']['limit_attempts'];
-		$values['repeat_question']			= $question_data['question_data']['repeat_question'];
-		$values['compulsory_question']		= $question_data['question_data']['compulsory_question'];
-		$values['feedback_correct_obj']		= $question_data['question_data']['feedback_correct_ref_id'];
-		$values['feedback_wrong_obj']		= $question_data['question_data']['feedback_wrong_ref_id'];
-		$values['show_comment_field']		= $question_data['question_data']['reflection_question_comment'];
-		$values['neutral_type']				= $question_data['question_data']['neutral_answer'];
-//		$values['question_correct']			= $question_data['question_data']['question_correct']; //marko
+        
+        if(isset($question_data['question_data'])) {
+            $values['question_text']			= $question_data['question_data']['question_text'];
+            $values['question_type']			= $question_data['question_data']['type'];
+            $values['feedback_correct']			= $question_data['question_data']['feedback_correct'];
+            $values['is_jump_correct']			= $question_data['question_data']['is_jump_correct'];
+            $values['show_correct_icon']		= $question_data['question_data']['show_correct_icon'];
+            $values['jump_correct_ts']			= $question_data['question_data']['jump_correct_ts'];
+            $values['feedback_one_wrong']		= $question_data['question_data']['feedback_one_wrong'];
+            $values['show_response_frequency']	= $question_data['question_data']['show_response_frequency'];
+            $values['show_best_solution']	    = $question_data['question_data']['show_best_solution'];
+            $values['show_best_solution_text']  = $question_data['question_data']['show_best_solution_text'];
+            $values['is_jump_wrong']			= $question_data['question_data']['is_jump_wrong'];
+            $values['show_wrong_icon']			= $question_data['question_data']['show_wrong_icon'];
+            $values['jump_wrong_ts']			= $question_data['question_data']['jump_wrong_ts'];
+            $values['limit_attempts']			= $question_data['question_data']['limit_attempts'];
+            $values['repeat_question']			= $question_data['question_data']['repeat_question'];
+            $values['compulsory_question']		= $question_data['question_data']['compulsory_question'];
+            $values['feedback_correct_obj']		= $question_data['question_data']['feedback_correct_ref_id'];
+            $values['feedback_wrong_obj']		= $question_data['question_data']['feedback_wrong_ref_id'];
+            $values['show_comment_field']		= $question_data['question_data']['reflection_question_comment'];
+            $values['neutral_type']				= $question_data['question_data']['neutral_answer'];
+        }
 
 		return $values;
 	}
