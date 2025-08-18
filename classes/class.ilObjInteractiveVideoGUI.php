@@ -17,7 +17,11 @@ use ILIAS\Refinery\ConstraintViolationException;
  */
 class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopItemHandling
 {
-	/** @var ilCtrl */
+    private const ACTION_PARAMETER_TOKEN = 'tid_id';
+    private const ACTION_ALL_TOKEN = 'ALL_OBJECTS';
+    private int $parent_obj_id;
+    private string $parent_obj_type;
+    /** @var ilCtrl */
     protected ilCtrl $ctrl;
 
 	/** @var ilObjInteractiveVideo|null $object */
@@ -39,6 +43,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         /** @var Container $DIC */
         global $DIC;
         $this->http = $DIC->http();
+        $this->parent_obj_id =  ilObject::_lookupObjId($a_ref_id);
+        $this->parent_obj_type = ilObject::_lookupType($this->parent_obj_id);
         parent::__construct($a_ref_id, $a_id_type, $a_parent_node_id);
     }
 	protected function appendImageUploadForm(ilInteractiveVideoPlugin $plugin, ilPropertyFormGUI $form): void
@@ -165,6 +171,27 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$this->ctrl->forwardCommand($exp_gui);
 				break;
 			default:
+                global $DIC;
+                $render_default = true;
+                $action_parameter_token = 'tid_id';
+                $parameter = 'tid_table_action';
+                $query = $DIC->http()->wrapper()->query();
+                if ($query->has($parameter)) {
+                    $action = $query->retrieve($parameter, $DIC->refinery()->kindlyTo()->string());
+                    if($action !== null) {
+                        switch($action)
+                        {
+                            case 'iv_remove_user_result':
+                                $this->confirmDeleteUserResults();
+                                $render_default = false;
+                                break;
+                            case 'iv_remove_question_result':
+                                $this->confirmDeleteQuestionsResults();
+                                $render_default = false;
+                                break;
+                        }
+                    }
+                }
 				switch($cmd)
 				{
 					case 'showLPUserDetails':
@@ -185,7 +212,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 						{
 							$this->$cmd();
 						}
-						else  $this->editComments();
+						else {
+                            $this->editComments();
+                        }
 						break;
 
 					case 'updateProperties':
@@ -201,9 +230,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				    case 'insertQuestion':
                     case 'completeCsvExport':
                     case 'removeSubtitle ':
+                    case 'showResults':
                     $this->checkPermission('write');
-						$this->$cmd();
-						break;
+                    if ($render_default) {
+                        $this->$cmd();
+                        break;
+                    }
 
 					case 'redrawHeaderAction':
 					case 'addToDesk':
@@ -214,42 +246,49 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 							$cmd .= 'Object';
 						}
 						$this->checkPermission('read');
-						$this->$cmd();
-						break;
+                        if ($render_default) {
+                            $this->$cmd();
+                            break;
+                        }
 					case 'getQuestionPerAjax':
 					case 'insertTutorCommentAjax':
 					case 'postAnswerPerAjax':
 						$this->checkPermission('read');
-						$this->$cmd();
-						break;
+                        if ($render_default) {
+                            $this->$cmd();
+                            break;
+                        }
 					default:
-						if(method_exists($this, $cmd))
+                        $get = $this->http->wrapper()->query();
+						if($cmd !== 'update' && method_exists($this, $cmd))
 						{
 							$this->checkPermission('read');
-							$this->$cmd();
+                            if ($render_default) {
+                                $this->$cmd();
+                                break;
+                            }
 						}
-						else
+						elseif($get->has('xvid_plugin_ctrl'))
 						{
-                            $get = $this->http->wrapper()->query();
-                            if($get->has('xvid_plugin_ctrl')){
                                 $xvid_plugin_ctrl = $get->retrieve('xvid_plugin_ctrl', $this->refinery->kindlyTo()->string());
                                 $xvid_plugin_ctrl = ilInteractiveVideoPlugin::stripSlashesWrapping($xvid_plugin_ctrl);
-                            }
-						    $dir = ltrim($xvid_plugin_ctrl,'il');
-                            $dir = rtrim($dir,'GUI');
-						    $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $xvid_plugin_ctrl . '.php';
-                            if(file_exists($path)){
-                                global $DIC;
-						        $class = new $xvid_plugin_ctrl($DIC);
-                                if(method_exists($class, $cmd))
-                                {
-                                    $class->{$cmd}();
+                                $dir = ltrim($xvid_plugin_ctrl,'il');
+                                $dir = rtrim($dir,'GUI');
+                                $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $xvid_plugin_ctrl . '.php';
+                                if(file_exists($path)){
+                                    global $DIC;
+                                    $class = new $xvid_plugin_ctrl($DIC);
+                                    if(method_exists($class, $cmd))
+                                    {
+                                        $class->{$cmd}();
+                                    }
                                 }
-                            }
-                             else {
-                                throw new ilException(sprintf("Unsupported plugin command %s ind %s", $cmd, __METHOD__));
-                            }
-						}
+                                else {
+                                    throw new ilException(sprintf("Unsupported plugin command %s ind %s", $cmd, __METHOD__));
+                                }
+						} else {
+                            $this->$cmd();
+                        }
 						break;
 				}
 				break;
@@ -1629,7 +1668,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$ilTabs->addTab('editComments', ilInteractiveVideoPlugin::getInstance()->txt('questions_comments'), $this->ctrl->getLinkTarget($this, 'editMyComments'));
 		}
-		$a = $this->object;
+
+        if($ilAccess->checkAccess('read', '', $this->object->getRefId()))
+        {
+            $ilTabs->addTab('results', ilInteractiveVideoPlugin::getInstance()->txt('results'), $this->ctrl->getLinkTarget($this, 'showMyResults'));
+        }
 		if(! $this->object instanceof ilObjRootFolder) {
             if(ilLearningProgressAccess::checkAccess($this->object->getRefId()))
             {
@@ -1678,17 +1721,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             }
             $ilTabs->addSubTab('editMyComments', $plugin->txt('my_comments'),
                 $this->ctrl->getLinkTarget($this, 'editMyComments'));
-            $ilTabs->addSubTab('showMyResults', $plugin->txt('show_my_results'),
-                $this->ctrl->getLinkTarget($this, 'showMyResults'));
-
-            if ($ilAccess->checkAccess('write', '', $this->object->getRefId())) {
-                $ilTabs->addSubTab('showResults', $plugin->txt('user_results'),
-                    $this->ctrl->getLinkTarget($this, 'showResults'));
-                $ilTabs->addSubTab('showQuestionsResults', $plugin->txt('question_results'),
-                    $this->ctrl->getLinkTarget($this, 'showQuestionsResults'));
-                $ilTabs->addSubTab('showCompleteOverviewOverAllResults', $plugin->txt('complete_question_results'),
-                    $this->ctrl->getLinkTarget($this, 'showCompleteOverviewOverAllResults'));
-            }
         }
 	}
 	/**
@@ -2860,7 +2892,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
 		$plugin = ilInteractiveVideoPlugin::getInstance();
         $simple_question = new SimpleChoiceQuestionFormEditGUI($this->plugin, $this->object);
-        $form = $simple_question->initQuestionForm(true);
+        $form = $simple_question->initQuestionForm();
         return $form;
 	}
 
@@ -3070,37 +3102,63 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         if($post->has('comment_id')) {
             $comment_id = $post->retrieve('comment_id', $this->refinery->kindlyTo()->int());
         }
-		$form_values = [];
+        if($post->has('comment_title')) {
+            $comment_title = $post->retrieve('comment_title', $this->refinery->kindlyTo()->string());
+        }
+        if($post->has('question_text')) {
+            $question_text = $post->retrieve('question_text', $this->refinery->kindlyTo()->string());
+        }
 
-		if($comment_id > 0 && !$chk =  SimpleChoiceQuestion::answerExists($comment_id))
+		if($comment_id > 0 && $comment_title !== '' && $question_text !== '')
 		{
-			$this->updateQuestion();
+            if( !$chk = SimpleChoiceQuestion::answerExists($comment_id) ) {
+                $this->existingAnswersForAnswerOptions();
+                return;
+            }
+            $this->updateQuestion();
 		}
 		else
 		{
             $form = $this->initQuestionForm();
             $form->checkInput();
-			$confirm = new ilConfirmationGUI();
-			$confirm->setFormAction($this->ctrl->getFormAction($this, 'updateQuestion'));
-			$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_update_question'));
-
-			$confirm->setCancel($this->lng->txt('cancel'), 'editComments');
-			$confirm->setConfirm($this->lng->txt('update'), 'updateQuestion');
-            global $DIC;
-            $form = $DIC->http()->request()->getParsedBody();
-            foreach($form as $key=>$value)
-			{
-				//@todo .... very quick ... very dirty ....
-				if($key != 'cmd')
-				{
-					$form_values[$key] = $value;
-				}
-			}
-			$confirm->addHiddenItem('form_values', serialize($form_values));
-			$confirm->addHiddenItem('form_files', serialize($_FILES));
-			$tpl->setContent($confirm->getHTML());
+            $form->setValuesByPost();
+            $this->tpl->setOnScreenMessage("failure", $this->lng->txt('err_check_input'));
+            $this->appendCkEditorMathJaxSupportToForm($form);
+            $form->addCommandButton('confirmUpdateQuestion', $this->lng->txt('update'));
+            $form->addCommandButton('editComments', $this->lng->txt('cancel'));
+            $this->addJavascriptAndCSSToTemplate($tpl);
+            $tpl->setContent($form->getHTML());
 		}
 	}
+
+    private function existingAnswersForAnswerOptions() {
+        /**
+         * @var $tpl    ilTemplate
+         * @var $ilTabs ilTabsGUI
+         */
+        global $tpl, $ilTabs;
+        $form = $this->initQuestionForm();
+        $form->checkInput();
+        $confirm = new ilConfirmationGUI();
+        $confirm->setFormAction($this->ctrl->getFormAction($this, 'updateQuestion'));
+        $confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_update_question'));
+
+        $confirm->setCancel($this->lng->txt('cancel'), 'editComments');
+        $confirm->setConfirm($this->lng->txt('update'), 'updateQuestion');
+        global $DIC;
+        $form = $DIC->http()->request()->getParsedBody();
+        foreach($form as $key=>$value)
+        {
+            //@todo .... very quick ... very dirty ....
+            if($key != 'cmd')
+            {
+                $form_values[$key] = $value;
+            }
+        }
+        $confirm->addHiddenItem('form_values', serialize($form_values));
+        $confirm->addHiddenItem('form_files', serialize($_FILES));
+        $tpl->setContent($confirm->getHTML());
+    }
 
     /**
      * @throws ilCtrlException
@@ -3266,47 +3324,62 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
     public function showResults(): void
 	{
-		/**
-		 * @var $tpl    ilTemplate
-		 * @var $ilTabs ilTabsGUI
-		 */
-		global $tpl, $ilTabs;
+        $this->setResultsSubTabs('showResults');
 
-		$this->setSubTabs('editComments');
+        $has_write = $this->access->checkAccess("write", "", $this->object->getRefId());
+        $tbl = new SimpleChoiceQuestionsTableGUI($this->obj_id, 'showResults', $has_write);
 
-		$ilTabs->activateTab('editComments');
-		$ilTabs->activateSubTab('showResults');
-
-		$simple = new SimpleChoiceQuestionStatistics();
-		$tbl_data = $simple->getPointsForUsers($this->obj_id);
-		$tbl = new SimpleChoiceQuestionsTableGUI($this, 'showResults');
-
-		$tbl->setData($tbl_data);
-		$tpl->setContent($tbl->getHTML());
+		$tbl->renderTable();
 	}
 
     /**
-     *
+     * @throws ilException
+     * @throws ilCtrlException
      */
+    public function showQuestionsResults(): void
+    {
+        /**
+         * @var $tpl    ilTemplate
+         */
+        global $tpl;
+
+        $this->setResultsSubTabs('showQuestionsResults');
+        $has_write = $this->access->checkAccess("write", "", $this->object->getRefId());
+        $tbl = new SimpleChoiceQuestionsOverviewTableGUI($this->parent_obj_id, $this->parent_obj_type, $has_write);
+        $tbl->renderTable();
+    }
+
 	public function showMyResults(): void
 	{
-		/**
-		 * @var $tpl    ilTemplate
-		 * @var $ilTabs ilTabsGUI
-		 */
-		global $tpl, $ilTabs;
-
-		$this->setSubTabs('editComments');
-
-		$ilTabs->activateTab('editComments');
-		$ilTabs->activateSubTab('showMyResults');
-
-		$simple = new SimpleChoiceQuestionScoring();
-		$tbl_data = $simple->getMyPoints($this->obj_id);
-		$tbl = new SimpleChoiceQuestionsUserTableGUI($this, 'showMyResults');
-		$tbl->setData($tbl_data);
-		$tpl->setContent($tbl->getHTML());
+        $this->setResultsSubTabs('showMyResults');
+		$tbl = new SimpleChoiceQuestionsUserTableGUI($this->parent_obj_id, $this->parent_obj_type);
+		$tbl->renderTable();
 	}
+
+    private function setResultsSubTabs($activate_subTab) {
+        /**
+         * @var $tpl    ilTemplate
+         * @var $ilTabs ilTabsGUI
+         */
+        global $ilTabs, $ilAccess;
+        $plugin = ilInteractiveVideoPlugin::getInstance();
+
+        $ilTabs->addSubTab('showMyResults', $plugin->txt('show_my_results'),
+            $this->ctrl->getLinkTarget($this, 'showMyResults'));
+
+        if ($ilAccess->checkAccess('write', '', $this->object->getRefId())) {
+            $ilTabs->addSubTab('showResults', $plugin->txt('user_results'),
+                $this->ctrl->getLinkTarget($this, 'showResults'));
+            $ilTabs->addSubTab('showQuestionsResults', $plugin->txt('question_results'),
+                $this->ctrl->getLinkTarget($this, 'showQuestionsResults'));
+            //Todo: remove tables
+          #  $ilTabs->addSubTab('showCompleteOverviewOverAllResults', $plugin->txt('complete_question_results'),
+          #      $this->ctrl->getLinkTarget($this, 'showCompleteOverviewOverAllResults'));
+        }
+
+        $ilTabs->activateTab('results');
+        $ilTabs->activateSubTab($activate_subTab);
+    }
 
     /**
      * @throws ilWACException
@@ -3341,17 +3414,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
 		 */
-		global $tpl, $ilTabs;
+		global $tpl;
 
-		$this->setSubTabs('editComments');
+        $user_ids = $this->getMultiActionIdsFromUrl();
 
-		$ilTabs->activateTab('editComments');
-		$ilTabs->activateSubTab('showResults');
-        $post = $this->http->wrapper()->post();
-        $user_ids = [];
-        if($post->has('user_id')) {
-            $user_ids = $post->retrieve('user_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
-        }
 		if(!count($user_ids))
 		{
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'));
@@ -3364,14 +3430,36 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteUserResults');
 		$confirm->setCancel($this->lng->txt('cancel'), 'showResults');
 
-		foreach($user_ids as $user_id)
-		{
-			$login = ilObjUser::_lookupName($user_id);
+        if($user_ids === [self::ACTION_ALL_TOKEN]){
+            $simple = new SimpleChoiceQuestion();
+            $user_ids = $simple->getUsersWithAnsweredQuestion($this->obj_id);
+        }
 
-			$confirm->addItem('user_id[]', $user_id, $login['firstname'].' '.$login['lastname']);
-		}
+        foreach($user_ids as $user_id)
+        {
+            $login = ilObjUser::_lookupName($user_id);
+            $confirm->addItem('user_id[]', $user_id, $login['firstname'].' '.$login['lastname']);
+        }
+
 		$tpl->setContent($confirm->getHTML());
 	}
+
+    /**
+     * @return list<string>
+     */
+    public function getMultiActionIdsFromUrl(): array
+    {
+        $ids = [];
+        $query = $this->http->wrapper()->query();
+        if ($query->has(self::ACTION_PARAMETER_TOKEN)) {
+            $ids = $query->retrieve(
+                self::ACTION_PARAMETER_TOKEN,
+                $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string())
+            );
+        }
+
+        return $ids;
+    }
 
 	public function deleteUserResults(): void
 	{
@@ -3403,49 +3491,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
     /**
-     * @throws ilException
-     * @throws ilCtrlException
-     */
-    public function showQuestionsResults(): void
-	{
-		/**
-		 * @var $tpl    ilTemplate
-		 * @var $ilTabs ilTabsGUI
-		 */
-		global $tpl, $ilTabs;
-
-		$this->setSubTabs('editComments');
-
-		$ilTabs->activateTab('editComments');
-		$ilTabs->activateSubTab('showQuestionsResults');
-
-		$simple = new SimpleChoiceQuestionStatistics();
-		$tbl_data = $simple->getQuestionsOverview($this->obj_id);
-		$tbl = new SimpleChoiceQuestionsOverviewTableGUI($this, 'showQuestionsResults');
-
-		$tbl->setData($tbl_data);
-		$tpl->setContent($tbl->getHTML());
-	}
-
-    /**
      * @throws ilCtrlException
      */
     public function confirmDeleteQuestionsResults(): void
 	{
 		/**
 		 * @var $tpl    ilTemplate
-		 * @var $ilTabs ilTabsGUI
 		 */
-		global $tpl, $ilTabs;
+		global $tpl;
 
-		$this->setSubTabs('editComments');
+        $question_ids = $this->getMultiActionIdsFromUrl();
 
-		$ilTabs->activateTab('editComments');
-		$ilTabs->activateSubTab('showQuestionsResults');
-        $post = $this->http->wrapper()->post();
-        $question_ids = [];
-        if($post->has('question_id')) {
-            $question_ids = $post->retrieve('question_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
+        if($question_ids === [self::ACTION_ALL_TOKEN]){
+            $simple = new SimpleChoiceQuestion();
+            $question_ids = $simple->getInteractiveQuestionIdsByObjId($this->obj_id);
         }
 
 		if(!count($question_ids))
@@ -3667,7 +3726,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
 		$simple = new SimpleChoiceQuestionStatistics();
-		$data = $simple->getScoreForAllQuestionsAndAllUser($this->obj_id);
+		$data = $simple->getScoreForAllQuestionsAndAllUserOrg($this->obj_id);
 
 		$csv = [];
 		$separator = ";";
@@ -3676,8 +3735,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		array_push($head_row, $lng->txt('name'));
 		foreach ($data['question'] as $key => $row)
 		{
-			array_push($head_row, trim($row, '"'));
-			array_push($head_row, trim($row, '"') . ' ' .$plugin->txt('answers') );
+			array_push($head_row, trim($row['title'], '"'));
+			array_push($head_row, trim($row['title'], '"') . ' ' .$plugin->txt('answers') );
 		}
 		array_push($head_row, $plugin->txt('answered') );
 		array_push($head_row, $plugin->txt('sum'));
@@ -3848,4 +3907,20 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             ilObjectGUI::_gotoRepositoryRoot();
 		}
 	}
+    protected function afterSave(ilObject $new_object): void
+    {
+        global $DIC;
+        $post = $DIC->http()->wrapper()->post();
+        if($post->has('source_id')) {
+            $source_id = $post->retrieve('source_id', $DIC->refinery()->kindlyTo()->string());
+            if($source_id === 'opc') {
+                $DIC->ctrl()->setParameter($this, 'ref_id', $new_object->getRefId());
+                $DIC->ctrl()->setParameter(new ilObjInteractiveVideoGUI(), 'xvid_plugin_ctrl', 'ilInteractiveVideoOpenCastGUI');
+                $DIC->ctrl()->setParameter(new ilObjInteractiveVideoGUI(), 'xvid_source_id', $source_id);
+                $DIC->ctrl()->redirectByClass(['ilobjplugindispatchgui', 'ilObjInteractiveVideoGUI'], 'update');
+            }
+        }
+        parent::afterSave($new_object);
+    }
+
 }

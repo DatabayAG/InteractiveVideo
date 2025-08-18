@@ -23,11 +23,6 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 		return
             [
                 [
-				'permission' => 'visible',
-				'cmd'        => 'showContent',
-				'default'    => true
-                ],
-                [
 				'permission' => 'read',
 				'cmd'        => 'showContent',
 				'default'    => true
@@ -42,7 +37,7 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public function initType(): void
 	{

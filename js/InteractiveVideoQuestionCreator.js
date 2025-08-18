@@ -110,7 +110,6 @@ InteractiveVideoQuestionCreator = (function () {
 	pro.showHideFormElementsPointsForNeutralAnswers = function()
 	{
 		var value = parseInt($('#neutral_type').val(), 10);
-		console.log('pro.showHideFormElementsPointsForNeutralAnswers();')
 		if(IVQuestionCreator.type !== 2){
 			if( value === 0)
 			{
