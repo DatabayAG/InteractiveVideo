@@ -196,7 +196,7 @@ if(!$ilDB->tableExists('rep_robj_xvid_question'))
 			'length' => '4',
 			'notnull' => true
 		)
-	);	
+	);
 	$ilDB->createTable('rep_robj_xvid_question', $fields);
     if(!$ilDB->primaryExistsByFields('rep_robj_xvid_question', array('question_id'))){
         $ilDB->addPrimaryKey('rep_robj_xvid_question', array('question_id'));
@@ -430,15 +430,15 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 			)
 		);
 	}
-	
+
 	$res = $ilDB->queryF('SELECT comment_id FROM rep_robj_xvid_comments WHERE repeat_question = %s',
 		array('integer'), array(1));
-	
+
 	while($row = $ilDB->fetchAssoc($res))
 	{
 		$comment_ids[] = $row['comment_id'];
 	}
-		
+
 	$ilDB->manipulateF('
 	UPDATE rep_robj_xvid_question 
 	SET rep_robj_xvid_question.repeat_question = %s
@@ -543,7 +543,7 @@ if($ilDB->tableExists('rep_robj_xvid_comments'))
 							'notnull' => true,
 							'default' => 0));
 		}
-	} 
+	}
 ?>
 <#25>
 	<?php
@@ -631,7 +631,9 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_sources', 'plugin_id'))
 		array(
 			'type'    => 'text',
 			'length'  => '255',
-			'notnull' => true)
+			'notnull' => true,
+            'default' => 0
+        )
 	);
 }
 ?>
