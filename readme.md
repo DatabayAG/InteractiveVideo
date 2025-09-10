@@ -39,7 +39,7 @@ If you upgrade to the 2.x version of the InteractiveVideo you can not go back to
 ## Repositories connected to the InteractiveVideo Plugin
 * [COPage Plugin for InteractiveVideo References in LearningModules](https://github.com/DatabayAG/InteractiveVideoReference)
 * [Video Source Plugin for Vimeo](https://github.com/DatabayAG/InteractiveVideoVimeo)
-* [Video Source Plugin for FAU Video Platform](https://github.com/ilifau/InteractiveVideoFauVideoPortal)
+* [Video Source Plugin for Opencast](https://github.com/DatabayAG/InteractiveVideoOpenCast)
 
 ## Installation Instructions
 1. Clone this repository to <ILIAS_DIRECTORY>/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo
