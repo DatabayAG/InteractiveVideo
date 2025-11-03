@@ -8,7 +8,7 @@ class ilInteractiveVideoExportGUI extends ilExportGUI
      * {}
      * @throws ilCtrlException
      */
-    protected function buildExportTableGUI(): ilExportTableGUI
+    protected function buildExportTableGUI(): ilExportGUI
 	{
 		/**
 		 * @var $ilCtrl ilCtrl

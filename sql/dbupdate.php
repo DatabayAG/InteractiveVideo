@@ -196,7 +196,7 @@ if(!$ilDB->tableExists('rep_robj_xvid_question'))
 			'length' => '4',
 			'notnull' => true
 		)
-	);	
+	);
 	$ilDB->createTable('rep_robj_xvid_question', $fields);
     if(!$ilDB->primaryExistsByFields('rep_robj_xvid_question', array('question_id'))){
         $ilDB->addPrimaryKey('rep_robj_xvid_question', array('question_id'));
@@ -430,15 +430,15 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 			)
 		);
 	}
-	
+
 	$res = $ilDB->queryF('SELECT comment_id FROM rep_robj_xvid_comments WHERE repeat_question = %s',
 		array('integer'), array(1));
-	
+
 	while($row = $ilDB->fetchAssoc($res))
 	{
 		$comment_ids[] = $row['comment_id'];
 	}
-		
+
 	$ilDB->manipulateF('
 	UPDATE rep_robj_xvid_question 
 	SET rep_robj_xvid_question.repeat_question = %s
@@ -543,7 +543,7 @@ if($ilDB->tableExists('rep_robj_xvid_comments'))
 							'notnull' => true,
 							'default' => 0));
 		}
-	} 
+	}
 ?>
 <#25>
 	<?php
@@ -845,13 +845,12 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 ?>
 <#43>
 <?php
-require_once 'Services/WebAccessChecker/classes/class.ilWACSecurePath.php';
 # If already registered comment out between these lines and let the update run again
 $ilWACSecurePath = new ilWACSecurePath();
-$ilWACSecurePath->setPath('xvid');
-$ilWACSecurePath->setCheckingClass('ilObjInteractiveVideoAccess');
-$ilWACSecurePath->setComponentDirectory('/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo');
-$ilWACSecurePath->create();
+#$ilWACSecurePath->setPath('xvid');
+#$ilWACSecurePath->setCheckingClass('ilObjInteractiveVideoAccess');
+#$ilWACSecurePath->setComponentDirectory('/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo');
+#$ilWACSecurePath->create();
 # If already registered comment out between these lines and let the update run again
 ?>
 <#44>
@@ -1018,13 +1017,14 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_comment_stream'))
 ?>
 <#65>
 <?php
-require_once('./Services/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php');
-$read_lp = ilDBUpdateNewObjectType::getCustomRBACOperationId('read_learning_progress');
-$xoct_type_id = ilDBUpdateNewObjectType::getObjectTypeId('xvid');
 
-if ($read_lp && $xoct_type_id) {
-	ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
-}
+//Todo reactivate this
+#$read_lp = ilDBUpdateNewObjectType::getCustomRBACOperationId('read_learning_progress');
+#$xoct_type_id = ilDBUpdateNewObjectType::getObjectTypeId('xvid');
+
+#if ($read_lp && $xoct_type_id) {
+#	ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
+#}
 ?>
 <#66>
 <?php
@@ -1233,13 +1233,14 @@ if($ilDB->tableExists('rep_robj_xvid_objects'))
 ?>
 <#80>
 <?php
-require_once('./Services/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php');
-$read_lp = ilDBUpdateNewObjectType::getCustomRBACOperationId('copy');
-$xoct_type_id = ilDBUpdateNewObjectType::getObjectTypeId('xvid');
+//Todo reactivate this
+#require_once 'components/ILIAS/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php';
+#$read_lp = ilDBUpdateNewObjectType::getCustomRBACOperationId('copy');
+#$xoct_type_id = ilDBUpdateNewObjectType::getObjectTypeId('xvid');
 
-if ($read_lp && $xoct_type_id) {
-    ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
-}
+#if ($read_lp && $xoct_type_id) {
+#    ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
+#}
 ?>
 <#81>
 <?php
@@ -1268,3 +1269,98 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'enable_comment'))
             'default' => 1));
 }
 ?>
+<#84>
+<?php
+if(!$ilDB->tableExists('rep_robj_xvid_surl'))
+{
+    $fields = array(
+            'obj_id' => array(
+                    'type' => 'integer',
+                    'length' => '4',
+                    'notnull' => true
+            ),
+            'simple_url' => array(
+                    'type' => 'text',
+                    'length' => '1000',
+                    'notnull' => true
+            )
+    );
+    $ilDB->createTable('rep_robj_xvid_surl', $fields);
+    $ilDB->addPrimaryKey('rep_robj_xvid_surl', array('obj_id'));
+}
+?>
+<#85>
+<?php
+/**
+ * @var $ilDB ilDB
+ */
+if(!$ilDB->tableExists('rep_robj_xvid_mobs'))
+{
+    $fields = array(
+            'obj_id' => array(
+                    'type' => 'integer',
+                    'length' => '4',
+                    'notnull' => true
+            ),
+            'mob_id' => array(
+                    'type' => 'integer',
+                    'length' => '4',
+                    'notnull' => true
+            )
+    );
+    $ilDB->createTable('rep_robj_xvid_mobs', $fields);
+    $ilDB->addPrimaryKey('rep_robj_xvid_mobs', array('obj_id', 'mob_id'));
+}
+?>
+<#86>
+<?php
+/**
+ * @var $ilDB ilDB
+ */
+if($ilDB->tableColumnExists('rep_robj_xvid_objects', 'mob_id'))
+{
+    $res = $ilDB->query('SELECT obj_id, mob_id FROM rep_robj_xvid_objects');
+
+    $transfer = array();
+    while($row = $ilDB->fetchAssoc($res))
+    {
+        $transfer[$row['obj_id']] = $row['mob_id'];
+    }
+
+    foreach($transfer as $obj_id => $mob_id)
+    {
+        $ilDB->insert('rep_robj_xvid_mobs',
+                array(
+                        'obj_id' => array('integer', $obj_id),
+                        'mob_id' => array('integer', $mob_id),
+                ));
+    }
+
+    $ilDB->dropTableColumn('rep_robj_xvid_objects', 'mob_id');
+}
+?>
+<#87>
+<?php
+/**
+ * @var $ilDB ilDB
+ */
+if(!$ilDB->tableExists('rep_robj_xvid_youtube'))
+{
+    $fields = array(
+            'obj_id' => array(
+                    'type' => 'integer',
+                    'length' => '4',
+                    'notnull' => true
+            ),
+            'youtube_id' => array(
+                    'type' => 'text',
+                    'length' => '100',
+                    'notnull' => true
+            )
+    );
+    $ilDB->createTable('rep_robj_xvid_youtube', $fields);
+    $ilDB->addPrimaryKey('rep_robj_xvid_youtube', array('obj_id', 'youtube_id'));
+}
+?>
+
+

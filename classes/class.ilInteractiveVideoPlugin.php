@@ -35,10 +35,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
         /** @var ilComponentFactory $component_factory */
         $component_factory = $DIC['component.factory'];
 
-        $plugin_info = $component_repository->getComponentByTypeAndName(
-            self::CTYPE,
-            self::CNAME
-        )->getPluginSlotById(self::SLOT_ID)->getPluginByName(self::PNAME);
+        $plugin_info = $component_repository->getPluginById('xvid');
 
         self::$instance = $component_factory->getPlugin($plugin_info->getId());
 

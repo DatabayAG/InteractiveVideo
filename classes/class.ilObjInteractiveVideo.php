@@ -114,7 +114,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			[$this->getId()]
 		);
 		$row = $this->db->fetchAssoc($res);
-		
+
 		$this->setIsAnonymized($row['is_anonymized'] ?: 0);
 		$this->setIsRepeat($row['is_repeat'] ?: 0);
 		$this->setIsPublic($row['is_public'] ?: 0);
@@ -233,144 +233,158 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                 $from_post = false;
             }
 
-			if($src_id != '')
-			{
-
-				try
-				{
-					$this->getVideoSourceObject($src_id);
-					$this->video_source_object->doCreateVideoSource($this->getId());
-
-                    $this->db->manipulateF('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = %s',
-						['integer'], [$this->getId()]);
-
-					if(!$from_post)
-					{
-						$anonymized		= $this->is_anonymized;
-						$repeat			= $this->is_repeat;
-						$chronologic	= $this->is_chronologic;
-						$online			= $this->is_online;
-						$source_id		= $this->source_id;
-						$is_task		= $this->task_active;
-						$task			= $this->task;
-						$enable_comment = $this->enable_comment;
-						$show_toolbar	= $this->enable_toolbar;
-						$auto_resume	= $this->auto_resume_after_question;
-						$fixed_modal	= $this->fixed_modal;
-						$show_toc_first	= $this->show_toc_first;
-						$disable_comment_stream	= $this->enable_comment_stream;
-                        $layout_width   = $this->layout_width;
-						$no_comment_stream  = $this->no_comment_stream;
-						$video_mode			= $this->video_mode;
-						$marker_for_students= $this->marker_for_students;
-					}
-					else
-					{
-                        $post = $this->http->wrapper()->post();
-                        $source_id = ilInteractiveVideoPlugin::stripSlashesWrapping($post->retrieve('source_id', $this->refinery->kindlyTo()->string()));
-                        if($post->has('is_online')) {
-                            $online	= $post->retrieve('is_online', $this->refinery->kindlyTo()->int());
-                        } else {
-                            $online = 0;
-                        }
-
-                        if($post->has('is_anonymized') || $post->has('video_mode') ) {
-                            $anonymized		= $post->retrieve('is_anonymized', $this->refinery->kindlyTo()->int());
-                            $repeat			= $post->retrieve('is_repeat', $this->refinery->kindlyTo()->int());
-                            if( $post->has('is_chronologic') ){
-                                $chronologic	= $post->retrieve('is_chronologic', $this->refinery->kindlyTo()->int());
-                            } else {
-                                $chronologic = 0;
-                            }
-
-                            $is_task		= $post->retrieve('is_task', $this->refinery->kindlyTo()->int());
-                            $task			= ilInteractiveVideoPlugin::stripSlashesWrapping($post->retrieve('task', $this->refinery->kindlyTo()->string()));
-                            $enable_comment	= $post->retrieve('enable_comment', $this->refinery->kindlyTo()->int());
-                            $show_toolbar   = 1;
-                            if($post->has('show_toolbar'))
-                            {
-                                $show_toolbar		= (int)$post->retrieve('show_toolbar', $this->refinery->kindlyTo()->int());
-                            }
-
-                            $auto_resume	        = $post->retrieve('auto_resume', $this->refinery->kindlyTo()->int());
-                            $fixed_modal	        = $post->retrieve('fixed_modal', $this->refinery->kindlyTo()->int());
-                            $show_toc_first     	= $post->retrieve('show_toc_first', $this->refinery->kindlyTo()->int());
-                            $enable_comment_stream	= $post->retrieve('enable_comment_stream', $this->refinery->kindlyTo()->int());
-                            $layout_width           = $post->retrieve('layout_width', $this->refinery->kindlyTo()->int());
-                            $no_comment_stream	    = $post->retrieve('no_comment_stream', $this->refinery->kindlyTo()->int());
-                            $video_mode			    = $post->retrieve('video_mode', $this->refinery->kindlyTo()->int());
-                            $marker_for_students    = $post->retrieve('marker_for_students', $this->refinery->kindlyTo()->int());
-                        } else {
-                            $anonymized		        = $this->is_anonymized;
-                            $repeat			        = $this->is_repeat;
-                            $chronologic	        = $this->is_chronologic;
-                            $is_task		        = $this->task_active;
-                            $task			        = '';
-                            $enable_comment     	= $this->enable_comment;
-                            $show_toolbar           = $this->enable_toolbar;
-                            $auto_resume	        = $this->auto_resume_after_question;
-                            $fixed_modal	        = $this->fixed_modal;
-                            $show_toc_first     	= $this->show_toc_first;
-                            $enable_comment_stream	= $this->enable_comment_stream;
-                            $layout_width           = 0;
-                            $no_comment_stream	    = $this->no_comment_stream;
-                            $video_mode			    = 0;
-                            $marker_for_students    = 0;
-                        }
-
-					}
-
+//			if($src_id != '')
+//			{
+//
+//				try
+//				{
+//					$this->getVideoSourceObject($src_id);
+//					$this->video_source_object->doCreateVideoSource($this->getId());
+//
+//                    $this->db->manipulateF('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = %s',
+//						['integer'], [$this->getId()]);
+//
+//					if(!$from_post)
+//					{
+//						$anonymized		= $this->is_anonymized;
+//						$repeat			= $this->is_repeat;
+//						$chronologic	= $this->is_chronologic;
+//						$online			= $this->is_online;
+//						$source_id		= $this->source_id;
+//						$is_task		= $this->task_active;
+//						$task			= $this->task;
+//						$enable_comment = $this->enable_comment;
+//						$show_toolbar	= $this->enable_toolbar;
+//						$auto_resume	= $this->auto_resume_after_question;
+//						$fixed_modal	= $this->fixed_modal;
+//						$show_toc_first	= $this->show_toc_first;
+//						$disable_comment_stream	= $this->enable_comment_stream;
+//                        $layout_width   = $this->layout_width;
+//						$no_comment_stream  = $this->no_comment_stream;
+//						$video_mode			= $this->video_mode;
+//						$marker_for_students= $this->marker_for_students;
+//					}
+//					else
+//					{
+//                        $post = $this->http->wrapper()->post();
+//                        $source_id = ilInteractiveVideoPlugin::stripSlashesWrapping($post->retrieve('source_id', $this->refinery->kindlyTo()->string()));
+//                        if($post->has('is_online')) {
+//                            $online	= $post->retrieve('is_online', $this->refinery->kindlyTo()->int());
+//                        } else {
+//                            $online = 0;
+//                        }
+//
+//                        if($post->has('is_anonymized') || $post->has('video_mode') ) {
+//                            $anonymized		= $post->retrieve('is_anonymized', $this->refinery->kindlyTo()->int());
+//                            $repeat			= $post->retrieve('is_repeat', $this->refinery->kindlyTo()->int());
+//                            if( $post->has('is_chronologic') ){
+//                                $chronologic	= $post->retrieve('is_chronologic', $this->refinery->kindlyTo()->int());
+//                            } else {
+//                                $chronologic = 0;
+//                            }
+//
+//                            $is_task		= $post->retrieve('is_task', $this->refinery->kindlyTo()->int());
+//                            $task			= ilInteractiveVideoPlugin::stripSlashesWrapping($post->retrieve('task', $this->refinery->kindlyTo()->string()));
+//                            $enable_comment	= $post->retrieve('enable_comment', $this->refinery->kindlyTo()->int());
+//                            $show_toolbar   = 1;
+//                            if($post->has('show_toolbar'))
+//                            {
+//                                $show_toolbar		= (int)$post->retrieve('show_toolbar', $this->refinery->kindlyTo()->int());
+//                            }
+//
+//                            $auto_resume	        = $post->retrieve('auto_resume', $this->refinery->kindlyTo()->int());
+//                            $fixed_modal	        = $post->retrieve('fixed_modal', $this->refinery->kindlyTo()->int());
+//                            $show_toc_first     	= $post->retrieve('show_toc_first', $this->refinery->kindlyTo()->int());
+//                            $enable_comment_stream	= $post->retrieve('enable_comment_stream', $this->refinery->kindlyTo()->int());
+//                            $layout_width           = $post->retrieve('layout_width', $this->refinery->kindlyTo()->int());
+//                            $no_comment_stream	    = $post->retrieve('no_comment_stream', $this->refinery->kindlyTo()->int());
+//                            $video_mode			    = $post->retrieve('video_mode', $this->refinery->kindlyTo()->int());
+//                            $marker_for_students    = $post->retrieve('marker_for_students', $this->refinery->kindlyTo()->int());
+//                        } else {
+//                            $anonymized		        = $this->is_anonymized;
+//                            $repeat			        = $this->is_repeat;
+//                            $chronologic	        = $this->is_chronologic;
+//                            $is_task		        = $this->task_active;
+//                            $task			        = '';
+//                            $enable_comment     	= $this->enable_comment;
+//                            $show_toolbar           = $this->enable_toolbar;
+//                            $auto_resume	        = $this->auto_resume_after_question;
+//                            $fixed_modal	        = $this->fixed_modal;
+//                            $show_toc_first     	= $this->show_toc_first;
+//                            $enable_comment_stream	= $this->enable_comment_stream;
+//                            $layout_width           = 0;
+//                            $no_comment_stream	    = $this->no_comment_stream;
+//                            $video_mode			    = 0;
+//                            $marker_for_students    = 0;
+//                        }
+//
+//					}
+//
+//                    $this->db->insert(
+//						self::TABLE_NAME_OBJECTS,
+//						[
+//                            'obj_id'         => ['integer', $this->getId()],
+//                            'is_anonymized'  => ['integer', $anonymized],
+//                            'is_repeat'      => ['integer', $repeat],
+//                            'is_chronologic' => ['integer', $chronologic],
+//                            'is_public'      => ['integer', 1],
+//                            'is_online'      => ['integer', $online],
+//                            'source_id'      => ['text', $source_id],
+//                            'is_task'        => ['integer', $is_task],
+//                            'auto_resume'    => ['integer', $auto_resume],
+//                            'fixed_modal'    => ['integer', $fixed_modal],
+//                            'task'           => ['text', $task],
+//                            'enable_comment' => ['integer', 1],
+//                            'show_toolbar'   => ['integer', $show_toolbar],
+//                            'show_toc_first' => ['integer', $show_toc_first],
+//                            'disable_comment_stream' => ['integer', 1],
+//                            'layout_width'        => ['integer', $layout_width],
+//                            'no_comment_stream'   => ['integer', $no_comment_stream],
+//                            'video_mode'          => ['integer', $video_mode],
+//                            'marker_for_students' => ['integer', $marker_for_students]
+//                        ]
+//					);
+//
+//					parent::doCreate();
+//
+//					$this->createMetaData();
+//				}
+//				catch(Exception $e)
+//				{
+//					$this->log->write($e->getMessage());
+//					$this->log->logStack();
+//
+//					$this->delete();
+//
+//					throw new ilException(sprintf("%s: Creation incomplete", __METHOD__));
+//				}
+//			}
+//			else
+//			{
+//				$this->delete();
+//			    throw new ilException(ilInteractiveVideoPlugin::getInstance()->txt('at_least_one_source'));
+//			}
                     $this->db->insert(
 						self::TABLE_NAME_OBJECTS,
 						[
                             'obj_id'         => ['integer', $this->getId()],
-                            'is_anonymized'  => ['integer', $anonymized],
-                            'is_repeat'      => ['integer', $repeat],
-                            'is_chronologic' => ['integer', $chronologic],
-                            'is_public'      => ['integer', 1],
-                            'is_online'      => ['integer', $online],
-                            'source_id'      => ['text', $source_id],
-                            'is_task'        => ['integer', $is_task],
-                            'auto_resume'    => ['integer', $auto_resume],
-                            'fixed_modal'    => ['integer', $fixed_modal],
-                            'task'           => ['text', $task],
-                            'enable_comment' => ['integer', 1],
-                            'show_toolbar'   => ['integer', $show_toolbar],
-                            'show_toc_first' => ['integer', $show_toc_first],
-                            'disable_comment_stream' => ['integer', 1],
-                            'layout_width'        => ['integer', $layout_width],
-                            'no_comment_stream'   => ['integer', $no_comment_stream],
-                            'video_mode'          => ['integer', $video_mode],
-                            'marker_for_students' => ['integer', $marker_for_students]
+                            'plugin_id'      => ['text', 'imo'],
+                            'source_id'      => ['text', ''],
+                            'is_task'        => ['integer', 0],
+                            'is_online'        => ['integer', 0],
                         ]
 					);
 
 					parent::doCreate();
 
 					$this->createMetaData();
-				}
-				catch(Exception $e)
-				{
-					$this->log->write($e->getMessage());
-					$this->log->logStack();
-
-					$this->delete();
-
-					throw new ilException(sprintf("%s: Creation incomplete", __METHOD__));
-				}
-			}
-			else
-			{
-				$this->delete();
-				throw new ilException(ilInteractiveVideoPlugin::getInstance()->txt('at_least_one_source'));
-			}
 		}
 	}
 
     protected function doUpdate(): void
 	{
 		parent::doUpdate();
-		
+
 		$old_source_id = $this->getOldVideoSource();
 		if($old_source_id != null && $old_source_id != $this->getSourceId())
 		{

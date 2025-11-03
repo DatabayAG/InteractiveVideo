@@ -1,5 +1,4 @@
 <?php
-require_once 'Services/Component/classes/class.ilPluginDBUpdate.php';
 
 /**
  * Class ilInteractiveVideoDbUpdater
@@ -61,11 +60,11 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
         }
         $this->collectUpdateFiles();
         $this->iterateThroughUpdateFiles();
-        $class_map = require ILIAS_ABSOLUTE_PATH . '/libs/composer/vendor/composer/autoload_classmap.php';
+        $class_map = require ILIAS_ABSOLUTE_PATH . '/vendor/composer/vendor/composer/autoload_classmap.php';
         $this->ctrl_structure_iterator = new ilCtrlArrayIterator($class_map);
 	}
 
-	
+
 	protected function iterateThroughUpdateFiles(): void
 	{
 		foreach($this->update_files as $file)
@@ -96,8 +95,9 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 			}
 			if($file->getFilename() === 'dbupdate.php')
 			{
-				$folder = './Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/' . basename(dirname(dirname(dirname($file->getPathName())))) . '/' . basename(dirname(dirname($file->getPathName()))) . '/' ;
-				$this->getPluginFolder($folder);
+                $folder = './public/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/' . basename(dirname(dirname(dirname($file->getPathName())))) . '/' . basename(dirname(dirname($file->getPathName()))) . '/' ;
+				$path = dirname($file->getRealPath(), 2) . '/';
+                $this->getPluginFolder($path);
 				$this->update_files[] = $folder . basename(dirname($file->getPathName())) . '/' . $file->getBasename();
 			}
 		}
@@ -206,7 +206,7 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 		$plugin_id = $this->getPluginId($folder);
 		if(file_exists($folder . 'sql/dbupdate.php'))
 		{
-			$this->update_map[$plugin_id] = $folder . 'sql/dbupdate.php'; 
+			$this->update_map[$plugin_id] = $folder . 'sql/dbupdate.php';
 		}
 	}
 
@@ -219,7 +219,8 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 	{
 		foreach($this->update_map as $key => $value)
 		{
-			if($file == $value)
+            $real_path = realpath($file);
+			if($real_path == $value)
 			{
 				$this->plugin_id = $key;
 				$this->update_map[$key]= ['file' => $file_version, 'installed'	=> $this->getCurrentVersion()];

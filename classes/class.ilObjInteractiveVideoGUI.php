@@ -4,6 +4,7 @@
 use ILIAS\HTTP\Services;
 use ILIAS\DI\Container;
 use ILIAS\Refinery\ConstraintViolationException;
+use ILIAS\UI\Component\Input\Container\Form\Standard;
 
 /**
  * Class ilObjInteractiveVideoGUI
@@ -201,6 +202,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				    case 'insertQuestion':
                     case 'completeCsvExport':
                     case 'removeSubtitle ':
+                    case 'selectSource ':
                     $this->checkPermission('write');
 						$this->$cmd();
 						break;
@@ -399,8 +401,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $comments_tpl->setVariable('TXT_NO_TEXT_WARNING', $this->plugin->txt('no_text_warning'));
                 $comments_tpl->setVariable('TXT_IS_PRIVATE', $this->plugin->txt('is_private_comment'));
                 $marker_template = '';
-                if( $this->object->isMarkerActive() &&
-                    $this->object->getMarkerForStudents() == 1 || $DIC->access()->checkAccess('write', '', $this->object->getRefId()))
+                if( ($this->object->isMarkerActive() &&
+                        $this->object->getMarkerForStudents() == 1) || $DIC->access()->checkAccess('write', '', $this->object->getRefId()))
                 {
                     $marker_template = $this->buildMarkerEditorTemplate()->get();
                 }
@@ -999,11 +1001,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     protected function initCreateForm(string $new_type): ilPropertyFormGUI
 	{
 		$form = parent::initCreateForm($new_type);
-
 		$form = $this->appendFormsFromFactory($form);
-
-		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
-		$form->addItem($online);
 
 		return $form;
 	}
@@ -1206,6 +1204,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function editProperties(): void
 	{
 	    global $DIC;
+
+        if($this->object->getSourceId() === "") {
+            $this->ctrl->redirect($this, 'selectSource');
+        }
+
         $get = $this->http->wrapper()->query();
         $customJS = '';
         if($get->has('xvid_custom_js')){
@@ -1613,7 +1616,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			if($ilCtrl->getCmd() === 'editProperties')
 			{
 				$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
-				if( ! $this->object->getVideoSourceObject($this->object->getSourceId())->hasOwnPlayer()) {
+				if( $this->object->getSourceId() !== '' && ! $this->object->getVideoSourceObject($this->object->getSourceId())->hasOwnPlayer()) {
 					$ilTabs->addSubTab('addSubtitle', $this->plugin->txt('subtitle'), $this->ctrl->getLinkTarget($this, 'addSubtitle'));
 				}
 			}
@@ -2617,7 +2620,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			#$this->ctrl->redirect($this, 'showTutorInsertCommentForm');
             $this->showTutorInsertCommentForm();
 		}
-        
+
 	}
 
     /**

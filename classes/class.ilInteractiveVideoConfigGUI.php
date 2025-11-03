@@ -135,13 +135,15 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 				{
 					$activation->setChecked(true);
 				}
-				if($update_map[$engine->getId()]['installed'] == $update_map[$engine->getId()]['file'])
+				if(isset($update_map[$engine->getId()]['installed']) && $update_map[$engine->getId()]['installed'] == $update_map[$engine->getId()]['file'])
 				{
 					$info = $this->plugin_object->txt('db_up_to_date');
 				}
 				else
 				{
-					$info = sprintf($this->plugin_object->txt('installed_version'), $update_map[$engine->getId()]['installed'], $update_map[$engine->getId()]['file']);
+                    $installed_version = $update_map[$engine->getId()]['installed'] ?? 0;
+                    $file_version = $update_map[$engine->getId()]['file'] ?? 0;
+					$info = sprintf($this->plugin_object->txt('installed_version'), $installed_version, $file_version);
 				}
                 $activation->setInfo($info);
 				$form->addItem($activation);

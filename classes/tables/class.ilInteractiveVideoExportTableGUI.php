@@ -2,7 +2,7 @@
 /**
  * Class ilInteractiveVideoExportTableGUI
  */
-class ilInteractiveVideoExportTableGUI extends ilExportTableGUI
+class ilInteractiveVideoExportTableGUI extends ilTable2GUI
 {
     /**
      * ilInteractiveVideoExportTableGUI constructor.
@@ -20,10 +20,10 @@ class ilInteractiveVideoExportTableGUI extends ilExportTableGUI
 	}
 
 	/**
-	 * 
+	 *
 	 */
     protected function initMultiCommands(): void
 	{
 		$this->addMultiCommand('confirmDeletion', $this->lng->txt('delete'));
 	}
-} 
+}
