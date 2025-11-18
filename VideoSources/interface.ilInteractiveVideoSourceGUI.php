@@ -48,4 +48,6 @@ interface ilInteractiveVideoSourceGUI
 	 */
 	public function getPlayer($player_id, $obj);
 
+    public function getEditFormCustom(ilPropertyFormGUI $a_form, ilObjInteractiveVideo|ilObject|null $object);
+
 }

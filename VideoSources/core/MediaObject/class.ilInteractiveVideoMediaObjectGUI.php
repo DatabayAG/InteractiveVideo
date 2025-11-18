@@ -89,4 +89,9 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 		return false;
 	}
 
+    public function getEditFormCustom(ilPropertyFormGUI $a_form, ilObjInteractiveVideo|ilObject|null $object)
+    {
+
+    }
+
 }

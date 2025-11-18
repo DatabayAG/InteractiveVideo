@@ -19,13 +19,13 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
         }
         return ['input' => $simple_url, 'source_type' => $source_type];
 
-	/*	$simple_url = new ilTextInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('simple_url'), 'simple_url');
+		$simple_url = new ilTextInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('simple_url'), 'simple_url');
 		$object = new ilInteractiveVideoSimpleUrl();
 		$object->doReadVideoSource($obj_id);
 		$simple_url->setValue($object->getSimpleUrl());
 		$simple_url->setInfo(ilInteractiveVideoPlugin::getInstance()->txt('simple_url_info'));
 		$option->addSubItem($simple_url);
-		return $option;*/
+		return $option;
 	}
 
 	/**
@@ -82,6 +82,13 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
             $a_values[ilInteractiveVideoSimpleUrl::FORM_URL_FIELD] = $instance->getSimpleUrl();
         }
 	}
+
+    public function getEditFormCustom(ilPropertyFormGUI $a_form, ilObjInteractiveVideo|ilObject|null $object)
+    {
+        $hidden_source = new ilHiddenInputGUI(ilInteractiveVideoSimpleUrl::FORM_URL_FIELD);
+        $hidden_source->setValue($object->getSourceId());
+        $a_form->addItem($hidden_source);
+    }
 
 	/**
 	 * @param $form

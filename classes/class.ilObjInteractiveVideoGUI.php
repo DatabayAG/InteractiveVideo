@@ -971,6 +971,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $this->object->setLayoutWidth((int)$layout_width);
 
 		$factory = new ilInteractiveVideoSourceFactory();
+        $a = $form->getInput('source_id');
 		$source = $factory->getVideoSourceObject($form->getInput('source_id'));
 		$source->doUpdateVideoSource($this->obj_id);
 
@@ -1160,6 +1161,22 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$fixed_modal->setInfo($plugin->txt('fixed_modal_info'));
 		$fixed_modal->setValue(1);
 		$a_form->addItem($fixed_modal);
+
+        $hidden_source = new ilHiddenInputGUI('source_id');
+        $hidden_source->setValue($this->object->getSourceId());
+        $a_form->addItem($hidden_source);
+
+        $factory = new ilInteractiveVideoSourceFactory();
+        $sources = $factory->getVideoSources();
+        foreach($sources as $key => $source)
+        {
+            /** @var ilInteractiveVideoSourceGUI $gui */
+            if($factory->isActive($source->getClass()))
+            {
+                $gui= $source->getGUIClass();
+                $gui->getEditFormCustom($a_form, $this->object);
+            }
+        }
 	}
 
 	/**

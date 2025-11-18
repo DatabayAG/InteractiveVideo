@@ -97,4 +97,11 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	{
 		return false;
 	}
+
+    public function getEditFormCustom(ilPropertyFormGUI $a_form, ilObjInteractiveVideo|ilObject|null $object)
+    {
+        $hidden_source = new ilHiddenInputGUI(ilInteractiveVideoSimpleUrl::FORM_URL_FIELD);
+        $hidden_source->setValue($object->getSourceId());
+        $a_form->addItem($hidden_source);
+    }
 }
