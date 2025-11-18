@@ -24,17 +24,17 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 * @param ilPropertyFormGUI $form
 	 * @return bool
 	 */
-	public function checkForm($form)
-	{
+	public function checkForm($form) : bool
+    {
 
 	}
 
 	/**
 	 * @param ilTemplate $tpl
-	 * @return mixed
-	 */
-	public function addPlayerElements($tpl)
-	{
+	 * @return ilGlobalPageTemplate
+     */
+	public function addPlayerElements($tpl) : ilGlobalPageTemplate
+    {
 		$tpl->addJavaScript(self::PATH . 'js/jquery.InteractiveVideoMediaElementPlayer.js');
 		ilPlayerUtil::initMediaElementJs($tpl);
 		return $tpl;
@@ -43,11 +43,11 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	/**
 	 * @param                       $player_id
 	 * @param ilObjInteractiveVideo $obj
-	 * @return ilTemplate
-	 * @throws ilWACException
+	 * @return void
+     * @throws ilWACException
 	 */
-	public function getPlayer($player_id, $obj)
-	{
+	public function getPlayer($player_id, ilObjInteractiveVideo $obj)
+    {
 		$player = new ilTemplate(self::PATH . 'tpl/tpl.video.html', false, false);
 		ilObjMediaObjectGUI::includePresentationJS();
 		$media_object = new ilInteractiveVideoMediaObject();
@@ -66,7 +66,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 * @param array                 $a_values
 	 * @param ilObjInteractiveVideo $obj
 	 */
-	public function getEditFormCustomValues(array &$a_values, $obj)
+	public function getEditFormCustomValues(array &$a_values, ilObjInteractiveVideo $obj)
 	{
 		$object = new ilInteractiveVideoMediaObject();
         if($obj->getSourceId() === $object->getId()) {

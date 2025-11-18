@@ -32,8 +32,8 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 	 * @param ilPropertyFormGUI $form
 	 * @return bool
 	 */
-	public function checkForm($form)
-	{
+	public function checkForm($form) : bool
+    {
 		$simple_url = ilUtil::stripSlashes($_POST['simple_url']);
 		if($simple_url != '' )
 		{
@@ -44,10 +44,10 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 
 	/**
 	 * @param ilTemplate $tpl
-	 * @return mixed
-	 */
-	public function addPlayerElements($tpl)
-	{
+	 * @return ilGlobalPageTemplate
+     */
+	public function addPlayerElements($tpl) : ilGlobalPageTemplate
+    {
 		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/SimpleUrl/js/jquery.InteractiveVideoSimpleUrlPlayer.js');
       #  ilPlayerUtil::initMediaElementJs($tpl);
 		return $tpl;
@@ -56,11 +56,11 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 	/**
 	 * @param                       $player_id
 	 * @param ilObjInteractiveVideo $obj
-	 * @param string     $id
-	 * @return mixed
-	 */
-	public function getPlayer($player_id, $obj)
-	{
+	 * @param string                $id
+	 * @return void
+     */
+	public function getPlayer($player_id, ilObjInteractiveVideo $obj)
+    {
         $player = new ilTemplate("../../VideoSources/core/SimpleUrl/tpl/tpl.video.html", true, true, $obj->getPluginObject()->getDirectory());
 		$instance	= new ilInteractiveVideoSimpleUrl();
 		$instance->doReadVideoSource($obj->getId());
@@ -74,7 +74,7 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 	 * @param array                 $a_values
 	 * @param ilObjInteractiveVideo $obj
 	 */
-	public function getEditFormCustomValues(array &$a_values, $obj)
+	public function getEditFormCustomValues(array &$a_values, ilObjInteractiveVideo $obj)
 	{
 		$instance = new ilInteractiveVideoSimpleUrl();
 		$instance->doReadVideoSource($obj->getId());

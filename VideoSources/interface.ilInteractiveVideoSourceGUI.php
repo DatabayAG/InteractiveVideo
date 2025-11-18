@@ -24,29 +24,24 @@ interface ilInteractiveVideoSourceGUI
 	public function hasOwnConfigForm();
 
 	/**
-	 * @param array $a_values
+	 * @param array                 $a_values
 	 * @param ilObjInteractiveVideo $obj
 	 */
-	public function getEditFormCustomValues(array &$a_values, $obj);
+	public function getEditFormCustomValues(array &$a_values, ilObjInteractiveVideo $obj);
 
 	/**
 	 * @param ilPropertyFormGUI $form
 	 * @return bool
 	 */
-	public function checkForm($form);
+	public function checkForm($form) : bool;
 
 	/**
 	 * @param ilTemplate $tpl
-	 * @return ilTemplate
-	 */
-	public function addPlayerElements($tpl);
+	 * @return ilGlobalPageTemplate
+     */
+	public function addPlayerElements($tpl) : ilGlobalPageTemplate;
 
-	/**
-	 * @param                       $player_id
-	 * @param ilObjInteractiveVideo $obj
-	 * @return
-	 */
-	public function getPlayer($player_id, $obj);
+	public function getPlayer($player_id, ilObjInteractiveVideo $obj);
 
     public function getEditFormCustom(ilPropertyFormGUI $a_form, ilObjInteractiveVideo|ilObject|null $object);
 
