@@ -45,7 +45,7 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 		return false;
 	}
 
-	public function addPlayerElements($tpl) : ilGlobalPageTemplate
+	public function addPlayerElements(ilGlobalPageTemplate $tpl) : ilGlobalPageTemplate
     {
 		$tpl->addJavaScript(self::PATH . 'js/jquery.InteractiveVideoYoutubePlayer.js');
 		return $tpl;
@@ -55,9 +55,9 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	 * @param                       $player_id
 	 * @param ilObjInteractiveVideo $obj
 	 * @param string                $id
-	 * @return void
+	 * @return ilTemplate
      */
-	public function getPlayer($player_id, ilObjInteractiveVideo $obj)
+	public function getPlayer($player_id, ilObjInteractiveVideo $obj) : ilTemplate
     {
         $player = new ilTemplate("../../VideoSources/core/Youtube/tpl/tpl.video.html", true, true, $obj->getPluginObject()->getDirectory());
 		$instance = new ilInteractiveVideoYoutube();
@@ -85,17 +85,17 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	}
 
 	/**
-	 * @param $form
+	 * @param ilPropertyFormGUI $form
 	 */
-	public function getConfigForm($form)
-	{
+	public function getConfigForm(ilPropertyFormGUI $form) : void
+    {
 	}
 
 	/**
 	 * @return boolean
 	 */
-	public function hasOwnConfigForm()
-	{
+	public function hasOwnConfigForm() : bool
+    {
 		return false;
 	}
 

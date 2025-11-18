@@ -43,10 +43,10 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 	}
 
 	/**
-	 * @param ilTemplate $tpl
+	 * @param ilGlobalPageTemplate $tpl
 	 * @return ilGlobalPageTemplate
      */
-	public function addPlayerElements($tpl) : ilGlobalPageTemplate
+	public function addPlayerElements(ilGlobalPageTemplate $tpl) : ilGlobalPageTemplate
     {
 		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/SimpleUrl/js/jquery.InteractiveVideoSimpleUrlPlayer.js');
       #  ilPlayerUtil::initMediaElementJs($tpl);
@@ -57,9 +57,9 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 	 * @param                       $player_id
 	 * @param ilObjInteractiveVideo $obj
 	 * @param string                $id
-	 * @return void
+	 * @return ilTemplate
      */
-	public function getPlayer($player_id, ilObjInteractiveVideo $obj)
+	public function getPlayer($player_id, ilObjInteractiveVideo $obj) : ilTemplate
     {
         $player = new ilTemplate("../../VideoSources/core/SimpleUrl/tpl/tpl.video.html", true, true, $obj->getPluginObject()->getDirectory());
 		$instance	= new ilInteractiveVideoSimpleUrl();
@@ -91,18 +91,18 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
     }
 
 	/**
-	 * @param $form
+	 * @param ilPropertyFormGUI $form
 	 */
-	public function getConfigForm($form)
-	{
+	public function getConfigForm(ilPropertyFormGUI $form) : void
+    {
 
 	}
 
 	/**
 	 * @return boolean
 	 */
-	public function hasOwnConfigForm()
-	{
+	public function hasOwnConfigForm() : bool
+    {
 		return false;
 	}
 

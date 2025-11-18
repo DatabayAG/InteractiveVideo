@@ -30,10 +30,10 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	}
 
 	/**
-	 * @param ilTemplate $tpl
+	 * @param ilGlobalPageTemplate $tpl
 	 * @return ilGlobalPageTemplate
      */
-	public function addPlayerElements($tpl) : ilGlobalPageTemplate
+	public function addPlayerElements(ilGlobalPageTemplate $tpl) : ilGlobalPageTemplate
     {
 		$tpl->addJavaScript(self::PATH . 'js/jquery.InteractiveVideoMediaElementPlayer.js');
 		ilPlayerUtil::initMediaElementJs($tpl);
@@ -43,10 +43,10 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	/**
 	 * @param                       $player_id
 	 * @param ilObjInteractiveVideo $obj
-	 * @return void
+	 * @return ilTemplate
      * @throws ilWACException
 	 */
-	public function getPlayer($player_id, ilObjInteractiveVideo $obj)
+	public function getPlayer($player_id, ilObjInteractiveVideo $obj) : ilTemplate
     {
 		$player = new ilTemplate(self::PATH . 'tpl/tpl.video.html', false, false);
 		ilObjMediaObjectGUI::includePresentationJS();
@@ -75,17 +75,17 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	}
 
 	/**
-	 * @param $form
+	 * @param ilPropertyFormGUI $form
 	 */
-	public function getConfigForm($form)
-	{
+	public function getConfigForm(ilPropertyFormGUI $form) : void
+    {
 	}
 
 	/**
 	 * @return boolean
 	 */
-	public function hasOwnConfigForm()
-	{
+	public function hasOwnConfigForm() : bool
+    {
 		return false;
 	}
 
