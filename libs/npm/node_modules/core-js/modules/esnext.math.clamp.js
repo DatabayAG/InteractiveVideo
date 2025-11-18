@@ -1,13 +1,10 @@
 'use strict';
 var $ = require('../internals/export');
+var clamp = require('../internals/math-clamp');
 
-var min = Math.min;
-var max = Math.max;
-
+// TODO: Remove from `core-js@4`
 // `Math.clamp` method
-// https://rwaldron.github.io/proposal-math-extensions/
+// https://github.com/tc39/proposal-math-clamp
 $({ target: 'Math', stat: true, forced: true }, {
-  clamp: function clamp(x, lower, upper) {
-    return min(upper, max(lower, x));
-  }
+  clamp: clamp
 });

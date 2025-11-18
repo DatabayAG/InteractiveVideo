@@ -9,16 +9,15 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	const PATH = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/';
 
 	/**
-	 * @param ilRadioOption $option
 	 * @param               $obj_id
 	 * @return ilRadioOption
 	 */
-	public function getForm($option, $obj_id)
+    public function getForm(ILIAS\UI\Factory $ui, int $obj_id)
 	{
-		$upload_field = new ilFileInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('video_file'), 'video_file');
+		/*$upload_field = new ilFileInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('video_file'), 'video_file');
 		$upload_field->setSuffixes(array('mp4', 'mov', 'mp3', 'flv', 'm4v', 'ogg', 'ogv', 'webm'));
 		$option->addSubItem($upload_field);
-		return $option;
+		return $option;*/
 	}
 
 	/**

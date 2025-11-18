@@ -1345,5 +1345,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         return $this->marker_active;
     }
 
-
+    public function getPluginObject() {
+        return $this->plugin;
+    }
 }

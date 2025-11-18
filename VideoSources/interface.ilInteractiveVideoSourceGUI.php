@@ -7,15 +7,14 @@
 interface ilInteractiveVideoSourceGUI
 {
 	/**
-	 * @param ilRadioOption $option
 	 * @param integer $obj_id
 	 * @return ilRadioOption
 	 */
-	public function getForm($option, $obj_id);
+    public function getForm(ILIAS\UI\Factory $ui, int $obj_id);
 
 	/**
 	 * @param ilPropertyFormGUI $form
-	 * @return 
+	 * @return
 	 */
 	public function getConfigForm($form);
 

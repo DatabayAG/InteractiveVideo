@@ -5,20 +5,27 @@
  */
 class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 {
-	/**
-	 * @param ilRadioOption $option
-	 * @param               $obj_id
-	 * @return ilRadioOption
-	 */
-	public function getForm($option, $obj_id)
+    public function getForm(ILIAS\UI\Factory $ui, int $obj_id)
 	{
-		$simple_url = new ilTextInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('simple_url'), 'simple_url');
+
+        $simple_url = $ui->input()->field()->text(ilInteractiveVideoPlugin::getInstance()->txt('simple_url'), ilInteractiveVideoPlugin::getInstance()->txt('simple_url_info'));
+        $source_type = $ui->input()->field()->hidden()->withValue('surl')->withDedicatedName('source');
+        $object = new ilInteractiveVideoSimpleUrl();
+        if($obj_id > 0) {
+            $simple_src = $object->doReadVideoSource($obj_id);
+            if($simple_src !== 0) {
+                $simple_url->withValue($simple_src);
+            }
+        }
+        return ['input' => $simple_url, 'source_type' => $source_type];
+
+	/*	$simple_url = new ilTextInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('simple_url'), 'simple_url');
 		$object = new ilInteractiveVideoSimpleUrl();
 		$object->doReadVideoSource($obj_id);
 		$simple_url->setValue($object->getSimpleUrl());
 		$simple_url->setInfo(ilInteractiveVideoPlugin::getInstance()->txt('simple_url_info'));
 		$option->addSubItem($simple_url);
-		return $option;
+		return $option;*/
 	}
 
 	/**
@@ -42,7 +49,7 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 	public function addPlayerElements($tpl)
 	{
 		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/SimpleUrl/js/jquery.InteractiveVideoSimpleUrlPlayer.js');
-        ilPlayerUtil::initMediaElementJs($tpl);
+      #  ilPlayerUtil::initMediaElementJs($tpl);
 		return $tpl;
 	}
 
@@ -54,7 +61,7 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function getPlayer($player_id, $obj)
 	{
-		$player		= new ilTemplate('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/SimpleUrl/tpl/tpl.video.html', false, false);
+        $player = new ilTemplate("../../VideoSources/core/SimpleUrl/tpl/tpl.video.html", true, true, $obj->getPluginObject()->getDirectory());
 		$instance	= new ilInteractiveVideoSimpleUrl();
 		$instance->doReadVideoSource($obj->getId());
 		$player->setVariable('PLAYER_ID', $player_id);

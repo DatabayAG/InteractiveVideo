@@ -3,6 +3,6 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-import type { Translations } from 'ckeditor5';
+import type { Translations } from '@ckeditor/ckeditor5-utils';
 declare const translations: Translations;
 export default translations;

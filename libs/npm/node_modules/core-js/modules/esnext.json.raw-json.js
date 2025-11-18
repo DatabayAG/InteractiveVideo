@@ -22,21 +22,23 @@ var create = getBuiltIn('Object', 'create');
 var freeze = getBuiltIn('Object', 'freeze');
 var at = uncurryThis(''.charAt);
 var slice = uncurryThis(''.slice);
-var exec = uncurryThis(/./.exec);
 var push = uncurryThis([].push);
 
 var MARK = uid();
 var MARK_LENGTH = MARK.length;
 var ERROR_MESSAGE = 'Unacceptable as raw JSON';
-var IS_WHITESPACE = /^[\t\n\r ]$/;
 
-// `JSON.parse` method
-// https://tc39.es/proposal-json-parse-with-source/#sec-json.israwjson
+var isWhitespace = function (it) {
+  return it === ' ' || it === '\t' || it === '\n' || it === '\r';
+};
+
+// `JSON.rawJSON` method
+// https://tc39.es/proposal-json-parse-with-source/#sec-json.rawjson
 // https://github.com/tc39/proposal-json-parse-with-source
 $({ target: 'JSON', stat: true, forced: !NATIVE_RAW_JSON }, {
   rawJSON: function rawJSON(text) {
     var jsonString = toString(text);
-    if (jsonString === '' || exec(IS_WHITESPACE, at(jsonString, 0)) || exec(IS_WHITESPACE, at(jsonString, jsonString.length - 1))) {
+    if (jsonString === '' || isWhitespace(at(jsonString, 0)) || isWhitespace(at(jsonString, jsonString.length - 1))) {
       throw new $SyntaxError(ERROR_MESSAGE);
     }
     var parsed = parse(jsonString);

@@ -39,6 +39,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
     };
 
     pub.playingEventHandler = function (interval, player) {
+      console.log('pub.playingEventHandler', interval);
         let cueTime, stop_video, i, j;
         let player_id = pub.getPlayerIdFromPlayerObject(player);
         let current_time = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
@@ -162,7 +163,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
     };
 
     pub.insertMarker = function (comment) {
-        if ($('.interactive_overlay_element_' + comment.comment_id).size() === 0) {
+        if ( $('.interactive_overlay_element_' + comment.comment_id).length === 0) {
             var marker = '<g class=interactive_overlay_element_' + comment.comment_id + '>' + comment.marker + '</g>';
             $('#ilInteractiveVideoOverlay').html($('#ilInteractiveVideoOverlay').html() + marker);
         }
@@ -554,8 +555,8 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
     };
 
     pub.doesReferencePointExists = function () {
-        let object = $('.back_link_to');
-        return (object.size() > 0);
+       // let object = $('.back_link_to');
+       // return (object.size() > 0);
     };
 
     pub.jumpToTimeInVideoFromCommentTime = function () {

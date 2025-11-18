@@ -1,5 +1,5 @@
 'use strict';
-var global = require('../internals/global');
+var globalThis = require('../internals/global-this');
 var uncurryThis = require('../internals/function-uncurry-this');
 var DESCRIPTORS = require('../internals/descriptors');
 var NATIVE_ARRAY_BUFFER = require('../internals/array-buffer-basic-detection');
@@ -33,14 +33,14 @@ var WRONG_INDEX = 'Wrong index';
 var getInternalArrayBufferState = InternalStateModule.getterFor(ARRAY_BUFFER);
 var getInternalDataViewState = InternalStateModule.getterFor(DATA_VIEW);
 var setInternalState = InternalStateModule.set;
-var NativeArrayBuffer = global[ARRAY_BUFFER];
+var NativeArrayBuffer = globalThis[ARRAY_BUFFER];
 var $ArrayBuffer = NativeArrayBuffer;
 var ArrayBufferPrototype = $ArrayBuffer && $ArrayBuffer[PROTOTYPE];
-var $DataView = global[DATA_VIEW];
+var $DataView = globalThis[DATA_VIEW];
 var DataViewPrototype = $DataView && $DataView[PROTOTYPE];
 var ObjectPrototype = Object.prototype;
-var Array = global.Array;
-var RangeError = global.RangeError;
+var Array = globalThis.Array;
+var RangeError = globalThis.RangeError;
 var fill = uncurryThis(arrayFill);
 var reverse = uncurryThis([].reverse);
 
@@ -205,7 +205,7 @@ if (!NATIVE_ARRAY_BUFFER) {
   });
 } else {
   var INCORRECT_ARRAY_BUFFER_NAME = PROPER_FUNCTION_NAME && NativeArrayBuffer.name !== ARRAY_BUFFER;
-  /* eslint-disable no-new -- required for testing */
+  /* eslint-disable no-new, sonarjs/inconsistent-function-call -- required for testing */
   if (!fails(function () {
     NativeArrayBuffer(1);
   }) || !fails(function () {
@@ -216,7 +216,7 @@ if (!NATIVE_ARRAY_BUFFER) {
     new NativeArrayBuffer(NaN);
     return NativeArrayBuffer.length !== 1 || INCORRECT_ARRAY_BUFFER_NAME && !CONFIGURABLE_FUNCTION_NAME;
   })) {
-    /* eslint-enable no-new -- required for testing */
+    /* eslint-enable no-new, sonarjs/inconsistent-function-call -- required for testing */
     $ArrayBuffer = function ArrayBuffer(length) {
       anInstance(this, ArrayBufferPrototype);
       return inheritIfRequired(new NativeArrayBuffer(toIndex(length)), this, $ArrayBuffer);

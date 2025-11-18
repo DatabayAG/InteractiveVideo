@@ -18,6 +18,7 @@ use ILIAS\UI\Component\Input\Container\Form\Standard;
  */
 class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopItemHandling
 {
+    protected string $PATH = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/';
 	/** @var ilCtrl */
     protected ilCtrl $ctrl;
 
@@ -323,9 +324,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $DIC;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
-        $DIC->ui()->mainTemplate()->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoQuestionCreator.js');
+       // $DIC->ui()->mainTemplate()->addJavaScript($this->PATH . '/js/InteractiveVideoQuestionCreator.js');
         if($this->object->isMarkerActive()){
-            $DIC->ui()->mainTemplate()->addJavaScript($this->plugin->getDirectory() . '/js/InteractiveVideoOverlayMarker.js');
+            $DIC->ui()->mainTemplate()->addJavaScript($this->PATH . '/js/InteractiveVideoOverlayMarker.js');
             $DIC->ui()->mainTemplate()->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
         }
 		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
@@ -548,8 +549,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $DIC;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
-        $DIC->ui()->mainTemplate()->addJavaScript($plugin->getDirectory() . '/js/InteractiveVideoQuestionCreator.js');
-        $DIC->ui()->mainTemplate()->addCss($plugin->getDirectory() . '/templates/default/xvid.css');
+        $DIC->ui()->mainTemplate()->addJavaScript($this->PATH .'/js/InteractiveVideoQuestionCreator.js');
+        $DIC->ui()->mainTemplate()->addCss($this->PATH .'/templates/default/xvid.css');
 		$simple_choice = new SimpleChoiceQuestion();
         $ajax_object   = new SimpleChoiceQuestionAjaxHandler();
         $get = $this->http->wrapper()->query();
@@ -655,12 +656,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     {
         foreach($this->custom_css as $file)
         {
-            $tpl->addCss($this->plugin->getDirectory() . $file);
+            $tpl->addCss($this->PATH . $file);
         }
 
         foreach($this->custom_javascript as $file)
         {
-            $tpl->addJavaScript($this->plugin->getDirectory() . $file, true, 2);
+            $tpl->addJavaScript($this->PATH . $file, true, 2);
         }
     }
 
@@ -998,10 +999,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      * @param string $new_type
      * @return ilPropertyFormGUI
      */
-    protected function initCreateForm(string $new_type): ilPropertyFormGUI
-	{
+    protected function initCreateForm(string $new_type) : ilPropertyFormGUI|Standard|array
+    {
+        /* @var $form Standard */
 		$form = parent::initCreateForm($new_type);
-		$form = $this->appendFormsFromFactory($form);
+		$this->selectSource();
 
 		return $form;
 	}
@@ -1020,7 +1022,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('editProperties');
 
-		$a_form = $this->appendFormsFromFactory($a_form);
+        if($a_form === null) {
+            $a_form = new ilPropertyFormGUI();
+        }
+		#$a_form = $this->selectSource($a_form);
 		$this->appendCkEditorMathJaxSupportToForm($a_form);
 		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
 		$a_form->addItem($online);
@@ -1502,40 +1507,72 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
-    /**
-     * @param ilPropertyFormGUI $a_form
-     * @return ilPropertyFormGUI
-     */
-	protected function appendFormsFromFactory(ilPropertyFormGUI $a_form): ilPropertyFormGUI
+	protected function selectSource()
 	{
+        global $DIC;
+        $ui = $DIC->ui()->factory();
+        $renderer = $DIC->ui()->renderer();
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 		$factory = new ilInteractiveVideoSourceFactory();
+        $field_factory = $this->ui_factory->input()->field();
 		$sources = $factory->getVideoSources();
+        $form_container = [];
 
-		$item_group = new ilRadioGroupInputGUI($plugin->txt('source'), 'source_id');
-		$a_form->addItem($item_group);
+
 		$non_active = true;
 		foreach($sources as $key => $source)
 		{
 			/** @var ilInteractiveVideoSourceGUI $gui */
 			if($factory->isActive($source->getClass()))
 			{
-				$op = new ilRadioOption($plugin->txt($source->getId()), $source->getId());
-				$gui= $source->getGUIClass();
-				$gui->getForm($op, $this->obj_id);
-				$item_group->addOption($op);
+                $gui = $source->getGUIClass();
+                $custom_form = $gui->getForm($ui, $this->obj_id);
+                if($custom_form !== null) {
+                    $form_container[] = $field_factory->group($custom_form, $plugin->txt($source->getId()))->withDedicatedName($source->getId());
+                }
 				$non_active = false;
 			}
 		}
 
-		$item_group->setValue($factory->getDefaultVideoSource());
+		#ä$item_group->setValue($factory->getDefaultVideoSource());
 		if($non_active)
 		{
             $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('at_least_one_source'), true);
 		}
-		return $a_form;
+        $sg = $ui->input()->field()->switchableGroup(
+            $form_container,
+            ilInteractiveVideoPlugin::getInstance()->txt('source')
+        );
+
+        $form = $ui->input()->container()->form()->standard($this->ctrl->getFormAction($this, 'updateSource'), ['iv_source' => $sg]);
+        $this->tpl->setContent($renderer->render($form));
+        return $form;
 	}
 
+    protected function updateSource(){
+        global $DIC;
+
+        $request = $DIC->http()->request();
+        $form = $this->selectSource();
+        $type = null;
+        $input = null;
+
+        if ($request->getMethod() === "POST") {
+            $form = $form->withRequest($request);
+            $result = $form->getData();
+            $source_id = 1;
+            if(isset($result['iv_source'][$source_id]['source_type'])) {
+                $type = $result['iv_source'][$source_id]['source_type'] ?: '';
+                $input = $result['iv_source'][$source_id]['input'] ?: '';
+            }
+            $this->object->setSourceId($type);
+            $this->object->update();
+
+            if($type !== null) {
+                $this->ctrl->redirectByClass(__CLASS__, "");
+            }
+        }
+    }
     /**
      * @throws ilCtrlException
      * @throws ilCtrlException

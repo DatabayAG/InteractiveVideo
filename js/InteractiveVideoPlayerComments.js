@@ -256,7 +256,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 
 		drop_down_list.html('');
 		drop_down_list.append(reset_elem);
-		for ( element in author_list) 
+		for ( element in author_list)
 		{
 			element = '<li><a href="#">' + element + '</a></li>';
 			drop_down_list.append(element);
@@ -593,7 +593,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		}
 		return value + '</div>';
 	};
-	
+
 	pub.getCommentRepliesHtml = function(reply)
 	{
 		let name = reply.user_name;
@@ -664,15 +664,15 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 		{
 			image = '<img src="' + comment.user_image + '"/>';
 		}
-		
+
 		if(parseInt(comment.is_interactive, 10) === 1)
 		{
 			image = '<img class="question_mark_comment" src="Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/templates/images/question_mark.svg"/>'
 		}
-		
+
 		return '<div class="comment_user_image">' + image + '</div>';
 	};
-	
+
 	pub.secondsToTimeCode = function(time)
 	{
 		let obj = pro.convertSecondsToTimeObject(time);
@@ -702,7 +702,7 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 			}
 		}
 	};
-	
+
 	pro.convertSecondsToTimeObject = function(time)
 	{
 		let obj = {};
@@ -717,11 +717,11 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pro.preselectValueOfTimeSelection = function(time, element)
 	{
 		element.val(time);
-		if(element.size() > 0) {
+		if(element.length > 0) {
 			element.timepicker('setTime', time);
 		}
 	};
-	
+
 	pub.protect = pro;
 	return pub;
 

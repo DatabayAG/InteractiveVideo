@@ -3,8 +3,7 @@
 // Definitions by: ondratra <https://github.com/ondratra>
 // TypeScript Version: 3.0
 
-export = Plyr;
-export as namespace Plyr;
+
 
 declare class Plyr {
   /**
@@ -565,7 +564,6 @@ declare namespace Plyr {
   interface FullScreenOptions {
     enabled?: boolean;
     fallback?: boolean | 'force';
-    allowAudio?: boolean;
     iosNative?: boolean;
     container?: string;
   }
@@ -584,6 +582,7 @@ declare namespace Plyr {
   interface PreviewThumbnailsOptions {
     enabled?: boolean;
     src?: string | string[];
+    withCredentials?: boolean;
   }
 
   interface MediaMetadataArtwork {
@@ -724,3 +723,7 @@ declare namespace Plyr {
     ui: boolean;
   }
 }
+
+export = Plyr;
+export as namespace Plyr;
+export default Plyr;

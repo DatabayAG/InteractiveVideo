@@ -59,7 +59,9 @@ class ilInteractiveVideoSimpleUrl implements ilInteractiveVideoSource
 		$row = $ilDB->fetchAssoc($result);
         if(isset($row['simple_url'])){
             $this->setSimpleUrl($row['simple_url']);
+            return $row['simple_url'];
         }
+        return 0;
 	}
 
 	/**
@@ -187,7 +189,7 @@ class ilInteractiveVideoSimpleUrl implements ilInteractiveVideoSource
 	{
 		return '';
 	}
-	
+
 
 	/**
 	 * @return string

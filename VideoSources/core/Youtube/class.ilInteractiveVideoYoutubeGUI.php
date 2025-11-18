@@ -14,18 +14,19 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	/**
 	 * @param ilRadioOption $option
 	 * @param               $obj_id
-	 * @return ilRadioOption
-	 */
-	public function getForm($option, $obj_id)
+     */
+	public function getForm(ILIAS\UI\Factory $ui, int $obj_id)
 	{
-		$youtube_url = new ilTextInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('ytb_youtube_url'), ilInteractiveVideoYoutube::FORM_FIELD);
-		$object = new ilInteractiveVideoYoutube();
+        $youtube_url = $ui->input()->field()->text(ilInteractiveVideoPlugin::getInstance()->txt('ytb_youtube_url'), ilInteractiveVideoPlugin::getInstance()->txt('ytb_youtube_info'));
+        $source_type = $ui->input()->field()->hidden()->withValue("ytb")->withDedicatedName('source');
+        $object = new ilInteractiveVideoYoutube();
         if($obj_id > 0) {
-            $youtube_url->setValue($object->doReadVideoSource($obj_id));
+            $youtube_src = $object->doReadVideoSource($obj_id);
+            if($youtube_src !== 0) {
+                $youtube_url->withValue($youtube_src);
+            }
         }
-		$youtube_url->setInfo(ilInteractiveVideoPlugin::getInstance()->txt('ytb_youtube_info'));
-		$option->addSubItem($youtube_url);
-		return $option;
+		return ['input' => $youtube_url, 'source_type' => $source_type];
 	}
 
 	/**
@@ -43,10 +44,6 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 		return false;
 	}
 
-	/**
-	 * @param ilTemplate $tpl
-	 * @return mixed
-	 */
 	public function addPlayerElements($tpl)
 	{
 		$tpl->addJavaScript(self::PATH . 'js/jquery.InteractiveVideoYoutubePlayer.js');
@@ -61,7 +58,7 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function getPlayer($player_id, $obj)
 	{
-		$player = new ilTemplate(self::PATH . 'tpl/tpl.video.html', false, false);
+        $player = new ilTemplate("../../VideoSources/core/Youtube/tpl/tpl.video.html", true, true, $obj->getPluginObject()->getDirectory());
 		$instance = new ilInteractiveVideoYoutube();
 		$player->setVariable('PLAYER_ID', $player_id);
 		$player->setVariable('YOUTUBE_ID', $instance->doReadVideoSource($obj->getId()));

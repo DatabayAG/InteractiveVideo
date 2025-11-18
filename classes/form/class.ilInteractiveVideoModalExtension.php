@@ -11,9 +11,8 @@ class ilInteractiveVideoModalExtension extends ilModalGUI
      */
     public function getHTML(): string
 	{
-		$tpl = new ilTemplate("tpl.modal.html", true, true, "Services/UIComponent/Modal");
-
-		if (count($this->getButtons()) > 0)
+        $tpl = new ilTemplate("tpl.modal.html", true, true, "components/ILIAS/UIComponent/Modal");
+        if (count($this->getButtons()) > 0)
 		{
 			foreach ($this->getButtons() as $b)
 			{
