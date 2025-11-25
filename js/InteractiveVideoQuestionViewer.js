@@ -302,7 +302,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 					element = '<div class="best_solution_answer_view"><input type="radio" onClick="return false;" checked="checked"></div>'
 				}
 				$( element).prependTo($('#answer_' + answer_id).parent())
-			} else if (question_type === "1"){
+			} else if (question_type === 1){
 				let element = '<div class="best_solution_answer_view"><input type="checkbox" onClick="return false;"></div>'
 				if(answer_state === 1) {
 					element = '<div class="best_solution_answer_view"><input type="checkbox" onClick="return false;" checked="checked"></div>'
