@@ -8,7 +8,7 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 {
 
 	const FORM_FIELD = 'youtube_url';
-	
+
 	const TABLE_NAME = 'rep_robj_xvid_youtube';
 
 	/**
@@ -40,18 +40,18 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	}
 
 	/**
-	 * @param $obj_id
+	 * @param int $obj_id
 	 */
-	public function doCreateVideoSource($obj_id)
+	public function doCreateVideoSource(int $obj_id)
 	{
 		$this->doUpdateVideoSource($obj_id);
 	}
 
 	/**
-	 * @param $obj_id
+	 * @param int $obj_id
 	 * @return int
 	 */
-	public function doReadVideoSource($obj_id)
+	public function doReadVideoSource(int $obj_id)
 	{
 		global $ilDB;
 		$result = $ilDB->query('SELECT youtube_id FROM '.self::TABLE_NAME.' WHERE obj_id = '.$ilDB->quote($obj_id, 'integer'));
@@ -65,25 +65,25 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	/**
 	 * @param $obj_id
 	 */
-	public function doDeleteVideoSource($obj_id)
-	{
+	public function doDeleteVideoSource($obj_id) : int
+    {
 		$this->beforeDeleteVideoSource($obj_id);
 	}
 
 	/**
-	 * @param $original_obj_id
-	 * @param $new_obj_id
+	 * @param int $original_obj_id
+	 * @param int $new_obj_id
 	 */
-	public function doCloneVideoSource($original_obj_id, $new_obj_id)
+	public function doCloneVideoSource(int $original_obj_id, int $new_obj_id)
 	{
 		$youtube_id = $this->doReadVideoSource($original_obj_id);
 		$this->saveData($new_obj_id, $youtube_id);
 	}
 
 	/**
-	 * @param $obj_id
+	 * @param int $obj_id
 	 */
-	public function doUpdateVideoSource($obj_id)
+	public function doUpdateVideoSource(int $obj_id)
 	{
         $source_id = $_POST[self::FORM_FIELD];
 		if($source_id !== null && ilUtil::stripSlashes($source_id))
@@ -122,8 +122,8 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	/**
 	 * @param $obj_id
 	 */
-	public function beforeDeleteVideoSource($obj_id)
-	{
+	public function beforeDeleteVideoSource($obj_id) : int
+    {
 		$this->removeEntryFromTable($obj_id);
 	}
 
@@ -140,32 +140,32 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	/**
 	 * @return string
 	 */
-	public function getClass()
-	{
+	public function getClass() : string
+    {
 		return __CLASS__;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function isFileBased()
-	{
+	public function isFileBased() : bool
+    {
 		return false;
 	}
 
 	/**
-	 * @return ilInteractiveVideoYoutubeGUI
-	 */
-	public function getGUIClass()
-	{
+	 * @return ilInteractiveVideoSourceGUI
+     */
+	public function getGUIClass() : ilInteractiveVideoSourceGUI
+    {
 		return new ilInteractiveVideoYoutubeGUI();
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getId()
-	{
+	public function getId() : string
+    {
 		return $this->id;
 	}
 
@@ -253,8 +253,8 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 
 	}
 
-	public function hasOwnPlayer()
-	{
+	public function hasOwnPlayer() : bool
+    {
 		return true;
 	}
 }

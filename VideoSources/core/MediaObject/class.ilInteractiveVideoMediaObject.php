@@ -22,9 +22,9 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 * @var string
 	 */
 	protected $mob_id;
-	
+
 	public $import_part_path = '';
-	
+
 	public $import_file_name = '';
 
 	/**
@@ -41,18 +41,18 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	}
 
 	/**
-	 * @param $obj_id
+	 * @param int $obj_id
 	 */
-	public function doCreateVideoSource($obj_id)
+	public function doCreateVideoSource(int $obj_id)
 	{
 		$this->doUpdateVideoSource($obj_id);
 	}
 
 	/**
-	 * @param $obj_id
+	 * @param int $obj_id
 	 * @return int
 	 */
-	public function doReadVideoSource($obj_id)
+	public function doReadVideoSource(int $obj_id)
 	{
 		global $ilDB;
 		$result = $ilDB->query('SELECT mob_id FROM '. self::TABLE_NAME .' WHERE obj_id = '.$ilDB->quote($obj_id, 'integer'));
@@ -65,16 +65,16 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	/**
 	 * @param $obj_id
 	 */
-	public function doDeleteVideoSource($obj_id)
-	{
+	public function doDeleteVideoSource($obj_id) : int
+    {
 		$this->beforeDeleteVideoSource($obj_id);
 	}
 
 	/**
-	 * @param $original_obj_id
-	 * @param $new_obj_id
+	 * @param int $original_obj_id
+	 * @param int $new_obj_id
 	 */
-	public function doCloneVideoSource($original_obj_id, $new_obj_id)
+	public function doCloneVideoSource(int $original_obj_id, int $new_obj_id)
 	{
 		$mob = new ilObjMediaObject($this->doReadVideoSource($original_obj_id));
 		$new_mob = $mob->duplicate();
@@ -84,9 +84,9 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	}
 
 	/**
-	 * @param $obj_id
+	 * @param int $obj_id
 	 */
-	public function doUpdateVideoSource($obj_id)
+	public function doUpdateVideoSource(int $obj_id)
 	{
 		if (isset($_FILES['video_file']))
 		{
@@ -100,8 +100,8 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	/**
 	 * @param $obj_id
 	 */
-	public function beforeDeleteVideoSource($obj_id)
-	{
+	public function beforeDeleteVideoSource($obj_id) : int
+    {
         $video_source_id = $this->doReadVideoSource($obj_id);
         if($video_source_id !== null) {
             $mob = new ilObjMediaObject($video_source_id);
@@ -128,7 +128,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 			$cmd = $ilCtrl->getCmd();
 			if($cmd == 'saveTarget')
 			{
-				// doClone .. 
+				// doClone ..
 				return true;
 			}
 			else
@@ -253,32 +253,32 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	/**
 	 * @return string
 	 */
-	public function getClass()
-	{
+	public function getClass() : string
+    {
 		return __CLASS__;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function isFileBased()
-	{
+	public function isFileBased() : bool
+    {
 		return true;
 	}
 
 	/**
-	 * @return ilInteractiveVideoMediaObjectGUI
-	 */
-	public function getGUIClass()
-	{
+	 * @return ilInteractiveVideoSourceGUI
+     */
+	public function getGUIClass() : ilInteractiveVideoSourceGUI
+    {
 		return new ilInteractiveVideoMediaObjectGUI();
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getId()
-	{
+	public function getId() : string
+    {
 		return $this->id;
 	}
 
@@ -397,8 +397,8 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		}
 	}
 
-	public function hasOwnPlayer()
-	{
+	public function hasOwnPlayer() : bool
+    {
 		return false;
 	}
 }

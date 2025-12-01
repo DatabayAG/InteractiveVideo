@@ -6,61 +6,27 @@
  */
 interface ilInteractiveVideoSource
 {
-	/**
-	 * @param integer $obj_id
-	 */
-	public function doCreateVideoSource($obj_id);
+	public function doCreateVideoSource(int $obj_id);
 
-	/**
-	 * @param integer $obj_id
-	 */
-	public function doReadVideoSource($obj_id);
+	public function doReadVideoSource(int $obj_id);
 
-	/**
-	 * @param integer $obj_id
-	 */
-	public function doDeleteVideoSource($obj_id);
+	public function doDeleteVideoSource($obj_id) : int;
 
-	/**
-	 * @param integer $original_obj_id
-	 * @param integer $new_obj_id
-	 */
-	public function doCloneVideoSource($original_obj_id, $new_obj_id);
+	public function doCloneVideoSource(int $original_obj_id, int $new_obj_id);
 
-	/**
-	 * @param integer $obj_id
-	 */
-	public function doUpdateVideoSource($obj_id);
+	public function doUpdateVideoSource(int $obj_id);
 
-	/**
-	 * @param integer $obj_id
-	 */
-	public function beforeDeleteVideoSource($obj_id);
+	public function beforeDeleteVideoSource($obj_id) : int;
 
-	/**
-	 * @return string
-	 */
-	public function getClass();
+	public function getClass() : string;
 
-	/**
-	 * @return string
-	 */
-	public function getId();
+	public function getId() : string;
 
-	/**
-	 * @return bool
-	 */
-	public function isFileBased();
+	public function isFileBased() : bool;
 
-	/**
-	 * @return bool
-	 */
-	public function hasOwnPlayer();
+	public function hasOwnPlayer() : bool;
 
-	/**
-	 * @return ilInteractiveVideoSourceGUI
-	 */
-	public function getGUIClass();
+	public function getGUIClass() : ilInteractiveVideoSourceGUI;
 
 	/**
 	 * @return string

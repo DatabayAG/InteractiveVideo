@@ -115,4 +115,9 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
         }
         return ilUtil::stripSlashes($a_str, true, '<a><br><strong><em><span>');
     }
+
+    public static function _getIcon(string $a_type) : string
+    {
+        return './Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/templates/images/icon_xvid.svg';
+    }
 }
