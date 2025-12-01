@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "@wiris/mathtype-ckeditor5": "^8.10.0",
+    "bootstrap": "^5.3.8",
     "bootstrap-timepicker": "^0.5.2",
     "ckeditor5": "^42.0.0",
     "ckeditor5-mathtype": "^1.0.4",
