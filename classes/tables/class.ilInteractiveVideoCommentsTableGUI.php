@@ -37,7 +37,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 	{
 		/**
 		 * @var $ilCtrl ilCtrl
-		 * @var ilToolbarGUI $ilToolbar 
+		 * @var ilToolbarGUI $ilToolbar
 		 */
 		global $ilCtrl, $ilAccess, $ilToolbar, $DIC;
 		$this->ctrl = $ilCtrl;
@@ -61,7 +61,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		{
 			$title = $a_parent_obj->getPluginInstance()->txt('my_comments');
 		}
-		
+
 		$this->setTitle($title);
 		$this->setRowTemplate('tpl.row_comments.html', $a_parent_obj->getPluginInstance()->getDirectory());
 
@@ -93,7 +93,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		$this->addColumn($this->lng->txt('actions'), 'actions', '10%');
 
 		$this->setSelectAllCheckbox('comment_id');
-		
+
 		if($a_parent_cmd == 'editComments')
 		{
 			$this->addMultiCommand('confirmDeleteComment', $this->lng->txt('delete'));
@@ -102,7 +102,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		{
 			$this->addMultiCommand('confirmDeleteMyComment', $this->lng->txt('delete'));
 		}
-		
+
 		$this->setShowRowsSelector(true);
 	}
 
@@ -188,16 +188,16 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 			$this->tpl->setVariable('VAL_'.strtoupper($key), $value);
 		}
 
-		$current_selection_list = new ilAdvancedSelectionListGUI();
-		$current_selection_list->setListTitle($this->lng->txt('actions'));
-		$current_selection_list->setId('act_' . $a_set['comment_id']);
+        global $DIC;
+        $f = $DIC->ui()->factory();
+        $renderer = $DIC->ui()->renderer();
 
 		$this->ctrl->setParameter($this->parent_obj, 'comment_id', $a_set['comment_id']);
-		
+
 		if(isset($a_set['is_interactive']) && $a_set['is_interactive'] == 1)
 		{
 			$link_target =  $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editQuestion' : 'editComment');
-		}	
+        }
 		else
 		{
 			$link_target =  $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editComment' : 'editMyComment');
@@ -205,8 +205,10 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
                 $link_target =  $this->ctrl->getLinkTarget($this->parent_obj,'editChapter');
             }
 		}
-		
-		$current_selection_list->addItem($this->lng->txt('edit'), '', $link_target);
-		$this->tpl->setVariable('VAL_ACTIONS', $current_selection_list->getHTML());
+        $items = array(
+             $f->button()->shy($this->lng->txt('edit'), $link_target)
+        );
+        $rendered_list =  $renderer->render($f->dropdown()->standard($items)->withLabel($this->lng->txt('actions')));
+		$this->tpl->setVariable('VAL_ACTIONS', $rendered_list);
 	}
 }

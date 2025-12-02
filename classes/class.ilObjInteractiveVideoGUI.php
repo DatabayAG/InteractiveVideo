@@ -18,7 +18,7 @@ use ILIAS\UI\Component\Input\Container\Form\Standard;
  */
 class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopItemHandling
 {
-    protected string $PATH = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/';
+    public const PATH = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/';
 	/** @var ilCtrl */
     protected ilCtrl $ctrl;
 
@@ -324,9 +324,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $DIC;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
-       // $DIC->ui()->mainTemplate()->addJavaScript($this->PATH . '/js/InteractiveVideoQuestionCreator.js');
+        $DIC->ui()->mainTemplate()->addJavaScript(self::PATH . '/js/InteractiveVideoQuestionCreator.js');
         if($this->object->isMarkerActive()){
-            $DIC->ui()->mainTemplate()->addJavaScript($this->PATH . '/js/InteractiveVideoOverlayMarker.js');
+            $DIC->ui()->mainTemplate()->addJavaScript(self::PATH . '/js/InteractiveVideoOverlayMarker.js');
             $DIC->ui()->mainTemplate()->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
         }
 		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
@@ -549,8 +549,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $DIC;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
-        $DIC->ui()->mainTemplate()->addJavaScript($this->PATH .'/js/InteractiveVideoQuestionCreator.js');
-        $DIC->ui()->mainTemplate()->addCss($this->PATH .'/templates/default/xvid.css');
+        $DIC->ui()->mainTemplate()->addJavaScript(self::PATH .'/js/InteractiveVideoQuestionCreator.js');
+        $DIC->ui()->mainTemplate()->addCss(self::PATH .'/templates/default/xvid.css');
 		$simple_choice = new SimpleChoiceQuestion();
         $ajax_object   = new SimpleChoiceQuestionAjaxHandler();
         $get = $this->http->wrapper()->query();
@@ -629,6 +629,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     protected $custom_css = [
         '/templates/default/xvid.css',
         '/libs/npm/node_modules/plyr/dist/plyr.css',
+        '/libs/npm/node_modules/bootstrap/dist/css/bootstrap.css',
         '/libs/Bootstraptoggle/bootstrap2-toggle.min.css',
         '/libs/npm/node_modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css'
     ];
@@ -637,6 +638,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      * @var array
      */
     protected $custom_javascript = [
+                '/libs/npm/node_modules/bootstrap/dist/js/bootstrap.js',
          		'/libs/Bootstraptoggle/bootstrap2-toggle.min.js',
 		        '/libs/npm/node_modules/plyr/dist/plyr.min.js',
 		        '/libs/npm/node_modules/svg.js/dist/svg.min.js',
@@ -656,12 +658,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     {
         foreach($this->custom_css as $file)
         {
-            $tpl->addCss($this->PATH . $file);
+            $tpl->addCss(self::PATH . $file);
         }
 
         foreach($this->custom_javascript as $file)
         {
-            $tpl->addJavaScript($this->PATH . $file, true, 2);
+            $tpl->addJavaScript(self::PATH . $file, true, 2);
         }
     }
 

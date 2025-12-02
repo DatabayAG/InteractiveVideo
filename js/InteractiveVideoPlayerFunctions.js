@@ -39,7 +39,6 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
     };
 
     pub.playingEventHandler = function (interval, player) {
-      console.log('pub.playingEventHandler', interval);
         let cueTime, stop_video, i, j;
         let player_id = pub.getPlayerIdFromPlayerObject(player);
         let current_time = scope.InteractiveVideoPlayerAbstract.currentTime(player_id);
@@ -508,7 +507,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
         let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
         if (value === language.reset_text) {
             value = player_data.layout_width
-            $('.dropdownMenuLayoutInteraktiveVideo_' + player_id).removeClass('btn-primary').html(language.layout_filter + ' <span class="caret"></span>');
+            $('.dropdownMenuLayoutInteraktiveVideo_' + player_id).removeClass('btn-primary').html(language.layout_filter );
         } else {
             if (value !== '1:1') {
                 value = value.split(':');
@@ -523,7 +522,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
                     value = '1:0';
                 }
             }
-            $('.dropdownMenuLayoutInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.layout_filter + ' ' + value + ' <span class="caret"></span>');
+            $('.dropdownMenuLayoutInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.layout_filter + ' ' + value);
         }
         pro.setLayoutValue(value, player_id);
     }

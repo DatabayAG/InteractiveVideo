@@ -1004,4 +1004,31 @@ li.toc_item > div > h5 > time {
     float:left;
 }
 
+.fade.show {
+    opacity: 1;
+}
+.modal-open .modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.modal.fade {
+    transition-property: opacity;
+    transition-duration: 0.15s;
+    transition-timing-function:
+            linear;
+    transition-delay: 0s;
+}
+.modal.fade .modal-dialog {
+    transform: translate(0, 0) !important;
+}
+
+.modal-backdrop.fade.show {
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 1 !important;
+}
+.container-fluid.interativeVideoNavHeader {
+    display: block!important;
+}
+
 
