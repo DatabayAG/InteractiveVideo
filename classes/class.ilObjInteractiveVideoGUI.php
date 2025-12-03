@@ -924,8 +924,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
     protected function updateCustom(ilPropertyFormGUI $form): void
 	{
-		$factory = new ilInteractiveVideoSourceFactoryGUI($this->object);
-		$factory->checkForm($form);
 
 		$is_task = $form->getInput('is_task');
 		$this->object->setTaskActive((int)$is_task);
@@ -972,13 +970,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $layout_width = $form->getInput('layout_width');
         $this->object->setLayoutWidth((int)$layout_width);
 
+        $source_id = $form->getInput('source_id');
+        $this->object->setSourceId(ilInteractiveVideoPlugin::stripSlashesWrapping($source_id));
+
+        $factory = new ilInteractiveVideoSourceFactoryGUI($this->object, $source_id);
+        $factory->checkForm($form);
+
 		$factory = new ilInteractiveVideoSourceFactory();
-        $a = $form->getInput('source_id');
 		$source = $factory->getVideoSourceObject($form->getInput('source_id'));
 		$source->doUpdateVideoSource($this->obj_id);
-
-		$source_id = $form->getInput('source_id');
-		$this->object->setSourceId(ilInteractiveVideoPlugin::stripSlashesWrapping($source_id));
 
 		$this->object->update();
 
@@ -1006,7 +1006,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     {
         /* @var $form Standard */
 		$form = parent::initCreateForm($new_type);
-		$this->selectSource();
+		#$this->selectSource();
 
 		return $form;
 	}
@@ -1028,7 +1028,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         if($a_form === null) {
             $a_form = new ilPropertyFormGUI();
         }
-		#$a_form = $this->selectSource($a_form);
+        $a_form = $this->selectSource($a_form);
 		$this->appendCkEditorMathJaxSupportToForm($a_form);
 		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
 		$a_form->addItem($online);
@@ -1063,7 +1063,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 * @param ilPropertyFormGUI $a_form
 	 */
-	protected function appendDefaultFormOptions(ilPropertyFormGUI $a_form): void
+	protected function appendDefaultFormOptions(ilPropertyFormGUI $a_form, string $form_rendered = null): void
 	{
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
@@ -1164,9 +1164,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$fixed_modal->setValue(1);
 		$a_form->addItem($fixed_modal);
 
-        $hidden_source = new ilHiddenInputGUI('source_id');
-        $hidden_source->setValue($this->object->getSourceId());
-        $a_form->addItem($hidden_source);
+        #$hidden_source = new ilHiddenInputGUI('source_id');
+        #$hidden_source->setValue($this->object->getSourceId());
+        #$a_form->addItem($hidden_source);
 
         $factory = new ilInteractiveVideoSourceFactory();
         $sources = $factory->getVideoSources();
@@ -1230,7 +1230,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	    global $DIC;
 
         if($this->object->getSourceId() === "") {
-            $this->ctrl->redirect($this, 'selectSource');
+           # $this->ctrl->redirect($this, 'selectSource');
         }
 
         $get = $this->http->wrapper()->query();
@@ -1526,46 +1526,35 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
-	protected function selectSource()
+	protected function selectSource($a_form)
 	{
-        global $DIC;
-        $ui = $DIC->ui()->factory();
-        $renderer = $DIC->ui()->renderer();
-		$plugin = ilInteractiveVideoPlugin::getInstance();
-		$factory = new ilInteractiveVideoSourceFactory();
-        $field_factory = $this->ui_factory->input()->field();
-		$sources = $factory->getVideoSources();
-        $form_container = [];
+        $plugin = ilInteractiveVideoPlugin::getInstance();
+        $factory = new ilInteractiveVideoSourceFactory();
+        $sources = $factory->getVideoSources();
 
+        $item_group = new ilRadioGroupInputGUI($plugin->txt('source'), 'source_id');
 
-		$non_active = true;
-		foreach($sources as $key => $source)
-		{
-			/** @var ilInteractiveVideoSourceGUI $gui */
-			if($factory->isActive($source->getClass()))
-			{
-                $gui = $source->getGUIClass();
-                $custom_form = $gui->getForm($ui, $this->obj_id);
-                if($custom_form !== null) {
-                    $form_container[] = $field_factory->group($custom_form, $plugin->txt($source->getId()))->withDedicatedName($source->getId());
-                }
-				$non_active = false;
-			}
-		}
+        $non_active = true;
+        foreach($sources as $key => $source)
+        {
+            /** @var ilInteractiveVideoSourceGUI $gui */
+            if($factory->isActive($source->getClass()))
+            {
+                $op = new ilRadioOption($plugin->txt($source->getId()), $source->getId());
+                $gui= $source->getGUIClass();
+                $gui->getForm($op, $this->obj_id);
+                $item_group->addOption($op);
+                $non_active = false;
+            }
+        }
 
-		#ä$item_group->setValue($factory->getDefaultVideoSource());
-		if($non_active)
-		{
+        $item_group->setValue($factory->getDefaultVideoSource());
+        if($non_active)
+        {
             $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('at_least_one_source'), true);
-		}
-        $sg = $ui->input()->field()->switchableGroup(
-            $form_container,
-            ilInteractiveVideoPlugin::getInstance()->txt('source')
-        );
-
-        $form = $ui->input()->container()->form()->standard($this->ctrl->getFormAction($this, 'updateSource'), ['iv_source' => $sg]);
-        $this->tpl->setContent($renderer->render($form));
-        return $form;
+        }
+        $a_form->addItem($item_group);
+        return $a_form;
 	}
 
     protected function updateSource(){

@@ -12,7 +12,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 * @param               $obj_id
 	 * @return ilRadioOption
 	 */
-    public function getForm(ILIAS\UI\Factory $ui, int $obj_id)
+    public function getForm($option, int $obj_id)
 	{
 		/*$upload_field = new ilFileInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('video_file'), 'video_file');
 		$upload_field->setSuffixes(array('mp4', 'mov', 'mp3', 'flv', 'm4v', 'ogg', 'ogv', 'webm'));

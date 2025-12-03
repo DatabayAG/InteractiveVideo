@@ -6,7 +6,7 @@
 interface ilInteractiveVideoSourceGUI
 {
 
-    public function getForm(ILIAS\UI\Factory $ui, int $obj_id);
+    public function getForm($option, int $obj_id);
 
 	public function getConfigForm(ilPropertyFormGUI $form) : void;
 

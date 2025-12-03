@@ -1030,5 +1030,9 @@ li.toc_item > div > h5 > time {
 .container-fluid.interativeVideoNavHeader {
     display: block!important;
 }
-
-
+.btn.btn-default.dropdown-toggle::after{
+    content:none !important;
+}
+#ilQuestionModal > div > div > div.modal-header {
+    display:none;
+}

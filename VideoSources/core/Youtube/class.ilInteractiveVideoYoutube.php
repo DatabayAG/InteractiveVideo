@@ -68,6 +68,7 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	public function doDeleteVideoSource($obj_id) : int
     {
 		$this->beforeDeleteVideoSource($obj_id);
+        return 0;
 	}
 
 	/**
@@ -125,6 +126,7 @@ class ilInteractiveVideoYoutube implements ilInteractiveVideoSource
 	public function beforeDeleteVideoSource($obj_id) : int
     {
 		$this->removeEntryFromTable($obj_id);
+        return 0;
 	}
 
 	/**

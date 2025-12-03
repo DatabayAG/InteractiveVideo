@@ -68,6 +68,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	public function doDeleteVideoSource($obj_id) : int
     {
 		$this->beforeDeleteVideoSource($obj_id);
+        return 0;
 	}
 
 	/**
@@ -109,6 +110,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
             $this->removeMobFromPluginTable($obj_id, $mob->getId());
             $mob->delete();
         }
+        return 0;
 	}
 
 	/**

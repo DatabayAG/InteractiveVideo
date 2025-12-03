@@ -11,23 +11,16 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 
 	const YOUTUBE_URL = 'https://www.youtube.com/watch?v=';
 
-    /**
-     * @param \ILIAS\UI\Factory $ui
-     * @param int               $obj_id
-     * @return array
-     */
-	public function getForm(ILIAS\UI\Factory $ui, int $obj_id)
+	public function getForm($option, int $obj_id)
 	{
-        $youtube_url = $ui->input()->field()->text(ilInteractiveVideoPlugin::getInstance()->txt('ytb_youtube_url'), ilInteractiveVideoPlugin::getInstance()->txt('ytb_youtube_info'));
-        $source_type = $ui->input()->field()->hidden()->withValue("ytb")->withDedicatedName('source');
+        $youtube_url = new ilTextInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('ytb_youtube_url'), ilInteractiveVideoYoutube::FORM_FIELD);
         $object = new ilInteractiveVideoYoutube();
         if($obj_id > 0) {
-            $youtube_src = $object->doReadVideoSource($obj_id);
-            if($youtube_src !== 0) {
-                $youtube_url->withValue($youtube_src);
-            }
+            $youtube_url->setValue($object->doReadVideoSource($obj_id));
         }
-		return ['input' => $youtube_url, 'source_type' => $source_type];
+        $youtube_url->setInfo(ilInteractiveVideoPlugin::getInstance()->txt('ytb_youtube_info'));
+        $option->addSubItem($youtube_url);
+        return $option;
 	}
 
 	/**
@@ -101,8 +94,6 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 
     public function getEditFormCustom(ilPropertyFormGUI $a_form, ilObjInteractiveVideo|ilObject|null $object)
     {
-        $hidden_source = new ilHiddenInputGUI(ilInteractiveVideoSimpleUrl::FORM_URL_FIELD);
-        $hidden_source->setValue($object->getSourceId());
-        $a_form->addItem($hidden_source);
+
     }
 }

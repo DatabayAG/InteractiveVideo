@@ -361,8 +361,8 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			}
 			else
 			{
-				$this->delete();
-			    throw new ilException(ilInteractiveVideoPlugin::getInstance()->txt('at_least_one_source'));
+				#$this->delete();
+			    #throw new ilException(ilInteractiveVideoPlugin::getInstance()->txt('at_least_one_source'));
 			}
                     $this->db->insert(
 						self::TABLE_NAME_OBJECTS,

@@ -53,6 +53,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         $this->tpl = $tpl;
         $this->lng = $lng;
         $this->ctrl = $ilCtrl;
+        parent::__construct($this->ctrl, $this->tpl);
     }
 
     /**
@@ -199,7 +200,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
     }
 
     /**
-     * 
+     *
      */
     public function refreshStatusAndShowLPSettings(): void
     {

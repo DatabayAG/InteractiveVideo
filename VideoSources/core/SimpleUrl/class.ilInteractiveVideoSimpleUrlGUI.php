@@ -5,27 +5,15 @@
  */
 class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 {
-    public function getForm(ILIAS\UI\Factory $ui, int $obj_id)
+    public function getForm($option, int $obj_id)
 	{
-
-        $simple_url = $ui->input()->field()->text(ilInteractiveVideoPlugin::getInstance()->txt('simple_url'), ilInteractiveVideoPlugin::getInstance()->txt('simple_url_info'));
-        $source_type = $ui->input()->field()->hidden()->withValue('surl')->withDedicatedName('source');
+        $simple_url = new ilTextInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('simple_url'), 'simple_url');
         $object = new ilInteractiveVideoSimpleUrl();
-        if($obj_id > 0) {
-            $simple_src = $object->doReadVideoSource($obj_id);
-            if($simple_src !== 0) {
-                $simple_url->withValue($simple_src);
-            }
-        }
-        return ['input' => $simple_url, 'source_type' => $source_type];
-
-		$simple_url = new ilTextInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('simple_url'), 'simple_url');
-		$object = new ilInteractiveVideoSimpleUrl();
-		$object->doReadVideoSource($obj_id);
-		$simple_url->setValue($object->getSimpleUrl());
-		$simple_url->setInfo(ilInteractiveVideoPlugin::getInstance()->txt('simple_url_info'));
-		$option->addSubItem($simple_url);
-		return $option;
+        $object->doReadVideoSource($obj_id);
+        $simple_url->setValue($object->getSimpleUrl());
+        $simple_url->setInfo(ilInteractiveVideoPlugin::getInstance()->txt('simple_url_info'));
+        $option->addSubItem($simple_url);
+        return $option;
 	}
 
 	/**
@@ -85,9 +73,7 @@ class ilInteractiveVideoSimpleUrlGUI implements ilInteractiveVideoSourceGUI
 
     public function getEditFormCustom(ilPropertyFormGUI $a_form, ilObjInteractiveVideo|ilObject|null $object)
     {
-        $hidden_source = new ilHiddenInputGUI(ilInteractiveVideoSimpleUrl::FORM_URL_FIELD);
-        $hidden_source->setValue($object->getSourceId());
-        $a_form->addItem($hidden_source);
+
     }
 
 	/**
