@@ -1272,7 +1272,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$data[] = $track;
 			}
 		}
-		#print_r($data); exit;
 		return json_encode($data);
 	}
 
@@ -1448,19 +1447,22 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$data_short = [];
 		$data_long  = [];
-		foreach ($_POST as $name => $value) {
+        
+        $subtitle_files = $this->getSubtitleFiles();
+		foreach ($subtitle_files as $name => $value) {
+            $post_value = 'l#' . $name;
+            $post_value = str_replace(".", '_', $post_value);
+            if($this->http->wrapper()->post()->has($post_value)) {
+                $value = $this->http->wrapper()->post()->retrieve($post_value, $this->refinery->kindlyTo()->string());
+                $data_long = $this->fillDataForSubtitles($name, $value, $data_long);
+            }
 
-			if (substr($name, 0, 2) === "l#") {
-				$data_long = $this->fillDataForSubtitles($name, $value, $data_long);
-			} elseif (substr($name, 0, 2) === "s#") {
-				$data_short = $this->fillDataForSubtitles($name, $value, $data_short);
-				$short_title = $data_short;
-				array_pop($short_title);
-				if($short_title == '') {
-                    $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('you_need_a_short_title'), true);
-					$this->ctrl->redirect($this, 'addSubtitle');
-				}
-			}
+            $post_value = 's#' . $name;
+            $post_value = str_replace(".", '_', $post_value);
+            if($this->http->wrapper()->post()->has($post_value)) {
+                $value = $this->http->wrapper()->post()->retrieve($post_value, $this->refinery->kindlyTo()->string());
+                $data_short = $this->fillDataForSubtitles($name, $value, $data_short);
+            }
 		}
 		$this->object->saveSubtitleData($data_short, $data_long);
 
@@ -1475,11 +1477,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
 	protected function fillDataForSubtitles($name, $value, $data)
 	{
-		$name  = ilArrayUtil::stripSlashesRecursive($name);
-		$value = ilArrayUtil::stripSlashesRecursive($value);
-
-		$cut             = substr($name, 2);
-		$cut             = preg_replace('/_vtt$/', '.vtt', $cut);
+		#$cut             = substr(, 2);
+		$cut             = preg_replace('/_vtt$/', '.vtt', $name);
 		$cut             = preg_replace('/_srt$/', '.srt', $cut);
 		$data[$cut]      = $value;
 		return $data;
