@@ -263,7 +263,6 @@
 }
 .rf_listener{
     width: 95%;
-    height:20px !important;
     padding: 1px;
     margin-left: 20px;
 }
@@ -299,10 +298,10 @@
     padding:0;
 }
 .arrow_left{
-    background-image: url(../../../../../../../../../templates/default/images/tree_col.svg);
+    background-image: url(../../../../../../../../../templates/default/images/nav/tree_col.svg);
 }
 .arrow_down{
-    background-image: url(../../../../../../../../../templates/default/images/tree_exp.svg);
+    background-image: url(../../../../../../../../../templates/default/images/nav/tree_exp.svg);
 }
 .task_text{
     padding-left:20px;

@@ -40,9 +40,11 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 	{
         global $tree, $ilDB;
 
+        $in_course = false;
+        $create_object = false;
 		$this->init();
-
-		if($new_id = $a_mapping->getMapping('Services/Container', 'objs', $a_id))
+        $new_id = $a_mapping->getMapping('Services/Container', 'objs', $a_id);
+		if ($new_id != "")
 		{
 			$ref_ids = ilObject::_getAllReferences($new_id);
 			$ref_id  = current($ref_ids);
@@ -51,52 +53,59 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 
 			$this->xvid_object = ilObjectFactory::getInstanceByObjId($new_id, false);
 			$this->xvid_object->setRefId($ref_id);
+            $in_course = true;
 		}
 		else
 		{
 			$this->xvid_object = new ilObjInteractiveVideo();
-			$parser = new ilInteractiveVideoXMLParser($this->xvid_object, $this->getXmlFile());
-			$parser->setImportDirectory($this->getImportDirectory());
-			$parser->startParsing();
-			$this->xvid_object = $parser->getObjInteractiveVideo();
+            $create_object = true;
+        }
 
-			$this->xvid_object->create();
-			$factory = new ilInteractiveVideoSourceFactory();
-			$source_obj = $factory->getVideoSourceObject($this->xvid_object->getSourceId());
-			$source_obj->afterImportParsing($this->xvid_object->getId(), $this->import_directory);
-			$comment_map = [];
-			foreach($this->xvid_object->import_comment as $key => $comment)
-			{
-				$comment->setObjId($this->xvid_object->getId());
-				$cid = $comment->create(true);
-				$comment_map[$key] = $cid;
-			}
-			foreach($this->xvid_object->import_simple_choice as $key => $question)
-			{
-				if(array_key_exists($key, $comment_map))
-				{
-					$question->setCommentId($comment_map[$key]);
-					if($question->import_question_image != null)
-					{
-						$file = ilInteractiveVideoFFmpeg::moveSelectedImage($question->getCommentId(), $this->xvid_object->getId(), $this->import_directory . $question->import_question_image);
-						$question->setQuestionImage($file);
-					}
+        $parser = new ilInteractiveVideoXMLParser($this->xvid_object, $this->getXmlFile());
+        $parser->setImportDirectory($this->getImportDirectory());
+        $parser->startParsing();
 
-					$question_id = $question->create();
-					foreach($question->import_answers as $answer_key => $answer)
-					{
-						$answer_id = $ilDB->nextId('rep_robj_xvid_qus_text');
-						$ilDB->insert('rep_robj_xvid_qus_text',
-							[
-                                'answer_id'   => ['integer', $answer_id],
-                                'question_id' => ['integer', $question_id],
-                                'answer'      => ['text', ilInteractiveVideoPlugin::stripSlashesWrapping($answer['text'])],
-                                'correct'     => ['integer', (int) $answer['correct']]
-                            ]);
-					}
-				}
-			}
-		}
+        $this->xvid_object = $parser->getObjInteractiveVideo();
+        $factory = new ilInteractiveVideoSourceFactory();
+        $source_obj = $factory->getVideoSourceObject($this->xvid_object->getSourceId());
+        if($create_object) {
+            $this->xvid_object->create();
+        }
+
+        $source_obj->afterImportParsing($this->xvid_object->getId(), $this->import_directory);
+        $comment_map = [];
+        foreach($this->xvid_object->import_comment as $key => $comment)
+        {
+            $comment->setObjId($this->xvid_object->getId());
+            $cid = $comment->create(true);
+            $comment_map[$key] = $cid;
+        }
+        foreach($this->xvid_object->import_simple_choice as $key => $question)
+        {
+            if(array_key_exists($key, $comment_map))
+            {
+                $question->setCommentId($comment_map[$key]);
+                if($question->import_question_image != null)
+                {
+                    $file = ilInteractiveVideoFFmpeg::moveSelectedImage($question->getCommentId(), $this->xvid_object->getId(), $this->import_directory . $question->import_question_image);
+                    $question->setQuestionImage($file);
+                }
+
+                $question_id = $question->create();
+                foreach($question->import_answers as $answer_key => $answer)
+                {
+                    $answer_id = $ilDB->nextId('rep_robj_xvid_qus_text');
+                    $ilDB->insert('rep_robj_xvid_qus_text',
+                        [
+                            'answer_id'   => ['integer', $answer_id],
+                            'question_id' => ['integer', $question_id],
+                            'answer'      => ['text', ilInteractiveVideoPlugin::stripSlashesWrapping($answer['text'])],
+                            'correct'     => ['integer', (int) $answer['correct']]
+                        ]);
+                }
+            }
+        }
+        $this->xvid_object->doUpdatePropertiesAfterImportParsing($in_course);
 		$a_mapping->addMapping('Plugins/xvid', 'xvid', $a_id, $this->xvid_object->getId());
 	}
 

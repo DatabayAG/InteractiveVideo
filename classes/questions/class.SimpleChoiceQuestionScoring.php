@@ -26,8 +26,18 @@ class SimpleChoiceQuestionScoring
         if(isset($score['points'])) {
             return (int)$score['points'];
         }
-        return 0;
+        return -1;
 	}
+
+    public function translateScoreToTxt(int $score): string
+    {
+        if($score === 1) {
+            return ilInteractiveVideoPlugin::getInstance()->txt('correct_answer');
+        } elseif($score === -1) {
+            return '-';
+        }
+        return ilInteractiveVideoPlugin::getInstance()->txt('wrong_answer');
+    }
 
 	/**
 	 * @param int $qid question_id
@@ -129,6 +139,71 @@ class SimpleChoiceQuestionScoring
 
 		}
 		$results[$counter]['neutral_answer'] = '';
+		return $results;
+	}
+
+    public function getMyPointsNew(int $oid): array
+	{
+
+        global $ilDB;
+
+		$res  = $ilDB->queryF('SELECT * FROM rep_robj_xvid_comments comments, rep_robj_xvid_question questions
+					 WHERE comments.comment_id = questions.comment_id AND  is_interactive = 1 AND obj_id = %s',
+			['integer'], [$oid]
+		);
+
+        $counter = 0;
+        $results = [];
+        $scoring         = new SimpleChoiceQuestionStatistics();
+        $evaluable_answer = 0;
+        $correct_answer = 0;
+        $neutral = xvidUtils::getTextFromLangVariable('neutral_string');
+        $answered = xvidUtils::getTextFromLangVariable('answered');
+        $not_answered = xvidUtils::getTextFromLangVariable('not_answered');
+
+		while($row = $ilDB->fetchAssoc($res))
+		{
+            $qid = $row['question_id'];
+			$results[$counter]['id'] = $qid;
+            $question_points = $this->getScoreForQuestionOnUserId($qid);
+            $question_points_txt = $this->translateScoreToTxt($question_points);
+			$results[$counter]['type'] = xvidUtils::replaceQuestionTypeWithLang((int) $row['type']);
+
+			$results[$counter]['title'] = $row['comment_title'];
+			$results[$counter]['neutral_answer'] = $row['neutral_answer'];
+            $results[$counter]['comments_time'] = xvidUtils::getTimeStringFromSeconds($row['comment_time']);
+
+            $results[$counter]['answered'] = 0;
+            $results[$counter]['points_txt']  = $question_points_txt;
+            $results[$counter]['points']  = $question_points;
+
+			if($results[$counter]['neutral_answer'] == 1 || (int) $row['type'] === 2) {
+                $points_txt = $not_answered;
+                if($question_points > -1) {
+                    $points_txt = $answered;
+                }
+				$results[$counter]['points_txt']  = $points_txt;
+				$results[$counter]['points']  = '';
+                $results[$counter]['type'] .= ' ' . $neutral;
+
+			} else {
+                if($question_points === 1) {
+                    $correct_answer++;
+                }
+                $evaluable_answer++;
+            }
+
+			$counter++;
+		}
+        $results[PHP_INT_MAX] = [
+            'id' => PHP_INT_MAX,
+            'correct' => $correct_answer,
+            'overall' => $evaluable_answer,
+            'answered' => '-',
+            'points_txt' => '-',
+            'type' => '-',
+            'title' => ''
+        ];
 		return $results;
 	}
 

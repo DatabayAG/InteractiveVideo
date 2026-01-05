@@ -201,7 +201,7 @@ class ilInteractiveVideoCommentsTableGUI extends ilTable2GUI
 		else
 		{
 			$link_target =  $this->ctrl->getLinkTarget($this->parent_obj,$this->parent_cmd == 'editComments' ?  'editComment' : 'editMyComment');
-            if(isset($a_set['is_table_of_content']) && $a_set['is_table_of_content'] === "1") {
+            if(isset($a_set['is_table_of_content']) && ($a_set['is_table_of_content'] === "1" || $a_set['is_table_of_content'] === 1)) {
                 $link_target =  $this->ctrl->getLinkTarget($this->parent_obj,'editChapter');
             }
 		}

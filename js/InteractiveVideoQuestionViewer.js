@@ -16,11 +16,11 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 					reflection_question_btns_below_form: '#question_reflection_buttons_bellow_form',
 				},
 				classes: {
-					modal_body:     '.modal-body',
-					modal_title:    '.modal-title',
-					modal_feedback: '.modal_feedback',
+					modal_body:     '#ilQuestionModal .modal-body',
+					modal_title:    '#ilQuestionModal .modal-title',
+					modal_feedback: '#ilQuestionModal .modal_feedback',
 					modal_close:    '.close',
-					modal_content:  '.modal-content'
+					modal_content:  '#ilQuestionModal .modal-content'
 				},
 			};
 
@@ -34,7 +34,9 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	}
 
 	pub.getQuestionPerAjax = function (comment_id, player, show_previous_answer) {
+
 		pro.cleanModal();
+
 		if(pro.isQuestionLockEnabled() && $(pri.ids.modal).css('display') === 'none') {
 				pro.removeQuestionLock();
 		}
@@ -272,8 +274,8 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.showBestSolutionIsClicked = function(comment_id, player) {
 		$('#show_best_solution').prop("disabled", true)
-		if(pub.QuestionObject.limit_attempts === "0"){
-			$('#question_buttons_bellow_form').append(pro.createButtonButtons('repeat_question', scope.InteractiveVideo.lang.repeat, 'question_repeat_btn', 'button'))
+		if(pub.QuestionObject.limit_attempts === 0){
+			$('#question_buttons_bellow_form').append(pro.createButtonButtons('repeat_question', scope.InteractiveVideo.lang.repeat, 'question_repeat_btn', 'submit'))
 			$('.question_repeat_btn').off('click');
 			$('.question_repeat_btn').on('click', function () {
 				let time = parseInt(pub.QuestionObject.time, 10);
@@ -315,13 +317,20 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 
 	pro.showResponseFrequency = function(response_frequency)
 	{
-		let answers_count = 0;
+		let answers_count = {};
 		let percentage = 0;
+		let max_user_answers = 0;
 
 		if(parseInt(pub.QuestionObject.show_response_frequency, 10) === 1)
 		{
+
 			$.each(response_frequency, function (l, value) {
-				answers_count += parseInt(value, 10);
+				if(answers_count[l] === undefined) {
+					answers_count[l] = parseInt(value, 10);
+					if(l === 'max_user_answers') {
+						max_user_answers = answers_count[l];
+					}
+				}
 			});
 
 			$.each($('.rf_listener'), function () {
@@ -329,7 +338,13 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 				$(this).html('<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>');
 			});
 			$.each(response_frequency, function (l, value) {
-				percentage = ((value / answers_count) * 100).toFixed(2);
+				console.log(value, l)
+				if(max_user_answers === 0) {
+					percentage = 0;
+				} else {
+					percentage = ((value / max_user_answers) * 100).toFixed(2);
+				}
+
 				$('.response_frequency_' + l).html('<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="' + percentage + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + percentage + '%;">' + percentage + '% ('+ value +')</div>');
 			});
 		}
@@ -377,9 +392,10 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 	{
 		let limit_attempts = il.InteractiveVideoQuestionViewer.QuestionObject.limit_attempts;
 
-		if(limit_attempts === '1') {
-			$("#question_form :input").attr("disabled", true);
-			$('#close_form').prop('disabled', false);
+		if(limit_attempts === '1' || limit_attempts === 1) {
+			$("#ilQuestionModal #sendForm").attr("disabled", true);
+			$('#question_form input[name="answer[]"]').prop( "disabled", true )
+			//$('#close_form').prop('disabled', false);
 		}
 
 	};

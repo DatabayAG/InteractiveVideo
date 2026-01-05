@@ -79,7 +79,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 			' value="'      + value.answer_id + '"' +
 			' type="'     + input_type + '">' +
 			value.answer +
-			'</label>' + 
+			'</label>' +
 			'<div class="progress rf_listener response_frequency_' + value.answer_id + ' ilNoDisplay"></div>' +
 			'<br/>';
 	};
@@ -102,7 +102,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 			}
 		});
 	};
-	
+
 	pro.appendSelfReflectionCommentForm = function()
 	{
 		var comment_id = 'text_reflection_comment_'+ pub.comment_id ;
@@ -155,22 +155,36 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		}
 	};
 
-	pro.showResponseFrequency = function(response_frequency) 
+	pro.showResponseFrequency = function(response_frequency)
 	{
-		var answers_count = 0;
-		var percentage = 0;
+		let answers_count = {};
+		let percentage = 0;
+		let max_user_answers = 0;
+
 		if(parseInt(pub.QuestionObject.show_response_frequency, 10) === 1)
 		{
+
 			$.each(response_frequency, function (l, value) {
-				answers_count += parseInt(value, 10);
+				if(answers_count[l] === undefined) {
+					answers_count[l] = parseInt(value, 10);
+					if(l === 'max_user_answers') {
+						max_user_answers = answers_count[l];
+					}
+				}
 			});
+			console.log(max_user_answers)
 
 			$.each($('.rf_listener'), function () {
 				$(this).removeClass('ilNoDisplay');
 				$(this).html('<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>');
 			});
 			$.each(response_frequency, function (l, value) {
-				percentage = ((value / answers_count) * 100).toFixed(2);
+				if(max_user_answers === 0) {
+					percentage = 0;
+				} else {
+					percentage = ((value / max_user_answers) * 100).toFixed(2);
+				}
+
 				$('.response_frequency_' + l).html('<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="' + percentage + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + percentage + '%;">' + percentage + '% ('+ value +')</div>');
 			});
 		}
@@ -217,7 +231,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		}
 		$('#ilQuestionModal').modal('show');
 	};
-	
+
 	pub.protect = pro;
 	return pub;
 

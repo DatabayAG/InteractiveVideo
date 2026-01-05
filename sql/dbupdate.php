@@ -631,7 +631,9 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_sources', 'plugin_id'))
 		array(
 			'type'    => 'text',
 			'length'  => '255',
-			'notnull' => true)
+			'notnull' => true,
+            'default' => 0
+        )
 	);
 }
 ?>

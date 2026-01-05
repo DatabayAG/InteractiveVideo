@@ -187,7 +187,7 @@ class ilObjComment
 			$query_types = array_merge($query_types, ['integer', 'integer', 'integer']);
 			$query_data = array_merge($query_data, [$ilUser->getId(), 1, 1]);
 		}
-		
+
 		$res = $this->db->queryF(
 			'SELECT *
 			FROM rep_robj_xvid_comments
@@ -252,7 +252,7 @@ class ilObjComment
 				$i++;
 			}
 		}
-		
+
 		if(is_array($is_reply_to) && sizeof($is_reply_to) > 0)
 		{
 			$comments = $this->sortInReplies($is_reply_to, $comments);
@@ -326,7 +326,14 @@ class ilObjComment
     {
 		if(!array_key_exists($user_id, self::$user_image_cache))
 		{
-			$img_file = ilObjUser::_getPersonalPicturePath($user_id, 'xxsmall');
+            try{
+                $img_file = ilObjUser::_getPersonalPicturePath($user_id, 'xxsmall');
+            } catch(Exception $e){
+                $img_file = '';
+                global $DIC;
+                $DIC->logger()->root()->error(sprintf('No user dataset found with id %s.', $user_id));
+            }
+
 			$img_file = preg_split('/\?/', $img_file);
 			$img_file = $img_file[0];
 			if(file_exists($img_file))
@@ -337,7 +344,9 @@ class ilObjComment
 			else if(strlen($img_file) > 0)
 			{
 				self::$user_image_cache[$user_id] = $img_file;
-			}
+			} else {
+                self::$user_image_cache[$user_id] = '';
+            }
 		}
 
 		return self::$user_image_cache[$user_id];
@@ -362,7 +371,7 @@ class ilObjComment
             }
 		}
 
-		return self::$user_name_cache[$user_id];
+        return self::$user_name_cache[$user_id] ?? '';
 	}
 
 	public static function getCommentTitleByQuestionId(int $question_id) : string
@@ -501,7 +510,7 @@ class ilObjComment
     {
         $this->is_table_of_content = $is_table_of_content;
     }
-	
+
 	public function isPublic() : int
     {
 		return $this->is_public;

@@ -38,7 +38,7 @@ class SimpleChoiceQuestion
 	protected int $feedback_wrong_id;
 	protected int $reflection_question_comment = 0;
 	protected int $neutral_answer = 0;
-	protected string $question_image = '';
+	protected ?string $question_image = '';
 	protected int $compulsory_question = 0;
 	public string $import_question_image = '';
 	public array $import_answers = [];
@@ -1164,15 +1164,15 @@ class SimpleChoiceQuestion
 		$this->neutral_answer = $neutral_answer;
 	}
 
-	public function getQuestionImage(): string
+	public function getQuestionImage(): ?string
 	{
 		return $this->question_image;
 	}
 
-	/**
-	 * @param string $question_image
-	 */
-	public function setQuestionImage(string $question_image): void
+    /**
+     * @param string|null $question_image
+     */
+	public function setQuestionImage(?string $question_image): void
 	{
 		$this->question_image = $question_image;
 	}

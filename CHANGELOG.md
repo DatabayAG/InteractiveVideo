@@ -1,3 +1,7 @@
+# 3.9.5
+1. Compatibility with ILIAS 9.0
+2. Refactored results tables and usage of the new table ui structure
+
 # 3.0.0
 1. SVG marker for videos
 2. Reply to comments

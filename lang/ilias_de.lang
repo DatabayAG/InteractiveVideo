@@ -44,7 +44,7 @@ correct_answered#:#Richtig beantwortet
 correct_solution#:#Richtige Lösung
 crs_create_xvid#:#Interaktives Video anlegen
 crs_create_xvid#:#Neues Interaktives Video anlegen
-csv_export#:#CSV-Export
+csv_export#:#Export detailierte Benutzerergebnisse
 db_up_to_date#:#Datenbank aktuell
 db_update_failed#:#Datenbank-Update schlug fehl: %s
 db_update_worked#:#Datenbank erfolgreich aktualisiert
@@ -94,7 +94,7 @@ insert_marker_info#:#Sie können den Marker per Drag & Drop auf dem Video versch
 insert_question#:#Frage hinzufügen
 installed_version#:#Installierte Databank Version: %s, Datei Datenbank Version %s
 interactive#:#Interaktive
-invalid_comment_ids#:#Einige Kommentare konnten nicht gefunden werden. 
+invalid_comment_ids#:#Einige Kommentare konnten nicht gefunden werden.
 invalid_comment_ids#:#Ungültige Kommentar-IDs
 invalid_question_ids#:#Ungültige Fragen-IDs
 invalid_user_ids#:#Ungültige User-IDs
@@ -147,8 +147,25 @@ neutral_question#:#Neutrale Frage
 neutral_questions#:#Neutrale Fragen
 neutral_type#:#Bewertung
 neutral_type_info#:#Wenn die Option 'Neutrale Anworten' ausgewählt ist, gibt es keine richtige Lösung für diese Aufgabe
-no_comment_id_given#:#Ein problem ist aufgetreten, es existiert keine Kommentar-ID
-no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflektionsfragen mit aktiviertem Kommentarfeld sind nach wie vor möglich.
+feedback_neutral#:#Feedback
+feedback_jump_neutral_info#:#Sie können hier eine Sprungmarke zu einer relevanten Stelle im Video angeben, zu der Nutzer über einen Button springen können, wenn die Frage beantwortet wurde. Der Button wird gemeinsam mit dem Feedback eingeblendet.
+feedback_jump_neutral#:#Sprungmarke
+feedback_repository_neutral#:#Feedback-Link zu einem Magazin-Objekt
+feedback_repository_neutral_info#:#Feedback-Link zu einem Magazin-Objekt
+neutral_questions#:#Neutrale Fragen
+neutral_question#:#Neutrale Frage
+export_comments#:#Kommentare exportieren
+export_all_comments#:#Alle Kommentare exportieren
+question_image#:#Bild für Frage
+extract#:#Thumbnail aus Video erzeugen
+use_this_image#:#Dieses Bild verwenden
+time_for_preview#:#Zeitpunkt:
+comment_title_info#:#Der Titel wird im Kommentarstream angezeigt und ist für die Kursteilnehmer damit immer sichtbar.
+correct_answer#:#Richtig
+wrong_answer#:#Falsch
+neutral_answer#:#-
+no_comment_id_given#:#Ein Problem ist aufgetreten, es existiert keine Kommentar-ID
+no_comment_info#:#Es wird kein Kommentarfeld unter dem Video angezeigt, Kommentare durch Reflexionsfragen mit aktiviertem Kommentarfeld sind nach wie vor möglich.
 no_comment_stream#:#Kein Kommentar-Stream
 no_comment_stream_info#:#Es wird kein Kommentar-Stream nebem dem Video angezeigt, somit auf keine Toolbar mit Filtern, Frage funktionieren weiter wie gewohnt.
 no_text_warning#:#Sie müssen einen Text eingeben
@@ -163,10 +180,13 @@ opc_id#:#Opencast Video Id
 opc_id_info#:#Opencast Video Id
 opc_insert#:#Video aus Opencast einfügen:
 opc_select_video#:#Video auswählen
+opc_change#:#Video ändern
 opc_selection_info#:#Opencast:
-opc_title#:#Titel
+no_oc_video_selected#:#Noch kein Opencast-Video ausgewählt
+opc_video#:#Opencast-Video
+opc_title#:#Ausgewähltes Video
 percentage#:#Prozent
-please_create_object_first#:#Um ein Opencast Video nutzen zu können, müssen Sie erst ein Objekt «Interaktives Video» anlegen. Geben Sie dazu einen Titel ein und klicken Sie auf «Neues Interaktives Video anlegen».
+please_create_object_first#:#Um ein Opencast Video nutzen zu können, müssen Sie erst ein Objekt «Interaktives Video» anlegen. Geben Sie dazu einen Titel ein und klicken Sie auf «Neues Interaktives Video anlegen». Sie können anschliessend ein Video auswählen.
 post#:#Posten
 private#:#privat
 process_header#:#Durchführung
@@ -181,7 +201,7 @@ questions#:#Fragen
 questions_comments#:#Fragen, Kapitel und Kommentare
 questions_comments_new#:#Fragen, Kapitel und öffentliche Kommentare
 questions_comments_sub_tab#:#Verwalten
-rbac_create_xvid#:#Interaktives Video anlegen 
+rbac_create_xvid#:#Interaktives Video anlegen
 rectangle#:#Rechteck
 reflection#:#Reflexionsfrage
 repeat#:#Wiederholen
@@ -196,7 +216,7 @@ root_create_xvid#:#Neues Interaktives Video anlegen
 rotate#:#Drehen
 save#:#Speichern
 save_anyway#:#Trotzdem speichern
-save_without_correct#:#Sind haben keine korrekte Antwort ausgewählt
+save_without_correct#:#Sie haben keine korrekte Antwort ausgewählt
 save_without_correct_detail#:#Sie haben weder eine Reflexionsfrage, noch neutrale Antworten aktiviert, sind Sie sicher, dass Sie die Frage ohne korrekte Antwort speichern wollen?
 scale#:#Skalieren
 screen_info#:#Diese Ansicht dient zum Erstellen und Verwalten von Fragen und Kommentaren. Achtung: Interaktive Fragen werden hier NICHT beim Abspielen des Videos angezeigt, wechseln Sie zum Reiter "Inhalt" um die Fragen während des Abspielvorganges eingeblendet zu bekommen.
@@ -246,7 +266,7 @@ task_switch#:#Aufgabenstellung aktivieren
 task_switch_info#:#Blendet oberhalb des Videos eine beliebige Aufgabenstellung ein.
 text#:#Text
 time_end#:#Ende der Passage
-time_for_preview#:#Zeitpunkt: 
+time_for_preview#:#Zeitpunkt:
 title_of_question#:#Titel der Frage
 toc#:#Inhaltsverzeichnis
 tutor#:#Tutor
@@ -280,3 +300,20 @@ you_need_a_short_title#:#Sie müssen einen Kurztitel eintragen!
 ytb#:#YouTube
 ytb_youtube_info#:#Geben Sie bitte eine YouTube-URL ein.
 ytb_youtube_url#:#YouTube-URL
+results#:#Ergebnisse
+question_type#:#Fragentyp
+question_result#:#Bewertung
+answered_by_user#:#Beantwortet von Nutzern
+correct_answered_by_user#:#Richtig beantwortet von Nutzern
+correct_percentage#:#Prozent richtig
+name#:#Name
+total#:#Total
+neutral_reflection#:#Neutrale & Reflexionsfragen
+evaluable_questions#:#Auswertbare Fragen
+percentage_correct#:#Prozent richtig
+answered_questions#:#Beantwortete Fragen
+from#:#von
+neutral_string#:#(neutral)
+answered#:#Beantwortet
+opc_selection_current#:#Aktuell ausgewähltes Video
+opc_selection#:#Bestehendes Video aus Opencast Video auswählen
