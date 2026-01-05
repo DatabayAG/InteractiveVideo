@@ -88,7 +88,10 @@ class SimpleChoiceQuestionsTableGUI implements DataRetrieval
                     return $right[$order_field] <=> $left[$order_field];
                 }
 
-                return $left[$order_field] <=> $right[$order_field];
+                if(isset($left[$order_field], $right[$order_field])) {
+                    return $left[$order_field] <=> $right[$order_field];
+                }
+                return 0;
             });
 
             if ($order_direction === Order::DESC) {
