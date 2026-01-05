@@ -568,7 +568,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * @param bool $strip_tags
      * @return array
      */
-	public function getCommentsTableData(bool $replace_with_text = false, bool $empty_string_if_null = false, bool $replace_settings_with_text = false, bool $strip_tags = false) : array
+	public function getCommentsTableData(bool $replace_with_text = false, bool $empty_string_if_null = false, bool $replace_settings_with_text = false, bool $strip_tags = false, $lng = null) : array
     {
 		$res = $this->db->queryF('
 			SELECT *, comments.comment_id as cid  FROM ' . self::TABLE_NAME_COMMENTS . ' comments
@@ -581,7 +581,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		$counter    = 0;
 		$table_data = [];
 		while($row = $this->db->fetchAssoc($res)) {
-            $type = $this->getCommentType($row);
+            $type = $this->getCommentType($row, $lng);
 
             $comment_time = $row['comment_time'];
             $comment_time_end = $row['comment_time_end'];
@@ -623,6 +623,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
             $table_data[$counter]['comment_time']		= $comment_time;
             $table_data[$counter]['comment_time_end']	= $comment_time_end;
 			$table_data[$counter]['user_id']			= $row['user_id'];
+			$table_data[$counter]['user_name_presentation']		= ilUserUtil::getNamePresentation( $row['user_id']);
 			$table_data[$counter]['user_user_name']		= $login;
 			$table_data[$counter]['user_first_name']	= $first_name;
 			$table_data[$counter]['user_surname']		= $surname;
@@ -634,7 +635,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
              //$table_data[$counter]['compulsory']      = $is_compulsory
             $table_data[$counter]['type']               = $type;
 			$table_data[$counter]['marker']             = $row['marker'];
-			$table_data[$counter]['is_reply_to']        = $row['is_reply_to'];
+            $reply = $row['is_reply_to'];
+            $reply_to_txt = xvidUtils::yesNoString(0);
+            if($reply > 0) {
+                $reply_to_txt = xvidUtils::yesNoString(1);
+            }
+			$table_data[$counter]['is_reply_to']        = $reply_to_txt;
             if($replace_settings_with_text === false && $strip_tags === false) {
                 $table_data[$counter]['is_table_of_content'] = $row['is_table_of_content'];
             }
@@ -650,7 +656,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * @param array $row
      * @return string
      */
-    private function getCommentType(array $row) : string
+    private function getCommentType(array $row, $lng = null) : string
     {
         $type = 'comment';
         if (isset($row['is_interactive']) && $row['is_interactive'] == "1") {
@@ -660,13 +666,16 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                 $type = 'chapter';
             }
         }
+        if($lng !== null) {
+            return $lng->txt($type);
+        }
         return $type;
     }
 
     /**
 	 * @return array<int, array{comment_id: mixed, comment_time: string, comment_time_end: string, title: mixed, comment_text: mixed, is_private: string, is_reply_to: mixed}>
 	 */
-	public function getCommentsTableDataByUserId(): array
+	public function getCommentsTableDataByUserId($with_text = false): array
 	{
 		$res = $this->db->queryF('
 			SELECT * FROM ' . self::TABLE_NAME_COMMENTS . ' 
@@ -697,7 +706,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 				$table_data[$counter]['is_private'] = ilInteractiveVideoPlugin::getInstance()->txt('public');
 			}
 
-			$table_data[$counter]['is_reply_to'] = $row['is_reply_to'];
+            $reply_to_txt = xvidUtils::yesNoString(0);
+            $reply_to = $row['is_reply_to'];
+            if($reply_to > 0) {
+                $reply_to_txt = xvidUtils::yesNoString(1);
+            }
+			$table_data[$counter]['is_reply_to'] = $reply_to_txt;
 //			$table_data[$counter]['is_tutor']       = $row['is_tutor'];
 //			$table_data[$counter]['is_interactive'] = $row['is_interactive'];
 			$counter++;

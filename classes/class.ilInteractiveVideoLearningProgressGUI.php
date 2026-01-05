@@ -53,7 +53,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         $this->tpl = $tpl;
         $this->lng = $lng;
         $this->ctrl = $ilCtrl;
-        parent::__construct($this->ctrl, $this->tpl);
+        parent::__construct(0);
     }
 
     /**

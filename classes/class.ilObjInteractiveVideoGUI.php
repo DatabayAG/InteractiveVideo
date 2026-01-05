@@ -2228,11 +2228,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
 			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
 		}
-		$tbl_data = $this->object->getCommentsTableDataByUserId();
-		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editMyComments');
-
-		$tbl->setData($tbl_data);
-		$tpl->setContent($tbl->getHTML());
+        $has_write = $this->access->checkAccess("write", "", $this->object->getRefId());
+		$tbl = new ilInteractiveVideoCommentsTableGUI($this->obj_id, 'showComments', $this->object, $has_write);
+        $tbl->renderTable();
 	}
 
     /**
@@ -2601,13 +2599,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(),true));
 
-		$tbl_data = $this->object->getCommentsTableData(true, true);
-		$tbl = new ilInteractiveVideoCommentsTableGUI($this, 'editComments');
-        $tbl->setIsPublic($this->object->isPublic());
-		$tbl->setData($tbl_data);
-		$video_tpl->setVariable('TABLE', $tbl->getHTML());
-
-		$tpl->setContent($video_tpl->get());
+        $has_write = $this->access->checkAccess("write", "", $this->object->getRefId());
+        $tbl = new ilInteractiveVideoAllCommentsTableGUI($this->obj_id, 'showComments', $this->object, $has_write);
+        $table = $tbl->renderTable(true);
+        $video_tpl->setVariable('TABLE', $table);
+        $tpl->setContent($video_tpl->get());
 	}
 
 	/**

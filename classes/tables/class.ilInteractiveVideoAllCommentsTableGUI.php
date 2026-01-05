@@ -17,7 +17,7 @@ use ILIAS\UI\URLBuilderToken;
 /**
  * Class ilInteractiveVideoCommentsTableGUI
  */
-class ilInteractiveVideoCommentsTableGUI implements DataRetrieval
+class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
 {
 
     private readonly Factory $factory;
@@ -49,7 +49,7 @@ class ilInteractiveVideoCommentsTableGUI implements DataRetrieval
     }
     private function getRecords(): array
     {
-        $rows = $this->object->getCommentsTableDataByUserId(true);
+        $rows = $this->object->getCommentsTableData(true, true, false, false, $this->lng);
         return $rows;
     }
 
@@ -108,9 +108,10 @@ class ilInteractiveVideoCommentsTableGUI implements DataRetrieval
         return [
             'comment_time' => $this->factory->table()->column()->text($this->lng->txt('time')),
             'comment_time_end' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('time_end')),
+            'user_name_presentation' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('user')),
             'title' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('long_title')),
             'comment_text' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('comment_table_title')),
-            'is_private' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('visibility')),
+            'type' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('type')),
             'is_reply_to' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('is_reply_to')),
         ];
     }
@@ -133,7 +134,7 @@ class ilInteractiveVideoCommentsTableGUI implements DataRetrieval
         ] : [];
     }
 
-    public function renderTable($return = false): void
+    public function renderTable($return = false): string
     {
         $df = new \ILIAS\Data\Factory();
 
@@ -158,6 +159,9 @@ class ilInteractiveVideoCommentsTableGUI implements DataRetrieval
 
         $query = $this->http->wrapper()->query();
 
+        if($return) {
+            return $this->renderer->render($out);
+        }
         $this->tpl->setContent($this->renderer->render($out));
     }
 
