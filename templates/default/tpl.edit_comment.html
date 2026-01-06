@@ -5,9 +5,9 @@
 			{VIDEO_PLAYER}
 		</div>
 		<div id="ilInteractiveVideoCommentsForm">
-			<form id="f_cmt" method="post" action="{FORM_ACTION}"> 
+			<form id="f_cmt" method="post" action="{FORM_ACTION}">
 			<div id="il_prop_cont_comment_text" class="form-group">
-				
+
 				<div class="col-sm-9">
 					<input type="hidden" name="comment_time" id="comment_time" value="($('video#ilInteractiveVideo')[0].currentTime">
 				</div>
@@ -23,7 +23,7 @@
 			</form>
 		</div>
 	</div>
-	
+
 </div>
 {CONFIG}
 <script type="module" src="Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/form/InteractiveVideoEditorInit.js"></script>
@@ -35,7 +35,6 @@
 		let time = il.InteractiveVideoPlayerAbstract.currentTime("{PLAYER_ID}");
 		let timesstring = il.InteractiveVideoPlayerComments.secondsToTimeCode(time);
 		$('#comment_time').val(timesstring);
-		console.log('HEELLLO)OO', timesstring)
 	});
 	}, false);
 

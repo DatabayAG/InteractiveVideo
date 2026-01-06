@@ -6,7 +6,6 @@ il.InteractiveVideoSimplePlayer = (function (scope) {
 	pub.initPlayer = function()
 	{
 		$.each(il.InteractiveVideo, function (player_id, value) {
-
 			if (value.hasOwnProperty("player_type") && value.player_type === "surl") {
 				il.InteractiveVideoPlayerFunction.appendInteractionEvents(player_id);
 				var player   = null,

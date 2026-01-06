@@ -21,9 +21,12 @@
             ]}*/
     }
     document.addEventListener('DOMContentLoaded', function () {
-      il.UI.dropdown.init(document.getElementById("dropdownMenuLayoutInteraktiveVideo_{PLAYER_ID}"));
-      il.UI.dropdown.init(document.getElementById("dropdownMenuInteraktiveVideo_{PLAYER_ID}"));
-        if(il.InteractiveVideo === undefined){
+      let el = document.getElementById("dropdownMenuLayoutInteraktiveVideo_{PLAYER_ID}");
+      if (el != null) {
+        il.UI.dropdown.init(document.getElementById("dropdownMenuLayoutInteraktiveVideo_{PLAYER_ID}"));
+        il.UI.dropdown.init(document.getElementById("dropdownMenuInteraktiveVideo_{PLAYER_ID}"));
+      }
+       if(il.InteractiveVideo === undefined){
             il.InteractiveVideo = {};
         }
 
