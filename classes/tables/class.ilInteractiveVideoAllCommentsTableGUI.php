@@ -89,7 +89,7 @@ class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
 
         foreach ($records as $record) {
             yield $row_builder
-                ->buildDataRow((string) $record['comment_time'], $record);
+                ->buildDataRow((string) $record['comment_id'], $record);
         }
     }
 
@@ -106,6 +106,7 @@ class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
     private function getColumns(): array
     {
         return [
+           # 'comment_id' => $this->factory->table()->column()->text($this->lng->txt('comment_id')),
             'comment_time' => $this->factory->table()->column()->text($this->lng->txt('time')),
             'comment_time_end' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('time_end')),
             'user_name_presentation' => $this->factory->table()->column()->text(ilInteractiveVideoPlugin::getInstance()->txt('user')),
@@ -145,7 +146,7 @@ class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
         [$url_builder, $action_parameter_token, $row_id_token] = $url_builder->acquireParameters(
             $query_params_namespace,
             'table_action',
-            'id',
+            'comment_id',
         );
 
         $table = $this->factory

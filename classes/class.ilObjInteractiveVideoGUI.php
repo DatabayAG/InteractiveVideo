@@ -192,6 +192,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                                 $this->confirmDeleteQuestionsResults();
                                 $render_default = false;
                                 break;
+                            case 'editMyComment':
+                                $this->editMyCommentsWrapper();
+                                $render_default = false;
+                                break;
                         }
                     }
                 }
@@ -3571,6 +3575,29 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$tpl->setContent($confirm->getHTML());
 	}
+
+    /**
+     * @throws ilCtrlException
+     */
+    public function editMyCommentsWrapper(): void
+    {
+        $comment_id = null;
+        $get_param = 'tid_comment_id';
+        $query = $this->http->wrapper()->query();
+        if ($query->has($get_param)) {
+            $comments_id = $query->retrieve(
+                $get_param,
+                $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string())
+            );
+            $comment_id = array_shift($comments_id);
+        }
+        if($comment_id !== null) {
+            $this->ctrl->setParameter($this, 'comment_id', $comment_id);
+            $link_target =  $this->ctrl->getLinkTarget($this, 'editComment');
+
+            ilUtil::redirect($link_target);
+        }
+    }
 
     /**
      *
