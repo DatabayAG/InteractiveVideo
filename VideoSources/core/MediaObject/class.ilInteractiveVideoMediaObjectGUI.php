@@ -14,10 +14,10 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 */
     public function getForm($option, int $obj_id)
 	{
-		/*$upload_field = new ilFileInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('video_file'), 'video_file');
+		$upload_field = new ilFileInputGUI(ilInteractiveVideoPlugin::getInstance()->txt('video_file'), 'video_file');
 		$upload_field->setSuffixes(array('mp4', 'mov', 'mp3', 'flv', 'm4v', 'ogg', 'ogv', 'webm'));
 		$option->addSubItem($upload_field);
-		return $option;*/
+		return $option;
 	}
 
 	/**
@@ -26,7 +26,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function checkForm($form) : bool
     {
-
+        return true;
 	}
 
 	/**
@@ -36,7 +36,6 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	public function addPlayerElements(ilGlobalPageTemplate $tpl) : ilGlobalPageTemplate
     {
 		$tpl->addJavaScript(self::PATH . 'js/jquery.InteractiveVideoMediaElementPlayer.js');
-		ilPlayerUtil::initMediaElementJs($tpl);
 		return $tpl;
 	}
 
@@ -48,7 +47,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function getPlayer($player_id, ilObjInteractiveVideo $obj) : ilTemplate
     {
-		$player = new ilTemplate(self::PATH . 'tpl/tpl.video.html', false, false);
+        $player = new ilTemplate("../../VideoSources/core/MediaObject/tpl/tpl.video.html", true, true, $obj->getPluginObject()->getDirectory());
 		ilObjMediaObjectGUI::includePresentationJS();
 		$media_object = new ilInteractiveVideoMediaObject();
 		$mob_id     = $media_object->doReadVideoSource($obj->getId());

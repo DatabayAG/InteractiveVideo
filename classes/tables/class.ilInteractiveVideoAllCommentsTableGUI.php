@@ -126,6 +126,7 @@ class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
         URLBuilderToken $row_id_token,
     ): array {
         return $this->has_write ? [
+            //Todo: fix different comment types
             'edit_comment' =>
                 $this->factory->table()->action()->single(
                     ilInteractiveVideoPlugin::getInstance()->txt('edit_comment'),
