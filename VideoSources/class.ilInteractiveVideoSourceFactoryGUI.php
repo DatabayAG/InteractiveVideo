@@ -69,8 +69,7 @@ class ilInteractiveVideoSourceFactoryGUI
 	{
         global $DIC;
         $plugin = ilInteractiveVideoPlugin::getInstance();
-        $DIC->ui()->mainTemplate()->setOnScreenMessage("failure", $plugin->txt("source_does_not_exist"), true);
-		ilUtil::redirect('ilias.php?baseClass=ilDashboardGUI');
+        $DIC->ui()->mainTemplate()->setOnScreenMessage("failure", $plugin->txt("source_has_to_be"), true);
 	}
 
 	/**
@@ -79,15 +78,16 @@ class ilInteractiveVideoSourceFactoryGUI
 	 */
 	public function checkForm($form)
 	{
+        $check = true;
 		foreach($this->sources as $class => $obj)
 		{
 			$source_id = ilUtil::stripSlashes($form->getInput('source_id'));
 			if($obj->getId() == $source_id)
 			{
-				$obj->getGUIClass()->checkForm($form);
+				$check = $obj->getGUIClass()->checkForm($form);
 			}
 		}
-		return $form;
+		return $check;
 	}
 
 	protected function generateUniqueId()

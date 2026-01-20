@@ -26,7 +26,10 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function checkForm($form) : bool
     {
-        return true;
+        if($_FILES['video_file']['name'] != '') {
+            return true;
+        }
+        return false;
 	}
 
 	/**

@@ -1015,18 +1015,22 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $this->object->setLayoutWidth((int)$layout_width);
 
         $source_id = $form->getInput('source_id');
-        $this->object->setSourceId(ilInteractiveVideoPlugin::stripSlashesWrapping($source_id));
 
-        $factory = new ilInteractiveVideoSourceFactoryGUI($this->object, $source_id);
-        $factory->checkForm($form);
+        $factory = new ilInteractiveVideoSourceFactoryGUI($this->object);
+        $check = $factory->checkForm($form);
 
-		$factory = new ilInteractiveVideoSourceFactory();
-		$source = $factory->getVideoSourceObject($form->getInput('source_id'));
-		$source->doUpdateVideoSource($this->obj_id);
+        if($check && $source_id !== "") {
+            $this->object->setSourceId(ilInteractiveVideoPlugin::stripSlashesWrapping($source_id));
+            $factory = new ilInteractiveVideoSourceFactory();
+            $source = $factory->getVideoSourceObject($source_id);
+            if($source !== null) {
+                $source->doUpdateVideoSource($this->obj_id);
+            }
+        }
 
-		$this->object->update();
+        $this->object->update();
+        parent::updateCustom($form);
 
-		parent::updateCustom($form);
 	}
 
     /**
@@ -1035,9 +1039,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
     protected function initCreationForms(string $new_type): array
 	{
-	$form_array =  [
-				self::CFORM_NEW => $this->initCreateForm($new_type),
-				self::CFORM_IMPORT => $this->initImportForm($new_type)
+        $form_array =
+            [
+                    self::CFORM_NEW => $this->initCreateForm($new_type),
+                    self::CFORM_IMPORT => $this->initImportForm($new_type)
             ];
 		return $form_array;
 	}
@@ -1050,8 +1055,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     {
         /* @var $form Standard */
 		$form = parent::initCreateForm($new_type);
-		#$this->selectSource();
-
 		return $form;
 	}
 
@@ -1221,7 +1224,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             /** @var ilInteractiveVideoSourceGUI $gui */
             if($factory->isActive($source->getClass()))
             {
-                $gui= $source->getGUIClass();
+                $gui = $source->getGUIClass();
                 $gui->getEditFormCustom($a_form, $this->object);
             }
         }
@@ -1232,6 +1235,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 */
     protected function getEditFormCustomValues(array &$a_values): void
 	{
+        $first_save = false;
+        if($this->object->getSourceId() === "") {
+            $first_save = true;
+        }
+
 		$factory = new ilInteractiveVideoSourceFactory();
 		$sources = $factory->getVideoSources();
 		/** $source ilInteractiveVideoSource */
@@ -1240,19 +1248,22 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			/** @var ilInteractiveVideoSourceGUI $gui */
 			if($factory->isActive($source->getClass()))
 			{
-				$gui= $source->getGUIClass();
+				$gui = $source->getGUIClass();
 				$gui->getEditFormCustomValues($a_values, $this->object);
 			}
 		}
 		$a_values['is_anonymized']		= $this->object->isAnonymized();
 		$a_values['is_repeat'] 			= $this->object->isRepeat();
-		$a_values['is_public']			= $this->object->isPublic();
+		$a_values['is_public']			= $this->object->isPublic() ?: 1;
 		$a_values["is_online"]			= $this->object->isOnline();
-		$a_values["is_chronologic"]		= $this->object->isChronologic();
-		$a_values["enable_comment"]			= $this->object->getEnableComment();
-		$a_values["show_toolbar"]			= $this->object->getEnableToolbar();
+        $a_values["is_chronologic"]		= $this->object->isChronologic() ?: 0;
+        if($first_save) {
+            $a_values["is_chronologic"]		= 0;
+        }
+		$a_values["enable_comment"]		= $this->object->getEnableComment();
+		$a_values["show_toolbar"]		= $this->object->getEnableToolbar() ?: 1;
 		$a_values["show_toc_first"]		= $this->object->getShowTocFirst();
-		$a_values["enable_comment_stream"]		= $this->object->getEnableCommentStream();
+		$a_values["enable_comment_stream"]		= $this->object->getEnableCommentStream() ?: 1;
 		$source_id = $this->object->getSourceId();
         if($source_id === 'opc' || $source_id === '') {
             $get = $this->http->wrapper()->query();

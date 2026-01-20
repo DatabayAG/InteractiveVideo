@@ -302,3 +302,4 @@ neutral_string#:#(neutral)
 answered#:#Answered
 opc_selection_current#:#Selected Video
 opc_selection#:#Select existing video from Opencast
+source_has_to_be#:#You have to selecte a video source.
