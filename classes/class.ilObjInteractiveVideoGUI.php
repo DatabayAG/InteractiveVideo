@@ -1015,6 +1015,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $this->object->setLayoutWidth((int)$layout_width);
 
         $source_id = $form->getInput('source_id');
+        $this->object->setSourceId(ilInteractiveVideoPlugin::stripSlashesWrapping($source_id));
 
         $factory = new ilInteractiveVideoSourceFactoryGUI($this->object);
         $check = $factory->checkForm($form);
@@ -1271,6 +1272,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $source_id = $get->retrieve('xvid_source_id', $this->refinery->kindlyTo()->string());
                 $source_id = ilInteractiveVideoPlugin::stripSlashesWrapping($source_id);
             }
+        }
+        if($source_id === '') {
+            $factory = new ilInteractiveVideoSourceFactory();
+            $source_id = $factory->getDefaultVideoSource();
         }
 
 		$a_values['source_id']			= $source_id;
@@ -1582,8 +1587,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
-	protected function selectSource($a_form)
+	protected function selectSource($a_form = null)
 	{
+        if($a_form === null) {
+            $a_form = new ilPropertyFormGUI();
+        }
+
         $plugin = ilInteractiveVideoPlugin::getInstance();
         $factory = new ilInteractiveVideoSourceFactory();
         $sources = $factory->getVideoSources();

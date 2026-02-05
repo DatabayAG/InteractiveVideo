@@ -374,7 +374,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						self::TABLE_NAME_OBJECTS,
 						[
                             'obj_id'         => ['integer', $this->getId()],
-                            'plugin_id'      => ['text', 'imo'],
+                            'plugin_id'      => ['text', ''],
                             'source_id'      => ['text', ''],
                             'is_task'        => ['integer', 0],
                             'is_online'        => ['integer', 0],
@@ -392,10 +392,12 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		parent::doUpdate();
 
 		$old_source_id = $this->getOldVideoSource();
-		if($old_source_id != null && $old_source_id != $this->getSourceId())
+		if($old_source_id !== null && $old_source_id !== $this->getSourceId())
 		{
-			$this->getVideoSourceObject($old_source_id);
-			$this->video_source_object->doDeleteVideoSource($this->getId());
+            if($old_source_id !== '') {
+                $this->getVideoSourceObject($old_source_id);
+                $this->video_source_object->doDeleteVideoSource($this->getId());
+            }
 		}
 
         $this->updateObject();
