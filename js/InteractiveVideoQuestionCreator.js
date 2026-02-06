@@ -6,7 +6,10 @@ InteractiveVideoQuestionCreator = (function () {
 	pro.appendMultiListener = function() {
 		$('.text_field').on('blur', function (){
 			let pos = parseInt($(this).attr('meta'), 10);
-			IVQuestionCreator.JSON[pos].answer = $(this).val();
+      if($(this).val() !== undefined) {
+        IVQuestionCreator.JSON[pos].answer = $(this).val();
+      }
+
 		});
 		$('#show_best_solution').on('click', function (){
 			pro.showHideFormElementsForReflectionType();
