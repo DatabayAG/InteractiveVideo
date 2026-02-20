@@ -374,7 +374,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 						self::TABLE_NAME_OBJECTS,
 						[
                             'obj_id'         => ['integer', $this->getId()],
-                            'plugin_id'      => ['text', ''],
+                            //'plugin_id'      => ['text', ''],
                             'source_id'      => ['text', ''],
                             'is_task'        => ['integer', 0],
                             'is_online'        => ['integer', 0],
@@ -1227,7 +1227,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * @return string
      * @throws ilException
      */
-				public function getInternalLabelForLPMode($lp_mode): string
+    public function getInternalLabelForLPMode($lp_mode): string
     {
         switch ($lp_mode) {
             case self::LP_MODE_BY_QUESTIONS:
@@ -1271,11 +1271,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
             empty($usrIds) ? null : $usrIds
         );
     }
-
-	public function trackReadEvent(): void
-	{
-        ilChangeEvent::_recordReadEvent($this->getType(), $this->getRefId(), $this->getId(), $this->user->getId());
-	}
 
 	public function uploadImage(int $comment_id, SimpleChoiceQuestion $question, array $a_upload): bool
 	{
