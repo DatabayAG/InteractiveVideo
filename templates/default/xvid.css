@@ -1035,3 +1035,14 @@ li.toc_item > div > h5 > time {
 #ilQuestionModal > div > div > div.modal-header {
     display:none;
 }
+select.form-control {
+    width: auto;
+    max-width: 100%;
+}
+.form-control {
+    appearance: auto !important;
+}
+.btn-default, .navbar-form > a {
+    color: white !important;
+    background-color: #4c6586 !important;
+}

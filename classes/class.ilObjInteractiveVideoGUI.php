@@ -2056,8 +2056,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($title);
 
 		$time = new ilInteractiveVideoTimePicker($this->lng->txt('time'), 'comment_time');
-		#$time->setShowTime(true);
-		#$time->setShowSeconds(true);
 
 		if($post->has('comment_time'))
 		{
@@ -2070,8 +2068,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addItem($time);
 
 		$time_end = new ilInteractiveVideoTimePicker($plugin->txt('time_end'), 'comment_time_end');
-		#$time_end->setShowTime(true);
-		#$time_end->setShowSeconds(true);
 
         if($post->has('comment_time_end'))
 		{
@@ -2811,7 +2807,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $ilTabs, $DIC;
 
 		$ilTabs->activateTab('editComments');
-		if(!($form instanceof ilPropertyFormGUI))
+        if(!($form instanceof ilPropertyFormGUI))
 		{
 			$form = $this->initChapterForm();
             $chapters = $this->getChapterFomValues();
@@ -2825,7 +2821,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$form->addCommandButton('updateChapter', $this->lng->txt('save'));
 		$form->addCommandButton('editComments', $this->lng->txt('cancel'));
         $tpl->addOnLoadCode('il.InteractiveVideoEditor.createInstance("comment_text");');
-		$tpl->setContent($form->getHTML());
+        $my_tpl = $this->getCommentTemplate();
+        $my_tpl->setVariable('FORM',$form->getHTML());
+		$tpl->setContent($my_tpl->get());
 	}
 
     /**
@@ -3612,7 +3610,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         }
         if($comment_id !== null) {
             $this->ctrl->setParameter($this, 'comment_id', $comment_id);
-            $link_target =  $this->ctrl->getLinkTarget($this, 'editComment');
+            $comment = new ilObjComment($comment_id);
+            $target = 'editComment';
+            if($comment->isInteractive() == 1) {
+                $target = 'editQuestion';
+            } else if($comment->getIsTableOfContent() === 1) {
+                $target = 'editChapter';
+            }
+            $link_target =  $this->ctrl->getLinkTarget($this, $target);
 
             ilUtil::redirect($link_target);
         }

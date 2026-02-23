@@ -55,6 +55,7 @@ display_width#:#Width video- & comments column
 display_width_info#:#- Gleich gross: 1:1 Die beiden Spalten sind gleich breit. Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/> - Video gross: 2:1 Das Video ist deutlich breiter als die Kommentarepalte, (Verhältnis = 2:1). Wechselt auf sehr kleinen Bildschrimen zu einem Ein-Spalten-Layout (untereinander). In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/> - Video sehr gross: Untereinander Das Video füllt die volle Fensterbreite aus. Die Kommentarepalte wird darunter angezeigt. In der Toolbar kann der Benutzer die eigene Ansicht anpassen. <br/>
 edit_chapter#:#Edit Chapter
 edit_comment#:#Edit comment
+edit#:#Edit
 enable_comment#:#Show comment field
 enable_comment_info#:#Shows a comment field below the video. Must be enabled if students should be able to add markers (see below).
 enable_comment_stream#:#Show comments column
