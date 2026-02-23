@@ -59,4 +59,9 @@ class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 		}
 		return $props;
 	}
+
+    public function getCommandFrame(string $cmd): string
+    {
+        return '';
+    }
 }
