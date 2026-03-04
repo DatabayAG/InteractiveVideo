@@ -196,6 +196,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                                 $this->editMyCommentsWrapper();
                                 $render_default = false;
                                 break;
+                            case 'deleteComment':
+                                $this->confirmDeleteComment();
+                                $render_default = false;
+                                break;
                         }
                     }
                 }
@@ -1947,14 +1951,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->setSubTabs('editComments');
 		$ilTabs->activateSubTab('editComments');
 
-        $post = $this->http->wrapper()->post();
-        $post_ids = [];
-        if($post->has('comment_id')) {
-            $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
+        $get = $this->http->wrapper()->query();
+        $get_ids = [];
+        if($get->has('tid_comment_id')) {
+            $get_ids = $get->retrieve('tid_comment_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string()));
         }
 
+        if ($get_ids === ['ALL_OBJECTS']) {
+            $get_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
 
-        if(!count($post_ids))
+        }
+
+        if(!count($get_ids))
 		{
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
             $this->ctrl->redirect($this, 'editComments');
@@ -1966,11 +1974,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$confirm->setCancel($this->lng->txt('cancel'), 'editComments');
 
 		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
-		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
+		$wrong_comment_ids = array_diff($get_ids, $comment_ids);
 
 		if(is_array($wrong_comment_ids) && (count($wrong_comment_ids) == 0))
 		{
-			foreach($post_ids as $comment_id)
+			foreach($get_ids as $comment_id)
 			{
 			    $texts = $this->object->getCommentTextById($comment_id);
 			    if(strlen($texts['title']) > 0){

@@ -132,6 +132,12 @@ class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
                     ilInteractiveVideoPlugin::getInstance()->txt('edit'),
                     $url_builder->withParameter($action_parameter_token, 'editMyComment'),
                     $row_id_token
+                ),
+            'delete_comment' =>
+                $this->factory->table()->action()->standard(
+                    ilInteractiveVideoPlugin::getInstance()->txt('delete'),
+                    $url_builder->withParameter($action_parameter_token, 'deleteComment'),
+                    $row_id_token
                 )
         ] : [];
     }
@@ -152,7 +158,7 @@ class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
 
         $table = $this->factory
             ->table()
-            ->data(ilInteractiveVideoPlugin::getInstance()->txt('question_results'), $this->getColumns(), $this)
+            ->data(ilInteractiveVideoPlugin::getInstance()->txt('questions_comments_new'), $this->getColumns(), $this)
             ->withId(self::class . '_' . $this->parent_id)
             ->withOrder(new Order('title', Order::ASC))
             ->withActions($this->getActions($url_builder, $action_parameter_token, $row_id_token))
