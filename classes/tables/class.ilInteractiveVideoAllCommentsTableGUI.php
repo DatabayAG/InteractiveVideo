@@ -134,7 +134,7 @@ class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
                     $row_id_token
                 ),
             'delete_comment' =>
-                $this->factory->table()->action()->standard(
+                $this->factory->table()->action()->multi(
                     ilInteractiveVideoPlugin::getInstance()->txt('delete'),
                     $url_builder->withParameter($action_parameter_token, 'deleteComment'),
                     $row_id_token

@@ -319,3 +319,4 @@ answered#:#Beantwortet
 opc_selection_current#:#Aktuell ausgewähltes Video
 opc_selection#:#Bestehendes Video aus Opencast Video auswählen
 source_has_to_be#:#Sie müssen eine Video Quelle auswählen.
+delete#:#Löschen
