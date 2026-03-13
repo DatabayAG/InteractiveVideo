@@ -1272,7 +1272,13 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         );
     }
 
-	public function uploadImage(int $comment_id, SimpleChoiceQuestion $question, array $a_upload): bool
+    public function trackReadEvent(): void
+    {
+        ilChangeEvent::_recordReadEvent($this->getType(), $this->getRefId(), $this->getId(), $this->user->getId());
+    }
+
+
+    public function uploadImage(int $comment_id, SimpleChoiceQuestion $question, array $a_upload): bool
 	{
 		if(!$this->id)
 		{
