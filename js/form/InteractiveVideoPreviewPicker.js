@@ -9,17 +9,23 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 		generate_id	: 'generate_ffmpeg',
 		path_id		: 'extract_file_path'
 	};
-	
+
 	pub.initialize = function(){
 		pro.makeModalBootstrapCompatible();
 		pro.registerClickListener();
 	};
-	
+
 	pro.registerClickListener = function()
 	{
 		$('#' + pub.config.button_id).on('click', function()
 		{
-			$('#' + pub.config.modal_id).modal({backdrop: 'static'}, 'show');
+      let local_config =  {
+          keyboard: false,
+          backdrop: 'static'
+      }
+      var modal = $('#ffmpeg_extract_modal');
+      const myModal = new bootstrap.Modal(modal, local_config)
+      myModal.show();
 			$('#ffmpeg_time_picker').timepicker('setTime', $('#comment_time').val());
 		});
 
@@ -27,9 +33,9 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 		{
 			pro.generateThumbnailsPerAjaxCall();
 		});
-		
+
 	};
-	
+
 	pro.generateThumbnailsPerAjaxCall = function()
 	{
 		pro.displayWaitBox();
@@ -37,11 +43,11 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 		let url = holder;
 		console.log(url)
 		$.ajax({
-			type:	"POST", 
-			cache:	false, 
+			type:	"POST",
+			cache:	false,
 			url:	url,
-			data:	{time : $('#ffmpeg_time_picker').val()}, 
-			success: function (json) 
+			data:	{time : $('#ffmpeg_time_picker').val()},
+			success: function (json)
 				{
 					let images = JSON.parse(json);
 					let html = '';
@@ -96,7 +102,7 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 		$('#' + pub.config.modal_id).find('.ffmpeg_spinner').remove();
 		$('.preview_image_container').find('.question_image_select').removeClass('hidden');
 	};
-	
+
 	pro.makeModalBootstrapCompatible = function()
 	{
 		let size = 'col-xs-12';
