@@ -60,7 +60,7 @@ class ilInteractiveVideoPreviewPicker extends ilImageFileInputGUI
 		$modal->setId('ffmpeg_extract_modal');
 		$modal->setType(ilModalGUI::TYPE_LARGE);
 		$modal->setHeading(ilInteractiveVideoPlugin::getInstance()->txt('extract'));
-		$video_tpl = new ilTemplate("tpl.ffmpeg_modal.html", false, false, 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/');
+		$video_tpl = new ilTemplate("tpl.ffmpeg_modal.html", false, false, 'public/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/');
 
 		$time      = new ilInteractiveVideoTimePicker('ffmpeg_time_picker', 'ffmpeg_time_picker');
 		$video_tpl->setVariable('AJAX_URL', $ilCtrl->getLinkTarget(new ilObjInteractiveVideoGUI(), 'generateThumbnailsFromSourcePerAjax', '', true));
