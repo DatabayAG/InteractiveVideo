@@ -13,6 +13,7 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 	pub.initialize = function(){
 		pro.makeModalBootstrapCompatible();
 		pro.registerClickListener();
+    pro.appendCloseButtonListener();
 	};
 
 	pro.registerClickListener = function()
@@ -35,6 +36,18 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 		});
 
 	};
+
+  pro.appendCloseButtonListener = function(player_id)
+  {
+    let close_form = $('.close');
+    let question_modal = $('#ffmpeg_extract_modal');
+
+    close_form.off('click');
+    close_form.on('click', function () {
+      question_modal.modal('hide');
+    });
+
+  };
 
 	pro.generateThumbnailsPerAjaxCall = function()
 	{
