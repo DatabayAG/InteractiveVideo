@@ -4,7 +4,8 @@
  */
 class ilInteractiveVideoXMLParser extends ilSaxParser
 {
-	/**
+    private string $importDirectory;
+    /**
 	 * @var ilObjInteractiveVideo
 	 */
 	protected $xvid_obj;

@@ -5,7 +5,8 @@
  */
 class ilInteractiveVideoImporter extends ilXmlImporter
 {
-	/**
+    private string $qti_path;
+    /**
 	 * @var ilObjInteractiveVideo | null
 	 */
 	protected $xvid_object = null;

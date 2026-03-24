@@ -56,7 +56,8 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
 
 		$player->setVariable('PLAYER_ID', $player_id);
-		$player->setVariable('VIDEO_SRC', ilWACSignedPath::signFile($mob_dir . '/' . $media_item['location']));
+        $mob_file = $mob_dir . '/' . $media_item['location'];
+		$player->setVariable('VIDEO_SRC', ilWACSignedPath::signFile($mob_file));
 		$player->setVariable('VIDEO_TYPE', $media_item['format']);
 		$player->setVariable('INTERACTIVE_VIDEO_ID', $obj->getId());
 		return $player;

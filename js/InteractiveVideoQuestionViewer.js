@@ -338,7 +338,6 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 				$(this).html('<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>');
 			});
 			$.each(response_frequency, function (l, value) {
-				console.log(value, l)
 				if(max_user_answers === 0) {
 					percentage = 0;
 				} else {

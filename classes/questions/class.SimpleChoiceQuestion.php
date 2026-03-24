@@ -300,12 +300,8 @@ class SimpleChoiceQuestion
 			',
 			['integer', 'integer'], [$question_id, $ilUser->getId()]);
 
-		if($ilDB->numRows($res) > 0)
-		{
-			return true;
-		}
-		return false;
-	}
+        return $ilDB->numRows($res) > 0;
+    }
 
 	private function readAnswerDefinitions(): void
 	{

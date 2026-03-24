@@ -3708,7 +3708,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $simple_choice->saveAnswer($qid, $answer);
 
             }
-            if(SimpleChoiceQuestion::existUserAnswerForQuestionId((int)$qid) == false)
+            if(SimpleChoiceQuestion::existUserAnswerForQuestionId((int)$qid) === false)
             {
                 $answer = [];
                 if($post->has('answer')) {

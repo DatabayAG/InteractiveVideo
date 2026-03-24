@@ -1032,8 +1032,8 @@ li.toc_item > div > h5 > time {
 .btn.btn-default.dropdown-toggle::after{
     content:none !important;
 }
-#ilQuestionModal > div > div > div.modal-header {
-    display:none;
+#ilQuestionModal > div > div > div.modal-header .close {
+    display:none !important;
 }
 select.form-control {
     width: auto;
@@ -1045,4 +1045,7 @@ select.form-control {
 .btn-default, .navbar-form > a {
     color: white !important;
     background-color: #4c6586 !important;
+}
+.modal-title{
+    width: 100%;
 }
