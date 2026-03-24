@@ -1043,8 +1043,9 @@ select.form-control {
     appearance: auto !important;
 }
 .btn-default, .navbar-form > a {
-    color: white !important;
+   /* color: white !important;
     background-color: #4c6586 !important;
+*/
 }
 .modal-title{
     width: 100%;
