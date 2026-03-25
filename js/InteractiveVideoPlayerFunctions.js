@@ -483,10 +483,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
             if (value === language.reset_text) {
                 player_data.filter_by_user = false;
-                $('#dropdownMenuInteraktiveVideo_' + player_id).removeClass('btn-primary').html(language.author_filter);
+                $('#dropdownMenuInteraktiveVideo_' + player_id).removeClass('btn-primary').html(language.author_filter + ' ' + '<span class="caret"></span>');
             } else {
                 player_data.filter_by_user = value;
-                $('#dropdownMenuInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.author_filter + ' ' + value);
+                $('#dropdownMenuInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.author_filter + ' ' + value + ' ' + '<span class="caret"></span>');
             }
 
             if (scope.InteractiveVideoPlayerAbstract.currentTime(player_id) > 0 || player_data.show_only_until_playhead === false) {
@@ -507,7 +507,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
         let player_data = pub.getPlayerDataObjectByPlayerId(player_id);
         if (value === language.reset_text) {
             value = player_data.layout_width
-            $('.dropdownMenuLayoutInteraktiveVideo_' + player_id).removeClass('btn-primary').html(language.layout_filter );
+            $('.dropdownMenuLayoutInteraktiveVideo_' + player_id).removeClass('btn-primary').html(language.layout_filter + ' ' + '<span class="caret"></span>');
         } else {
             if (value !== '1:1') {
                 value = value.split(':');
@@ -522,7 +522,7 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
                     value = '1:0';
                 }
             }
-            $('.dropdownMenuLayoutInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.layout_filter + ' ' + value);
+           $('.dropdownMenuLayoutInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.layout_filter + ' ' + value + ' ' + '<span class="caret"></span>');
         }
         pro.setLayoutValue(value, player_id);
     }

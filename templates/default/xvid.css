@@ -1050,3 +1050,9 @@ select.form-control {
 .modal-title{
     width: 100%;
 }
+.toggle-group{
+    top: -1px !important;
+}
+.toggle-off{
+    right: -1px !important;
+}
