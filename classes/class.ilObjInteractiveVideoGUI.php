@@ -1259,16 +1259,17 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		$a_values['is_anonymized']		= $this->object->isAnonymized();
 		$a_values['is_repeat'] 			= $this->object->isRepeat();
-		$a_values['is_public']			= $this->object->isPublic() ?: 1;
+		$a_values['is_public']			= $this->object->isPublic() ?? 1;
 		$a_values["is_online"]			= $this->object->isOnline();
-        $a_values["is_chronologic"]		= $this->object->isChronologic() ?: 0;
+        $a_values["is_chronologic"]		= $this->object->isChronologic() ?? 0;
         if($first_save) {
             $a_values["is_chronologic"]		= 0;
         }
 		$a_values["enable_comment"]		= $this->object->getEnableComment();
-		$a_values["show_toolbar"]		= $this->object->getEnableToolbar() ?: 1;
+        $a = $this->object->getEnableToolbar();
+		$a_values["show_toolbar"]		= $this->object->getEnableToolbar() ?? 1;
 		$a_values["show_toc_first"]		= $this->object->getShowTocFirst();
-		$a_values["enable_comment_stream"]		= $this->object->getEnableCommentStream() ?: 1;
+		$a_values["enable_comment_stream"]		= $this->object->getEnableCommentStream() ?? 1;
 		$source_id = $this->object->getSourceId();
         if($source_id === 'opc' || $source_id === '') {
             $get = $this->http->wrapper()->query();
