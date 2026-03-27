@@ -55,7 +55,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 		},
 		actual_marker : null
 	};
-	
+
 	pub.jumpToTimeAndRemoveOverlay = function(event)
 	{
 		$('.play_overlay_jump_to_time').remove();
@@ -114,7 +114,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	pub.checkForOverlay = function()
 	{
 		var svg = '<svg id="ilInteractiveVideoOverlay" viewBox="0 0 300 150" preserveAspectRatio="xMinYMin meet"></svg>';
-		var overlay_count = $(pri.ids.ilInteractiveVideoOverlay).size();
+		var overlay_count = $(pri.ids.ilInteractiveVideoOverlay).length;
 		var modal_visibility = $('#ilInteractiveVideoAjaxModal').css('display');
 		if(overlay_count === 1){
 			$('#ilInteractiveVideoOverlay').remove();
@@ -242,7 +242,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 			}
 		});
 	};
-	
+
 	pub.resetForm = function()
 	{
 		pro.showButtons();
@@ -374,7 +374,7 @@ il.InteractiveVideoOverlayMarker = (function (scope) {
 	{
 		return SVG(pri.strings.ilInteractiveVideoOverlay);
 	};
-	
+
 	pro.addStrokeAndNoFill = function(element)
 	{
 		element.stroke({ width: pro.stroke_width , color : pro.default_color});

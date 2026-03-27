@@ -176,9 +176,9 @@ InteractiveVideoQuestionCreator = (function () {
 			if(pro.checkIfAnswerConfigurationIsValid())
 			{
 				evt.preventDefault();
-				if($('#ilInteractiveVideoAjaxModal').size() >= 1)
+				if($('#ilInteractiveVideoAjaxModal').length >= 1)
 				{
-					if($('.alert_ex_modal').size() == 0)
+					if($('.alert_ex_modal').length == 0)
 					{
 						var info = '<div class="alert_ex_modal alert alert-info" >' +
 									$('#simple_question_warning .alert.alert-info').html() +

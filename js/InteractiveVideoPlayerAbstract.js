@@ -18,7 +18,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 		readyCallback              : null,
 		removeNonAdventureElements : null,
 		initPlayerCallback         : null
-	}; 
+	};
 
 	pub.pause = function(player_id)
 	{
@@ -135,7 +135,7 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 	{
 		if(il.InteractiveVideo.tutor_mode == 'true' || il.InteractiveVideo.tutor_mode == '1')
 		{
-			if($('#ilInteractiveVideoTutorCommentSubmit').size() === 0 && $('#ilInteractiveVideoTutorQuestionSubmit').size() === 0)
+			if($('#ilInteractiveVideoTutorCommentSubmit').length === 0 && $('#ilInteractiveVideoTutorQuestionSubmit').length === 0)
 			{
 				$( '#ilInteractiveVideo').parent().attr('class', 'col-sm-6');
 			}
