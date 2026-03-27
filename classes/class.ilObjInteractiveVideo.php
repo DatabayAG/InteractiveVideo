@@ -1037,7 +1037,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
             if (in_array($this->getLearningProgressMode(), [self::LP_MODE_BY_QUESTIONS])) {
                 $usrs_points = $simple->getAllUsersWithCompletelyCorrectAnswers($this->getId());
                 foreach ($usrs_points as $usr_id => $points) {
-                    if ($points === count($questionIds)) {
+                    if ($points >= count($questionIds)) {
                         $usrIds[$usr_id] = $usr_id;
                     }
                 }
