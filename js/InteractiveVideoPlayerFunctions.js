@@ -483,10 +483,10 @@ il.InteractiveVideoPlayerFunction = (function (scope) {
 
             if (value === language.reset_text) {
                 player_data.filter_by_user = false;
-                $('#dropdownMenuInteraktiveVideo_' + player_id).removeClass('btn-primary').html(language.author_filter + ' ' + '<span class="caret"></span>');
+                $('#dropdownMenuInteraktiveVideo_' + player_id + ' button').removeClass('btn-primary').html(language.author_filter + ' ' + '<span class="caret"></span>');
             } else {
                 player_data.filter_by_user = value;
-                $('#dropdownMenuInteraktiveVideo_' + player_id).addClass('btn-primary').html(language.author_filter + ' ' + value + ' ' + '<span class="caret"></span>');
+                $('#dropdownMenuInteraktiveVideo_' + player_id + ' button').addClass('btn-primary').html(language.author_filter + ' ' + value + ' ' + '<span class="caret"></span>');
             }
 
             if (scope.InteractiveVideoPlayerAbstract.currentTime(player_id) > 0 || player_data.show_only_until_playhead === false) {
