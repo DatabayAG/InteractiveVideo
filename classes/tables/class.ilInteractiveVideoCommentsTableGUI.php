@@ -129,6 +129,12 @@ class ilInteractiveVideoCommentsTableGUI implements DataRetrieval
                     ilInteractiveVideoPlugin::getInstance()->txt('edit_comment'),
                     $url_builder->withParameter($action_parameter_token, 'editMyComment'),
                     $row_id_token
+                ),
+            'delete_comment' =>
+                $this->factory->table()->action()->multi(
+                    ilInteractiveVideoPlugin::getInstance()->txt('delete'),
+                    $url_builder->withParameter($action_parameter_token, 'deleteComment'),
+                    $row_id_token
                 )
         ] : [];
     }

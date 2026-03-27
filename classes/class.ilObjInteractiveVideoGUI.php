@@ -1077,13 +1077,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('editProperties');
 
-        $DIC->ui()->mainTemplate()->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/form/InteractiveVideoEditorInit.js');
-        $DIC->ui()->mainTemplate()->addOnLoadCode('il.InteractiveVideoEditor.createInstance("task")');
+        //$DIC->ui()->mainTemplate()->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/form/InteractiveVideoEditorInit.js');
         if($a_form === null) {
             $a_form = new ilPropertyFormGUI();
         }
         $a_form = $this->selectSource($a_form);
 		$this->appendCkEditorMathJaxSupportToForm($a_form);
+        $DIC->ui()->mainTemplate()->addOnLoadCode('il.InteractiveVideoEditor.createInstance("task")');
 		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
 		$a_form->addItem($online);
 		$this->appendDefaultFormOptions($a_form);
@@ -1946,7 +1946,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
 		 */
-		global $tpl, $ilTabs;
+		global $tpl, $ilTabs, $DIC;
 
 		$ilTabs->activateTab('editComments');
 		$this->setSubTabs('editComments');
@@ -1969,6 +1969,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $this->ctrl->redirect($this, 'editComments');
 		}
 		$confirm = new ilConfirmationGUI();
+
+        $cmd = '';
+        if($get->has('cmd')) {
+            $cmd = $get->retrieve('cmd', $this->refinery->kindlyTo()->string());
+        }
+        $DIC->ctrl()->setParameter($this, 'iv_return', $cmd);
 		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteComment'));
 		$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_delete_comment'));
 		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteComment');
@@ -2022,7 +2028,19 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		{
             $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('invalid_comment_ids'));
 		}
-		$this->editComments();
+
+        $get = $this->http->wrapper()->query();
+        $cmd = '';
+        if($get->has('iv_return')) {
+            $cmd = $get->retrieve('iv_return', $this->refinery->kindlyTo()->string());
+        }
+
+        if($cmd === 'editMyComments') {
+            $this->editMyComments();
+        } else {
+            $this->editComments();
+        }
+
 	}
 
     /**
