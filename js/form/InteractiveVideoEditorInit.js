@@ -17,7 +17,8 @@ il.InteractiveVideoEditor = (function (scope) {
     }
 
     pub.createInstance = function (elementIdentifier) {
-        if ( ! pub.getEditorInstanceById(elementIdentifier)) {
+      //Todo: check if this is really needed
+        if ( true ||! pub.getEditorInstanceById(elementIdentifier)) {
             if (document.getElementById(elementIdentifier)) {
                 return ClassicEditor
                     .create(document.querySelector('#' + elementIdentifier), pri.getEditorConfig())

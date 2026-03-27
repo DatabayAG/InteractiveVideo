@@ -84,7 +84,7 @@ class SimpleChoiceQuestionAjaxHandler
 						{
 							$start_div = '<div class="neutral">';
 						}
-	
+
 						if(isset($feedback['feedback_correct_ref_id']) && $feedback['feedback_correct_ref_id'] > 0)
 						{
 							$json['feedback_link'] =  $this->getLinkIfReadAccessForObjectByRefId($feedback['feedback_correct_ref_id']);
@@ -144,7 +144,9 @@ class SimpleChoiceQuestionAjaxHandler
         $best_solution = '';
 	    $answers = $this->getAnswersForQuestionId($qid, false);
         foreach($answers as $answer) {
-            $best_solution .= '<div class="best_solution_answer" data-best-solution="'. $answer["answer_id"] .'" data-answer-state="'.$answer['correct'].'"></div>';
+            if($answer !== "" && is_array($answer)) {
+                $best_solution .= '<div class="best_solution_answer" data-best-solution="'. $answer["answer_id"] .'" data-answer-state="'.$answer['correct'].'"></div>';
+            }
         }
         return $best_solution;
     }
@@ -170,7 +172,7 @@ class SimpleChoiceQuestionAjaxHandler
 			global $ilAccess;
 			$video_tpl = new ilTemplate("tpl.elements.html", true, true, ilInteractiveVideoPlugin::getInstance()->getDirectory());
 			$obj = ilObjectFactory::getInstanceByRefId($ref_id);
-			
+
 			if($ilAccess->checkAccess('read', '', $ref_id))
 			{
 				$video_tpl->setCurrentBlock('feedback_linked_element');

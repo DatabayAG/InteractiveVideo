@@ -874,7 +874,7 @@ li.toc_item > div > h5 > time {
     text-align: left;
 }
 .best_solution_answer_view {
-    margin-bottom: -10px;
+    //margin-bottom: -10px;
 }
 
 .best_solution_block{
