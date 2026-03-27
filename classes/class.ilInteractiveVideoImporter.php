@@ -18,8 +18,8 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 
     public function init(): void
 	{
-		$this->qti_path = $this->getImportDirectory().'/Plugins/xvid/set_1/expDir_1';
-		$this->xml_file = $this->getImportDirectory().'/Plugins/xvid/set_1/export.xml';
+		$this->qti_path = $this->getImportDirectory().'/Plugins/xvid/set_0/expDir_1';
+		$this->xml_file = $this->getImportDirectory().'/Plugins/xvid/set_0/export.xml';
 	}
 
     /**

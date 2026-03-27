@@ -241,7 +241,6 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 
 			if($src_id != '')
 			{
-
 				try
 				{
 					$this->getVideoSourceObject($src_id);
@@ -369,7 +368,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			{
 				#$this->delete();
 			    #throw new ilException(ilInteractiveVideoPlugin::getInstance()->txt('at_least_one_source'));
-			}
+
                     $this->db->insert(
 						self::TABLE_NAME_OBJECTS,
 						[
@@ -384,6 +383,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 					parent::doCreate();
 
 					$this->createMetaData();
+            }
 		}
 	}
 

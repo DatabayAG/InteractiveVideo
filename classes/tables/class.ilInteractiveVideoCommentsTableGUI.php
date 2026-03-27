@@ -149,7 +149,7 @@ class ilInteractiveVideoCommentsTableGUI implements DataRetrieval
 
         $table = $this->factory
             ->table()
-            ->data(ilInteractiveVideoPlugin::getInstance()->txt('question_results'), $this->getColumns(), $this)
+            ->data(ilInteractiveVideoPlugin::getInstance()->txt('my_comments'), $this->getColumns(), $this)
             ->withId(self::class . '_' . $this->parent_id)
             ->withOrder(new Order('title', Order::ASC))
             ->withActions($this->getActions($url_builder, $action_parameter_token, $row_id_token))
