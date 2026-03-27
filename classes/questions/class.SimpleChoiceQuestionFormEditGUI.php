@@ -226,14 +226,16 @@ class SimpleChoiceQuestionFormEditGUI
 		}
 		$factory = new ilInteractiveVideoSourceFactory();
 		$source = $factory->getVideoSourceObject($this->object->getSourceId());
-		if($source->isFileBased())
-		{
-			$image_upload->setPathToVideo($source->getPath($this->object->getId()));
-		}
-		else
-		{
-			$image_upload->setCanExtractImages(false);
-		}
+        if ($source !== null) {
+            if($source->isFileBased())
+            {
+                $image_upload->setPathToVideo($source->getPath($this->object->getId()));
+            }
+            else
+            {
+                $image_upload->setCanExtractImages(false);
+            }
+        }
 
 		$form->addItem($image_upload);
 	}

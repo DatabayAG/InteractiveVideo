@@ -1056,3 +1056,7 @@ select.form-control {
 .toggle-off{
     right: -1px !important;
 }
+
+div.modal-header{
+    display: block;
+}
