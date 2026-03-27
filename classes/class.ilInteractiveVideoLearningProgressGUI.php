@@ -276,7 +276,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         $info = new ilInfoScreenGUI($cloned_controller);
         $info->setFormAction($this->ctrl->getFormAction($this, 'editUser'));
         $info->addSection($this->lng->txt('trac_learning_progress'));
-        $status = (int)ilLearningProgressBaseGUI::__readStatus($this->object->getId(), $ilUser->getId());
+        $status = ilLPStatus::_lookupStatus($this->object->getId(), $ilUser->getId());
         $status_path = ilLPStatusIcons::getInstance()->getImagePathForStatus($status);
         $status_text = ilLearningProgressBaseGUI::_getStatusText($status);
         $info->addProperty($this->lng->txt('trac_status'),
