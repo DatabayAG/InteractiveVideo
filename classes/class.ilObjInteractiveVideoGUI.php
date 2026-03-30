@@ -1068,8 +1068,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      * @throws ilSystemStyleException
      * @throws ilTemplateException
      */
-    protected function initEditCustomForm(ilPropertyFormGUI $a_form): void
-	{
+    protected function initEditCustomForm(ilPropertyFormGUI $a_form) : void
+    {
 		/**
 		 * @var $ilTabs ilTabsGUI
 		 */
@@ -1087,7 +1087,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$online = new ilCheckboxInputGUI($this->lng->txt('online'), 'is_online');
 		$a_form->addItem($online);
 		$this->appendDefaultFormOptions($a_form);
-
 	}
 
     /**
@@ -1101,7 +1100,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 * @var $tpl ilTemplate
 		 */
 		global $tpl;
-		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", true, true, $this->plugin->getDirectory());
+		$ck_editor = new ilTemplate("tpl.ckeditor_mathjax.html", false, false, $this->plugin->getDirectory());
 		$mathJaxSetting = new ilSetting('MathJax');
 		if($mathJaxSetting->get('enable'))
 		{
