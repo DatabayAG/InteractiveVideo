@@ -372,7 +372,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		$file_name = ilObjMediaObject::fixFilename($this->import_file_name);
 		$file      = $mob_dir . '/' . $file_name;
 
-		$tmp_file = $import_dir .'/Plugins/xvid/set_1/expDir_1/objects/' . $this->import_part_path .'/'. $this->import_file_name;
+		$tmp_file = $import_dir .'/objects/' . $this->import_part_path .'/'. $this->import_file_name;
 		if(file_exists($tmp_file))
 		{
 			copy($tmp_file, $file);
