@@ -8,7 +8,7 @@ class ilInteractiveVideoExportGUI extends ilExportGUI
      * {}
      * @throws ilCtrlException
      */
-    protected function buildExportTableGUI(): ilExportGUI
+    public function buildExportTableGUI()
 	{
 		/**
 		 * @var $ilCtrl ilCtrl
@@ -19,16 +19,5 @@ class ilInteractiveVideoExportGUI extends ilExportGUI
 			ilInteractiveVideoPlugin::getInstance()->txt('export_all_comments'),
 			$ilCtrl->getLinkTarget(new ilObjInteractiveVideoGUI(), 'exportAllComments')
 		);
-		$table = new ilInteractiveVideoExportTableGUI($this, 'listExportFiles', $this->obj);
-		return $table;
-	}
-
-	/**
-	 * Download file
-	 */
-    public function download(): void
-	{
-
-		parent::download();
 	}
 }

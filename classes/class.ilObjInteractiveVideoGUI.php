@@ -170,6 +170,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$this->checkPermission('write');
 				$ilTabs->setTabActive('export');
 				$exp_gui = new ilInteractiveVideoExportGUI($this);
+                $exp_gui->buildExportTableGUI();
 				$exp_gui->addFormat('xml', $this->lng->txt('export'));
 				$this->ctrl->forwardCommand($exp_gui);
 				break;
