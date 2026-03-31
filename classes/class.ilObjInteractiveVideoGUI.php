@@ -235,7 +235,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					case 'postAddSubtitle':
 					case 'confirmDeleteComment':
 					case 'confirmRemoveSubtitle':
-					case 'deleteComment':
 					case 'editComments':
 				    case 'editQuestion':
 					case 'confirmUpdateQuestion':
@@ -266,6 +265,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					case 'getQuestionPerAjax':
 					case 'insertTutorCommentAjax':
 					case 'postAnswerPerAjax':
+                    case 'deleteComment':
 						$this->checkPermission('read');
                         if ($render_default) {
                             $this->$cmd();
@@ -2517,7 +2517,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		if($valid){
 			$this->objComment->update();
-			$this->editComments();
+			$this->showContent();
 		}
 		else
 		{

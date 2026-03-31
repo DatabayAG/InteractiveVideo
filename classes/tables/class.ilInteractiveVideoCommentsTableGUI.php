@@ -127,7 +127,7 @@ class ilInteractiveVideoCommentsTableGUI implements DataRetrieval
         URLBuilderToken $action_parameter_token,
         URLBuilderToken $row_id_token,
     ): array {
-        return $this->has_write ? [
+        return [
             'edit_comment' =>
                 $this->factory->table()->action()->single(
                     ilInteractiveVideoPlugin::getInstance()->txt('edit_comment'),
@@ -140,7 +140,7 @@ class ilInteractiveVideoCommentsTableGUI implements DataRetrieval
                     $url_builder->withParameter($action_parameter_token, 'deleteComment'),
                     $row_id_token
                 )
-        ] : [];
+        ];
     }
 
     public function renderTable($return = false): void
