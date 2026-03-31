@@ -103,11 +103,16 @@ il.InteractiveVideoPlayerAbstract = (function (scope) {
 
 	pub.resumeVideo = function (player_id)
 	{
-		if(scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id).auto_resume === true ||
-				scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id).auto_resume === "1")
-		{
-			pub.play(player_id);
-		}
+    let data = scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id);
+    if (typeof data !== "undefined") {
+      if(scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id).auto_resume === true ||
+        scope.InteractiveVideoPlayerFunction.getPlayerDataObjectByPlayerId(player_id).auto_resume === "1")
+        {
+          pub.play(player_id);
+        }
+    }
+
+
 	};
 
 	pub.videoFinished = function(player_id)

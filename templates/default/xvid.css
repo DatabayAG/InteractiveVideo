@@ -1033,7 +1033,7 @@ li.toc_item > div > h5 > time {
     content:none !important;
 }
 #ilQuestionModal > div > div > div.modal-header .close {
-    display:none !important;
+
 }
 select.form-control {
     width: auto;

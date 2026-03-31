@@ -449,7 +449,12 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		}
     const myModal = new bootstrap.Modal(pri.ids.modal, config)
     myModal.show();
-	};
+    $('.modal-header .close').on('click', function () {
+      $('#ilQuestionModal').modal('hide');
+      il.InteractiveVideoPlayerAbstract.resumeVideo();
+    });
+
+  };
 
 	pro.enableQuestionLock = function(){
 		pri.locked = true;
