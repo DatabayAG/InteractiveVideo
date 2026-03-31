@@ -46,6 +46,10 @@ class ilInteractiveVideoCommentsTableGUI implements DataRetrieval
         $this->parent_id = $parent_obj_id;
         $this->parent_type = $parent_obj_type;
         $this->object = $object;
+        $DIC->toolbar()->addButton(
+            $object->txt('export_comments'),
+            $DIC->ctrl()->getLinkTarget( new ilObjInteractiveVideoGUI(), 'exportMyComments'));
+
     }
     private function getRecords(): array
     {
