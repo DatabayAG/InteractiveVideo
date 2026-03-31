@@ -1967,8 +1967,22 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         }
 
         if ($get_ids === ['ALL_OBJECTS']) {
-            $get_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
-
+            if($this->access->checkAccess("write", "", $this->object->getRefId())) {
+                $get_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
+            }
+            else {
+                $temp_comments = $this->object->getCommentsTableDataByUserId(true);
+                if(count($temp_comments) > 0) {
+                    $get_ids = [];
+                    foreach($temp_comments as $key => $row) {
+                        foreach($row as $id => $value) {
+                            if($id === 'comment_id') {
+                                $get_ids[] = $value;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         if(!count($get_ids))
@@ -1993,7 +2007,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         else {
             $confirm->setCancel($this->lng->txt('cancel'), 'editMyComments');
         }
-        
+
 		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
 		$wrong_comment_ids = array_diff($get_ids, $comment_ids);
 
