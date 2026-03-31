@@ -3968,7 +3968,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$csvrow = [];
 			foreach ( $row as $type => $value)
 			{
-				array_push($csvrow, trim($value, '"'));
+                if(! in_array($type, ['user_name_presentation'])) {
+                    array_push($csvrow, trim($value, '"'));
+                }
 			}
 			array_push($csv, ilCSVUtil::processCSVRow($csvrow, TRUE, $separator));
 		}
