@@ -965,6 +965,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
     protected function validateCustom(ilPropertyFormGUI $form): bool
 	{
+        $source_id = $form->getInput('source_id');
+        $this->object->setSourceId(ilInteractiveVideoPlugin::stripSlashesWrapping($source_id));
+        $gui_factory = new ilInteractiveVideoSourceFactoryGUI($this->object);
+        $check = $gui_factory->checkForm($form);
+        if($check === false) {
+            $this->tpl->setOnScreenMessage("failure", $this->plugin->txt('enter_videos_source'), true);
+            return false;
+        }
 		return parent::validateCustom($form);
 	}
 
@@ -1032,10 +1040,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             if($source !== null) {
                 $source->doUpdateVideoSource($this->obj_id);
             }
+            $this->object->update();
+            parent::updateCustom($form);
         }
 
-        $this->object->update();
-        parent::updateCustom($form);
 
 	}
 
