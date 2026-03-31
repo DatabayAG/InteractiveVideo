@@ -115,6 +115,7 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 			case 'fixedModal':
 			case 'autoResumeAfterQuestion':
 			case 'studentMarker':
+			case 'layoutWidth':
 				if($this->inSettingsTag)
 				{
 					$this->cdata = '';
@@ -232,8 +233,12 @@ class ilInteractiveVideoXMLParser extends ilSaxParser
 				$this->xvid_obj->setAutoResumeAfterQuestion(trim($this->cdata));
 				$this->cdata = '';
 				break;
-			case 'show_toc_first':
+			case 'showTocFirst':
 				$this->xvid_obj->setShowTocFirst(trim($this->cdata));
+				$this->cdata = '';
+				break;
+            case 'layoutWidth':
+				$this->xvid_obj->setLayoutWidth(trim($this->cdata));
 				$this->cdata = '';
 				break;
 			case 'studentMarker':

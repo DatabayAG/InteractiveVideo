@@ -123,6 +123,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		$this->xml_writer->xmlElement('autoResumeAfterQuestion', null, (int)$this->object->isAutoResumeAfterQuestion());
 		$this->xml_writer->xmlElement('studentMarker', null, $this->object->getMarkerForStudents());
 		$this->xml_writer->xmlElement('noCommentStream', null, $this->object->getNoCommentStream());
+		$this->xml_writer->xmlElement('layoutWidth', null, $this->object->getLayoutWidth());;
 
 		$this->exportQuestions();
 		$this->exportVideoSourceObject();
