@@ -1986,8 +1986,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteComment'));
 		$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_delete_comment'));
 		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteComment');
-		$confirm->setCancel($this->lng->txt('cancel'), 'editComments');
 
+        if($this->access->checkAccess("write", "", $this->object->getRefId())) {
+            $confirm->setCancel($this->lng->txt('cancel'), 'editComments');
+        }
+        else {
+            $confirm->setCancel($this->lng->txt('cancel'), 'editMyComments');
+        }
+        
 		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
 		$wrong_comment_ids = array_diff($get_ids, $comment_ids);
 
