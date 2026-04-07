@@ -114,6 +114,31 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		return 'showContent';
 	}
 
+    public function executeCommand() : void
+    {
+        $next_class = $this->ctrl->getNextClass();
+        try {
+            switch ($next_class) {
+                case "ilinfoscreengui":
+                    if (!$this->ctrl->isAsynch()) {
+                        $this->initHeader();
+                        $this->setTabs();
+                    }
+                    $this->checkPermission("visible");
+                    $this->infoScreen();    // forwards command
+                    $this->tpl->printToStdout();
+                    break;
+                case 'ilpermissiongui':
+                    $this->initHeader(false);
+                    parent::executeCommand();
+                    break;
+                default:
+                    parent::executeCommand();
+                    }
+        } catch (ilException $e) {}
+
+        $this->tpl->loadStandardTemplate();
+    }
 	/**
 	 * @param string $cmd
 	 * @throws ilException
@@ -128,7 +153,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->setTitleAndDescription();
 
 		$this->lng->loadLanguageModule('trac');
-		$plugin = ilInteractiveVideoPlugin::getInstance();
 
 		$next_class = $this->ctrl->getNextClass($this);
 		switch($next_class)
@@ -174,6 +198,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 				$exp_gui->addFormat('xml', $this->lng->txt('export'));
 				$this->ctrl->forwardCommand($exp_gui);
 				break;
+
 			default:
                 global $DIC;
                 $render_default = true;
@@ -309,7 +334,24 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$this->addHeaderAction();
 	}
+    protected function initHeader(bool $render_locator = true) : void
+    {
+        if ($render_locator) {
+            $this->setLocator();
+        }
 
+        $this->tpl->setTitleIcon(ilObjViMP::_getIcon($this->object_id));
+        $this->tpl->setTitle($this->object->getTitle());
+        $this->tpl->setDescription($this->object->getDescription());
+
+        if (!$this->object->isOnline()) {
+            $list_gui = ilObjectListGUIFactory::_getListGUIByType('xvid');
+            $this->tpl->setAlertProperties($list_gui->getAlertProperties());
+        }
+
+        //		$this->tpl->setTitleIcon(ilObjViMP::_getIcon($this->object_id));
+        $this->tpl->setPermanentLink('xvid', (int) $_GET['ref_id']);
+    }
     public function ajaxCallPluginHelper() {
         $xvid_ctrl = '';
         $xvid_function = '';
@@ -1710,7 +1752,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      * @param int|null    $sub_id
      * @return ilObjectListGUI|ilObjInteractiveVideoListGUI|null
      */
-				protected function initHeaderAction(?string $sub_type = null, ?int $sub_id = null): ?ilObjectListGUI
+    protected function initHeaderAction(?string $sub_type = null, ?int $sub_id = null): ?ilObjectListGUI
 	{
         return parent::initHeaderAction();
 	}
@@ -1731,7 +1773,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$ilTabs->addTab('content', $this->lng->txt('content'), $this->ctrl->getLinkTarget($this, 'showContent'));
 		}
 
-		$this->addInfoTab();
+        $this->tabs_gui->addTab(
+            'info',
+            $this->lng->txt('info_short'),
+            $this->ctrl->getLinkTargetByClass(ilInfoScreenGUI::class)
+        );
 
 		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
 		{
