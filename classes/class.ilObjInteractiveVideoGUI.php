@@ -340,7 +340,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $this->setLocator();
         }
 
-        $this->tpl->setTitleIcon(ilObjViMP::_getIcon($this->object_id));
+        $this->tpl->setTitleIcon(ilObjInteractiveVideo::_getIcon($this->object_id));
         $this->tpl->setTitle($this->object->getTitle());
         $this->tpl->setDescription($this->object->getDescription());
 
@@ -349,7 +349,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $this->tpl->setAlertProperties($list_gui->getAlertProperties());
         }
 
-        //		$this->tpl->setTitleIcon(ilObjViMP::_getIcon($this->object_id));
         $this->tpl->setPermanentLink('xvid', (int) $_GET['ref_id']);
     }
     public function ajaxCallPluginHelper() {
