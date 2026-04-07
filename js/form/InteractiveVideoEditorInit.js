@@ -17,7 +17,7 @@ il.InteractiveVideoEditor = (function (scope) {
     }
 
     pub.createInstance = function (elementIdentifier) {
-        //if (! pub.getEditorInstanceById(elementIdentifier)) {
+        if (elementIdentifier.startsWith('text_reflection_comment_') || ! pub.getEditorInstanceById(elementIdentifier)) {
             if (document.getElementById(elementIdentifier)) {
                 return ClassicEditor
                     .create(document.querySelector('#' + elementIdentifier), pri.getEditorConfig())
@@ -29,7 +29,7 @@ il.InteractiveVideoEditor = (function (scope) {
                     })
                     .catch(err => console.error(err.stack));
             }
-       // }
+        }
     }
 
     pub.getEditorInstanceById = function (elementIdentifier) {
