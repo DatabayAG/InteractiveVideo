@@ -7,6 +7,7 @@
  */
 class ilObjInteractiveVideoListGUI extends ilObjectPluginListGUI
 {
+    protected int $obj_id;
 	/**
 	 * @return string
 	 */
