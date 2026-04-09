@@ -404,6 +404,7 @@ class SimpleChoiceQuestion
         global $ilDB;
 
 		$question_id = $ilDB->nextId(self::TABLE_NAME_QUESTION);
+        $a= $this->getCompulsoryQuestion();
 		$ilDB->insert(self::TABLE_NAME_QUESTION,
 			[
                 'question_id'        => ['integer', $question_id],

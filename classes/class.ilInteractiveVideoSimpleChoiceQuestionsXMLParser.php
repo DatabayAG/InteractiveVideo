@@ -5,7 +5,7 @@
 class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVideoXMLParser
 {
 	/**
-	 * @var 
+	 * @var
 	 */
 	protected $xvid_obj;
 	protected bool $inAnswerTag = false;
@@ -57,6 +57,9 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 			case 'QuestionRepeatQuestion':
 			case 'QuestionReflectionComment':
 			case 'QuestionNeutralAnswer':
+			case 'QuestionCompulsory':
+			case 'QuestionShowBestSolution':
+			case 'QuestionShowBestSolutionText':
 			case 'CommentIsTutor':
 			case 'CommentIsInteractive':
 			case 'CommentTime':
@@ -196,6 +199,15 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 				break;
 			case 'QuestionImage':
 				$this->xvid_obj->import_simple_choice[$this->comments]->setQuestionImage(trim($this->cdata));
+				break;
+            case 'QuestionCompulsory':
+				$this->xvid_obj->import_simple_choice[$this->comments]->setCompulsoryQuestion(trim($this->cdata));
+				break;
+            case 'QuestionShowBestSolution':
+				$this->xvid_obj->import_simple_choice[$this->comments]->setShowBestSolution(trim($this->cdata));
+				break;
+            case 'QuestionShowBestSolutionText':
+				$this->xvid_obj->import_simple_choice[$this->comments]->setShowBestSolutionText(trim($this->cdata));
 				break;
 		}
 	}

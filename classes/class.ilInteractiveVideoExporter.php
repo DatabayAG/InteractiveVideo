@@ -189,6 +189,8 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 					$this->xml_writer->xmlElement('QuestionRepeatQuestion', null, (int) $row['repeat_question']);
 					$this->xml_writer->xmlElement('QuestionReflectionComment', null, (int) $row['reflection_question_comment']);
 					$this->xml_writer->xmlElement('QuestionNeutralAnswer', null, (int) $row['neutral_answer']);
+					$this->xml_writer->xmlElement('QuestionCompulsory', null, (int) $row['compulsory_question']);;
+					$this->xml_writer->xmlElement('QuestionShowBestSolution', null, (int) $row['show_best_solution']);
 					if($row['question_image'])
 					{
 						$path = $row['question_image'];
