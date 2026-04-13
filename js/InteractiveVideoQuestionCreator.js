@@ -95,7 +95,7 @@ InteractiveVideoQuestionCreator = (function () {
 				$('#subform_show_best_solution').show();
 			}
 			$('#il_prop_cont_limit_attempts').hide();
-			il.InteractiveVideoEditor.createInstance("show_best_solution_text");
+      il.InteractiveVideoEditor.createInstance("show_best_solution_text");
 		}
 		else
 		{

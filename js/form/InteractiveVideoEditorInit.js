@@ -9,7 +9,8 @@ il.InteractiveVideoEditor = (function (scope) {
 
     let pub = {}, pro = {},
         pri = {
-            editor_instances: {}
+            editor_instances: {},
+            editor_instances_init: {}
         };
 
     pub.createMultipleInstances = function (elementIdentifiers) {
@@ -17,8 +18,10 @@ il.InteractiveVideoEditor = (function (scope) {
     }
 
     pub.createInstance = function (elementIdentifier) {
-        if (elementIdentifier.startsWith('text_reflection_comment_') || ! pub.getEditorInstanceById(elementIdentifier)) {
+      console.log(elementIdentifier, pri.editor_instances);
+        if (elementIdentifier.startsWith('text_reflection_comment_') || ! pri.editorInitialized(elementIdentifier)) {
             if (document.getElementById(elementIdentifier)) {
+                pri.editor_instances_init[elementIdentifier] = true;
                 return ClassicEditor
                     .create(document.querySelector('#' + elementIdentifier), pri.getEditorConfig())
                     .then(editor => {
@@ -38,6 +41,14 @@ il.InteractiveVideoEditor = (function (scope) {
                 return pri.editor_instances[elementIdentifier];
             }
         }
+
+        return false;
+    }
+
+     pri.editorInitialized = function (elementIdentifier) {
+            if (typeof pri.editor_instances_init[elementIdentifier] != "undefined") {
+                return pri.editor_instances_init[elementIdentifier];
+            }
 
         return false;
     }
