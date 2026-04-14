@@ -783,14 +783,17 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * @param bool $with_user_id
      * @return array<int|string, mixed>
      */
-	public function getCommentIdsByObjId($obj_id, bool $with_user_id = true): array
+	public function getCommentIdsByObjId($obj_id, bool $with_user_id = true, bool $ignore_privates = false): array
 	{
 		$comment_ids = [];
-		$res = $this->db->queryF('SELECT comment_id, user_id FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE obj_id = %s',
+		$res = $this->db->queryF('SELECT comment_id, user_id, is_private FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE obj_id = %s',
 			['integer'], [$obj_id]);
 
 		while($row = $this->db->fetchAssoc($res))
 		{
+            if($ignore_privates === true && $row['is_private'] == 1) {
+                continue;
+            }
 			if($with_user_id == true)
 			{
 				$comment_ids[$row['comment_id']] = $row['user_id'];

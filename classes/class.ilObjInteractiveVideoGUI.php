@@ -2013,7 +2013,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         if ($get_ids === ['ALL_OBJECTS']) {
             if($this->access->checkAccess("write", "", $this->object->getRefId())) {
-                $get_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
+                $get_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id, true, true));
             }
             else {
                 $temp_comments = $this->object->getCommentsTableDataByUserId(true);
