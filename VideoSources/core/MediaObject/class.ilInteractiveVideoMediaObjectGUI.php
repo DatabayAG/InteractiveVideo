@@ -1,5 +1,12 @@
 <?php
 
+use ILIAS\MediaObjects\InternalDataService;
+use ILIAS\MediaObjects\InternalRepoService;
+use ILIAS\MediaObjects\InternalDomainService;
+use ILIAS\MediaObjects\MediaObjectRepository;
+use ILIAS\Repository\IRSS\IRSSWrapper;
+use ILIAS\Repository\IRSS\DataService;
+
 /**
  * Class ilInteractiveVideoMediaObjectGUI
  * @author Guido Vollbach <gvollbach@databay.de>
@@ -50,15 +57,23 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
     {
         $player = new ilTemplate("../../VideoSources/core/MediaObject/tpl/tpl.video.html", true, true, $obj->getPluginObject()->getDirectory());
 		ilObjMediaObjectGUI::includePresentationJS();
+        global $DIC;
 		$media_object = new ilInteractiveVideoMediaObject();
 		$mob_id     = $media_object->doReadVideoSource($obj->getId());
 		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
-
+        $mob = new ilObjMediaObject($mob_id);
+        $mob_file = $mob->getStandardSrc();
 		$player->setVariable('PLAYER_ID', $player_id);
-        $mob_file = $mob_dir . '/' . $media_item['location'];
-		$player->setVariable('VIDEO_SRC', ilWACSignedPath::signFile($mob_file));
-		$player->setVariable('VIDEO_TYPE', $media_item['format']);
+        $repository = new MediaObjectRepository($DIC->database(), new IRSSWrapper(new DataService()));
+        $check_local_file = $repository->hasLocalFile($mob_id, $media_item['location']);
+        if($check_local_file === false) {
+            $mob_file = $mob_dir . '/' . $media_item['location'];
+            $player->setVariable('VIDEO_SRC', ilWACSignedPath::signFile($mob_file));
+        } else {
+            $player->setVariable('VIDEO_SRC', $mob_file);
+        }
+        $player->setVariable('VIDEO_TYPE', $media_item['format']);
 		$player->setVariable('INTERACTIVE_VIDEO_ID', $obj->getId());
 		return $player;
 	}

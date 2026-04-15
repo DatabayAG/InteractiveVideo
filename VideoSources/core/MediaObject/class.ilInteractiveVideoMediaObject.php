@@ -146,7 +146,11 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		$mob->setDescription('');
 		$mob->create();
 
-		$mob->createDirectory();
+        $mob->addMediaItemFromLocalFile(
+            "Standard",
+            $_FILES['video_file']['tmp_name'],
+            $_FILES['video_file']['name']);
+		/*$mob->createDirectory();
 		$mob_dir = ilObjMediaObject::_getDirectory($mob->getId());
 
 		$media_item = new ilMediaItem();
@@ -174,7 +178,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		$media_item->setHAlign("Left");
 
         ilFileUtils::renameExecutables($mob_dir);
-
+*/
 		$mob->update();
 
 		$this->setMobId($mob->getId());
