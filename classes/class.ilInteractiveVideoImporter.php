@@ -18,8 +18,14 @@ class ilInteractiveVideoImporter extends ilXmlImporter
 
     public function init(): void
 	{
-		$this->qti_path = $this->getImportDirectory().'/Plugins/xvid/set_0/expDir_1';
-		$this->xml_file = $this->getImportDirectory().'/Plugins/xvid/set_0/export.xml';
+        if(file_exists($this->getImportDirectory().'/Plugins/xvid/set_0/export.xml')) {
+            $this->qti_path = $this->getImportDirectory().'/Plugins/xvid/set_0/expDir_1';
+            $this->xml_file = $this->getImportDirectory().'/Plugins/xvid/set_0/export.xml';
+        } else {
+            $this->qti_path = $this->getImportDirectory().'/Plugins/xvid/set_1/expDir_1';
+            $this->xml_file = $this->getImportDirectory().'/Plugins/xvid/set_1/export.xml';
+        }
+
 	}
 
     /**
@@ -73,7 +79,7 @@ class ilInteractiveVideoImporter extends ilXmlImporter
             $this->xvid_object->create();
         }
 
-        $source_obj->afterImportParsing($this->xvid_object->getId(), $this->import_directory);
+        $source_obj->afterImportParsing($this->xvid_object->getId(), $this->qti_path);
         $comment_map = [];
         foreach($this->xvid_object->import_comment as $key => $comment)
         {

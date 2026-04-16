@@ -60,14 +60,14 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
         global $DIC;
 		$media_object = new ilInteractiveVideoMediaObject();
 		$mob_id     = $media_object->doReadVideoSource($obj->getId());
-		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
         $mob = new ilObjMediaObject($mob_id);
         $mob_file = $mob->getStandardSrc();
 		$player->setVariable('PLAYER_ID', $player_id);
         $repository = new MediaObjectRepository($DIC->database(), new IRSSWrapper(new DataService()));
-        $check_local_file = $repository->hasLocalFile($mob_id, $media_item['location']);
-        if($check_local_file === false) {
+        $is_file_in_rss = $repository->hasLocalFile($mob_id, $media_item['location']);
+        if($is_file_in_rss === false) {
+            $mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
             $mob_file = $mob_dir . '/' . $media_item['location'];
             $player->setVariable('VIDEO_SRC', ilWACSignedPath::signFile($mob_file));
         } else {

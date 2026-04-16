@@ -95,7 +95,9 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 			if ($file['error'] == 0 && $this->import_file_name == '') {
 				$this->uploadVideoFile($obj_id);
 			}
-		}
+		} else if($this->import_file_name != '') {
+
+        }
 	}
 
 	/**
@@ -150,35 +152,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
             "Standard",
             $_FILES['video_file']['tmp_name'],
             $_FILES['video_file']['name']);
-		/*$mob->createDirectory();
-		$mob_dir = ilObjMediaObject::_getDirectory($mob->getId());
 
-		$media_item = new ilMediaItem();
-		$mob->addMediaItem($media_item);
-		$media_item->setPurpose('Standard');
-
-		$file_name = ilObjMediaObject::fixFilename($new_file['name']);
-		$file      = $mob_dir . '/' . $file_name;
-
-		if(file_exists($new_file['tmp_name']))
-		{
-			ilFileUtils::moveUploadedFile($new_file['tmp_name'], $file_name, $file);
-		}
-
-		// get mime type
-		$format   = ilObjMediaObject::getMimeType($file);
-		$location = $file_name;
-
-		// set real meta and object data
-		$media_item->setFormat($format);
-		$media_item->setLocation($location);
-		$media_item->setLocationType('LocalFile');
-
-		$mob->setDescription($format);
-		$media_item->setHAlign("Left");
-
-        ilFileUtils::renameExecutables($mob_dir);
-*/
 		$mob->update();
 
 		$this->setMobId($mob->getId());
@@ -379,24 +353,19 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		$tmp_file = $import_dir .'/objects/' . $this->import_part_path .'/'. $this->import_file_name;
 		if(file_exists($tmp_file))
 		{
-			copy($tmp_file, $file);
-			$this->setMobId($mob->getId());
-			// get mime type
-			$format   = ilObjMediaObject::getMimeType($file);
-			$location = $file_name;
+            $new_file = $tmp_file;
 
-			// set real meta and object data
-			$media_item->setFormat($format);
-			$media_item->setLocation($location);
-			$media_item->setLocationType('LocalFile');
+            $mob = new ilObjMediaObject();
+            $mob->setTitle($file_name);
+            $mob->setDescription('');
+            $mob->create();
 
-			$mob->setDescription($format);
-			$media_item->setHAlign("Left");
+            $mob->addMediaItemFromLocalFile(
+                "Standard",
+                $tmp_file,
+                $file_name);
 
-			ilFileUtils::renameExecutables($mob_dir);
-
-			$mob->update();
-
+            $mob->update();
 			$this->setMobId($mob->getId());
 			ilObjMediaObject::_saveUsage($mob->getId(), 'xvid', $obj_id);
 			$this->saveDataToDb($obj_id);
