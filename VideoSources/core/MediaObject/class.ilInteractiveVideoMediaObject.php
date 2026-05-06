@@ -327,14 +327,13 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		$mob->exportXML($xml_writer);
         global $DIC;
         $repository = new MediaObjectRepository($DIC->database(), new IRSSWrapper(new DataService()));
-        $is_file_in_rss = $repository->hasLocalFile($mob->getId(), 'Standard');
 		ilFileUtils::makeDirParents($export_path . '/objects');
-        $irss_mob = $repository->getById($mob->getId());
-        if($irss_mob['rid'] !== '') {
-            $rid = new ResourceIdentification($irss_mob['rid']);
-        }
-        $a = $DIC->resourceStorage()->consume()->src($rid);
-		$mob->exportFiles($export_path);
+
+        $st_item = $mob->getMediaItem("Standard");
+        $src = $repository->getLocalSrc($mob->getId(), $st_item->getLocation());
+        $subdir = "il_" . IL_INST_ID . "_mob_" . $mob->getId();
+        ilFileUtils::makeDir($export_path . "/objects/" . $subdir);
+        copy($src, $export_path . "/objects/" . $subdir . '/' . $st_item->getLocation());
 	}
 
 	/**
@@ -351,26 +350,12 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function afterImportParsing($obj_id, $import_dir)
 	{
-		$mob = new ilObjMediaObject();
-		$mob->setTitle($this->import_file_name);
-		$mob->setDescription('');
-		$mob->create();
-
-		$mob->createDirectory();
-		$mob_dir = ilObjMediaObject::_getDirectory($mob->getId());
-
-		$media_item = new ilMediaItem();
-		$mob->addMediaItem($media_item);
-		$media_item->setPurpose('Standard');
-
 		$file_name = ilObjMediaObject::fixFilename($this->import_file_name);
-		$file      = $mob_dir . '/' . $file_name;
 
+        $import_dir = dirname($import_dir, 4);
 		$tmp_file = $import_dir .'/objects/' . $this->import_part_path .'/'. $this->import_file_name;
 		if(file_exists($tmp_file))
 		{
-            $new_file = $tmp_file;
-
             $mob = new ilObjMediaObject();
             $mob->setTitle($file_name);
             $mob->setDescription('');
