@@ -1,4 +1,12 @@
 <?php
+
+use ILIAS\MediaObjects\InternalRepoService;
+use ILIAS\MediaObjects\InternalDataService;
+use ILIAS\MediaObjects\MediaObjectRepository;
+use ILIAS\Repository\IRSS\IRSSWrapper;
+use ILIAS\Repository\IRSS\DataService;
+use ILIAS\ResourceStorage\Identification\ResourceIdentification;
+
 /**
  * Class ilInteractiveVideoMediaObject
  * @author Guido Vollbach <gvollbach@databay.de>
@@ -317,7 +325,15 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	{
 		$mob = new ilObjMediaObject($this->doReadVideoSource($obj_id));
 		$mob->exportXML($xml_writer);
+        global $DIC;
+        $repository = new MediaObjectRepository($DIC->database(), new IRSSWrapper(new DataService()));
+        $is_file_in_rss = $repository->hasLocalFile($mob->getId(), 'Standard');
 		ilFileUtils::makeDirParents($export_path . '/objects');
+        $irss_mob = $repository->getById($mob->getId());
+        if($irss_mob['rid'] !== '') {
+            $rid = new ResourceIdentification($irss_mob['rid']);
+        }
+        $a = $DIC->resourceStorage()->consume()->src($rid);
 		$mob->exportFiles($export_path);
 	}
 
