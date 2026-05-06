@@ -310,10 +310,10 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	{
 		$mob        = new ilObjMediaObject($this->doReadVideoSource($obj_id));
 		$mob_id     = $mob->getId();
-		$mob_dir    = ilObjMediaObject::_getDirectory($mob_id);
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
-
-		return $mob_dir . '/' . $media_item['location'];
+		global $DIC;
+		$repository = new MediaObjectRepository($DIC->database(), new IRSSWrapper(new DataService()));
+		return $repository->getLocalSrc($mob_id, $media_item['location']);
 	}
 
 	/**
