@@ -1,3 +1,6 @@
+## Changes in version 3.10.5
+1. Compatibility with ILIAS 10.0
+
 # 3.9.5
 1. Compatibility with ILIAS 9.0
 2. Refactored results tables and usage of the new table ui structure

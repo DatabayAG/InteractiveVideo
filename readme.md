@@ -20,15 +20,15 @@
 ILIAS Interactive Video Plugin
 
 ## ILIAS compatibility
+- The branch r10 is compatible with ILIAS 10
 - The branch r9 is compatible with ILIAS 9
 - The branch r8 is compatible with ILIAS 8
 - If you are looking for a ILIAS 6 or ILIAS 7 compatible version of the plugin, please use the master branch.
 - If you are looking for a ILIAS 5.2-5.4 compatible version, please use the release_2 branch.
 - For even older ILIAS versions, please use the release_1 branch.
 
-## Changes in version 3.9.5
-1. Compatibility with ILIAS 9.0
-2. Refactored results tables and usage of the new table ui structure
+## Changes in version 3.10.5
+1. Compatibility with ILIAS 10.0
 
 ## Important notice
 If you upgrade to the 2.x version of the InteractiveVideo you can not go back to version 1.x, because there are migration steps which alter the database schema.
