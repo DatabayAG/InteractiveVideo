@@ -126,6 +126,7 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		$this->xml_writer->xmlElement('layoutWidth', null, $this->object->getLayoutWidth());;
 
 		$this->exportQuestions();
+        $this->exportChapters();
 		$this->exportVideoSourceObject();
 		$this->xml_writer->xmlEndTag('Settings');
 	}
@@ -141,6 +142,46 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 		$this->xml_writer->xmlEndTag('VideoSource');
 	}
 
+    private function exportChapters(): void
+    {
+        /**
+         * @var $ilDB   ilDB
+         */
+        global $ilDB;
+        $this->xml_writer->xmlStartTag('Chapters');
+        $comments = $this->object->getCommentsTableData();
+        if(count($comments) > 0)
+        {
+            foreach($comments as $key => $comment)
+            {
+                if(isset($comment['is_table_of_content']) && $comment['is_table_of_content'] == '1') {
+                    $this->xml_writer->xmlStartTag('Chapter');
+                    if(is_array($comment) && count($comment) > 0)
+                    {
+                        $this->xml_writer->xmlElement('CommentId', null, (int) $comment['comment_id']);
+                        $this->xml_writer->xmlElement('CommentIsTutor', null, (int) $comment['is_tutor']);
+                        $this->xml_writer->xmlElement('CommentIsInteractive', null, (int) $comment['is_interactive']);
+                        $this->xml_writer->xmlElement('CommentTime', null, (int) $comment['comment_time']);
+                        $this->xml_writer->xmlElement('CommentText', null, (string) $comment['comment_text']);
+                        $this->xml_writer->xmlElement('CommentTitle', null, (string) $comment['title']);
+                        $this->xml_writer->xmlElement('CommentTimeEnd', null, (int) $comment['comment_time_end']);
+                        $this->xml_writer->xmlElement('CommentIsReplyTo', null, (string) $comment['is_reply_to']);
+                        $this->xml_writer->xmlElement('CommentIsTableOfContent', null, (int) $comment['is_table_of_content']);
+                        $this->xml_writer->xmlElement('CommentMarker', null, (int) $comment['marker']);
+                        $this->xml_writer->xmlElement('CommentType', null, (int) $comment['type']);
+                        $this->xml_writer->xmlElement('CommentUserId', null, (int) $comment['user_id']);
+                        $this->xml_writer->xmlElement('CommentUserEmail', null, (string) $comment['user_email']);
+                        $this->xml_writer->xmlElement('CommentUserFirstName', null, (int) $comment['user_first_name']);
+                        $this->xml_writer->xmlElement('CommentUserNamePresentation', null, (int) $comment['user_name_presentation']);
+                        $this->xml_writer->xmlElement('CommentUserSurname', null, (int) $comment['user_surname']);
+                        $this->xml_writer->xmlElement('CommentUserUserName', null, (int) $comment['user_user_name']);
+                    }
+                    $this->xml_writer->xmlEndTag('Chapter');
+                }
+            }
+        }
+        $this->xml_writer->xmlEndTag('Chapters');
+    }
 	private function exportQuestions(): void
 	{
 		/**

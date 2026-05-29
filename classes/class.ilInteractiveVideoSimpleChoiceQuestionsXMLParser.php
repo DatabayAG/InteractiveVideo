@@ -72,6 +72,7 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 			case 'AnswerId':
 			case 'AnswerText':
 			case 'AnswerCorrect':
+			case 'CommentIsTableOfContent':
 				$this->cdata = '';
 				break;
 			case 'QuestionImage':
@@ -144,7 +145,10 @@ class ilInteractiveVideoSimpleChoiceQuestionsXMLParser extends ilInteractiveVide
 				$this->xvid_obj->import_comment[$this->comments]->setCommentTimeEnd(trim($this->cdata));
 				break;
 			case 'CommentIsReplyTo':
-				$this->xvid_obj->import_comment[$this->comments]->setIsReplyTo(trim($this->cdata));
+				$this->xvid_obj->import_comment[$this->comments]->setIsReplyTo((int)trim($this->cdata));
+				break;
+           case 'CommentIsTableOfContent':
+				$this->xvid_obj->import_comment[$this->comments]->setIsTableOfContent((int) trim($this->cdata));
 				break;
 			case 'QuestionText':
 				$this->xvid_obj->import_simple_choice[$this->comments]->setQuestionText(trim($this->cdata));
