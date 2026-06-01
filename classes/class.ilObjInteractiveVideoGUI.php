@@ -1320,12 +1320,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$a_values["show_toc_first"]		= $this->object->getShowTocFirst();
 		$a_values["enable_comment_stream"]		= $this->object->getEnableCommentStream() ?? 1;
 		$source_id = $this->object->getSourceId();
-        if($source_id === 'opc' || $source_id === '') {
+       # if($source_id === 'opc' || $source_id === '') {
             $get = $this->http->wrapper()->query();
-            if($get->has('xvid_source_id')){
-                $source_id = $get->retrieve('xvid_source_id', $this->refinery->kindlyTo()->string());
-                $source_id = ilInteractiveVideoPlugin::stripSlashesWrapping($source_id);
-            }
+            if($get->has('custom_video_id')){
+                #$source_id = $get->retrieve('custom_video_id', $this->refinery->kindlyTo()->string());
+                #$source_id = ilInteractiveVideoPlugin::stripSlashesWrapping($source_id);
+                $source_id = 'opc';
+           # }
         }
         if($source_id === '') {
             $factory = new ilInteractiveVideoSourceFactory();
