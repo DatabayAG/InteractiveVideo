@@ -387,7 +387,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		}
 	}
 
-    protected function doUpdate(): void
+    public function doUpdate(): void
 	{
 		parent::doUpdate();
 
