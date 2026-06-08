@@ -2582,7 +2582,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 		if($valid){
 			$this->objComment->update();
-			$this->showContent();
+            $this->editComments();
 		}
 		else
 		{
