@@ -2041,7 +2041,15 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         if($get->has('cmd')) {
             $cmd = $get->retrieve('cmd', $this->refinery->kindlyTo()->string());
         }
-        $DIC->ctrl()->setParameter($this, 'iv_return', $cmd);
+
+        if($get->has('iv_return')) {
+            $iv_return = $get->retrieve('iv_return', $this->refinery->kindlyTo()->string());
+            $DIC->ctrl()->setParameter($this, 'iv_return', $iv_return);
+        }
+        
+        if($cmd !== 'post') {
+            $DIC->ctrl()->setParameter($this, 'iv_return', $cmd);
+        }
 		$confirm->setFormAction($this->ctrl->getFormAction($this, 'deleteComment'));
 		$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_delete_comment'));
 		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteComment');
