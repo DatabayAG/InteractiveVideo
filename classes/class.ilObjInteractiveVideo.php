@@ -121,18 +121,18 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         if($row !== null) {
             $this->setIsAnonymized($row['is_anonymized'] ?: 0);
             $this->setIsRepeat($row['is_repeat'] ?: 0);
-            $this->setIsPublic($row['is_public'] ?: 1);
+            $this->setIsPublic($row['is_public']);
             $this->setOnline((bool) $row['is_online'] || false);
             $this->setIsChronologic($row['is_chronologic']  ?: 0);
             $this->setSourceId($row['source_id'] ?: '');
             $this->setTaskActive($row['is_task'] ?: 0);
             $this->setTask($row['task'] ?: '');
-            $this->setEnableComment($row['enable_comment'] ?: 1);
-            $this->setEnableToolbar($row['show_toolbar'] ?: 1);
+            $this->setEnableComment($row['enable_comment']);
+            $this->setEnableToolbar($row['show_toolbar']);
             $this->setAutoResumeAfterQuestion($row['auto_resume'] ?: 0);
             $this->setFixedModal($row['fixed_modal'] ?: 0);
             $this->setShowTocFirst($row['show_toc_first'] ?: 0);
-            $this->setEnableCommentStream($row['disable_comment_stream'] ?: 1);
+            $this->setEnableCommentStream($row['disable_comment_stream']);
             $this->setNoCommentStream($row['no_comment_stream'] ?: 0);
             $this->setVideoMode($row['video_mode'] ?: 0);
             $this->setMarkerForStudents($row['marker_for_students'] ?: 0);
