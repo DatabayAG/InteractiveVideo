@@ -340,7 +340,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                             'fixed_modal'    => ['integer', $fixed_modal],
                             'task'           => ['text', $task],
                             'enable_comment' => ['integer', 1],
-                            'show_toolbar'   => ['integer', $show_toolbar],
+                            'show_toolbar'   => ['integer', 1],
                             'show_toc_first' => ['integer', $show_toc_first],
                             'disable_comment_stream' => ['integer', 1],
                             'layout_width'        => ['integer', $layout_width],
@@ -377,6 +377,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                             'source_id'      => ['text', ''],
                             'is_task'        => ['integer', 0],
                             'is_online'        => ['integer', 0],
+                            'enable_comment' => ['integer', 1],
+                            'show_toolbar'   => ['integer', 1],
+                            'disable_comment_stream' => ['integer', 1],
+                            'is_public'      => ['integer', 1],
                         ]
 					);
 

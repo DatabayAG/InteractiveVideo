@@ -1315,8 +1315,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $a_values["is_chronologic"]		= 0;
         }
 		$a_values["enable_comment"]		= $this->object->getEnableComment();
-        $a = $this->object->getEnableToolbar();
-		$a_values["show_toolbar"]		= $this->object->getEnableToolbar() ?? 1;
+		$a_values["show_toolbar"]		= $this->object->getEnableToolbar();
 		$a_values["show_toc_first"]		= $this->object->getShowTocFirst();
 		$a_values["enable_comment_stream"]		= $this->object->getEnableCommentStream() ?? 1;
 		$source_id = $this->object->getSourceId();
