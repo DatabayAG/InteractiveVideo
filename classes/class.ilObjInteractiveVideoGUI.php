@@ -222,6 +222,10 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                                 $this->editMyCommentsWrapper();
                                 $render_default = false;
                                 break;
+                            case 'editComment':
+                                $this->editCommentWrapper();
+                                $render_default = false;
+                                break;
                             case 'deleteComment':
                                 $this->confirmDeleteComment();
                                 $render_default = false;
@@ -2727,7 +2731,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$video_tpl->setVariable('CONFIG', $this->initPlayerConfig($player_id, $this->object->getSourceId(),true));
 
         $has_write = $this->access->checkAccess("write", "", $this->object->getRefId());
-        $tbl = new ilInteractiveVideoAllCommentsTableGUI($this->obj_id, 'showComments', $this->object, $has_write);
+        $tbl = new ilInteractiveVideoAllCommentsTableGUI($this->obj_id, $this->parent_obj_type, $this->object, $has_write, 'editComment');
         $table = $tbl->renderTable(true);
         $video_tpl->setVariable('TABLE', $table);
         $tpl->setContent($video_tpl->get());
@@ -3724,6 +3728,33 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $this->ctrl->setParameter($this, 'comment_id', $comment_id);
             $comment = new ilObjComment($comment_id);
             $target = 'editMyComment';
+            if($comment->isInteractive() == 1) {
+                $target = 'editQuestion';
+            } else if($comment->getIsTableOfContent() === 1) {
+                $target = 'editChapter';
+            }
+            $link_target =  $this->ctrl->getLinkTarget($this, $target);
+
+            ilUtil::redirect($link_target);
+        }
+    }
+
+    public function editCommentWrapper(): void
+    {
+        $comment_id = null;
+        $get_param = 'tid_comment_id';
+        $query = $this->http->wrapper()->query();
+        if ($query->has($get_param)) {
+            $comments_id = $query->retrieve(
+                $get_param,
+                $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->string())
+            );
+            $comment_id = array_shift($comments_id);
+        }
+        if($comment_id !== null) {
+            $this->ctrl->setParameter($this, 'comment_id', $comment_id);
+            $comment = new ilObjComment($comment_id);
+            $target = 'editComment';
             if($comment->isInteractive() == 1) {
                 $target = 'editQuestion';
             } else if($comment->getIsTableOfContent() === 1) {
