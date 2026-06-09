@@ -3292,7 +3292,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		if($comment_id > 0 && $comment_title !== '' && $question_text !== '')
 		{
-            if( !$chk = SimpleChoiceQuestion::answerExists($comment_id) ) {
+            if(SimpleChoiceQuestion::answerExists($comment_id) ) {
                 $this->existingAnswersForAnswerOptions();
                 return;
             }
