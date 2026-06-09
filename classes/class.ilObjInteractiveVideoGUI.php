@@ -2046,7 +2046,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             $iv_return = $get->retrieve('iv_return', $this->refinery->kindlyTo()->string());
             $DIC->ctrl()->setParameter($this, 'iv_return', $iv_return);
         }
-        
+
         if($cmd !== 'post') {
             $DIC->ctrl()->setParameter($this, 'iv_return', $cmd);
         }
@@ -2338,6 +2338,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
     public function editMyComments(): void
 	{
+        //
 		/**
 		 * @var $tpl    ilTemplate
 		 * @var $ilTabs ilTabsGUI
@@ -2355,7 +2356,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			$tpl->addJavaScript($mathJaxSetting->get('path_to_mathjax'));
 		}
         $has_write = $this->access->checkAccess("write", "", $this->object->getRefId());
-		$tbl = new ilInteractiveVideoCommentsTableGUI($this->obj_id, 'showComments', $this->object, $has_write);
+		$tbl = new ilInteractiveVideoCommentsTableGUI($this->obj_id, $this->parent_obj_type, $this->object, $has_write);
         $tbl->renderTable();
 	}
 
@@ -2560,6 +2561,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
 	public function updateComment(): void
 	{
+        //
 		$valid = false;
 		$form = $this->initCommentForm();
 
@@ -3721,7 +3723,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         if($comment_id !== null) {
             $this->ctrl->setParameter($this, 'comment_id', $comment_id);
             $comment = new ilObjComment($comment_id);
-            $target = 'editComment';
+            $target = 'editMyComment';
             if($comment->isInteractive() == 1) {
                 $target = 'editQuestion';
             } else if($comment->getIsTableOfContent() === 1) {
