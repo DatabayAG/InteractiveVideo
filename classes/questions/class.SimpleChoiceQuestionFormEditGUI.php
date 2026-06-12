@@ -287,7 +287,7 @@ class SimpleChoiceQuestionFormEditGUI
 		if(isset($_POST['jump_wrong_ts']))
 		{
 			$seconds = $_POST['jump_wrong_ts'];
-			$jump_wrong_ts->setValueByArray(['jump_correct_ts' => (int)$seconds]);
+			$jump_wrong_ts->setValueByArray(['jump_wrong_ts' => (int)$seconds]);
 		}
 		$is_jump_wrong->addSubItem($jump_wrong_ts);
 		$feedback_one_wrong->addSubItem($is_jump_wrong);

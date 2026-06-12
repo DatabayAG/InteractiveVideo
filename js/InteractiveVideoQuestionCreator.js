@@ -156,10 +156,54 @@ InteractiveVideoQuestionCreator = (function () {
 		});
 	};
 
-	pro.checkIfAnswerConfigurationIsValid = function() {
-		return 	$('#question_type').val() !== '2' &&
-			$('#neutral_type').val()  !== '1' &&
-			$('.correct_solution:checked').length === 0
+	pro.stripHtmlContent = function(html) {
+		if (!html) {
+			return '';
+		}
+		return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/gi, ' ').replace(/\u00a0/g, ' ').trim();
+	};
+
+	pro.getQuestionForm = function() {
+		let form = $('input[name="cmd[insertQuestion]"], input[name="cmd[confirmUpdateQuestion]"]').closest('form');
+		if (form.length === 0) {
+			form = $('input[name="comment_title"]').closest('form');
+		}
+		return form;
+	};
+
+	pro.getTitleValue = function() {
+		return $.trim(pro.getQuestionForm().find('input[name="comment_title"]').val() || '');
+	};
+
+	pro.getQuestionTextValue = function() {
+		if (typeof il !== 'undefined' && il.InteractiveVideoEditor) {
+			let editor = il.InteractiveVideoEditor.getEditorInstanceById('question_text');
+			if (editor && typeof editor.getData === 'function') {
+				return pro.stripHtmlContent(editor.getData());
+			}
+		}
+		if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances.question_text) {
+			return pro.stripHtmlContent(CKEDITOR.instances.question_text.getData());
+		}
+		let textarea = pro.getQuestionForm().find('textarea[name="question_text"]');
+		if (textarea.length) {
+			return pro.stripHtmlContent(textarea.val());
+		}
+		let editable = document.querySelector('#il_prop_cont_question_text .ck-editor__editable, #question_text + .ck-editor .ck-editor__editable');
+		if (editable) {
+			return pro.stripHtmlContent(editable.innerHTML);
+		}
+		return '';
+	};
+
+	pro.areMandatoryFieldsFilled = function() {
+		return pro.getTitleValue() !== '' && pro.getQuestionTextValue() !== '';
+	};
+
+	pro.needsCorrectAnswerWarning = function() {
+		return $('#question_type').val() !== '2' &&
+			$('#neutral_type').val() !== '1' &&
+			$('.correct_solution:checked').length === 0;
 	};
 
 	pub.Init = function () {
@@ -171,12 +215,19 @@ InteractiveVideoQuestionCreator = (function () {
 		$('#is_interactive').parent().parent().parent().parent().append(question_form);
 		pro.createQuestionForm();
 		pro.appendSingleListener();
-		$('input[name="cmd[insertQuestion]"], input[name="cmd[confirmUpdateQuestion]"]').on('click', function (evt)
+		$('input[name="cmd[insertQuestion]"], input[name="cmd[confirmUpdateQuestion]"]')
+			.off('click.questionCreatorValidation')
+			.on('click.questionCreatorValidation', function (evt)
 		{
-			if(pro.checkIfAnswerConfigurationIsValid())
-			{
-				evt.preventDefault();
-				if($('#ilInteractiveVideoAjaxModal').length >= 1)
+			if (!pro.areMandatoryFieldsFilled()) {
+				return;
+			}
+			if (!pro.needsCorrectAnswerWarning()) {
+				return;
+			}
+			evt.preventDefault();
+			evt.stopImmediatePropagation();
+				if($('#ilInteractiveVideoAjaxModal').length >= 1 && $('#ilInteractiveVideoAjaxModal').is(':visible'))
 				{
 					if($('.alert_ex_modal').length == 0)
 					{
@@ -191,7 +242,6 @@ InteractiveVideoQuestionCreator = (function () {
 				else
 				{
 					$('#simple_question_warning').modal('show');
-
 					$('.question_cancel_saving').on('click', function (evt)
 					{
 						$('#simple_question_warning').modal('hide');
@@ -202,7 +252,6 @@ InteractiveVideoQuestionCreator = (function () {
 				{
 					pro.submitAnyway();
 				});
-			}
 		});
 
 		pro.showHideFormElementsForReflectionType();
@@ -211,8 +260,10 @@ InteractiveVideoQuestionCreator = (function () {
 	pro.submitAnyway = function ()
 	{
 		$('#simple_question_warning').modal('hide');
-		$( 'input[name="cmd[insertQuestion]"]' ).off('click');
-		$( 'input[name="cmd[insertQuestion]"]' ).click();
+		$('.alert_ex_modal').remove();
+		$('input[name="cmd[insertQuestion]"], input[name="cmd[confirmUpdateQuestion]"]')
+			.off('click.questionCreatorValidation');
+		$('input[name="cmd[insertQuestion]"], input[name="cmd[confirmUpdateQuestion]"]').first().click();
 	};
 
 	pub.appendEmptyJSON = function () {
