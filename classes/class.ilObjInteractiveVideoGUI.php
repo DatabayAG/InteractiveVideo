@@ -2361,7 +2361,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
         $has_write = $this->access->checkAccess("write", "", $this->object->getRefId());
 		$tbl = new ilInteractiveVideoCommentsTableGUI($this->obj_id, $this->parent_obj_type, $this->object, $has_write);
-        $tbl->renderTable();
+        $this->ctrl->setParameter($this, 'comment_id', null);
+        $tbl->renderTable(ILIAS_HTTP_PATH . '/' . $this->ctrl->getLinkTarget($this, 'editMyComments'));
 	}
 
     /**
@@ -2732,7 +2733,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         $has_write = $this->access->checkAccess("write", "", $this->object->getRefId());
         $tbl = new ilInteractiveVideoAllCommentsTableGUI($this->obj_id, $this->parent_obj_type, $this->object, $has_write, 'editComment');
-        $table = $tbl->renderTable(true);
+        $this->ctrl->setParameter($this, 'comment_id', null);
+        $table = $tbl->renderTable(ILIAS_HTTP_PATH . '/' . $this->ctrl->getLinkTarget($this, 'editComments'), true);
         $video_tpl->setVariable('TABLE', $table);
         $tpl->setContent($video_tpl->get());
 	}

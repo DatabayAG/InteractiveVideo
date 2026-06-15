@@ -142,11 +142,11 @@ class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
         ] : [];
     }
 
-    public function renderTable($return = false): string
+    public function renderTable(string $url, bool $return = false): string
     {
         $df = new \ILIAS\Data\Factory();
 
-        $table_uri = $df->uri($this->request->getUri()->__toString());
+        $table_uri = $df->uri($url);
         $url_builder = new URLBuilder($table_uri);
         $query_params_namespace = ['tid'];
 
