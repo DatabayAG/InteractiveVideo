@@ -2034,17 +2034,23 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             }
         }
 
-        if(!count($get_ids))
-		{
-            $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
-            $this->ctrl->redirect($this, 'editComments');
-		}
-		$confirm = new ilConfirmationGUI();
-
         $cmd = '';
         if($get->has('cmd')) {
             $cmd = $get->retrieve('cmd', $this->refinery->kindlyTo()->string());
         }
+
+        $origin_cmd = $cmd;
+        if(($origin_cmd === '' || $origin_cmd === 'post') && $get->has('iv_return')) {
+            $origin_cmd = $get->retrieve('iv_return', $this->refinery->kindlyTo()->string());
+        }
+        $return_cmd = ($origin_cmd === 'editMyComments') ? 'editMyComments' : 'editComments';
+
+        if(!count($get_ids))
+		{
+            $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
+            $this->ctrl->redirect($this, $return_cmd);
+		}
+		$confirm = new ilConfirmationGUI();
 
         if($get->has('iv_return')) {
             $iv_return = $get->retrieve('iv_return', $this->refinery->kindlyTo()->string());
@@ -2058,12 +2064,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$confirm->setHeaderText(ilInteractiveVideoPlugin::getInstance()->txt('sure_delete_comment'));
 		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteComment');
 
-        if($this->access->checkAccess("write", "", $this->object->getRefId())) {
-            $confirm->setCancel($this->lng->txt('cancel'), 'editComments');
-        }
-        else {
-            $confirm->setCancel($this->lng->txt('cancel'), 'editMyComments');
-        }
+        $confirm->setCancel($this->lng->txt('cancel'), $return_cmd);
 
 		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
 		$wrong_comment_ids = array_diff($get_ids, $comment_ids);
@@ -2098,7 +2099,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         }
 		if(!count($post_ids)) {
             $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'));
-			$this->editComments();
+            $get = $this->http->wrapper()->query();
+            if($get->has('iv_return') && $get->retrieve('iv_return', $this->refinery->kindlyTo()->string()) === 'editMyComments') {
+                $this->editMyComments();
+            } else {
+                $this->editComments();
+            }
 			return;
 		}
 
