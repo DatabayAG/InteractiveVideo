@@ -326,6 +326,11 @@
     margin:0;
     margin-left:3em;
 }
+.reply_comment_anonymized + .reply_comment_anonymized{
+    margin-top:0.5em;
+    padding-top:0.5em;
+    border-top:1px solid #ddd;
+}
 .feedback_link_element{
     text-align: center;
 }
