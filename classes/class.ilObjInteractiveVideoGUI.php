@@ -36,7 +36,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/** @var ilPlugin|null */
     protected ?ilPlugin $plugin = null;
 
-    protected Services $http;
+    protected \ILIAS\HTTP\GlobalHttpState $http;
 
     public function __construct(
         int $a_ref_id = 0,
@@ -117,7 +117,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     public function executeCommand() : void
     {
         $next_class = $this->ctrl->getNextClass();
-        try {
+
             switch ($next_class) {
                 case "ilinfoscreengui":
                     if (!$this->ctrl->isAsynch()) {
@@ -135,7 +135,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 default:
                     parent::executeCommand();
                     }
-        } catch (ilException $e) {}
+
 
         $this->tpl->loadStandardTemplate();
     }
@@ -384,7 +384,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('content');
 
 		$video_tpl = $this->buildContentTemplate();
-
 		$tpl->setContent($video_tpl->get());
         $tpl->setPermanentLink(ilInteractiveVideoPlugin::PLUGIN_ID, $this->ref_id);
 	}
@@ -456,7 +455,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->objComment->setIsRepeat($this->object->isRepeat());
 		$modal = ilInteractiveVideoModalExtension::getInstance();
 		$modal->setId("ilQuestionModal");
-		$modal->setType(ilModalGUI::TYPE_LARGE);
+		$modal->setType(ilInteractiveVideoModalExtension::TYPE_LARGE);
 		$modal->setBody('');
 		$video_tpl->setVariable("MODAL_QUESTION_OVERLAY", $modal->getHTML());
         $this->addJavascriptAndCSSToTemplate($DIC->ui()->mainTemplate());

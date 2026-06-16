@@ -70,8 +70,9 @@ class SimpleChoiceQuestionsUserTableGUI implements DataRetrieval
         array $visible_column_ids,
         Range $range,
         Order $order,
-        ?array $filter_data,
-        ?array $additional_parameters
+        mixed $additional_viewcontrol_data,
+        mixed $filter_data,
+        mixed $additional_parameters
     ): Generator {
         $records = $this->getRecords();
 
@@ -126,8 +127,9 @@ class SimpleChoiceQuestionsUserTableGUI implements DataRetrieval
     }
 
     public function getTotalRowCount(
-        ?array $filter_data,
-        ?array $additional_parameters
+        mixed $additional_viewcontrol_data,
+        mixed $filter_data,
+        mixed $additional_parameters
     ): ?int {
         return \count($this->getRecords());
     }
@@ -172,7 +174,7 @@ class SimpleChoiceQuestionsUserTableGUI implements DataRetrieval
 
         $table = $this->factory
             ->table()
-            ->data(ilInteractiveVideoPlugin::getInstance()->txt('show_my_results'), $this->getColumns(), $this)
+            ->data($this, ilInteractiveVideoPlugin::getInstance()->txt('show_my_results'), $this->getColumns())
             ->withId(self::class . '_' . $this->parent_id)
             ->withOrder(new Order('title', Order::ASC))
             ->withActions($this->getActions($url_builder, $action_parameter_token, $row_id_token))

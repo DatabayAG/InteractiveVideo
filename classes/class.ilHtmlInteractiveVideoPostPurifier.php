@@ -42,7 +42,7 @@ class ilHtmlInteractiveVideoPostPurifier extends ilHtmlPurifierAbstractLibWrappe
 		$config->set('Cache.SerializerPath', ilHtmlPurifierAbstractLibWrapper::_getCacheDirectory());
 		$config->set('HTML.Doctype', 'XHTML 1.0 Strict');
 
-		$tags = ilObjAdvancedEditing::_getUsedHTMLTags(self::$_type);
+		$tags = ilRTESettings::_getUsedHTMLTags(self::$_type);
 		$tags = $this->makeElementListTinyMceCompliant($tags);
         $tags[] = 'i';
 		$config->set('HTML.AllowedElements', $this->removeUnsupportedElements($tags));

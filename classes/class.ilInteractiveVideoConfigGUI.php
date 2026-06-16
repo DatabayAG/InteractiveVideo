@@ -103,7 +103,8 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 			$form = $this->getConfigurationForm();
 		}
 
-		$this->addTabs();
+        global $DIC;
+		$this->addTabs($DIC->tabs());
 		$this->tpl->setContent($form->getHTML());
 	}
 
@@ -198,10 +199,9 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
     /**
      * @throws ilCtrlException
      */
-    protected function addTabs(): void
+    protected function addTabs(ilTabsGUI $tabs): void
 	{
-		$this->tabs->addSubTab('settings', $this->lng->txt('settings'),
-			$this->ctrl->getLinkTargetByClass('ilInteractiveVideoConfigGUI', 'view'));
+
 		foreach($this->video_source_factory->getVideoSources() as $class =>  $engine)
 		{
 			if($this->video_source_factory->isActive($class) && $engine->getGUIClass()->hasOwnConfigForm())
@@ -210,7 +210,6 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
 					$this->ctrl->getLinkTargetByClass('ilInteractiveVideoConfigGUI', 'view') . '&video_source=' . $engine->getID() );
 			}
 		}
-		$this->tabs->setSubTabActive($this->active_tab);
 	}
 
     /**

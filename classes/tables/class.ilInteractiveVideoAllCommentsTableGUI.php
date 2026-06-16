@@ -58,8 +58,9 @@ class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
         array $visible_column_ids,
         Range $range,
         Order $order,
-        ?array $filter_data,
-        ?array $additional_parameters
+        mixed $additional_viewcontrol_data,
+        mixed $filter_data,
+        mixed $additional_parameters
     ): Generator {
         $records = $this->getRecords();
 
@@ -94,8 +95,9 @@ class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
     }
 
     public function getTotalRowCount(
-        ?array $filter_data,
-        ?array $additional_parameters
+        mixed $additional_viewcontrol_data,
+        mixed $filter_data,
+        mixed $additional_parameters
     ): ?int {
         return \count($this->getRecords());
     }
@@ -158,7 +160,7 @@ class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
 
         $table = $this->factory
             ->table()
-            ->data(ilInteractiveVideoPlugin::getInstance()->txt('questions_comments_new'), $this->getColumns(), $this)
+            ->data($this, ilInteractiveVideoPlugin::getInstance()->txt('questions_comments_new'), $this->getColumns())
             ->withId(self::class . '_' . $this->parent_id)
             ->withOrder(new Order('title', Order::ASC))
             ->withActions($this->getActions($url_builder, $action_parameter_token, $row_id_token))
