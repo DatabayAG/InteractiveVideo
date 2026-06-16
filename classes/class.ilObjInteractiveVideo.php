@@ -574,7 +574,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * @param bool $strip_tags
      * @return array
      */
-	public function getCommentsTableData(bool $replace_with_text = false, bool $empty_string_if_null = false, bool $replace_settings_with_text = false, bool $strip_tags = false, $lng = null) : array
+	public function getCommentsTableData(bool $replace_with_text = false, bool $empty_string_if_null = false, bool $replace_settings_with_text = false, bool $strip_tags = false, ?ilLanguage $lng = null) : array
     {
 		$res = $this->db->queryF('
 			SELECT *, comments.comment_id as cid  FROM ' . self::TABLE_NAME_COMMENTS . ' comments
@@ -662,7 +662,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * @param array $row
      * @return string
      */
-    private function getCommentType(array $row, $lng = null) : string
+    private function getCommentType(array $row, ?ilLanguage $lng = null) : string
     {
         $type = 'comment';
         if (isset($row['is_interactive']) && $row['is_interactive'] == "1") {

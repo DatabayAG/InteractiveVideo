@@ -1169,7 +1169,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	/**
 	 * @param ilPropertyFormGUI $a_form
 	 */
-	protected function appendDefaultFormOptions(ilPropertyFormGUI $a_form, string $form_rendered = null): void
+	protected function appendDefaultFormOptions(ilPropertyFormGUI $a_form, ?string $form_rendered = null): void
 	{
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
@@ -1644,7 +1644,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 	}
 
-	protected function selectSource($a_form = null)
+ protected function selectSource(?ilPropertyFormGUI $a_form = null)
 	{
         if($a_form === null) {
             $a_form = new ilPropertyFormGUI();
@@ -2845,7 +2845,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @throws ilTemplateException
 	 * @throws ilSystemStyleException
 	 */
-	public function editMyComment(ilPropertyFormGUI $form = NULL): void
+ public function editMyComment(?ilPropertyFormGUI $form = NULL): void
 	{
 		/**
 		 * @var $tpl    ilTemplate
@@ -2879,7 +2879,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @throws ilTemplateException
 	 * @throws ilSystemStyleException
 	 */
-	public function editComment(ilPropertyFormGUI $form = NULL): void
+ public function editComment(?ilPropertyFormGUI $form = NULL): void
 	{
 		/**
 		 * @var $tpl    ilTemplate
@@ -2921,7 +2921,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @param \ilPropertyFormGUI $form
 	 * @throws ilCtrlException
 	 */
-	public function editChapter(ilPropertyFormGUI $form = NULL): void
+ public function editChapter(?ilPropertyFormGUI $form = NULL): void
 	{
 		/**
 		 * @var $tpl    ilTemplate
@@ -3114,7 +3114,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @throws ilSystemStyleException
 	 * @throws ilTemplateException
 	 */
-	public function showTutorInsertQuestionForm(ilPropertyFormGUI $form = NULL): void
+ public function showTutorInsertQuestionForm(?ilPropertyFormGUI $form = NULL): void
 	{
 		/**
 		 * @var $tpl    ilTemplate
@@ -3186,7 +3186,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	 * @throws ilSystemStyleException
 	 * @throws ilTemplateException
 	 */
-	public function editQuestion(ilPropertyFormGUI $form = NULL): void
+ public function editQuestion(?ilPropertyFormGUI $form = NULL): void
 	{
 		/**
 		 * @var $tpl    ilTemplate

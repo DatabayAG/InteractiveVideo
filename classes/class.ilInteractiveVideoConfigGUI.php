@@ -95,7 +95,7 @@ class ilInteractiveVideoConfigGUI extends ilPluginConfigGUI
      * @param ilPropertyFormGUI|null $form
      * @throws ilCtrlException
      */
-	protected function showConfigurationForm(ilPropertyFormGUI $form = null): void
+ protected function showConfigurationForm(?ilPropertyFormGUI $form = null): void
 	{
 
 		if(!$form instanceof ilPropertyFormGUI)

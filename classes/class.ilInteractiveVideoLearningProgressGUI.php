@@ -107,7 +107,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
      * @throws ilException
      * @throws ilObjectException
      */
-    public function showLPSettings(ilPropertyFormGUI $form = null): void
+    public function showLPSettings(?ilPropertyFormGUI $form = null): void
     {
         /**
          * @var $ilTabs ilTabsGUI
@@ -301,7 +301,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
      * @throws ilObjectException
      * @throws ilObjectNotFoundException
      */
-    public function editUser(ilPropertyFormGUI $form = null)
+    public function editUser(?ilPropertyFormGUI $form = null)
     {
         /**
          * @var $ilTabs ilTabsGUI

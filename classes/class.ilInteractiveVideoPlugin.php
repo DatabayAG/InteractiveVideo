@@ -109,7 +109,7 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 		return true;
 	}
 
-    public static function stripSlashesWrapping(string $a_str = null): string {
+    public static function stripSlashesWrapping(?string $a_str = null): string {
         if(is_null($a_str)) {
             return '';
         }

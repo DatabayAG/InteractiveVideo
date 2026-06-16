@@ -125,7 +125,7 @@ class ilInteractiveVideoModalExtension
     {
         return $this->buttons;
     }
-    public static function initJS(ilGlobalTemplateInterface $a_main_tpl = null): void
+    public static function initJS(?ilGlobalTemplateInterface $a_main_tpl = null): void
     {
         global $DIC;
 
