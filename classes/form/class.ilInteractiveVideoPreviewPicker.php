@@ -19,7 +19,7 @@ class ilInteractiveVideoPreviewPicker extends ilImageFileInputGUI
 	{
 		parent::insert($a_tpl);
 
-		if($this->isCanExtractImages() && $this->getPathToVideo() != '' 
+		if($this->isCanExtractImages() && $this->getPathToVideo() != ''
 			&& defined("PATH_TO_FFMPEG") && PATH_TO_FFMPEG != ''
 		)
 		{
@@ -56,9 +56,9 @@ class ilInteractiveVideoPreviewPicker extends ilImageFileInputGUI
      */
     protected function addModalToTemplate(ilTemplate $a_tpl, ilCtrl $ilCtrl): void
 	{
-		$modal = ilModalGUI::getInstance();
+		$modal = ilInteractiveVideoModalExtension::getInstance();
 		$modal->setId('ffmpeg_extract_modal');
-		$modal->setType(ilModalGUI::TYPE_LARGE);
+		$modal->setType(ilInteractiveVideoModalExtension::TYPE_LARGE);
 		$modal->setHeading(ilInteractiveVideoPlugin::getInstance()->txt('extract'));
 		$video_tpl = new ilTemplate("tpl.ffmpeg_modal.html", false, false, 'public/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/');
 

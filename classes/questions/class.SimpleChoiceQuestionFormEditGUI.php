@@ -320,9 +320,9 @@ class SimpleChoiceQuestionFormEditGUI
 	protected function appendWarningModalToQuestionForm(ilPropertyFormGUI $form): void
 	{
 		//Todo: what to do with the modal?
-		$modal = ilModalGUI::getInstance();
+		$modal = ilInteractiveVideoModalExtension::getInstance();
 		$modal->setId('simple_question_warning');
-		$modal->setType(ilModalGUI::TYPE_MEDIUM);
+		$modal->setType(ilInteractiveVideoModalExtension::TYPE_MEDIUM);
 		$modal->setHeading($this->plugin->txt('save_without_correct'));
 		$warning_dialog = new ilTemplate("tpl.question_edit_modal.html", true, true, $this->plugin->getDirectory());
 		$warning_dialog->setVariable('INFO_TEXT', $this->plugin->txt('save_without_correct_detail'));

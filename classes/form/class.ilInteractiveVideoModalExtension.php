@@ -100,7 +100,7 @@ class ilInteractiveVideoModalExtension
     /**
      * Set type
      *
-     * @param string $a_val type const ilModalGUI::TYPE_SMALL|ilModalGUI::TYPE_MEDIUM|ilModalGUI::TYPE_LARGE
+     * @param string $a_val type const ilInteractiveVideoModalExtension::TYPE_SMALL|ilInteractiveVideoModalExtension::TYPE_MEDIUM|ilInteractiveVideoModalExtension::TYPE_LARGE
      */
     public function setType(string $a_val): void
     {
