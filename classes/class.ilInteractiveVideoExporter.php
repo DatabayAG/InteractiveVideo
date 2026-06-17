@@ -1,4 +1,7 @@
 <?php
+
+use ILIAS\MetaData\Services\InternalServices;
+
 /**
  * Class ilInteractiveVideoExporter
  */
@@ -57,10 +60,26 @@ class ilInteractiveVideoExporter extends ilXmlExporter
 
 	public function exportXMLMetaData(): void
 	{
-		$md2xml = new ilMD2XML($this->object->getId(), 0, $this->object->getType());
-		$md2xml->setExportMode();
-		$md2xml->startExport();
-		$this->xml_writer->appendXML($md2xml->getXML());
+		global $DIC;
+
+		$md_services = new InternalServices($DIC);
+		$md_repository = $md_services->repository()->repository();
+		$md_xml_services = $md_services->xml();
+		$md_writer = $md_xml_services->standardWriter();
+
+		$md_set = $md_repository->getMD(
+			(int) $this->object->getId(),
+			0,
+			$this->object->getType()
+		);
+
+		$md_xml = $md_writer->write($md_set);
+
+		$xml_string = $md_xml->asXML();
+		if ($xml_string !== false) {
+			$xml_string = preg_replace('/^<\?xml[^>]*\?>/i', '', $xml_string);
+			$this->xml_writer->appendXML(trim($xml_string));
+		}
 	}
 
     public function init(): void
