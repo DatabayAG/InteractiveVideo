@@ -1068,3 +1068,8 @@ select.form-control {
 div.modal-header{
     display: block;
 }
+
+.breadcrumb_wrapper .breadcrumb {
+    direction: ltr !important;
+    text-align: left !important;
+}
