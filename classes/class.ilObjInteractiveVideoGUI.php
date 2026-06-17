@@ -3973,43 +3973,44 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$simple = new SimpleChoiceQuestionStatistics();
 		$data = $simple->getScoreForAllQuestionsAndAllUserOrg($this->obj_id);
 
-		$csv = [];
 		$separator = ";";
+		$writer = new ilCSVWriter();
+		$writer->setSeparator($separator);
 
 		$head_row = [];
-		array_push($head_row, $lng->txt('name'));
+		$head_row[] = $lng->txt('name');
 		foreach ($data['question'] as $key => $row)
 		{
-			array_push($head_row, trim($row['title'], '"'));
-			array_push($head_row, trim($row['title'], '"') . ' ' .$plugin->txt('answers') );
+			$head_row[] = trim($row['title'], '"');
+			$head_row[] = trim($row['title'], '"') . ' ' .$plugin->txt('answers');
 		}
-		array_push($head_row, $plugin->txt('answered') );
-		array_push($head_row, $plugin->txt('sum'));
-		array_push($csv, ilCSVUtil::processCSVRow($head_row, TRUE, $separator) );
+		$head_row[] = $plugin->txt('answered');
+		$head_row[] = $plugin->txt('sum');
+
+		foreach ($head_row as $cell) {
+			$writer->addColumn($cell);
+		}
+		$writer->addRow();
+
 		$ignore_colum = ['name', 'answerd', 'sum'];
 		foreach ($data['users'] as $key => $row)
 		{
-			$csvrow = [];
 			foreach ( $row as $type => $value)
 			{
-				array_push($csvrow, trim($value, '"'));
+				$writer->addColumn(trim($value, '"'));
 				if(isset($data['answers'][$key][$type]))
 				{
-					array_push($csvrow, trim($data['answers'][$key][$type], '"'));
+					$writer->addColumn(trim($data['answers'][$key][$type], '"'));
 				}
 				else if(!in_array($type, $ignore_colum))
 				{
-					array_push($csvrow, '');
+					$writer->addColumn('');
 				}
 			}
-			array_push($csv, ilCSVUtil::processCSVRow($csvrow, TRUE, $separator));
+			$writer->addRow();
 		}
-		$csvoutput = "";
-		foreach ($csv as $row)
-		{
-			$csvoutput .= join($separator, $row) . "\n";
-		}
-		ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
+
+		ilUtil::deliverData($writer->getCSVString(), $this->object->getTitle() .  ".csv");
 	}
 
     /**
@@ -4022,35 +4023,34 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$data = $this->object->getCommentsTableDataByUserId();
 
-		$csv = [];
 		$separator = ";";
+		$writer = new ilCSVWriter();
+		$writer->setSeparator($separator);
 
 		$head_row = [];
-		array_push($head_row, $lng->txt('id'));
-		array_push($head_row, $lng->txt('time'));
-		array_push($head_row, $plugin->txt('time_end') );
-		array_push($head_row, $plugin->txt('comment_title'));
-		array_push($head_row, $plugin->txt('comment'));
-		array_push($head_row, $plugin->txt('is_table_of_content'));
-        array_push($head_row, $plugin->txt('visibility'));
-		array_push($head_row, $plugin->txt('reply_to'));
+		$head_row[] = $lng->txt('id');
+		$head_row[] = $lng->txt('time');
+		$head_row[] = $plugin->txt('time_end');
+		$head_row[] = $plugin->txt('comment_title');
+		$head_row[] = $plugin->txt('comment');
+		$head_row[] = $plugin->txt('is_table_of_content');
+        $head_row[] = $plugin->txt('visibility');
+		$head_row[] = $plugin->txt('reply_to');
 
-		array_push($csv, ilCSVUtil::processCSVRow($head_row, TRUE, $separator) );
+		foreach ($head_row as $cell) {
+			$writer->addColumn($cell);
+		}
+		$writer->addRow();
+
 		foreach ($data as $key => $row)
 		{
-			$csvrow = [];
 			foreach ( $row as $type => $value)
 			{
-				array_push($csvrow, trim($value, '"'));
+				$writer->addColumn(trim($value, '"'));
 			}
-			array_push($csv, ilCSVUtil::processCSVRow($csvrow, TRUE, $separator));
+			$writer->addRow();
 		}
-		$csvoutput = "";
-		foreach ($csv as $row)
-		{
-			$csvoutput .= join($separator, $row) . "\n";
-		}
-		ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
+		ilUtil::deliverData($writer->getCSVString(), $this->object->getTitle() .  ".csv");
 	}
 
     /**
@@ -4063,48 +4063,46 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
 		$data = $this->object->getCommentsTableData(true, false, false, true);
 
-		$csv = [];
 		$separator = ";";
+		$writer = new ilCSVWriter();
+		$writer->setSeparator($separator);
 
 		$head_row = [];
 
-		array_push($head_row, $lng->txt('id'));
-		array_push($head_row, $lng->txt('time'));
-		array_push($head_row, $plugin->txt('time_end') );
-		array_push($head_row, $plugin->txt('user') );
-		array_push($head_row, $this->lng->txt('login') );
-		array_push($head_row, $this->lng->txt('firstname') );
-		array_push($head_row, $this->lng->txt('lastname') );
-		array_push($head_row, $this->lng->txt('email') );
-		array_push($head_row, $plugin->txt('comment_title'));
-		array_push($head_row, $plugin->txt('comment'));
-		array_push($head_row, $plugin->txt('tutor'));
-        array_push($head_row, $plugin->txt('interactive'));
+		$head_row[] = $lng->txt('id');
+		$head_row[] = $lng->txt('time');
+		$head_row[] = $plugin->txt('time_end');
+		$head_row[] = $plugin->txt('user');
+		$head_row[] = $this->lng->txt('login');
+		$head_row[] = $this->lng->txt('firstname');
+		$head_row[] = $this->lng->txt('lastname');
+		$head_row[] = $this->lng->txt('email');
+		$head_row[] = $plugin->txt('comment_title');
+		$head_row[] = $plugin->txt('comment');
+		$head_row[] = $plugin->txt('tutor');
+        $head_row[] = $plugin->txt('interactive');
 		//array_push($head_row, $plugin->txt('compulsory'));
-		array_push($head_row, $plugin->txt('type'));
-		array_push($head_row, 'marker');
-		array_push($head_row, $plugin->txt('reply_to'));
+		$head_row[] = $plugin->txt('type');
+		$head_row[] = 'marker';
+		$head_row[] = $plugin->txt('reply_to');
 		//array_push($head_row, $plugin->txt('toc'));
 
-		array_push($csv, ilCSVUtil::processCSVRow($head_row, TRUE, $separator) );
+		foreach ($head_row as $cell) {
+			$writer->addColumn($cell);
+		}
+		$writer->addRow();
 
 		foreach ($data as $key => $row)
 		{
-			$csvrow = [];
 			foreach ( $row as $type => $value)
 			{
                 if(! in_array($type, ['user_name_presentation'])) {
-                    array_push($csvrow, trim($value, '"'));
+					$writer->addColumn(trim($value, '"'));
                 }
 			}
-			array_push($csv, ilCSVUtil::processCSVRow($csvrow, TRUE, $separator));
+			$writer->addRow();
 		}
-		$csvoutput = "";
-		foreach ($csv as $row)
-		{
-			$csvoutput .= join($separator, $row) . "\n";
-		}
-		ilUtil::deliverData($csvoutput, $this->object->getTitle() .  ".csv");
+		ilUtil::deliverData($writer->getCSVString(), $this->object->getTitle() .  ".csv");
 	}
 #endregion
 
