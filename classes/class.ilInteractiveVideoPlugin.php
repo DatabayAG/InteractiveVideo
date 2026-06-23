@@ -16,9 +16,9 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 	private static ?ilInteractiveVideoPlugin $instance = null;
 
 	/**
-	 * @return ilInteractiveVideoPlugin | ilPlugin
+	 * @return ilInteractiveVideoPlugin
 	 */
-	public static function getInstance(): ilPlugin
+	public static function getInstance(): self
 	{
         if (self::$instance instanceof self) {
             return self::$instance;
@@ -26,21 +26,14 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
 
         global $DIC;
 
-        /** @var ilComponentRepository $component_repository */
-        if(!isset($DIC['component.repository'])) {
-           $component =  new InitComponentService();
-           $component->init($DIC);
-        }
-        $component_repository = $DIC['component.repository'];
         /** @var ilComponentFactory $component_factory */
         $component_factory = $DIC['component.factory'];
 
-        $plugin_info = $component_repository->getPluginById('xvid');
-
-        self::$instance = $component_factory->getPlugin($plugin_info->getId());
+        /** @var self $plugin */
+        $plugin = $component_factory->getPlugin(self::PLUGIN_ID);
+        self::$instance = $plugin;
 
         return self::$instance;
-
 	}
 
     public function getPluginName(): string
