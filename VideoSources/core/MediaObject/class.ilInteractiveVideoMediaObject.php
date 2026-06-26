@@ -313,7 +313,22 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
 		global $DIC;
 		$repository = new MediaObjectRepository($DIC->database(), new IRSSWrapper(new DataService()));
-		return $repository->getLocalSrc($mob_id, $media_item['location']);
+		$location = $media_item['location'];
+		if (str_starts_with($location, '/')) {
+			$location = substr($location, 1);
+		}
+		$zip_path = $repository->getContainerPath($mob_id);
+		$temp_file = ilFileUtils::ilTempnam();
+		$zip = new ZipArchive();
+		if ($zip->open($zip_path) === true) {
+			$content = $zip->getFromName($location);
+			if ($content !== false) {
+				file_put_contents($temp_file, $content);
+			}
+			$zip->close();
+		}
+
+		return $temp_file;
 	}
 
 	/**
