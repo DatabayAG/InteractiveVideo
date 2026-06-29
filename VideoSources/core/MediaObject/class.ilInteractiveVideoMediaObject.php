@@ -325,7 +325,7 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 			if ($content !== false) {
 				file_put_contents($temp_file, $content);
 			}
-			$zip->close();
+			$zip->close();  
 		}
 
 		return $temp_file;

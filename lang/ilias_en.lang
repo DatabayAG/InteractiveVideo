@@ -306,3 +306,4 @@ opc_selection#:#Select existing video from Opencast
 source_has_to_be#:#You have to selecte a video source.
 delete#:#Delete
 enter_videos_source#:#You have to enter a video for the video source.
+select_video_file#:#Please select a video file to upload.

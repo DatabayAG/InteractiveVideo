@@ -34,7 +34,34 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function checkForm($form) : bool
     {
-        return true;
+        global $DIC;
+
+        $file = $_FILES['video_file'] ?? null;
+        $has_new_file = is_array($file)
+            && isset($file['error'], $file['name'])
+            && $file['error'] === UPLOAD_ERR_OK
+            && $file['name'] !== '';
+
+        if ($has_new_file) {
+            return true;
+        }
+        
+        $ref_id = (int) ($_REQUEST['ref_id'] ?? 0);
+        if ($ref_id > 0) {
+            $obj_id = (int) ilObject::_lookupObjId($ref_id);
+            if ($obj_id > 0
+                && (new ilInteractiveVideoMediaObject())->doReadVideoSource($obj_id) !== null) {
+                return true;
+            }
+        }
+
+        $DIC->ui()->mainTemplate()->setOnScreenMessage(
+            'failure',
+            ilInteractiveVideoPlugin::getInstance()->txt('select_video_file'),
+            true
+        );
+
+        return false;
     }
 
 	/**
@@ -86,7 +113,10 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	{
 		$object = new ilInteractiveVideoMediaObject();
         if($obj->getSourceId() === $object->getId()) {
-            $a_values['video_file'] = ilObject::_lookupTitle($object->doReadVideoSource($obj->getId()));
+            $mob_id = $object->doReadVideoSource($obj->getId());
+            if ($mob_id !== null) {
+                $a_values['video_file'] = ilObject::_lookupTitle($mob_id);
+            }
         }
 	}
 
