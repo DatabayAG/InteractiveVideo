@@ -45,7 +45,7 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
         if ($has_new_file) {
             return true;
         }
-        
+
         $ref_id = (int) ($_REQUEST['ref_id'] ?? 0);
         if ($ref_id > 0) {
             $obj_id = (int) ilObject::_lookupObjId($ref_id);
