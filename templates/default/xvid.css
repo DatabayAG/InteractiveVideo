@@ -1069,7 +1069,25 @@ div.modal-header{
     display: block;
 }
 
-.breadcrumbs .breadcrumb {
-    direction: ltr !important;
+.breadcrumbs .breadcrumb, .breadcrumb-wrapper .breadcrumb {
     text-align: left !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    float: none !important;
+    margin-right: auto !important;
+    margin-left: 0 !important;
+}
+
+.breadcrumbs .breadcrumb > li, .breadcrumb-wrapper .breadcrumb .breadcrumb-crumb {
+    float: none !important;
+    display: inline-block !important;
+}
+
+.breadcrumb-wrapper .breadcrumb .breadcrumb-separator {
+    display: inline-block !important;
+}
+
+.breadcrumbs .breadcrumb > *, .breadcrumb-wrapper .breadcrumb > * {
+    float: none !important;
 }
