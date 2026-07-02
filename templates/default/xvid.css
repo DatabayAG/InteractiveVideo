@@ -1091,3 +1091,6 @@ div.modal-header{
 .breadcrumbs .breadcrumb > *, .breadcrumb-wrapper .breadcrumb > * {
     float: none !important;
 }
+.best_solution_answer_view {
+    background-color: transparent !important;
+}
