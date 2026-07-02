@@ -308,24 +308,35 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function getPath($obj_id)
 	{
+		global $DIC;
 		$mob        = new ilObjMediaObject($this->doReadVideoSource($obj_id));
 		$mob_id     = $mob->getId();
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
-		global $DIC;
+		if (!isset($media_item['location'])) {
+			return '';
+		}
+
 		$repository = new MediaObjectRepository($DIC->database(), new IRSSWrapper(new DataService()));
 		$location = $media_item['location'];
 		if (str_starts_with($location, '/')) {
 			$location = substr($location, 1);
 		}
+
 		$zip_path = $repository->getContainerPath($mob_id);
+		if (!file_exists($zip_path)) {
+			return '';
+		}
+
 		$temp_file = ilFileUtils::ilTempnam();
 		$zip = new ZipArchive();
 		if ($zip->open($zip_path) === true) {
 			$content = $zip->getFromName($location);
 			if ($content !== false) {
-				file_put_contents($temp_file, $content);
+				if (file_put_contents($temp_file, $content) === false) {
+					$DIC->logger()->root()->info(sprintf('InteractiveVideo: Could not write temporary file %s for MOB %s', $temp_file, $mob_id));
+				}
 			}
-			$zip->close();  
+			$zip->close();
 		}
 
 		return $temp_file;

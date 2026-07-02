@@ -3417,20 +3417,29 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         $question->setType((int)$this->getValueFromFormOrArray('question_type', $form));
 
-		if(is_array($_FILES) && count($_FILES) > 0 && array_key_exists('question_image', $_FILES))
-		{
+		if (is_array($_FILES) && count($_FILES) > 0 && array_key_exists('question_image', $_FILES)) {
 			$this->object->uploadImage($comment_id, $question, $_FILES['question_image']);
 		}
-		$post = $DIC->http()->request()->getParsedBody();
-        if(array_key_exists('ffmpeg_thumb', $post))
-		{
-			$file = ilInteractiveVideoFFmpeg::moveSelectedImage($comment_id, $this->object->getId(), $post['ffmpeg_thumb']);
-			$question->setQuestionImage($file);
-		}
-		if(array_key_exists('question_image_delete', $post))
-		{
-			ilInteractiveVideoFFmpeg::removeSelectedImage($question->getQuestionImage());
-			$question->setQuestionImage(null);
+
+		if (is_array($form)) {
+			if (array_key_exists('ffmpeg_thumb', $form)) {
+				$file = ilInteractiveVideoFFmpeg::moveSelectedImage($comment_id, $this->object->getId(), $form['ffmpeg_thumb']);
+				$question->setQuestionImage($file);
+			}
+			if (array_key_exists('question_image_delete', $form)) {
+				ilInteractiveVideoFFmpeg::removeSelectedImage($question->getQuestionImage());
+				$question->setQuestionImage(null);
+			}
+		} elseif ($form instanceof ilPropertyFormGUI) {
+			$ffmpeg_thumb = $form->getInput('ffmpeg_thumb');
+			if ($ffmpeg_thumb) {
+				$file = ilInteractiveVideoFFmpeg::moveSelectedImage($comment_id, $this->object->getId(), $ffmpeg_thumb);
+				$question->setQuestionImage($file);
+			}
+			if ($form->getInput('question_image_delete')) {
+				ilInteractiveVideoFFmpeg::removeSelectedImage($question->getQuestionImage());
+				$question->setQuestionImage(null);
+			}
 		}
 
         $question->setQuestionText(ilInteractiveVideoPlugin::stripSlashesWrapping($this->getValueFromFormOrArray('question_text', $form)));
@@ -3466,7 +3475,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         $question->deleteQuestionsIdByCommentId($comment_id);
         $qid = $question->create();
-       # $question->editAnswersForQuestion($qid);
+        $question->editAnswersForQuestion($qid);
 	}
 
     private function getValueFromFormOrArray(string $key, $form)

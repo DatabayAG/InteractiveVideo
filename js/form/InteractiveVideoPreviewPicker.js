@@ -92,13 +92,22 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 
 		$('.question_image_select').on('click', function(){
 			let img = $(this).parent().find('.preview_image').attr('src');
+            let cache_buster = img;
+            if(cache_buster.indexOf('?') !== -1)
+            {
+                cache_buster += '&time=' + new Date().getTime();
+            }
+            else
+            {
+                cache_buster += '?time=' + new Date().getTime();
+            }
 
 			if($('#il_prop_cont_question_image').find('img').length > 0)
 			{
 				$('#il_prop_cont_question_image').find('img').remove();
 			}
 
-			$('#il_prop_cont_question_image').find('#ffmpeg_extract').before('<img class="fake_media_image" src="'+img+'"/><br/>');
+			$('#il_prop_cont_question_image').find('#ffmpeg_extract').before('<img class="fake_media_image" src="'+cache_buster+'"/><br/>');
 			$('#il_prop_cont_question_image').find('#ffmpeg_extract').before('<input type="hidden" name="ffmpeg_thumb" value="'+img+'">');
 			$('#' + pub.config.modal_id).modal('hide');
 			$('#' + pub.config.modal_id).find('.preview').html('');
