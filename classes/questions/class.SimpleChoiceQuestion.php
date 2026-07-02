@@ -768,9 +768,8 @@ class SimpleChoiceQuestion
 		return $results;
 	}
 
-    /**
+	/**
 	 * @param int $obj_id
-	 * @return array<int|string, array{time: mixed, question_id: mixed, comment_id: mixed, answered: bool}>
 	 */
 	public static function getAllCompulsoryQuestions(int $obj_id): array
 	{
@@ -789,11 +788,17 @@ class SimpleChoiceQuestion
 		$results = [];
 		while($row = $ilDB->fetchAssoc($res))
 		{
+            $answered = false;
+            if($row['points'] === null) {
+                $answered = false;
+            } else if ($row['points'] >= 0) {
+                $answered = true;
+            }
 			$results[$row['question_id']] = [
 			    'time'          => $row['comment_time'],
                 'question_id'   => $row['question_id'],
 			    'comment_id'    => $row['comment_id'],
-			    'answered'      => $row['points'] != null
+			    'answered'      => $answered,
             ];
 		}
 		return $results;
