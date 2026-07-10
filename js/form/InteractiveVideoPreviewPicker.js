@@ -24,8 +24,11 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
           keyboard: false,
           backdrop: 'static'
       }
-      var modal = $('#ffmpeg_extract_modal');
-      const myModal = new bootstrap.Modal(modal, local_config)
+      var modal = $('#ffmpeg_extract_modal')[0];
+      let myModal = bootstrap.Modal.getInstance(modal);
+      if (!myModal) {
+          myModal = new bootstrap.Modal(modal, local_config)
+      }
       myModal.show();
 			$('#ffmpeg_time_picker').timepicker('setTime', $('#comment_time').val());
 		});

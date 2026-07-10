@@ -443,12 +443,16 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 				( pub.QuestionObject.compulsory_question === "1" && ! pub.QuestionObject.feedback )
 		) {
 			config = {
-        keyboard: false,
-        backdrop: 'static'
-      };
+				keyboard: false,
+				backdrop: 'static'
+			};
 		}
-    const myModal = new bootstrap.Modal(pri.ids.modal, config)
-    myModal.show();
+		const modalElement = document.querySelector(pri.ids.modal);
+		let myModal = bootstrap.Modal.getInstance(modalElement);
+		if (!myModal) {
+			myModal = new bootstrap.Modal(modalElement, config);
+		}
+		myModal.show();
     $('.modal-header .close').on('click', function () {
       $('#ilQuestionModal').modal('hide');
       il.InteractiveVideoPlayerAbstract.resumeVideo();
