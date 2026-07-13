@@ -365,6 +365,12 @@ body.cke_editable{
 .feedback_link_more{
     text-align:center;
 }
+.feedback_link_more_icon{
+    height: 25px;
+    width: auto;
+    vertical-align: middle;
+    margin-right: 5px;
+}
 .question_image_container{
     width: 100%;
     text-align: center;
