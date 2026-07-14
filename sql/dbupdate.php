@@ -1020,13 +1020,13 @@ if(!$ilDB->tableColumnExists('rep_robj_xvid_objects', 'no_comment_stream'))
 <#65>
 <?php
 
-//Todo reactivate this
-#$read_lp = ilDBUpdateNewObjectType::getCustomRBACOperationId('read_learning_progress');
-#$xoct_type_id = ilDBUpdateNewObjectType::getObjectTypeId('xvid');
+require_once '../components/ILIAS/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php';
+$read_lp = ilDBUpdateNewObjectType::getCustomRBACOperationId('read_learning_progress');
+$xoct_type_id = ilDBUpdateNewObjectType::getObjectTypeId('xvid');
 
-#if ($read_lp && $xoct_type_id) {
-#	ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
-#}
+if ($read_lp && $xoct_type_id) {
+	ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
+}
 ?>
 <#66>
 <?php
@@ -1235,14 +1235,13 @@ if($ilDB->tableExists('rep_robj_xvid_objects'))
 ?>
 <#80>
 <?php
-//Todo reactivate this
-#require_once 'components/ILIAS/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php';
-#$read_lp = ilDBUpdateNewObjectType::getCustomRBACOperationId('copy');
-#$xoct_type_id = ilDBUpdateNewObjectType::getObjectTypeId('xvid');
+require_once '../components/ILIAS/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php';
+$read_lp = ilDBUpdateNewObjectType::getCustomRBACOperationId('copy');
+$xoct_type_id = ilDBUpdateNewObjectType::getObjectTypeId('xvid');
 
-#if ($read_lp && $xoct_type_id) {
-#    ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
-#}
+if ($read_lp && $xoct_type_id) {
+    ilDBUpdateNewObjectType::addRBACOperation($xoct_type_id, $read_lp);
+}
 ?>
 <#81>
 <?php
