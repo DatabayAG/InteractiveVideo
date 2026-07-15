@@ -847,13 +847,22 @@ if($ilDB->tableExists('rep_robj_xvid_question'))
 ?>
 <#43>
 <?php
-# If already registered comment out between these lines and let the update run again
-$ilWACSecurePath = new ilWACSecurePath();
-#$ilWACSecurePath->setPath('xvid');
-#$ilWACSecurePath->setCheckingClass('ilObjInteractiveVideoAccess');
-#$ilWACSecurePath->setComponentDirectory('/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo');
-#$ilWACSecurePath->create();
-# If already registered comment out between these lines and let the update run again
+$wac_path = 'xvid';
+$wac_component = '/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo';
+$wac_checker = 'ilObjInteractiveVideoAccess';
+
+$ilWACSecurePath = ilWACSecurePath::find($wac_path);
+if ($ilWACSecurePath === null) {
+    $ilWACSecurePath = new ilWACSecurePath();
+    $ilWACSecurePath->setPath($wac_path);
+    $ilWACSecurePath->setCheckingClass($wac_checker);
+    $ilWACSecurePath->setComponentDirectory($wac_component);
+    $ilWACSecurePath->create();
+} else {
+    $ilWACSecurePath->setCheckingClass($wac_checker);
+    $ilWACSecurePath->setComponentDirectory($wac_component);
+    $ilWACSecurePath->update();
+}
 ?>
 <#44>
 <?php
@@ -1388,6 +1397,29 @@ if (!$ilDB->tableExists('rep_robj_xvid_opc')) {
     );
     $ilDB->createTable('rep_robj_xvid_opc', $fields);
     $ilDB->addPrimaryKey('rep_robj_xvid_opc', array('obj_id', 'opc_id'));
+}
+?>
+<#89>
+<?php
+/**
+ * Ensure WAC secure path for xvid is registered (idempotent re-run for existing installs).
+ * @var $ilDB ilDB
+ */
+$wac_path = 'xvid';
+$wac_component = '/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo';
+$wac_checker = 'ilObjInteractiveVideoAccess';
+
+$ilWACSecurePath = ilWACSecurePath::find($wac_path);
+if ($ilWACSecurePath === null) {
+    $ilWACSecurePath = new ilWACSecurePath();
+    $ilWACSecurePath->setPath($wac_path);
+    $ilWACSecurePath->setCheckingClass($wac_checker);
+    $ilWACSecurePath->setComponentDirectory($wac_component);
+    $ilWACSecurePath->create();
+} else {
+    $ilWACSecurePath->setCheckingClass($wac_checker);
+    $ilWACSecurePath->setComponentDirectory($wac_component);
+    $ilWACSecurePath->update();
 }
 ?>
 

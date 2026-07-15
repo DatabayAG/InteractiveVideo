@@ -52,18 +52,148 @@ class SimpleChoiceQuestionsTableGUI implements DataRetrieval
         $this->parent_type = $parent_obj_type;
     }
 
+    private function parsePercentageSortValue(mixed $value): float
+    {
+        if ($value === null || $value === '' || $value === '-') {
+            return -1.0;
+        }
+
+        if (is_numeric($value)) {
+            return (float) $value;
+        }
+
+        if (preg_match('/-?\d+(?:\.\d+)?/', (string) $value, $matches) === 1) {
+            return (float) $matches[0];
+        }
+
+        return -1.0;
+    }
+
+    private function getNumericSortValue(mixed $value): float
+    {
+        if ($value === '-' || $value === null || $value === '') {
+            return -1.0;
+        }
+
+        if (is_numeric($value)) {
+            return (float) $value;
+        }
+
+        return -1.0;
+    }
+
+    private function parseLeadingNumber(mixed $value): float
+    {
+        if ($value === null || $value === '') {
+            return -1.0;
+        }
+
+        if (is_numeric($value)) {
+            return (float) $value;
+        }
+
+        if (preg_match('/-?\d+(?:\.\d+)?/', (string) $value, $matches) === 1) {
+            return (float) $matches[0];
+        }
+
+        return -1.0;
+    }
+
+    private function getSortValue(array $record, string $order_field): string|float
+    {
+        return match ($order_field) {
+            'total' => $record['total_sort'],
+            'neutral_reflection' => $record['neutral_reflection_sort'],
+            'evaluable_questions' => $record['evaluable_questions_sort'],
+            'correct' => $record['correct_sort'],
+            'wrong' => $record['wrong_sort'],
+            'percentage_correct' => $record['percentage_correct_sort'],
+            default => $record[$order_field] ?? '',
+        };
+    }
+
+    private function compareRecords(array $left, array $right, string $order_field): int
+    {
+        $left_value = $this->getSortValue($left, $order_field);
+        $right_value = $this->getSortValue($right, $order_field);
+
+        if (is_float($left_value) || is_float($right_value) || is_int($left_value) || is_int($right_value)) {
+            return $left_value <=> $right_value;
+        }
+
+        return strnatcasecmp((string) $left_value, (string) $right_value);
+    }
+
+    private function sortRecords(array $records, Order $order): array
+    {
+        [$order_field, $order_direction] = $order->join(
+            [],
+            fn($ret, $key, $value) => [$key, $value]
+        );
+
+        usort(
+            $records,
+            fn(array $left, array $right): int => $this->compareRecords($left, $right, $order_field)
+        );
+
+        if ($order_direction === Order::DESC) {
+            $records = array_reverse($records);
+        }
+
+        return $records;
+    }
+
+    private function toDisplayRecord(array $record): array
+    {
+        return [
+            'id' => $record['id'],
+            'name' => $record['name'],
+            'total' => $record['total_display'],
+            'neutral_reflection' => $record['neutral_reflection_display'],
+            'evaluable_questions' => $record['evaluable_questions_display'],
+            'correct' => $record['correct_display'],
+            'wrong' => $record['wrong_display'],
+            'percentage_correct' => $record['percentage_correct_display'],
+        ];
+    }
+
+    private function normalizeUserRecord(array $user): array
+    {
+        return [
+            'id' => (string) ($user['id'] ?? ''),
+            'name' => $user['name'] ?? '',
+            'total_display' => is_scalar($user['total'] ?? null) ? (string) $user['total'] : '0',
+            'total_sort' => $this->parseLeadingNumber($user['total'] ?? 0),
+            'neutral_reflection_display' => (string) ($user['neutral_reflection'] ?? 0),
+            'neutral_reflection_sort' => $this->getNumericSortValue($user['neutral_reflection'] ?? 0),
+            'evaluable_questions_display' => (string) ($user['evaluable_questions'] ?? ''),
+            'evaluable_questions_sort' => $this->parseLeadingNumber($user['evaluable_questions'] ?? 0),
+            'correct_display' => is_scalar($user['correct'] ?? null) ? (string) $user['correct'] : '-',
+            'correct_sort' => $this->getNumericSortValue($user['correct'] ?? '-'),
+            'wrong_display' => is_scalar($user['wrong'] ?? null) ? (string) $user['wrong'] : '-',
+            'wrong_sort' => $this->getNumericSortValue($user['wrong'] ?? '-'),
+            'percentage_correct_display' => (string) ($user['percentage_correct'] ?? '0%'),
+            'percentage_correct_sort' => $this->parsePercentageSortValue($user['percentage_correct'] ?? '0%'),
+        ];
+    }
+
     private function getRecords(): array
     {
         if ($this->cached_records !== null) {
             return $this->cached_records;
         }
 
-        $rows = [];
-
         $simple = new SimpleChoiceQuestionStatistics();
-        $rows = $simple->getScoreForAllQuestionsAndAllUser($this->parent_id);
+        $data = $simple->getScoreForAllQuestionsAndAllUser($this->parent_id);
+        $records = [];
 
-        return $rows['users'];
+        foreach ($data['users'] as $user) {
+            $records[] = $this->normalizeUserRecord($user);
+        }
+
+        $this->cached_records = $records;
+
+        return $records;
     }
 
     public function getRows(
@@ -78,26 +208,7 @@ class SimpleChoiceQuestionsTableGUI implements DataRetrieval
         $records = $this->getRecords();
 
         if ($order) {
-            [$order_field, $order_direction] = $order->join(
-                [],
-                fn($ret, $key, $value) => [$key, $value]
-            );
-
-            usort($records, static function (array $left, array $right) use ($order_field): int {
-
-                if ($order_field === 'active') {
-                    return $right[$order_field] <=> $left[$order_field];
-                }
-
-                if(isset($left[$order_field], $right[$order_field])) {
-                    return $left[$order_field] <=> $right[$order_field];
-                }
-                return 0;
-            });
-
-            if ($order_direction === Order::DESC) {
-                $records = array_reverse($records);
-            }
+            $records = $this->sortRecords($records, $order);
         }
 
         if ($range) {
@@ -106,7 +217,7 @@ class SimpleChoiceQuestionsTableGUI implements DataRetrieval
 
         foreach ($records as $record) {
             yield $row_builder
-                ->buildDataRow((string) $record['id'], $record);
+                ->buildDataRow($record['id'], $this->toDisplayRecord($record));
         }
     }
 
@@ -171,7 +282,7 @@ class SimpleChoiceQuestionsTableGUI implements DataRetrieval
             ->table()
             ->data($this, ilInteractiveVideoPlugin::getInstance()->txt('answered_questions'), $this->getColumns())
             ->withId(self::class . '_' . $this->parent_id)
-            ->withOrder(new Order('title', Order::ASC))
+            ->withOrder(new Order('name', Order::ASC))
             ->withActions($this->getActions($url_builder, $action_parameter_token, $row_id_token))
             ->withRequest($this->request);
         $out = [$table];

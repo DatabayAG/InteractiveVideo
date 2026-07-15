@@ -1,3 +1,10 @@
+## Changes in version 3.11.6
+1. ILIAS 11 compatibility fixes: WAC secure-path registration, legacy table migration
+2. Migrated remaining result tables to KS/UI Data Table API
+
+## Changes in version 3.11.5
+1. Compatibility with ILIAS 11.0
+
 ## Changes in version 3.10.5
 1. Compatibility with ILIAS 10.0
 

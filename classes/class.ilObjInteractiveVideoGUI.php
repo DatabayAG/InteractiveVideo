@@ -3560,38 +3560,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                 $this->ctrl->getLinkTarget($this, 'showResults'));
             $ilTabs->addSubTab('showQuestionsResults', $plugin->txt('question_results'),
                 $this->ctrl->getLinkTarget($this, 'showQuestionsResults'));
-            //Todo: remove tables
-          #  $ilTabs->addSubTab('showCompleteOverviewOverAllResults', $plugin->txt('complete_question_results'),
-          #      $this->ctrl->getLinkTarget($this, 'showCompleteOverviewOverAllResults'));
         }
 
         $ilTabs->activateTab('results');
         $ilTabs->activateSubTab($activate_subTab);
     }
-
-    /**
-     * @throws ilWACException
-     */
-    public function showCompleteOverviewOverAllResults(): void
-	{
-		/**
-		 * @var $tpl    ilTemplate
-		 * @var $ilTabs ilTabsGUI
-		 */
-		global $tpl, $ilTabs;
-
-		$this->setSubTabs('editComments');
-
-		$ilTabs->activateTab('editComments');
-		$ilTabs->activateSubTab('showCompleteOverviewOverAllResults');
-		$simple = new SimpleChoiceQuestionStatistics();
-		$data = $simple->getScoreForAllQuestionsAndAllUser($this->obj_id);
-		$tbl = new SimpleChoiceQuestionsCompleteUserTableGUI($this, 'showCompleteResults', $data['question']);
-		$tbl_data = $data['users'];
-		$tbl->setData($tbl_data);
-		$tpl->setContent($tbl->getHTML());
-
-	}
 
     /**
      * @throws ilCtrlException

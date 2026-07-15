@@ -20,12 +20,20 @@
 ILIAS Interactive Video Plugin
 
 ## ILIAS compatibility
-- The branch r10 is compatible with ILIAS 10
+- The branch **r11_dev** is compatible with **ILIAS 11** (plugin version 3.11.x, PHP 8.3)
+- The branch r10_dev is compatible with ILIAS 10
 - The branch r9 is compatible with ILIAS 9
 - The branch r8 is compatible with ILIAS 8
 - If you are looking for a ILIAS 6 or ILIAS 7 compatible version of the plugin, please use the master branch.
 - If you are looking for a ILIAS 5.2-5.4 compatible version, please use the release_2 branch.
 - For even older ILIAS versions, please use the release_1 branch.
+
+## Changes in version 3.11.6
+1. ILIAS 11 compatibility fixes: WAC secure-path registration, legacy table migration
+2. Migrated remaining result tables to KS/UI Data Table API
+
+## Changes in version 3.11.5
+1. Compatibility with ILIAS 11.0
 
 ## Changes in version 3.10.5
 1. Compatibility with ILIAS 10.0
@@ -47,24 +55,26 @@ If you upgrade to the 2.x version of the InteractiveVideo you can not go back to
 3. Select **Plugins** from the **Administration** main menu drop down.
 4. Search the **InteractiveVideo** plugin in the list of plugin and choose **Activate** from the **Actions** drop down.
 
-### Workaround patch for making the Interactive Videos work with the Web Access Checker
-Simply insert the following line into the file 'Services/MediaObjects/classes/class.ilObjMediaObject.php' at round about line number 1195, which should read like this in the original:
+### Web Access Checker (WAC)
 
-	case "mep":
-		$obj_id = $id;
-		break;
+The plugin registers its WAC secure path (`xvid`) automatically during the database update
+(steps 43 and 89 in `sql/dbupdate.php`). After activating or updating the plugin, run
+**Update Database** in **Administration → Plugins** if the registration has not been applied yet.
 
-Insert     case "xvid":    to make it read like this:
+### Media object usage tracking (optional core patch)
 
-	case "mep":
-	case "xvid":
-		$obj_id = $id;
-		break;
+For correct media-pool usage resolution, add `xvid` to the switch in
+`components/ILIAS/MediaObjects/MediaObject/class.ilObjMediaObject.php` (alongside `mep`):
 
-That's it.
+```php
+case "mep":
+case "xvid":
+    $obj_id = $id;
+    break;
+```
 
 # What is it for?
-The InteractiveVideo Plugin for ILIAS gives you the possibility to create a video object, where your students can communicate in a asynchronous way. Please note that this is *NOT* a chat. They can leave notes on different timestamps in the video for other students to read, or only for themselves. Further a tutor can insert questions on various positions in the video for the students to answer. At the moment three questions types are supported single and multiple choice and a reflective type. 
+The InteractiveVideo Plugin for ILIAS gives you the possibility to create a video object, where your students can communicate in a asynchronous way. Please note that this is *NOT* a chat. They can leave notes on different timestamps in the video for other students to read, or only for themselves. Further a tutor can insert questions on various positions in the video for the students to answer. At the moment three questions types are supported single and multiple choice and a reflective type.
 
 ## Add SVG Marker Select Form
 ![Add SVG Marker Select Form](https://databayag.github.io/InteractiveVideo/2.5.x/new_marker_feature_1.png)
