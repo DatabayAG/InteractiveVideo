@@ -267,6 +267,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					case 'editComments':
 				    case 'editQuestion':
 					case 'confirmUpdateQuestion':
+					case 'updateQuestion':
 				    case 'insertQuestion':
                     case 'completeCsvExport':
                     case 'removeSubtitle ':
@@ -3345,7 +3346,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             }
         }
         $confirm->addHiddenItem('form_values', serialize($form_values));
-        $confirm->addHiddenItem('form_files', serialize($_FILES));
         $tpl->setContent($confirm->getHTML());
     }
 
@@ -3358,13 +3358,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
         global $DIC;
 		$form = $this->initQuestionForm();
-		if($DIC->http()->wrapper()->post()->has('form_values')) {
-			//@todo .... very quick ... very wtf ....
-			$post = unserialize($_POST['form_values']);
-			$_FILES = unserialize($_REQUEST['form_files']);
+		if ($DIC->http()->wrapper()->post()->has('form_values')) {
+			$post = unserialize(
+				(string) $_POST['form_values'],
+				['allowed_classes' => false]
+			);
+			if (!is_array($post)) {
+				$this->tpl->setOnScreenMessage('failure', $this->lng->txt('err_check_input'), true);
+				return;
+			}
 		} else {
-            $post = $DIC->http()->request()->getParsedBody();
-        }
+			$post = $DIC->http()->request()->getParsedBody();
+		}
 
 		if(is_array($post))
 		{

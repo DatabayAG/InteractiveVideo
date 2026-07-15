@@ -1214,13 +1214,13 @@ class SimpleChoiceQuestion
         $question_type = null;
         $correct_answers = null;
 
-        if($post->has('form_values'))
-        {
-            if($post->has('form_values') ) {
-                $form_values = $post->retrieve('form_values', $DIC->refinery()->kindlyTo()->string());
-                $form_values = unserialize($form_values);
-            } else {
-                $answer = $post->retrieve('answers', $DIC->refinery()->kindlyTo()->string());
+        if ($post->has('form_values')) {
+            $form_values = unserialize(
+                $post->retrieve('form_values', $DIC->refinery()->kindlyTo()->string()),
+                ['allowed_classes' => false]
+            );
+            if (!is_array($form_values)) {
+                return;
             }
 
             if (isset($form_values['answer'])) {
@@ -1231,7 +1231,7 @@ class SimpleChoiceQuestion
             }
             if (isset($form_values['correct'])) {
                 $correct_answers = $form_values['correct'];
-             }
+            }
         } elseif($post->has('answer')) {
             if($post->has('answer')) {
                 $answer = $post->retrieve('answer', $DIC->refinery()->kindlyTo()->listOf($DIC->refinery()->kindlyTo()->string()));
