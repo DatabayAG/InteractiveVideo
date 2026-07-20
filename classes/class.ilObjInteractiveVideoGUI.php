@@ -267,6 +267,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					case 'editComments':
 				    case 'editQuestion':
 					case 'confirmUpdateQuestion':
+					case 'updateQuestion':
 				    case 'insertQuestion':
                     case 'completeCsvExport':
                     case 'removeSubtitle ':
@@ -1784,7 +1785,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		if($ilAccess->checkAccess('write', '', $this->object->getRefId()))
 		{
 			$ilTabs->addTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
-			if($ilCtrl->getCmd() === 'editProperties')
+			if(in_array($ilCtrl->getCmd(), ['editProperties', 'update'], true))
 			{
 				$ilTabs->addSubTab('editProperties', $this->lng->txt('settings'), $this->ctrl->getLinkTarget($this, 'editProperties'));
 				if( $this->object->getSourceId() !== '' && ! $this->object->getVideoSourceObject($this->object->getSourceId())->hasOwnPlayer()) {
@@ -3344,7 +3345,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
             }
         }
         $confirm->addHiddenItem('form_values', serialize($form_values));
-        $confirm->addHiddenItem('form_files', serialize($_FILES));
         $tpl->setContent($confirm->getHTML());
     }
 
@@ -3357,13 +3357,18 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	{
         global $DIC;
 		$form = $this->initQuestionForm();
-		if($DIC->http()->wrapper()->post()->has('form_values')) {
-			//@todo .... very quick ... very wtf ....
-			$post = unserialize($_POST['form_values']);
-			$_FILES = unserialize($_REQUEST['form_files']);
+		if ($DIC->http()->wrapper()->post()->has('form_values')) {
+			$post = unserialize(
+				(string) $_POST['form_values'],
+				['allowed_classes' => false]
+			);
+			if (!is_array($post)) {
+				$this->tpl->setOnScreenMessage('failure', $this->lng->txt('err_check_input'), true);
+				return;
+			}
 		} else {
-            $post = $DIC->http()->request()->getParsedBody();
-        }
+			$post = $DIC->http()->request()->getParsedBody();
+		}
 
 		if(is_array($post))
 		{
@@ -3410,26 +3415,34 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
      */
 	private function performQuestionRefresh($comment_id, $form): void
 	{
-        global $DIC;
 		$question    = new SimpleChoiceQuestion($comment_id);
 		$question->setCommentId($comment_id);
 
         $question->setType((int)$this->getValueFromFormOrArray('question_type', $form));
 
-		if(is_array($_FILES) && count($_FILES) > 0 && array_key_exists('question_image', $_FILES))
-		{
+		if (is_array($_FILES) && count($_FILES) > 0 && array_key_exists('question_image', $_FILES)) {
 			$this->object->uploadImage($comment_id, $question, $_FILES['question_image']);
 		}
-		$post = $DIC->http()->request()->getParsedBody();
-        if(array_key_exists('ffmpeg_thumb', $post))
-		{
-			$file = ilInteractiveVideoFFmpeg::moveSelectedImage($comment_id, $this->object->getId(), $post['ffmpeg_thumb']);
-			$question->setQuestionImage($file);
-		}
-		if(array_key_exists('question_image_delete', $post))
-		{
-			ilInteractiveVideoFFmpeg::removeSelectedImage($question->getQuestionImage());
-			$question->setQuestionImage(null);
+
+		if (is_array($form)) {
+			if (array_key_exists('ffmpeg_thumb', $form)) {
+				$file = ilInteractiveVideoFFmpeg::moveSelectedImage($comment_id, $this->object->getId(), $form['ffmpeg_thumb']);
+				$question->setQuestionImage($file);
+			}
+			if (array_key_exists('question_image_delete', $form)) {
+				ilInteractiveVideoFFmpeg::removeSelectedImage($question->getQuestionImage());
+				$question->setQuestionImage(null);
+			}
+		} elseif ($form instanceof ilPropertyFormGUI) {
+			$ffmpeg_thumb = $form->getInput('ffmpeg_thumb');
+			if ($ffmpeg_thumb) {
+				$file = ilInteractiveVideoFFmpeg::moveSelectedImage($comment_id, $this->object->getId(), $ffmpeg_thumb);
+				$question->setQuestionImage($file);
+			}
+			if ($form->getInput('question_image_delete')) {
+				ilInteractiveVideoFFmpeg::removeSelectedImage($question->getQuestionImage());
+				$question->setQuestionImage(null);
+			}
 		}
 
         $question->setQuestionText(ilInteractiveVideoPlugin::stripSlashesWrapping($this->getValueFromFormOrArray('question_text', $form)));
@@ -3465,7 +3478,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         $question->deleteQuestionsIdByCommentId($comment_id);
         $qid = $question->create();
-       # $question->editAnswersForQuestion($qid);
 	}
 
     private function getValueFromFormOrArray(string $key, $form)

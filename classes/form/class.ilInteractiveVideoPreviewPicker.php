@@ -17,6 +17,7 @@ class ilInteractiveVideoPreviewPicker extends ilImageFileInputGUI
 	 */
     public function insert(ilTemplate $a_tpl): void
 	{
+        $this->setUseCache(false);
 		parent::insert($a_tpl);
 
 		if($this->isCanExtractImages() && $this->getPathToVideo() != ''

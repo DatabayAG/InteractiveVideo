@@ -768,9 +768,8 @@ class SimpleChoiceQuestion
 		return $results;
 	}
 
-    /**
+	/**
 	 * @param int $obj_id
-	 * @return array<int|string, array{time: mixed, question_id: mixed, comment_id: mixed, answered: bool}>
 	 */
 	public static function getAllCompulsoryQuestions(int $obj_id): array
 	{
@@ -789,11 +788,17 @@ class SimpleChoiceQuestion
 		$results = [];
 		while($row = $ilDB->fetchAssoc($res))
 		{
+            $answered = false;
+            if($row['points'] === null) {
+                $answered = false;
+            } else if ($row['points'] >= 0) {
+                $answered = true;
+            }
 			$results[$row['question_id']] = [
 			    'time'          => $row['comment_time'],
                 'question_id'   => $row['question_id'],
 			    'comment_id'    => $row['comment_id'],
-			    'answered'      => $row['points'] != null
+			    'answered'      => $answered,
             ];
 		}
 		return $results;
@@ -1209,13 +1214,13 @@ class SimpleChoiceQuestion
         $question_type = null;
         $correct_answers = null;
 
-        if($post->has('form_values'))
-        {
-            if($post->has('form_values') ) {
-                $form_values = $post->retrieve('form_values', $DIC->refinery()->kindlyTo()->string());
-                $form_values = unserialize($form_values);
-            } else {
-                $answer = $post->retrieve('answers', $DIC->refinery()->kindlyTo()->string());
+        if ($post->has('form_values')) {
+            $form_values = unserialize(
+                $post->retrieve('form_values', $DIC->refinery()->kindlyTo()->string()),
+                ['allowed_classes' => false]
+            );
+            if (!is_array($form_values)) {
+                return;
             }
 
             if (isset($form_values['answer'])) {
@@ -1226,7 +1231,7 @@ class SimpleChoiceQuestion
             }
             if (isset($form_values['correct'])) {
                 $correct_answers = $form_values['correct'];
-             }
+            }
         } elseif($post->has('answer')) {
             if($post->has('answer')) {
                 $answer = $post->retrieve('answer', $DIC->refinery()->kindlyTo()->listOf($DIC->refinery()->kindlyTo()->string()));
