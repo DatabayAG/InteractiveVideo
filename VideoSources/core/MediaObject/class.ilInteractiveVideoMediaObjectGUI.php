@@ -86,11 +86,23 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 		ilObjMediaObjectGUI::includePresentationJS();
         global $DIC;
 		$media_object = new ilInteractiveVideoMediaObject();
-		$mob_id     = $media_object->doReadVideoSource($obj->getId());
+		$mob_id = $media_object->doReadVideoSource($obj->getId());
+		$player->setVariable('PLAYER_ID', $player_id);
+		$player->setVariable('INTERACTIVE_VIDEO_ID', $obj->getId());
+		if ($mob_id === null || (int) $mob_id <= 0) {
+			$player->setVariable('VIDEO_SRC', '');
+			$player->setVariable('VIDEO_TYPE', '');
+			return $player;
+		}
+		$mob_id = (int) $mob_id;
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
+		if (!is_array($media_item) || !isset($media_item['location'], $media_item['format'])) {
+			$player->setVariable('VIDEO_SRC', '');
+			$player->setVariable('VIDEO_TYPE', '');
+			return $player;
+		}
         $mob = new ilObjMediaObject($mob_id);
         $mob_file = $mob->getStandardSrc();
-		$player->setVariable('PLAYER_ID', $player_id);
         $repository = new MediaObjectRepository($DIC->database(), new IRSSWrapper(new DataService()));
         $is_file_in_rss = $repository->hasLocalFile($mob_id, $media_item['location']);
         if($is_file_in_rss === false) {
@@ -101,7 +113,6 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
             $player->setVariable('VIDEO_SRC', $mob_file);
         }
         $player->setVariable('VIDEO_TYPE', $media_item['format']);
-		$player->setVariable('INTERACTIVE_VIDEO_ID', $obj->getId());
 		return $player;
 	}
 
