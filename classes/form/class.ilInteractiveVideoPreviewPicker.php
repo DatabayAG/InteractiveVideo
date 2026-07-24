@@ -35,7 +35,9 @@ class ilInteractiveVideoPreviewPicker extends ilImageFileInputGUI
     public function supportImageExtractionFromVideo(ilTemplate $a_tpl): void
 	{
 		global $tpl, $ilCtrl;
-		$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/form/InteractiveVideoPreviewPicker.js');
+		$tpl->addJavaScript(ilInteractiveVideoPlugin::getWebAssetPath(
+            'js/form/InteractiveVideoPreviewPicker.js'
+        ));
 
 		$link = ilLinkButton::getInstance();
 		$link->setCaption(ilInteractiveVideoPlugin::getInstance()->txt('extract'), false);
@@ -61,7 +63,12 @@ class ilInteractiveVideoPreviewPicker extends ilImageFileInputGUI
 		$modal->setId('ffmpeg_extract_modal');
 		$modal->setType(ilInteractiveVideoModalExtension::TYPE_LARGE);
 		$modal->setHeading(ilInteractiveVideoPlugin::getInstance()->txt('extract'));
-		$video_tpl = new ilTemplate("tpl.ffmpeg_modal.html", false, false, 'public/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/');
+		$video_tpl = new ilTemplate(
+            "tpl.ffmpeg_modal.html",
+            false,
+            false,
+            ilInteractiveVideoPlugin::getTemplateModulePath()
+        );
 
 		$time      = new ilInteractiveVideoTimePicker('ffmpeg_time_picker', 'ffmpeg_time_picker');
 		$video_tpl->setVariable('AJAX_URL', $ilCtrl->getLinkTarget(new ilObjInteractiveVideoGUI(), 'generateThumbnailsFromSourcePerAjax', '', true));

@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'ILIAS\\Plugin\\InteractiveVideo\\\\' => array($baseDir . '/classes'),
+    'ILIAS\\Plugin\\InteractiveVideo\\' => array($baseDir . '/classes'),
 );

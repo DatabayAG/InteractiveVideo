@@ -109,8 +109,29 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
         return ilUtil::stripSlashes($a_str, true, '<a><br><i><u><s><strong><em><span><p><sub><sup>');
     }
 
-    public static function _getIcon(string $a_type) : string
+    /**
+     * Web-relative plugin path under public/ (for CSS/JS URLs).
+     */
+    public static function getWebAssetPath(string $path = ''): string
     {
-        return './Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/templates/images/icon_xvid.svg';
+        $base = rtrim(self::getInstance()->getRelativeDirectory(), '/');
+        if ($path === '') {
+            return $base . '/';
+        }
+
+        return $base . '/' . ltrim($path, '/');
+    }
+
+    /**
+     * Absolute plugin directory for ilTemplate module paths.
+     */
+    public static function getTemplateModulePath(): string
+    {
+        return rtrim(self::getInstance()->getDirectory(), '/');
+    }
+
+    public static function _getIcon(string $a_type): string
+    {
+        return parent::_getIcon($a_type);
     }
 }

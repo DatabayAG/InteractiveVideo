@@ -52,10 +52,14 @@ class SimpleChoiceQuestionFormEditGUI
 	    global $tpl;
         $plugin = ilInteractiveVideoPlugin::getInstance();
 
-        $tpl->addJavaScript(ilObjInteractiveVideoGUI::PATH .   '/libs/npm/node_modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js');
-        $tpl->addJavaScript(ilObjInteractiveVideoGUI::PATH . '/js/InteractiveVideoQuestionCreator.js');
-        $tpl->addCss(ilObjInteractiveVideoGUI::PATH .  '/templates/default/xvid.css');
-        $tpl->addCss(ilObjInteractiveVideoGUI::PATH . '/libs/npm/node_modules/bootstrap-timepicker/css/bootstrap-timepicker.css');
+        $tpl->addJavaScript(ilInteractiveVideoPlugin::getWebAssetPath(
+            'libs/npm/node_modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js'
+        ));
+        $tpl->addJavaScript(ilInteractiveVideoPlugin::getWebAssetPath('js/InteractiveVideoQuestionCreator.js'));
+        $tpl->addCss(ilInteractiveVideoPlugin::getWebAssetPath('templates/default/xvid.css'));
+        $tpl->addCss(ilInteractiveVideoPlugin::getWebAssetPath(
+            'libs/npm/node_modules/bootstrap-timepicker/css/bootstrap-timepicker.css'
+        ));
 	    $tpl->addOnLoadCode('InteractiveVideoQuestionCreator.registerCreator();');
 		$form = new ilPropertyFormGUI();
 		$form->setFormAction($this->ctrl->getFormAction(new ilObjInteractiveVideoGUI(), 'insertQuestion'));

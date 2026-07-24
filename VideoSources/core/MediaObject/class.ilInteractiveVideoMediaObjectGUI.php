@@ -13,8 +13,6 @@ use ILIAS\Repository\IRSS\DataService;
  */
 class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 {
-	const PATH = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/MediaObject/';
-
     /**
      * @param     $option
      * @param int $obj_id
@@ -70,7 +68,9 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
      */
 	public function addPlayerElements(ilGlobalPageTemplate $tpl) : ilGlobalPageTemplate
     {
-		$tpl->addJavaScript(self::PATH . 'js/jquery.InteractiveVideoMediaElementPlayer.js');
+		$tpl->addJavaScript(ilInteractiveVideoPlugin::getWebAssetPath(
+            'VideoSources/core/MediaObject/js/jquery.InteractiveVideoMediaElementPlayer.js'
+        ));
 		return $tpl;
 	}
 

@@ -22,10 +22,13 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     private const ACTION_ALL_TOKEN = 'ALL_OBJECTS';
     private int $parent_obj_id;
     private string $parent_obj_type;
-    /** @var ilCtrl */
-    public const PATH = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/';
 	/** @var ilCtrl */
     protected ilCtrl $ctrl;
+
+    public static function getPath(): string
+    {
+        return ilInteractiveVideoPlugin::getWebAssetPath();
+    }
 
 	/** @var ilObjInteractiveVideo|null $object */
 				protected ?ilObject $object = null;
@@ -317,7 +320,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                                 $xvid_plugin_ctrl = ilInteractiveVideoPlugin::stripSlashesWrapping($xvid_plugin_ctrl);
                                 $dir = ltrim($xvid_plugin_ctrl,'il');
                                 $dir = rtrim($dir,'GUI');
-                                $path = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/plugin/' . $dir . '/class.' . $xvid_plugin_ctrl . '.php';
+                                $path = ilInteractiveVideoPlugin::getTemplateModulePath()
+                                    . '/VideoSources/plugin/' . $dir . '/class.' . $xvid_plugin_ctrl . '.php';
                                 if(file_exists($path)){
                                     global $DIC;
                                     $class = new $xvid_plugin_ctrl($DIC);
@@ -418,9 +422,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		 */
 		global $tpl, $DIC;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
-        $DIC->ui()->mainTemplate()->addJavaScript(self::PATH . '/js/InteractiveVideoQuestionCreator.js');
+        $DIC->ui()->mainTemplate()->addJavaScript(self::getPath() . 'js/InteractiveVideoQuestionCreator.js');
         if($this->object->isMarkerActive()){
-            $DIC->ui()->mainTemplate()->addJavaScript(self::PATH . '/js/InteractiveVideoOverlayMarker.js');
+            $DIC->ui()->mainTemplate()->addJavaScript(self::getPath() . 'js/InteractiveVideoOverlayMarker.js');
             $DIC->ui()->mainTemplate()->addOnLoadCode('il.InteractiveVideoOverlayMarker.checkForEditScreen();');
         }
 		$player_id = ilInteractiveVideoUniqueIds::getInstance()->getNewId();
@@ -643,8 +647,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		global $tpl, $DIC;
 		$plugin = ilInteractiveVideoPlugin::getInstance();
 
-        $DIC->ui()->mainTemplate()->addJavaScript(self::PATH .'/js/InteractiveVideoQuestionCreator.js');
-        $DIC->ui()->mainTemplate()->addCss(self::PATH .'/templates/default/xvid.css');
+        $DIC->ui()->mainTemplate()->addJavaScript(self::getPath() . 'js/InteractiveVideoQuestionCreator.js');
+        $DIC->ui()->mainTemplate()->addCss(self::getPath() . 'templates/default/xvid.css');
 		$simple_choice = new SimpleChoiceQuestion();
         $ajax_object   = new SimpleChoiceQuestionAjaxHandler();
         $get = $this->http->wrapper()->query();
@@ -752,12 +756,12 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     {
         foreach($this->custom_css as $file)
         {
-            $tpl->addCss(self::PATH . $file);
+            $tpl->addCss(ilInteractiveVideoPlugin::getWebAssetPath($file));
         }
 
         foreach($this->custom_javascript as $file)
         {
-            $tpl->addJavaScript(self::PATH . $file, true, 2);
+            $tpl->addJavaScript(ilInteractiveVideoPlugin::getWebAssetPath($file), true, 2);
         }
     }
 
@@ -1131,7 +1135,6 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$ilTabs->activateTab('editProperties');
 		$ilTabs->activateSubTab('editProperties');
 
-        //$DIC->ui()->mainTemplate()->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/form/InteractiveVideoEditorInit.js');
         if($a_form === null) {
             $a_form = new ilPropertyFormGUI();
         }

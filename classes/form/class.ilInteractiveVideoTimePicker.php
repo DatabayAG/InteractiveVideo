@@ -85,7 +85,12 @@ class ilInteractiveVideoTimePicker extends ilSubEnabledFormPropertyGUI
      */
     public function render(): string
 	{
-		$my_tpl = new ilTemplate('tpl.time_picker.html', true, true, 'public/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/');
+		$my_tpl = new ilTemplate(
+            'tpl.time_picker.html',
+            true,
+            true,
+            ilInteractiveVideoPlugin::getTemplateModulePath()
+        );
 
         $value = $this->getValue();
         if($value === "") {

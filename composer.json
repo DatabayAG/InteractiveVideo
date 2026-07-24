@@ -1,11 +1,11 @@
 {
   "require": {
-    "php": ">=8.3 <8.4",
+    "php": ">=8.3 <8.5",
     "ext-json": "*",
     "ext-dom": "*"
   },
   "autoload": {
-    "psr-4" : { "ILIAS\\Plugin\\InteractiveVideo\\\\" : "./classes" },
+    "psr-4" : { "ILIAS\\Plugin\\InteractiveVideo\\" : "./classes" },
     "classmap": ["./classes"],
     "exclude-from-classmap": []
   },
@@ -17,4 +17,3 @@
     "allow-plugins": {}
   }
 }
-

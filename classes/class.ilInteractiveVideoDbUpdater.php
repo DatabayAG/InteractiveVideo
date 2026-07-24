@@ -95,10 +95,9 @@ class ilInteractiveVideoDbUpdater extends ilPluginDBUpdate
 			}
 			if($file->getFilename() === 'dbupdate.php')
 			{
-                $folder = './public/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/' . basename(dirname(dirname(dirname($file->getPathName())))) . '/' . basename(dirname(dirname($file->getPathName()))) . '/' ;
 				$path = dirname($file->getRealPath(), 2) . '/';
                 $this->getPluginFolder($path);
-				$this->update_files[] = $folder . basename(dirname($file->getPathName())) . '/' . $file->getBasename();
+				$this->update_files[] = $file->getRealPath();
 			}
 		}
 	}

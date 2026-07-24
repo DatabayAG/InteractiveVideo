@@ -288,7 +288,9 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
             $info->addProperty($this->lng->txt('trac_comment'), $comment);
         }
 
-        $this->tpl->addCss('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/templates/default/iv_learning_progress.css');
+        $this->tpl->addCss(ilInteractiveVideoPlugin::getWebAssetPath(
+            'templates/default/iv_learning_progress.css'
+        ));
         $this->tpl->setContent(implode('<br />', [$info->getHTML(), $this->__getLegendHTML()]));
     }
 

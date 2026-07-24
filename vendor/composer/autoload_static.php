@@ -9,12 +9,12 @@ class ComposerStaticInitea21ceda40693f9a2bcdf1b6c121ff4e
     public static $prefixLengthsPsr4 = array (
         'I' => 
         array (
-            'ILIAS\\Plugin\\InteractiveVideo\\\\' => 31,
+            'ILIAS\\Plugin\\InteractiveVideo\\' => 30,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'ILIAS\\Plugin\\InteractiveVideo\\\\' => 
+        'ILIAS\\Plugin\\InteractiveVideo\\' => 
         array (
             0 => __DIR__ . '/../..' . '/classes',
         ),

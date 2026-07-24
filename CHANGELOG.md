@@ -1,3 +1,7 @@
+## Changes in version 3.11.8
+1. Align PHP constraint with ILIAS 11 (`>=8.3 <8.5`)
+2. Resolve plugin asset/icon paths via `getRelativeDirectory()` / `getDirectory()`
+
 ## Changes in version 3.11.6
 1. ILIAS 11 compatibility fixes: WAC secure-path registration, legacy table migration
 2. Migrated remaining result tables to KS/UI Data Table API

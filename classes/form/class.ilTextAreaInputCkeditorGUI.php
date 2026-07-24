@@ -26,7 +26,12 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
     public function insert(ilTemplate $a_tpl): void
 	{
 		self::appendJavascriptFile();
-		$ttpl = new ilTemplate("tpl.textarea_ckeditor.html", true, true, "public/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/");
+		$ttpl = new ilTemplate(
+            "tpl.textarea_ckeditor.html",
+            true,
+            true,
+            ilInteractiveVideoPlugin::getTemplateModulePath()
+        );
 
 		$ttpl->setVariable("PROPERTY_VALUE", ilLegacyFormElementsUtil::prepareFormOutput($this->getValue()));
 		$ttpl->setVariable("FIELD_ID", $this->getFieldId());
@@ -43,7 +48,8 @@ class ilTextAreaInputCkeditorGUI extends ilTextAreaInputGUI
 		 * @var $tpl ilTemplate
 		 */
 		global $tpl;
-		$tpl->addCss('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/libs/npm/node_modules/ckeditor5/dist/browser/ckeditor5.css');
-        //$tpl->addJavaScript('Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/js/form/InteractiveVideoEditorInit.js');
+		$tpl->addCss(ilInteractiveVideoPlugin::getWebAssetPath(
+            'libs/npm/node_modules/ckeditor5/dist/browser/ckeditor5.css'
+        ));
 	}
 }

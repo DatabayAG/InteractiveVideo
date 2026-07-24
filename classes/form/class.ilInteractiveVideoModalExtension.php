@@ -21,7 +21,12 @@ class ilInteractiveVideoModalExtension
      */
     public function getHTML(): string
 	{
-        $tpl = new ilTemplate("tpl.modal.html", true, true, 'public/Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/');
+        $tpl = new ilTemplate(
+            "tpl.modal.html",
+            true,
+            true,
+            ilInteractiveVideoPlugin::getTemplateModulePath()
+        );
         if (count($this->getButtons()) > 0)
 		{
 			foreach ($this->getButtons() as $b)

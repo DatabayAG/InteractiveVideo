@@ -20,13 +20,17 @@
 ILIAS Interactive Video Plugin
 
 ## ILIAS compatibility
-- The branch **r11_dev** is compatible with **ILIAS 11** (plugin version 3.11.x, PHP 8.3)
+- The branch **r11_dev** is compatible with **ILIAS 11** (plugin version 3.11.x, PHP `>=8.3 <8.5`)
 - The branch r10_dev is compatible with ILIAS 10
 - The branch r9 is compatible with ILIAS 9
 - The branch r8 is compatible with ILIAS 8
 - If you are looking for a ILIAS 6 or ILIAS 7 compatible version of the plugin, please use the master branch.
 - If you are looking for a ILIAS 5.2-5.4 compatible version, please use the release_2 branch.
 - For even older ILIAS versions, please use the release_1 branch.
+
+## Changes in version 3.11.8
+1. Align PHP constraint with ILIAS 11 (`>=8.3 <8.5`)
+2. Resolve plugin asset/icon paths via `getRelativeDirectory()` / `getDirectory()`
 
 ## Changes in version 3.11.6
 1. ILIAS 11 compatibility fixes: WAC secure-path registration, legacy table migration

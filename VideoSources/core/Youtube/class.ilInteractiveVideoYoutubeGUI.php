@@ -7,8 +7,6 @@
 class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 {
 
-	const PATH = 'Customizing/global/plugins/Services/Repository/RepositoryObject/InteractiveVideo/VideoSources/core/Youtube/';
-
 	const YOUTUBE_URL = 'https://www.youtube.com/watch?v=';
 
 	public function getForm($option, int $obj_id)
@@ -40,7 +38,9 @@ class ilInteractiveVideoYoutubeGUI implements ilInteractiveVideoSourceGUI
 
 	public function addPlayerElements(ilGlobalPageTemplate $tpl) : ilGlobalPageTemplate
     {
-		$tpl->addJavaScript(self::PATH . 'js/jquery.InteractiveVideoYoutubePlayer.js');
+		$tpl->addJavaScript(ilInteractiveVideoPlugin::getWebAssetPath(
+            'VideoSources/core/Youtube/js/jquery.InteractiveVideoYoutubePlayer.js'
+        ));
 		return $tpl;
 	}
 
