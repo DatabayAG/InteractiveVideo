@@ -321,3 +321,4 @@ opc_selection#:#Bestehendes Video aus Opencast Video auswählen
 source_has_to_be#:#Sie müssen eine Video Quelle auswählen.
 delete#:#Löschen
 enter_videos_source#:#Sie müssen ein Video für die Videoquelle eingeben.
+select_video_file#:#Die Einstellungen konnten nicht gespeichert werden. Bitte wählen Sie zunächst ein Video aus.

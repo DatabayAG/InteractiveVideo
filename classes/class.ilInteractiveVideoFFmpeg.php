@@ -35,7 +35,7 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
 		}
 		else
 		{
-			throw new ilFFmpegException('It was not possible to extract an image from '.basename($a_file).'.');
+			throw new ilFFmpegException('It was not possible to extract an image from '.basename($a_file).'. ' . implode(' ', $ret));
 		}
 	}
 
@@ -59,10 +59,14 @@ class ilInteractiveVideoFFmpeg extends ilFFmpeg
         {
             $time = (int) $sec + $i;
             $file = self::extractImage($a_file, $i . '.jpg', $a_target_dir, $time);
-            $json_container[] = ['time' => $time, 'img' => ilWACSignedPath::signFile($file . '?' . rand())];
+            $json_container[] = ['time' => $time, 'img' => ilWACSignedPath::signFile($file) . '&time=' . time()];
         }
 
-		if($return_json)
+        if (strpos($a_file, 'ilias_temp_') !== false && file_exists($a_file)) {
+            unlink($a_file);
+        }
+
+        if($return_json)
 		{
 			return json_encode($json_container);
 		}

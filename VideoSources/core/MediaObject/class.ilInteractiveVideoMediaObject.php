@@ -308,12 +308,38 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	 */
 	public function getPath($obj_id)
 	{
+		global $DIC;
 		$mob        = new ilObjMediaObject($this->doReadVideoSource($obj_id));
 		$mob_id     = $mob->getId();
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
-		global $DIC;
+		if (!isset($media_item['location'])) {
+			return '';
+		}
+
 		$repository = new MediaObjectRepository($DIC->database(), new IRSSWrapper(new DataService()));
-		return $repository->getLocalSrc($mob_id, $media_item['location']);
+		$location = $media_item['location'];
+		if (str_starts_with($location, '/')) {
+			$location = substr($location, 1);
+		}
+
+		$zip_path = $repository->getContainerPath($mob_id);
+		if (!file_exists($zip_path)) {
+			return '';
+		}
+
+		$temp_file = ilFileUtils::ilTempnam();
+		$zip = new ZipArchive();
+		if ($zip->open($zip_path) === true) {
+			$content = $zip->getFromName($location);
+			if ($content !== false) {
+				if (file_put_contents($temp_file, $content) === false) {
+					$DIC->logger()->root()->info(sprintf('InteractiveVideo: Could not write temporary file %s for MOB %s', $temp_file, $mob_id));
+				}
+			}
+			$zip->close();
+		}
+
+		return $temp_file;
 	}
 
 	/**
@@ -351,26 +377,50 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	public function afterImportParsing($obj_id, $import_dir)
 	{
 		$file_name = ilObjMediaObject::fixFilename($this->import_file_name);
+		$tmp_file = $this->resolveImportedMediaFile($import_dir);
+		if ($tmp_file !== null) {
+			$mob = new ilObjMediaObject();
+			$mob->setTitle($file_name);
+			$mob->setDescription('');
+			$mob->create();
 
-        $import_dir = dirname($import_dir, 4);
-		$tmp_file = $import_dir .'/objects/' . $this->import_part_path .'/'. $this->import_file_name;
-		if(file_exists($tmp_file))
-		{
-            $mob = new ilObjMediaObject();
-            $mob->setTitle($file_name);
-            $mob->setDescription('');
-            $mob->create();
+			$mob->addMediaItemFromLocalFile(
+				"Standard",
+				$tmp_file,
+				$file_name
+			);
 
-            $mob->addMediaItemFromLocalFile(
-                "Standard",
-                $tmp_file,
-                $file_name);
-
-            $mob->update();
+			$mob->update();
 			$this->setMobId($mob->getId());
 			ilObjMediaObject::_saveUsage($mob->getId(), 'xvid', $obj_id);
 			$this->saveDataToDb($obj_id);
 		}
+	}
+
+	/**
+	 * Resolve media file path inside an InteractiveVideo export.
+	 * Files are stored under expDir_N/objects/<Identifier Entry>/<Location>.
+	 */
+	protected function resolveImportedMediaFile(string $import_dir): ?string
+	{
+		if ($this->import_part_path === '' || $this->import_file_name === '') {
+			return null;
+		}
+
+		$relative = 'objects/' . $this->import_part_path . '/' . $this->import_file_name;
+		$candidates = [
+			rtrim($import_dir, '/') . '/' . $relative,
+			// Legacy fallback: some older builds walked up from expDir to the import root.
+			rtrim((string) dirname($import_dir, 4), '/') . '/' . $relative,
+		];
+
+		foreach ($candidates as $candidate) {
+			if (is_file($candidate)) {
+				return $candidate;
+			}
+		}
+
+		return null;
 	}
 
 	public function hasOwnPlayer() : bool

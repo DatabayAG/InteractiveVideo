@@ -34,7 +34,34 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	 */
 	public function checkForm($form) : bool
     {
-        return true;
+        global $DIC;
+
+        $file = $_FILES['video_file'] ?? null;
+        $has_new_file = is_array($file)
+            && isset($file['error'], $file['name'])
+            && $file['error'] === UPLOAD_ERR_OK
+            && $file['name'] !== '';
+
+        if ($has_new_file) {
+            return true;
+        }
+
+        $ref_id = (int) ($_REQUEST['ref_id'] ?? 0);
+        if ($ref_id > 0) {
+            $obj_id = (int) ilObject::_lookupObjId($ref_id);
+            if ($obj_id > 0
+                && (new ilInteractiveVideoMediaObject())->doReadVideoSource($obj_id) !== null) {
+                return true;
+            }
+        }
+
+        $DIC->ui()->mainTemplate()->setOnScreenMessage(
+            'failure',
+            ilInteractiveVideoPlugin::getInstance()->txt('select_video_file'),
+            true
+        );
+
+        return false;
     }
 
 	/**
@@ -59,11 +86,23 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 		ilObjMediaObjectGUI::includePresentationJS();
         global $DIC;
 		$media_object = new ilInteractiveVideoMediaObject();
-		$mob_id     = $media_object->doReadVideoSource($obj->getId());
+		$mob_id = $media_object->doReadVideoSource($obj->getId());
+		$player->setVariable('PLAYER_ID', $player_id);
+		$player->setVariable('INTERACTIVE_VIDEO_ID', $obj->getId());
+		if ($mob_id === null || (int) $mob_id <= 0) {
+			$player->setVariable('VIDEO_SRC', '');
+			$player->setVariable('VIDEO_TYPE', '');
+			return $player;
+		}
+		$mob_id = (int) $mob_id;
 		$media_item = ilMediaItem::_getMediaItemsOfMObId($mob_id, 'Standard');
+		if (!is_array($media_item) || !isset($media_item['location'], $media_item['format'])) {
+			$player->setVariable('VIDEO_SRC', '');
+			$player->setVariable('VIDEO_TYPE', '');
+			return $player;
+		}
         $mob = new ilObjMediaObject($mob_id);
         $mob_file = $mob->getStandardSrc();
-		$player->setVariable('PLAYER_ID', $player_id);
         $repository = new MediaObjectRepository($DIC->database(), new IRSSWrapper(new DataService()));
         $is_file_in_rss = $repository->hasLocalFile($mob_id, $media_item['location']);
         if($is_file_in_rss === false) {
@@ -74,7 +113,6 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
             $player->setVariable('VIDEO_SRC', $mob_file);
         }
         $player->setVariable('VIDEO_TYPE', $media_item['format']);
-		$player->setVariable('INTERACTIVE_VIDEO_ID', $obj->getId());
 		return $player;
 	}
 
@@ -86,7 +124,10 @@ class ilInteractiveVideoMediaObjectGUI implements ilInteractiveVideoSourceGUI
 	{
 		$object = new ilInteractiveVideoMediaObject();
         if($obj->getSourceId() === $object->getId()) {
-            $a_values['video_file'] = ilObject::_lookupTitle($object->doReadVideoSource($obj->getId()));
+            $mob_id = $object->doReadVideoSource($obj->getId());
+            if ($mob_id !== null) {
+                $a_values['video_file'] = ilObject::_lookupTitle($mob_id);
+            }
         }
 	}
 

@@ -151,7 +151,7 @@ var InteractiveVideoQuestionViewer = (function (scope) {
 		}
 		if(feedback.feedback_link !== undefined && feedback.feedback_link !== '')
 		{
-			modal.append('<div class="learning_recommendation_link">' + scope.InteractiveVideo.lang.more_information + ': <span class="feedback_link_more">' + '<img src="' + feedback.feedback_icon + '"/>' + feedback.feedback_link + '</span></div>');
+   modal.append('<div class="learning_recommendation_link">' + scope.InteractiveVideo.lang.more_information + ': <span class="feedback_link_more">' + '<img class="feedback_link_more_icon" src="' + feedback.feedback_icon + '"/>' + feedback.feedback_link + '</span></div>');
 		}
 	};
 

@@ -130,7 +130,7 @@ class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
             'edit_comment' =>
                 $this->factory->table()->action()->single(
                     ilInteractiveVideoPlugin::getInstance()->txt('edit'),
-                    $url_builder->withParameter($action_parameter_token, 'editMyComment'),
+                    $url_builder->withParameter($action_parameter_token, 'editComment'),
                     $row_id_token
                 ),
             'delete_comment' =>
@@ -142,11 +142,11 @@ class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
         ] : [];
     }
 
-    public function renderTable($return = false): string
+    public function renderTable(string $url, bool $return = false): string
     {
         $df = new \ILIAS\Data\Factory();
 
-        $table_uri = $df->uri($this->request->getUri()->__toString());
+        $table_uri = $df->uri($url);
         $url_builder = new URLBuilder($table_uri);
         $query_params_namespace = ['tid'];
 

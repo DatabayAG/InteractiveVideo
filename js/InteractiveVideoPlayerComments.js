@@ -597,14 +597,17 @@ il.InteractiveVideoPlayerComments = (function (scope) {
 	pub.getCommentRepliesHtml = function(reply)
 	{
 		let name = reply.user_name;
+		let anonymized_class = '';
 		if(name !== "") {
 			name = pub.buildCommentUsernameHtml(name , reply.is_interactive) + ': ';
+		} else {
+			anonymized_class = ' reply_comment_anonymized';
 		}
 		if(reply.is_table_of_content === "1") {
 			return '';
 		}
 
-		return '<div class="reply_comment reply_comment_' + reply.comment_id + '">' + name + reply.comment_text + ' ' + pro.appendPrivateHtml(reply.is_private) + '</div>';
+		return '<div class="reply_comment reply_comment_' + reply.comment_id + anonymized_class + '">' + name + reply.comment_text + ' ' + pro.appendPrivateHtml(reply.is_private) + '</div>';
 	};
 
 	pro.appendPrivateHtml = function (is_private)

@@ -121,18 +121,18 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
         if($row !== null) {
             $this->setIsAnonymized($row['is_anonymized'] ?: 0);
             $this->setIsRepeat($row['is_repeat'] ?: 0);
-            $this->setIsPublic($row['is_public'] ?: 0);
+            $this->setIsPublic($row['is_public']);
             $this->setOnline((bool) $row['is_online'] || false);
             $this->setIsChronologic($row['is_chronologic']  ?: 0);
             $this->setSourceId($row['source_id'] ?: '');
             $this->setTaskActive($row['is_task'] ?: 0);
             $this->setTask($row['task'] ?: '');
-            $this->setEnableComment($row['enable_comment'] ?: 0);
-            $this->setEnableToolbar($row['show_toolbar'] ?: 0);
+            $this->setEnableComment($row['enable_comment']);
+            $this->setEnableToolbar($row['show_toolbar']);
             $this->setAutoResumeAfterQuestion($row['auto_resume'] ?: 0);
             $this->setFixedModal($row['fixed_modal'] ?: 0);
             $this->setShowTocFirst($row['show_toc_first'] ?: 0);
-            $this->setEnableCommentStream($row['disable_comment_stream'] ?: 0);
+            $this->setEnableCommentStream($row['disable_comment_stream']);
             $this->setNoCommentStream($row['no_comment_stream'] ?: 0);
             $this->setVideoMode($row['video_mode'] ?: 0);
             $this->setMarkerForStudents($row['marker_for_students'] ?: 0);
@@ -340,7 +340,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                             'fixed_modal'    => ['integer', $fixed_modal],
                             'task'           => ['text', $task],
                             'enable_comment' => ['integer', 1],
-                            'show_toolbar'   => ['integer', $show_toolbar],
+                            'show_toolbar'   => ['integer', 1],
                             'show_toc_first' => ['integer', $show_toc_first],
                             'disable_comment_stream' => ['integer', 1],
                             'layout_width'        => ['integer', $layout_width],
@@ -377,6 +377,10 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                             'source_id'      => ['text', ''],
                             'is_task'        => ['integer', 0],
                             'is_online'        => ['integer', 0],
+                            'enable_comment' => ['integer', 1],
+                            'show_toolbar'   => ['integer', 1],
+                            'disable_comment_stream' => ['integer', 1],
+                            'is_public'      => ['integer', 1],
                         ]
 					);
 
@@ -387,7 +391,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 		}
 	}
 
-    protected function doUpdate(): void
+    public function doUpdate(): void
 	{
 		parent::doUpdate();
 
@@ -699,6 +703,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			//	$table_data[$counter]['user_id']			= $row['user_id'];
 			$table_data[$counter]['comment_text']		= $row['comment_text'];
 			$table_data[$counter]['is_table_of_content']= $row['is_table_of_content'];
+            if($row['is_table_of_content'] === 1) {
+                continue;
+            }
 			if($row['is_private'] == 1)
 			{
 				$table_data[$counter]['is_private'] = ilInteractiveVideoPlugin::getInstance()->txt('private');

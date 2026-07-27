@@ -24,8 +24,11 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
           keyboard: false,
           backdrop: 'static'
       }
-      var modal = $('#ffmpeg_extract_modal');
-      const myModal = new bootstrap.Modal(modal, local_config)
+      var modal = $('#ffmpeg_extract_modal')[0];
+      let myModal = bootstrap.Modal.getInstance(modal);
+      if (!myModal) {
+          myModal = new bootstrap.Modal(modal, local_config)
+      }
       myModal.show();
 			$('#ffmpeg_time_picker').timepicker('setTime', $('#comment_time').val());
 		});
@@ -92,13 +95,22 @@ il.InteractiveVideoPreviewPicker = (function (scope) {
 
 		$('.question_image_select').on('click', function(){
 			let img = $(this).parent().find('.preview_image').attr('src');
+            let cache_buster = img;
+            if(cache_buster.indexOf('?') !== -1)
+            {
+                cache_buster += '&time=' + new Date().getTime();
+            }
+            else
+            {
+                cache_buster += '?time=' + new Date().getTime();
+            }
 
 			if($('#il_prop_cont_question_image').find('img').length > 0)
 			{
 				$('#il_prop_cont_question_image').find('img').remove();
 			}
 
-			$('#il_prop_cont_question_image').find('#ffmpeg_extract').before('<img class="fake_media_image" src="'+img+'"/><br/>');
+			$('#il_prop_cont_question_image').find('#ffmpeg_extract').before('<img class="fake_media_image" src="'+cache_buster+'"/><br/>');
 			$('#il_prop_cont_question_image').find('#ffmpeg_extract').before('<input type="hidden" name="ffmpeg_thumb" value="'+img+'">');
 			$('#' + pub.config.modal_id).modal('hide');
 			$('#' + pub.config.modal_id).find('.preview').html('');

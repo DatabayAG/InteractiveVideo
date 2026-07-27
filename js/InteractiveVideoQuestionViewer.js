@@ -250,7 +250,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		}
 		if(feedback.feedback_link !== undefined && feedback.feedback_link !== '')
 		{
-			modal.append('<div class="learning_recommendation_link">' + language.more_information + ': <span class="feedback_link_more">' + '<img src="' + feedback.feedback_icon + '"/>' + feedback.feedback_link + '</span></div>');
+   modal.append('<div class="learning_recommendation_link">' + language.more_information + ': <span class="feedback_link_more">' + '<img class="feedback_link_more_icon" src="' + feedback.feedback_icon + '"/>' + feedback.feedback_link + '</span></div>');
 		}
 
 		$('.iv_best_solution_value').html(feedback.best_solution);
@@ -443,12 +443,16 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 				( pub.QuestionObject.compulsory_question === "1" && ! pub.QuestionObject.feedback )
 		) {
 			config = {
-        keyboard: false,
-        backdrop: 'static'
-      };
+				keyboard: false,
+				backdrop: 'static'
+			};
 		}
-    const myModal = new bootstrap.Modal(pri.ids.modal, config)
-    myModal.show();
+		const modalElement = document.querySelector(pri.ids.modal);
+		let myModal = bootstrap.Modal.getInstance(modalElement);
+		if (!myModal) {
+			myModal = new bootstrap.Modal(modalElement, config);
+		}
+		myModal.show();
     $('.modal-header .close').on('click', function () {
       $('#ilQuestionModal').modal('hide');
       il.InteractiveVideoPlayerAbstract.resumeVideo();
