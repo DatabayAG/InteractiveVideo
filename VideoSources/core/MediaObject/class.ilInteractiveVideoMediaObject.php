@@ -377,26 +377,50 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 	public function afterImportParsing($obj_id, $import_dir)
 	{
 		$file_name = ilObjMediaObject::fixFilename($this->import_file_name);
+		$tmp_file = $this->resolveImportedMediaFile($import_dir);
+		if ($tmp_file !== null) {
+			$mob = new ilObjMediaObject();
+			$mob->setTitle($file_name);
+			$mob->setDescription('');
+			$mob->create();
 
-        $import_dir = dirname($import_dir, 4);
-		$tmp_file = $import_dir .'/objects/' . $this->import_part_path .'/'. $this->import_file_name;
-		if(file_exists($tmp_file))
-		{
-            $mob = new ilObjMediaObject();
-            $mob->setTitle($file_name);
-            $mob->setDescription('');
-            $mob->create();
+			$mob->addMediaItemFromLocalFile(
+				"Standard",
+				$tmp_file,
+				$file_name
+			);
 
-            $mob->addMediaItemFromLocalFile(
-                "Standard",
-                $tmp_file,
-                $file_name);
-
-            $mob->update();
+			$mob->update();
 			$this->setMobId($mob->getId());
 			ilObjMediaObject::_saveUsage($mob->getId(), 'xvid', $obj_id);
 			$this->saveDataToDb($obj_id);
 		}
+	}
+
+	/**
+	 * Resolve media file path inside an InteractiveVideo export.
+	 * Files are stored under expDir_N/objects/<Identifier Entry>/<Location>.
+	 */
+	protected function resolveImportedMediaFile(string $import_dir): ?string
+	{
+		if ($this->import_part_path === '' || $this->import_file_name === '') {
+			return null;
+		}
+
+		$relative = 'objects/' . $this->import_part_path . '/' . $this->import_file_name;
+		$candidates = [
+			rtrim($import_dir, '/') . '/' . $relative,
+			// Legacy fallback: some older builds walked up from expDir to the import root.
+			rtrim((string) dirname($import_dir, 4), '/') . '/' . $relative,
+		];
+
+		foreach ($candidates as $candidate) {
+			if (is_file($candidate)) {
+				return $candidate;
+			}
+		}
+
+		return null;
 	}
 
 	public function hasOwnPlayer() : bool
