@@ -59,7 +59,7 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
     /**
      *
      */
-    public function executeCommand(): void
+    protected function handleCommand(): void
     {
         $cmd = $this->ctrl->getCmd();
         $this->$cmd();
