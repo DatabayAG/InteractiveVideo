@@ -104,7 +104,7 @@ class ilInteractiveVideoLearningProgressGUI
             "tpl.lp_legend.html",
             true,
             true,
-            "components/ILIAS/Tracking"
+            "Services/Tracking"
         );
         $tpl->setVariable(
             "IMG_NOT_ATTEMPTED",
