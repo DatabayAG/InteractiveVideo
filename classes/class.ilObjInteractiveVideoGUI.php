@@ -202,7 +202,8 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 					case 'editUser':
 					case 'updateLPUsers':
 						$ilTabs->setTabActive('learning_progress');
-						$this->$cmd();
+						$lp_gui = new ilInteractiveVideoLearningProgressGUI($this, $this->object);
+						$this->ctrl->forwardCommand($lp_gui);
 						break;
 
 					case 'showTutorInsertForm':
