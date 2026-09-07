@@ -4,7 +4,7 @@
  * @author Michael Jansen <mjansen@databay.de>
  * @ilCtrl_Calls ilInteractiveVideoLearningProgressGUI: ilLearningProgressGUI, ilInteractiveVideoLPSummaryTableGUI, ilInteractiveVideoLPUsersTableGUI
  */
-class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
+class ilInteractiveVideoLearningProgressGUI
 {
 
     /**
@@ -53,15 +53,31 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
         $this->tpl = $tpl;
         $this->lng = $lng;
         $this->ctrl = $ilCtrl;
-        parent::__construct(0);
+    }
+
+    public function executeCommand(): void
+    {
+        $this->handleCommand();
     }
 
     /**
      *
      */
-    protected function handleCommand(): void
+    public function handleCommand(): void
     {
         $cmd = $this->ctrl->getCmd();
+        if (empty($cmd)) {
+            if ($this->gui->hasPermission('write') || $this->gui->hasPermission('read_learning_progress')) {
+                if ($this->object->getLearningProgressMode() != ilObjInteractiveVideo::LP_MODE_DEACTIVATED) {
+                    $cmd = 'showLPUsers';
+                } else {
+                    $cmd = 'showLPSettings';
+                }
+            } else {
+                $cmd = 'showLPUserDetails';
+            }
+        }
+
         $this->$cmd();
     }
 
@@ -72,6 +88,63 @@ class ilInteractiveVideoLearningProgressGUI extends ilLearningProgressBaseGUI
     public function getObjId(): int
     {
         return $this->object->getId();
+    }
+
+    public function getRefId(): int
+    {
+        return $this->object->getRefId();
+    }
+
+    public function __getLegendHTML(int $variant = ilLPStatusIcons::ICON_VARIANT_LONG): string
+    {
+        global $DIC;
+        $icons = ilLPStatusIcons::getInstance($variant);
+
+        $tpl = new ilTemplate(
+            "tpl.lp_legend.html",
+            true,
+            true,
+            "components/ILIAS/Tracking"
+        );
+        $tpl->setVariable(
+            "IMG_NOT_ATTEMPTED",
+            $icons->renderIconForStatus(ilLPStatus::LP_STATUS_NOT_ATTEMPTED_NUM)
+        );
+        $tpl->setVariable(
+            "IMG_IN_PROGRESS",
+            $icons->renderIconForStatus(ilLPStatus::LP_STATUS_IN_PROGRESS_NUM)
+        );
+        $tpl->setVariable(
+            "IMG_COMPLETED",
+            $icons->renderIconForStatus(ilLPStatus::LP_STATUS_COMPLETED_NUM)
+        );
+        $tpl->setVariable(
+            "IMG_FAILED",
+            $icons->renderIconForStatus(ilLPStatus::LP_STATUS_FAILED_NUM)
+        );
+        $tpl->setVariable(
+            "TXT_NOT_ATTEMPTED",
+            $this->lng->txt("trac_not_attempted")
+        );
+        $tpl->setVariable(
+            "TXT_IN_PROGRESS",
+            $this->lng->txt("trac_in_progress")
+        );
+        $tpl->setVariable(
+            "TXT_COMPLETED",
+            $this->lng->txt("trac_completed")
+        );
+        $tpl->setVariable(
+            "TXT_FAILED",
+            $this->lng->txt("trac_failed")
+        );
+
+        $panel = $DIC->ui()->factory()->panel()->secondary()->legacy(
+            '',
+            $DIC->ui()->factory()->legacy($tpl->get())
+        );
+
+        return $DIC->ui()->renderer()->render($panel);
     }
 
     /**
