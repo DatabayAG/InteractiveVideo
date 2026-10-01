@@ -19,6 +19,8 @@
 # InteractiveVideo
 ILIAS Interactive Video Plugin
 
+Planned work for the current release line: [ROADMAP.md](ROADMAP.md).
+
 ## ILIAS compatibility
 - The branch r10 is compatible with ILIAS 10
 - The branch r9 is compatible with ILIAS 9
