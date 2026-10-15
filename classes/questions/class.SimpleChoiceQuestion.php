@@ -454,10 +454,11 @@ class SimpleChoiceQuestion
 		WHERE rep_robj_xvid_comments.obj_id = %s 
         AND is_interactive = 1
         AND neutral_answer = 0
+        AND type <> %s
         AND points = 1
         GROUP BY usr_id',
-			['integer'],
-			[($oid)]
+			['integer', 'integer'],
+			[$oid, self::REFLECTION]
 		);
 		while($row = $ilDB->fetchAssoc($res))
 		{
