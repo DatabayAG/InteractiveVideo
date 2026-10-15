@@ -162,7 +162,7 @@ class ilInteractiveVideoAllCommentsTableGUI implements DataRetrieval
             ->table()
             ->data($this, ilInteractiveVideoPlugin::getInstance()->txt('questions_comments_new'), $this->getColumns())
             ->withId(self::class . '_' . $this->parent_id)
-            ->withOrder(new Order('title', Order::ASC))
+            ->withOrder(new Order('comment_time', Order::ASC))
             ->withActions($this->getActions($url_builder, $action_parameter_token, $row_id_token))
             ->withRequest($this->request);
         $out = [$table];
