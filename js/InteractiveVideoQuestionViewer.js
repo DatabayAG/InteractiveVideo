@@ -177,7 +177,9 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 			url:     player_data.question_post_url,
 			data:    {'qid' : pub.QuestionObject.question_id},
 			success: function () {
+				pro.markCompulsoryQuestionAnswered(player_id);
 				pro.addToLocalIgnoreArrayIfNonRepeatable(player_id);
+				pub.toggleCloseButtons(false);
 			}
 		});
 	};
@@ -202,6 +204,14 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 		il.InteractiveVideoEditor.createInstance(comment_id)
 		feedback.prepend(language.add_comment);
 		scope.InteractiveVideoPlayerFunction.addAjaxFunctionForReflectionCommentPosting(pub.comment_id, pub.QuestionObject.reply_original_id, player_id);
+	};
+
+	pro.markCompulsoryQuestionAnswered = function(player_id) {
+		let question_id = pub.QuestionObject.question_id;
+		let compulsory = il.InteractiveVideo[player_id].compulsoryQuestions;
+		if(question_id in compulsory) {
+			compulsory[question_id].answered = true;
+		}
 	};
 
 	pro.addToLocalIgnoreArrayIfNonRepeatable = function(player_id){
@@ -370,10 +380,7 @@ il.InteractiveVideoQuestionViewer = (function (scope) {
 					data:    $(pri.ids.question_form).serialize(),
 					success: function (feedback) {
 						let obj = JSON.parse(feedback);
-						let question_id = pub.QuestionObject.question_id;
-						if(question_id in il.InteractiveVideo[player_id].compulsoryQuestions) {
-							il.InteractiveVideo[player_id].compulsoryQuestions[question_id].answered = true;
-						}
+						pro.markCompulsoryQuestionAnswered(player_id);
 						$('#show_best_solution').remove();
 						pro.showFeedback(comment_id, obj, player);
 						pro.addToLocalIgnoreArrayIfNonRepeatable(player_id);

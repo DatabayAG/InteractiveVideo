@@ -773,17 +773,19 @@ class SimpleChoiceQuestion
 	 */
 	public static function getAllCompulsoryQuestions(int $obj_id): array
 	{
-        global $ilDB;
+        global $ilDB, $ilUser;
 		$res     = $ilDB->queryF('
-			SELECT comments.comment_time, questions.question_id, comments.comment_id, points 
+			SELECT comments.comment_time, questions.question_id, comments.comment_id, score.points 
 			FROM ' . self::TABLE_NAME_COMMENTS . ' comments, 
 				' . self::TABLE_NAME_QUESTION . '  questions 
-			LEFT JOIN rep_robj_xvid_score ON questions.question_id = rep_robj_xvid_score.question_id
+			LEFT JOIN ' . self::TABLE_NAME_SCORE . ' score
+				ON questions.question_id = score.question_id
+				AND score.user_id = %s
 			WHERE comments.comment_id = questions.comment_id 
 			AND questions.compulsory_question = 1
 			AND comments.obj_id = %s',
-			['integer'],
-			[$obj_id]
+			['integer', 'integer'],
+			[$ilUser->getId(), $obj_id]
 		);
 		$results = [];
 		while($row = $ilDB->fetchAssoc($res))
@@ -998,6 +1000,17 @@ class SimpleChoiceQuestion
 		else if($type === self::REFLECTION)
 		{
 			$points = 1;
+			$answer_id = 0;
+			if(is_array($correct_answers) && count($correct_answers) > 0)
+			{
+				$answer_id = (int) $correct_answers[0];
+			}
+			$ilDB->insert(self::TABLE_NAME_ANSWERS,
+				[
+                    'question_id' => ['integer', $qid],
+                    'user_id'     => ['integer', $usr_id],
+                    'answer_id'   => ['integer', $answer_id]
+                ]);
 		}
 
 		if($this->getNeutralAnswer() === self::NEUTRAL_ANSWERS)
