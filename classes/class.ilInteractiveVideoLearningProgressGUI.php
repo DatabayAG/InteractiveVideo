@@ -141,7 +141,7 @@ class ilInteractiveVideoLearningProgressGUI
 
         $panel = $DIC->ui()->factory()->panel()->secondary()->legacy(
             '',
-            $DIC->ui()->factory()->legacy($tpl->get())
+            $DIC->ui()->factory()->legacy()->content($tpl->get())
         );
 
         return $DIC->ui()->renderer()->render($panel);
