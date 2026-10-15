@@ -29,6 +29,7 @@ il.InteractiveVideoEditor = (function (scope) {
                         editor.editing.view.change(writer => {
                             writer.setStyle('min-height', '75px', editor.editing.view.document.getRoot());
                         });
+                        pri.shieldBodyWrapperFromModalFocusTrap();
                     })
                     .catch(err => console.error(err.stack));
             }
@@ -43,6 +44,16 @@ il.InteractiveVideoEditor = (function (scope) {
         }
 
         return false;
+    }
+
+    // CKEditor renders balloons (e.g. the link form) into a wrapper attached to <body>. The Bootstrap modal
+    // focus trap reacts to focusin outside the modal and pulls focus back, which closes the balloon at once.
+    pri.shieldBodyWrapperFromModalFocusTrap = function () {
+        const wrapper = document.querySelector('.ck-body-wrapper');
+        if (wrapper && !wrapper.dataset.xvidFocusShield) {
+            wrapper.dataset.xvidFocusShield = '1';
+            wrapper.addEventListener('focusin', event => event.stopPropagation());
+        }
     }
 
      pri.editorInitialized = function (elementIdentifier) {

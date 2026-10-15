@@ -1102,3 +1102,7 @@ div.modal-header{
 .best_solution_answer_view {
     background-color: transparent !important;
 }
+/* CKEditor balloons (e.g. link form) are attached to <body> and must stack above the question modal (z-index 1050). */
+.ck-body-wrapper {
+    --ck-z-panel: 1060;
+}
