@@ -106,7 +106,56 @@ class ilInteractiveVideoPlugin extends ilRepositoryObjectPlugin
         if(is_null($a_str)) {
             return '';
         }
-        return ilUtil::stripSlashes($a_str, true, '<a><br><i><u><s><strong><em><span><p><sub><sup>');
+        $str = ilUtil::stripSlashes($a_str, true, '<a><br><i><u><s><strong><em><span><p><sub><sup>');
+        // Preserve values like "<1" that strip_tags would otherwise drop (Mantis #19727).
+        if ($str !== $a_str) {
+            $str = ilUtil::stripSlashes(
+                str_replace('<', '< ', $a_str),
+                true,
+                '<a><br><i><u><s><strong><em><span><p><sub><sup>'
+            );
+        }
+        return $str;
+    }
+
+    /**
+     * Strip slashes / unsafe HTML while keeping text that starts with "<" + non-tag text
+     * (e.g. "<1"). Same approach as ilFormPropertyGUI::stripSlashesAddSpaceFallback.
+     */
+    public static function stripSlashesAddSpaceFallback(?string $a_str = null): string
+    {
+        if ($a_str === null) {
+            return '';
+        }
+        $str = ilUtil::stripSlashes($a_str);
+        if ($str !== $a_str) {
+            $str = ilUtil::stripSlashes(str_replace('<', '< ', $a_str));
+        }
+        return $str;
+    }
+
+    /**
+     * @param string|array $a_data
+     * @return string|array
+     */
+    public static function stripSlashesRecursiveAddSpaceFallback($a_data)
+    {
+        if (is_array($a_data)) {
+            foreach ($a_data as $k => $v) {
+                if (is_array($v)) {
+                    $a_data[$k] = self::stripSlashesRecursiveAddSpaceFallback($v);
+                } else {
+                    $a_data[$k] = self::stripSlashesAddSpaceFallback(
+                        is_string($v) ? $v : (string) $v
+                    );
+                }
+            }
+            return $a_data;
+        }
+
+        return self::stripSlashesAddSpaceFallback(
+            is_string($a_data) ? $a_data : (string) $a_data
+        );
     }
 
     /**

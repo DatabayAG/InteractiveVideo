@@ -676,9 +676,9 @@ class SimpleChoiceQuestion
 		}
 		if($this->getType() != self::REFLECTION)
 		{
-			foreach(ilArrayUtil::stripSlashesRecursive($_POST['answer']) as $key => $value)
+			foreach(ilInteractiveVideoPlugin::stripSlashesRecursiveAddSpaceFallback($_POST['answer']) as $key => $value)
 			{
-				if(is_array($_POST['correct']) && array_key_exists($key, ilArrayUtil::stripSlashesRecursive($_POST['correct'])))
+				if(is_array($_POST['correct']) && array_key_exists($key, $_POST['correct']))
 				{
 					$correct += 1;
 				}
@@ -1267,7 +1267,7 @@ class SimpleChoiceQuestion
 
         if(is_array($answer) && count($answer) > 0 && $question_type != self::REFLECTION)
         {
-            foreach(ilArrayUtil::stripSlashesRecursive($answer) as $key => $value)
+            foreach(ilInteractiveVideoPlugin::stripSlashesRecursiveAddSpaceFallback($answer) as $key => $value)
             {
                 $answer_id = $DIC->database()->nextId(self::TABLE_NAME_QUESTION_TEXT);
                 if($value == null){$value = ' ';}

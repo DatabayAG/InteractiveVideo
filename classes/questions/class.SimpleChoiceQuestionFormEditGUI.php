@@ -402,7 +402,7 @@ class SimpleChoiceQuestionFormEditGUI
             $post = $DIC->http()->wrapper()->post();
             if($post->has('answer'))
 			{
-				$post_answers = ilArrayUtil::stripSlashesRecursive($post->retrieve('answer', $DIC->refinery()->kindlyTo()->listOf($DIC->refinery()->kindlyTo()->string())));
+				$post_answers = ilInteractiveVideoPlugin::stripSlashesRecursiveAddSpaceFallback($post->retrieve('answer', $DIC->refinery()->kindlyTo()->listOf($DIC->refinery()->kindlyTo()->string())));
                 $post_correct = [];
                 if($post->has('correct')) {
                     $post_correct = $post->retrieve('correct', $DIC->refinery()->kindlyTo()->dictOf($DIC->refinery()->kindlyTo()->string()));
