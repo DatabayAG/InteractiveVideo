@@ -1075,7 +1075,8 @@ div.modal-header{
     display: block;
 }
 
-.breadcrumbs .breadcrumb, .breadcrumb-wrapper .breadcrumb {
+.breadcrumbs .breadcrumb, .breadcrumb-wrapper .breadcrumb, .breadcrumb_wrapper .breadcrumb {
+    direction: ltr !important;
     text-align: left !important;
     display: flex !important;
     flex-direction: row !important;
@@ -1085,7 +1086,8 @@ div.modal-header{
     margin-left: 0 !important;
 }
 
-.breadcrumbs .breadcrumb > li, .breadcrumb-wrapper .breadcrumb .breadcrumb-crumb {
+.breadcrumbs .breadcrumb > li, .breadcrumb-wrapper .breadcrumb .breadcrumb-crumb, .breadcrumb_wrapper .breadcrumb .crumb {
+    direction: ltr !important;
     float: none !important;
     display: inline-block !important;
 }
@@ -1094,7 +1096,7 @@ div.modal-header{
     display: inline-block !important;
 }
 
-.breadcrumbs .breadcrumb > *, .breadcrumb-wrapper .breadcrumb > * {
+.breadcrumbs .breadcrumb > *, .breadcrumb-wrapper .breadcrumb > *, .breadcrumb_wrapper .breadcrumb > * {
     float: none !important;
 }
 .best_solution_answer_view {
