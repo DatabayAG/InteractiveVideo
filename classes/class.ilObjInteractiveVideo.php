@@ -159,6 +159,9 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 			[$this->getId()]
 		);
 		$row = $this->db->fetchAssoc($res);
+		if (!is_array($row)) {
+			return null;
+		}
 
 		return $row['source_id'];
 	}
