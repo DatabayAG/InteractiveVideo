@@ -200,9 +200,8 @@ root_create_xvid#:#Create Interactive Video
 root_create_xvid#:#Create Interactive Video
 rotate#:#Rotate
 save#:#Save
-save_anyway#:#Save Anyway
-save_without_correct#:#No answer indicated as correct
-save_without_correct_detail#:#You don't have selected a reflection question or have you selected a question without correct answers, are you sure you want to save the question?
+save_without_correct#:#No correct answer marked
+save_without_correct_detail#:#At least one answer must be marked as correct. If the question should not be evaluated, select Neutral answers under Evaluation. Adjust the answer options. The question can be saved only after that.
 scale#:#Scale
 screen_info#:#Use this screen to create and manage questions and comments. Caution: Interactive questions will NOT be shown on this screen. In order to see them during playback, go to the tab "Content".
 select_at_least_one#:#Please select at least one source

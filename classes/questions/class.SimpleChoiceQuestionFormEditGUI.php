@@ -330,7 +330,6 @@ class SimpleChoiceQuestionFormEditGUI
 		$modal->setHeading($this->plugin->txt('save_without_correct'));
 		$warning_dialog = new ilTemplate("tpl.question_edit_modal.html", true, true, $this->plugin->getDirectory());
 		$warning_dialog->setVariable('INFO_TEXT', $this->plugin->txt('save_without_correct_detail'));
-		$warning_dialog->setVariable('SAVE_ANYWAY', $this->plugin->txt('save_anyway'));
 		$warning_dialog->setVariable('CANCEL', $this->plugin->txt('CANCEL'));
 		$modal->setBody($warning_dialog->get());
 		$mod = new ilCustomInputGUI('', '');

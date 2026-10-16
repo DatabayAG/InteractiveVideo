@@ -216,9 +216,8 @@ root_create_xvid#:#Interaktives Video anlegen
 root_create_xvid#:#Neues Interaktives Video anlegen
 rotate#:#Drehen
 save#:#Speichern
-save_anyway#:#Trotzdem speichern
-save_without_correct#:#Sie haben keine korrekte Antwort ausgewählt
-save_without_correct_detail#:#Sie haben weder eine Reflexionsfrage, noch neutrale Antworten aktiviert, sind Sie sicher, dass Sie die Frage ohne korrekte Antwort speichern wollen?
+save_without_correct#:#Keine korrekte Antwort markiert
+save_without_correct_detail#:#Mindestens eine Antwort muss als korrekt markiert sein. Wenn die Frage nicht bewertet werden soll, wählen Sie unter Bewertung die Option Neutrale Antworten. Passen Sie die Antwortoptionen an. Erst danach lässt sich die Frage speichern.
 scale#:#Skalieren
 screen_info#:#Diese Ansicht dient zum Erstellen und Verwalten von Fragen und Kommentaren. Achtung: Interaktive Fragen werden hier NICHT beim Abspielen des Videos angezeigt, wechseln Sie zum Reiter "Inhalt" um die Fragen während des Abspielvorganges eingeblendet zu bekommen.
 select_at_least_one#:#Bitte wählen Sie mindestens eine Quelle aus.

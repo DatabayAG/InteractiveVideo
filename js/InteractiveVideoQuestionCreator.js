@@ -231,12 +231,11 @@ InteractiveVideoQuestionCreator = (function () {
 				{
 					if($('.alert_ex_modal').length == 0)
 					{
-						var info = '<div class="alert_ex_modal alert alert-info" >' +
+						var info = '<div class="alert_ex_modal alert alert-info" role="alert">' +
 									$('#simple_question_warning .alert.alert-info').html() +
-									'<br/>' + $('.question_warning_buttons').html() + '</div>';
+									'</div>';
 						$('#ilInteractiveVideoAjaxModal .modal-body').prepend(info);
 						$('#ilInteractiveVideoAjaxModal .modal-body').append(info);
-						$('.question_cancel_saving').remove();
 					}
 				}
 				else
@@ -244,26 +243,13 @@ InteractiveVideoQuestionCreator = (function () {
 					$('#simple_question_warning').modal('show');
 					$('.question_cancel_saving').on('click', function (evt)
 					{
+						evt.preventDefault();
 						$('#simple_question_warning').modal('hide');
 					});
 				}
-
-				$('.question_save_anyway').on('click', function (evt)
-				{
-					pro.submitAnyway();
-				});
 		});
 
 		pro.showHideFormElementsForReflectionType();
-	};
-
-	pro.submitAnyway = function ()
-	{
-		$('#simple_question_warning').modal('hide');
-		$('.alert_ex_modal').remove();
-		$('input[name="cmd[insertQuestion]"], input[name="cmd[confirmUpdateQuestion]"]')
-			.off('click.questionCreatorValidation');
-		$('input[name="cmd[insertQuestion]"], input[name="cmd[confirmUpdateQuestion]"]').first().click();
 	};
 
 	pub.appendEmptyJSON = function () {

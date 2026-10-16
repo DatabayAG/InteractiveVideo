@@ -1,3 +1,6 @@
+## Changes in version 3.11.10
+1. Scored single and multiple choice questions can only be saved after a correct answer is marked. The warning dialog no longer offers saving without that change.
+
 ## Changes in version 3.11.8
 1. Align PHP constraint with ILIAS 11 (`>=8.3 <8.5`)
 2. Resolve plugin asset/icon paths via `getRelativeDirectory()` / `getDirectory()`
