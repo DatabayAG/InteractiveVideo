@@ -457,7 +457,7 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
                 if($this->video_source_object !== null) {
                     $this->video_source_object->beforeDeleteVideoSource($this->getId());
                 }
-                self::deleteComments(self::getCommentIdsByObjId($this->getId(), false));
+                $this->deleteComments($this->getCommentIdsByObjId($this->getId(), false), (int) $this->getId());
 
                 $this->db->manipulate('DELETE FROM ' . self::TABLE_NAME_OBJECTS . ' WHERE obj_id = ' . $this->db->quote($this->getId(), 'integer'));
                 $this->deleteMetaData();
@@ -777,17 +777,28 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
      * @param $comment_ids
      * @return bool
      */
-	public function deleteComments($comment_ids)
+	public function deleteComments($comment_ids, int $obj_id)
 	{
-		if(!is_array($comment_ids))
+		if(!is_array($comment_ids) || $comment_ids === [] || $obj_id <= 0)
         {
             return false;
         }
 
+		$owned_ids = array_map('intval', $this->getCommentIdsByObjId($obj_id, false));
+		$comment_ids = array_values(array_intersect(array_map('intval', $comment_ids), $owned_ids));
+		if ($comment_ids === []) {
+			return false;
+		}
+
 		$question_ids = self::getQuestionIdsByCommentIds($comment_ids);
 		SimpleChoiceQuestion::deleteQuestions($question_ids);
 
-        $this->db->manipulate('DELETE FROM ' . self::TABLE_NAME_COMMENTS . ' WHERE ' . $this->db->in('comment_id', $comment_ids, false, 'integer'));
+        $this->db->manipulate(
+			'DELETE FROM ' . self::TABLE_NAME_COMMENTS
+			. ' WHERE obj_id = ' . $this->db->quote($obj_id, 'integer')
+			. ' AND ' . $this->db->in('comment_id', $comment_ids, false, 'integer')
+		);
+		return true;
 	}
 
 	/**
@@ -1250,6 +1261,13 @@ class ilObjInteractiveVideo extends ilObjectPlugin implements ilLPStatusPluginIn
 	public function uploadImage(int $comment_id, SimpleChoiceQuestion $question, array $a_upload): bool
 	{
 		if(!$this->id)
+		{
+			return false;
+		}
+
+		if((int) ($a_upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK
+			|| !is_string($a_upload['tmp_name'] ?? null)
+			|| !is_uploaded_file($a_upload['tmp_name']))
 		{
 			return false;
 		}
