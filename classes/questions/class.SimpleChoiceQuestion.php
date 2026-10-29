@@ -1214,11 +1214,9 @@ class SimpleChoiceQuestion
 
         if($post->has('form_values'))
         {
-            if($post->has('form_values') ) {
-                $form_values = $post->retrieve('form_values', $DIC->refinery()->kindlyTo()->string());
-                $form_values = unserialize($form_values);
-            } else {
-                $answer = $post->retrieve('answers', $DIC->refinery()->kindlyTo()->string());
+            $form_values = json_decode($post->retrieve('form_values', $DIC->refinery()->kindlyTo()->string()), true);
+            if (!is_array($form_values)) {
+                return;
             }
 
             if (isset($form_values['answer'])) {
