@@ -6,6 +6,7 @@ use ILIAS\MediaObjects\MediaObjectRepository;
 use ILIAS\Repository\IRSS\IRSSWrapper;
 use ILIAS\Repository\IRSS\DataService;
 use ILIAS\ResourceStorage\Identification\ResourceIdentification;
+use ILIAS\FileUpload\DTO\UploadResult;
 
 /**
  * Class ilInteractiveVideoMediaObject
@@ -150,16 +151,14 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		}
 
 		$new_file = $_FILES['video_file'];
+		$upload_result = $this->getUploadResult($new_file['tmp_name']);
 
 		$mob = new ilObjMediaObject();
 		$mob->setTitle($new_file['name']);
 		$mob->setDescription('');
 		$mob->create();
 
-        $mob->addMediaItemFromLocalFile(
-            "Standard",
-            $_FILES['video_file']['tmp_name'],
-            $_FILES['video_file']['name']);
+		$mob->addMediaItemFromUpload("Standard", $upload_result);
 
 		$mob->update();
 
@@ -180,6 +179,26 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		$this->removeOldMobFiles($obj_id, $mob);
 
 		$this->saveDataToDb($obj_id);
+	}
+
+	/**
+	 * @throws ilException
+	 */
+	protected function getUploadResult(string $tmp_name) : UploadResult
+	{
+		global $DIC;
+
+		$upload = $DIC->upload();
+		if (!$upload->hasBeenProcessed()) {
+			$upload->process();
+		}
+
+		$results = $upload->getResults();
+		if (!isset($results[$tmp_name]) || !$results[$tmp_name]->isOK()) {
+			throw new ilException(sprintf("%s: Upload could not be processed", __METHOD__));
+		}
+
+		return $results[$tmp_name];
 	}
 
 	/**
@@ -330,11 +349,17 @@ class ilInteractiveVideoMediaObject implements ilInteractiveVideoSource
 		$temp_file = ilFileUtils::ilTempnam();
 		$zip = new ZipArchive();
 		if ($zip->open($zip_path) === true) {
-			$content = $zip->getFromName($location);
-			if ($content !== false) {
-				if (file_put_contents($temp_file, $content) === false) {
+			// getFromName() would hold the whole video in memory
+			$source = $zip->getStream($location);
+			if ($source !== false) {
+				$target = fopen($temp_file, 'wb');
+				if ($target === false || stream_copy_to_stream($source, $target) === false) {
 					$DIC->logger()->root()->info(sprintf('InteractiveVideo: Could not write temporary file %s for MOB %s', $temp_file, $mob_id));
 				}
+				if ($target !== false) {
+					fclose($target);
+				}
+				fclose($source);
 			}
 			$zip->close();
 		}
