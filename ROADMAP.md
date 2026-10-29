@@ -4,23 +4,6 @@ Status: Plugin **3.10.5**, branch **r10_dev**, ILIAS **10** (`ilias_min_version`
 
 This roadmap defines three consecutive work packages. Each package can be released separately. Comments, questions, learning progress, and video sources remain usable throughout the work.
 
-## Order
-
-1. Remove SVG markers
-2. Revise the main view
-3. Revise the question forms
-
-Package 1 comes first because the main view currently embeds the marker editor and overlay. Package 3 can start in parallel with package 2 once the question Ajax contract (`getQuestionPerAjax`, `postAnswerPerAjax`, `insertQuestion`) has been defined.
-
-## Non-goals
-
-- No new question type or video source.
-- The player remains plyr. The `imo`, `ytb`, `surl`, and `opc` sources remain.
-- Static icons remain: `templates/images/icon_xvid.svg`, `question_mark.svg`, and `spinner.svg`. The removal concerns stored marker SVGs, not these files.
-- No changes to ILIAS Core, InteractiveVideoReference, InteractiveVideoVimeo, or the OpenCast repository object.
-- No conversion of old markers to another drawing format. Existing SVG text is discarded.
-- No new PHPUnit suite unless explicitly requested.
-
 ## 1. Remove SVG markers
 
 ### Current state
@@ -144,9 +127,3 @@ Acceptance: `jump_correct_ts` and `jump_wrong_ts` are stored on the question row
 - Implement the warning about a missing correct answer as an interruptive dialog instead of HTML embedded in a form field.
 
 Acceptance: Create a question from the main view and edit it from the comment administration page. Answering it in the player behaves as specified in package 2.4.
-
-## Cross-cutting work for each package
-
-- Maintain English and German language entries and remove unused marker entries.
-- Update `$version` in `plugin.php` and `CHANGELOG.md` for every released package.
-- Keep personal data such as comments, answers, and learning progress in the existing tables. Do not add new free-text columns for data that is not currently stored.
