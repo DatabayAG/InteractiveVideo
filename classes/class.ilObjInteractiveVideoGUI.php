@@ -2070,28 +2070,25 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
         $confirm->setCancel($this->lng->txt('cancel'), $return_cmd);
 
-		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
-		$wrong_comment_ids = array_diff($get_ids, $comment_ids);
-
-		if(is_array($wrong_comment_ids) && (count($wrong_comment_ids) == 0))
-		{
-			foreach($get_ids as $comment_id)
-			{
-			    $texts = $this->object->getCommentTextById($comment_id);
-			    if(strlen($texts['title']) > 0){
-			        $text = $texts['title'];
-                } else {
-                    $text = $texts['text'];
-                }
-				$confirm->addItem('comment_id[]', $comment_id, $text);
-			}
-
-			$tpl->setContent($confirm->getHTML());
+		$allowed_ids = $this->filterDeletableCommentIds($get_ids);
+		if ($allowed_ids === []) {
+			$this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('invalid_comment_ids'), true);
+			$this->ctrl->redirect($this, $return_cmd);
+			return;
 		}
-		else
+
+		foreach($allowed_ids as $comment_id)
 		{
-            $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('invalid_comment_ids'));
+		    $texts = $this->object->getCommentTextById($comment_id);
+		    if(strlen($texts['title']) > 0){
+		        $text = $texts['title'];
+            } else {
+                $text = $texts['text'];
+            }
+			$confirm->addItem('comment_id[]', $comment_id, $text);
 		}
+
+		$tpl->setContent($confirm->getHTML());
 	}
 
 	public function deleteComment(): void
@@ -2112,16 +2109,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 			return;
 		}
 
-		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
-		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
-		if(is_array($wrong_comment_ids) && (count($wrong_comment_ids) == 0))
-		{
-			$this->object->deleteComments($post_ids);
-            $this->tpl->setOnScreenMessage("success", ilInteractiveVideoPlugin::getInstance()->txt('comments_successfully_deleted'));
+		$allowed_ids = $this->filterDeletableCommentIds($post_ids);
+		if ($allowed_ids === []) {
+            $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('invalid_comment_ids'), true);
 		}
 		else
 		{
-            $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('invalid_comment_ids'));
+			$this->object->deleteComments($allowed_ids, (int) $this->obj_id);
+            $this->tpl->setOnScreenMessage("success", ilInteractiveVideoPlugin::getInstance()->txt('comments_successfully_deleted'));
 		}
 
         $get = $this->http->wrapper()->query();
@@ -2427,6 +2422,45 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	}
 
     /**
+     * @return array<int, int>
+     */
+    private function commentOwnersForCurrentObject(): array
+    {
+		$owners = [];
+		foreach ($this->object->getCommentIdsByObjId($this->obj_id) as $comment_id => $user_id) {
+			$owners[(int) $comment_id] = (int) $user_id;
+		}
+		return $owners;
+    }
+
+    private function commentBelongsToCurrentObject(int $comment_id): bool
+    {
+		return $comment_id > 0 && array_key_exists($comment_id, $this->commentOwnersForCurrentObject());
+    }
+
+    /**
+     * @param list<int> $comment_ids
+     * @return list<int>
+     */
+    private function filterDeletableCommentIds(array $comment_ids): array
+    {
+		$owners = $this->commentOwnersForCurrentObject();
+		global $DIC;
+		$current_user_id = (int) $DIC->user()->getId();
+		$may_delete_any = $this->checkPermissionBool('write');
+		$allowed = [];
+		foreach ($comment_ids as $comment_id) {
+			$comment_id = (int) $comment_id;
+			$owner_id = $owners[$comment_id] ?? null;
+			if ($current_user_id === ANONYMOUS_USER_ID || $owner_id === null || (!$may_delete_any && $owner_id !== $current_user_id)) {
+				return [];
+			}
+			$allowed[] = $comment_id;
+		}
+		return $allowed;
+    }
+
+    /**
      * @throws ilCtrlException
      * @throws ilCtrlException
      */
@@ -2443,14 +2477,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$this->setSubTabs('editComments');
 		$ilTabs->activateSubTab('editMyComments');
 
-        $post = $this->http->wrapper()->post();
         $post_ids = [];
         if($post->has('comment_id')) {
             $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
-            if(!count($post_ids)) {
-                $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
-                $this->ctrl->redirect($this, 'editMyComments');
-            }
         }
 
 		$confirm = new ilConfirmationGUI();
@@ -2459,13 +2488,21 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		$confirm->setConfirm($this->lng->txt('confirm'), 'deleteMyComment');
 		$confirm->setCancel($this->lng->txt('cancel'), 'editMyComments');
 
-		$comment_ids = array_keys($this->object->getCommentIdsByObjId($this->obj_id));
-		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
+		if ($post_ids === []) {
+			$this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
+			$this->ctrl->redirect($this, 'editMyComments');
+			return;
+		}
 
-		if(is_array($wrong_comment_ids) && (count($wrong_comment_ids) == 0))
+		$allowed_ids = $this->filterDeletableCommentIds($post_ids);
+		if ($allowed_ids === []) {
+			$this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('invalid_comment_ids'), true);
+			$this->ctrl->redirect($this, 'editMyComments');
+			return;
+		}
+
+		foreach($allowed_ids as $comment_id)
 		{
-			foreach($post_ids as $comment_id)
-			{
                 $texts = $this->object->getCommentTextById($comment_id);
                 if(strlen($texts['title']) > 0){
                     $text = $texts['title'];
@@ -2473,14 +2510,9 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
                     $text = $texts['text'];
                 }
                 $confirm->addItem('comment_id[]', $comment_id, $text);
-			}
+		}
 
-			$tpl->setContent($confirm->getHTML());
-		}
-		else
-		{
-            $this->tpl->setOnScreenMessage("failure", ilInteractiveVideoPlugin::getInstance()->txt('invalid_comment_ids'));
-		}
+		$tpl->setContent($confirm->getHTML());
 	}
 
     /**
@@ -2495,32 +2527,23 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $post_ids = [];
         if($post->has('comment_id')) {
             $post_ids = $post->retrieve('comment_id', $this->refinery->kindlyTo()->listOf($this->refinery->kindlyTo()->int()));
-            if(!count($post_ids)) {
-                $this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
-                $this->ctrl->redirect($this, 'editMyComments');
-            }
         }
 
-		$comments = $this->object->getCommentIdsByObjId($this->obj_id);
-		$comment_ids = array_keys($comments);
-		$user_ids = array_unique($comments);
-
-		if(is_array($user_ids) && (count($user_ids)> 1))
-		{
-            $this->tpl->setOnScreenMessage("failure", $plugin->txt('invalid_comment_ids'));
-			$this->editMyComments();
+		if ($post_ids === []) {
+			$this->tpl->setOnScreenMessage("failure", $this->lng->txt('select_one'), true);
+			$this->ctrl->redirect($this, 'editMyComments');
+			return;
 		}
 
-		$wrong_comment_ids = array_diff($post_ids, $comment_ids);
-		if(is_array($wrong_comment_ids) && (count($wrong_comment_ids) == 0))
-		{
-			$this->object->deleteComments($post_ids);
-            $this->tpl->setOnScreenMessage("success", $plugin->txt('comments_successfully_deleted'));
+		$allowed_ids = $this->filterDeletableCommentIds($post_ids);
+		if ($allowed_ids === []) {
+			$this->tpl->setOnScreenMessage("failure", $plugin->txt('invalid_comment_ids'), true);
+			$this->ctrl->redirect($this, 'editMyComments');
+			return;
 		}
-		else
-		{
-            $this->tpl->setOnScreenMessage("failure", $plugin->txt('invalid_comment_ids'));
-		}
+
+		$this->object->deleteComments($allowed_ids, (int) $this->obj_id);
+		$this->tpl->setOnScreenMessage("success", $plugin->txt('comments_successfully_deleted'), true);
 		$this->ctrl->redirect($this, 'editMyComments');
 	}
 
@@ -3301,6 +3324,14 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         if($post->has('question_text')) {
             $question_text = $post->retrieve('question_text', $this->refinery->kindlyTo()->string());
         }
+        $comment_id = (int) ($comment_id ?? 0);
+        $comment_title = (string) ($comment_title ?? '');
+        $question_text = (string) ($question_text ?? '');
+        if ($comment_id > 0 && !$this->commentBelongsToCurrentObject($comment_id)) {
+            $this->tpl->setOnScreenMessage('failure', ilInteractiveVideoPlugin::getInstance()->txt('invalid_comment_ids'), true);
+            $this->ctrl->redirect($this, 'editComments');
+            return;
+        }
 
 		if($comment_id > 0 && $comment_title !== '' && $question_text !== '')
 		{
@@ -3340,15 +3371,27 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
         $confirm->setConfirm($this->lng->txt('update'), 'updateQuestion');
         global $DIC;
         $form = $DIC->http()->request()->getParsedBody();
+        if (!is_array($form)) {
+            $this->tpl->setOnScreenMessage('failure', $this->lng->txt('err_check_input'), true);
+            $this->ctrl->redirect($this, 'editComments');
+            return;
+        }
+        $form_values = [];
         foreach($form as $key=>$value)
         {
             //@todo .... very quick ... very dirty ....
-            if($key != 'cmd')
+            if($key != 'cmd' && $key !== 'form_values' && $key !== 'form_files')
             {
                 $form_values[$key] = $value;
             }
         }
-        $confirm->addHiddenItem('form_values', serialize($form_values));
+        $encoded_form_values = json_encode($form_values);
+        if (!is_string($encoded_form_values)) {
+            $this->tpl->setOnScreenMessage('failure', $this->lng->txt('err_check_input'), true);
+            $this->ctrl->redirect($this, 'editComments');
+            return;
+        }
+        $confirm->addHiddenItem('form_values', $encoded_form_values);
         $tpl->setContent($confirm->getHTML());
     }
 
@@ -3360,46 +3403,36 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 	public function updateQuestion(): void
 	{
         global $DIC;
-		$form = $this->initQuestionForm();
+		$this->checkPermission('write');
 		if ($DIC->http()->wrapper()->post()->has('form_values')) {
-			$post = unserialize(
-				(string) $_POST['form_values'],
-				['allowed_classes' => false]
+			$encoded = $DIC->http()->wrapper()->post()->retrieve(
+				'form_values',
+				$this->refinery->kindlyTo()->string()
 			);
-			if (!is_array($post)) {
-				$this->tpl->setOnScreenMessage('failure', $this->lng->txt('err_check_input'), true);
-				return;
-			}
+			$post = json_decode($encoded, true);
 		} else {
 			$post = $DIC->http()->request()->getParsedBody();
 		}
 
 		if(is_array($post))
 		{
-			$comment_id = $post['comment_id'];
-			if($comment_id > 0)
-			{
-				$this->objComment = new ilObjComment($comment_id);
+			$comment_id = (int) $this->getValueFromFormOrArray('comment_id', $post);
+			if (!$this->commentBelongsToCurrentObject($comment_id)) {
+				$this->tpl->setOnScreenMessage('failure', ilInteractiveVideoPlugin::getInstance()->txt('invalid_comment_ids'), true);
+				$this->ctrl->redirect($this, 'editComments');
+				return;
 			}
-			$this->objComment->setCommentText($post['question_text']);
-			$this->objComment->setInteractive((int)$post['is_interactive']);
-			$this->objComment->setCommentTitle((string)$post['comment_title']);
+			$this->objComment = new ilObjComment($comment_id);
+			$this->objComment->setCommentText((string) $this->getValueFromFormOrArray('question_text', $post));
+			$this->objComment->setInteractive((int) $this->getValueFromFormOrArray('is_interactive', $post));
+			$this->objComment->setCommentTitle((string) $this->getValueFromFormOrArray('comment_title', $post));
 
 			// calculate seconds
-            if(isset($post['comment_time'])) {
-                $comment_time = $post['comment_time'];
-            } else {
-                $comment_time = 0;
-            }
-
+            $comment_time = (string) $this->getValueFromFormOrArray('comment_time', $post);
             $start_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time));
             $this->objComment->setCommentTime($start_time);
 
-            if(isset($post['comment_time_end'])) {
-                $comment_time_end = $post['comment_time_end'];
-            } else {
-                $comment_time_end = 0;
-            }
+            $comment_time_end = (string) $this->getValueFromFormOrArray('comment_time_end', $post);
             $end_time = ilInteractiveVideoTimePicker::getSecondsFromString(ilInteractiveVideoPlugin::stripSlashesWrapping($comment_time_end));
             $this->objComment->setCommentTimeEnd($end_time);
 
@@ -3409,8 +3442,11 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 
             $this->tpl->setOnScreenMessage("success", $this->lng->txt('saved_successfully'));
 			$this->editComments();
+			return;
 		}
 
+		$this->tpl->setOnScreenMessage('failure', $this->lng->txt('err_check_input'), true);
+		$this->ctrl->redirect($this, 'editComments');
 	}
 
     /**
@@ -3429,7 +3465,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
 		}
 
 		if (is_array($form)) {
-			if (array_key_exists('ffmpeg_thumb', $form)) {
+			if (is_scalar($form['ffmpeg_thumb'] ?? null)) {
 				$file = ilInteractiveVideoFFmpeg::moveSelectedImage($comment_id, $this->object->getId(), $form['ffmpeg_thumb']);
 				$question->setQuestionImage($file);
 			}
@@ -3487,7 +3523,7 @@ class ilObjInteractiveVideoGUI extends ilObjectPluginGUI implements ilDesktopIte
     private function getValueFromFormOrArray(string $key, $form)
     {
         if(is_array($form)){
-            if(array_key_exists($key, $form)){
+            if(array_key_exists($key, $form) && is_scalar($form[$key])){
                 return $form[$key];
             }
         } elseif($form instanceof ilPropertyFormGUI) {

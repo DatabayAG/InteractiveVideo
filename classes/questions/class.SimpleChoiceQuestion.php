@@ -1229,9 +1229,9 @@ class SimpleChoiceQuestion
         $correct_answers = null;
 
         if ($post->has('form_values')) {
-            $form_values = unserialize(
+            $form_values = json_decode(
                 $post->retrieve('form_values', $DIC->refinery()->kindlyTo()->string()),
-                ['allowed_classes' => false]
+                true
             );
             if (!is_array($form_values)) {
                 return;
